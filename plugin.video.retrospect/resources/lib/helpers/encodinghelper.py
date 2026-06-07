@@ -2,8 +2,6 @@
 import base64
 import hashlib
 
-from resources.lib.backtothefuture import PY3
-
 
 class EncodingHelper(object):
     """Class that is intended to help with the encoding and decoding
@@ -30,7 +28,7 @@ class EncodingHelper(object):
         :return: bytes
         """
 
-        if PY3 and isinstance(data, str):
+        if isinstance(data, str):
             data = data.encode()
 
         return base64.b64encode(data)
@@ -48,7 +46,7 @@ class EncodingHelper(object):
         """
 
         hash_tool = hashlib.md5()
-        if PY3 and isinstance(data, str):
+        if isinstance(data, str):
             data = data.encode()
 
         hash_tool.update(data)

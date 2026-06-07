@@ -138,9 +138,7 @@ def get_video_url(plugin,
     data_player = re.compile(r'data-player\=\"(.*?)\"').findall(resp.text)[0]
     data_video_id = re.compile(r'data-video-id\=\"(.*?)\"').findall(
         resp.text)[0]
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, data_video_id,
-                                                    download_mode)
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account, data_player, data_video_id, None, download_mode)
 
 
 @Resolver.register

@@ -5,17 +5,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Composite\n"
-"Report-Msgid-Bugs-To: https://github.com/anxdpanic/plugin.video.composite_for_plex/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2020-01-18 21:15+0500\n"
-"Last-Translator: Maven85\n"
-"Language-Team: German"
-"Language: de_DE\n"
+"PO-Revision-Date: 2021-10-07 01:53+0000\n"
+"Last-Translator: Kai Sommerfeld <kai.sommerfeld@gmx.com>\n"
+"Language-Team: German <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-composite_for_plex/de_de/>\n"
+"Language: de_de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.6\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.8\n"
+
+msgctxt "Addon Description"
+msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
+msgstr "Durchsuchen und Abspielen von Videos, Musik und Fotos, die vom Plex Media Server verwaltet werden.[CR][CR]Fork von Hippojay's PleXBMC"
+
+msgctxt "Addon Disclaimer"
+msgid "Composite is NOT an official Plex add-on and is not supported or endorsed by Plex."
+msgstr "Composite ist KEIN offizielles Plex-Addon und wird von Plex weder unterstützt noch gebilligt."
 
 msgctxt "#30000"
 msgid "Confirm file delete?"
@@ -31,11 +39,11 @@ msgstr "Plex Online"
 
 msgctxt "#30003"
 msgid "About to install"
-msgstr "Installiere"
+msgstr "Zu installieren"
 
 msgctxt "#30004"
 msgid "This plugin is already installed"
-msgstr "Das Add-on ist bereits installiert"
+msgstr "Das Addon ist bereits installiert"
 
 msgctxt "#30005"
 msgid "Switch Failed"
@@ -47,7 +55,7 @@ msgstr "Abmelden"
 
 msgctxt "#30007"
 msgid "To sign out you must be logged in as an admin user. Switch user and try again"
-msgstr "Um sich abzumelden, musst du als Administrator angemeldet sein. Wechsel den Benutzer und versuche es erneut"
+msgstr "Zum Abmelden muss man als Administrator angemeldet sein. Bitte den Benutzer wechseln und erneut versuchen"
 
 msgctxt "#30008"
 msgid "myPlex"
@@ -55,17 +63,16 @@ msgstr "myPlex"
 
 msgctxt "#30009"
 msgid "You are currently signed into myPlex. Are you sure you want to sign out?"
-msgstr "Du bist zurzeit bei myPlex angemeldet. Möchstest du dich wirklich abmelden?"
+msgstr "Zurzeit angemeldet by myPlex. Wirklich abmelden?"
 
 #  30010
-
 msgctxt "#30011"
 msgid "You are not currently logged into myPlex. Continue to sign in, or cancel to return"
-msgstr "Du bist zurzeit nicht bei myPlex angemeldet. Setze fort, um dich anzumelden, oder brich ab, um zurückzukehren"
+msgstr "Zurzeit nicht bei myPlex angemeldet. Fortfahren, um sich anzumelden, oder abbrechen, um zurückzukehren"
 
 msgctxt "#30012"
 msgid "To access these screens you must be logged in as an admin user. Switch user and try again"
-msgstr "Um auf diese Bildschirme zugreifen zu können, musst du als Administrator angemeldet sein. Wechsel den Benutzer und versuche es erneut"
+msgstr "Um auf diese Bildschirme zugreifen zu können, muss man als Administrator angemeldet sein. Bitte den Benutzer wechseln und erneut versuchen"
 
 msgctxt "#30013"
 msgid "All"
@@ -85,7 +92,7 @@ msgstr "Kürzlich hinzugefügt"
 
 msgctxt "#30017"
 msgid "Recently Viewed Episodes"
-msgstr "Kürzlich gesehene Folgen"
+msgstr "Kürzlich gesehene Episoden"
 
 msgctxt "#30018"
 msgid "Recently Viewed Shows"
@@ -121,11 +128,11 @@ msgstr "Nach Ordner"
 
 msgctxt "#30026"
 msgid "Search Shows..."
-msgstr "Suche Serien..."
+msgstr "Serien suchen ..."
 
 msgctxt "#30027"
 msgid "Search Episodes..."
-msgstr "Suche Folgen..."
+msgstr "Episoden suchen ..."
 
 msgctxt "#30028"
 msgid "All"
@@ -157,15 +164,15 @@ msgstr "Nach Ordner"
 
 msgctxt "#30035"
 msgid "Search Artists..."
-msgstr "Suche Künstler..."
+msgstr "Interpreten suchen ..."
 
 msgctxt "#30036"
 msgid "Search Albums..."
-msgstr "Suche Album..."
+msgstr "Alben suchen ..."
 
 msgctxt "#30037"
 msgid "Search Tracks..."
-msgstr "Suche Titel..."
+msgstr "Titel suchen ..."
 
 msgctxt "#30038"
 msgid "All"
@@ -213,7 +220,7 @@ msgstr "Nach Regisseur"
 
 msgctxt "#30049"
 msgid "By Starring Actor"
-msgstr "Nach Schauspieler"
+msgstr "Nach Darsteller"
 
 msgctxt "#30050"
 msgid "By Country"
@@ -241,7 +248,7 @@ msgstr "Nach Ordner"
 
 msgctxt "#30056"
 msgid "Search..."
-msgstr "Suche..."
+msgstr "Suchen ..."
 
 msgctxt "#30057"
 msgid "All"
@@ -285,7 +292,7 @@ msgstr "Es können keine Medienserver angezeigt werden"
 
 msgctxt "#30067"
 msgid "Unable to contact server:"
-msgstr "Verbindung zum Server nicht möglich:"
+msgstr "Verbindung nicht möglich zum Server:"
 
 msgctxt "#30068"
 msgid "Library refresh started"
@@ -301,19 +308,19 @@ msgstr "Fortsetzen"
 
 msgctxt "#30071"
 msgid "Select media to play"
-msgstr "Abzuspielende Medien wählen"
+msgstr "Medien für Wiedergabe auswählen"
 
 msgctxt "#30072"
 msgid "Select subtitle"
-msgstr "Untertiel wählen"
+msgstr "Untertiel auswählen"
 
 msgctxt "#30073"
 msgid "Select audio"
-msgstr "Audio wählen"
+msgstr "Audio auswählen"
 
 msgctxt "#30074"
 msgid "Select master server"
-msgstr "Hauptserver wählen"
+msgstr "Hauptserver auswählen"
 
 msgctxt "#30075"
 msgid "Known server list"
@@ -321,11 +328,11 @@ msgstr "Bekannte Server"
 
 msgctxt "#30076"
 msgid "Switch User"
-msgstr "Benutzerwechsel"
+msgstr "Benutzer wechseln"
 
 msgctxt "#30077"
 msgid "Enter PIN"
-msgstr "PIN-Eingabe"
+msgstr "PIN eingeben"
 
 msgctxt "#30078"
 msgid "Resume from"
@@ -333,7 +340,7 @@ msgstr "Fortsetzen bei"
 
 msgctxt "#30079"
 msgid "Start from beginning"
-msgstr "Von Anfang abspielen"
+msgstr "Von Anfang wiedergeben"
 
 msgctxt "#30080"
 msgid "myPlex Queue"
@@ -341,7 +348,7 @@ msgstr "myPlex-Warteschlange"
 
 msgctxt "#30081"
 msgid "Sign In"
-msgstr "Einloggen"
+msgstr "Anmelden"
 
 msgctxt "#30082"
 msgid "Display Servers"
@@ -365,7 +372,7 @@ msgstr "Transcodierte Wiedergabe"
 
 msgctxt "#30087"
 msgid "All episodes"
-msgstr "Alle Folgen"
+msgstr "Alle Episoden"
 
 msgctxt "#30088"
 msgid "Season"
@@ -373,14 +380,13 @@ msgstr "Staffel"
 
 msgctxt "#30089"
 msgid "Search for"
-msgstr "Suche nach"
+msgstr "Suchen nach"
 
 msgctxt "#30090"
 msgid "Unplayed"
-msgstr "Ungespielt"
+msgstr "Nicht wiedergegeben"
 
-###### SETTINGS
-
+# ##### SETTINGS
 msgctxt "#30500"
 msgid "Primary Server Address"
 msgstr "Adresse des primären Servers"
@@ -395,7 +401,7 @@ msgstr "Erweiterte Metadaten vom PMS holen"
 
 msgctxt "#30503"
 msgid "Enable extra filter menus"
-msgstr "Menü mit erweiterten Filtern zeigen"
+msgstr "Zusätzliche Filtermenüs aktivieren"
 
 msgctxt "#30504"
 msgid "Server Discovery"
@@ -418,12 +424,12 @@ msgid "Transcode format "
 msgstr "Transcoding-Format "
 
 msgctxt "#30509"
-msgid "Recent & On Deck items"
-msgstr "Letzte & aktuelle Titel"
+msgid "Recent & OnDeck items"
+msgstr "Kürzliche und aktuelle Einträge"
 
 msgctxt "#30510"
 msgid "Debug log"
-msgstr "Debug-Log"
+msgstr "Debug-Protokoll"
 
 msgctxt "#30511"
 msgid "Auto"
@@ -443,7 +449,7 @@ msgstr "Debug-Level"
 
 msgctxt "#30515"
 msgid "Use transcoding proxy"
-msgstr "Verwende Transcoding-Proxy"
+msgstr "Transcoding-Proxy verwenden"
 
 msgctxt "#30516"
 msgid "Server"
@@ -487,7 +493,7 @@ msgstr "myPlex-Passwort"
 
 msgctxt "#30526"
 msgid "Select master server..."
-msgstr "Hauptserver auswählen..."
+msgstr "Hauptserver auswählen ..."
 
 msgctxt "#30527"
 msgid "Authentication required?"
@@ -527,7 +533,7 @@ msgstr "Auswahl des Untertitel-Streams"
 
 msgctxt "#30536"
 msgid "Kodi Control"
-msgstr "Kodi"
+msgstr "Kodi-Steuerung"
 
 msgctxt "#30537"
 msgid "External"
@@ -539,7 +545,7 @@ msgstr "Quelle für Audio- und Untertitel-Auswahl"
 
 msgctxt "#30539"
 msgid "Never show subtitles"
-msgstr "Keine Untertitel"
+msgstr "Niemals Untertitel anziegen"
 
 msgctxt "#30540"
 msgid "Quality"
@@ -555,7 +561,7 @@ msgstr "Ansicht der Plex-Kanäle"
 
 msgctxt "#30543"
 msgid "Flatten TV Shows"
-msgstr "Serien-Staffel reduzieren"
+msgstr "Serien reduzieren"
 
 msgctxt "#30544"
 msgid "Server MAC address"
@@ -563,7 +569,7 @@ msgstr "MAC-Adresse des Servers"
 
 msgctxt "#30545"
 msgid "Plex Style Watched flags"
-msgstr "Gesehen-Markierung im Plex-Stil anzeigen"
+msgstr "Gesehen-Markierung im Plex-Stil"
 
 msgctxt "#30546"
 msgid "Windows Media Server?"
@@ -574,14 +580,13 @@ msgid "Use WOL?"
 msgstr "Wake on LAN verwenden?"
 
 # 30548
-
 msgctxt "#30549"
 msgid "Skip Genre/director/writer"
-msgstr "Informationen über Genre/Regisseur/Author überspringen"
+msgstr "Informationen für Genre/Regisseur/Autor überspringen"
 
 msgctxt "#30550"
 msgid "Skip images (thumbs, fanart)"
-msgstr "Bilder (Vorschaubilder, Hintergrundbilder) überspringen"
+msgstr "Bilder (Vorschaubilder, Fanart) überspringen"
 
 msgctxt "#30551"
 msgid "Skip Media Flags"
@@ -589,7 +594,7 @@ msgstr "Medienmarkierungen überspringen"
 
 msgctxt "#30552"
 msgid "Skip Context Menus"
-msgstr "Kontextmenüelemente überspringen"
+msgstr "Kontextmenüs überspringen"
 
 msgctxt "#30553"
 msgid "Off"
@@ -601,7 +606,7 @@ msgstr "Bonjour"
 
 msgctxt "#30556"
 msgid "Play TV Theme Music"
-msgstr "TV-Theme abspielen"
+msgstr "TV-Theme-Musik wiedergeben"
 
 msgctxt "#30557"
 msgid "Select audio output"
@@ -645,7 +650,7 @@ msgstr "NAS-Stammordner"
 
 msgctxt "#30567"
 msgid "Plex Control"
-msgstr "PMS"
+msgstr "Plex Control"
 
 msgctxt "#30568"
 msgid "Subtitle Size"
@@ -653,7 +658,7 @@ msgstr "Untertitelgröße"
 
 msgctxt "#30569"
 msgid "Audio Boost"
-msgstr "Lautstärke erhöhen"
+msgstr "Lautstärkeerhöhung"
 
 msgctxt "#30570"
 msgid "Auto (GDM)"
@@ -677,7 +682,7 @@ msgstr "Aktuell"
 
 msgctxt "#30575"
 msgid "Force Skin Views"
-msgstr "Ansicht im Skin erzwingen"
+msgstr "Skin-Ansichten erzwingen"
 
 msgctxt "#30576"
 msgid "Skin Name"
@@ -693,7 +698,7 @@ msgstr "Ansicht für Serien"
 
 msgctxt "#30579"
 msgid "Season View"
-msgstr "Ansicht für Staffel"
+msgstr "Ansicht für Staffeln"
 
 msgctxt "#30580"
 msgid "Episode View"
@@ -705,27 +710,27 @@ msgstr "Ansicht für Musik"
 
 msgctxt "#30582"
 msgid "Enable Movie Shelf"
-msgstr "Shelf für Filme aktivieren"
+msgstr "Filmregal aktivieren"
 
 msgctxt "#30583"
 msgid "Enable TV Shelf"
-msgstr "Shelf für Serien aktivieren"
+msgstr "Serienregal aktivieren"
 
 msgctxt "#30584"
 msgid "Enable Music Shelf"
-msgstr "Shelf für Musik aktivieren"
+msgstr "Musikregal aktivieren"
 
 msgctxt "#30585"
 msgid "Enable Channel Shelf"
-msgstr "Shelf für Kanäle aktivieren"
+msgstr "Kanalregal aktivieren"
 
 msgctxt "#30586"
 msgid "Content filter"
-msgstr "Inhalte filtern"
+msgstr "Inhaltefilter"
 
 msgctxt "#30587"
 msgid "Map unknown content as:"
-msgstr "Unbekannte Bewertungen filtern für:"
+msgstr "Unbekannte Inhalte behandeln als:"
 
 msgctxt "#30588"
 msgid "RA Library filter"
@@ -761,7 +766,7 @@ msgstr "Vorschaubilder in voller Auflösung verwenden"
 
 msgctxt "#30596"
 msgid "Use full resolution fanart"
-msgstr "Hintergrundbilder in voller Auflösung verwenden"
+msgstr "Fanart in voller Auflösung verwenden"
 
 msgctxt "#30597"
 msgid "Hide watched recently added items"
@@ -769,7 +774,7 @@ msgstr "Gesehene Elemente in 'Kürzlich hinzugefügt' verstecken"
 
 msgctxt "#30598"
 msgid "Info"
-msgstr "Info"
+msgstr "Information"
 
 msgctxt "#30599"
 msgid "Debug"
@@ -789,7 +794,7 @@ msgstr "Clientname"
 
 msgctxt "#30603"
 msgid "Disable 'All Episodes'"
-msgstr "'Alle Episoden' aus Liste der Staffeln ausblenden"
+msgstr "‚Alle Episoden‘ deaktivieren"
 
 msgctxt "#30604"
 msgid "Enable Kodi view cache"
@@ -805,7 +810,7 @@ msgstr "Staffel-Artwork bevorzugen"
 
 msgctxt "#30607"
 msgid "Hide Unique Information in log"
-msgstr "Keine Benutzerinformation in das Log schreiben"
+msgstr "Keine Benutzerinformation in das Protokoll schreiben"
 
 msgctxt "#30608"
 msgid "Use Kodi client name?"
@@ -821,11 +826,11 @@ msgstr "HTTPS verwenden"
 
 msgctxt "#30611"
 msgid "Transcode > 1080p"
-msgstr "Transkodiere > 1080p"
+msgstr "> 1080p transkodieren"
 
 msgctxt "#30612"
 msgid "Transcode HEVC"
-msgstr "Transkodiere HEVC"
+msgstr "HEVC transkodieren"
 
 msgctxt "#30613"
 msgid "MAC Address"
@@ -877,7 +882,7 @@ msgstr "Anmeldung nicht möglich"
 
 msgctxt "#30625"
 msgid "From your computer, go to %s and enter the code below"
-msgstr "Rufe die Webseite %s auf und gib folgenden Code ein"
+msgstr "Webseite %s aufrufen und folgenden Code eingeben"
 
 msgctxt "#30626"
 msgid "Successfully signed in"
@@ -904,30 +909,27 @@ msgid "Exit"
 msgstr "Beenden"
 
 #  30632
-
 #  30633
-
 msgctxt "#30634"
 msgid "Enter your myPlex details below"
-msgstr "Gib unten die myPlex-Daten ein"
+msgstr "Bitte myPlex-Daten eingeben"
 
 #  30635
-
 msgctxt "#30636"
 msgid "Unknown"
 msgstr "Unbekannt"
 
 msgctxt "#30637"
 msgid "myPlex Login"
-msgstr "myPlex Anmeldung"
+msgstr "myPlex-Anmeldung"
 
 msgctxt "#30638"
 msgid "Enter search term"
-msgstr "Suchbegriff"
+msgstr "Suchbegriff eingeben"
 
 msgctxt "#30639"
 msgid "Enter value"
-msgstr "Wert"
+msgstr "Wert eingeben"
 
 msgctxt "#30640"
 msgid "Transcode Profile"
@@ -975,23 +977,23 @@ msgstr "Serversuche"
 
 msgctxt "#30651"
 msgid "Please wait..."
-msgstr "Bitte warten..."
+msgstr "Bitte warten ..."
 
 msgctxt "#30652"
 msgid "myPlex discovery..."
-msgstr "myPlex-Suche"
+msgstr "myPlex-Suche ..."
 
 msgctxt "#30653"
 msgid "GDM discovery..."
-msgstr "GDM-Suche..."
+msgstr "GDM-Suche ..."
 
 msgctxt "#30654"
 msgid "User provided..."
-msgstr "Vom Benutzer bereitgestellt..."
+msgstr "Vom Benutzer bereitgestellt ..."
 
 msgctxt "#30655"
 msgid "Caching results..."
-msgstr "Caching-Ergebnisse..."
+msgstr "Ergebnisse zwischenspeichern ..."
 
 msgctxt "#30656"
 msgid "Finished"
@@ -1007,11 +1009,11 @@ msgstr "Keine Server gefunden"
 
 msgctxt "#30659"
 msgid "Transcode > 8-bit"
-msgstr "Transkodiere > 8-bit"
+msgstr "> 8-bit transcodieren"
 
 msgctxt "#30660"
 msgid "Device Name"
-msgstr "Gerätenamen"
+msgstr "Gerätename"
 
 msgctxt "#30661"
 msgid "Cache"
@@ -1059,19 +1061,19 @@ msgstr "Standard"
 
 msgctxt "#30672"
 msgid "Go to %s"
-msgstr "Gehe zu %s"
+msgstr "Zu %s gehen"
 
 msgctxt "#30673"
 msgid "Delete %s from the %s playlist?"
-msgstr "%s von der Wiedergabeliste '%s' entfernen?"
+msgstr "%s aus der Wiedergabeliste ‚%s‘ entfernen?"
 
 msgctxt "#30674"
 msgid "Confirm playlist item delete?"
-msgstr "Titel von der Wiedergabeliste entfernen?"
+msgstr "Eintrag aus der Wiedergabeliste entfernen?"
 
 msgctxt "#30675"
 msgid "Delete from playlist"
-msgstr "Von der Wiedergabeliste entfernen"
+msgstr "Aus der Wiedergabeliste entfernen"
 
 msgctxt "#30676"
 msgid "Select playlist"
@@ -1083,27 +1085,27 @@ msgstr "Zur Wiedergabeliste hinzufügen"
 
 msgctxt "#30678"
 msgid "Added %s to the %s playlist"
-msgstr "%s zur Wiedergabeliste '%s' hinzugefügt"
+msgstr "%s zur Wiedergabeliste ‚%s‘ hinzugefügt"
 
 msgctxt "#30679"
 msgid "Failed to add %s to the %s playlist"
-msgstr "Hinzufügen von %s zur Wiedergabeliste '%s' fehlgeschlagen"
+msgstr "Hinzufügen von %s zur Wiedergabeliste ‚%s‘ fehlgeschlagen"
 
 msgctxt "#30680"
 msgid "%s is already in the %s playlist"
-msgstr "%s ist bereits in der Wiedergabeliste '%s'"
+msgstr "%s ist bereits in der Wiedergabeliste ‚%s‘ vorhanden"
 
 msgctxt "#30681"
 msgid "%s has been removed the %s playlist"
-msgstr "%s von der Wiedergabeliste '%s' entfernt"
+msgstr "%s wurde aus der Wiedergabeliste ‚%s‘ entfernt"
 
 msgctxt "#30682"
 msgid "Unable to remove %s from the %s playlist"
-msgstr "Entfernen von %s von der Wiedergabeliste '%s' fehlgeschlagen"
+msgstr "Entfernen von %s aus der Wiedergabeliste ‚%s‘ fehlgeschlagen"
 
 msgctxt "#30683"
 msgid "Show the 'Delete' context menu"
-msgstr "'Löschen' im Kontextmenü anzeigen"
+msgstr "‚Löschen‘ im Kontextmenü anzeigen"
 
 msgctxt "#30684"
 msgid "Up Next"
@@ -1111,31 +1113,31 @@ msgstr "Up Next"
 
 msgctxt "#30685"
 msgid "Enable Up Next"
-msgstr "'Up Next' aktivieren"
+msgstr "‚Up Next‘ aktivieren"
 
 msgctxt "#30686"
 msgid "Open Up Next settings"
-msgstr "'Up Next'-Einstellungen"
+msgstr "‚Up Next‘-Einstellungen"
 
 msgctxt "#30687"
 msgid "Install Up Next"
-msgstr "'Up Next' installieren"
+msgstr "‚Up Next‘ installieren"
 
 msgctxt "#30688"
 msgid "Up Next is enabled in the settings, however Up Next appears to be disabled. Would you like to enable Up Next now?"
-msgstr "'Up Next' ist in den Einstellungen aktiviert, scheint jedoch deaktiviert zu sein. 'Up Next' jetzt aktivieren?"
+msgstr "‚Up Next‘ ist in den Einstellungen aktiviert, scheint jedoch deaktiviert zu sein. ‚Up Next‘ jetzt aktivieren?"
 
 msgctxt "#30689"
 msgid "Up Next requires Kodi 18 or higher"
-msgstr "'Up Next' benötigt Kodi 18 oder höher"
+msgstr "‚Up Next‘ benötigt Kodi 18 oder höher"
 
 msgctxt "#30690"
 msgid "From your computer, go to [B]%s[/B] and enter the following code: [B]%s[/B]"
-msgstr "Rufe die Webseite [B]%s[/B] auf und gib folgenden Code ein: [B]%s[/B]"
+msgstr "Die Webseite [B]%s[/B] auf rufen und folgenden Code eingeben: [B]%s[/B]"
 
 msgctxt "#30691"
 msgid "Use episode thumbnails"
-msgstr "Folgen-Thumbnails verwenden"
+msgstr "Episoden-Vorschaubilder verwenden"
 
 msgctxt "#30692"
 msgid "Widgets"
@@ -1143,7 +1145,7 @@ msgstr "Widgets"
 
 msgctxt "#30693"
 msgid "Show [B]Widgets[/B] menu"
-msgstr "Menüpunkt [B]Widgets[/B] zeigen"
+msgstr "Menüpunkt [B]Widgets[/B] anzeigen"
 
 msgctxt "#30694"
 msgid "Clear Caches"
@@ -1211,7 +1213,7 @@ msgstr "Port"
 
 msgctxt "#30710"
 msgid "Kodi's Web Server Settings"
-msgstr "Kodi's Webserver-Einstellungen"
+msgstr "Kodis Webserver-Einstellungen"
 
 msgctxt "#30711"
 msgid "[COLOR=red]EXPERIMENTAL[/COLOR] - This feature is experimental[CR]Any changes to these settings will require a restart to take effect"
@@ -1219,7 +1221,7 @@ msgstr "[COLOR=red]EXPERIMENTELL[/COLOR] - Dieses Feature ist experimentell[CR]�
 
 msgctxt "#30712"
 msgid "Username"
-msgstr "Benutzer"
+msgstr "Benutzername"
 
 msgctxt "#30713"
 msgid "Password"
@@ -1231,19 +1233,19 @@ msgstr "Hauptmenü"
 
 msgctxt "#30715"
 msgid "Show [B]myPlex Queue[/B] menu"
-msgstr "Menüpunkt [B]myPlex Warteschlange[/B] zeigen"
+msgstr "Menüpunkt [B]myPlex Warteschlange[/B] anzeigen"
 
 msgctxt "#30716"
 msgid "Show [B]Channels[/B] menu"
-msgstr "Menüpunkt [B]Kanäle[/B] zeigen"
+msgstr "Menüpunkt [B]Kanäle[/B] anzeigen"
 
 msgctxt "#30717"
 msgid "Show [B]Plex Online[/B] menu"
-msgstr "Menüpunkt [B]Plex Online[/B] zeigen"
+msgstr "Menüpunkt [B]Plex Online[/B] anzeigen"
 
 msgctxt "#30718"
 msgid "Show [B]Playlists[/B] menu"
-msgstr "Menüpunkt [B]Wiedergabelisten[/B] zeigen"
+msgstr "Menüpunkt [B]Wiedergabelisten[/B] anzeigen"
 
 msgctxt "#30719"
 msgid "Context Menu"
@@ -1263,7 +1265,7 @@ msgstr "Wiedergabeliste erstellen"
 
 msgctxt "#30723"
 msgid "Enter a playlist title"
-msgstr "Titel der Wiedergabeliste"
+msgstr "Titel für die Wiedergabeliste eingeben"
 
 msgctxt "#30724"
 msgid "Delete playlist"
@@ -1283,7 +1285,7 @@ msgstr "Benachrichtigungscodierung"
 
 msgctxt "#30728"
 msgid "Episode sort method"
-msgstr "Sortiermethode bei Episoden"
+msgstr "Sortiermethode für Episoden"
 
 msgctxt "#30729"
 msgid "Plex"
@@ -1299,11 +1301,11 @@ msgstr "Server verwalten"
 
 msgctxt "#30732"
 msgid "Set as Master"
-msgstr "Hauptserver einstellen"
+msgstr "Als Hauptserver einstellen"
 
 msgctxt "#30733"
 msgid "Connection Test Results"
-msgstr "Verbindungstestergebnisse"
+msgstr "Verbindungs-Testergebnisse"
 
 msgctxt "#30734"
 msgid "Default to forced subtitles"
@@ -1343,7 +1345,7 @@ msgstr "Benutzerdefiniert"
 
 msgctxt "#30743"
 msgid "All Artists"
-msgstr "Alle Künstler"
+msgstr "Alle Interpreten"
 
 msgctxt "#30744"
 msgid "All Photos"
@@ -1359,11 +1361,11 @@ msgstr "Alle Filme"
 
 msgctxt "#30747"
 msgid "Preferred lyrics format"
-msgstr "Bevorzugtes Textformat"
+msgstr "Bevorzugtes Format für Liedtexte"
 
 msgctxt "#30748"
 msgid "Lyrics"
-msgstr "Text"
+msgstr "Liedtext"
 
 msgctxt "#30749"
 msgid "lrc"
@@ -1391,7 +1393,7 @@ msgstr "Plex powered by LyricFind"
 
 msgctxt "#30755"
 msgid "Show skip intro dialog"
-msgstr "'Intro überspringen'-Dialog anzeigen"
+msgstr "‚Intro überspringen‘-Dialog anzeigen"
 
 msgctxt "#30756"
 msgid "All %s"
@@ -1568,3 +1570,15 @@ msgstr ""
 msgctxt "#30799"
 msgid "Configured library sections have been reset"
 msgstr ""
+
+msgctxt "#30800"
+msgid "Continue Watching"
+msgstr ""
+
+msgctxt "#30801"
+msgid "Detect Servers"
+msgstr ""
+
+#~ msgctxt "#30509"
+#~ msgid "Recent & On Deck items"
+#~ msgstr "Letzte & aktuelle Titel"

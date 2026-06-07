@@ -3,48 +3,46 @@
 [![Codecov status](https://img.shields.io/codecov/c/github/add-ons/plugin.video.vrt.nu/master)](https://codecov.io/gh/add-ons/plugin.video.vrt.nu/branch/master)
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
 [![Contributors](https://img.shields.io/github/contributors/add-ons/plugin.video.vrt.nu.svg)](https://github.com/add-ons/plugin.video.vrt.nu/graphs/contributors)
-[![Donate!](https://img.shields.io/static/v1.svg?label=&message=Donate!&color=lightgrey&logo=paypal)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6C58R2PNAWTNW&source=url)
 
-# VRT NU Kodi add-on
+# VRT MAX Kodi add-on
 **plugin.video.vrt.nu** is a [Kodi](https://kodi.tv/) add-on for watching all live video streams *and* all video-on-demand
-content available on [VRT NU](https://vrt.be/vrtnu/).
+content available on [VRT MAX](https://vrt.be/vrtmax/).
 
-VRT NU is the video-on-demand platform of VRT, Flanders' public broadcasting service.
+VRT MAX is the video-on-demand platform of VRT, Flanders' public broadcasting service.
 
-This Kodi add-on can be used to watch all video content from VRT NU.
+This Kodi add-on can be used to watch all video content from VRT MAX.
 
 - Track the programs you like
 - List all videos alphabetically by program, category, channel or feature
-- Watch live streams from Eén, Canvas, Ketnet, Ketnet Junior and Sporza
+- Watch live streams from VRT 1, VRT Canvas, Ketnet, Ketnet Junior and Sporza
 - Discover recently added or soon offline content
-- Browse the online TV guides or search VRT NU
+- Browse the online TV guides or search VRT MAX
 
-> Note: The VRT NU add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.
+> Note: The VRT MAX add-on is not endorsed by VRT, and is provided 'as is' without any warranty of any kind.
 
 ## Installing
-In Kodi, simply search the add-ons for `VRT` and install the VRT NU video add-on.
+In Kodi, simply search the add-ons for `VRT` and install the VRT MAX video add-on.
 
-> Note: Detailed information about installing and updating the VRT NU add-on is available on [our Wiki](https://github.com/add-ons/plugin.video.vrt.nu/wiki).
+> Note: Detailed information about installing and updating the VRT MAX add-on is available on [our Wiki](https://github.com/add-ons/plugin.video.vrt.nu/wiki).
 
 ## Using the plugin
-The [VRT NU](https://vrt.be/vrtnu) platform requires users to sign in before gaining access to video-on-demand content.
+The [VRT MAX](https://vrt.be/vrtmax) platform requires users to sign in before gaining access to video-on-demand content.
 Users can sign in with a user name and password, or sign in with their Google, or Facebook account.
 
 This plugin currently only supports signing in using the first method (user name and password). If you already
-have a VRT NU account and sign in with another method, it is easy to get a password:
+have a VRT MAX account and sign in with another method, it is easy to get a password:
 
-- Sign out of your VRT NU account;
+- Sign out of your VRT MAX account;
 - Click **Inloggen met e-mail**;
 - Click the **Wachtwoord vergeten?** hyperlink, and enter your email address.
 
 You will receive an email that allows you to set a password. Use this password to enter in the plugin when
 prompted.
 
-> For more information about the VRT NU Kodi add-on, look at [our GitHub Wiki page](https://github.com/add-ons/plugin.video.vrt.nu/wiki).
+> For more information about the VRT MAX Kodi add-on, look at [our GitHub Wiki page](https://github.com/add-ons/plugin.video.vrt.nu/wiki).
 
 ## Reporting issues
-You can report issues at [our GitHub project](https://github.com/add-ons/plugin.video.vrt.nu) or
-leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
+You can report issues at [our GitHub issues page](https://github.com/add-ons/plugin.video.vrt.nu/issues)
 
 ## Screenshots
 <table>
@@ -59,6 +57,163 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 </table>
 
 ## Releases
+### v2.5.50 (2026-01-20)
+- Fix season menu listings (@mediaminister)
+
+### v2.5.49 (2026-01-14)
+- Fix season menu listings (@mediaminister)
+
+### v2.5.48 (2026-01-08)
+- Fix menu listings after api change (@mediaminister)
+
+### v2.5.47 (2025-12-21)
+- Fix IPTV Manager EPG (@mediaminister)
+
+### v2.5.46 (2025-11-26)
+- Fix TV guide menu listings (@mediaminister)
+- Improve season menu listings (@mediaminister)
+
+### v2.5.45 (2025-10-29)
+- Fix TV guide menu listings (@mediaminister)
+
+### v2.5.44 (2025-10-10)
+- Improve TV guide menu listings (@mediaminister)
+- Fix api requests for long episode lists (@mediaminister)
+
+### v2.5.43 (2025-09-15)
+- Fix TV guide menu listings (@mediaminister)
+
+### v2.5.42 (2025-08-29)
+- Fix api calls (@mediaminister)
+
+### v2.5.41 (2025-08-28)
+- Updated various api calls (@mediaminister)
+
+### v2.5.40 (2025-08-13)
+- Fixed incorrect item count in menu listings (@mediaminister)
+
+### v2.5.39 (2025-07-20)
+- Fix category menu listings (@mediaminister)
+
+### v2.5.38 (2025-05-12)
+- Fix Ketnet Jr livestream (@mediaminister)
+
+### v2.5.37 (2025-04-04)
+- Fix DRM streams (@mediaminister)
+
+### v2.5.36 (2025-03-03)
+- Fix program listings (@malc0mn)
+
+### v2.5.35 (2025-02-26)
+- Fix episode listings (@mediaminister)
+
+### v2.5.34 (2025-02-04)
+- Fix watching VRT MAX abroad (@mediaminister)
+- Fix Sporza IPTV Manager EPG (@mediaminister)
+
+### v2.5.33 (2024-12-01)
+- Fix search (@mediaminister)
+- Fix category menu listings (@mediaminister)
+
+### v2.5.32 (2024-05-21)
+- Fix search (@mediaminister)
+- Fix program menu listings (@mediaminister)
+
+### v2.5.31 (2024-04-21)
+- Fix program menu listings (@mediaminister)
+
+### v2.5.30 (2024-04-16)
+- Fix playing from TV guide (@mediaminister)
+
+### v2.5.29 (2024-02-12)
+- Fix program listings (@mediaminister)
+
+### v2.5.28 (2024-01-24)
+- Fix 'My favorites' listing (@mediaminister)
+
+### v2.5.27 (2023-12-27)
+- Fix categories listing (@mediaminister)
+
+### v2.5.26 (2023-09-22)
+- Fix program listings (@mediaminister)
+- Add extra content to program listings (@mediaminister)
+
+### v2.5.25 (2023-09-14)
+- Fix episode listings and featured menu (@mediaminister)
+
+### v2.5.24 (2023-07-18)
+- Fix 1080p quality and playback issue (@mediaminister)
+
+### v2.5.23 (2023-07-11)
+- Fix episode and featured listings (@mediaminister)
+
+### v2.5.22 (2023-06-14)
+- Fix categories menu (@mediaminister)
+- Fix 1080p (@mediaminister)
+
+### v2.5.21 (2023-05-23)
+- Fix 1080p for livestreams (@mediaminister)
+- Remove All programs menu (@mediaminister)
+- Fix paging in episode listings (@mediaminister)
+
+### v2.5.20 (2022-12-06)
+- Fix all programs menu (@mediaminister)
+- Fix latest episode API (@mediaminister)
+
+### v2.5.19 (2022-10-16)
+- Fix categories and channels menu listings (@mediaminister)
+- Fix resumepoints and Up Next integration (@mediaminister)
+- Fix playing from VRT MAX url API interface (@mediaminister)
+
+### v2.5.18 (2022-10-07)
+- Fix menu listings (@mediaminister)
+
+### v2.5.17 (2022-09-21)
+- Fix watching VRT MAX abroad (@mediaminister)
+- Fix 'My Programs' menu (@mediaminister)
+- Fix login issue on Raspberry Pi (@mediaminister)
+
+### v2.5.16 (2022-09-13)
+- Fix 'My Programs' menu (@mediaminister)
+- Hide resumepoints error messages (@mediaminister)
+- Implement new login api @mediaminister)
+
+### v2.5.15 (2022-08-31)
+- Fix add-on crash (@mediaminister)
+
+### v2.5.14 (2022-08-29)
+- VRT MAX rebranding (@mediaminister)
+
+### v2.5.13 (2022-08-05)
+- Support 1080p video on demand (@mediaminister)
+
+### v2.5.12 (2022-05-25)
+- Fix playing from TV guide (@mediaminister)
+- Fix listing programs with a single char in their name (@mediaminister)
+
+### v2.5.11 (2022-05-15)
+- Fix "All programs", "Categories","Most recent", "Soon offline" and "Channels" menu (@mediaminister)
+
+### v2.5.10 (2022-04-29)
+- Fix watching from the tv guide (@mediaminister)
+- Fix season menu labels (@mediaminister)
+
+### v2.5.9 (2022-04-20)
+- Fix broken menu listings (@mediaminister)
+
+### v2.5.8 (2022-04-14)
+- Fix watching VRT NU abroad (@mediaminister)
+- Fix webscraping video attributes (@mediaminister)
+
+### v2.5.7 (2022-01-31)
+- Fix watch later (@mediaminister)
+- Fix favorites (@mediaminister)
+
+### v2.5.6 (2021-12-22)
+- Fix watching VRT NU abroad (@mediaminister)
+- Fix resumepoints (@mediaminister)
+- Update featured menu (@mediaminister)
+
 ### v2.5.5 (2021-09-09)
 - Fix broken menu listings (@mediaminister)
 
@@ -350,6 +505,3 @@ leave a message at [our Facebook page](https://facebook.com/kodivrtnu/).
 
 ### v0.0.1 (2017-05-01)
 - Initial working release (@pietje666)
-
-## Donating
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6C58R2PNAWTNW&source=url)

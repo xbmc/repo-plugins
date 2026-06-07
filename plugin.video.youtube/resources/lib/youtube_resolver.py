@@ -1,27 +1,26 @@
 # -*- coding: utf-8 -*-
 """
 
-    Copyright (C) 2017-2019 plugin.video.youtube
+    Copyright (C) 2017-2025 plugin.video.youtube
 
     SPDX-License-Identifier: GPL-2.0-only
     See LICENSES/GPL-2.0-only for more information.
 """
 
-from six import string_types
+from __future__ import absolute_import, division, unicode_literals
+
 import re
-import json
-import requests
 
 from youtube_plugin.youtube.provider import Provider
-from youtube_plugin.kodion.impl import Context
+from youtube_plugin.kodion.context import XbmcContext
 
 
 def _get_core_components(addon_id=None):
     provider = Provider()
     if addon_id is not None:
-        context = Context(params={'addon_id': addon_id}, plugin_id='plugin.video.youtube')
+        context = XbmcContext(params={'addon_id': addon_id})
     else:
-        context = Context(plugin_id='plugin.video.youtube')
+        context = XbmcContext()
     client = provider.get_client(context=context)
 
     return provider, context, client
@@ -54,9 +53,9 @@ def resolve(video_id, sort=True, addon_id=None):
             break
 
     if matched_id:
-        streams = client.get_video_streams(context=context, video_id=matched_id)
+        streams, _ = client.load_stream_info(video_id=matched_id)
 
     if sort and streams:
-        streams = sorted(streams, key=lambda x: x.get('sort', 0), reverse=True)
+        streams = sorted(streams, key=lambda x: x.get('sort', (0, 0)))
 
     return streams

@@ -1,10 +1,10 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib import chn_class
+from resources.lib import chn_class, contenttype, mediatype
 from resources.lib.helpers.datehelper import DateHelper
 
-from resources.lib.mediaitem import MediaItem
+from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.mediatype import EPISODE
 from resources.lib.parserdata import ParserData
 from resources.lib.regexer import Regexer
@@ -36,21 +36,25 @@ class Channel(chn_class.Channel):
             self.noImage = "nickelodeonimage.png"
             self.mainListUri = "https://www.nickelodeon.nl/shows"
             self.baseUrl = "https://www.nickelodeon.nl"
+            self.__mgid = ""
 
         elif self.channelCode == "nickno":
             self.noImage = "nickelodeonimage.png"
             self.mainListUri = "https://www.nickelodeon.no/shows"
             self.baseUrl = "https://www.nickelodeon.no"
+            self.__mgid = ""
 
         elif self.channelCode == "mtvnl":
             self.mainListUri = "https://www.mtv.nl/shows"
             self.baseUrl = "https://www.mtv.nl"
             self.noImage = "mtvnlimage.png"
+            self.__mgid = "mtv.nl"
 
         elif self.channelCode == "mtvde":
             self.mainListUri = "https://www.mtv.de/shows"
             self.baseUrl = "https://www.mtv.de"
             self.noImage = "mtvnlimage.png"
+            self.__mgid = "mtv.de"
         else:
             raise NotImplementedError("Unknown channel code")
 
@@ -70,16 +74,16 @@ class Channel(chn_class.Channel):
                                       "children", ("type", "LineList", 0), 'props', 'loadMore'],
                               creator=self.extract_more_json_episodes)
 
-        self._add_data_parser("https://www.[^/]+/shows/",
+        self._add_data_parser("https://www.[^/]+/(shows|serien)/",
                               name="JSON Retriever for videos",
                               match_type=ParserData.MatchRegex,
                               json=True, preprocessor=self.extract_json_video)
 
-        self._add_data_parser("https://www.[^/]+/shows/", name="JSON video creator",
+        self._add_data_parser("https://www.[^/]+/(shows|serien)/", name="JSON video creator",
                               match_type=ParserData.MatchRegex, json=True,
                               parser=["items"], creator=self.create_json_video_item)
 
-        self._add_data_parser("https://www.[^/]+/shows/", name="JSON season creator",
+        self._add_data_parser("https://www.[^/]+/(shows|serien)/", name="JSON season creator",
                               match_type=ParserData.MatchRegex,  json=True,
                               parser=["seasons"], creator=self.create_json_season_item)
 
@@ -254,7 +258,7 @@ class Channel(chn_class.Channel):
         """
 
         url = "{}{}".format(self.baseUrl, result_set["url"])
-        item = MediaItem(result_set["label"], url)
+        item = FolderItem(result_set["label"], url, content_type=contenttype.EPISODES, media_type=mediatype.SEASON)
         item.metaData["is_season"] = True
         return item
 
@@ -287,7 +291,8 @@ class Channel(chn_class.Channel):
         if sub_heading:
             name = "{} - {}".format(name, sub_heading)
 
-        url = "{}{}".format(self.baseUrl, result_set["url"])
+        url = f"https://topaz.viacomcbs.digital/topaz/api/mgid:arc:episode:{self.__mgid}:{result_set['id']}/mica.json?clientPlatform=desktop"
+        url = f"https://topaz.viacomcbs.digital/topaz/api/mgid:arc:episode:mtv.nl:84c9904e-6fed-11e9-9fb2-70df2f866ace/mica.json?clientPlatform=desktop&ssus=44545c3d-6208-45e5-953e-801abf27ae7b&browser=Chrome&device=Desktop&os=Windows+10"
         item = MediaItem(name, url, media_type=EPISODE)
         item.description = meta.get("description")
         item.thumb = result_set.get("media", {}).get("image", {}).get("url")
@@ -299,6 +304,8 @@ class Channel(chn_class.Channel):
 
         if "." in date_value:
             date = DateHelper.get_date_from_string(date_value, date_format="%d.%m.%Y")
+        elif "-" in date_value:
+            date = DateHelper.get_date_from_string(date_value, date_format="%d-%m-%Y")
         else:
             date = DateHelper.get_date_from_string(date_value, date_format="%d/%m/%Y")
         item.set_date(*date[0:6])
@@ -331,26 +338,9 @@ class Channel(chn_class.Channel):
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
         from resources.lib.streams.m3u8 import M3u8
 
-        data = UriHandler.open(item.url)
-        video_id = Regexer.do_regex(r'{"video":{"config":{"uri":"([^"]+)', data)[0]
-        url = "http://media.mtvnservices.com/pmt/e1/access/index.html?uri={}&configtype=edge".format(video_id)
-        meta_data = UriHandler.open(url, referer=self.baseUrl)
-        meta = JsonHelper(meta_data)
-        stream_parts = meta.get_value("feed", "items")
-        for stream_part in stream_parts:
-            stream_url = stream_part["group"]["content"]
-            stream_url = stream_url.replace("&device={device}", "")
-            stream_url = "%s&format=json&acceptMethods=hls" % (stream_url,)
-            stream_data = UriHandler.open(stream_url)
-            stream = JsonHelper(stream_data)
+        data = JsonHelper(UriHandler.open(item.url))
+        stream_url = data.get_value("stitchedstream", "source")
+        item.complete |= M3u8.update_part_with_m3u8_streams(item, stream_url)
 
-            # subUrls = stream.get_value("package", "video", "item", 0, "transcript", 0, "typographic")  # NOSONAR
-
-            hls_streams = stream.get_value("package", "video", "item", 0, "rendition")
-            for hls_stream in hls_streams:
-                hls_url = hls_stream["src"]
-                item.complete |= M3u8.update_part_with_m3u8_streams(item, hls_url)
-
-        item.complete = True
         Logger.trace("Media url: %s", item)
         return item

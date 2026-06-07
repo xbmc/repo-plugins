@@ -15,6 +15,7 @@ from kodi_six import xbmcgui
 import urlquick
 
 from resources.lib import web_utils
+from resources.lib.addon_utils import Quality
 from resources.lib.menu_utils import item_post_treatment
 
 # TO DO
@@ -260,7 +261,7 @@ def get_live_url(plugin, item_id, **kwargs):
         root = lives_stream_jsonparser["stream"].split('master.m3u8')[0]
 
     lines = m3u8_video_auto.text.splitlines()
-    if DESIRED_QUALITY == "DIALOG":
+    if DESIRED_QUALITY == Quality['DIALOG']:
         all_datas_videos_quality = []
         all_datas_videos_path = []
         for k in range(0, len(lines) - 1):
@@ -271,14 +272,15 @@ def get_live_url(plugin, item_id, **kwargs):
                     all_datas_videos_path.append(lines[k + 1])
                 else:
                     all_datas_videos_path.append(root + '/' + lines[k + 1])
-        seleted_item = xbmcgui.Dialog().select(
+        selected_item = xbmcgui.Dialog().select(
             plugin.localize(30709),
             all_datas_videos_quality)
-        if seleted_item <= -1:
+        if selected_item <= -1:
             return False
-        return all_datas_videos_path[seleted_item]
+        return all_datas_videos_path[selected_item]
 
-    if DESIRED_QUALITY == 'BEST':
+    url = False
+    if DESIRED_QUALITY == Quality['BEST']:
         # Last video in the Best
         for k in range(0, len(lines) - 1):
             if 'RESOLUTION=' in lines[k]:

@@ -5,60 +5,69 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Addons\n"
-"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Kodi Translation Team\n"
-"Language-Team: German (http://www.transifex.com/projects/p/xbmc-addons/language/de/)\n"
-"Language: de\n"
+"PO-Revision-Date: 2021-07-23 14:15+0000\n"
+"Last-Translator: Kai Sommerfeld <kai.sommerfeld@gmx.com>\n"
+"Language-Team: German <https://kodi.weblate.cloud/projects/kodi-add-ons-program/plugin-library-node-editor/de_de/>\n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.7.2\n"
+
+msgctxt "Addon Summary"
+msgid "Manage custom library nodes."
+msgstr "Benutzerdefinierte Bibliotheksknoten verwalten."
+
+msgctxt "Addon Description"
+msgid "Create and edit custom library nodes."
+msgstr "Benutzerdefinierte Bibliotheksknoten erstellen und bearbeiten."
 
 msgctxt "#30000"
 msgid "Add content..."
-msgstr "Inhalt hinzufügen..."
+msgstr "Inhalt hinzufügen ..."
 
 msgctxt "#30001"
 msgid "Add path..."
-msgstr "Pfad hinzufügen..."
+msgstr "Pfad hinzufügen ..."
 
 msgctxt "#30002"
 msgid "Add order..."
-msgstr "Sortierung hinzufügen..."
+msgstr "Sortierung hinzufügen ..."
 
 msgctxt "#30003"
 msgid "Add limit..."
-msgstr "Beschränkung hinzufügen..."
+msgstr "Beschränkung hinzufügen ..."
 
 msgctxt "#30004"
 msgid "Add grouping..."
-msgstr "Gruppierung hinzufügen..."
+msgstr "Gruppierung hinzufügen ..."
 
 msgctxt "#30005"
 msgid "Add rule..."
-msgstr "Regel hinzufügen..."
+msgstr "Regel hinzufügen ..."
 
 msgctxt "#30006"
 msgid "New node..."
-msgstr "Neuer Knoten..."
+msgstr "Neuer Knoten ..."
 
 msgctxt "#30007"
 msgid "New parent node..."
-msgstr "Neuer übergeordneter Knoten..."
+msgstr "Neuer übergeordneter Knoten ..."
 
 msgctxt "#30008"
 msgid "Reset library nodes to default..."
-msgstr "Bibliotheksknoten auf Standard zurücksetzen..."
+msgstr "Bibliotheksknoten auf Standard zurücksetzen ..."
 
 msgctxt "#30009"
 msgid "Add component..."
-msgstr ""
+msgstr "Komponente hinzufügen ..."
 
 msgctxt "#30010"
 msgid "Manually edit..."
-msgstr ""
+msgstr "Manuell bearbeiten ..."
 
 msgctxt "#30091"
 msgid "Video Library"
@@ -86,7 +95,7 @@ msgstr "Nach Symbol suchen"
 
 msgctxt "#30104"
 msgid "Move node"
-msgstr ""
+msgstr "Knoten verschieben"
 
 msgctxt "#30105"
 msgid "Edit visibility"
@@ -126,7 +135,7 @@ msgstr "Regel"
 
 msgctxt "#30206"
 msgid "Match"
-msgstr ""
+msgstr "Übereinstimmung"
 
 msgctxt "#30300"
 msgid "Set name"
@@ -154,7 +163,7 @@ msgstr "Feld"
 
 msgctxt "#30306"
 msgid "Operator"
-msgstr "Betreiber"
+msgstr "Operator"
 
 msgctxt "#30307"
 msgid "Value"
@@ -198,11 +207,11 @@ msgstr "Name des neuen Knotens"
 
 msgctxt "#30317"
 msgid "Retrieving values..."
-msgstr ""
+msgstr "Werte werden abgerufen ..."
 
 msgctxt "#30318"
 msgid "Property"
-msgstr ""
+msgstr "Eigenschaft"
 
 msgctxt "#30400"
 msgid "Unable to copy default library nodes"
@@ -210,15 +219,15 @@ msgstr "Standardbibliotheksknoten können nicht kopiert werden"
 
 msgctxt "#30401"
 msgid "Are you sure you want to delete this node?"
-msgstr "Sind Sie Sicher, dass Sie diesen Knoten löschen möchten?"
+msgstr "Diesen Knoten wirklich löschen?"
 
 msgctxt "#30402"
 msgid "Are you sure you want to reset all nodes?"
-msgstr "Sind Sie Sicher, dass Sie alle Knoten zurücksetzen möchten?"
+msgstr "Wirklich alle Knoten zurücksetzen?"
 
 msgctxt "#30403"
 msgid "Are you sure you want to delete this property?"
-msgstr "Sind Sie Sicher, dass Sie diese Eigenschaft löschen möchten?"
+msgstr "Diese Eigenschaft wirklich löschen?"
 
 msgctxt "#30404"
 msgid "Content parameter can't be deleted whilst this node still has an Order, Limit or Rule parameter."
@@ -226,7 +235,7 @@ msgstr "Inhaltsparameter kann nicht gelöscht werden, solange dieser Knoten noch
 
 msgctxt "#30405"
 msgid "Are you sure you want to delete this rule?"
-msgstr "Sind Sie Sicher, dass Sie diese Regel löschen möchten?"
+msgstr "Diese Regel wirklich löschen?"
 
 msgctxt "#30406"
 msgid "Order requires a Content parameter"
@@ -234,83 +243,83 @@ msgstr "Sortierung benötigt einen Inhaltsparameter"
 
 msgctxt "#30407"
 msgid "Are you sure you want to delete this component?"
-msgstr ""
+msgstr "Diese Komponente wirklich löschen?"
 
 msgctxt "#30408"
 msgid "Custom property..."
-msgstr ""
+msgstr "Benutzerdefinierte Eigenschaft ..."
 
 msgctxt "#30409"
 msgid "No options to select from were found"
-msgstr ""
+msgstr "Keine Auswahlmöglichkeiten gefunden"
 
 msgctxt "#30410"
 msgid "Getting plugin listings..."
-msgstr ""
+msgstr "Plugin-Auflistungen werden abgerufen ..."
 
 msgctxt "#30411"
 msgid "Link path to here"
-msgstr ""
+msgstr "Pfad hierauf verlinken"
 
 msgctxt "#30500"
 msgid "Genre ID"
-msgstr ""
+msgstr "Genre-ID"
 
 msgctxt "#30501"
 msgid "Country ID"
-msgstr ""
+msgstr "Landes-ID"
 
 msgctxt "#30502"
 msgid "Studio ID"
-msgstr ""
+msgstr "Studio-ID"
 
 msgctxt "#30503"
 msgid "Director ID"
-msgstr ""
+msgstr "Direktor-ID"
 
 msgctxt "#30504"
 msgid "Actor ID"
-msgstr ""
+msgstr "Darsteller-ID"
 
 msgctxt "#30505"
 msgid "Set ID"
-msgstr ""
+msgstr "Zusammenstellungs-ID"
 
 msgctxt "#30506"
 msgid "Tag ID"
-msgstr ""
+msgstr "Tag-ID"
 
 msgctxt "#30507"
 msgid "TV Show ID"
-msgstr ""
+msgstr "TV-Show-ID"
 
 msgctxt "#30508"
 msgid "Artist ID"
-msgstr ""
+msgstr "Interpreten-ID"
 
 msgctxt "#30509"
 msgid "Album ID"
-msgstr ""
+msgstr "Album-ID"
 
 msgctxt "#30510"
 msgid "Role ID"
-msgstr ""
+msgstr "Rollen-ID"
 
 msgctxt "#30511"
 msgid "Song ID"
-msgstr ""
+msgstr "Titel-ID"
 
 msgctxt "#30512"
 msgid "Album artists only"
-msgstr ""
+msgstr "Nur Albumsinterpreten"
 
 msgctxt "#30513"
 msgid "Show singles"
-msgstr ""
+msgstr "Singles anzeigen"
 
 msgctxt "#30514"
 msgid "Plugin..."
-msgstr ""
+msgstr "Plugin ..."
 
 #~ msgctxt "#30104"
 #~ msgid "Edit order"

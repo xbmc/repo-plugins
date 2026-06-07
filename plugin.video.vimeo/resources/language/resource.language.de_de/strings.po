@@ -270,3 +270,11 @@ msgstr "Ungültiges Passwort"
 msgctxt "#30906"
 msgid "Whoops! That password is invalid"
 msgstr "Whoops! Dieses Passwort ist ungültig"
+
+msgctxt "#30907"
+msgid "Error"
+msgstr "Fehler"
+
+msgctxt "#30908"
+msgid "This resource is restricted in your region."
+msgstr "Diese Anfrage ist in deiner Region nicht verfügbar."

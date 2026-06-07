@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
 # Copyright: (c) 2019, Dag Wieers (@dagwieers) <dag@wieers.com>
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-"""Implements a VRT NU TV guide"""
+"""Implements a VRT MAX TV guide"""
 
-from __future__ import absolute_import, division, unicode_literals
 from datetime import datetime, timedelta
 import dateutil.parser
 import dateutil.tz
 
+from api import get_epg_episodes, get_epg_list
 from data import CHANNELS, RELATIVE_DATES
-from favorites import Favorites
 from helperobjects import TitleItem
-from kodiutils import (colour, get_cached_url_json, get_url_json, has_addon, localize,
+from kodiutils import (colour, get_cached_url_json, has_addon, localize,
                        localize_datelong, show_listing, themecolour, ttl, url_for)
-from metadata import Metadata
-from resumepoints import ResumePoints
-from utils import add_https_proto, find_entry, html_to_kodi, url_to_program
+from utils import find_entry, parse_duration
 
 
 class TVGuide:
@@ -25,11 +22,8 @@ class TVGuide:
 
     def __init__(self):
         """Initializes TV-guide object"""
-        self._favorites = Favorites()
-        self._resumepoints = ResumePoints()
-        self._metadata = Metadata(self._favorites, self._resumepoints)
 
-    def show_tvguide(self, date=None, channel=None):
+    def show_tvguide(self, date=None, channel=None, end_cursor=None):
         """Offer a menu depending on the information provided"""
 
         if not date and not channel:
@@ -48,7 +42,7 @@ class TVGuide:
             show_listing(date_items, category=channel_name, content='files', selected=7)
 
         else:
-            episode_items = self.get_episode_items(date, channel)
+            episode_items = self.get_episode_items(date, channel, end_cursor)
             channel_name = find_entry(CHANNELS, 'name', channel).get('label')
             entry = find_entry(RELATIVE_DATES, 'id', date)
             date_name = localize(entry.get('msgctxt')) if entry else date
@@ -63,7 +57,7 @@ class TVGuide:
         if epg.hour < 6:
             epg += timedelta(days=-1)
         date_items = []
-        for offset in range(14, -19, -1):
+        for offset in range(7, -8, -1):
             day = epg + timedelta(days=offset)
             label = localize_datelong(day)
             date = day.strftime('%Y-%m-%d')
@@ -91,8 +85,8 @@ class TVGuide:
             date_items.append(TitleItem(
                 label=label,
                 path=path,
-                art_dict=dict(thumb='DefaultYear.png'),
-                info_dict=dict(plot=plot),
+                art_dict={'thumb': 'DefaultYear.png'},
+                info_dict={'plot': plot},
                 context_menu=[(
                     localize(30413),  # Refresh menu
                     'RunPlugin(%s)' % url_for('delete_cache', cache_file=cache_file)
@@ -127,7 +121,7 @@ class TVGuide:
 
             if date:
                 label = chan.get('label')
-                path = url_for('tvguide', date=date, channel=chan.get('name'))
+                path = url_for('tvguide', date=date, channel=chan.get('name'), end_cursor='1')
                 plot = '[B]%s[/B]\n%s' % (datelong, localize(30302, **chan))
             else:
                 label = '[B]%s[/B]' % localize(30303, **chan)
@@ -144,107 +138,121 @@ class TVGuide:
                 path=path,
                 art_dict=art_dict,
                 context_menu=context_menu,
-                info_dict=dict(plot=plot, studio=chan.get('studio')),
+                info_dict={'plot': plot, 'studio': chan.get('studio')},
             ))
         return channel_items
 
-    def get_episode_items(self, date, channel):
+    def get_episode_items(self, date, channel, end_cursor=None):
         """Show episodes for a given date and channel"""
         now = datetime.now(dateutil.tz.tzlocal())
-        epg = self.parse(date, now)
-        epg_url = epg.strftime(self.VRT_TVGUIDE)
-
-        self._favorites.refresh(ttl=ttl('indirect'))
-        self._resumepoints.refresh(ttl=ttl('indirect'))
-
-        cache_file = 'schedule.{date}.json'.format(date=date)
-        if date in ('today', 'yesterday', 'tomorrow'):
-            schedule = get_cached_url_json(url=epg_url, cache=cache_file, ttl=ttl('indirect'), fail={})
-        else:
-            schedule = get_url_json(url=epg_url, fail={})
-
-        entry = find_entry(CHANNELS, 'name', channel)
-        if entry:
-            episodes = schedule.get(entry.get('id'), [])
-        else:
-            episodes = []
-        episode_items = []
-        for episode in episodes:
-            program = url_to_program(episode.get('url', ''))
-            context_menu, favorite_marker, watchlater_marker = self._metadata.get_context_menu(episode, program, cache_file)
-            label = self._metadata.get_label(episode)
-            path = self.get_episode_path(episode, channel)
-            # Playable item
-            if '/play/' in path:
-                is_playable = True
-                label += favorite_marker + watchlater_marker
-            # Non-actionable item
-            else:
-                is_playable = False
-                label = '[COLOR={greyedout}]%s[/COLOR]' % label
-
-            # Now playing
-            start_date = dateutil.parser.parse(episode.get('startTime'))
-            end_date = dateutil.parser.parse(episode.get('endTime'))
-            if start_date <= now <= end_date:
-                if is_playable:
-                    label = '[COLOR={highlighted}]%s[/COLOR] %s' % (label, localize(30301))
-                else:
-                    label += localize(30301)
-
-            info_labels = self._metadata.get_info_labels(episode, date=date, channel=entry)
-            # FIXME: Due to a bug in Kodi, ListItem.Title is used when Sort methods are used, not ListItem.Label
-            info_labels['title'] = colour(label)
-
-            episode_items.append(TitleItem(
-                label=colour(label),
-                path=path,
-                art_dict=self._metadata.get_art(episode),
-                info_dict=info_labels,
-                context_menu=context_menu,
-                is_playable=is_playable,
-            ))
+        epg_date = self.parse(date, now)
+        episode_items = get_epg_episodes(date=epg_date.strftime('%Y-%m-%d'), channel=channel, page=end_cursor)
         return episode_items
-
-    @staticmethod
-    def get_episode_path(episode, channel):
-        """Return a playable plugin:// path for an episode"""
-        now = datetime.now(dateutil.tz.tzlocal())
-        end_date = dateutil.parser.parse(episode.get('endTime'))
-        if episode.get('url') and episode.get('vrt.whatson-id'):
-            return url_for('play_whatson_id', whatson_id=episode.get('vrt.whatson-id'))
-        if now - timedelta(hours=24) <= end_date <= now:
-            return url_for('play_air_date', channel, episode.get('startTime')[:19], episode.get('endTime')[:19])
-        return url_for('noop', whatsonid=episode.get('vrt.whatson-id', ''))
 
     def get_epg_data(self):
         """Return EPG data"""
-        now = datetime.now(dateutil.tz.tzlocal())
+        from base64 import b64decode
 
+        now = datetime.now(dateutil.tz.tzlocal())
         epg_data = {}
-        for date in ['yesterday', 'today', 'tomorrow']:
-            epg = self.parse(date, now)
-            epg_url = epg.strftime(self.VRT_TVGUIDE)
-            schedule = get_url_json(url=epg_url, fail={})
-            for channel_id, episodes in list(schedule.items()):
-                channel = find_entry(CHANNELS, 'id', channel_id)
+        tz_brussels = dateutil.tz.gettz('Europe/Brussels')
+
+        epg_dates = [now + timedelta(days=i) for i in range(-7, 8)]
+        for epg_date in epg_dates:
+
+            for channel in CHANNELS:
+                if not channel.get('has_tvguide'):
+                    continue
+
                 epg_id = channel.get('epg_id')
-                if epg_id not in epg_data:
-                    epg_data[epg_id] = []
-                for episode in episodes:
-                    if episode.get('url') and episode.get('vrt.whatson-id'):
-                        path = url_for('play_whatson_id', whatson_id=episode.get('vrt.whatson-id'))
+                epg_data.setdefault(epg_id, [])
+
+                data, _ = get_epg_list(channel.get('name'), epg_date.strftime('%Y-%m-%d'))
+
+                previous_stop_dt = None
+                for item in data:
+                    node = item.get('node', {}) or item
+                    stream = None
+                    ep_code = None
+
+                    # Decode start datetime
+                    if node.get('tileType') == 'livestream':
+                        start_str = node.get('livestream').get('startDateTime')
                     else:
-                        path = None
-                    epg_data[epg_id].append(dict(
-                        start=episode.get('startTime'),
-                        stop=episode.get('endTime'),
-                        image=add_https_proto(episode.get('image', '')),
-                        title=episode.get('title'),
-                        subtitle=html_to_kodi(episode.get('subtitle', '')),
-                        description=html_to_kodi(episode.get('description', '')),
-                        stream=path,
-                    ))
+                        comp_id = node.get('componentId', '').lstrip('#')
+                        decoded = b64decode(comp_id.encode('utf-8')).decode('utf-8')
+                        start_str = decoded.split('#1')[2].split('|')[0]
+
+                    start_dt = datetime.fromisoformat(start_str.replace('Z', '+00:00'))
+
+                    if node.get('livestream'):
+                        episode = node.get('livestream').get('episode')
+                    else:
+                        episode = node.get('episode')
+                    duration = timedelta(0)
+
+                    if node.get('progress'):
+                        duration = timedelta(seconds=node.get('progress').get('durationInSeconds'))
+                    elif episode and (dur_raw := episode.get('durationRaw')):
+                        duration = parse_duration(dur_raw)
+
+                    if duration == timedelta(0) and node.get('statusMeta'):
+                        minutes_str = node['statusMeta'][0].get('value', '').split()[0]
+                        if minutes_str.isdigit():
+                            duration = timedelta(minutes=int(minutes_str))
+
+                    stop_dt = start_dt + (duration or timedelta())
+
+                    epg_start_dt = previous_stop_dt or start_dt
+                    previous_stop_dt = stop_dt
+
+                    # Common conversion
+                    start_iso = epg_start_dt.astimezone(tz_brussels).isoformat()
+                    stop_iso = stop_dt.astimezone(tz_brussels).isoformat()
+
+                    # Fill EPG entry
+                    if episode:
+                        program = episode.get('program', {})
+                        title = program.get('title')
+                        description = episode.get('description')
+                        subtitle = episode.get('subtitle')
+                        image = ((episode.get('image') or {}).get('templateUrl') or '').split('?')[0]
+                        genre = (episode.get('analytics') or {}).get('categories')
+                        date = (episode.get('analytics') or {}).get('airDate')
+
+                        watch_action = episode.get('watchAction', {})
+                        video_id = watch_action.get('videoId')
+                        publication_id = watch_action.get('publicationId')
+                        if node.get('available'):
+                            stream = url_for('play_id', video_id=video_id, publication_id=publication_id)
+
+                        program_type = program.get('programType')
+                        season = episode.get('season', {})
+                        if (
+                            program_type == 'series'
+                            and (title_raw := season.get('titleRaw', '')).isnumeric()
+                            and isinstance(ep_no := episode.get('episodeNumberRaw'), int)
+                        ):
+                            se_no = int(title_raw)
+                            ep_code = f'S{se_no:02d}E{ep_no:02d}'
+                    else:
+                        title = node.get('title')
+                        description = subtitle = genre = date = None
+                        image = (node.get('image') or {}).get('templateUrl') if node.get('image') else None
+
+                    epg_data[epg_id].append({
+                        'start': start_iso,
+                        'stop': stop_iso,
+                        'title': title,
+                        'description': description,
+                        'subtitle': subtitle,
+                        'episode': ep_code,
+                        'genre': genre,
+                        'image': image,
+                        'date': date,
+                        'stream': stream,
+                    })
+
         return epg_data
 
     def playing_now(self, channel):

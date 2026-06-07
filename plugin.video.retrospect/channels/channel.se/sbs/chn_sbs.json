@@ -12,6 +12,7 @@
       "channelcode": "tv5json",
       "sortorder": 5,
       "language": "se",
+      "ignore": true,
       "fanart": "kanal5fanart.jpg"
     },
     {
@@ -26,6 +27,7 @@
       "channelcode": "tv9json",
       "sortorder": 9,
       "language": "se",
+      "ignore": true,
       "fanart": "dplayfanart.jpg"
     },
     {
@@ -40,6 +42,7 @@
       "channelcode": "tv11json",
       "sortorder": 11,
       "language": "se",
+      "ignore": true,
       "fanart": "tv11seimage.jpg"
     },
     {
@@ -54,6 +57,7 @@
       "channelcode": "dplayse",
       "sortorder": 7,
       "language": "se",
+      "ignore": true,
       "fanart": "dplusfanart.jpg"
     },
     {
@@ -68,6 +72,7 @@
       "channelcode": "dplayno",
       "sortorder": 7,
       "language": "no",
+      "ignore": true,
       "fanart": "dplayfanart.jpg"
     },
     {
@@ -82,6 +87,7 @@
       "channelcode": "tvnorge",
       "sortorder": 7,
       "language": "no",
+      "ignore": true,
       "fanart": "tvnorgefanart.jpg"
     },
     {
@@ -96,6 +102,7 @@
       "channelcode": "maxnorge",
       "sortorder": 7,
       "language": "no",
+      "ignore": true,
       "fanart": "dplayfanart.jpg"
     },
     {
@@ -110,6 +117,7 @@
       "channelcode": "femnorge",
       "sortorder": 7,
       "language": "no",
+      "ignore": true,
       "fanart": "dplayfanart.jpg"
     },
     {
@@ -124,6 +132,7 @@
       "channelcode": "voxnorge",
       "sortorder": 7,
       "language": "no",
+      "ignore": true,
       "fanart": "dplayfanart.jpg"
     },
     {
@@ -168,6 +177,7 @@
       "channelcode": "dplaydk",
       "sortorder": 7,
       "language": "dk",
+      "ignore": true,
       "fanart": "dplayfanart.jpg"
     }
   ],

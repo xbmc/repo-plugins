@@ -11,6 +11,8 @@ import dateutil.parser
 import dateutil.tz
 import requests
 
+from resources.lib import kodiutils
+
 _LOGGER = logging.getLogger(__name__)
 
 GENRE_MAPPING = {
@@ -30,6 +32,8 @@ GENRE_MAPPING = {
     'Thriller': 0x11,
     'Voetbal': 0x43,
 }
+
+PROXIES = kodiutils.get_proxies()
 
 
 class EpgProgram:
@@ -177,7 +181,7 @@ class EpgApi:
         :type url: str
         :rtype str
         """
-        response = self._session.get(url)
+        response = self._session.get(url, proxies=PROXIES)
 
         if response.status_code != 200:
             raise Exception('Could not fetch data')

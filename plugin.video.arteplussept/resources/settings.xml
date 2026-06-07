@@ -1,21 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <setting
-        id="lang"
-        type="enum"
-        label="30050"
-        values="fr|de|en|es|pl|it"
-        default="0"/>
-    <!-- <setting id="prefer_vost"      type="bool"   label="30051" default="false"/> -->
-    <setting
-        id="quality"
-        type="enum"
-        label="30052"
-        values="SQ (High)|EQ (Medium)|HQ (Low)"
-        default="0"/>
-    <setting
-        id="show_video_streams"
-        type="bool"
-        label="30053"
-        default="false"/>
+	<!-- General -->
+	<category label="30044">
+		<setting
+			id="lang"
+			type="enum"
+			label="30050"
+			values="fr|de|en|es|pl|it|ro"
+			default="0"/>
+		<setting
+			id="quality"
+			type="enum"
+			label="30052"
+			values="Low|Medium|High"
+			default="2"/>
+		<setting
+			id="show_video_streams"
+			type="bool"
+			label="30053"
+			default="false"/>
+		<setting
+			id="loglevel"
+			type="enum"
+			label="30056"
+			values="DEFAULT|API"
+			default="0"/>
+	</category>
+	
+	<!-- Profile -->
+	<category label="30045">
+		<setting
+			id="username"
+			type="text"
+			label="30054" />
+		<setting
+			type="action"
+			action="RunPlugin(plugin://plugin.video.arteplussept/user/login)"
+			label="30057" />
+		<setting
+			id="login_acc"
+			type="text"
+			enable="false"
+			default=""
+			subsetting="true"
+			label="" />
+		<setting
+			type="action"
+			action="RunPlugin(plugin://plugin.video.arteplussept/user/logout)"
+			label="30058" />
+	</category>
 </settings>

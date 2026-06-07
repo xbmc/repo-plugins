@@ -1,0 +1,78 @@
+{
+    "channels": [{
+        "name": "Schweizer Radio und Fernsehen",
+        "channel": "UCVuR4hBxX3zWY_xUCZeIc3A"
+    },
+    {
+        "name": "SRF Musik",
+        "channel": "UCl4lkSSo6rc5u15Z5cxWncA"
+    },
+    {
+        "name": "SRF DOK",
+        "channel": "UCdFkj0fA6VYJaty-v8_avvg"
+    },
+    {
+        "name": "SRF Kultur",
+        "channel": "UCh_GQqobenO55IJ9sYZWndA"
+    },
+    {
+        "name": "SRF Wissen",
+        "channel": "UCO1uLCdX--uLXXDdJXJfpJA"
+    },
+    {
+        "name": "SRF 3",
+        "channel": "UC1-g9E0BKQo5pID4y55K5iA"
+    },
+    {
+        "name": "SRF Comedy",
+        "channel": "UC0ia0Bh33OgZ8p4emfeGG6g"
+    },
+    {
+        "name": "SRF Virus",
+        "channel": "UCK8iSDkDpKsaMlVpz38qLUw"
+    },
+    {
+        "name": "Zwei am Morge",
+        "channel": "UCj88Pp4scKu5I2YJiy2JWQw"
+    },
+    {
+        "name": "SRF Sport",
+        "channel": "UC5vaBYHzkZvJkjGSNrz5tWQ"
+    },
+    {
+        "name": "SRF Archiv",
+        "channel": "UCd0NmHBRRAq5O-ye7kx_VlQ"
+    },
+    {
+        "name": "Nr. 47",
+        "channel": "UCbbFUi57jUR_VQh-N3x9KGA"
+    },
+    {
+        "name": "True Talk",
+        "channel": "UCQNvR_M_HYiZr_To1X3Qz_A"
+    },
+    {
+        "name": "Youngbulanz",
+        "channel": "UCetg03fzXGGlDGBRTJelkFQ"
+    },
+    {
+        "name": "SRF Digital",
+        "channel": "UCqNL83581wbf9pv_wHV0Zaw"
+    },
+    {
+        "name": "SRF Kids",
+        "channel": "UCodzpCel9VT-Sc0K7eeHm-w"
+    },
+    {
+        "name": "SRF Impact",
+        "channel": "UCjD8NR8386K2EGoe4DW-J1Q"
+    },
+    {
+        "name": "SRF Kassensturz",
+        "channel": "UCqdXpIZSamBceDmH8uOoTHA"
+    },
+    {
+        "name": "SRF Deville",
+        "channel": "UCX0OdLuEQ3ccSCq-Z7iMoiw"
+    }]
+}

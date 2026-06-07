@@ -29,6 +29,5 @@ def route(api):
     if PY2 and isinstance(prompt_url, unicode):
         prompt_url = prompt_url.encode('utf-8')
 
-    result = kodi.Dialog().ok(i18n('authorize_heading'),
-                              i18n('authorize_message') + '[CR]%s' % prompt_url)
+    _ = kodi.Dialog().ok(i18n('authorize_heading'), i18n('authorize_message') + '[CR]%s' % prompt_url)
     kodi.show_settings()

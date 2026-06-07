@@ -4,7 +4,7 @@ import json
 import websocket
 from . import url
 try:
-    from kodi_six import xbmc
+    import xbmc
     MONITOR = xbmc.Monitor()
 except:
     MONITOR = None

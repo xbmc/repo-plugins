@@ -14,7 +14,7 @@ import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
 
-from dumpert_const import LANGUAGE, IMAGES_PATH, DAY, WEEK, MONTH, LATEST_URL, TOPPERS_URL, DUMPERT_TV_URL, SEARCH_URL
+from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, DAY, WEEK, MONTH, LATEST_URL, TOPPERS_URL, DUMPERT_TV_URL, SEARCH_URL
 
 #
 # Main class

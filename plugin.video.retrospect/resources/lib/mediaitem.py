@@ -1,10 +1,10 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import os
 from datetime import datetime
-import binascii
 from functools import reduce
+from random import getrandbits
+from typing import Optional, Dict, Any, List, Union
 
 import xbmcgui
 
@@ -16,6 +16,7 @@ from resources.lib.helpers.encodinghelper import EncodingHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib import mediatype
 from resources.lib import contenttype
+from resources.lib.retroconfig import Config
 from resources.lib.streams.adaptive import Adaptive
 from resources.lib.proxyinfo import ProxyInfo
 
@@ -32,8 +33,38 @@ class MediaItem:
 
     """
 
+    actionUrl: Optional[str]
+    cacheToDisc: bool
+    complete: bool
+    content_type: str
+    description: str
+    dontGroup: bool
+    episode: int
+    fanart: str
+    HttpHeaders: Dict[str, str]
+    icon: str
+    isCloaked: bool
+    isDrmProtected: bool
+    isGeoLocked: bool
+    isLive: bool
+    isPaid: bool
+    items: List["MediaItem"]
+    media_type: Optional[str]
+    metaData: Dict[Any, Any]
+    name: str
+    postData: Optional[str]
+    poster: str
+    postJson: Optional[dict]
+    streams: List["MediaStream"]
+    subtitle: Optional[str]
+    thumb: str
+    tv_show_title: Optional[str]
+    url: str
+
+    LabelEpisode = "Episode"
     LabelTrackNumber = "TrackNumber"
     LabelDuration = "Duration"
+    LabelTvShowTitle = "TVShowTitle"
     ExpiresAt = LanguageHelper.get_localized_string(LanguageHelper.ExpiresAt)
 
     #noinspection PyShadowingBuiltins
@@ -63,6 +94,8 @@ class MediaItem:
         self.tv_show_title = tv_show_title
         self.url = url
         self.actionUrl = None
+        self.postData = None
+        self.postJson = None
 
         self.description = ""
         self.thumb = ""                           # : The thumbnail (16:9, min 520x293)
@@ -76,11 +109,12 @@ class MediaItem:
 
         self.dontGroup = False                    # : if set to True this item will not be auto grouped.
         self.isLive = False                       # : if set to True, the item will have a random QuerySting param
+        self.cacheToDisc = True                   # : cache the content to disk so Kodi will not refetch
         self.isGeoLocked = False                  # : if set to True, the item is GeoLocked to the channels language (o)
         self.isDrmProtected = False               # : if set to True, the item is DRM protected and cannot be played (^)
         self.isPaid = False                       # : if set to True, the item is a Paid item and cannot be played (*)
         self.season = 0                           # : The season number
-        self.epsiode = 0                          # : The episode number
+        self.episode = 0                          # : The episode number
         self.__infoLabels = dict()                # : Additional Kodi InfoLabels
 
         self.complete = False
@@ -97,7 +131,7 @@ class MediaItem:
         # musicvideos, videos, images, games. Defaults to 'episodes'
         self.content_type = contenttype.EPISODES
 
-        self.streams = []  # type: list[MediaStream]
+        self.streams = []
         self.subtitle = None
 
         if depickle:
@@ -107,12 +141,29 @@ class MediaItem:
 
         # GUID used for identification of the object. Do not set from script, MD5 needed
         # to prevent UTF8 issues
-        try:
-            self.guid = "%s%s" % (EncodingHelper.encode_md5(title), EncodingHelper.encode_md5(url or ""))
-        except:
-            Logger.error("Error setting GUID for title:'%s' and url:'%s'. Falling back to UUID", title, url, exc_info=True)
-            self.guid = self.__get_uuid()
-        self.guidValue = int("0x%s" % (self.guid,), 0)
+        self.__guid = None
+        self.__guid_value = None
+
+    @property
+    def guid(self):
+        """ Returns the item's GUID
+
+        :rtype: str
+
+        """
+
+        if not self.__guid:
+            self.__set_guids()
+
+        return self.__guid
+
+    @property
+    def guid_value(self):
+        """ Returns the guid's int value that can be used for hashing. """
+        if not self.__guid_value:
+            self.__set_guids()
+
+        return self.__guid_value
 
     def add_stream(self, url, bitrate=0, subtitle=None):
         """ Appends a single stream to  this MediaItem.
@@ -187,6 +238,10 @@ class MediaItem:
         """
         return self.media_type in mediatype.AUDIO_TYPES
 
+    @property
+    def is_search_folder(self) -> bool:
+        return self.is_folder and "retrospect:needle" in self.metaData
+
     def has_track(self):
         """ Does this MediaItem have a TrackNumber InfoLabel
 
@@ -244,6 +299,18 @@ class MediaItem:
 
         self.__infoLabels[label] = value
 
+    def has_info_label(self, label):
+        """ Indication of a specific info label is present
+
+        :param str label:   The info label to check.
+
+        :returns: In boolean whether the info label exists.
+        :rtype: bool
+
+        """
+
+        return label in self.__infoLabels
+
     def set_artwork(self, icon=None, thumb=None, fanart=None, poster=None):
         """ Set the artwork for this MediaItem.
 
@@ -260,11 +327,12 @@ class MediaItem:
         self.fanart = fanart or self.fanart
         self.poster = poster or self.poster
 
-    def set_season_info(self, season, episode):
+    def set_season_info(self, season, episode, tv_show_title=None):
         """ Set season and episode information
 
         :param str|int season:  The Season Number
         :param str|int episode: The Episode Number
+        :param str|None: The name of the TV Show
 
         """
 
@@ -272,11 +340,16 @@ class MediaItem:
             Logger.warning("Cannot set EpisodeInfo without season and episode")
             return
 
-        self.season = int(season)
-        self.__infoLabels["Season"] = self.season
+        if season:
+            self.season = int(season)
+            self.__infoLabels["Season"] = self.season
 
-        self.epsiode = int(episode)
-        self.__infoLabels["Episode"] = self.epsiode
+        if episode:
+            self.episode = int(episode)
+            self.__infoLabels["Episode"] = self.episode
+
+        if tv_show_title:
+            self.tv_show_title = tv_show_title
         return
 
     def set_expire_datetime(self, timestamp, year=0, month=0, day=0, hour=0, minutes=0, seconds=0):
@@ -309,7 +382,7 @@ class MediaItem:
 
         return "{:03d}-{:03d}-{}-{}".format(
             self.season,
-            self.epsiode,
+            self.episode,
             self.__timestamp.strftime("%Y.%m.%d") if self.__timestamp.year > 1900 else "0001.01.01",
             self.name)
 
@@ -444,10 +517,10 @@ class MediaItem:
             info_labels["Date"] = kodi_date
             info_labels["Year"] = kodi_year
             info_labels["Aired"] = kodi_date
-        if self.media_type in mediatype.VIDEO_TYPES:
+        if self.media_type in (mediatype.VIDEO_TYPES | mediatype.FOLDER_TYPES):
             info_labels["Plot"] = description
         if self.tv_show_title:
-            info_labels["TVShowTitle"] = self.tv_show_title
+            info_labels[MediaItem.LabelTvShowTitle] = self.tv_show_title
 
         # now create the Kodi item
         item = kodifactory.list_item(name or "<unknown>", self.__date)
@@ -541,7 +614,9 @@ class MediaItem:
 
     @property
     def uses_external_addon(self):
-        return self.url is not None and self.url.startswith("plugin://")
+        return (self.url is not None
+                and self.url.startswith("plugin://")
+                and not self.url.startswith(f"plugin://{Config.addonId}"))
 
     @property
     def title(self):
@@ -632,10 +707,25 @@ class MediaItem:
                 Logger.debug("Adding (Pre-Krypton) %s", proxy)
         return
 
-    def __get_uuid(self):
+    def __set_guids(self):
         """ Generates a Unique Identifier based on Time and Random Integers """
 
-        return binascii.hexlify(os.urandom(16)).upper()
+        try:
+            self.__guid = "%s%s" % (
+                EncodingHelper.encode_md5(self.name), EncodingHelper.encode_md5(self.url or ""))
+            self.__guid_value = int("0x%s" % (self.guid,), 0)
+
+            # For live items and search, append a random part to the textual guid, as these items
+            # actually have different content for the same URL.
+            if self.isLive:
+                self.__guid = "%s%s" % (self.__guid, ("%0x" % getrandbits(8 * 4)).upper())
+        except:
+            Logger.error("Error setting GUID for title:'%s' and url:'%s'. Falling back to UUID",
+                         self.title, self.url, exc_info=True)
+            # Slower code
+            # self.__guid = binascii.hexlify(os.urandom(16)).decode().upper()
+            self.__guid = "%0x" % getrandbits(32 * 4)
+            self.__guid_value = int("0x%s" % (self.guid,), 0)
 
     def __full_decode_text(self, string_value):
         """ Decodes a byte encoded string with HTML content into Unicode String
@@ -662,7 +752,7 @@ class MediaItem:
         return string_value
 
     def __str__(self):
-        """ String representation 
+        """ String representation
 
         :return: The String representation
         :rtype: str
@@ -720,7 +810,7 @@ class MediaItem:
     def __hash__(self):
         """ returns the hash value """
 
-        return hash(self.guidValue)
+        return hash(self.guid_value)
 
     def __equals(self, other):
         """ Checks two MediaItems for equality
@@ -735,7 +825,7 @@ class MediaItem:
         if not other:
             return False
 
-        return self.guidValue == other.guidValue
+        return self.guid_value == other.guid_value
 
     def __update_title_and_description_with_limitations(self):
         """ Updates the title/name and description with the symbols for DRM, GEO and Paid.
@@ -935,7 +1025,7 @@ class MediaStream:
         """ Appends a new property to the self.Properties dictionary. On playback
         these properties will be set to the Kodi PlaylistItem as properties.
 
-        Example:    
+        Example:
         strm.add_property("inputstream", "inputstream.adaptive")
         strm.add_property("inputstream.adaptive.manifest_type", "mpd")
 
@@ -980,3 +1070,6 @@ class MediaStream:
             text = "%s\n    + Property: %s=%s" % (text, prop[0], prop[1])
 
         return text
+
+
+MediaItemResult = Optional[Union[List[MediaItem], MediaItem]]

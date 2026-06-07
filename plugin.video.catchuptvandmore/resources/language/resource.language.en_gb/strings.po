@@ -64,7 +64,7 @@ msgid "Hide channels"
 msgstr ""
 
 msgctxt "#30012"
-msgid "To configure YTDL go settings of script.module.youtube.dl"
+msgid "YTDL settings"
 msgstr ""
 
 msgctxt "#30013"
@@ -116,6 +116,10 @@ msgstr ""
 
 msgctxt "#30033"
 msgid "Favourites"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Internet service providers"
 msgstr ""
 
 
@@ -193,6 +197,53 @@ msgctxt "#30067"
 msgid "Morocco"
 msgstr ""
 
+msgctxt "#30068"
+msgid "Singapore"
+msgstr ""
+
+msgctxt "#30069"
+msgid "Lituania"
+msgstr ""
+
+msgctxt "#30070"
+msgid "Turkey"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Slovakia"
+msgstr ""
+
+msgctxt "#30072"
+msgid "Greece"
+msgstr ""
+
+msgctxt "#30073"
+msgid "Peru"
+msgstr ""
+
+msgctxt "#30074"
+msgid "Venezuela"
+msgstr ""
+
+msgctxt "#30075"
+msgid "Luxembourg"
+msgstr ""
+
+msgctxt "#30076"
+msgid "Bolivia"
+msgstr ""
+
+msgctxt "#30077"
+msgid "Saudi Arabia"
+msgstr ""
+
+msgctxt "#30078"
+msgid "Macedonia"
+msgstr ""
+
+msgctxt "#30079"
+msgid "Ireland"
+msgstr ""
 
 # Channels (from 30080 to 30129)
 
@@ -268,6 +319,13 @@ msgctxt "#30097"
 msgid "Moroccan channels"
 msgstr ""
 
+msgctxt "#30098"
+msgid "Peruvian channels"
+msgstr ""
+
+msgctxt "#30099"
+msgid "UK channels"
+msgstr ""
 
 # Websites (from 30130 to 30149)
 
@@ -280,7 +338,7 @@ msgid "Video quality"
 msgstr ""
 
 msgctxt "#30151"
-msgid "Video quality (BEST|DEFAULT|DIALOG)"
+msgid "Device is L1 certified"
 msgstr ""
 
 msgctxt "#30152"
@@ -359,6 +417,85 @@ msgctxt "#30170"
 msgid "CBC: Choose region"
 msgstr ""
 
+msgctxt "#30171"
+msgid "BFM Régions: Choose region"
+msgstr ""
+
+msgctxt "#30173"
+msgid "TV5 monde plus: Choose language"
+msgstr ""
+
+msgctxt "#30174"
+msgid "Choose live channel"
+msgstr ""
+
+msgctxt "#30175"
+msgid "Equidia Racing: Choose race"
+msgstr ""
+
+msgctxt "#30177"
+msgid "TV5 monde: Choose region"
+msgstr ""
+
+msgctxt "#30178"
+msgid "France, Belgium, Switzerland"
+msgstr ""
+
+msgctxt "#30179"
+msgid "Europe, outside FBS"
+msgstr ""
+
+msgctxt "#30180"
+msgid "Video quality"
+msgstr ""
+
+msgctxt "#30181"
+msgid "Choose version"
+msgstr ""
+
+msgctxt "#30182"
+msgid "France 3 Régions: Choose subregion"
+msgstr ""
+
+msgctxt "#30183"
+msgid "Channel4: Programmes: Sort By"
+msgstr ""
+
+msgctxt "#30184"
+msgid "quality: "
+msgstr ""
+
+msgctxt "#30192"
+msgid "BEST"
+msgstr ""
+
+msgctxt "#30193"
+msgid "DEFAULT"
+msgstr ""
+
+msgctxt "#30194"
+msgid "DIALOG"
+msgstr ""
+
+msgctxt "#30195"
+msgid "WORST"
+msgstr ""
+
+msgctxt "#30196"
+msgid "Maximum stream bitrate [COLOR=gray](0=disabled)[/COLOR]"
+msgstr ""
+
+msgctxt "#30197"
+msgid "Settings - InputStream adaptive"
+msgstr ""
+
+msgctxt "#30198"
+msgid "Use inputstream HLS?"
+msgstr ""
+
+msgctxt "#30199"
+msgid "Use ytdl for stream?"
+msgstr ""
 
 # Download (from 30200 to 30239)
 
@@ -380,14 +517,6 @@ msgstr ""
 
 
 # Accounts (from 30240 to 30269)
-
-msgctxt "#30240"
-msgid "NRJ Login"
-msgstr ""
-
-msgctxt "#30241"
-msgid "NRJ Password"
-msgstr ""
 
 msgctxt "#30242"
 msgid "VRT NU Login"
@@ -429,6 +558,70 @@ msgctxt "#30251"
 msgid "UKTVPlay Password"
 msgstr ""
 
+msgctxt "#30252"
+msgid "RMCBFM Play Login"
+msgstr ""
+
+msgctxt "#30253"
+msgid "RMCBFM Play Password"
+msgstr ""
+
+msgctxt "#30254"
+msgid "TV guides"
+msgstr ""
+
+msgctxt "#30255"
+msgid "Schedules Direct login"
+msgstr ""
+
+msgctxt "#30256"
+msgid "Schedules Direct password"
+msgstr ""
+
+msgctxt "#30257"
+msgid "Schedules Direct lineup"
+msgstr ""
+
+msgctxt "#30258"
+msgid "RTBF auvio Login"
+msgstr ""
+
+msgctxt "#30259"
+msgid "RTBF auvio Password"
+msgstr ""
+
+msgctxt "#30260"
+msgid "TF1+ Login"
+msgstr ""
+
+msgctxt "#30261"
+msgid "TF1+ Password"
+msgstr ""
+
+msgctxt "#30262"
+msgid "SFR TV login"
+msgstr ""
+
+msgctxt "#30263"
+msgid "SFR TV password"
+msgstr ""
+
+msgctxt "#30264"
+msgid "Channel 4 Login"
+msgstr ""
+
+msgctxt "#30265"
+msgid "Channel 4 Password"
+msgstr ""
+
+msgctxt "#30266"
+msgid "Log in to Channel5"
+msgstr ""
+
+msgctxt "#30267"
+msgid "Log out of Channel5"
+msgstr ""
+
 
 # TV integration (from 30270 to 30289)
 
@@ -466,10 +659,7 @@ msgstr ""
 
 
 
-# Reserved space for other tab/category in settins (from 30290 to 30339)
-
-
-
+# Reserved space for other tab/category in settings (from 30290 to 30339)
 
 
 # Advanced settings (from 30370 to 30399)
@@ -682,7 +872,7 @@ msgid "No videos found"
 msgstr ""
 
 msgctxt "#30719"
-msgid "Inputstream Adaptive not enable"
+msgid "Inputstream Adaptive not enabled"
 msgstr ""
 
 msgctxt "#30720"
@@ -691,10 +881,6 @@ msgstr ""
 
 msgctxt "#30721"
 msgid "Content requiring a subscription"
-msgstr ""
-
-msgctxt "#30722"
-msgid "TV guide"
 msgstr ""
 
 msgctxt "#30723"
@@ -711,6 +897,42 @@ msgstr ""
 
 msgctxt "#30726"
 msgid "Races"
+msgstr ""
+
+msgctxt "#30727"
+msgid "Most popular"
+msgstr ""
+
+msgctxt "#30728"
+msgid "Recently added"
+msgstr ""
+
+msgctxt "#30729"
+msgid "Emissions"
+msgstr ""
+
+msgctxt "#30731"
+msgid "Homepage"
+msgstr ""
+
+msgctxt "#30732"
+msgid "This content requires a payment. To buy or rent it, go to %s website at this URL : %s"
+msgstr ""
+
+msgctxt "#30733"
+msgid "Enter email"
+msgstr ""
+
+msgctxt "#30734"
+msgid "Enter password"
+msgstr ""
+
+msgctxt "#30735"
+msgid "Logged in successfully"
+msgstr ""
+
+msgctxt "#30736"
+msgid "Logged out successfully"
 msgstr ""
 
 
@@ -788,4 +1010,8 @@ msgstr ""
 
 msgctxt "#30895"
 msgid "This resource is no longer available"
+msgstr ""
+
+msgctxt "#30896"
+msgid "No item"
 msgstr ""

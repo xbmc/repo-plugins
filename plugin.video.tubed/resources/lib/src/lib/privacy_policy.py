@@ -26,7 +26,7 @@ def show_privacy_policy(context):
         LOG.debug('User has not accepted the current revision '
                   'of the privacy policy, prompting now...')
 
-        with open(PRIVACY_POLICY_MARKDOWN, 'r') as file_handle:
+        with open(PRIVACY_POLICY_MARKDOWN, 'r', encoding='utf-8') as file_handle:
             privacy_policy = file_handle.read()
 
         privacy_policy = privacy_policy.replace('## ', '').replace('<br />', '').replace('*', '')

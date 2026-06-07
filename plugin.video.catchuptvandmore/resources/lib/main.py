@@ -7,6 +7,7 @@
 from __future__ import unicode_literals
 from builtins import str
 import importlib
+import os
 import sys
 
 from codequick import Route, Resolver, Listitem, Script, utils
@@ -15,8 +16,14 @@ from kodi_six import xbmc, xbmcgui, xbmcplugin
 
 from resources.lib.addon_utils import get_item_label, get_item_media_path
 import resources.lib.favourites as fav
-from resources.lib.kodi_utils import build_kodi_url, get_params_in_query
+from resources.lib.kodi_utils import build_kodi_url, get_params_in_query, get_proxy
 from resources.lib.menu_utils import get_sorted_menu, add_context_menus_to_item
+
+
+proxy = get_proxy()
+if proxy:
+    os.environ['HTTP_PROXY'] = proxy
+    os.environ['HTTPS_PROXY'] = proxy
 
 
 @Route.register
@@ -130,7 +137,11 @@ def tv_guide_menu(plugin, item_id, **kwargs):
 
     # Get tv_guide of this country
     xmltv = importlib.import_module('resources.lib.xmltv')
-    tv_guide = xmltv.grab_current_programmes(live_country_id)
+    # Use local time format without seconds. Fix weird kodi formatting for 12-hour clock.
+    time_format = xbmc.getRegion('time').replace(':%S', '').replace('%I%I:', '%I:')
+    tv_guide = xmltv.grab_current_programmes(live_country_id,
+                                             time_range=6,
+                                             time_format=time_format)
 
     # Treat this menu as a generic menu and add, if any, tv guide information
     for item in generic_menu(plugin, live_country_id):
@@ -139,50 +150,32 @@ def tv_guide_menu(plugin, item_id, **kwargs):
         if 'xmltv_id' in item.params and item.params['xmltv_id'] in tv_guide:
             guide_infos = tv_guide[item.params['xmltv_id']]
 
+            now_playing = guide_infos[0]
+
             # Title
-            if 'title' in guide_infos:
-                item.label = item.label + ' — ' + guide_infos['title']
+            show_title = now_playing.get('title')
+            if show_title:
+                item.info['title'] = f'{item.label}    [COLOR orange]{show_title}[/COLOR]'
 
             # Credits
             credits = []
-            for credit, l in guide_infos.get('credits', {}).items():
+            for credit, l in now_playing.get('credits', {}).items():
                 for s in l:
                     credits.append(s)
             item.info['credits'] = credits
 
-            # Country
-            if 'country' in guide_infos:
-                item.info['country'] = guide_infos['country']
-
-            # Category
-            if 'category' in guide_infos:
-                item.info['genre'] = guide_infos['category']
-
-            # Plot
-            plot = []
-
-            # start_time and stop_time must be a string
-            if 'start' in guide_infos and 'stop' in guide_infos:
-                s = guide_infos['start'] + ' - ' + guide_infos['stop']
-                plot.append(s)
-            elif 'stop' in guide_infos:
-                plot.append(guide_infos['stop'])
-
-            if 'sub-title' in guide_infos:
-                plot.append(guide_infos['sub-title'])
-
-            if 'desc' in guide_infos:
-                plot.append(guide_infos['desc'])
-
-            item.info['plot'] = '\n'.join(plot)
-
-            # Duration
-            item.info["duration"] = guide_infos.get('length')
+            item.info['country'] = now_playing.get('country')
+            item.info['genre'] = now_playing.get('category')
+            item.info["duration"] = now_playing.get('length')
 
             # Art
             if 'icon' in guide_infos:
-                item.art["clearlogo"] = item.art["thumb"]
-                item.art["thumb"] = guide_infos['icon']
+                item.art["clearlogo"] = now_playing.art["thumb"]
+                item.art["thumb"] = now_playing['icon']
+
+            # Build plot from EPG of upcoming programmes, with a max of 12 programmes.
+            plot = '\n'.join(f"{pgm.get('start', '')} - {pgm.get('title', '')}" for pgm in guide_infos[:12])
+            item.info['plot'] = plot
 
         # Playcount is useless for live streams
         item.info['playcount'] = 0

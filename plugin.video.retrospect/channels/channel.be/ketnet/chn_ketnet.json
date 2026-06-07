@@ -12,7 +12,8 @@
       "channelcode": "ketnet",
       "sortorder": 12,
       "language": "be",
-      "fanart": "ketnetfanart.jpg"
+      "fanart": "ketnetfanart.jpg",
+      "ignore": true
     }
   ],
   "settings": [

@@ -270,3 +270,11 @@ msgstr ""
 msgctxt "#30906"
 msgid "Whoops! That password is invalid"
 msgstr ""
+
+msgctxt "#30907"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30908"
+msgid "This resource is restricted in your region."
+msgstr ""

@@ -3,7 +3,6 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
-import hashlib
 import json
 import logging
 
@@ -27,25 +26,27 @@ CONTENT_TYPE_EPISODE = 'EPISODE'
 
 
 class ApiUpdateRequired(Exception):
-    """ Is thrown when the an API update is required. """
+    """ Is thrown when an API update is required. """
 
 
 class VtmGo:
     """ VTM GO API """
 
-    def __init__(self, auth=None):
-        """ Initialise object """
-        self._auth = auth
-        self._tokens = self._auth.get_tokens() if self._auth else None
+    def __init__(self, tokens):
+        """ Initialise object
+        :param resources.lib.vtmgo.vtmgoauth.AccountStorage token:       An authenticated token.
+        """
+        self._tokens = tokens
 
     def _mode(self):
         """ Return the mode that should be used for API calls """
-        return 'vtmgo-kids' if self.get_product() == 'VTM_GO_KIDS' else 'vtmgo'
+        return 'vtmgo-kids' if self.get_product() == 'VTM_GO_KIDS' else 'VTM_GO'
 
-    def get_config(self):
+    @staticmethod
+    def get_config():
         """ Returns the config for the app """
         # This is currently not used
-        response = util.http_get(API_ANDROID_ENDPOINT + '/vtmgo/config', token=self._tokens.jwt_token)
+        response = util.http_get(API_ANDROID_ENDPOINT + '/vtmgo/config')
         info = json.loads(response.text)
 
         # This contains a player.updateIntervalSeconds that could be used to notify VTM GO about the playing progress
@@ -58,7 +59,7 @@ class VtmGo:
          :rtype: list[Category|Program|Movie]
          """
         response = util.http_get(API_ENDPOINT + '/%s/storefronts/%s' % (self._mode(), storefront),
-                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 token=self._tokens.access_token if self._tokens else None,
                                  profile=self._tokens.profile if self._tokens else None)
         result = json.loads(response.text)
 
@@ -67,7 +68,7 @@ class VtmGo:
             if row.get('rowType') in ['SWIMLANE_DEFAULT', 'SWIMLANE_PORTRAIT', 'SWIMLANE_LANDSCAPE']:
                 items.append(Category(
                     category_id=row.get('id'),
-                    title=row.get('title'),
+                    title=row.get('title').strip(),
                 ))
                 continue
 
@@ -101,7 +102,7 @@ class VtmGo:
          :rtype: Category
          """
         response = util.http_get(API_ENDPOINT + '/%s/storefronts/%s/detail/%s' % (self._mode(), storefront, category),
-                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 token=self._tokens.access_token if self._tokens else None,
                                  profile=self._tokens.profile if self._tokens else None)
         result = json.loads(response.text)
 
@@ -118,7 +119,7 @@ class VtmGo:
     def get_mylist(self, content_filter=None, cache=CACHE_ONLY):
         """ Returns the contents of My List """
         response = util.http_get(API_ENDPOINT + '/%s/my-list' % (self._mode()),
-                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 token=self._tokens.access_token if self._tokens else None,
                                  profile=self._tokens.profile if self._tokens else None)
 
         # Result can be empty
@@ -128,7 +129,7 @@ class VtmGo:
         result = json.loads(response.text)
 
         items = []
-        for item in result.get('teasers'):
+        for item in result.get('teasers', []):
             if item.get('target', {}).get('type') == CONTENT_TYPE_MOVIE and content_filter in [None, Movie]:
                 items.append(self._parse_movie_teaser(item, cache=cache))
 
@@ -140,17 +141,17 @@ class VtmGo:
 
         return items
 
-    def add_mylist(self, video_type, content_id):
+    def add_mylist(self, content_id):
         """ Add an item to My List """
-        util.http_put(API_ENDPOINT + '/%s/userData/myList/%s/%s' % (self._mode(), video_type, content_id),
-                      token=self._tokens.jwt_token,
+        util.http_put(API_ENDPOINT + '/%s/userData/myList/%s' % (self._mode(), content_id),
+                      token=self._tokens.access_token,
                       profile=self._tokens.profile)
         kodiutils.set_cache(['swimlane', 'my-list'], None)
 
-    def del_mylist(self, video_type, content_id):
+    def del_mylist(self, content_id):
         """ Delete an item from My List """
-        util.http_delete(API_ENDPOINT + '/%s/userData/myList/%s/%s' % (self._mode(), video_type, content_id),
-                         token=self._tokens.jwt_token,
+        util.http_delete(API_ENDPOINT + '/%s/userData/myList/%s' % (self._mode(), content_id),
+                         token=self._tokens.access_token,
                          profile=self._tokens.profile)
         kodiutils.set_cache(['swimlane', 'my-list'], None)
 
@@ -160,7 +161,7 @@ class VtmGo:
         """
         import dateutil.parser
         response = util.http_get(API_ENDPOINT + '/%s/live' % self._mode(),
-                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 token=self._tokens.access_token if self._tokens else None,
                                  profile=self._tokens.profile if self._tokens else None)
         info = json.loads(response.text)
 
@@ -191,50 +192,6 @@ class VtmGo:
         channels = self.get_live_channels()
         return next(c for c in channels if c.key == key)
 
-    def get_categories(self):
-        """ Get a list of all the categories.
-        :rtype list[Category]
-        """
-        response = util.http_get(API_ENDPOINT + '/%s/catalog/filters' % self._mode(),
-                                 token=self._tokens.jwt_token if self._tokens else None,
-                                 profile=self._tokens.profile if self._tokens else None)
-        info = json.loads(response.text)
-
-        categories = []
-        for item in info.get('catalogFilters', []):
-            categories.append(Category(
-                category_id=item.get('id'),
-                title=item.get('title'),
-            ))
-
-        return categories
-
-    def get_items(self, category=None, content_filter=None, cache=CACHE_ONLY):
-        """ Get a list of all the items in a category.
-
-        :type category: str
-        :type content_filter: class
-        :type cache: int
-        :rtype list[resources.lib.vtmgo.Movie | resources.lib.vtmgo.Program]
-        """
-        # Fetch from API
-        response = util.http_get(API_ENDPOINT + '/%s/catalog' % self._mode(),
-                                 params={'pageSize': 2000, 'filter': quote(category) if category else None},
-                                 token=self._tokens.jwt_token if self._tokens else None,
-                                 profile=self._tokens.profile if self._tokens else None)
-        info = json.loads(response.text)
-        content = info.get('pagedTeasers', {}).get('content', [])
-
-        items = []
-        for item in content:
-            if item.get('target', {}).get('type') == CONTENT_TYPE_MOVIE and content_filter in [None, Movie]:
-                items.append(self._parse_movie_teaser(item, cache=cache))
-
-            elif item.get('target', {}).get('type') == CONTENT_TYPE_PROGRAM and content_filter in [None, Program]:
-                items.append(self._parse_program_teaser(item, cache=cache))
-
-        return items
-
     def get_movie(self, movie_id, cache=CACHE_AUTO):
         """ Get the details of the specified movie.
         :type movie_id: str
@@ -249,13 +206,12 @@ class VtmGo:
         else:
             movie = None
 
-        if movie is None:
+        if not movie:
             # Fetch from API
             response = util.http_get(API_ENDPOINT + '/%s/movies/%s' % (self._mode(), movie_id),
-                                     token=self._tokens.jwt_token if self._tokens else None,
+                                     token=self._tokens.access_token if self._tokens else None,
                                      profile=self._tokens.profile if self._tokens else None)
-            info = json.loads(response.text)
-            movie = info.get('movie', {})
+            movie = json.loads(response.text)
             kodiutils.set_cache(['movie', movie_id], movie)
 
         return Movie(
@@ -263,10 +219,11 @@ class VtmGo:
             name=movie.get('name'),
             description=movie.get('description'),
             duration=movie.get('durationSeconds'),
-            thumb=movie.get('teaserImageUrl'),
-            fanart=movie.get('bigPhotoUrl'),
+            thumb=movie.get('landscapeTeaserImageUrl'),
+            # portraitthumb=movie.get('portraitTeaserImageUrl'),
+            fanart=movie.get('backgroundImageUrl'),
             year=movie.get('productionYear'),
-            geoblocked=movie.get('geoBlocked'),
+            geoblocked=movie.get('blockedFor') == 'GEO',
             remaining=movie.get('remainingDaysAvailable'),
             legal=movie.get('legalIcons'),
             # aired=movie.get('broadcastTimestamp'),
@@ -287,49 +244,49 @@ class VtmGo:
         else:
             program = None
 
-        if program is None:
+        if not program:
             # Fetch from API
-            response = util.http_get(API_ENDPOINT + '/%s/programs/%s' % (self._mode(), program_id),
-                                     token=self._tokens.jwt_token if self._tokens else None,
+            response = util.http_get(API_ENDPOINT + '/%s/detail/%s' % (self._mode(), program_id),
+                                     token=self._tokens.access_token if self._tokens else None,
                                      profile=self._tokens.profile if self._tokens else None)
-            info = json.loads(response.text)
-            program = info.get('program', {})
+            program = json.loads(response.text)
             kodiutils.set_cache(['program', program_id], program)
 
         channel = self._parse_channel(program.get('channelLogoUrl'))
 
-        # Calculate a hash value of the ids of all episodes
-        program_hash = hashlib.md5()
-        program_hash.update(program.get('id').encode())
-
         seasons = {}
-        for item_season in program.get('seasons', []):
-            episodes = {}
+        for item_season in program.get('seasonIndices', []):
+            episodes = []
 
-            for item_episode in item_season.get('episodes', []):
-                episodes[item_episode.get('index')] = Episode(
+            # Fetch season
+            season_response = util.http_get(API_ENDPOINT + '/%s/detail/%s?selectedSeasonIndex=%s' % (self._mode(), program_id, item_season),
+                                            token=self._tokens.access_token if self._tokens else None,
+                                            profile=self._tokens.profile if self._tokens else None)
+            season = json.loads(season_response.text).get('selectedSeason')
+
+            for item_episode in season.get('episodes', []):
+                episodes.append(Episode(
                     episode_id=item_episode.get('id'),
                     program_id=program_id,
                     program_name=program.get('name'),
                     number=item_episode.get('index'),
-                    season=item_season.get('index'),
+                    season=item_season,
                     name=item_episode.get('name'),
                     description=item_episode.get('description'),
                     duration=item_episode.get('durationSeconds'),
-                    thumb=item_episode.get('bigPhotoUrl'),
-                    fanart=item_episode.get('bigPhotoUrl'),
-                    geoblocked=program.get('geoBlocked'),
+                    thumb=item_episode.get('imageUrl'),
+                    fanart=item_episode.get('imageUrl'),
+                    geoblocked=program.get('blockedFor') == 'GEO',
                     remaining=item_episode.get('remainingDaysAvailable'),
                     channel=channel,
                     legal=program.get('legalIcons'),
                     aired=item_episode.get('broadcastTimestamp'),
                     progress=item_episode.get('playerPositionSeconds', 0),
                     watched=item_episode.get('doneWatching', False),
-                )
-                program_hash.update(item_episode.get('id').encode())
+                ))
 
-            seasons[item_season.get('index')] = Season(
-                number=item_season.get('index'),
+            seasons[item_season] = Season(
+                number=item_season,
                 episodes=episodes,
                 channel=channel,
                 legal=program.get('legalIcons'),
@@ -340,13 +297,12 @@ class VtmGo:
             name=program.get('name'),
             description=program.get('description'),
             year=program.get('productionYear'),
-            thumb=program.get('teaserImageUrl'),
-            fanart=program.get('bigPhotoUrl'),
-            geoblocked=program.get('geoBlocked'),
+            thumb=program.get('landscapeTeaserImageUrl'),
+            fanart=program.get('backgroundImageUrl'),
+            geoblocked=program.get('blockedFor') == 'GEO',
             seasons=seasons,
             channel=channel,
             legal=program.get('legalIcons'),
-            content_hash=program_hash.hexdigest().upper(),
             # my_list=program.get('addedToMyList'),  # Don't use addedToMyList, since we might have cached this info
         )
 
@@ -358,7 +314,7 @@ class VtmGo:
         :rtype Episode
         """
         for season in list(program.seasons.values()):
-            for episode in list(season.episodes.values()):
+            for episode in season.episodes:
                 if episode.episode_id == episode_id:
                     return episode
 
@@ -375,7 +331,7 @@ class VtmGo:
         next_season_episode = None
 
         # First, try to find a match in the current season
-        for episode in [e for s in list(program.seasons.values()) for e in list(s.episodes.values())]:
+        for episode in [e for s in list(program.seasons.values()) for e in s.episodes]:
             if episode.season == season and episode.number == number + 1:
                 return episode
             if episode.season == season + 1 and episode.number == 1:
@@ -394,7 +350,7 @@ class VtmGo:
         :rtype Episode
         """
         response = util.http_get(API_ENDPOINT + '/%s/play/episodes/%s' % (self._mode(), episode_id),
-                                 token=self._tokens.jwt_token if self._tokens else None,
+                                 token=self._tokens.access_token if self._tokens else None,
                                  profile=self._tokens.profile if self._tokens else None)
         episode = json.loads(response.text)
 
@@ -419,53 +375,14 @@ class VtmGo:
             next_episode=next_episode,
         )
 
-    def get_mylist_ids(self):
-        """ Returns the IDs of the contents of My List """
-        # Try to fetch from cache
-        items = kodiutils.get_cache(['mylist_id'], 300)  # 5 minutes ttl
-        if items:
-            return items
-
-        # Fetch from API
-        response = util.http_get(API_ENDPOINT + '/%s/my-list' % (self._mode()),
-                                 token=self._tokens.jwt_token,
-                                 profile=self._tokens.profile)
-
-        # Result can be empty
-        result = json.loads(response.text) if response.text else []
-
-        items = [item.get('target', {}).get('id') for item in result.get('teasers', [])]
-
-        kodiutils.set_cache(['mylist_id'], items)
-        return items
-
-    def get_catalog_ids(self):
-        """ Returns the IDs of the contents of the Catalog """
-        # Try to fetch from cache
-        items = kodiutils.get_cache(['catalog_id'], 300)  # 5 minutes ttl
-        if items:
-            return items
-
-        # Fetch from API
-        response = util.http_get(API_ENDPOINT + '/%s/catalog' % self._mode(),
-                                 params={'pageSize': 2000, 'filter': None},
-                                 token=self._tokens.jwt_token if self._tokens else None,
-                                 profile=self._tokens.profile if self._tokens else None)
-        info = json.loads(response.text)
-
-        items = [item.get('target', {}).get('id') for item in info.get('pagedTeasers', {}).get('content', [])]
-
-        kodiutils.set_cache(['catalog_id'], items)
-        return items
-
     def do_search(self, search):
         """ Do a search in the full catalog.
         :type search: str
         :rtype list[Union[Movie, Program]]
         """
-        response = util.http_get(API_ENDPOINT + '/%s/search/?query=%s' % (self._mode(),
-                                                                          kodiutils.to_unicode(quote(kodiutils.from_unicode(search)))),
-                                 token=self._tokens.jwt_token if self._tokens else None,
+        response = util.http_get(API_ENDPOINT + '/%s/search?query=%s' % (self._mode(),
+                                                                         kodiutils.to_unicode(quote(kodiutils.from_unicode(search)))),
+                                 token=self._tokens.access_token if self._tokens else None,
                                  profile=self._tokens.profile if self._tokens else None)
         results = json.loads(response.text)
 
@@ -502,7 +419,7 @@ class VtmGo:
             movie_id=item.get('target', {}).get('id'),
             name=item.get('title'),
             thumb=item.get('imageUrl'),
-            geoblocked=item.get('geoBlocked'),
+            geoblocked=item.get('blockedFor') == 'GEO',
         )
 
     def _parse_program_teaser(self, item, cache=CACHE_ONLY):
@@ -518,8 +435,8 @@ class VtmGo:
         return Program(
             program_id=item.get('target', {}).get('id'),
             name=item.get('title'),
-            thumb=item.get('imageUrl'),
-            geoblocked=item.get('geoBlocked'),
+            thumb=item.get('largeImageUrl'),
+            geoblocked=item.get('blockedFor') == 'GEO',
         )
 
     def _parse_episode_teaser(self, item, cache=CACHE_ONLY):
@@ -537,7 +454,7 @@ class VtmGo:
             program_name=item.get('title'),
             name=item.get('label'),
             description=episode.description if episode else None,
-            geoblocked=item.get('geoBlocked'),
+            geoblocked=item.get('blockedFor') == 'GEO',
             thumb=item.get('imageUrl'),
             progress=item.get('playerPositionSeconds'),
             watched=False,

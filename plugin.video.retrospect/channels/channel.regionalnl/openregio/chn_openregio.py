@@ -1,14 +1,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib.backtothefuture import PY2
 from resources.lib.urihandler import UriHandler
 
-if PY2:
-    # noinspection PyUnresolvedReferences
-    import urlparse as parse
-else:
-    # noinspection PyUnresolvedReferences
-    import urllib.parse as parse
+# noinspection PyUnresolvedReferences
+import urllib.parse as parse
 
 from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
@@ -120,6 +115,9 @@ class Channel(chn_class.Channel):
         """
 
         items = []
+
+        if isinstance(data, str):
+            data = data.replace(",,", ",")
 
         if self.liveUrls:
             live_title = LanguageHelper.get_localized_string(LanguageHelper.LiveStreamTitleId)

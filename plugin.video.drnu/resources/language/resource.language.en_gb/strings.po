@@ -1,14 +1,14 @@
 # Kodi Media Center language file
 # Addon Name: DR TV
 # Addon id: plugin.video.drnu
-# Addon Provider: twinther, msj33, TermeHansen
+# Addon Provider: twinther, TermeHansen
 msgid ""
 msgstr ""
 "Project-Id-Version: Kodi Addons\n"
 "Report-Msgid-Bugs-To: https://github.com/xbmc-danish-addons/plugin.video.drnu\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: twinther, msj33, TermeHansen\n"
+"Last-Translator: twinther, TermeHansen\n"
 "Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,69 +21,59 @@ msgid "Programs A-Z"
 msgstr ""
 
 msgctxt "#30001"
-msgid "Latest videos"
-msgstr ""
-
-msgctxt "#30002"
-msgid "Spotlight videos"
-msgstr ""
-
-msgctxt "#30003"
-msgid "Search videos"
-msgstr ""
-
-msgctxt "#30007"
-msgid "Recently watched videos"
-msgstr ""
-
-msgctxt "#30008"
-msgid "Favorite programs"
-msgstr ""
-
-msgctxt "#30009"
-msgid "Program added"
-msgstr ""
-
-msgctxt "#30010"
-msgid "Program removed"
-msgstr ""
-
-msgctxt "#30011"
-msgid "Most watched videos on DR NU"
-msgstr ""
-
-msgctxt "#30012"
-msgid "Programs by area"
-msgstr ""
-
-msgctxt "#30013"
-msgid "The list is empty."
-msgstr ""
-
-msgctxt "#30018"
-msgid "You can add program series to favorites using"
-msgstr ""
-
-msgctxt "#30019"
-msgid "the context menu."
-msgstr ""
-
-msgctxt "#30020"
-msgid "Your recently watched videos are automatically added."
-msgstr ""
-
-msgctxt "#30025"
-msgid "Premiere videos"
-msgstr ""
-
-msgctxt "#30027"
 msgid "Live TV"
 msgstr ""
 
-msgctxt "#30028"
-msgid "Themes"
+msgctxt "#30002"
+msgid "Search videos"
 msgstr ""
 
+msgctxt "#30003"
+msgid "Recently watched videos"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Favorite programs"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Program added"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Program removed"
+msgstr ""
+
+msgctxt "#30007"
+msgid "The list is empty."
+msgstr ""
+
+msgctxt "#30008"
+msgid "Your recently watched videos are automatically added."
+msgstr ""
+
+msgctxt "#30009"
+msgid "Add to favorite program series"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Remove from favorite program series"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Favorite program series cleared"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Danish (file)"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Foreign language text (file)"
+msgstr ""
+
+
+# GUI
 msgctxt "#30100"
 msgid "DR TV Universe"
 msgstr ""
@@ -92,78 +82,172 @@ msgctxt "#30101"
 msgid "Choose area"
 msgstr ""
 
-msgctxt "#30200"
-msgid "Add to favorite program series"
-msgstr ""
-
-msgctxt "#30201"
-msgid "Remove from favorite program series"
-msgstr ""
-
-msgctxt "#30202"
-msgid "Favorite program series cleared"
-msgstr ""
-
-msgctxt "#30500"
-msgid "General"
-msgstr ""
-
-msgctxt "#30503"
-msgid "Enable Hard-of-hearing subtitles"
-msgstr ""
-
-msgctxt "#30504"
-msgid "Clear the favorite programs list"
-msgstr ""
-
-msgctxt "#30505"
-msgid "Remove programs from Ramasjang/Ultra in latest videos list"
-msgstr ""
-
-msgctxt "#30506"
-msgid "Hard-of-hearing"
-msgstr ""
-
-msgctxt "#30507"
-msgid "Subtitles"
-msgstr ""
-
-msgctxt "#30508"
-msgid "Empty"
-msgstr ""
-
-msgctxt "#30509"
-msgid "No subtitles on Ramasjang/Ultra episodes"
-msgstr ""
-
-msgctxt "#30510"
-msgid "Start in area"
-msgstr ""
-
-msgctxt "#30511"
-msgid "Show area chooser"
-msgstr ""
-
-msgctxt "#30512"
+msgctxt "#30102"
 msgid "DR TV"
 msgstr ""
 
-msgctxt "#30513"
+msgctxt "#30103"
 msgid "Ramasjang"
 msgstr ""
 
-msgctxt "#30514"
+msgctxt "#30104"
 msgid "Ultra"
 msgstr ""
 
-msgctxt "#30515"
+msgctxt "#30105"
+msgid "Minisjang"
+msgstr ""
+
+
+# SETTINGS
+msgctxt "#30200"
+msgid "Subtitles"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Kids"
+msgstr ""
+
+msgctxt "#30202"
+msgid "General"
+msgstr ""
+
+msgctxt "#30203"
+msgid "re-caching"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Start in area"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Show area chooser"
+msgstr ""
+
+msgctxt "#30206"
 msgid "Show area chooser item in root"
 msgstr ""
 
-msgctxt "#30520"
-msgid "Fanart image resolution"
+msgctxt "#30207"
+msgid "Enable Hard-of-hearing subtitles"
 msgstr ""
 
+msgctxt "#30208"
+msgid "Remove programs from Ramasjang/Ultra in alphabetical lists"
+msgstr ""
+
+msgctxt "#30209"
+msgid "No subtitles on Ramasjang/Ultra episodes"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Use simple Area Selector"
+msgstr ""
+
+msgctxt "#30211"
+msgid "No seasons on children shows, unfold all episodes"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Inputstream type"
+msgstr ""
+
+msgctxt "#30213"
+msgid "Clear the favorite programs list"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Subtitles from file"
+msgstr ""
+
+msgctxt "#30220"
+msgid "re-cache all"
+msgstr ""
+
+msgctxt "#30221"
+msgid "cache expiration in hours"
+msgstr ""
+
+msgctxt "#30222"
+msgid "re-cache all in: "
+msgstr ""
+
+msgctxt "#30223"
+msgid "Days between cleanup of sqlite db"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Request caching"
+msgstr ""
+
+msgctxt "#30225"
+msgid "re-cache cron job"
+msgstr ""
+
+msgctxt "#30226"
+msgid "cron expression"
+msgstr ""
+
+
+# IPTV
+msgctxt "#30550"
+msgid "IPTV Manager"
+msgstr ""
+
+msgctxt "#30551"
+msgid "Install IPTV Manager add-on"
+msgstr ""
+
+msgctxt "#30552"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#30553"
+msgid "IPTV Manager settings..."
+msgstr ""
+
+msgctxt "#30554"
+msgid "TV channels"
+msgstr ""
+
+msgctxt "#30555"
+msgid "Enable DR1"
+msgstr ""
+
+msgctxt "#30556"
+msgid "Enable DR2"
+msgstr ""
+
+msgctxt "#30557"
+msgid "Enable DR Ramasjang"
+msgstr ""
+
+msgctxt "#30558"
+msgid "Enable DRTV"
+msgstr ""
+
+msgctxt "#30559"
+msgid "Enable DRTV Ekstra"
+msgstr ""
+
+msgctxt "#30560"
+msgid "Schedule"
+msgstr ""
+
+msgctxt "#30561"
+msgid "Look ahead in time [I](in hours)[/I]"
+msgstr ""
+
+msgctxt "#30562"
+msgid "Refresh interval [I](in hours)[/I]"
+msgstr ""
+
+msgctxt "#30563"
+msgid "Set using IPTV Manager settings"
+msgstr ""
+
+
+# API
 msgctxt "#30900"
 msgid "There was an error while communicating with DR NU."
 msgstr ""
@@ -184,6 +268,10 @@ msgctxt "#30904"
 msgid "The video is no longer available and playback is not possible."
 msgstr ""
 
-msgctxt "#30905"
-msgid "Unknown Live TV Slug:"
+msgctxt "#30906"
+msgid "Please report issue at github"
+msgstr ""
+
+msgctxt "#30907"
+msgid "https://github.com/xbmc-danish-addons/plugin.video.drnu/issues"
 msgstr ""

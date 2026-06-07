@@ -48,20 +48,20 @@ class JSONStore:
                     LOG.debug('JSONStore Save |{filename}| failed to create directories.'
                               .format(filename=self.filename.encode('utf-8')))
                     return
-            with open(self.filename, 'w') as jsonfile:
+            with open(self.filename, 'w') as jsonfile:  # pylint: disable=unspecified-encoding
                 LOG.debug('JSONStore Save |{filename}|'
                           .format(filename=self.filename.encode('utf-8')))
                 json.dump(self._data, jsonfile, indent=4, sort_keys=True)
 
     def load(self):
         if xbmcvfs.exists(self.filename):
-            with open(self.filename, 'r') as jsonfile:
+            with open(self.filename, 'r') as jsonfile:  # pylint: disable=unspecified-encoding
                 data = json.load(jsonfile)
                 self._data = data
                 LOG.debug('JSONStore Load |{filename}|'
                           .format(filename=self.filename.encode('utf-8')))
         else:
-            self._data = dict()
+            self._data = {}
 
     def get_data(self):
         return deepcopy(self._data)

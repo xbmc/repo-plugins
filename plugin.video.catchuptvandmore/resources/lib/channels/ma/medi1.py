@@ -5,23 +5,24 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
+import json
 import re
 import urlquick
 
+# noinspection PyUnresolvedReferences
 from codequick import Resolver
 
-URL_LIVES = 'http://www.medi1tv.com/ar/live.aspx'
+from resources.lib import resolver_proxy, web_utils
+
+URL_API = 'https://idara.medi1tv.ma/rss/medi1tv/live.aspx'
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-
-    resp = urlquick.get(URL_LIVES)
-    pattern = r"Medi1TV\ %s[\S\s]*file\:\ \'(.*\.m3u8.*)\'[\S\s]*Medi1V_%s.jpg" % (item_id, item_id.lower())
-    manifesturl = re.compile(pattern).findall(resp.text)[0]
-    finalurl = ''
-    if manifesturl.startswith('https'):
-        finalurl = manifesturl
-    else:
-        finalurl = 'https:' + manifesturl
-    return finalurl
+    streams = json.loads(
+        urlquick.get(URL_API, headers=GENERIC_HEADERS, max_age=-1).text)
+    for stream in streams:
+        if stream.get('titre') == item_id:
+            return resolver_proxy.get_easybroadcast_stream(plugin, stream.get('link'))

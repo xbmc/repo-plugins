@@ -31,68 +31,68 @@ class Menu:
             TitleItem(
                 title=kodiutils.localize(30001),  # A-Z
                 path=kodiutils.url_for('show_catalog'),
-                art_dict=dict(
-                    icon='DefaultMovieTitle.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30002),
-                )
+                art_dict={
+                    'icon': 'DefaultMovieTitle.png',
+                    'fanart': kodiutils.get_addon_info('fanart')
+                },
+                info_dict={
+                    'plot': kodiutils.localize(30002)
+                }
             ),
             TitleItem(
                 title=kodiutils.localize(30007),  # TV Channels
                 path=kodiutils.url_for('show_channels'),
-                art_dict=dict(
-                    icon='DefaultAddonPVRClient.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30008),
-                )
+                art_dict={
+                    'icon': 'DefaultAddonPVRClient.png',
+                    'fanart': kodiutils.get_addon_info('fanart')
+                },
+                info_dict={
+                    'plot': kodiutils.localize(30008)
+                }
             ),
             TitleItem(
                 title=kodiutils.localize(30003),  # Catalog
                 path=kodiutils.url_for('show_categories'),
-                art_dict=dict(
-                    icon='DefaultGenre.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30004),
-                )
+                art_dict={
+                    'icon': 'DefaultGenre.png',
+                    'fanart': kodiutils.get_addon_info('fanart')
+                },
+                info_dict={
+                    'plot': kodiutils.localize(30004)
+                }
             ),
             TitleItem(
                 title=kodiutils.localize(30005),  # Recommendations
                 path=kodiutils.url_for('show_recommendations'),
-                art_dict=dict(
-                    icon='DefaultFavourites.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30006),
-                )
+                art_dict={
+                    'icon': 'DefaultFavourites.png',
+                    'fanart': kodiutils.get_addon_info('fanart')
+                },
+                info_dict={
+                    'plot': kodiutils.localize(30006)
+                }
             ),
             TitleItem(
                 title=kodiutils.localize(30011),  # My List
                 path=kodiutils.url_for('show_mylist'),
-                art_dict=dict(
-                    icon='DefaultPlaylist.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30012),
-                )
+                art_dict={
+                    'icon': 'DefaultPlaylist.png',
+                    'fanart': kodiutils.get_addon_info('fanart')
+                },
+                info_dict={
+                    'plot': kodiutils.localize(30012)
+                }
             ),
             TitleItem(
                 title=kodiutils.localize(30009),  # Search
                 path=kodiutils.url_for('show_search'),
-                art_dict=dict(
-                    icon='DefaultAddonsSearch.png',
-                    fanart=kodiutils.get_addon_info('fanart'),
-                ),
-                info_dict=dict(
-                    plot=kodiutils.localize(30010),
-                )
+                art_dict={
+                    'icon': 'DefaultAddonsSearch.png',
+                    'fanart': kodiutils.get_addon_info('fanart')
+                },
+                info_dict={
+                    'plot': kodiutils.localize(30010)
+                }
             )
         ]
 
@@ -128,14 +128,7 @@ class Menu:
             }
 
             visible = True
-            if isinstance(item.episodes, list) and not item.episodes:
-                # We know that we don't have episodes
-                title = '[COLOR gray]' + item.title + '[/COLOR]'
-                visible = kodiutils.get_setting_bool('interface_show_unavailable')
-
-            else:
-                # We have episodes, or we don't know it
-                title = item.title
+            title = item.title
 
             context_menu = []
             if item.uuid:
@@ -190,7 +183,7 @@ class Menu:
 
             if item.uuid:
                 # We have an UUID and can play this item directly
-                path = kodiutils.url_for('play_catalog', uuid=item.uuid)
+                path = kodiutils.url_for('play_catalog', uuid=item.uuid, islongform=item.islongform)
             else:
                 # We don't have an UUID, and first need to fetch the video information from the page
                 path = kodiutils.url_for('play_from_page', page=quote(item.path, safe=''))

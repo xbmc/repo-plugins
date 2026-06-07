@@ -2,16 +2,13 @@
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """Implementation of PlayerInfo class"""
 
-from __future__ import absolute_import, division, unicode_literals
 from threading import Event, Thread
 from xbmc import getInfoLabel, Player, PlayList
 
-from apihelper import ApiHelper
+from api import get_next_info, get_resumepoint_data, set_resumepoint
 from data import CHANNELS
-from favorites import Favorites
 from kodiutils import addon_id, get_setting_bool, has_addon, jsonrpc, kodi_version_major, log, log_error, notify, set_property, url_for
-from resumepoints import ResumePoints
-from utils import play_url_to_id, to_unicode, url_to_episode
+from utils import play_url_to_id
 
 
 class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
@@ -19,8 +16,6 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
 
     def __init__(self):
         """PlayerInfo initialisation"""
-        self.resumepoints = ResumePoints()
-        self.apihelper = ApiHelper(Favorites(), self.resumepoints)
         self.last_pos = None
         self.listen = False
         self.paused = False
@@ -28,15 +23,12 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         self.positionthread = None
         self.quit = Event()
 
-        self.asset_id = None
         # FIXME On Kodi 17, use ListItem.Filenameandpath because Player.FilenameAndPath returns the stream manifest url and
         # this definitely breaks "Up Next" on Kodi 17, but this is not supported or available through the Kodi add-on repo anyway
         self.path_infolabel = 'ListItem.Filenameandpath' if kodi_version_major() < 18 else 'Player.FilenameAndPath'
         self.path = None
-        self.title = None
-        self.ep_id = None
-        self.url = None
-        self.whatson_id = None
+        self.video_id = None
+        self.resumepoint_title = None
         from random import randint
         self.thread_id = randint(1, 10001)
         log(3, '[PlayerInfo {id}] Initialized', id=self.thread_id)
@@ -58,19 +50,20 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
 
         # Update previous episode when using "Up Next"
         if self.path.startswith('plugin://plugin.video.vrt.nu/play/upnext'):
-            self.push_position(position=self.last_pos, total=self.total)
+            # Set last position complete
+            self.last_pos = self.total
+            set_resumepoint(self.video_id, self.resumepoint_title, self.last_pos, self.total)
+            log(3, '[PlayerInfo {id}] Update previous episode resumepoint {position}/{total}', id=self.thread_id, position=self.last_pos, total=self.total)
 
-        # Reset episode data
-        self.asset_id = None
-        self.title = None
-        self.url = None
-        self.whatson_id = None
+        # Reset resumepoint data
+        self.video_id = None
+        self.resumepoint_title = None
 
         ep_id = play_url_to_id(self.path)
 
         # Avoid setting resumepoints for livestreams
         for channel in CHANNELS:
-            if ep_id.get('video_id') and ep_id.get('video_id') == channel.get('live_stream_id'):
+            if ep_id.get('video_id') and ep_id.get('video_id') in (channel.get('live_stream_id'), channel.get('name')):
                 log(3, '[PlayerInfo {id}] Avoid setting resumepoints for livestream {video_id}', id=self.thread_id, video_id=ep_id.get('video_id'))
                 self.listen = False
 
@@ -78,20 +71,11 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
                 set_property('vrtnu_resumepoints', None)
                 return
 
-        # Get episode data needed to update resumepoints from VRT NU Search API
-        episode = self.apihelper.get_single_episode_data(video_id=ep_id.get('video_id'), whatson_id=ep_id.get('whatson_id'), video_url=ep_id.get('video_url'))
-
-        # Avoid setting resumepoints without episode data
-        if episode is None:
-            # Reset vrtnu_resumepoints property before return
-            set_property('vrtnu_resumepoints', None)
-            return
-
-        from metadata import Metadata
-        self.asset_id = Metadata(None, None).get_asset_id(episode)
-        self.title = episode.get('program')
-        self.url = url_to_episode(episode.get('url', ''))
-        self.whatson_id = episode.get('whatsonId') or None  # Avoid empty string
+        # Get resumepoint data
+        episode_id = 'https://' + self.path.split('https://')[1]
+        resumepoint_data = get_resumepoint_data(episode_id=episode_id)
+        self.video_id = resumepoint_data.get('mediaId')
+        self.resumepoint_title = resumepoint_data.get('mediaName')
 
         # Kodi 17 doesn't have onAVStarted
         if kodi_version_major() < 18:
@@ -135,7 +119,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             return
         log(3, '[PlayerInfo {id}] Event onPlayBackPaused', id=self.thread_id)
         self.update_position()
-        self.push_position(position=self.last_pos, total=self.total)
+        set_resumepoint(self.video_id, self.resumepoint_title, self.last_pos, self.total)
         self.paused = True
 
     def onPlayBackResumed(self):  # pylint: disable=invalid-name
@@ -172,7 +156,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         """Called when player exits"""
         log(3, '[PlayerInfo {id}] Event onPlayerExit', id=self.thread_id)
         self.positionthread = None
-        self.push_position(position=self.last_pos, total=self.total)
+        set_resumepoint(self.video_id, self.resumepoint_title, self.last_pos, self.total)
 
         # Set property to let wait_for_resumepoints function know that update resume is done
         set_property('vrtnu_resumepoints', 'ready')
@@ -185,12 +169,12 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
                 break
         self.onPlayerExit()
 
-    def add_upnext(self, video_id):
+    def add_upnext(self, episode_id):
         """Add Up Next url to Kodi Player"""
         # Reset vrtnu_resumepoints property
         set_property('vrtnu_resumepoints', None)
 
-        url = url_for('play_upnext', video_id=video_id)
+        url = url_for('play_url', video_url=episode_id)
         self.update_position()
         self.update_total()
         if self.isPlaying() and self.total - self.last_pos < 1:
@@ -203,30 +187,27 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
     def push_upnext(self):
         """Push episode info to Up Next service add-on"""
         if has_addon('service.upnext') and get_setting_bool('useupnext', default=True) and self.isPlaying():
-            info_tag = self.getVideoInfoTag()
-            next_info = self.apihelper.get_upnext(dict(
-                program=to_unicode(info_tag.getTVShowTitle()),
-                playcount=info_tag.getPlayCount(),
-                rating=info_tag.getRating(),
-                path=self.path,
-                runtime=self.total,
-            ))
+            from base64 import b64encode
+            episode_id = 'https://' + self.path.split('https://')[1]
+            next_info = get_next_info(episode_id=episode_id)
             if next_info:
-                from base64 import b64encode
                 from json import dumps
-                data = [to_unicode(b64encode(dumps(next_info).encode()))]
+                data = [b64encode(dumps(next_info).encode('utf-8')).decode('utf-8')]
                 sender = '{addon_id}.SIGNAL'.format(addon_id=addon_id())
                 notify(sender=sender, message='upnext_data', data=data)
 
     def update_position(self):
         """Update the player position, when possible"""
         try:
-            self.last_pos = self.getTime()
+            pos = self.getTime()
+            # Kodi Player sometimes returns a time of 0.0 and this causes unwanted behaviour with VRT MAX Resumepoints API.
+            if pos > 0.0:
+                self.last_pos = pos
         except RuntimeError:
             pass
 
     def virtualsubclip_seektozero(self):
-        """VRT NU already offers some programs (mostly current affairs programs) as video on demand while the program is still being broadcasted live.
+        """VRT MAX already offers some programs (mostly current affairs programs) as video on demand while the program is still being broadcasted live.
            To do so, a start timestamp is added to the livestream url so the Unified Origin streaming platform knows
            it should return a time bounded manifest file that indicates the beginning of the program.
            This is called a Live-to-VOD stream or virtual subclip: https://docs.unified-streaming.com/documentation/vod/player-urls.html#virtual-subclips
@@ -240,10 +221,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
         """
         playing_file = self.getPlayingFile()
         if any(param in playing_file for param in ('?t=', '&t=')):
-            try:  # Python 3
-                from urllib.parse import parse_qs, urlsplit
-            except ImportError:  # Python 2
-                from urlparse import parse_qs, urlsplit
+            from urllib.parse import parse_qs, urlsplit
             import re
             # Detect single start timestamp
             timestamp = parse_qs(urlsplit(playing_file).query).get('t')[0]
@@ -251,7 +229,7 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
             is_single_start_timestamp = bool(re.match(rgx, timestamp))
             if is_single_start_timestamp:
                 # Check resume status
-                resume_info = jsonrpc(method='Player.GetItem', params=dict(playerid=1, properties=['resume'])).get('result')
+                resume_info = jsonrpc(method='Player.GetItem', params={'playerid': 1, 'properties': ['resume']}).get('result')
                 if resume_info:
                     resume_position = resume_info.get('item').get('resume').get('position')
                     is_resumed = abs(resume_position - self.getTime()) < 1
@@ -265,26 +243,9 @@ class PlayerInfo(Player, object):  # pylint: disable=useless-object-inheritance
     def update_total(self):
         """Update the total video time"""
         try:
-            total = self.getTotalTime()
-            # Kodi Player sometimes returns a total time of 0.0 and this causes unwanted behaviour with VRT NU Resumepoints API.
-            if total > 0.0:
-                self.total = total
+            tot = self.getTotalTime()
+            # Kodi Player sometimes returns a total time of 0.0 and this causes unwanted behaviour with VRT MAX Resumepoints API.
+            if tot > 0.0:
+                self.total = tot
         except RuntimeError:
             pass
-
-    def push_position(self, position, total):
-        """Push player position to VRT NU resumepoints API and reload container"""
-        # Not all content has an asset_id
-        if not self.asset_id:
-            return
-
-        # Push resumepoint to VRT NU
-        self.resumepoints.update(
-            asset_id=self.asset_id,
-            title=self.title,
-            url=self.url,
-            position=position,
-            total=total,
-            whatson_id=self.whatson_id,
-            path=self.path
-        )

@@ -10,25 +10,38 @@ import re
 from codequick import Resolver
 import urlquick
 
-from resources.lib import web_utils
-
+from resources.lib import resolver_proxy, web_utils
 
 # TODO
 # Add Replay
 
 URL_ROOT = "https://www.sportenfrance.com"
+API_URL = 'https://apisef.mytvchain.com/public/api.php'
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(
-        URL_ROOT, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    root = resp.parse()
-    live_datas = root.find('.//iframe')
-    resp2 = urlquick.get(
-        live_datas.get('src'), headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    stream_url = ''
-    for url in re.compile(r'videoxurl \= \'(.*?)\'').findall(resp2.text):
-        stream_url = url
-    return stream_url
+    try:
+        headers = {
+            "User-Agent": web_utils.get_random_ua(),
+            "referer": URL_ROOT
+        }
+
+        params = {
+            'a': 'getVideos',
+            'mode': 'live',
+            'onair': 'yes',
+            'reallyLive': 'false',
+        }
+
+        resp = urlquick.get(API_URL, headers=headers, params=params, max_age=-1)
+        json_parser = resp.json()
+        live_id = json_parser['videos'][0]['daily_id']
+
+        return resolver_proxy.get_stream_dailymotion(plugin, live_id, embeder=URL_ROOT)
+
+    except Exception:
+        return resolver_proxy.get_stream_dailymotion(plugin, 'x8sayn8', embeder=URL_ROOT)

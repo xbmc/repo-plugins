@@ -2,10 +2,10 @@
 # encoding: UTF-8
 
 from __future__ import absolute_import
-import xbmcgui
-import xbmcplugin
 
 import sarpur
+import xbmcgui
+import xbmcplugin
 
 
 def play(url, name, live=False):
@@ -17,6 +17,6 @@ def play(url, name, live=False):
     """
     item = xbmcgui.ListItem(name, path=url)
     if live:
-        item.setProperty('IsLive', 'true')
+        item.setProperty("IsLive", "true")
 
     xbmcplugin.setResolvedUrl(sarpur.ADDON_HANDLE, True, item)

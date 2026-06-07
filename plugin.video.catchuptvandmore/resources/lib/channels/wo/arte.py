@@ -5,51 +5,41 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
+
 import json
 import re
 
-from codequick import Listitem, Resolver, Route, Script
 import urlquick
+# noinspection PyUnresolvedReferences
+from codequick import Listitem, Resolver, Route, Script
 
 from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
-
 
 # TO DO
 #   Most recent
 #   Most viewed
 #   Add some videos Arte Concerts
 
-URL_ROOT = 'https://www.arte.tv/%s/'
-# Language
-
-URL_TOKEN = 'https://static-cdn.arte.tv/guide/manifest.js'
-
+URL_ARTE_HOME = 'https://api.arte.tv/api/emac/v4/%s/tv/pages/HOME'
+URL_ARTE_CATEGORIES = 'https://api.arte.tv/api/emac/v4/%s/app/pages/%s'
+URL_ARTE_COLLECTION = 'https://api.arte.tv/api/emac/v4/%s/tv/collections/%s'
+URL_ARTE_PROGRAMS = 'https://api.arte.tv/api/emac/v4/%s/tv/programs/%s'
+URL_ARTE_SEARCH = 'https://api.arte.tv/api/emac/v4/%s/app/pages/SEARCH'
 URL_LIVE_ARTE = 'https://api.arte.tv/api/player/v2/config/%s/LIVE'
 # Langue, ...
 
 # URL_VIDEOS = 'http://www.arte.tv/hbbtvv2/services/web/index.php/OPA/v3/videos/subcategory/%s/page/%s/limit/100/%s'
 # VideosCode, Page, language
 
-URL_VIDEOS_2 = 'http://www.arte.tv/hbbtvv2/services/web/index.php/OPA/v3/videos/collection/%s/%s/%s'
-# VideosCode, Page, language
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
+ARTE_API_HEADERS = {
+    'user-agent': web_utils.get_random_ua(),
+    'accept': 'application/vnd.api+json',
+    'authorization': 'Bearer YTEwZWE3M2UxMTVmYmRjZmE0YTdmNjA4ZTI2NDczZDU3YjdjYmVmMmRmNGFjOTM3M2RhNTM5ZjIxYmI3NTc1Zg',
+}
 
 DESIRED_LANGUAGE = Script.setting['arte.language']
-
-CORRECT_MONTH = {
-    'Jan': '01',
-    'Feb': '02',
-    'Mar': '03',
-    'Apr': '04',
-    'May': '05',
-    'Jun': '06',
-    'Jul': '07',
-    'Aug': '08',
-    'Sep': '09',
-    'Oct': '10',
-    'Nov': '11',
-    'Dec': '12'
-}
 
 
 @Route.register
@@ -61,552 +51,187 @@ def list_categories(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    resp = urlquick.get(URL_ROOT % DESIRED_LANGUAGE.lower())
-    json_value = re.compile(r'_INITIAL_STATE__ \= (.*?)\}\;').findall(resp.text)[0]
-    # print 'json_value : ' + repr(json_value)
-    json_parser = json.loads(json_value + '}')
+    # Search items
+    item = Listitem.search(list_videos_search)
+    item_post_treatment(item)
+    yield item
 
-    for category_datas in json_parser['categories']:
-        category_title = category_datas['label']
-        category_url = category_datas['url']
+    url = URL_ARTE_HOME % DESIRED_LANGUAGE.lower()
+    response = urlquick.get(url, headers=ARTE_API_HEADERS, max_age=-1)
+    json_parser = response.json()
+
+    for zone in json_parser['zones']:
+        # Avoid empty folders
+        if not zone['content']['data']:
+            continue
+        # Avoid infinite loop
+        data_url_dic = zone['content']['data'][0]['url'].split("/")
+        data_url_len = len(data_url_dic)
+        data_url = data_url_dic[data_url_len - 3]
+        zone_url_dic = url.split("/")
+        zone_url_len = len(zone_url_dic)
+        zone_url = zone_url_dic[zone_url_len - 1]
+        if data_url == zone_url:
+            continue
 
         item = Listitem()
-        item.label = category_title
-        item.set_callback(list_sub_categories,
-                          item_id=item_id,
-                          category_url=category_url)
+        item.label = zone['title']
+        item.info['plot'] = zone['description']
+        item.set_callback(list_programs, url=url, zone_id=zone['id'])
         item_post_treatment(item)
         yield item
 
 
 @Route.register
-def list_sub_categories(plugin, item_id, category_url, **kwargs):
-    """
-    Build programs listing
-    - Les feux de l'amour
-    - ...
-    """
+def list_zone(plugin, url):
+    response = urlquick.get(url, headers=ARTE_API_HEADERS, max_age=-1)
+    json_parser = response.json()
 
-    resp = urlquick.get(category_url)
-    json_value = re.compile(r'_INITIAL_STATE__ \= (.*?)\}\;').findall(resp.text)[0]
-    json_parser = json.loads(json_value + '}')
-
-    value_code = json_parser['pages']['currentCode']
-    for sub_category_datas in json_parser['pages']['list'][value_code]['zones']:
-        if 'subcategory' in sub_category_datas['code']['name']:
-            sub_category_title = sub_category_datas['title']
-            sub_category_url = sub_category_datas['link']['url']
-
-            item = Listitem()
-            item.label = sub_category_title
-            item.set_callback(list_videos_sub_category,
-                              item_id=item_id,
-                              sub_category_url=sub_category_url)
-            item_post_treatment(item)
-            yield item
-
-        elif 'genres' in sub_category_datas['code']['name']:
-            sub_category_title = sub_category_datas['title']
-            sub_category_code_name = sub_category_datas['code']['name']
-            sub_category_url = category_url
-
-            item = Listitem()
-            item.label = sub_category_title
-
-            item.set_callback(list_programs_concert,
-                              item_id=item_id,
-                              sub_category_code_name=sub_category_code_name,
-                              sub_category_url=sub_category_url)
-            item_post_treatment(item)
-            yield item
-
-        elif 'banner' in sub_category_datas['code']['name']:
+    for zone in json_parser['zones']:
+        # Avoid empty folders
+        if not zone['content']['data']:
             continue
-
-        elif 'playlists' in sub_category_datas['code']['name'] or \
-                'collections' in sub_category_datas['code']['name'] or \
-                'magazines' in sub_category_datas['code']['name'] or \
-                'ARTE_CONCERT' in sub_category_datas['code']['name'] or \
-                'highlights_category' in sub_category_datas['code']['name'] or \
-                '-' in sub_category_datas['code']['name'] or \
-                'collection_videos' in sub_category_datas['code']['name'] or \
-                'collection_subcollection' in sub_category_datas['code']['name']:
-            if sub_category_datas['data']:
-                sub_category_title = sub_category_datas['title']
-                sub_category_code_name = sub_category_datas['code']['name']
-                sub_category_url = category_url
-
-                item = Listitem()
-                item.label = sub_category_title
-
-                item.set_callback(list_programs,
-                                  item_id=item_id,
-                                  sub_category_title=sub_category_title,
-                                  sub_category_code_name=sub_category_code_name,
-                                  sub_category_url=sub_category_url)
-                item_post_treatment(item)
-                yield item
-
-        # else:
-        #     # Add Notification (Category Not known)
-        #     return None
-
-
-@Route.register
-def list_programs(plugin, item_id, sub_category_title, sub_category_code_name, sub_category_url,
-                  **kwargs):
-    """
-    Build programs listing
-    - Les feux de l'amour
-    - ...
-    """
-
-    if '/api/' in sub_category_url:
-        resp = urlquick.get(sub_category_url.replace('https://api-internal.arte.tv', 'https://www.arte.tv/guide'))
-        json_parser = json.loads(resp.text)
-        # for video_datas in json_parser['data']:
-        for program_datas in json_parser['data']:
-
-            if program_datas["kind"]["isCollection"]:
-                program_title = program_datas['title']
-                program_url = program_datas['url']
-                program_image = ''
-                if (program_datas['images']['landscape'] is not None and 'resolutions' in program_datas['images']['landscape']):
-                    for image_datas in program_datas['images']['landscape']['resolutions']:
-                        program_image = image_datas['url']
-                elif (program_datas['images']['square'] is not None and 'resolutions' in program_datas['images']['square']):
-                    for image_datas in program_datas['images']['square']['resolutions']:
-                        program_image = image_datas['url']
-
-                item = Listitem()
-                item.label = program_title
-                item.art['thumb'] = item.art['landscape'] = program_image
-                item.set_callback(
-                    list_sub_categories,
-                    item_id=item_id,
-                    category_url=program_url)
-                item_post_treatment(item)
-                yield item
-
-            if program_datas['programId'] is not None and 'RC-' in program_datas['programId']:
-                program_title = program_datas['title']
-                program_id = program_datas['programId']
-                program_image = ''
-                if (program_datas['images']['landscape'] is not None and 'resolutions' in program_datas['images']['landscape']):
-                    for image_datas in program_datas['images']['landscape']['resolutions']:
-                        program_image = image_datas['url']
-                elif (program_datas['images']['square'] is not None and 'resolutions' in program_datas['images']['square']):
-                    for image_datas in program_datas['images']['square']['resolutions']:
-                        program_image = image_datas['url']
-
-                item = Listitem()
-                item.label = program_title
-                item.art['thumb'] = item.art['landscape'] = program_image
-                item.set_callback(
-                    list_videos_program,
-                    item_id=item_id,
-                    sub_category_code_name=sub_category_code_name,
-                    program_id=program_id)
-                item_post_treatment(item)
-                yield item
-
-            if program_datas['subtitle']:
-                video_title = '{title} - {subtitle}'.format(**program_datas)
-            else:
-                video_title = program_datas['title']
-            video_id = program_datas['programId']
-            video_image = ''
-            if (program_datas['images']['landscape'] is not None and 'resolutions' in program_datas['images']['landscape']):
-                for video_image_datas in program_datas['images']['landscape']['resolutions']:
-                    video_image = video_image_datas['url']
-            elif (program_datas['images']['square'] is not None and 'resolutions' in program_datas['images']['square']):
-                for image_datas in program_datas['images']['square']['resolutions']:
-                    program_image = image_datas['url']
-            video_duration = program_datas["duration"]
-            video_plot = program_datas.get("shortDescription", '')
-
-            item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = item.art['landscape'] = video_image
-            item.info['duration'] = video_duration
-            item.info['plot'] = video_plot
-
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              video_id=video_id)
-            item_post_treatment(item,
-                                is_playable=True,
-                                is_downloadable=True)
-            yield item
-
-        if json_parser['nextPage'] is not None:
-            yield Listitem.next_page(
-                item_id=item_id,
-                sub_category_title=sub_category_title,
-                sub_category_code_name=sub_category_code_name,
-                sub_category_url=json_parser['nextPage'])
-    else:
-        resp = urlquick.get(sub_category_url)
-        json_value = re.compile(r'_INITIAL_STATE__ \= (.*?)\}\;').findall(resp.text)[0]
-        json_parser = json.loads(json_value + '}')
-
-        value_code = json_parser['pages']['currentCode']
-        for sub_category_datas in json_parser['pages']['list'][value_code]['zones']:
-            if (sub_category_datas['code']['name'] != sub_category_code_name or
-                    sub_category_title != sub_category_datas['title']):
-                continue
-
-            for program_datas in sub_category_datas['data']:
-                if program_datas["kind"]["isCollection"]:
-                    program_title = program_datas['title']
-                    program_url = program_datas['url']
-                    program_image = ''
-                    if (program_datas['images']['landscape'] is not None and 'resolutions' in program_datas['images']['landscape']):
-                        for image_datas in program_datas['images']['landscape']['resolutions']:
-                            program_image = image_datas['url']
-                    elif (program_datas['images']['square'] is not None and 'resolutions' in program_datas['images']['square']):
-                        for image_datas in program_datas['images']['square']['resolutions']:
-                            program_image = image_datas['url']
-
-                    item = Listitem()
-                    item.label = program_title
-                    item.art['thumb'] = item.art['landscape'] = program_image
-                    item.set_callback(
-                        list_sub_categories,
-                        item_id=item_id,
-                        category_url=program_url)
-                    item_post_treatment(item)
-                    yield item
-
-                if program_datas['programId'] is not None and 'RC-' in program_datas['programId']:
-                    program_title = program_datas['title']
-                    program_id = program_datas['programId']
-                    program_image = ''
-                    if (program_datas['images']['landscape'] is not None and 'resolutions' in program_datas['images']['landscape']):
-                        for image_datas in program_datas['images']['landscape']['resolutions']:
-                            program_image = image_datas['url']
-                    elif (program_datas['images']['square'] is not None and 'resolutions' in program_datas['images']['square']):
-                        for image_datas in program_datas['images']['square']['resolutions']:
-                            program_image = image_datas['url']
-
-                    item = Listitem()
-                    item.label = program_title
-                    item.art['thumb'] = item.art['landscape'] = program_image
-                    item.set_callback(
-                        list_videos_program,
-                        item_id=item_id,
-                        sub_category_code_name=sub_category_code_name,
-                        program_id=program_id)
-                    item_post_treatment(item)
-                    yield item
-
-                if program_datas['subtitle']:
-                    video_title = '{title} - {subtitle}'.format(**program_datas)
-                else:
-                    video_title = program_datas['title']
-                video_id = program_datas['programId']
-                video_image = ''
-                if (program_datas['images']['landscape'] is not None and 'resolutions' in program_datas['images']['landscape']):
-                    for video_image_datas in program_datas['images']['landscape']['resolutions']:
-                        video_image = video_image_datas['url']
-                elif (program_datas['images']['square'] is not None and 'resolutions' in program_datas['images']['square']):
-                    for image_datas in program_datas['images']['square']['resolutions']:
-                        program_image = image_datas['url']
-                video_duration = program_datas["duration"]
-                video_plot = program_datas.get("shortDescription", '')
-
-                item = Listitem()
-                item.label = video_title
-                item.art['thumb'] = item.art['landscape'] = video_image
-                item.info['duration'] = video_duration
-                item.info['plot'] = video_plot
-
-                item.set_callback(get_video_url,
-                                  item_id=item_id,
-                                  video_id=video_id)
-                item_post_treatment(item,
-                                    is_playable=True,
-                                    is_downloadable=True)
-                yield item
-
-            if sub_category_datas['nextPage'] is not None:
-                yield Listitem.next_page(
-                    item_id=item_id,
-                    sub_category_title=sub_category_title,
-                    sub_category_code_name=sub_category_code_name,
-                    sub_category_url=sub_category_datas['nextPage'])
-
-
-@Route.register
-def list_programs_concert(plugin, item_id, sub_category_code_name, sub_category_url,
-                          **kwargs):
-    """
-    Build programs listing
-    - Les feux de l'amour
-    - ...
-    """
-    resp = urlquick.get(sub_category_url)
-    json_value = re.compile(r'_INITIAL_STATE__ \= (.*?)\}\;').findall(resp.text)[0]
-    json_parser = json.loads(json_value + '}')
-
-    value_code = json_parser['pages']['currentCode']
-    for sub_category_datas in json_parser['pages']['list'][value_code]['zones']:
-        if sub_category_datas['code']['name'] != sub_category_code_name:
+        # Avoid infinite loop
+        data_url_dic = zone['content']['data'][0]['url'].split("/")
+        data_url_len = len(data_url_dic)
+        data_url = data_url_dic[data_url_len - 3]
+        zone_url_dic = url.split("/")
+        zone_url_len = len(zone_url_dic)
+        zone_url = zone_url_dic[zone_url_len - 1]
+        if data_url == zone_url:
             continue
-
-        for program_datas in sub_category_datas['data']:
-            program_title = program_datas['title']
-            program_url = program_datas['url']
-            program_image = ''
-            for image_datas in program_datas['images']['landscape']['resolutions']:
-                program_image = image_datas['url']
-
-            item = Listitem()
-            item.label = program_title
-            item.art['thumb'] = item.art['landscape'] = program_image
-            item.set_callback(
-                list_videos_program_concert,
-                item_id=item_id,
-                program_url=program_url)
-            item_post_treatment(item)
-            yield item
-
-
-@Route.register
-def list_videos_sub_category(plugin, item_id, sub_category_url,
-                             **kwargs):
-
-    if '/api/' in sub_category_url:
-        resp = urlquick.get(sub_category_url.replace('https://api-internal.arte.tv', 'https://www.arte.tv/guide'))
-        json_parser = json.loads(resp.text)
-        for video_datas in json_parser['data']:
-            if video_datas['subtitle']:
-                video_title = '{title} - {subtitle}'.format(**video_datas)
-            else:
-                video_title = video_datas['title']
-            video_id = video_datas['programId']
-            video_image = ''
-            if 'resolutions' in video_datas['images']['landscape']:
-                for video_image_datas in video_datas['images']['landscape']['resolutions']:
-                    video_image = video_image_datas['url']
-            video_duration = video_datas["duration"]
-            video_plot = video_datas.get("shortDescription", '')
-
-            item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = item.art['landscape'] = video_image
-            item.info['duration'] = video_duration
-            item.info['plot'] = video_plot
-
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              video_id=video_id)
-            item_post_treatment(item,
-                                is_playable=True,
-                                is_downloadable=True)
-            yield item
-
-        if json_parser['nextPage'] is not None:
-            yield Listitem.next_page(item_id=item_id,
-                                     sub_category_url=json_parser['nextPage'])
-    else:
-        resp = urlquick.get(sub_category_url)
-        json_value = re.compile(r'_INITIAL_STATE__ \= (.*?)\}\;').findall(resp.text)[0]
-        json_parser = json.loads(json_value + '}')
-
-        value_code = json_parser['pages']['currentCode']
-        for sub_category_datas in json_parser['pages']['list'][value_code]['zones']:
-            if 'videos_subcategory' != sub_category_datas['code']['name']:
-                continue
-
-            for video_datas in sub_category_datas['data']:
-                if video_datas['subtitle']:
-                    video_title = '{title} - {subtitle}'.format(**video_datas)
-                else:
-                    video_title = video_datas['title']
-                video_id = video_datas['programId']
-                video_image = ''
-                if 'resolutions' in video_datas['images']['landscape']:
-                    for video_image_datas in video_datas['images']['landscape']['resolutions']:
-                        video_image = video_image_datas['url']
-                video_duration = video_datas["duration"]
-                video_plot = video_datas.get("shortDescription", '')
-
-                item = Listitem()
-                item.label = video_title
-                item.art['thumb'] = item.art['landscape'] = video_image
-                item.info['duration'] = video_duration
-                item.info['plot'] = video_plot
-
-                item.set_callback(get_video_url,
-                                  item_id=item_id,
-                                  video_id=video_id)
-                item_post_treatment(item,
-                                    is_playable=True,
-                                    is_downloadable=True)
-                yield item
-
-                if sub_category_datas['nextPage'] is None:
-                    continue
-
-                yield Listitem.next_page(item_id=item_id,
-                                         sub_category_url=sub_category_datas['nextPage'])
-
-
-@Route.register
-def list_videos_program(plugin, item_id, sub_category_code_name, program_id,
-                        **kwargs):
-
-    resp = urlquick.get(
-        URL_VIDEOS_2 %
-        (sub_category_code_name.upper(), program_id, DESIRED_LANGUAGE.lower()))
-    json_parser = json.loads(resp.text)
-
-    for video_datas in json_parser['videos']:
-        if video_datas['subtitle']:
-            video_title = '{title} - {subtitle}'.format(**video_datas)
-        else:
-            video_title = video_datas['title']
-        video_id = video_datas['programId']
-        vudeo_image = video_datas['imageUrl']
-        video_duration = video_datas["durationSeconds"]
-        video_plot = video_datas["shortDescription"]
-        date_value = video_datas["videoRightsBegin"].split(' ')
-        day = date_value[1]
-        try:
-            month = CORRECT_MONTH[date_value[2]]
-        except Exception:
-            month = '00'
-        year = date_value[3]
-        date_value = '-'.join((year, month, day))
 
         item = Listitem()
-        item.label = video_title
-        item.art['thumb'] = item.art['landscape'] = vudeo_image
-        item.info['duration'] = video_duration
-        item.info['plot'] = video_plot
-        item.info.date(date_value, '%Y-%m-%d')
-
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          video_id=video_id)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        item.label = zone['title']
+        item.info['plot'] = zone['description']
+        item.set_callback(list_programs, url=url, zone_id=zone['id'])
+        item_post_treatment(item)
         yield item
 
 
 @Route.register
-def list_videos_program_concert(plugin, item_id, program_url,
-                                **kwargs):
+def list_videos_search(plugin, search_query, **kwargs):
+    if search_query is None or len(search_query) == 0:
+        return False
 
-    if '/api/' in program_url:
-        resp = urlquick.get(program_url.replace('https://api-internal.arte.tv', 'https://www.arte.tv/guide').replace(" ", ""))
-        json_parser = json.loads(resp.text)
-        for video_datas in json_parser['data']:
-            if video_datas['subtitle']:
-                video_title = '{title} - {subtitle}'.format(**video_datas)
-            else:
-                video_title = video_datas['title']
-            video_id = video_datas['programId']
-            video_image = ''
-            if 'resolutions' in video_datas['images']['landscape']:
-                for video_image_datas in video_datas['images']['landscape']['resolutions']:
-                    video_image = video_image_datas['url']
-            video_duration = video_datas["duration"]
-            video_plot = video_datas.get("shortDescription", '')
+    params = {
+        'query': search_query,
+    }
+    response = urlquick.get(URL_ARTE_SEARCH % DESIRED_LANGUAGE.lower(), params=params, headers=ARTE_API_HEADERS, max_age=-1)
+    json_parser = response.json()
 
-            item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = item.art['landscape'] = video_image
-            item.info['duration'] = video_duration
-            item.info['plot'] = video_plot
-
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              video_id=video_id)
-            item_post_treatment(item,
-                                is_playable=True,
-                                is_downloadable=True)
+    at_least_one_item = False
+    for zone in json_parser['zones']:
+        for data in zone['content']['data']:
+            item = handle_programs(data)
+            at_least_one_item = True
             yield item
 
-        if json_parser['nextPage'] is not None:
-            yield Listitem.next_page(item_id=item_id,
-                                     program_url=json_parser['nextPage'])
-    else:
-        resp = urlquick.get(program_url.replace(" ", ""))
-        json_value = re.compile(r'_INITIAL_STATE__ \= (.*?)\}\;').findall(resp.text)[0]
-        json_parser = json.loads(json_value + '}')
-
-        value_code = json_parser['pages']['currentCode']
-        videos_datas = json_parser['pages']['list'][value_code]['zones'][0]
-        for video_datas in videos_datas['data']:
-            if video_datas['subtitle']:
-                video_title = '{title} - {subtitle}'.format(**video_datas)
-            else:
-                video_title = video_datas['title']
-            video_id = video_datas['programId']
-            video_image = ''
-            if 'resolutions' in video_datas['images']['landscape']:
-                for video_image_datas in video_datas['images']['landscape']['resolutions']:
-                    video_image = video_image_datas['url']
-            video_duration = video_datas["duration"]
-            video_plot = video_datas.get("shortDescription", '')
-
-            item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = item.art['landscape'] = video_image
-            item.info['duration'] = video_duration
-            item.info['plot'] = video_plot
-
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              video_id=video_id)
-            item_post_treatment(item,
-                                is_playable=True,
-                                is_downloadable=True)
-            yield item
-
-        if videos_datas['nextPage'] is not None:
-            yield Listitem.next_page(item_id=item_id,
-                                     program_url=videos_datas['nextPage'])
+    if not at_least_one_item:
+        plugin.notify(plugin.localize(30718), '')
+        yield False
 
 
 @Resolver.register
-def get_video_url(plugin,
-                  item_id,
-                  video_id,
-                  download_mode=False,
-                  **kwargs):
+def handle_programs(data):
+    title = data['title']
+    if 'subtitle' in data and data['subtitle']:
+        title += ' - ' + data['subtitle']
 
-    return resolver_proxy.get_arte_video_stream(plugin,
-                                                DESIRED_LANGUAGE.lower(),
-                                                video_id,
-                                                download_mode)
+    item = Listitem()
+    item.label = title
+    if 'teaserText' in data:
+        item.info['plot'] = data['teaserText']
+    else:
+        item.info['plot'] = data.get('shortDescription', None)
+
+    if 'mainImage' in data:
+        item.art['thumb'] = item.art["fanart"] = data['mainImage']['url'].replace('__SIZE__', '940x530')
+        item.art['landscape'] = data['mainImage']['url'].replace('__SIZE__', '265x397')
+
+    if 'duration' in data:
+        item.info['duration'] = data['duration']
+
+    try:
+        item.info.date(data['availability']['start'].split('T')[0], '%Y-%m-%d')
+    except Exception:
+        pass
+
+    if data.get('kind') is not None and data['kind']['code'] in ['SHOWS', 'SHOW']:
+        item.set_callback(get_video_url, video_id=data['programId'])
+        item_post_treatment(item, is_playable=True, is_downloadable=True)
+    else:
+        # Assume it's a folder
+        if data['deeplink'] is None:
+            # No items found
+            item.label = Script.localize(30896)
+        else:
+            deeplink_dic = data['deeplink'].split("/")
+            deeplink_len = len(deeplink_dic)
+            deeplink = deeplink_dic[deeplink_len - 1]
+            if deeplink_dic[deeplink_len - 2] == "emac":
+                item.set_callback(list_zone, url=URL_ARTE_CATEGORIES % (DESIRED_LANGUAGE.lower(), deeplink))
+                item_post_treatment(item)
+            elif deeplink_dic[deeplink_len - 2] == "collection":
+                item.set_callback(list_zone, url=URL_ARTE_COLLECTION % (DESIRED_LANGUAGE.lower(), deeplink))
+                item_post_treatment(item)
+            elif deeplink_dic[deeplink_len - 2] == "program":
+                item.set_callback(list_zone, url=URL_ARTE_PROGRAMS % (DESIRED_LANGUAGE.lower(), deeplink))
+                item_post_treatment(item)
+            else:
+                # No items found
+                item.label = Script.localize(30896)
+
+    return item
+
+
+@Route.register
+def list_programs(plugin, url, zone_id):
+    response = urlquick.get(url, headers=ARTE_API_HEADERS, max_age=-1)
+    json_parser = response.json()
+
+    if zone_id != 'pagination_link_next':
+        for zone in json_parser['zones']:
+            if zone_id == zone['id']:
+                data = zone['content']['data']
+                break
+        for data in zone['content']['data']:
+            item = handle_programs(data)
+            yield item
+
+        if zone.get('link') is not None and zone['link'].get('page')[:3] == "RC-":
+            item = handle_programs(zone.get('link'))
+            yield item
+
+        if zone['content'].get('pagination') is not None:
+            if zone['content']['pagination']['links'].get('next') is not None:
+                url_next = zone['content']['pagination']['links']['next']
+                yield Listitem.next_page(url=url_next, zone_id='pagination_link_next')
+    else:
+        for data in json_parser['data']:
+            item = handle_programs(data)
+            yield item
+
+        if json_parser.get('pagination') is not None:
+            if json_parser['pagination']['links'].get('next') is not None:
+                url_next = json_parser['pagination']['links']['next']
+                yield Listitem.next_page(url=url_next, zone_id='pagination_link_next')
+
+
+@Resolver.register
+def get_video_url(plugin, video_id, download_mode=False, **kwargs):
+    return resolver_proxy.get_arte_video_stream(plugin, DESIRED_LANGUAGE.lower(), video_id, download_mode)
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
     final_language = kwargs.get('language', DESIRED_LANGUAGE)
+    resp = urlquick.get(URL_LIVE_ARTE % final_language.lower(), headers=GENERIC_HEADERS)
+    json_parser = json.loads(resp.text)
 
-    resp = urlquick.get(URL_TOKEN)
-    token = re.compile(r'token\"\:\"(.*?)\"').findall(resp.text)[0]
-
-    headers = {
-        'Authorization': 'Bearer %s' % token
-    }
-    resp2 = urlquick.get(URL_LIVE_ARTE % final_language.lower(), headers=headers)
-    json_parser = json.loads(resp2.text)
-    # return json_parser["data"]["attributes"]["streams"][0]["url"]
-
-    # To uncomment if issue
-    url_stream = json_parser["data"]["attributes"]["streams"][0]["url"]
-    manifest = urlquick.get(
-        url_stream,
-        headers={'User-Agent': web_utils.get_random_ua()},
-        max_age=-1)
-    lines = manifest.text.splitlines()
-    final_url = ''
-    for k in range(0, len(lines) - 1):
-        if 'RESOLUTION=' in lines[k]:
-            final_url = lines[k + 1]
-
-    return final_url
+    streams = json_parser["data"]["attributes"]["streams"]
+    if len(streams) == 0:
+        plugin.notify(plugin.localize(30600), plugin.localize(30716))
+        return False
+    video_url = streams[0]["url"]
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url)

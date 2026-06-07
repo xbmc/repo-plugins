@@ -1,0 +1,35 @@
+# Addon Name: Greek Voice
+# Addon id: plugin.video.greekvoice
+# Addon Provider: threshold84
+msgid ""
+msgstr ""
+"Project-Id-Version: Greek Voice\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2016-06-22 11:29+0000\n"
+"Last-Translator: threshold84\n"
+"Language-Team: Greek (http://www.domain.com)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Live video streams"
+msgstr "Ζωντανές τηλεοπτικές ροές"
+
+msgctxt "#30002"
+msgid "Radio stations"
+msgstr "Ραδιοφωνικοί σταθμοί"
+
+msgctxt "#30003"
+msgid "Youtube channel"
+msgstr "Κανάλι Youtube"
+
+msgctxt "#30004"
+msgid "Tilemousiki"
+msgstr "Τηλεμουσική"
+
+msgctxt "#30005"
+msgid "stream #{0}"
+msgstr "ροή #{0}"

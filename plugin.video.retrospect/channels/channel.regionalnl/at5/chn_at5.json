@@ -12,7 +12,8 @@
       "channelcode": "rtvnh",
       "sortorder": 100,
       "language": "nl",
-      "fanart": "rtvnhfanart.jpg"
+      "fanart": "rtvnhfanart.jpg",
+      "poster": "rtvnhposter.jpg"
     },
     {
       "guid": "870EAD32-F2F9-11DD-B0E7-747356D89593",

@@ -1,0 +1,190 @@
+
+# Kodi Media Center language file
+# Addon Name: YouTube
+# Addon id: plugin.video.youtube
+# Addon Provider: bromix
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2015-09-21 11:01+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+msgctxt "#30000"
+msgid "Remove folder"
+msgstr "Удалить папку"
+
+msgctxt "#30001"
+msgid "Add folder"
+msgstr "Добавить папку"
+
+msgctxt "#30002"
+msgid "Add channel to root"
+msgstr "Дообавить канал в корневую папку"
+
+msgctxt "#30003"
+msgid "Remove channel"
+msgstr "Удалить канал"
+
+msgctxt "#30004"
+msgid "Playlists"
+msgstr "Плейлисты"
+
+msgctxt "#30005"
+msgid "Next page"
+msgstr "Следующая страница"
+
+msgctxt "#30006"
+msgid "Search for channel"
+msgstr "Поиск канала"
+
+msgctxt "#30007"
+msgid "Add by username"
+msgstr "Добавить по имени пользователя"
+
+msgctxt "#30008"
+msgid "Choose option"
+msgstr "Выбрать опцию"
+
+msgctxt "#30009"
+msgid "Add channel to"
+msgstr "Добавить канал в"
+
+msgctxt "#30010"
+msgid "root"
+msgstr "корневую папку"
+
+msgctxt "#30011"
+msgid "Folder name"
+msgstr "Название папки"
+
+msgctxt "#30012"
+msgid "Search channel"
+msgstr "Найти канал"
+
+msgctxt "#30013"
+msgid "Choose channel"
+msgstr "Выбрать канал"
+
+msgctxt "#30014"
+msgid "Enter username"
+msgstr "Ввести имя пользователя"
+
+msgctxt "#30015"
+msgid "Erase database"
+msgstr "Очистить базу данных"
+
+msgctxt "#30016"
+msgid "Do you wish to erase your Youtube Channels database?"
+msgstr "Вы действительно хотите очистить базу данных YouTube Channels?"
+
+msgctxt "#30017"
+msgid "Successfully erased folder database!"
+msgstr "База данных каталогов успешно очищена!"
+
+msgctxt "#30018"
+msgid "Channel with username"
+msgstr "Канал с именем пользователя"
+
+msgctxt "#30019"
+msgid "does not exist."
+msgstr "не существует."
+
+msgctxt "#30020"
+msgid "API Key Error"
+msgstr "Проблема с API-ключом"
+
+msgctxt "#30021"
+msgid "You must enter a YouTube API Key to continue. Please use the addon settings to set the API key."
+msgstr "Вы должны ввести ключ к YouTube API, чтобы продолжить. Пожалуйта, указите API-ключ в настройках дополнения."
+
+msgctxt "#30022"
+msgid "A YouTube API Key is required for this addon to work, please enter your API key now."
+msgstr "Для работы данного дополнения необходим ключ к YouTube API, пожалуйста, введите API-ключ сейчас."
+
+msgctxt "#30023"
+msgid "Move up"
+msgstr "Переместить вверх"
+
+msgctxt "#30024"
+msgid "Move down"
+msgstr "Переместить вниз"
+
+msgctxt "#30025"
+msgid "Change folder"
+msgstr "Сменить папку"
+
+msgctxt "#30026"
+msgid "Choose image"
+msgstr "Выбрать изображение"
+
+msgctxt "#30027"
+msgid "Set thumbnail"
+msgstr "Установить миниатюру"
+
+msgctxt "#30028"
+msgid "Remove playlist"
+msgstr "Удалить плейлист"
+
+msgctxt "#30029"
+msgid "Live"
+msgstr "Прямой эфир"
+
+msgctxt "#30031"
+msgid "Playing using YouTube"
+msgstr "Воспроизведение с помощью YouTube"
+
+msgctxt "#30032"
+msgid "Sort Channels A-Z"
+msgstr "Сортировать каналы по алфавиту"
+
+msgctxt "#30099"
+msgid "Youtube channels"
+msgstr "Каналы YouTube"
+
+msgctxt "#30200"
+msgid "General"
+msgstr "Общие"
+
+msgctxt "#30201"
+msgid "Enable playlists"
+msgstr "Разрешить плейлисты"
+
+msgctxt "#30202"
+msgid "Show 'add folder/channel' options"
+msgstr "Показывать опции \"добавить папку/канал\""
+
+msgctxt "#30203"
+msgid "Number of videos per page"
+msgstr "Количество видероликов на странице"
+
+msgctxt "#30204"
+msgid "Number of channel search results"
+msgstr "Количество результатов поиска канала"
+
+msgctxt "#30205"
+msgid "Erase database"
+msgstr "Очистить базу данных"
+
+msgctxt "#30206"
+msgid "API Key"
+msgstr "API-ключ"
+
+msgctxt "#30207"
+msgid "YouTube API Key"
+msgstr "Ключ YouTube API"
+
+msgctxt "#30208"
+msgid "Enable live streams"
+msgstr "Разрешить прямые эфиры"
+
+msgctxt "#30209"
+msgid "Filter out shorts"
+msgstr "Скрывать короткие видео"

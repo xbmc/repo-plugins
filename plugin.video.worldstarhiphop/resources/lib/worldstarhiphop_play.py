@@ -8,18 +8,15 @@
 import YDStreamExtractor
 from future import standard_library
 standard_library.install_aliases()
-from builtins import str
 from builtins import object
 
-import requests
 import sys
 import urllib.parse
 import xbmc
 import xbmcgui
 import xbmcplugin
-import re
 
-from resources.lib.worldstarhiphop_const import SETTINGS, LANGUAGE, HEADERS, convertToUnicodeString, log, getSoup
+from resources.lib.worldstarhiphop_const import SETTINGS, LANGUAGE, log
 #
 # Main class
 #
@@ -56,103 +53,59 @@ class Main(object):
         #
         # Init
         #
-        is_folder = False
         # Create a list for our items.
-        listing = []
         unplayable_media_file = False
         have_valid_url = False
-        dialogWait = xbmcgui.DialogProgress()
-
-        #
-        # Get current list item details...
-        #
-        # title = convertToUnicodeString(xbmc.getInfoLabel("list_item.Title"))
-        thumbnail_url = convertToUnicodeString(xbmc.getInfoImage("list_item.Thumb"))
-        # studio = convertToUnicodeString(xbmc.getInfoLabel("list_item.Studio"))
-        plot = convertToUnicodeString(xbmc.getInfoLabel("list_item.Plot"))
-        genre = convertToUnicodeString(xbmc.getInfoLabel("list_item.Genre"))
 
         video_url = self.video_page_url
 
+        log("video_url", video_url)
+
         try:
+            # 2 possible video kinds
+            #   video hosted on worldstarhiphop server:
+            #   https://worldstar.com/videos/wshhUe2VMr4X59943tcB/bruh-went-crazy-south-korean-man-oh-yohan-broke-the-guinness-world-record-for-most-pull-ups-in-24-hours-with-11-707-reps
+            #   video hosted on youtube server:
+            #   https://worldstar.com/videos/wshh713c6jtnO4GYA8jg/jim-jones-life-with-you-feat-shyst-vader-and-beaujoli
+
             vid = YDStreamExtractor.getVideoInfo(video_url, quality=int(
                 self.VIDEO))  # quality is 0=SD, 1=720p, 2=1080p and is a maximum
-            video_url = vid.streamURL()
-            have_valid_url = True
-        except:
-            # Maybe it's an 18+ video ?!
-            #
-            # Get HTML page...
-            #
-            response = requests.get(video_url, headers=HEADERS)
+            stream_url = vid.streamURL()
 
-            html_source = response.text
-            html_source = convertToUnicodeString(html_source)
+            log("stream_url", stream_url)
 
-            # Parse response
-            soup = getSoup(html_source)
+            # the 2 possible video kinds result in these stream urls
+            #   video hosted on worldstarhiphop server:
+            #   https://hw-videos.worldstarhiphop.com/u/vid/2025/06/LDnY4eI5gMB3.mp4|User-Agent=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F75.0.3739.1+Safari%2F537.36
+            #   video hosted on youtube server:
+            #   https://www.youtube.com/v/f-lwAZ77vSo|User-Agent=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F71.0.3559.2+Safari%2F537.36
 
-            # log("html_source", html_source)
+            #   For a youtube video: use kodi youtube plugin to play it
+            if "youtube" in stream_url.lower():
+                # Extract the URL part before the pipe
+                url_part = stream_url.split("|User-Agent=")[0]
+                # Find the last '/' and extract the ID after it
+                youtube_id = url_part.split('/')[-1]
 
-            # A bit of a dirty hack, but let's try it anyway...
-            # so.addVariable("file","http://hw-videos.worldstarhiphop.com/u/vid/2015/09/SAWGSqGpaohk.mp4");
-            # or
-            # <source src="http://hw-videos.worldstarhiphop.com/u/vid/2017/04/Gtlg3yKHNNqP.mp4" type="video/mp4">
-            pos_vid_url = str(html_source).find("hw-videos.worldstarhiphop.com/")
-            if pos_vid_url >= 0:
-                pos_start_quote = str(html_source).rfind('"', 0, pos_vid_url)
-                pos_end_quote = str(html_source).find('"', pos_start_quote + 1)
-                video_url = html_source[pos_start_quote + 1: pos_end_quote]
+                log("youtube_id:", youtube_id)
+
+                youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
                 have_valid_url = True
+                video_url = youtube_url
             else:
-                # Maybe it's a youtube video then ?!
-                if str(html_source).find("www.youtube.com/embed") >= 0:
-                    # Seems like it's an youtube video
-                    # <iframe src="http://www.youtube.com/embed/1xcxn7pOYCg?autoplay=1" width="640" height="390" frameborder="0"></iframe>
-                    # look for http youtube
-                    video_urls = soup.findAll('iframe', attrs={'src': re.compile("^http://www.youtube.com/embed")}, limit=1)
-                    if len(video_urls) == 0:
-                        # look for https youtube
-                        video_urls = soup.findAll('iframe', attrs={'src': re.compile("^https://www.youtube.com/embed")}, limit=1)
-                        if len(video_urls) == 0:
-                            unplayable_media_file = True
-                        else:
-                            video_url = video_urls[0]['src']
-
-                            log("video_url", video_url)
-
-                            # make youtube plugin url
-                            pos_of_last_question_mark = video_url.rfind("?")
-                            video_url = video_url[0: pos_of_last_question_mark]
-                            video_url_len = len(video_url)
-                            youtubeID = video_url[len("https://www.youtube.com/embed/"):video_url_len]
-                            youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtubeID
-                            have_valid_url = True
-                            video_url = youtube_url
-                    else:
-                        video_url = video_urls[0]['src']
-
-                        log("video_url", video_url)
-
-                        # make youtube plugin url
-                        pos_of_last_question_mark = video_url.rfind("?")
-                        video_url = video_url[0: pos_of_last_question_mark]
-                        video_url_len = len(video_url)
-                        youtubeID = video_url[len("http://www.youtube.com/embed/"):video_url_len]
-                        youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtubeID
-                        have_valid_url = True
-                        video_url = youtube_url
-                else:
-                    unplayable_media_file = True
+                # for a video hosted on worldstarhiphop server: play the video file directly
+                have_valid_url = True
+                video_url = stream_url
+        except:
+            unplayable_media_file = True
 
         log("have_valid_url", have_valid_url)
-
+        log("unplayable_media_file", unplayable_media_file)
         log("video_url", video_url)
 
         if have_valid_url:
             list_item = xbmcgui.ListItem(path=video_url)
             xbmcplugin.setResolvedUrl(self.plugin_handle, True, list_item)
-
         #
         # Alert user
         #

@@ -7,10 +7,19 @@
 from __future__ import unicode_literals
 import os
 
+# noinspection PyUnresolvedReferences
 from codequick import Script, utils
 import urlquick
-
+# noinspection PyUnresolvedReferences
 from kodi_six import xbmcgui, xbmcvfs
+
+
+Quality = {
+    "BEST": "0",
+    "DEFAULT": "1",
+    "DIALOG": "2",
+    "WORST": "3"
+}
 
 
 def get_item_label(item_id, item_infos={}, append_selected_lang=True):
@@ -74,18 +83,21 @@ def get_quality_YTDL(download_mode=False):
     # If not download mode get the 'quality' setting
     if not download_mode:
         quality = Script.setting.get_string('quality')
-        if quality == 'BEST':
+        if quality == Quality['BEST']:
             return 3
 
-        if quality == 'DEFAULT':
+        if quality == Quality['DEFAULT']:
             return 3
 
-        if quality == 'DIALOG':
-            youtubeDL_qualiy = ['SD', '720p', '1080p', 'Highest Available']
+        if quality == Quality['DIALOG']:
+            youtube_dl_quality = ['SD', '720p', '1080p', 'Highest Available']
             selected_item = xbmcgui.Dialog().select(
                 Script.localize(30709),
-                youtubeDL_qualiy)
+                youtube_dl_quality)
             return selected_item
+
+        if quality == Quality['WORST']:
+            return 0
 
         return 3
 
@@ -121,6 +133,6 @@ def clear_cache(plugin):
     # Remove all tv guides
     dirs, files = xbmcvfs.listdir(Script.get_info('profile'))
     for fn in files:
-        if '.xml' in fn and fn != 'settings.xml':
+        if ('.xml' in fn and fn != 'settings.xml') or '.json' in fn:
             Script.log('Remove xmltv file: {}'.format(fn))
             xbmcvfs.delete(os.path.join(Script.get_info('profile'), fn))

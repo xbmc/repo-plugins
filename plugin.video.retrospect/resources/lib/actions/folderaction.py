@@ -20,7 +20,7 @@ from resources.lib.xbmcwrapper import XbmcWrapper
 
 
 class FolderAction(AddonAction):
-    def __init__(self, parameter_parser, channel, favorites=None):
+    def __init__(self, parameter_parser, channel, favorites=None, items=None):
         """Wraps the channel.process_folder_list
 
         :param ActionParser parameter_parser:      A ActionParser object to is used to parse and
@@ -38,6 +38,7 @@ class FolderAction(AddonAction):
         self.__channel = channel
         self.__media_item = parameter_parser.media_item
         self.__favorites = favorites
+        self.__items = items
 
     def execute(self):
         Logger.info("Plugin::process_folder_list Doing process_folder_list")
@@ -50,7 +51,10 @@ class FolderAction(AddonAction):
             # determine the parent guid
             parent_guid = self.parameter_parser.get_parent_guid(self.__channel, selected_item)
 
-            if self.__favorites is None:
+            if self.__items is not None:
+                watcher = StopWatch("Plugin process_folder_list of existing items", Logger.instance())
+                media_items = self.__items
+            elif self.__favorites is None:
                 watcher = StopWatch("Plugin process_folder_list", Logger.instance())
                 media_items = self.__channel.process_folder_list(selected_item)
                 watcher.lap("Class process_folder_list finished")
@@ -58,6 +62,11 @@ class FolderAction(AddonAction):
                 parent_guid = "{}.fav".format(parent_guid)
                 watcher = StopWatch("Plugin process_folder_list With Items", Logger.instance())
                 media_items = self.__favorites
+
+            if media_items is None:
+                Logger.warning("process_folder_list returned None, navigating back")
+                xbmcplugin.endOfDirectory(self.handle, False)
+                return
 
             if len(media_items) == 0:
                 Logger.warning("process_folder_list returned %s items", len(media_items))
@@ -68,8 +77,22 @@ class FolderAction(AddonAction):
             kodi_items = []
 
             use_thumbs_as_fanart = AddonSettings.use_thumbs_as_fanart()
+
+            # Determine the TV Show title. Use the TV Show title of the selected item if it has one,
+            # or use the title of the selected item if the content has `episodes`. Becaue in that
+            # case the selected item is a TV Show.
+            tv_show_title = None
+            if selected_item:
+                tv_show_title = selected_item.tv_show_title or (
+                    selected_item.title if selected_item.content_type == contenttype.EPISODES else None
+                )
+
             for media_item in media_items:  # type: MediaItem
                 self.__update_artwork(media_item, self.__channel, use_thumbs_as_fanart)
+                # Set the TV Show title if it was set before, but don't override existing values.
+                if tv_show_title and not media_item.tv_show_title:
+                    Logger.trace("Updating TV Show title to: %s", tv_show_title)
+                    media_item.tv_show_title = tv_show_title
 
                 if media_item.is_folder:
                     action_value = action.LIST_FOLDER
@@ -87,7 +110,7 @@ class FolderAction(AddonAction):
                                            is_favourite=self.__favorites is not None)
 
                 # Get the context menu items
-                context_menu_items = self._get_context_menu_items(self.__channel, item=media_item)
+                context_menu_items = self._get_context_menu_items(self.__channel, item=media_item, store_id=parent_guid)
                 kodi_item.addContextMenuItems(context_menu_items)
 
                 # Get the action URL
@@ -114,7 +137,8 @@ class FolderAction(AddonAction):
             self.__add_breadcrumb(self.handle, self.__channel, selected_item)
             self.__add_content_type(self.handle, self.__channel, selected_item)
 
-            xbmcplugin.endOfDirectory(self.handle, ok)
+            cache_to_disk = selected_item.cacheToDisc if selected_item else True
+            xbmcplugin.endOfDirectory(self.handle, ok, cacheToDisc=cache_to_disk)
         except Exception:
             Logger.error("Plugin::Error Processing FolderList", exc_info=True)
             XbmcWrapper.show_notification(
@@ -159,8 +183,11 @@ class FolderAction(AddonAction):
         else:
             ok = True
 
-        XbmcWrapper.show_notification(LanguageHelper.get_localized_string(LanguageHelper.ErrorId),
-                                      title, XbmcWrapper.Error, 2500)
+        notification_type = XbmcWrapper.Error if behaviour == "error" else XbmcWrapper.Info
+        notification_title = LanguageHelper.get_localized_string(
+            LanguageHelper.ErrorId) if behaviour == "error" else None
+        XbmcWrapper.show_notification(notification_title,
+                                      title, notification_type, 2500)
         return ok
 
     def __update_artwork(self, media_item, channel, use_thumbs_as_fanart):
@@ -225,6 +252,12 @@ class FolderAction(AddonAction):
 
         # Set the properties for the context menu add-on
         kodi_item.setProperty(self._propertyRetrospect, "true")
+
+        if media_item.is_search_folder:
+            kodi_item.setProperty(self._propertyRetrospectSearchFolder, "true")
+            # Search folders don't need more.
+            return
+
         kodi_item.setProperty(self._propertyRetrospectFolder
                               if is_folder
                               else self._propertyRetrospectVideo, "true")
@@ -257,19 +290,33 @@ class FolderAction(AddonAction):
         if AddonSettings.mix_folders_and_videos():
             sort_methods.append(xbmcplugin.SORT_METHOD_LABEL_IGNORE_FOLDERS)
         else:
-            sort_methods.append(xbmcplugin.SORT_METHOD_LABEL)
-        sort_methods.append(xbmcplugin.SORT_METHOD_EPISODE)
-        sort_methods.append(xbmcplugin.SORT_METHOD_UNSORTED)
+            sort_methods.append(xbmcplugin.SORT_METHOD_LABEL)  # 1
+        sort_methods.append(xbmcplugin.SORT_METHOD_UNSORTED)   # 40
 
         # And then the specialized ones ad default sort options
         if items:
-            has_dates = any([i for i in items if i.has_date()])
+            has_dates = any([i.has_date() for i in items])
             if has_dates:
-                sort_methods.insert(0, xbmcplugin.SORT_METHOD_DATE)
+                sort_methods.insert(0, xbmcplugin.SORT_METHOD_DATE)  # 3
 
-            has_tracks = any([i for i in items if i.has_track()])
+            has_tracks = any([i.has_track() for i in items])
             if has_tracks:
                 sort_methods.insert(0, xbmcplugin.SORT_METHOD_TRACKNUM)
+
+            # Check for episodes
+            playable = [i for i in items if i.is_playable]
+            if playable and all([i.has_info_label(MediaItem.LabelEpisode) for i in playable]):
+                # All playable items have episodes, pre-sort them on that.
+                sort_methods.insert(0, xbmcplugin.SORT_METHOD_EPISODE)  # 24
+
+            elif any([i.has_info_label(MediaItem.LabelEpisode) for i in items]):
+                # Some items have episodes, only add the sorting options.
+                sort_methods.append(xbmcplugin.SORT_METHOD_EPISODE)  # 24
+
+        is_search = self.parameter_parser.action == action.SEARCH
+        if is_search:
+            sort_methods.remove(xbmcplugin.SORT_METHOD_UNSORTED)
+            sort_methods.insert(0, xbmcplugin.SORT_METHOD_UNSORTED)
 
         # Actually add them
         Logger.debug("Sorting methods: %s", sort_methods)
@@ -290,7 +337,10 @@ class FolderAction(AddonAction):
 
         bread_crumb = None
         if selected_item is not None:
-            bread_crumb = selected_item.name
+            if selected_item.tv_show_title and selected_item.tv_show_title != selected_item.name:
+                bread_crumb = "{} / {}".format(selected_item.tv_show_title, selected_item.name)
+            else:
+                bread_crumb = selected_item.name
         elif self.__channel is not None:
             bread_crumb = channel.channelName
 

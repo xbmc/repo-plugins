@@ -10,21 +10,68 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
 "Language-Team: Team-Kodi\n"
+"Language: fo_FO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fo_FO\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "Addon Summary"
+msgid "Video plugin to access content from nasa.gov"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "This video plugin provides access to more than 1800 videos, 8 vodcasts and 4 nasa-tv livestreams[CR]All content is dynamic and should be always up to date."
+msgstr ""
 
 msgctxt "#30001"
 msgid "Page"
 msgstr "Síða"
 
+msgctxt "#30100"
+msgid "Livestreams"
+msgstr ""
+
 msgctxt "#30101"
 msgid "Videos"
 msgstr "Video"
+
+msgctxt "#30103"
+msgid "Vodcasts"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Search for Videos"
+msgstr ""
 
 msgctxt "#30201"
 msgid "Title"
 msgstr "Heiti"
 
+msgctxt "#30202"
+msgid "General"
+msgstr ""
+
+msgctxt "#30203"
+msgid "General Settings"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Add-on used for playback"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Select the Add-on used for playback"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Youtube Add-on"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Tubed Add-on"
+msgstr ""

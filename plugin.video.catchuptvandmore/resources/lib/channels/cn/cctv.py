@@ -6,14 +6,15 @@
 
 from __future__ import unicode_literals
 import json
+import re
 import socket
 import requests
 
+# noinspection PyUnresolvedReference
 from codequick import Resolver
+from resources.lib import resolver_proxy, web_utils
 
-
-# TODO
-# Add Replay
+# TODO Add Replay
 
 URL_LIVE = "https://vdn.live.cntv.cn/api2/liveHtml5.do"
 
@@ -33,14 +34,20 @@ def get_ip():
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-
     live_id = 'cctv_p2p_hd%s' % item_id
     resp = requests.get(
         URL_LIVE + '?channel=pa://%s&client=html5&ip=%s' % (live_id, get_ip()),
         headers={
+            "User-Agent": web_utils.get_random_ua(),
             'Cache-Control': 'max-age=-1, public'
         })
-    json_parser = json.loads(
-        resp.text.replace('var html5VideoData=\'', '').replace(
-            '\';getHtml5VideoData(html5VideoData);', ''))
-    return json_parser["hls_url"]["hls2"]
+
+    replace = re.sub("^[^{]*", "", resp.text)
+    replace = re.sub("(.*)}[^}]*", "\\1}", replace)
+    json_parser = json.loads(replace)
+    url = json_parser["hls_url"]["hls2"]
+
+    if url.endswith('m3u8'):
+        return resolver_proxy.get_stream_with_quality(plugin, video_url=url, manifest_type="hls")
+
+    return url

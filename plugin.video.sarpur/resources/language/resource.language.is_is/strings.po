@@ -56,3 +56,11 @@ msgstr "Leita að efni"
 msgctxt "#30910"
 msgid "View program"
 msgstr "Skoða þáttaröð"
+
+msgctxt "#30911"
+msgid "Search TV"
+msgstr "Leita að sjónvarpsefni"
+
+msgctxt "#30912"
+msgid "Search Radio"
+msgstr "Leita að útvarpsefni"

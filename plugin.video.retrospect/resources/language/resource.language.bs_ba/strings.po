@@ -2,1099 +2,1259 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-30 21:18+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-08-27 08:29+0000\n"
+"Last-Translator: SecularSteve <fairfull.playing@gmail.com>\n"
 "Language-Team: Bosnian (Bosnia and Herzegovina) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/bs_ba/>\n"
 "Language: bs_ba\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 5.13\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
-msgstr ""
+msgstr "Retrospect vam omogućava gledanje repriza/nadoknada TV emisija dostupnih putem njihovih službenih emitera."
 
 msgctxt "Addon Description"
 msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
-msgstr ""
+msgstr "Retrospect koristi službene web stranice i besplatno dostupne streamove različitih emitera (uglavnom holandskih, belgijskih, britanskih, norveških i švedskih) kako bi svoje reprize/nadoknade epizoda učinio dostupnim na Kodi platformi. [CR][CR]Neki kanali koji su uključeni su: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord, RTV Westveprojnmond, Omroeprojnmond, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo, Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info i Ons.[CR][CR]Više informacija možete pronaći na adresi: https://github.com/retrospect-addon/plugin.video.retrospect ili Retrospect wiki na https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
 
 msgctxt "Addon Disclaimer"
 msgid "Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms."
-msgstr ""
+msgstr "Retrospektiva se pruža \"kakva jeste\". Ne preuzimamo nikakvu odgovornost za moguću (ali vrlo malo vjerovatnu) štetu nanesenu vašem sistemu. Također ne preuzimamo odgovornost za sadržaj koji se može gledati pomoću ovog dodatka ili bilo kakve posljedice korištenja ovog dodatka za gledanje sadržaja putem platformi pružatelja sadržaja."
 
 msgctxt "#30000"
 msgid "Stream Quality"
-msgstr ""
+msgstr "Kvalitet streama"
 
 msgctxt "#30001"
 msgid "Low"
-msgstr ""
+msgstr "Nisko"
 
 msgctxt "#30002"
 msgid "Medium"
-msgstr ""
+msgstr "Umjereno"
 
 msgctxt "#30003"
 msgid "High"
-msgstr ""
+msgstr "Visoko"
 
 msgctxt "#30004"
 msgid "Release channel for update notifications"
-msgstr ""
+msgstr "Kanal izdanja za obavještenja o ažuriranjima"
 
 msgctxt "#30005"
 msgid "Stable"
-msgstr ""
+msgstr "Stajalište"
 
 msgctxt "#30006"
 msgid "Alpha/Beta"
-msgstr ""
+msgstr "Alfa/Beta"
 
 msgctxt "#30007"
 msgid "via other add-on"
-msgstr ""
+msgstr "putem drugog dodatka"
 
 msgctxt "#30008"
 msgid "Retrospect"
-msgstr ""
+msgstr "Retrospektiva"
 
 msgctxt "#30009"
 msgid "General"
-msgstr ""
+msgstr "Općenito"
 
 msgctxt "#30010"
 msgid "Channels"
-msgstr ""
+msgstr "Kanali"
 
 msgctxt "#30011"
 msgid "Requires restart of Retrospect to take effect."
-msgstr ""
+msgstr "Za primjenu je potrebno ponovno pokretanje Retrospect-a."
 
 msgctxt "#30012"
 msgid "Login Failed"
-msgstr ""
+msgstr "Prijava je neuspješna"
 
 msgctxt "#30013"
 msgid "Could not log on to the selected channel."
-msgstr ""
-
-msgctxt "#30014"
-msgid "Show info"
-msgstr ""
+msgstr "Prijava na odabrani kanal nije uspjela."
 
 msgctxt "#30015"
 msgid "via missing add-on"
-msgstr ""
+msgstr "putem nedostajućeg dodatka"
 
 msgctxt "#30016"
 msgid "Sort by"
-msgstr ""
+msgstr "Sortiraj po"
 
 msgctxt "#30017"
 msgid "Name"
-msgstr ""
+msgstr "Ime"
 
 msgctxt "#30018"
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 msgctxt "#30019"
 msgid "Show DRM/Paid warning before playback"
-msgstr ""
+msgstr "Prikaži DRM/upozorenje o plaćenom prije reprodukcije"
 
 msgctxt "#30020"
 msgid "Maximum Stream Bitrate [COLOR=gray](0=disabled)[/COLOR]"
-msgstr ""
+msgstr "Maksimalna brzina prijenosa podataka [COLOR=siva](0=onemogućeno)[/COLOR]"
 
 msgctxt "#30021"
 msgid "Enable subtitles by default when available"
-msgstr ""
+msgstr "Omogući titlove prema zadanim postavkama kada su dostupni"
 
 msgctxt "#30022"
 msgid "If available"
-msgstr ""
+msgstr "Ako je dostupno"
 
 msgctxt "#30023"
 msgid "Never show"
-msgstr ""
+msgstr "Nikad ne prikazuj"
 
 msgctxt "#30024"
 msgid "Recent"
-msgstr ""
+msgstr "Nedavno"
 
 msgctxt "#30025"
 msgid "None"
-msgstr ""
+msgstr "Nema"
 
 msgctxt "#30026"
 msgid "Group list if it exceeds # folders"
-msgstr ""
+msgstr "Grupiraj listu ako ima više od # foldera"
 
 msgctxt "#30027"
 msgid "Autorun Retrospect on Kodi start"
-msgstr ""
+msgstr "Automatsko pokretanje Retrospect-a pri pokretanju Kodija"
 
 msgctxt "#30028"
 msgid "Proxy"
-msgstr ""
+msgstr "Proksi"
 
 msgctxt "#30029"
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 msgctxt "#30030"
 msgid "Port"
-msgstr ""
+msgstr "Priključak"
 
 msgctxt "#30031"
 msgid "Cache HTTP(S) requests"
-msgstr ""
+msgstr "HTTP(S) zahtjevi u keši"
 
 msgctxt "#30032"
 msgid "Channel Settings"
-msgstr ""
+msgstr "Postavke kanala"
 
 msgctxt "#30033"
 msgid "Expires at"
-msgstr ""
+msgstr "Ističe u"
 
 msgctxt "#30034"
 msgid "No channel selected"
-msgstr ""
+msgstr "Nije odabran nijedan kanal"
 
 msgctxt "#30035"
 msgid "Username"
-msgstr ""
+msgstr "Korisničko ime"
 
 msgctxt "#30036"
 msgid "Password"
-msgstr ""
+msgstr "Lozinka"
 
 msgctxt "#30037"
 msgid "Use 'Up Next' to play next episode"
-msgstr ""
+msgstr "Koristite 'Sljedeće' za reprodukciju sljedeće epizode"
 
 msgctxt "#30038"
 msgid "'Up Next' add-on settings"
-msgstr ""
+msgstr "Postavke dodatka 'Sljedeće'"
 
 msgctxt "#30039"
 msgid "Up Next integration"
-msgstr ""
+msgstr "Integracija \"Sljedeće\""
 
 msgctxt "#30040"
 msgid "Channels"
-msgstr ""
+msgstr "Kanali"
 
 msgctxt "#30041"
 msgid "Show \"All Favourites\" in main Channel listing"
-msgstr ""
+msgstr "Prikaži \"Sve favorite\" u glavnoj listi kanala"
 
 msgctxt "#30042"
 msgid "Enabled"
-msgstr ""
+msgstr "Omogućeno"
 
 msgctxt "#30043"
 msgid "Folder prefix"
-msgstr ""
+msgstr "Prefiks mape"
 
 msgctxt "#30044"
 msgid "Kodi update required"
-msgstr ""
+msgstr "Potrebno je ažuriranje Kodija"
 
 msgctxt "#30045"
 msgid "This feature of Retrospect requires a more recent version of Kodi. Please install the most recent version of your current Kodi build. Depending on your installation this can either be a 'stable' or 'nightly' build."
-msgstr ""
+msgstr "Ova funkcija Retrospect-a zahtijeva noviju verziju Kodija. Molimo vas da instalirate najnoviju verziju vaše trenutne Kodi verzije. U zavisnosti od vaše instalacije, ovo može biti 'stabilna' ili 'noćna' verzija."
 
 msgctxt "#30046"
 msgid "DRM/Geo-blocked/Premium filters"
-msgstr ""
+msgstr "DRM/Geo-blokiranje/Premium filteri"
 
 msgctxt "#30047"
 msgid "Cannot playback this YouTube Video because the Kodi YouTube add-on is missing."
-msgstr ""
+msgstr "Nije moguće reproducirati ovaj YouTube video jer nedostaje dodatak Kodi za YouTube."
 
 # empty string with id 30047
 msgctxt "#30048"
 msgid "Log level"
-msgstr ""
+msgstr "Nivo zapisnika"
 
 msgctxt "#30049"
 msgid "Premium/Paid"
-msgstr ""
+msgstr "Premium/Plaćeno"
 
 msgctxt "#30050"
 msgid "DRM Protected"
-msgstr ""
+msgstr "Zaštićeno DRM-om"
 
 msgctxt "#30051"
 msgid "Hidden item"
-msgstr ""
+msgstr "Skrivena stavka"
 
 msgctxt "#30052"
 msgid "Send usage statistics"
-msgstr ""
+msgstr "Pošalji statistiku korištenja"
 
 msgctxt "#30053"
 msgid "Appearance"
-msgstr ""
+msgstr "Izgled"
 
 msgctxt "#30054"
 msgid "[COLOR gold][B]The Retrospect Password Vault[/B][/COLOR][CR]'The Vault' enables storing sensitive data in a more secure way. How does this work:[CR][CR]* The users selects a simple Vault PIN that is used as the main code for accessing the Vault data.[CR]* This PIN can be rather simple and short and easy to remember: for example 3145.[CR]* That PIN is then used to generate a much stronger and complexer encryption key using Scrypt.[CR]* As a user you will not need to know this complex key.[CR][CR][COLOR gold][B]Storing sensitive data[/B][/COLOR][CR]Whenever sensitive data is being [B]stored[/B]:[CR][CR]* The user will be asked for their PIN first.[CR]* After a correct PIN the actual data to store will be asked.[CR][CR][COLOR gold][B]Retrieving sensitive data[/B][/COLOR][CR]Whenever sensitive data is being [B]retrieved[/B]:[CR][CR]* The user will only be asked for their PIN.[CR]* That PIN is then used to securely fetch the actual data.[CR][CR][COLOR gold][B]Resetting the Vault[/B][/COLOR][CR]If a user has forgotten the PIN, there is no way of recovering the data. The only solution is to reset the Vault and pick a new PIN and generate a new Vault Key. [B]This will invalidate all encrypted data[/B]. This data must be entered again."
-msgstr ""
+msgstr "[Zlatna BOJA][B]Retrospect trezor lozinki[/B][/BOJA][CR]'Trezor' omogućava sigurnije pohranjivanje osjetljivih podataka. Kako ovo funkcioniše:[CR][CR]* Korisnik bira jednostavan PIN za Trezor koji se koristi kao glavni kod za pristup podacima iz Trezora.[CR]* Ovaj PIN može biti prilično jednostavan, kratak i lako ga je zapamtiti: na primjer 3145.[CR]* Taj PIN se zatim koristi za generiranje mnogo jačeg i složenijeg ključa za šifriranje pomoću Scrypta.[CR]* Kao korisnik nećete morati znati ovaj složeni ključ.[CR][CR][COLOR gold][B]Pohranjivanje osjetljivih podataka[/B][/COLOR][CR]Kad god se osjetljivi podaci [B]pohranjuju[/B]:[CR][CR]* Korisnik će prvo biti zamoljen za PIN.[CR]* Nakon ispravnog PIN-a, bit će zamoljen za stvarni podatak koji će se pohraniti.[CR][CR][COLOR gold][B]Preuzimanje osjetljivih podataka[/B][/COLOR][CR]Kad god se osjetljivi podaci [B]preuzimaju[/B]:[CR][CR]* Korisnik će biti zamoljen samo za PIN.[CR]* Taj PIN se zatim koristi za sigurno preuzimanje stvarnih podaci.[CR][CR][COLOR gold][B]Resetiranje trezora[/B][/COLOR][CR]Ako je korisnik zaboravio PIN, ne postoji način da se podaci oporave. Jedino rješenje je resetiranje trezora, odabir novog PIN-a i generiranje novog ključa trezora. [B]Ovo će poništiti sve šifrirane podatke[/B]. Ove podatke je potrebno ponovo unijeti."
 
 msgctxt "#30055"
 msgid "Advanced"
-msgstr ""
+msgstr "Napredno"
 
 msgctxt "#30056"
 msgid "Install the Up Next add-on"
-msgstr ""
+msgstr "Instalirajte dodatak Up Next"
 
 msgctxt "#30057"
 msgid "Enable the Up Next add-on"
-msgstr ""
+msgstr "Omogućite dodatak Up Next"
 
 # empty strings from id 30056 to 30058
 msgctxt "#30059"
 msgid "Other Countries"
-msgstr ""
+msgstr "Druge zemlje"
 
 msgctxt "#30060"
 msgid "Enable/Disable channels by country of origin"
-msgstr ""
+msgstr "Omogući/Onemogući kanale prema zemlji porijekla"
 
 msgctxt "#30061"
 msgid "Channel Origin"
-msgstr ""
+msgstr "Porijeklo kanala"
 
 msgctxt "#30062"
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 msgctxt "#30063"
 msgid "Channel to configure"
-msgstr ""
+msgstr "Kanal za konfiguraciju"
 
 msgctxt "#30064"
 msgid "Proxy Group"
-msgstr ""
+msgstr "Proksi grupa"
 
 msgctxt "#30065"
 msgid "Country Settings"
-msgstr ""
+msgstr "Postavke zemlje"
 
 msgctxt "#30066"
 msgid "DNS"
-msgstr ""
+msgstr "DNS"
 
 msgctxt "#30067"
 msgid "Show channels in categories"
-msgstr ""
+msgstr "Prikaži kanale u kategorijama"
 
 msgctxt "#30068"
 msgid "Active"
-msgstr ""
+msgstr "Aktivno"
 
 msgctxt "#30069"
 msgid "Settings"
-msgstr ""
+msgstr "Podešavanja"
 
 msgctxt "#30070"
 msgid "Let Kodi determine bitrate if possible"
-msgstr ""
+msgstr "Neka Kodi odredi brzinu prijenosa podataka ako je moguće"
 
 msgctxt "#30071"
 msgid "Set the proxy and local IP to all channels related to this country"
-msgstr ""
+msgstr "Postavite proxy i lokalnu IP adresu za sve kanale povezane s ovom državom"
 
 msgctxt "#30072"
 msgid "Proxy Type"
-msgstr ""
+msgstr "Vrsta proxyja"
 
 msgctxt "#30073"
 msgid "- Geo-blocked = º, DRM protected = ^ and Premium = ª."
-msgstr ""
+msgstr "- Geoblokirano = º, DRM zaštićeno = ^ i Premium = ª."
 
 msgctxt "#30074"
 msgid "Disabled"
-msgstr ""
+msgstr "Onemogućeno"
 
 msgctxt "#30075"
 msgid "Empty list behaviour"
-msgstr ""
+msgstr "Ponašanje prazne liste"
 
 msgctxt "#30076"
 msgid "Show error"
-msgstr ""
+msgstr "Prikaži grešku"
 
 msgctxt "#30077"
 msgid "Show empty list"
-msgstr ""
+msgstr "Prikaži praznu listu"
 
 msgctxt "#30078"
 msgid "Show dummy item"
-msgstr ""
+msgstr "Prikaži lažnu stavku"
 
 msgctxt "#30079"
 msgid "Local IP (0.0.0.0=disabled)"
-msgstr ""
+msgstr "Lokalna IP adresa (0.0.0.0=onemogućena)"
 
 msgctxt "#30080"
 msgid "Filter DRM protected items"
-msgstr ""
+msgstr "Filtriraj stavke zaštićene DRM-om"
 
 msgctxt "#30081"
 msgid "Filter Premium/Paid items"
-msgstr ""
+msgstr "Filtriraj premium/plaćene artikle"
 
 msgctxt "#30082"
 msgid "Apply filter to"
-msgstr ""
+msgstr "Primijeni filter na"
 
 msgctxt "#30083"
 msgid "Folders & Streams"
-msgstr ""
+msgstr "Folderi i tokovi"
 
 msgctxt "#30084"
 msgid "Streams Only"
-msgstr ""
+msgstr "Samo streamovi"
 
 msgctxt "#30085"
 msgid "Geo Location"
-msgstr ""
+msgstr "Geografska lokacija"
 
 msgctxt "#30086"
 msgid "Hide Fanart"
-msgstr ""
+msgstr "Sakrij fanart"
 
 msgctxt "#30087"
 msgid "Mix folders and streams while sorting"
-msgstr ""
+msgstr "Miješajte mape i streamove prilikom sortiranja"
 
 msgctxt "#30088"
 msgid "Show thumbnail as fanart if no fanart is available"
-msgstr ""
+msgstr "Prikaži sličicu kao fanart ako fanart nije dostupan"
 
 msgctxt "#30089"
 msgid "Password Vault"
-msgstr ""
+msgstr "Trezor lozinki"
 
 msgctxt "#30090"
 msgid "The 'Password Vault' protects stored password with encryption using a PIN."
-msgstr ""
+msgstr "'Trezor lozinki' štiti pohranjenu lozinku šifriranjem pomoću PIN-a."
 
 msgctxt "#30091"
 msgid "Change Vault Pin"
-msgstr ""
+msgstr "Promijeni PIN trezora"
 
 msgctxt "#30092"
 msgid "Reset Vault"
-msgstr ""
+msgstr "Resetiraj trezor"
 
 msgctxt "#30093"
 msgid "Password"
-msgstr ""
+msgstr "Lozinka"
 
 msgctxt "#30094"
 msgid "Username"
-msgstr ""
+msgstr "Korisničko ime"
 
 msgctxt "#30095"
 msgid "Show Hidden Items"
-msgstr ""
+msgstr "Prikaži skrivene stavke"
 
 msgctxt "#30096"
 msgid "Country"
-msgstr ""
+msgstr "Država"
 
 msgctxt "#30097"
 msgid "Local IP"
-msgstr ""
+msgstr "Lokalna IP adresa"
 
 msgctxt "#30098"
 msgid "Logging & Diagnostics"
-msgstr ""
+msgstr "Zapisivanje i dijagnostika"
 
 msgctxt "#30099"
 msgid "Use HLS instead of Dash for non-encrypted streams"
-msgstr ""
+msgstr "Koristite HLS umjesto Dash-a za nešifrirane streamove"
 
 msgctxt "#30100"
 msgid "None"
-msgstr ""
+msgstr "Nema"
 
 msgctxt "#30101"
 msgid "Regional"
-msgstr ""
+msgstr "Regionalno"
 
 msgctxt "#30102"
 msgid "National"
-msgstr ""
+msgstr "Nacionalni"
 
 msgctxt "#30103"
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 msgctxt "#30104"
 msgid "Radio"
-msgstr ""
+msgstr "Radio"
 
 msgctxt "#30105"
 msgid "Sport"
-msgstr ""
+msgstr "Sport"
 
 msgctxt "#30106"
 msgid "Kids"
-msgstr ""
+msgstr "Djeca"
 
 msgctxt "#30107"
 msgid "Tech"
-msgstr ""
+msgstr "Tehnologija"
 
 msgctxt "#30108"
 msgid "Other"
-msgstr ""
+msgstr "Ostalo"
+
+msgctxt "#30109"
+msgid "IPTV Manager"
+msgstr "IPTV menadžer"
+
+msgctxt "#30110"
+msgid "Install IPTV Manager add-on"
+msgstr "Instalirajte dodatak IPTV Manager"
+
+msgctxt "#30111"
+msgid "Enable IPTV Manager integration"
+msgstr "Omogući integraciju IPTV Managera"
+
+msgctxt "#30112"
+msgid "IPTV Manager settings…"
+msgstr "Postavke IPTV menadžera…"
+
+msgctxt "#30113"
+msgid "Set refresh token"
+msgstr "Postavi token za osvježavanje"
+
+msgctxt "#30114"
+msgid "Retrospect Web Dialog"
+msgstr "Web dijalog za retrospektivu"
+
+msgctxt "#30115"
+msgid "Setting up Retrospect webserver"
+msgstr "Postavljanje Retrospect web servera"
+
+msgctxt "#30116"
+msgid "Starting webserver on port {}"
+msgstr "Pokretanje web servera na portu {}"
+
+msgctxt "#30117"
+msgid "Waiting for input from browser"
+msgstr "Čekanje unosa iz preglednika"
+
+msgctxt "#30118"
+msgid "Input received from browser"
+msgstr "Unos primljen iz preglednika"
+
+msgctxt "#30119"
+msgid "Open a browser and navigate to http://{}:{}"
+msgstr "Otvorite preglednik i idite na http://{}:{}"
+
+msgctxt "#30120"
+msgid "Browser input cancelled"
+msgstr "Unos u pregledniku otkazan"
+
+msgctxt "#30121"
+msgid "Paste refresh token here."
+msgstr "Ovdje zalijepite token za osvježavanje."
+
+msgctxt "#30122"
+msgid "Invalid Refresh Token"
+msgstr "Nevažeći token za osvježavanje"
+
+msgctxt "#30123"
+msgid "Expired Refresh Token"
+msgstr "Istekli token za osvježavanje"
+
+msgctxt "#30124"
+msgid "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
+msgstr "Pronađite <b>token za osvježavanje</b> za svoj račun tako što ćete pregledati kolačiće web-mjesta i ovdje zalijepiti <b>vrijednost</b> kolačića tokena za osvježavanje."
+
+msgctxt "#30125"
+msgid "Show future episodes under 'Recent > Today'"
+msgstr "Prikaži buduće epizode pod 'Nedavno > Danas'"
+
+msgctxt "#30126"
+msgid "Default"
+msgstr "Zadano"
+
+msgctxt "#30127"
+msgid "Show All"
+msgstr "Pokaži sve"
+
+msgctxt "#30128"
+msgid "Filter Premium"
+msgstr "Premium filter"
+
+msgctxt "#30129"
+msgid "Re-Authenticate"
+msgstr "Ponovna autentifikacija"
 
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"
 msgid "Monday"
-msgstr ""
+msgstr "Ponedjeljak"
 
 msgctxt "#30191"
 msgid "Tuesday"
-msgstr ""
+msgstr "Utorak"
 
 msgctxt "#30192"
 msgid "Wednesday"
-msgstr ""
+msgstr "Srijeda"
 
 msgctxt "#30193"
 msgid "Thursday"
-msgstr ""
+msgstr "Četvrtak"
 
 msgctxt "#30194"
 msgid "Friday"
-msgstr ""
+msgstr "Petak"
 
 msgctxt "#30195"
 msgid "Saturday"
-msgstr ""
+msgstr "Subota"
 
 msgctxt "#30196"
 msgid "Sunday"
-msgstr ""
+msgstr "Nedjelja"
 
 msgctxt "#30199"
 msgid "10"
-msgstr ""
+msgstr "10"
 
 msgctxt "#30200"
 msgid "50"
-msgstr ""
+msgstr "50"
 
 msgctxt "#30201"
 msgid "75"
-msgstr ""
+msgstr "75"
 
 msgctxt "#30202"
 msgid "100"
-msgstr ""
+msgstr "100"
 
 msgctxt "#30203"
 msgid "150"
-msgstr ""
+msgstr "150"
 
 msgctxt "#30204"
 msgid "200"
-msgstr ""
+msgstr "200"
 
 msgctxt "#30205"
 msgid "1000"
-msgstr ""
+msgstr "1000"
 
 # language and countries
 # empty strings from id 30206 to 30299
 msgctxt "#30300"
 msgid "Other Countries"
-msgstr ""
+msgstr "Druge zemlje"
 
 # nl
 msgctxt "#30301"
 msgid "The Netherlands"
-msgstr ""
+msgstr "Nizozemska"
 
 msgctxt "#30302"
 msgid "Sweden"
-msgstr ""
+msgstr "Švedska"
 
 msgctxt "#30303"
 msgid "Lithuania"
-msgstr ""
+msgstr "Litvanija"
 
 msgctxt "#30304"
 msgid "Latvia"
-msgstr ""
+msgstr "Latvija"
 
 msgctxt "#30305"
 msgid "Norway"
-msgstr ""
+msgstr "Norveška"
 
 msgctxt "#30306"
 msgid "Belgium"
-msgstr ""
+msgstr "Belgija"
 
 msgctxt "#30307"
 msgid "United Kingdom"
-msgstr ""
+msgstr "Ujedinjeno Kraljevstvo"
 
 msgctxt "#30308"
 msgid "Estonia"
-msgstr ""
+msgstr "Estonija"
 
 msgctxt "#30309"
 msgid "Germany"
-msgstr ""
+msgstr "Njemačka"
 
 msgctxt "#30310"
 msgid "Denmark"
-msgstr ""
+msgstr "Danska"
 
 msgctxt "#30311"
 msgid "Finland"
-msgstr ""
+msgstr "Finska"
 
 # empty strings from id 30312 to 30345
 msgctxt "#30346"
 msgid "Now Playing"
-msgstr ""
+msgstr "U tijeku"
 
 msgctxt "#30347"
 msgid "Now"
-msgstr ""
+msgstr "Sada"
 
 msgctxt "#30348"
 msgid "Next"
-msgstr ""
+msgstr "Sljedeće"
 
 msgctxt "#30349"
 msgid "Later"
-msgstr ""
+msgstr "Kasnije"
 
 # empty strings from id 30312 to 30349
 msgctxt "#30350"
 msgid "Search"
-msgstr ""
+msgstr "Pretražite"
 
 msgctxt "#30351"
 msgid "Categories"
-msgstr ""
+msgstr "Kategorije"
 
 msgctxt "#30352"
 msgid "TV shows"
-msgstr ""
+msgstr "TV emisije"
 
 msgctxt "#30353"
 msgid "Currently playing"
-msgstr ""
+msgstr "Trenutno se reproducira"
 
 msgctxt "#30354"
 msgid "Most viewed episodes"
-msgstr ""
+msgstr "Najgledanije epizode"
 
 msgctxt "#30355"
 msgid "Most recent episodes"
-msgstr ""
+msgstr "Najnovije epizode"
 
 msgctxt "#30356"
 msgid "Live TV"
-msgstr ""
+msgstr "TV uživo"
 
 msgctxt "#30357"
 msgid "Live Radio"
-msgstr ""
+msgstr "Radio uživo"
 
 msgctxt "#30358"
 msgid "Episodes"
-msgstr ""
+msgstr "Epizode"
 
 msgctxt "#30359"
 msgid "Genres"
-msgstr ""
+msgstr "Žanrovi"
 
 msgctxt "#30360"
 msgid "Full list"
-msgstr ""
+msgstr "Potpuna lista"
 
 msgctxt "#30361"
 msgid "Tags"
-msgstr ""
+msgstr "Oznake"
 
 msgctxt "#30362"
 msgid "Last chance"
-msgstr ""
+msgstr "Posljednja šansa"
 
 msgctxt "#30363"
 msgid "Popular"
-msgstr ""
+msgstr "Popularno"
 
 msgctxt "#30364"
 msgid "Latest news"
-msgstr ""
+msgstr "Najnovije vijesti"
 
 msgctxt "#30365"
 msgid "Movies"
-msgstr ""
+msgstr "Filmovi"
 
 msgctxt "#30366"
 msgid "Available from"
-msgstr ""
+msgstr "Dostupno od"
+
+msgctxt "#30367"
+msgid "New on %s"
+msgstr "Novo na %s"
+
+msgctxt "#30368"
+msgid "Extras"
+msgstr "Dodaci"
+
+msgctxt "#30369"
+msgid "Fragments"
+msgstr "Fragmenti"
+
+msgctxt "#30370"
+msgid "All episodes"
+msgstr "Sve epizode"
+
+msgctxt "#30371"
+msgid "Trending"
+msgstr "U trendu"
+
+msgctxt "#30372"
+msgid "New Search"
+msgstr "Nova pretraga"
+
+msgctxt "#30373"
+msgid "Following"
+msgstr "Pod pratnjom"
+
+msgctxt "#30374"
+msgid "Recommended TV Shows"
+msgstr "Preporučene TV emisije"
+
+msgctxt "#30375"
+msgid "Recommended Videos"
+msgstr "Preporučeni videozapisi"
+
+msgctxt "#30376"
+msgid "Continue Watching"
+msgstr "Nastavi gledati"
+
+msgctxt "#30377"
+msgid "Clear Search History"
+msgstr "Obriši historiju pretraživanja"
+
+msgctxt "#30378"
+msgid "Remove Item"
+msgstr "Ukloni stavku"
 
 # empty strings from id 30365 to 30400
 msgctxt "#30401"
 msgid "Dutch"
-msgstr ""
+msgstr "Nizozemski"
 
 # se
 msgctxt "#30402"
 msgid "Swedish"
-msgstr ""
+msgstr "Švedski"
 
 # lt
 msgctxt "#30403"
 msgid "Lithuanian"
-msgstr ""
+msgstr "Litvanski"
 
 # lv
 msgctxt "#30404"
 msgid "Latvian"
-msgstr ""
+msgstr "Latvijski"
 
 # no
 msgctxt "#30405"
 msgid "Norwegian"
-msgstr ""
+msgstr "Norveški"
 
 # be
 msgctxt "#30406"
 msgid "Belgian"
-msgstr ""
+msgstr "Belgijski"
 
 # en-gb
 msgctxt "#30407"
 msgid "British"
-msgstr ""
+msgstr "Britanski"
 
 # ee
 msgctxt "#30408"
 msgid "Estonian"
-msgstr ""
+msgstr "Estonski"
 
 # de
 msgctxt "#30409"
 msgid "German"
-msgstr ""
+msgstr "Njemački"
 
 # dk
 msgctxt "#30410"
 msgid "Danish"
-msgstr ""
+msgstr "Danski"
 
 # fi
 msgctxt "#30411"
 msgid "Finnish"
-msgstr ""
+msgstr "Finski"
 
 # empty strings from id 30412 to 30498
 msgctxt "#30499"
 msgid "Contains all the Retrospect favourites that are available across all channels."
-msgstr ""
+msgstr "Sadrži sve Retrospect favorite dostupne na svim kanalima."
 
 msgctxt "#30500"
 msgid "All Favourites"
-msgstr ""
+msgstr "Svi favoriti"
 
 msgctxt "#30501"
 msgid "Favourite"
-msgstr ""
+msgstr "Omiljeno"
 
 msgctxt "#30502"
 msgid "Favourites"
-msgstr ""
+msgstr "Favoriti"
 
 msgctxt "#30503"
 msgid "Channel Favourites"
-msgstr ""
+msgstr "Omiljeni od kanala"
 
 msgctxt "#30504"
 msgid "Add to Favourites"
-msgstr ""
+msgstr "Dodaj u favorite"
 
 msgctxt "#30505"
 msgid "Hide"
-msgstr ""
+msgstr "Sakrij"
 
 msgctxt "#30506"
 msgid "Remove Favourite"
-msgstr ""
+msgstr "Ukloni iz omiljenih"
 
 msgctxt "#30507"
 msgid "Select Channels »"
-msgstr ""
+msgstr "Odaberite kanale »"
 
 msgctxt "#30508"
 msgid "No favourites available"
-msgstr ""
+msgstr "Nema dostupnih favorita"
 
 msgctxt "#30509"
 msgid "Cannot start playback"
-msgstr ""
+msgstr "Nije moguće pokrenuti reprodukciju"
 
 msgctxt "#30510"
 msgid "New version available"
-msgstr ""
+msgstr "Dostupna nova verzija"
+
+msgctxt "#30511"
+msgid "Add shortcut"
+msgstr "Dodaj prečicu"
+
+msgctxt "#30512"
+msgid "Please provide a name for the shortcut."
+msgstr "Molimo vas da navedete naziv prečice."
+
+msgctxt "#30513"
+msgid "Profiles"
+msgstr "Profili"
 
 # empty strings from id 30511 to 30515
 msgctxt "#30516"
 msgid "New Version Available."
-msgstr ""
+msgstr "Nova verzija dostupna."
 
 msgctxt "#30517"
 msgid "A new version of %s is available: %s. Please visit the website to download it."
-msgstr ""
+msgstr "Dostupna je nova verzija programa %s: %s. Molimo vas da posjetite web stranicu da biste je preuzeli."
 
 # empty strings from id 30518 to 30519
 msgctxt "#30520"
 msgid "Repository Warning"
-msgstr ""
+msgstr "Upozorenje o repozitoriju"
 
 msgctxt "#30521"
 msgid "The Retrospect repository is not installed.|Please install it to allow future updates."
-msgstr ""
+msgstr "Retrospect repozitorij nije instaliran.|Molimo vas da ga instalirate kako biste omogućili buduća ažuriranja."
 
 msgctxt "#30522"
 msgid "Channel message"
-msgstr ""
+msgstr "Poruka kanala"
 
 msgctxt "#30523"
 msgid "Error"
-msgstr ""
+msgstr "Greška"
 
 msgctxt "#30524"
 msgid "No videos were found for the selected item."
-msgstr ""
+msgstr "Za odabranu stavku nisu pronađeni videozapisi."
 
 msgctxt "#30525"
 msgid "The selected item does not have|any streams associated."
-msgstr ""
+msgstr "Odabrana stavka nema pridružene tokove podataka."
 
 # empty strings from id 30526 to 30527
 msgctxt "#30528"
 msgid "Add-on Settings"
-msgstr ""
+msgstr "Postavke dodataka"
 
 msgctxt "#30529"
 msgid "Refresh list"
-msgstr ""
+msgstr "Osvježi listu"
 
 msgctxt "#30530"
 msgid "Check for Retrospect updates"
-msgstr ""
+msgstr "Provjerite ažuriranja za Retrospect"
 
 msgctxt "#30531"
 msgid "Missing 'InputStream Helper' add-on. Cannot install."
-msgstr ""
+msgstr "Nedostaje dodatak 'InputStream Helper'. Nije moguće instalirati."
 
 msgctxt "#30532"
 msgid "Install Widevine using 'InputStream Helper' add-on"
-msgstr ""
+msgstr "Instalirajte Widevine koristeći dodatak 'InputStream Helper'"
 
 msgctxt "#30533"
 msgid "Installing Widevine libraries using the 'InputStream Helper' add-on is done at your own risk and Retrospect is not responsible for any results. Nor is it guaranteed that Widevine will be installed correctly."
-msgstr ""
+msgstr "Instaliranje Widevine biblioteka pomoću dodatka 'InputStream Helper' vršite na vlastitu odgovornost i Retrospect nije odgovoran za bilo kakve rezultate. Također nije zagarantovano da će Widevine biti ispravno instaliran."
 
 msgctxt "#30534"
 msgid "Installation of Widevine failed!"
-msgstr ""
+msgstr "Instalacija Widevine-a nije uspjela!"
 
 msgctxt "#30535"
 msgid "Installation of Widevine completed!"
-msgstr ""
+msgstr "Instalacija Widevine-a završena!"
 
 msgctxt "#30536"
 msgid "This stream requires Kodi Leia, an enabled InputStream Adaptive add-on and the Widevine library to be installed. The latter can be installed from within the Retrospect add-on settings."
-msgstr ""
+msgstr "Za ovaj stream je potreban Kodi Leia, omogućeni dodatak InputStream Adaptive i instalirana biblioteka Widevine. Potonja se može instalirati iz postavki dodatka Retrospect."
 
 msgctxt "#30537"
 msgid "Page"
-msgstr ""
+msgstr "Stranica"
 
 msgctxt "#30538"
 msgid "The selected live stream has not yet|begun."
-msgstr ""
+msgstr "Odabrani prijenos uživo još nije započeo."
 
 msgctxt "#30539"
 msgid "Live stream"
-msgstr ""
+msgstr "Prijenos uživo"
 
 msgctxt "#30540"
 msgid "Geo-blocked"
-msgstr ""
+msgstr "Geoblokirano"
 
 msgctxt "#30541"
 msgid "Queue item"
-msgstr ""
+msgstr "Stavka reda čekanja"
 
 msgctxt "#30542"
 msgid "Starting %s."
-msgstr ""
+msgstr "Počevši od %s."
 
 msgctxt "#30543"
 msgid "Season"
-msgstr ""
+msgstr "Sezona"
 
 msgctxt "#30544"
 msgid "Episode"
-msgstr ""
+msgstr "Epizoda"
 
 msgctxt "#30545"
 msgid "Titles with '%s'"
-msgstr ""
+msgstr "Naslovi sa '%s'"
 
 msgctxt "#30546"
 msgid "Other Chars"
-msgstr ""
+msgstr "Ostali znakovi"
 
 msgctxt "#30547"
 msgid "More Pages"
-msgstr ""
+msgstr "Više stranica"
 
 msgctxt "#30548"
 msgid "Clips"
-msgstr ""
+msgstr "Klipovi"
 
 msgctxt "#30549"
 msgid "Error retrieving the list of items."
-msgstr ""
+msgstr "Greška prilikom preuzimanja liste stavki."
 
 msgctxt "#30550"
 msgid "No episodes found for the selected item."
-msgstr ""
+msgstr "Nije pronađena nijedna epizoda za odabranu stavku."
 
 msgctxt "#30551"
 msgid "Today"
-msgstr ""
+msgstr "Danas"
 
 msgctxt "#30552"
 msgid "Yesterday"
-msgstr ""
+msgstr "Jučer"
 
 msgctxt "#30553"
 msgid "Day before yesterday"
-msgstr ""
+msgstr "Prekjučer"
 
 msgctxt "#30554"
 msgid "DRM Protection"
-msgstr ""
+msgstr "DRM zaštita"
 
 msgctxt "#30555"
 msgid "The selected item is DRM protected and might not play on Kodi."
-msgstr ""
+msgstr "Odabrana stavka je zaštićena DRM-om i možda se neće reproducirati na Kodiju."
 
 msgctxt "#30556"
 msgid "Initialising channel(s)."
-msgstr ""
+msgstr "Inicijalizacija kanala(a)."
 
 msgctxt "#30557"
 msgid "Channels have been updated or installed. Performing first time actions. This could take some time."
-msgstr ""
+msgstr "Kanali su ažurirani ili instalirani. Izvršavaju se prve radnje. Ovo bi moglo potrajati."
 
 msgctxt "#30558"
 msgid "Fetching Textures"
-msgstr ""
+msgstr "Preuzimanje tekstura"
 
 msgctxt "#30559"
 msgid "Fetching missing textures. This could take some time depending on the internet and system speed."
-msgstr ""
+msgstr "Dohvaćanje nedostajućih tekstura. Ovo može potrajati neko vrijeme ovisno o brzini interneta i sistema."
 
 msgctxt "#30560"
 msgid "Paid video"
-msgstr ""
+msgstr "Plaćeni video"
 
 msgctxt "#30561"
 msgid "The selected item is not free and might not play on Kodi."
-msgstr ""
+msgstr "Odabrana stavka nije besplatna i možda se neće reproducirati na Kodiju."
 
 msgctxt "#30562"
 msgid "Username and/or password not set in Add-on settings"
-msgstr ""
+msgstr "Korisničko ime i/ili lozinka nisu postavljeni u postavkama dodatka"
 
 msgctxt "#30563"
 msgid "Hide Item"
-msgstr ""
+msgstr "Sakrij stavku"
 
 msgctxt "#30564"
 msgid "Show Hidden Item"
-msgstr ""
+msgstr "Prikaži skrivenu stavku"
 
 msgctxt "#30565"
 msgid "Hidden items"
-msgstr ""
+msgstr "Skriveni predmeti"
 
 msgctxt "#30566"
 msgid "To show a hidden item, first configure Retrospect to show hidden items. Then use the context menu's \"Show hidden item\"."
-msgstr ""
+msgstr "Da biste prikazali skrivenu stavku, prvo konfigurirajte Retrospect da prikazuje skrivene stavke. Zatim koristite opciju \"Prikaži skrivenu stavku\" u kontekstnom meniju."
 
 msgctxt "#30567"
 msgid "Add-on(s) disabled"
-msgstr ""
+msgstr "Dodatak(ci) onemogućen(i)"
 
 msgctxt "#30568"
 msgid "Some of the Retrospect Channel Add-ons are not enabled which will prevent them from auto updating. The Kodi add-on browser will now open and you should enable all Retrospect related add-ons. See http://kodi.wiki/view/add-on_manager."
-msgstr ""
+msgstr "Neki od dodataka Retrospect kanala nisu omogućeni, što će spriječiti njihovo automatsko ažuriranje. Preglednik dodataka Kodi će se sada otvoriti i trebali biste omogućiti sve dodatke povezane s Retrospectom. Pogledajte http://kodi.wiki/view/add-on_manager."
 
 msgctxt "#30569"
 msgid "Ignore SSL verification errors (Security Risk!)"
-msgstr ""
+msgstr "Zanemarite greške SSL verifikacije (Sigurnosni rizik!)"
 
 msgctxt "#30570"
 msgid "Hide channel initialisation messages"
-msgstr ""
+msgstr "Sakrij poruke o inicijalizaciji kanala"
 
 msgctxt "#30571"
 msgid "Use Kodi InputStream Adaptive add-on when possible"
-msgstr ""
+msgstr "Koristite Kodi InputStream Adaptive dodatak kad god je to moguće"
 
 msgctxt "#30572"
 msgid "Retrospect Settings »"
-msgstr ""
+msgstr "Postavke retrospektive »"
 
 msgctxt "#30573"
 msgid "(Un-)Hide item »"
-msgstr ""
+msgstr "(Poništi) sakrivanje stavke »"
 
 msgctxt "#30574"
 msgid "Hide Channel"
-msgstr ""
+msgstr "Sakrij kanal"
 
 msgctxt "#30575"
 msgid "Retrospect Favourites »"
-msgstr ""
+msgstr "Retrospektivni favoriti »"
 
 msgctxt "#30576"
 msgid "Select Countries"
-msgstr ""
+msgstr "Odaberite zemlje"
 
 msgctxt "#30577"
 msgid "Bitrate »"
-msgstr ""
+msgstr "Brzina prijenosa podataka »"
 
 msgctxt "#30578"
 msgid "InputStream Adaptive add-on settings"
-msgstr ""
+msgstr "Postavke dodatka InputStream Adaptive"
 
 msgctxt "#30579"
 msgid "InputStream Adaptive add-on »"
-msgstr ""
+msgstr "Prilagodljivi dodatak InputStream »"
 
 msgctxt "#30580"
 msgid "Channel Options »"
-msgstr ""
+msgstr "Opcije kanala »"
 
 msgctxt "#30581"
 msgid "InputStream Adaptive add-on usage"
-msgstr ""
+msgstr "Korištenje adaptivnog dodatka InputStream"
 
 msgctxt "#30582"
 msgid "Split TV shows and single episodes in separate folders"
-msgstr ""
+msgstr "Podijelite TV emisije i pojedinačne epizode u odvojene mape"
 
 msgctxt "#30583"
 msgid "Single episodes"
-msgstr ""
+msgstr "Pojedinačne epizode"
+
+msgctxt "#30584"
+msgid "Fetching a long list of items using multiple API calls."
+msgstr "Dohvaćanje dugačke liste stavki korištenjem više API poziva."
+
+msgctxt "#30585"
+msgid "Page {} of {}"
+msgstr "Stranica {} od {}"
+
+msgctxt "#30586"
+msgid "Number of pages to load for the main listing"
+msgstr "Broj stranica za učitavanje za glavni popis"
+
+msgctxt "#30587"
+msgid "Show streams with accessibility features"
+msgstr "Prikaži streamove s funkcijama pristupačnosti"
+
+msgctxt "#30588"
+msgid "This stream cannot be played due to geographical restrictions."
+msgstr "Ovaj stream se ne može reproducirati zbog geografskih ograničenja."
 
 # empty strings from id 30584 to 30589
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"
-msgstr ""
+msgstr "Postavite novi PIN za Retrospect"
 
 msgctxt "#30591"
 msgid "No Retrospect PIN specified"
-msgstr ""
+msgstr "Nije naveden PIN za retrospektivu"
 
 msgctxt "#30592"
 msgid "Repeat the new Retrospect PIN"
-msgstr ""
+msgstr "Ponovite novi Retrospect PIN"
 
 msgctxt "#30593"
 msgid "PINs don't match"
-msgstr ""
+msgstr "PIN-ovi se ne podudaraju"
 
 msgctxt "#30594"
 msgid "Specify value for setting: '%s'"
-msgstr ""
+msgstr "Navedite vrijednost za postavku: '%s'"
 
 msgctxt "#30595"
 msgid "Input Retrospect PIN"
-msgstr ""
+msgstr "Unesite PIN za retrospektivu"
 
 msgctxt "#30596"
 msgid "Incorrect Retrospect PIN specified"
-msgstr ""
+msgstr "Naveden je netačan PIN za Retrospect"
 
 msgctxt "#30597"
 msgid "Resetting the vault will invalidate all existing encrypted values. Are you sure?"
-msgstr ""
+msgstr "Resetiranje trezora će poništiti sve postojeće šifrirane vrijednosti. Jeste li sigurni?"
 
 msgctxt "#30598"
 msgid "Send retrospect.log »"
-msgstr ""
+msgstr "Pošalji retrospect.log »"
 
 msgctxt "#30599"
 msgid "Logfile posted to: %s[CR][CR]Note the URL (especially the last characters) and use them to refer to these log files in posts."
-msgstr ""
+msgstr "Datoteka dnevnika objavljena na: %s[CR][CR]Zabilježite URL (posebno posljednje znakove) i koristite ih za pozivanje na ove datoteke dnevnika u objavama."
 
 msgctxt "#30600"
 msgid "Logfile successfully posted"
-msgstr ""
+msgstr "Datoteka dnevnika uspješno objavljena"
 
 msgctxt "#30601"
 msgid "Error posting logfile: %s"
-msgstr ""
+msgstr "Greška prilikom objavljivanja datoteke dnevnika: %s"
 
 msgctxt "#30602"
 msgid "Error posting logfile"
-msgstr ""
+msgstr "Greška pri objavljivanju datoteke dnevnika"
 
 msgctxt "#30603"
 msgid "Retrospect changed add-on ID. To prevent data loss, your user data will now be migrated. After this has been done, please restart Kodi to complete migration. After the restart update any shortcut you had to Retrospect. The Retrospect marked as \"broken\" in \"My add-ons\" can be uninstalled."
-msgstr ""
+msgstr "Retrospect je promijenio ID dodatka. Da biste spriječili gubitak podataka, vaši korisnički podaci će sada biti migrirani. Nakon što je to urađeno, ponovo pokrenite Kodi da biste dovršili migraciju. Nakon ponovnog pokretanja ažurirajte sve prečice koje ste imali za Retrospect. Retrospect označen kao \"pokvaren\" u \"Moji dodaci\" može se deinstalirati."
 
 msgctxt "#30604"
 msgid "Clean-up cache and cookies »"
-msgstr ""
+msgstr "Očistite keš memoriju i kolačiće »"
 
 msgctxt "#30605"
 msgid "Are you sure you want to clean all of Retrospect's cache and cookies? This action cannot be undone."
-msgstr ""
+msgstr "Jeste li sigurni da želite obrisati svu keš memoriju i kolačiće Retrospect-a? Ova radnja se ne može poništiti."
 
 msgctxt "#30606"
 msgid "Minimum level for showing notifications"
-msgstr ""
+msgstr "Minimalni nivo za prikazivanje obavještenja"
 
 msgctxt "#30607"
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 msgctxt "#30608"
 msgid "Warning"
-msgstr ""
+msgstr "Upozorenje"
 
 msgctxt "#30609"
 msgid "Error"
-msgstr ""
+msgstr "Greška"

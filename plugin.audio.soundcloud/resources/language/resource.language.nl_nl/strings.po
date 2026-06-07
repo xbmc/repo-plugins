@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Jan Hekkerman\n"
+"Last-Translator: Miniontoby\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -46,11 +46,11 @@ msgstr ""
 
 msgctxt "#30061"
 msgid "Client-ID"
-msgstr ""
+msgstr "Client ID"
 
 msgctxt "#30062"
 msgid "Localization"
-msgstr ""
+msgstr "Localisatie"
 
 msgctxt "#30063"
 msgid "auto"
@@ -124,6 +124,15 @@ msgctxt "#30501"
 msgid "Cache cleared"
 msgstr "Cache gewist"
 
+# GUI - Context menus
+msgctxt "#30601"
+msgid "Remove"
+msgstr "Verwijderen"
+
+msgctxt "#30602"
+msgid "Clear"
+msgstr "Zuiveren"
+
 # GUI - Generic
 msgctxt "#30901"
 msgid "Next page"
@@ -135,4 +144,12 @@ msgstr "Niet beschikbaar in jouw land"
 
 msgctxt "#30903"
 msgid "Preview"
+msgstr "Voorbeeld"
+
+msgctxt "#30904"
+msgid "followers"
+msgstr "volgers"
+
+msgctxt "#30905"
+msgid "likes"
 msgstr ""

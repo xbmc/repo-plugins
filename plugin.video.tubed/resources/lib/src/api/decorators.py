@@ -30,6 +30,7 @@ def api_request(func):
         if len(args) > 0 and not func.__name__.endswith('refresh_token'):
             try:
                 args[0].refresh_token()
+                args[0].tv_refresh_token()
             except AttributeError:
                 pass
 

@@ -1,17 +1,21 @@
 # coding=utf-8  # NOSONAR
 # SPDX-License-Identifier: GPL-3.0-or-later
+from typing import Optional, List, Tuple
+
 import pytz
 
-from resources.lib import chn_class, mediatype
+from resources.lib import chn_class, mediatype, contenttype
 from resources.lib.helpers.datehelper import DateHelper
-from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.helpers.subtitlehelper import SubtitleHelper
 
-from resources.lib.mediaitem import MediaItem
+from resources.lib.mediaitem import MediaItem, FolderItem, MediaItemResult
 from resources.lib.parserdata import ParserData
 from resources.lib.regexer import Regexer
 from resources.lib.logger import Logger
+from resources.lib.retroconfig import Config
+from resources.lib.streams.m3u8 import M3u8
+from resources.lib.streams.mpd import Mpd
 from resources.lib.urihandler import UriHandler
 from resources.lib.helpers.jsonhelper import JsonHelper
 
@@ -28,10 +32,13 @@ class Channel(chn_class.Channel):
 
         """
 
+        # https://media-api.urplay.se/config-streaming/v1/urplay/sources/194128
+
+        self.__build_version = None
         chn_class.Channel.__init__(self, channel_info)
 
         # ==== Actual channel setup STARTS here and should be overwritten from derived classes ====
-        self.noImage = "urplayimage.png"
+        self.noImage = "urplayimage.jpg"
 
         # setup the urls
         self.mainListUri = "#mainlist_merge"
@@ -42,201 +49,71 @@ class Channel(chn_class.Channel):
         self._add_data_parser(self.mainListUri, json=True,
                               name="Show parser with categories",
                               match_type=ParserData.MatchExact,
-                              preprocessor=self.merge_add_categories_and_search,
-                              parser=["results"], creator=self.create_episode_json_item)
+                              preprocessor=self.merge_add_categories_and_search)
 
-        # Match Videos (programs)
-        self._add_data_parser("https://urplay.se/api/bff/v1/search?product_type=program",
+        self._add_data_parser("#tvshows", json=True, match_type=ParserData.MatchExact,
+                              name="Main listing of merged TV Shows.",
+                              preprocessor=self.load_az_listing,
+                              parser=["pageProps", "alphabeticProductGroups"],
+                              creator=self.create_az_items)
+
+        self._add_data_parser("/serie/", json=True, match_type=ParserData.MatchContains,
+                              name="Processor of shows in a TV serie",
+                              parser=["pageProps", "productData", "programs"],
+                              creator=self.create_video_item)
+
+        self._add_data_parser("/serie/", json=True, match_type=ParserData.MatchContains,
+                              name="Processor of seasons for a TV serie",
+                              parser=["pageProps", "productData", "seasonLabels"],
+                              creator=self.create_season_item,
+                              postprocessor=self.check_seasons)
+
+        self._add_data_parser("https://urplay.se/api/v1/search?product_type=program",
                               name="Most viewed", json=True,
-                              parser=["results"], creator=self.create_video_item_json_with_show_title)
+                              parser=["results"], creator=self.create_video_item_with_show_title)
 
-        self._add_data_parser("*", json=True,
-                              name="Json based video parser",
-                              parser=["accessibleEpisodes"],
-                              creator=self.create_video_item_json)
+        # self._add_data_parser("*", json=True,
+        #                       name="Json based video parser",
+        #                       parser=["accessibleEpisodes"],
+        #                       creator=self.create_video_item_json)
 
         self._add_data_parser("*", updater=self.update_video_item)
 
-        # Categories
-        cat_reg = r'<a[^>]+href="(?<url>/blad[^"]+/(?<slug>[^"]+))"[^>]*>' \
-                  r'(?:<svg[\w\W]{0,2000}?</svg>)?(?<title>[^<]+)<'
-        cat_reg = Regexer.from_expresso(cat_reg)
-        self._add_data_parser("https://urplay.se/", name="Category parser",
-                              match_type=ParserData.MatchExact,
-                              parser=cat_reg,
-                              creator=self.create_category_item)
+        self._add_data_parser("/bladdra/alla-kategorier.json", match_type=ParserData.MatchEnd, json=True,
+                              parser=["pageProps", "highlightedCategories"], creator=self.create_category_item)
 
-        self._add_data_parsers(["https://urplay.se/api/bff/v1/search?play_category",
-                                "https://urplay.se/api/bff/v1/search?main_genre",
-                                "https://urplay.se/api/bff/v1/search?response_type=category",
-                                "https://urplay.se/api/bff/v1/search?type=programradio",
-                                "https://urplay.se/api/bff/v1/search?age=",
-                                "https://urplay.se/api/bff/v1/search?response_type=limited"],
-                               name="Category content", json=True,
-                               preprocessor=self.merge_category_items,
-                               parser=["results"], creator=self.create_json_item)
+        self._add_data_parser("/bladdra/", json=True, match_type=ParserData.MatchContains,
+                              preprocessor=self.iterate_page_props,
+                              parser=["pageProps", "initialSearchResult", "results"], creator=self.create_episode_item)
+
+        # Categories
+        # cat_reg = r'<a[^>]+href="(?P<url>/blad[^"]+/(?P<slug>[^"]+))"[^>]*>(?P<title>[^<]+)<'
+        # cat_reg = Regexer.from_expresso(cat_reg)
+        # self._add_data_parser("https://urplay.se/bladdra/alla-kategorier", name="Category parser",
+        #                       match_type=ParserData.MatchExact,
+        #                       parser=cat_reg,
+        #                       creator=self.create_category_item)
+        # self._add_data_parsers(["https://urplay.se/api/v1/search?play_category",
+        #                         "https://urplay.se/api/v1/search?main_genre",
+        #                         "https://urplay.se/api/v1/search?response_type=category",
+        #                         "https://urplay.se/api/v1/search?type=programradio",
+        #                         "https://urplay.se/api/v1/search?age=",
+        #                         "https://urplay.se/api/v1/search?response_type=limited",
+        #                         "#category"],
+        #                        name="Category content", json=True,
+        #                        preprocessor=self.merge_category_items,
+        #                        parser=["results"], creator=self.create_search_result)
 
         # Searching
-        self._add_data_parser("https://urplay.se/search/json", json=True,
-                              parser=["programs"], creator=self.create_search_result_program)
-        self._add_data_parser("https://urplay.se/search/json", json=True,
-                              parser=["series"], creator=self.create_search_result_serie)
+        self._add_data_parser("https://urplay.se/api/v1/search", json=True,
+                              parser=["results"], creator=self.create_search_result)
 
         self.mediaUrlRegex = r"urPlayer.init\(([^<]+)\);"
 
         #===========================================================================================
         # non standard items
         self.__videoItemFound = False
-
-        # There is either a slug lookup or an url lookup
-        self.__cateogory_slugs = {
-        }
-
-        self.__cateogory_urls = {
-            "alla-program":
-                "https://urplay.se/api/bff/v1/search?"
-                "response_type=limited&"
-                "product_type=series&"
-                "rows={}&start={}&view=title",
-
-            "barn":
-                "https://urplay.se/api/bff/v1/search?"
-                "age=children&"
-                "platform=urplay&"
-                "rows={}&"
-                "singles_and_series=true&"
-                "start={}"
-                "&view=title",
-
-            "dokumentarfilmer":
-                "https://urplay.se/api/bff/v1/search?"
-                "main_genre[]=dokument%C3%A4rfilm&main_genre[]=dokument%C3%A4rserie&"
-                # "platform=urplay&"
-                "singles_and_series=true&view=title&"
-                "rows={}&"
-                "singles_and_series=true&"
-                "start={}"
-                "&view=title",
-
-            "drama":
-                "https://urplay.se/api/bff/v1/search?"
-                "main_genre[]=drama&main_genre[]=kortfilm&main_genre[]=fiktiva%20ber%C3%A4ttelser&"
-                "platform=urplay&"
-                "rows={}&"
-                "singles_and_series=true&"
-                "start={}&"
-                "view=title",
-
-            "forelasningar":
-                "https://urplay.se/api/bff/v1/search?"
-                "main_genre[]=f%C3%B6rel%C3%A4sning&main_genre[]=panelsamtal&"
-                "platform=urplay&"
-                "rows={}&"
-                "singles_and_series=true&"
-                "start={}&"
-                "view=title",
-
-            "halsa-och-relationer":
-                "https://urplay.se/api/bff/v1/search?"
-                "main_genre_must_not[]=forelasning&"
-                "main_genre_must_not[]=panelsamtal&"
-                "platform=urplay&"
-                "rows={}&"
-                "sab_category=kropp%20%26%20sinne&"
-                "singles_and_series=true&"
-                "start={}&"
-                "view=title",
-            
-            "kultur-och-historia":
-                "https://urplay.se/api/bff/v1/search?"
-                "main_genre_must_not[]=forelasning&main_genre_must_not[]=panelsamtal&"
-                "platform=urplay&"
-                "rows={}&"
-                "sab_category=kultur%20%26%20historia&"
-                "singles_and_series=true&"
-                "start={}&"
-                "view=title",
-
-            "natur-och-resor":
-                "https://urplay.se/api/bff/v1/search?"
-                "main_genre_must_not[]=forelasning&main_genre_must_not[]=panelsamtal&"
-                "platform=urplay&"
-                "rows={}&"
-                "sab_category=natur%20%26%20resor&"
-                "singles_and_series=true&"
-                "start={}&"
-                "view=title",
-
-            "radio":
-                "https://urplay.se/api/bff/v1/search?"
-                "type=programradio&"
-                "platform=urplay&"
-                "rows={}&"
-                "singles_and_series=true&"
-                "start={}&"
-                "view=title",
-
-            "samhalle":
-                "https://urplay.se/api/bff/v1/search?"
-                "main_genre_must_not[]=forelasning&main_genre_must_not[]=panelsamtal&"
-                "platform=urplay&"
-                "rows={}&"
-                "sab_category=samh%C3%A4lle&"
-                "singles_and_series=true&"
-                "start={}&"
-                "view=title",
-
-            "sprak":
-                "https://urplay.se/api/bff/v1/search?"
-                "main_genre_must_not[]=forelasning&main_genre_must_not[]=panelsamtal&"
-                "platform=urplay&"
-                "rows={}&"
-                "sab_category=spr%C3%A5k&"
-                "singles_and_series=true&"
-                "start={}&"
-                "view=title",
-
-            "syntolkat":
-                "https://urplay.se/api/bff/v1/search?"
-                "response_type=category&"
-                "is_audio_described=true&"
-                "platform=urplay&"
-                "rows={}&"
-                "singles_and_series=true&"
-                "start={}&"
-                "view=title",
-
-            "teckensprak":
-                "https://urplay.se/api/bff/v1/search?"
-                "response_type=category&"
-                "language=sgn-SWE&"
-                "platform=urplay&"
-                "rows={}&"
-                "singles_and_series=true&"
-                "start={}&"
-                "view=title",
-
-            "utbildning-och-media":
-                "https://urplay.se/api/bff/v1/search?"
-                "main_genre_must_not[]=forelasning&"
-                "main_genre_must_not[]=panelsamtal&"
-                "platform=urplay&"
-                "rows={}&"
-                "sab_category=utbildning%20%26%20media&"
-                "singles_and_series=true&"
-                "start={}&"
-                "view=title",
-
-            "vetenskap":
-                "https://urplay.se/api/bff/v1/search?"
-                "main_genre_must_not[]=forelasning&main_genre_must_not[]=panelsamtal&"
-                "platform=urplay&"
-                "rows={}&"
-                "sab_category=vetenskap%20%26%20teknik&"
-                "singles_and_series=true&"
-                "start={}&"
-                "view=title"
-        }
+        self.__build_version = None
 
         self.__timezone = pytz.timezone("Europe/Amsterdam")
         self.__episode_text = LanguageHelper.get_localized_string(LanguageHelper.EpisodeId)
@@ -246,6 +123,57 @@ class Channel(chn_class.Channel):
 
         # ====================================== Actual channel setup STOPS here ===================
         return
+
+    @property
+    def build_version(self) -> str:
+        if not self.__build_version:
+            data = UriHandler.open("https://urplay.se")
+            try:
+                build_version = Regexer.do_regex(r"<script src=\"[^\"]+/([^/]+)/_buildManifest.js\"", data)[0]
+            except:
+                Logger.error(data)
+                raise
+            Logger.info(f"Found build version: {build_version}")
+            self.__build_version = build_version
+
+        return self.__build_version
+
+    def process_folder_list(self, parent_item: Optional[MediaItem] = None) -> List[MediaItem]:
+        """ We override this method to fix possible issues with build version's in older urls
+        such as favorite urls.
+
+        :param: The parent item.
+
+        :return: A list of MediaItems that form the childeren of the <item>.
+
+        """
+
+        if parent_item and parent_item.url and not parent_item.url.startswith("#"):
+            old_url = parent_item.url
+            UriHandler.header(old_url)
+            if UriHandler.instance().status.code >= 400:
+                # Replace the build version!
+                parts = Regexer.do_regex(r"^(.+/_next/data/)[^/]+(/.+\.json.*)$", old_url)[0]
+                new_url = f"{parts[0]}{self.build_version}{parts[1]}"
+                parent_item.url = new_url
+
+        return super().process_folder_list(parent_item)
+
+    # noinspection PyUnusedLocal
+    def load_az_listing(self, data: str) -> Tuple[str, List[MediaItem]]:
+        # Load it here, to prevent the `self.build_version` to start unwanted.
+        data = UriHandler.open(f"https://urplay.se/_next/data/{self.build_version}/bladdra/alla-program.json")
+        return data, []
+
+    def create_az_items(self, result_set: dict) -> MediaItemResult:
+        items = []
+        for k, result_sets in result_set.items():
+            for r in result_sets:
+                item = self.create_episode_item(r)
+                if item:
+                    items.append(item)
+
+        return items
 
     def merge_category_items(self, data):
         """ Merge the multipage category result items into a single list.
@@ -259,11 +187,62 @@ class Channel(chn_class.Channel):
 
         items = []
         url = self.parentItem.url
+        if url.startswith("#category"):
+            url = self.parentItem.metaData.get("url_format")
+
         if "{" not in url:
             return data, items
 
-        data = self.__iterate_results(url, max_iterations=10, results_per_page=150)
+        data = self.__iterate_results(url, max_iterations=5, use_pb=True)
         return data, items
+
+    def iterate_page_props(self, data: str):
+        # &rows={}&sort=published&start={}
+        json_data = JsonHelper(data)
+        json_path = ["pageProps", "initialSearchResult"]
+        results_path = json_path + ["results"]
+        total_count = json_data.get_value(*json_path, "count", "total")
+        next_rows = json_data.get_value(*json_path, "nextPageInfo", "rows")
+        next_start = json_data.get_value(*json_path, "nextPageInfo", "start")
+        max_pages = int(total_count / next_rows)
+        page = 0
+        if next_rows + next_start > total_count:
+            next_rows = total_count - next_start
+
+        progress = None
+        try:
+            from resources.lib.xbmcwrapper import XbmcDialogProgressWrapper
+            status = LanguageHelper.get_localized_string(LanguageHelper.FetchMultiApi)
+            updated = LanguageHelper.get_localized_string(LanguageHelper.PageOfPages)
+            progress = XbmcDialogProgressWrapper("{} - {}".format(Config.appName, self.channelName), status)
+
+            while next_rows:
+                page += 1
+                if progress.progress_update(page, max_pages, int(page * 100 / max_pages), False, updated.format(page, max_pages)):
+                    break
+
+                url = f"{self.parentItem.url}&start={next_start}&rows={next_rows}"
+                data = UriHandler.open(url)
+                if UriHandler.instance().status.error:
+                    Logger.error(f"Failed to fetch data for {url}")
+                    break
+
+                part_json = JsonHelper(data)
+                results = part_json.get_value(*results_path)
+                json_data.get_value(*json_path)["results"] += results
+
+                next_info = part_json.get_value(*json_path, "nextPageInfo")
+                if not next_info:
+                    break
+
+                next_rows = next_info["rows"]
+                next_start = next_info["start"]
+                if next_rows + next_start > total_count:
+                    next_rows = total_count - next_start
+        finally:
+            if progress:
+                progress.close()
+        return json_data, []
 
     def create_category_item(self, result_set):
         """ Creates a MediaItem of type 'folder' using the result_set from the regex.
@@ -283,14 +262,13 @@ class Channel(chn_class.Channel):
             result_set['thumburl'] = "%s/%s" % (self.baseUrl, result_set["thumburl"])
 
         slug = result_set["slug"]
-        url = self.__cateogory_urls.get(slug)
+        url = f"https://urplay.se/_next/data/{self.build_version}/bladdra/{slug}.json?categoryPath={slug}"
+        name = result_set["name"]
+        image = result_set.get("imageUrl")
 
-        if url is None:
-            Logger.warning("Missing category in list: %s", slug)
-            return None
-
-        result_set["url"] = url
-        return chn_class.Channel.create_folder_item(self, result_set)
+        item = FolderItem(name, url, content_type=contenttype.TVSHOWS)
+        item.set_artwork(thumb=image)
+        return item
 
     # noinspection PyUnusedLocal
     def merge_add_categories_and_search(self, data):
@@ -307,26 +285,20 @@ class Channel(chn_class.Channel):
 
         Logger.info("Performing Pre-Processing")
         items = []
-        max_items = 150
-
-        # merge the main list items:
-        data = self.__iterate_results(
-            "https://urplay.se/api/bff/v1/search?product_type=series&rows={}&start={}",
-            results_per_page=max_items,
-            max_iterations=11
-        )
+        max_items_per_page = 20
 
         categories = {
-            LanguageHelper.Popular: "https://urplay.se/api/bff/v1/search?product_type=program&query=&rows={}&start=0&view=most_viewed".format(max_items),
-            LanguageHelper.MostRecentEpisodes: "https://urplay.se/api/bff/v1/search?product_type=program&rows={}&start=0&view=published".format(max_items),
-            LanguageHelper.LastChance: "https://urplay.se/api/bff/v1/search?product_type=program&rows={}&start=0&view=last_chance".format(max_items),
-            LanguageHelper.Categories: "https://urplay.se/",
-            LanguageHelper.Search: "searchSite"
+            LanguageHelper.Popular: "https://urplay.se/api/v1/search?product_type=program&query=&rows={}&start=0&view=most_viewed".format(max_items_per_page),
+            LanguageHelper.MostRecentEpisodes: "https://urplay.se/api/v1/search?product_type=program&rows={}&start=0&view=published".format(max_items_per_page),
+            LanguageHelper.LastChance: "https://urplay.se/api/v1/search?product_type=program&rows={}&start=0&view=last_chance".format(max_items_per_page),
+            LanguageHelper.Categories: f"https://urplay.se/_next/data/{self.build_version}/bladdra/alla-kategorier.json",
+            LanguageHelper.Search: self.search_url,
+            LanguageHelper.TvShows: "#tvshows"
         }
 
         for cat in categories:
-            title = "\a.: {} :.".format(LanguageHelper.get_localized_string(cat))
-            item = MediaItem(title, categories[cat])
+            title = LanguageHelper.get_localized_string(cat)
+            item = FolderItem(title, categories[cat], content_type=contenttype.VIDEOS)
             item.complete = True
             item.dontGroup = True
             items.append(item)
@@ -334,53 +306,55 @@ class Channel(chn_class.Channel):
         Logger.debug("Pre-Processing finished")
         return data, items
 
-    def search_site(self, url=None):
-        """ Creates an list of items by searching the site.
+    # def merge_tv_show(self, data):
+    #     """ Adds some generic items such as search and categories to the main listing.
+    #
+    #     The return values should always be instantiated in at least ("", []).
+    #
+    #     :param str data: The retrieve data that was loaded for the current item and URL.
+    #
+    #     :return: A tuple of the data and a list of MediaItems that were generated.
+    #     :rtype: tuple[str|JsonHelper,list[MediaItem]]
+    #
+    #     """
+    #
+    #     # merge the main list items:
+    #     # https://urplay.se/api/v1/search?product_type=series&response_type=limited&rows=20&sort=title&start=20
+    #     max_items_per_page = 20
+    #     main_list_pages = int(self._get_setting("mainlist_pages"))
+    #     data = self.__iterate_results(
+    #         "https://urplay.se/api/v1/search?product_type=series&response_type=limited&rows={}&sort=published&start={}",
+    #         results_per_page=max_items_per_page,
+    #         max_iterations=main_list_pages,
+    #         use_pb=True
+    #     )
+    #
+    #     return data, []
 
-        This method is called when the URL of an item is "searchSite". The channel
+    def search_site(self, url: Optional[str] = None, needle: Optional[str] = None) -> List[MediaItem]:
+        """ Creates a list of items by searching the site.
+
+        This method is called when and item with `self.search_url` is opened. The channel
         calling this should implement the search functionality. This could also include
         showing of an input keyboard and following actions.
 
-        The %s the url will be replaced with an URL encoded representation of the
+        The %s the url will be replaced with a URL encoded representation of the
         text to search for.
 
-        :param str|None url:     Url to use to search with a %s for the search parameters.
+        :param url:     Url to use to search with an %s for the search parameters.
+        :param needle:  The needle to search for.
 
         :return: A list with search results as MediaItems.
-        :rtype: list[MediaItem]
 
         """
 
-        url = "https://urplay.se/search/json?query=%s"
-        return chn_class.Channel.search_site(self, url)
+        if not needle:
+            raise ValueError("No needle present")
 
-    def create_json_item(self, result_set):
-        """ Creates a new MediaItem for an folder or video.
+        url = "https://urplay.se/api/v1/search?query=%s"
+        return chn_class.Channel.search_site(self, url, needle)
 
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-
-        item_type = result_set["format"]
-        if item_type == "video":
-            return self.create_video_item_json(result_set)
-        elif item_type == "audio":
-            # Apparently the audio is always linking to a show folder.
-            return self.create_episode_json_item(result_set)
-        else:
-            Logger.warning("Found unknown type: %s", item_type)
-            return None
-
-    def create_episode_json_item(self, result_set):
+    def create_episode_item(self, result_set: dict) -> MediaItemResult:
         """ Creates a new MediaItem for an episode.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -397,16 +371,82 @@ class Channel(chn_class.Channel):
         Logger.trace(result_set)
 
         title = "%(title)s" % result_set
-        url = "https://urplay.se/api/bff/v1/series/{}".format(result_set["id"])
+        url = f"https://urplay.se/_next/data/{self.build_version}{result_set['link']}.json"
         fanart = "https://assets.ur.se/id/%(id)s/images/1_hd.jpg" % result_set
         thumb = "https://assets.ur.se/id/%(id)s/images/1_l.jpg" % result_set
         item = MediaItem(title, url)
         item.thumb = thumb
         item.description = result_set.get("description")
         item.fanart = fanart
+        item.dontGroup = True
         return item
 
-    def create_video_item_json_with_show_title(self, result_set):
+    def create_season_item(self, result_set: dict) -> MediaItemResult:
+        """ Creates a new MediaItem for a season.
+
+        This method creates a new MediaItem from the Regular Expression or Json
+        results <result_set>. The method should be implemented by derived classes
+        and are specific to the channel.
+
+        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+
+        :return: A new MediaItem of type 'folder'.
+        :rtype: MediaItem|None
+
+        """
+
+        Logger.trace(result_set)
+
+        if self.parentItem.metaData.get("season", False):
+            return None
+
+        title = "%(label)s" % result_set
+        url = f"https://urplay.se/_next/data/{self.build_version}{result_set['link']}.json"
+        fanart = "https://assets.ur.se/id/%(id)s/images/1_hd.jpg" % result_set
+        thumb = "https://assets.ur.se/id/%(id)s/images/1_l.jpg" % result_set
+        item = FolderItem(title, url, content_type=contenttype.EPISODES, media_type=mediatype.FOLDER)
+        item.thumb = thumb
+        item.description = self.parentItem.description
+        item.fanart = fanart
+        item.metaData["season"] = True
+        return item
+
+    # noinspection PyUnusedLocal
+    def check_seasons(self, data: JsonHelper, items: List[MediaItem]) -> List[MediaItem]:
+        """ Performs post-process actions for data processing.
+
+        Accepts a data from the process_folder_list method, BEFORE the items are
+        processed. Allows setting of parameters (like title etc) for the channel.
+        Inside this method the <data> could be changed and additional items can
+        be created.
+
+        The return values should always be instantiated in at least ("", []).
+
+        :param str|JsonHelper data:     The retrieve data that was loaded for the
+                                         current item and URL.
+        :param list[MediaItem] items:   The currently available items
+
+        :return: A tuple of the data and a list of MediaItems that were generated.
+        :rtype: list[MediaItem]
+
+        """
+
+        Logger.info("Performing Post-Processing")
+
+        # check if there are seasons, if so, filter all the videos out
+        seasons = [i for i in items if i.metaData.get("season", False)]
+        if seasons and len(seasons) > 1:
+            Logger.debug("Seasons found, skipping any videos.")
+            return seasons
+
+        if seasons and len(seasons) == 1:
+            Logger.debug("Remove the season entry")
+            return [i for i in items if not i.metaData.get("season", False)]
+
+        Logger.debug("Post-Processing finished")
+        return items
+
+    def create_video_item_with_show_title(self, result_set: dict) -> MediaItemResult:
         """ Creates a MediaItem of type 'video' using the result_set from the regex.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -425,9 +465,9 @@ class Channel(chn_class.Channel):
 
         """
 
-        return self.create_video_item_json(result_set, include_show_title=True)
+        return self.create_video_item(result_set, include_show_title=True)
 
-    def create_video_item_json(self, result_set, include_show_title=False):
+    def create_video_item(self, result_set: dict, include_show_title: bool = False) -> MediaItemResult:
         """ Creates a MediaItem of type 'video' using the result_set from the regex.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -464,8 +504,9 @@ class Channel(chn_class.Channel):
         elif bool(episode):
             title = "{} {:02d} - {}".format(self.__episode_text, episode, title)
 
-        slug = result_set['slug']
-        url = "%s/%s" % (self.baseUrl, slug)
+        # slug = result_set['slug']
+        # url = "%s/program/%s" % (self.baseUrl, slug)
+        url = f"https://media-api.urplay.se/config-streaming/v1/urplay/sources/{result_set['id']}"
 
         item = MediaItem(title, url)
         item.media_type = mediatype.EPISODE
@@ -554,52 +595,70 @@ class Channel(chn_class.Channel):
 
         """
 
-        data = UriHandler.open(item.url)
-        # Extract stream JSON data from HTML
-        streams = Regexer.do_regex(r'ProgramContainer" data-react-props="({[^"]+})"', data)
-        json_data = streams[0]
-        json_data = HtmlEntityHelper.convert_html_entities(json_data)
-        json = JsonHelper(json_data, logger=Logger.instance())
-        Logger.trace(json.json)
+        data = UriHandler.open(item.url, no_cache=True)
+        json = JsonHelper(data)
 
-        item.streams = []
-
-        # generic server information
-        proxy_data = UriHandler.open("https://streaming-loadbalancer.ur.se/loadbalancer.json",
-                                     no_cache=True)
-        proxy_json = JsonHelper(proxy_data)
-        proxy = proxy_json.get_value("redirect")
-        Logger.trace("Found RTMP Proxy: %s", proxy)
-
-        stream_infos = json.get_value("program", "streamingInfo")
-        for stream_type, stream_info in stream_infos.items():
-            Logger.trace(stream_info)
-            default_stream = stream_info.get("default", False)
-            bitrates = {"mp3": 400, "m4a": 250, "sd": 1200, "hd": 2000, "tt": None}
-            for quality, bitrate in bitrates.items():
-                stream = stream_info.get(quality)
-                if stream is None:
-                    continue
-                stream_url = stream["location"]
-                if quality == "tt":
-                    item.subtitle = SubtitleHelper.download_subtitle(
-                        stream_url, format="ttml")
-                    continue
-
-                bitrate = bitrate if default_stream else bitrate + 1
-                if stream_type == "raw":
-                    bitrate += 1
-                url = "https://%s/%smaster.m3u8" % (proxy, stream_url)
-                item.add_stream(url, bitrate)
-
-        item.complete = True
+        for stream_type, stream_url in json.get_value("sources").items():
+            if stream_type == "dash":
+                stream = item.add_stream(stream_url, 1)
+                Mpd.set_input_stream_addon_input(stream)
+                item.complete = True
+            elif stream_type == "hls":
+                stream = item.add_stream(stream_url, 0)
+                M3u8.set_input_stream_addon_input(stream)
+                item.complete = True
+        #
+        # # Extract stream JSON data from HTML
+        # # streams = Regexer.do_regex(r'ProgramContainer" data-react-props="({[^"]+})"', data)
+        # # json_data = streams[0]
+        # # json_data = HtmlEntityHelper.convert_html_entities(json_data)
+        # json_data = Regexer.do_regex(r'__NEXT_DATA__" type="application/json">(.*?)</script>', data)[0]
+        #
+        # json = JsonHelper(json_data, logger=Logger.instance())
+        # Logger.trace(json.json)
+        #
+        # item.streams = []
+        #
+        # # generic server information
+        # proxy_data = UriHandler.open("https://streaming-loadbalancer.ur.se/loadbalancer.json",
+        #                              no_cache=True)
+        # proxy_json = JsonHelper(proxy_data)
+        # proxy = proxy_json.get_value("redirect")
+        # Logger.trace("Found RTMP Proxy: %s", proxy)
+        #
+        # stream_infos = json.get_value("props", "pageProps", "program", "streamingInfo")
+        # for stream_type, stream_info in stream_infos.items():
+        #     Logger.trace(stream_info)
+        #     default_stream = stream_info.get("default", False)
+        #     bitrates = {"mp3": 400, "m4a": 250, "sd": 1200, "hd": 2000, "tt": None}
+        #     for quality, bitrate in bitrates.items():
+        #         stream = stream_info.get(quality)
+        #         if stream is None:
+        #             continue
+        #         stream_url = stream["location"]
+        #         if quality == "tt":
+        #             item.subtitle = SubtitleHelper.download_subtitle(
+        #                 stream_url, format="ttml")
+        #             continue
+        #
+        #         bitrate = bitrate if default_stream else bitrate + 1
+        #         if stream_type == "raw":
+        #             bitrate += 1
+        #         url = "https://%s/%smaster.m3u8" % (proxy, stream_url)
+        #         item.add_stream(url, bitrate)
+        #
+        # item.complete = True
         return item
 
-    def create_search_result_program(self, result_set):
-        return self.__create_search_result(result_set, "program")
+    def create_search_result(self, result_set):
+        result_type = result_set["productType"].lower()
+        if result_type == "series":
+            return self.__create_search_result(result_set, "series")
+        elif result_type in ("episode", "program", "single"):
+            return self.__create_search_result(result_set, "program")
 
-    def create_search_result_serie(self, result_set):
-        return self.__create_search_result(result_set, "serie")
+        Logger.error("Missing search result type: %s", result_type)
+        return None
 
     def __create_search_result(self, result_set, result_type):
         """ Creates a MediaItem of type 'folder' using the result_set from the regex.
@@ -617,39 +676,64 @@ class Channel(chn_class.Channel):
         """
 
         # Logger.trace(result_set)
+        if result_type == "series":
+            url = f"https://urplay.se/_next/data/{self.build_version}{result_set['link']}.json"
+            item = FolderItem(result_set["title"], url, contenttype.EPISODES, media_type=mediatype.FOLDER)
+        else:
+            url = "https://urplay.se/{}/{}".format(result_type, result_set["slug"])
+            series_title = result_set.get("seriesTitle")
+            if series_title:
+                title = "{} - {}".format(series_title, result_set["title"])
+            else:
+                title = result_set["title"]
+            item = MediaItem(title, url, media_type=mediatype.EPISODE)
 
-        url = "https://urplay.se/{}/{}".format(result_type, result_set["slug"])
-        item = MediaItem(result_set["title"], url)
+        item.thumb = "https://assets.ur.se/id/{}/images/1_hd.jpg".format(result_set["id"])
+        item.fanart = "https://assets.ur.se/id/{}/images/1_l.jpg".format(result_set["id"])
 
-        asset_id = result_set["ur_asset_id"]
-        item.thumb = "https://assets.ur.se/id/{}/images/1_hd.jpg".format(asset_id)
-        item.fanart = "https://assets.ur.se/id/{}/images/1_l.jpg".format(asset_id)
         if result_type == "program":
             item.set_info_label("duration", result_set["duration"] * 60)
             item.media_type = mediatype.EPISODE
         return item
 
-    def __iterate_results(self, url_format, results_per_page=150, max_iterations=10):
+    def __iterate_results(self, url_format, results_per_page=20, max_iterations=10, use_pb=False):
         """ Retrieves the full dataset for a multi-set search action.
 
         :param str url_format:             The url format with start and count placeholders
         :param int results_per_page:       The maximum results per request
         :param int max_iterations:         The maximum number of iterations
+        :param bool use_pb:                Use a progress bar
 
         :returns A Json response with all results
         :rtype JsonHelper
 
         Url format should be like:
-            https://urplay.se/api/bff/v1/search?product_type=series&rows={}&start={}
+            https://urplay.se/api/v1/search?product_type=series&rows={}&start={}
 
         """
 
+        # TODO: Currently the new (none bff API) ignores the "rows" parameters. Even on the website.
+        #  This causes a response with 20 results only. So we need to load more pages.
+
         results = None
+        from resources.lib.xbmcwrapper import XbmcDialogProgressWrapper
+        status = LanguageHelper.get_localized_string(LanguageHelper.FetchMultiApi)
+        updated = LanguageHelper.get_localized_string(LanguageHelper.PageOfPages)
+
+        progress = None
+        if use_pb:
+            progress = XbmcDialogProgressWrapper("{} - {}".format(Config.appName, self.channelName), status)
+
         for p in range(0, max_iterations):
             url = url_format.format(results_per_page, p * results_per_page)
-            data = UriHandler.open(url)
+            if (progress and progress.progress_update(
+                    p, max_iterations, int(p * 100 / max_iterations), False, updated.format(p + 1, max_iterations))):
+                break
+
+            data = UriHandler.open(url, force_cache_duration=24*3600)
             json_data = JsonHelper(data)
             result_items = json_data.get_value("results", fallback=[])
+            # result_size = json_data.get_value("nextPageInfo", "rows")
             if results is None:
                 results = json_data
             else:
@@ -658,4 +742,6 @@ class Channel(chn_class.Channel):
             if len(result_items) < results_per_page:
                 break
 
+        if progress:
+            progress.close()
         return results or ""

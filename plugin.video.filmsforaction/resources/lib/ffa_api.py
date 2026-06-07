@@ -127,10 +127,12 @@ def get_playable_url(url):
     video_patterns = (
             ('vimeo1',       'vimeo.com/video/([0-9]+)',                                        'vimeo'),
             ('vimeo2',       'vimeo.com%2Fvideo%2F([0-9]+)',                                    'vimeo'),
-            ('youtube1',     'videoId: "([0-9A-Za-z_-]{11})',                                   'youtube'),
-            ('youtube2',     'youtube.com%2Fwatch%3Fv%3D([0-9A-Za-z_-]{11})',                   'youtube'),
-            ('youtube3',     'youtube.com%2Fembed%2F([0-9A-Za-z_-]{11})',                       'youtube'),
-            ('youtube4',     'youtube.com/embed/([0-9A-Za-z_-]{11})',                           'youtube'),
+            ('vimeo3',       '"vimeoId": "([0-9]+)',                                            'vimeo'),
+            ('youtube1',     '"youTubeId": "([0-9A-Za-z_-]{11})',                               'youtube'),
+            ('youtube2',     'videoId: "([0-9A-Za-z_-]{11})',                                   'youtube'),
+            ('youtube3',     'youtube.com%2Fwatch%3Fv%3D([0-9A-Za-z_-]{11})',                   'youtube'),
+            ('youtube4',     'youtube.com%2Fembed%2F([0-9A-Za-z_-]{11})',                       'youtube'),
+            ('youtube5',     'youtube.com/embed/([0-9A-Za-z_-]{11})',                           'youtube'),
             ('dailymotion1', ' src="[htp:]*?//www.dailymotion.com/embed/video/([0-9a-zA-Z]+)',  'dailymotion'),
             ('dailymotion2', 'www.dailymotion.com%2Fembed%2Fvideo%2F(.*?)%',                    'dailymotion'),
             ('archiveorg1',  ' src="(https://archive.org/embed/[^"]*?)"',                       'archiveorg'),
@@ -159,8 +161,8 @@ def get_playable_url(url):
 
 def get_playable_vimeo_url(video_id):
     """This function returns the playable URL for the Vimeo embedded video from the video_id retrieved."""
-    video_quality_pattern = '"profile":[0-9]+,"width":([0-9]+),.*?,"url":"([^"]*?)"'
-    quality_list          = ('640', '720', '480', '320', '960', '1280', '1920')
+    video_quality_pattern = '"width":([0-9]+),"mime":"video/mp4",.*?,"url":"([^"]*?)"'
+    quality_list          = ('720', '960', '1280', '1920', '640', '480', '320')
 
     video_info_url   = 'https://player.vimeo.com/video/' + video_id
     buffer_link = l.carga_web(video_info_url)

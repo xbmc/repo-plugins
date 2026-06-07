@@ -9,7 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+
 # Settings tabs/categories (from 30000 to 30019)
+
 msgctxt "#30000"
 msgid ""
 msgstr ""
@@ -50,7 +52,9 @@ msgctxt "#30009"
 msgid "General"
 msgstr "Algemeen"
 
+
 # Settings line separators (from 30010 to 30029)
+
 msgctxt "#30010"
 msgid "Hide main menu categories"
 msgstr "Verberg hoofdmenu categorieën"
@@ -60,8 +64,8 @@ msgid "Hide channels"
 msgstr "Verberg kanalen"
 
 msgctxt "#30012"
-msgid "To configure YTDL go settings of script.module.youtube.dl"
-msgstr "Ga naar de instellingen van script.module.youtube.dl om YTDL te configureren"
+msgid "YTDL settings"
+msgstr ""
 
 msgctxt "#30013"
 msgid "Hide countries"
@@ -95,7 +99,9 @@ msgctxt "#30020"
 msgid "Unmask replay TV channels"
 msgstr ""
 
+
 # Main menu (from 30030 to 30049)
+
 msgctxt "#30030"
 msgid "Live TV"
 msgstr "Live tv"
@@ -112,7 +118,13 @@ msgctxt "#30033"
 msgid "Favourites"
 msgstr "Favorieten"
 
+msgctxt "#30034"
+msgid "Internet service providers"
+msgstr "Internetproviders"
+
+
 # Countries (from 30050 to 30079)
+
 msgctxt "#30050"
 msgid "France"
 msgstr "Frankrijk"
@@ -185,7 +197,56 @@ msgctxt "#30067"
 msgid "Morocco"
 msgstr "Marokko"
 
+msgctxt "#30068"
+msgid "Singapore"
+msgstr "Singapore"
+
+msgctxt "#30069"
+msgid "Lituania"
+msgstr "Litouwen"
+
+msgctxt "#30070"
+msgid "Turkey"
+msgstr "Turkije"
+
+msgctxt "#30071"
+msgid "Slovakia"
+msgstr "Slowakije"
+
+msgctxt "#30072"
+msgid "Greece"
+msgstr "Griekenland"
+
+msgctxt "#30073"
+msgid "Peru"
+msgstr "Peru"
+
+msgctxt "#30074"
+msgid "Venezuela"
+msgstr "Venezuela"
+
+msgctxt "#30075"
+msgid "Luxembourg"
+msgstr "Luxemburgs"
+
+msgctxt "#30076"
+msgid "Bolivia"
+msgstr "Bolivia"
+
+msgctxt "#30077"
+msgid "Saudi Arabia"
+msgstr "Saoedi-Arabië"
+
+msgctxt "#30078"
+msgid "Macedonia"
+msgstr "Macedonië"
+
+msgctxt "#30079"
+msgid "Ireland"
+msgstr "Irland"
+
 # Channels (from 30080 to 30129)
+
 msgctxt "#30080"
 msgid "French channels"
 msgstr "Franse kanalen"
@@ -254,19 +315,31 @@ msgctxt "#30096"
 msgid "Ethiopian channels"
 msgstr "Ethiopische kanalen"
 
-msgctxt "#30096"
+msgctxt "#30097"
 msgid "Moroccan channels"
 msgstr "Marokkaans kanalen"
 
+msgctxt "#30098"
+msgid "Peruvian channels"
+msgstr "Peruaans kanalen"
+
+msgctxt "#30099"
+msgid "UK channels"
+msgstr "UK kanalen"
+
 # Websites (from 30130 to 30149)
+
+
+
 # Quality and content (from 30150 to 30199)
+
 msgctxt "#30150"
 msgid "Video quality"
 msgstr "Video kwaliteit"
 
 msgctxt "#30151"
-msgid "Video quality (BEST|DEFAULT|DIALOG)"
-msgstr "Video kwaliteit (BEST|DEFAULT|DIALOG)"
+msgid "Device is L1 certified"
+msgstr ""
 
 msgctxt "#30152"
 msgid "Contents"
@@ -344,7 +417,88 @@ msgctxt "#30170"
 msgid "CBC: Choose region"
 msgstr "CBC : Kies regio"
 
+msgctxt "#30171"
+msgid "BFM Régions: Choose region"
+msgstr ""
+
+msgctxt "#30173"
+msgid "TV5 monde plus: Choose language"
+msgstr ""
+
+msgctxt "#30174"
+msgid "Choose live channel"
+msgstr ""
+
+msgctxt "#30175"
+msgid "Equidia Racing: Choose race"
+msgstr ""
+
+msgctxt "#30177"
+msgid "TV5 monde: Choose region"
+msgstr ""
+
+msgctxt "#30178"
+msgid "France, Belgium, Switzerland"
+msgstr ""
+
+msgctxt "#30179"
+msgid "Europe, outside FBS"
+msgstr ""
+
+msgctxt "#30180"
+msgid "Video quality"
+msgstr ""
+
+msgctxt "#30181"
+msgid "Choose version"
+msgstr ""
+
+msgctxt "#30182"
+msgid "France 3 Régions: Choose subregion"
+msgstr ""
+
+msgctxt "#30183"
+msgid "Channel4: Programmes: Sort By"
+msgstr ""
+
+msgctxt "#30184"
+msgid "quality: "
+msgstr "kwaliteit: "
+
+msgctxt "#30192"
+msgid "BEST"
+msgstr ""
+
+msgctxt "#30193"
+msgid "DEFAULT"
+msgstr ""
+
+msgctxt "#30194"
+msgid "DIALOG"
+msgstr ""
+
+msgctxt "#30195"
+msgid "WORST"
+msgstr ""
+
+msgctxt "#30196"
+msgid "Maximum stream bitrate [COLOR=gray](0=disabled)[/COLOR]"
+msgstr ""
+
+msgctxt "#30197"
+msgid "Settings - InputStream adaptive"
+msgstr ""
+
+msgctxt "#30198"
+msgid "Use inputstream HLS?"
+msgstr ""
+
+msgctxt "#30199"
+msgid "Use ytdl for stream?"
+msgstr ""
+
 # Download (from 30200 to 30239)
+
 msgctxt "#30200"
 msgid "Download directory"
 msgstr "Download map"
@@ -361,14 +515,8 @@ msgctxt "#30203"
 msgid "Automatically rename the video (download directory required)"
 msgstr "Hernoem de video automatisch (download map vereist)"
 
-# Accounts (from 30240 to 30269)
-msgctxt "#30240"
-msgid "NRJ Login"
-msgstr "NRJ gebruikersnaam"
 
-msgctxt "#30241"
-msgid "NRJ Password"
-msgstr "NRJ wachtwoord"
+# Accounts (from 30240 to 30269)
 
 msgctxt "#30242"
 msgid "VRT NU Login"
@@ -410,7 +558,65 @@ msgctxt "#30251"
 msgid "UKTVPlay Password"
 msgstr "UKTVPlay wachtwoord"
 
+msgctxt "#30252"
+msgid "RMCBFM Play Login"
+msgstr ""
+
+msgctxt "#30253"
+msgid "RMCBFM Play Password"
+msgstr ""
+
+msgctxt "#30254"
+msgid "TV guides"
+msgstr ""
+
+msgctxt "#30255"
+msgid "Schedules Direct login"
+msgstr ""
+
+msgctxt "#30256"
+msgid "Schedules Direct password"
+msgstr ""
+
+msgctxt "#30257"
+msgid "Schedules Direct lineup"
+msgstr ""
+
+msgctxt "#30258"
+msgid "RTBF auvio Login"
+msgstr ""
+
+msgctxt "#30259"
+msgid "RTBF auvio Password"
+msgstr ""
+
+msgctxt "#30260"
+msgid "TF1+ Login"
+msgstr ""
+
+msgctxt "#30261"
+msgid "TF1+ Password"
+msgstr ""
+
+msgctxt "#30262"
+msgid "SFR TV login"
+msgstr ""
+
+msgctxt "#30263"
+msgid "SFR TV password"
+msgstr ""
+
+msgctxt "#30264"
+msgid "Channel 4 Login"
+msgstr ""
+
+msgctxt "#30265"
+msgid "Channel 4 Password"
+msgstr ""
+
+
 # TV integration (from 30270 to 30289)
+
 msgctxt "#30270"
 msgid "TV integration"
 msgstr "TV integratie"
@@ -443,8 +649,13 @@ msgctxt "#30277"
 msgid "Select channels to enable in Kodi Live TV"
 msgstr "Selecteer de kanalen om te activeren in Kodi Live TV"
 
-# Reserved space for other tab/category in settins (from 30290 to 30339)
+
+
+# Reserved space for other tab/category in settings (from 30290 to 30339)
+
+
 # Advanced settings (from 30370 to 30399)
+
 msgctxt "#30370"
 msgid "Clear cache"
 msgstr "Cache legen"
@@ -465,7 +676,9 @@ msgctxt "#30374"
 msgid "Favourites deleted"
 msgstr "Favorieten verwijderd"
 
+
 # Settings of 'General' category (from 30400 to 30429)
+
 msgctxt "#30400"
 msgid "Restore default order of all menus"
 msgstr "Herstel de standaard volgorde van alle menus"
@@ -502,13 +715,20 @@ msgctxt "#30408"
 msgid "All hidden items have been unmasked"
 msgstr ""
 
+
 # Advanced settings (from 30430 to 30449)
+
 msgctxt "#30430"
 msgid "Automatically start Catch-up TV & More when Kodi starts"
 msgstr "Start Catch-up TV & More automatisch wanneer Kodi start"
 
+
 # Reserved space for other tab/category in settins (from 30450 to 30499)
+
+
+
 # Context menu (from 30500 to 30599)
+
 msgctxt "#30500"
 msgid "Move down"
 msgstr "Verplaats omlaag"
@@ -533,7 +753,9 @@ msgctxt "#30505"
 msgid "List Videos (type=episode)"
 msgstr "Videos weergeven (type=episode)"
 
+
 # Dialog boxes (from 30600 to 30699)
+
 msgctxt "#30600"
 msgid "Information"
 msgstr "Informatie"
@@ -562,7 +784,9 @@ msgctxt "#30606"
 msgid "Do you want to see this information next time?"
 msgstr "Wilt u deze informatie een volgende keer zien?"
 
+
 # Others (from 30700 to 30799)
+
 msgctxt "#30700"
 msgid "More videos..."
 msgstr "Meer video's..."
@@ -640,7 +864,7 @@ msgid "No videos found"
 msgstr "Geen video's gevonden"
 
 msgctxt "#30719"
-msgid "Inputstream Adaptive not enable"
+msgid "Inputstream Adaptive not enabled"
 msgstr "Inputstream Adaptive is niet geactiveerd"
 
 msgctxt "#30720"
@@ -650,10 +874,6 @@ msgstr "Kodi 17.6 of > is vereist"
 msgctxt "#30721"
 msgid "Content requiring a subscription"
 msgstr "Inhoud vereist een abonnement"
-
-msgctxt "#30722"
-msgid "TV guide"
-msgstr "Tv-gids"
 
 msgctxt "#30723"
 msgid "An error occurred while getting TV guide"
@@ -671,7 +891,29 @@ msgctxt "#30726"
 msgid "Races"
 msgstr "Races"
 
+msgctxt "#30727"
+msgid "Most popular"
+msgstr ""
+
+msgctxt "#30728"
+msgid "Recently added"
+msgstr ""
+
+msgctxt "#30729"
+msgid "Emissions"
+msgstr ""
+
+msgctxt "#30731"
+msgid "Homepage"
+msgstr ""
+
+msgctxt "#30732"
+msgid "This content requires a payment. To buy or rent it, go to %s website at this URL : %s"
+msgstr ""
+
+
 # Favourites (from 30800 to 30859)
+
 msgctxt "#30800"
 msgid "Add to add-on favourites"
 msgstr "Toevoegen aan add-on favorieten"
@@ -704,7 +946,9 @@ msgctxt "#30807"
 msgid "This favourite raises an error, would you like to delete it?"
 msgstr "Deze favoriet veroorzaakt een fout, wilt het verwijderen?"
 
+
 # Log uploader (from 30860 to 30889)
+
 msgctxt "#30860"
 msgid "This selection triggered an unexpected error, would you like to share your error log so that we can try to resolve this issue?"
 msgstr "Deze selectie heeft een onverwachte fout veroorzaakt, wilt u het logboek delen zodat we kunnen proberen de fout op te lossen?"
@@ -717,7 +961,9 @@ msgctxt "#30862"
 msgid "Sorry, sharing your error log failed"
 msgstr "Sorry, delen van het logboek is mislukt"
 
+
 # HTTP error (from 30890 to 30919)
+
 msgctxt "#30890"
 msgid "HTTP Error code"
 msgstr "HTTP foutcode"
@@ -741,3 +987,7 @@ msgstr "Deze bron vereist een betaling of abonnement"
 msgctxt "#30895"
 msgid "This resource is no longer available"
 msgstr "Deze bron is niet langer beschikbaar"
+
+msgctxt "#30896"
+msgid "No item"
+msgstr ""

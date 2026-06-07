@@ -38,11 +38,18 @@ menu = {
         'enabled': True,
         'order': 3
     },
+    'providers': {
+        'route': '/resources/lib/main:generic_menu',
+        'label': 30034,
+        'thumb': 'providers.png',
+        'enabled': True,
+        'order': 4
+    },
     'favourites': {
         'route': '/resources/lib/main:favourites',
         'label': 30033,
         'thumb': 'favourites.png',
         'enabled': True,
-        'order': 4
+        'order': 5
     }
 }

@@ -2,6 +2,8 @@
 
 import os
 import sys
+from typing import List
+
 import xbmc
 import xbmcgui
 
@@ -56,6 +58,7 @@ class Menu(ActionParser):
         super(Menu, self).__init__(name, -1, params)
 
         self.channelObject = self.__get_channel()
+        self.params["menu_command"] = menu_action
         Logger.debug(self)
 
     def hide_channel(self):
@@ -123,6 +126,34 @@ class Menu(ActionParser):
         AddonSettings.show_settings()
         self.refresh()
 
+    def __get_search_key(self) -> str:
+        # SearchAction may store history under a profile-scoped key
+        # (e.g. "search:{profile_id}").  We record the active key so
+        # Menu can find it without instantiating the full channel.
+        settings = AddonSettings.store(LOCAL)
+        key = settings.get_setting("search:active_key", self.channelObject, None)
+        return key or "search"
+
+    def clear_search(self):
+        """ Clears the complete search history for a channel."""
+
+        settings = AddonSettings.store(LOCAL)
+        settings.set_setting(self.__get_search_key(), [], self.channelObject)
+        self.refresh()
+
+    def remove_search_item(self):
+        """ Removes a single item from the search history for a folder """
+
+        settings = AddonSettings.store(LOCAL)
+        key = self.__get_search_key()
+        history: List[str] = settings.get_setting(key, self.channelObject, [])  # type: ignore
+        needle: str = self.params[keyword.NEEDLE]
+        needle = HtmlEntityHelper.url_decode(needle)
+        if needle in history:
+            history.remove(needle)
+        settings.set_setting(key, history, self.channelObject)
+        self.refresh()
+
     def channel_settings(self):
         """ Shows the channel settings for the selected channel. Refreshes the list after closing
         the settings. """
@@ -170,6 +201,37 @@ class Menu(ActionParser):
 
         # we are finished, so just open the Favorites
         self.favourites()
+
+    @LockWithDialog(logger=Logger.instance())
+    def add_shortcut(self):
+        """ Adds the selected item to the favourites. The opens the favourite list. """
+
+        # remove the item
+        item = self.media_item
+        Logger.debug("Adding shortcut: %s", item)
+
+        f = Favourites(Config.shortcutDir)
+        if item.is_playable:
+            action_value = action.PLAY_VIDEO
+        else:
+            action_value = action.LIST_FOLDER
+
+        # Ask for a filename
+        heading = LanguageHelper.get_localized_string(LanguageHelper.ShortCutName)
+        keyboard = xbmc.Keyboard("", heading)
+        keyboard.doModal()
+        if not keyboard.isConfirmed():
+            return None
+
+        filename = keyboard.getText()
+        if not filename:
+            Logger.warning("No shortcut name set. Aborting.")
+            return
+
+        # add the favourite
+        f.add(self.channelObject,
+              item,
+              self.create_action_url(self.channelObject, action_value, item), shortcut_name=filename)
 
     @LockWithDialog(logger=Logger.instance())
     def remove_favourite(self):

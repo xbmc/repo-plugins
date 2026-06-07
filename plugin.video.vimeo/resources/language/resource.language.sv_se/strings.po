@@ -1,0 +1,281 @@
+# Kodi Media Center Swedish vimeo addon language file
+# Addon Name: Vimeo
+# Addon id: plugin.video.vimeo
+# Addon Provider: jaylinski
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-05-31 20:32+0200\n"
+"Last-Translator: Daniel Nylander <github@danielnylander.se>\n"
+"Language-Team: sv\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.6\n"
+
+# Settings - General
+msgctxt "#30001"
+msgid "General"
+msgstr "Allmänt"
+
+msgctxt "#30011"
+msgid "Search"
+msgstr "Sök"
+
+msgctxt "#30012"
+msgid "Items per page"
+msgstr "Objekt per sida"
+
+msgctxt "#30013"
+msgid "History size"
+msgstr "Historikstorlek"
+
+msgctxt "#30014"
+msgid "Template"
+msgstr "Mall"
+
+msgctxt "#30015"
+msgid "Sort by"
+msgstr "Sortera efter"
+
+msgctxt "#300150"
+msgid "Relevance"
+msgstr "Relevans"
+
+msgctxt "#300151"
+msgid "Popularity"
+msgstr "Popularitet"
+
+msgctxt "#300152"
+msgid "Most recent"
+msgstr "Senaste"
+
+msgctxt "#300153"
+msgid "Alphabetical A-Z"
+msgstr "Alfabetisk A-Z"
+
+msgctxt "#300154"
+msgid "Alphabetical Z-A"
+msgstr "Alfabetisk Z-A"
+
+msgctxt "#300155"
+msgid "Longest"
+msgstr "Längsta"
+
+msgctxt "#300156"
+msgid "Shortest"
+msgstr "Kortaste"
+
+msgctxt "#30020"
+msgid "Video"
+msgstr "Video"
+
+msgctxt "#30021"
+msgid "Streaming"
+msgstr "Strömning"
+
+msgctxt "#30022"
+msgid "AOMedia Video 1 (AV1)"
+msgstr "AOMedia Video 1 (AV1)"
+
+msgctxt "#30023"
+msgid "Subtitles"
+msgstr "Undertexter"
+
+# Settings - Advanced
+msgctxt "#30051"
+msgid "Advanced"
+msgstr "Avancerat"
+
+msgctxt "#30070"
+msgid "API"
+msgstr "API"
+
+msgctxt "#30071"
+msgid "Access Token"
+msgstr "Åtkomsttoken"
+
+msgctxt "#30080"
+msgid "Cache"
+msgstr "Cache"
+
+msgctxt "#30081"
+msgid "Clear cache"
+msgstr "Töm cache"
+
+# GUI - Root
+msgctxt "#30101"
+msgid "Search"
+msgstr "Sök"
+
+msgctxt "#30102"
+msgid "Featured"
+msgstr "Utvalda"
+
+msgctxt "#30103"
+msgid "Trending"
+msgstr "Trendande"
+
+msgctxt "#30104"
+msgid "Categories"
+msgstr "Kategorier"
+
+msgctxt "#30105"
+msgid "Profile"
+msgstr "Profil"
+
+msgctxt "#30108"
+msgid "Settings"
+msgstr "Inställningar"
+
+msgctxt "#30109"
+msgid "Log in"
+msgstr "Logga in"
+
+msgctxt "#30110"
+msgid "Log out"
+msgstr "Logga ut"
+
+# GUI - Auth
+msgctxt "#30151"
+msgid "Authorization"
+msgstr "Auktorisering"
+
+msgctxt "#30152"
+msgid "1. Open the link {}"
+msgstr "1. Öppna länken {}"
+
+msgctxt "#30153"
+msgid "2. Log in and enter the code {}"
+msgstr "2. Logga in och ange koden {}"
+
+msgctxt "#30154"
+msgid "3. Authorize the app"
+msgstr "3. Auktorisera appen"
+
+msgctxt "#30155"
+msgid "4. Confirm with {}"
+msgstr "4. Bekräfta med {}"
+
+msgctxt "#30156"
+msgid "You are now logged in as {}!"
+msgstr "Du är nu inloggad som {}!"
+
+# GUI - Search
+msgctxt "#30201"
+msgid "New search"
+msgstr "Ny sökning"
+
+msgctxt "#30211"
+msgid "People"
+msgstr "Personer"
+
+msgctxt "#30212"
+msgid "Channels"
+msgstr "Kanaler"
+
+msgctxt "#30213"
+msgid "Groups"
+msgstr "Grupper"
+
+# GUI - Featured
+msgctxt "#30301"
+msgid "Vimeo Staff Picks"
+msgstr "Vimeos personal väljer"
+
+msgctxt "#30302"
+msgid "Vimeo Staff Pick Premieres"
+msgstr "Vimeos personal väljer-premiärvisningar"
+
+msgctxt "#30303"
+msgid "Vimeo Staff Picks: Best of the Month"
+msgstr "Vimeos personal väljer: Månadens bästa"
+
+msgctxt "#30304"
+msgid "Vimeo Staff Picks: Best of the Year"
+msgstr "Vimeos personal väljer: Årets bästa"
+
+msgctxt "#30305"
+msgid "A Decade of Staff Picks"
+msgstr "Ett decennium av personalens val"
+
+msgctxt "#30306"
+msgid "Vimeo Curation channels"
+msgstr "Vimeo Curation-kanaler"
+
+# GUI - Info
+msgctxt "#30401"
+msgid "Vimeo account"
+msgstr "Vimeo-konto"
+
+# GUI - Settings
+msgctxt "#30501"
+msgid "Cache cleared"
+msgstr "Cachen tömd"
+
+# GUI - Context menus
+msgctxt "#30601"
+msgid "Remove"
+msgstr "Ta bort"
+
+msgctxt "#30602"
+msgid "Clear"
+msgstr "Töm"
+
+# GUI - Profile
+msgctxt "#30701"
+msgid "Followers"
+msgstr "Följare"
+
+msgctxt "#30702"
+msgid "Following"
+msgstr "Följer"
+
+msgctxt "#30703"
+msgid "Likes"
+msgstr "Gillar"
+
+msgctxt "#30704"
+msgid "Albums"
+msgstr "Album"
+
+msgctxt "#30705"
+msgid "Watch Later"
+msgstr "Se senare"
+
+# GUI - Generic
+msgctxt "#30901"
+msgid "Next page"
+msgstr "Nästa sida"
+
+msgctxt "#30902"
+msgid "LIVE"
+msgstr "LIVE"
+
+msgctxt "#30903"
+msgid "Trailer"
+msgstr "Trailer"
+
+msgctxt "#30904"
+msgid "Password"
+msgstr "Lösenord"
+
+msgctxt "#30905"
+msgid "Invalid password"
+msgstr "Ogiltigt lösenord"
+
+msgctxt "#30906"
+msgid "Whoops! That password is invalid"
+msgstr "Hoppsan! Det lösenordet är ogiltigt"
+
+msgctxt "#30907"
+msgid "Error"
+msgstr "Fel"
+
+msgctxt "#30908"
+msgid "This resource is restricted in your region."
+msgstr "Denna resurs är begränsad i din region."

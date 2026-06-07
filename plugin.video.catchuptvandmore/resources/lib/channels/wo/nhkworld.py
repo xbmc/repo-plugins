@@ -10,16 +10,21 @@ import json
 import time
 import re
 
-from codequick import Listitem, Resolver, Route, Script
+from codequick import Listitem, Route, Script
 import urlquick
 
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
 
+# noinspection PyUnresolvedReferences
+from codequick import Resolver
+
+from resources.lib import resolver_proxy, web_utils
+
 
 URL_ROOT = 'http://www3.nhk.or.jp/'
 
-URL_LIVE_NHK = 'https://www3.nhk.or.jp/nhkworld/app/tv/hlslive_web.json'
+URL_LIVE_NHK = 'https://www3.nhk.or.jp/nhkworld/app/tv/hlslive_android_v2.json'
 # Channel_Name...
 
 URL_COMMONJS_NHK = 'http://www3.nhk.or.jp/%s/common/js/common.js'
@@ -116,11 +121,11 @@ def get_video_url(plugin,
     resp2 = urlquick.get(URL_VIDEO_STREAM % (data_de_api_key, data_de_program_uuid))
     json_parser2 = json.loads(resp2.text)
 
-    final_video_url = json_parser2["response"]["WsProgramResponse"]["program"]["asset"]["ipadM3u8Url"]
+    video_url = json_parser2["response"]["WsProgramResponse"]["program"]["asset"]["ipadM3u8Url"]
 
     if download_mode:
-        return download.download_video(final_video_url)
-    return final_video_url
+        return download.download_video(video_url)
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")
 
 
 @Resolver.register
@@ -129,9 +134,11 @@ def get_live_url(plugin, item_id, **kwargs):
 
     resp = urlquick.get(URL_LIVE_NHK)
     json_parser = json.loads(resp.text)
-    stream_url = ''
+    streams = json_parser["tv"]
+    video_url = ''
     if desired_country == 'Outside Japan':
-        stream_url = json_parser["main"]["wstrm"]
+        video_url = streams["wstrm"]
     else:
-        stream_url = json_parser["main"]["jstrm"]
-    return stream_url
+        video_url = streams["jstrm"]
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

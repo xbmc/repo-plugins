@@ -11,6 +11,7 @@
       "category": "Radio",
       "sortorder": 250,
       "message": "",
+      "ignore": true,
       "fanart": "24classicfanart.png"
     }
   ]

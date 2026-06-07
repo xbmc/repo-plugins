@@ -1,3 +1,69 @@
+v1.0.3 (2025-12-14)
+- fix Container Update Bug (latest Omega)
+- fix error on Addon start cause by OrfOn Api Change
+- remove duplicate livestream item from frontpage
+
+v1.0.2 (2024-06-08)
+- new Livestream (timeshift)
+- added setting to use old livestream format
+- LF conversion
+- list callback fix main menu
+- add license
+- forum fix addon.xml
+
+v1.0.1 beta (2024-06-05)
+- fix routing requirement
+- show segment option added
+- cache reload fix
+- related video option
+- fix UA stream errors (#6)
+- orf tvthek has been disabled
+
+v1.0.0 beta (2024-01-06)
+- inital ORF ON addon
+- beta version
+- most stuff is working but everything needs to be tested a little more
+- orf on is still in beta so stuff might change until the final release in april 2024
+- translation stuff is still missing
+
+* 0.12.12
+ - ORF TVthek is down and replaced by ORF On
+ - ServiceAPI is forced on this version
+
+* 0.12.11
+ - Major API Change on ServiceAPI regarding assets and json structure (#137)
+
+* 0.12.10
+ - fixed livestream multistream not available #133
+
+* 0.12.9
+ - fixed livestream endpoint changes serviceapi
+
+* 0.12.8
+ - added direct uri for simple iptv (livestreams) #108
+
+* 0.12.7
+ - fixed url parameters for drm livestreams
+ - added UHD 50fps option for livestreams
+
+* 0.12.6
+ - fixed drm content for restart (license server error 500)
+
+* 0.12.5
+ - added livestream specials for htmlscraper
+
+* 0.12.4
+ - added header to drm license server request (fixes error 500 for drm content)
+
+* 0.12.3-1
+ - bugfix livestream restart (kodi <19 only)
+ - removed quality setting
+ - livestream active bugfix
+
+* 0.12.3
+ - service api fixes (auth & restart)
+ - minor logging improvements
+
 * 0.12.2
  - drm for restart
  - drm livestream license url
@@ -28,7 +94,7 @@
 - python2/3 compatible
 - added 'play full video' for htmlscraper
 - show listitems are absolute now and can be added to favourites
-- minor fixes for serviceapi & htmlscraper 
+- minor fixes for serviceapi & htmlscraper
 
 0.9.2
 - fixed frontpage (new html markup)
@@ -46,7 +112,7 @@
 - New icons/backdrops according to the new CI
 
 0.8.8
-- removed stream method option because its not available with the htmlscraper. Progressive streaming can still be used with the serviceAPI. 
+- removed stream method option because its not available with the htmlscraper. Progressive streaming can still be used with the serviceAPI.
 
 0.8.7
 - another fix for the restart option

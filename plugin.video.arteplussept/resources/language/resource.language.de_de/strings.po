@@ -1,14 +1,22 @@
 # Kodi Media Center language file
 # Addon Name: Arte +7
 # Addon id: plugin.video.arteplussept
-# Addon Provider: bmf
+# Addon Provider: bmf, thomas-ernest
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
+"Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30044"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30045"
+msgid "Profile"
+msgstr "Profil"
 
 msgctxt "#30050"
 msgid "Language (Videos)"
@@ -22,22 +30,149 @@ msgctxt "#30053"
 msgid "Show video stream options"
 msgstr "Show video stream options"
 
-msgctxt "#30005"
-msgid "Most recent"
-msgstr "Neuste"
+msgctxt "#30054"
+msgid "Email"
+msgstr "E-Mail-Adresse"
 
-msgctxt "#30006"
-msgid "Most viewed"
-msgstr "Am meisten gesehen"
+msgctxt "#30056"
+msgid "Log level"
+msgstr "Log level"
 
-msgctxt "#30007"
-msgid "Last chance"
-msgstr "Letzte chance"
+msgctxt "#30057"
+msgid "Log in"
+msgstr "Einloggen"
 
-msgctxt "#30008"
-msgid "Magazines A-Z"
-msgstr "Sendungen A-Z"
+msgctxt "#30058"
+msgid "Log out"
+msgstr "Austragen"
 
-msgctxt "#30009"
-msgid "This week"
-msgstr "Diese Woche"
+
+msgctxt "#30011"
+msgid "View collection as menu"
+msgstr "Sammlung als Menü anzeigen"
+
+
+msgctxt "#30012"
+msgid "Search"
+msgstr "Suche"
+
+
+msgctxt "#30014"
+msgid "Authentication needed in addon settings"
+msgstr "Authentifizierung in den Add-on-Einstellungen erforderlich"
+
+msgctxt "#30015"
+msgid "User already logged in"
+msgstr "Benutzer bereits angemeldet"
+
+msgctxt "#30016"
+msgid "Do you want to log in as \"{new_user}\" instead of \"{old_user}\" ?"
+msgstr "Möchten Sie sich als \"{new_user}\" statt als \"{old_user}\" anmelden?"
+
+msgctxt "#30017"
+msgid "Logged in as \"{user}\""
+msgstr "Als \"{user}\" angemeldet"
+
+msgctxt "#30018"
+msgid "Logged out"
+msgstr "Abgemeldet"
+
+msgctxt "#30019"
+msgid "Enter password please:"
+msgstr "Bitte Passwort eingeben:"
+
+msgctxt "#30020"
+msgid "Unable to authenticate"
+msgstr "Authentifizierungsfehler"
+
+msgctxt "#30021"
+msgid "Email missing"
+msgstr "E-Mail fehlen"
+
+msgctxt "#30022"
+msgid "Password missing"
+msgstr "Passwort fehlen"
+
+
+msgctxt "#30023"
+msgid "Add to Arte favorites"
+msgstr "Zu Arte-Favoriten hinzufügen"
+
+msgctxt "#30024"
+msgid "Remove from Arte favorites"
+msgstr "Aus Arte-Favoriten entfernen"
+
+msgctxt "#30025"
+msgid "\"{label}\" successfully added to favorites"
+msgstr "\"{label}\" erfolgreich zu Favoriten hinzugefügt"
+
+msgctxt "#30026"
+msgid "Failed to add \"{label}\" to favorites"
+msgstr "Fehler beim Hinzufügen \"{label}\" zu den Favoriten"
+
+msgctxt "#30027"
+msgid "\"{label}\" successfully removed from favorites"
+msgstr "\"{label}\" erfolgreich aus Favoriten entfernen"
+
+msgctxt "#30028"
+msgid "Failed to remove \"{label}\" from favorites"
+msgstr "Entfernen \"{label}\" aus Favoriten fehlgeschlagen"
+
+msgctxt "#30029"
+msgid "Stream \"{strm}\" in \"{ln}\" is not available"
+msgstr "Stream \"{strm}\" in \"{ln}\" ist nicht verfügbar"
+
+msgctxt "#30030"
+msgid "Purge my history"
+msgstr "Lösche mein Videoverlauf"
+
+msgctxt "#30031"
+msgid "Successfully purged history"
+msgstr "Videoverlauf erfolgreich gelöscht"
+
+msgctxt "#30032"
+msgid "Failed to purge my history"
+msgstr "Mein Videoerlauf konnte nicht gelöscht werden"
+
+msgctxt "#30033"
+msgid "Do you really want to purge your history ?"
+msgstr "Wollen Sie wirklich Ihr Videoverlauf löschen ?"
+
+
+msgctxt "#30035"
+msgid "Mark as watched in Arte"
+msgstr "Als geschaut in Arte markieren"
+
+msgctxt "#30036"
+msgid "\"{label}\" successfully marked as watched"
+msgstr "\"{label}\" erfolgreich als geschaut markiert"
+
+msgctxt "#30037"
+msgid "Failed to mark as watched \"{label}\""
+msgstr "\"{label}\" konnte nicht als geschaut markiert werden"
+
+
+msgctxt "#30038"
+msgid "Next page"
+msgstr "Nächste Seite"
+
+msgctxt "#30039"
+msgid "Previous page"
+msgstr "Vorherige Seite"
+
+
+msgctxt "#30040"
+msgid "Purge my Arte favorites"
+msgstr "Lösche meine Arte-Favoriten"
+
+msgctxt "#30041"
+msgid "Successfully purged favorites"
+msgstr "Favoriten erfolgreich gelöscht"
+
+msgctxt "#30042"
+msgid "Failed to purge favorites"
+msgstr "Meine Favoriten konnte nicht gelöscht werden"
+
+msgctxt "#30043"
+msgid "Do you really want to purge Arte favorites ?"
+msgstr "Wollen Sie wirklich Arte-Favoriten löschen ?"

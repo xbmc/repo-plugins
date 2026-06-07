@@ -1,4 +1,4 @@
-#   Copyright (C) 2021 Lunatixz
+#   Copyright (C) 2022 Lunatixz
 #
 #
 # This file is part of PlutoTV.
@@ -23,15 +23,23 @@ import socket, json, inputstreamhelper, requests, collections
 from six.moves     import urllib
 from simplecache   import SimpleCache, use_cache
 from itertools     import repeat, cycle, chain, zip_longest
+from functools     import partial
 from kodi_six      import xbmc, xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs, py2_encode, py2_decode
 from favorites     import *
 
 try:
-    from multiprocessing import cpu_count 
-    from multiprocessing.pool import ThreadPool 
-    ENABLE_POOL = True
-    CORES = cpu_count()
-except: ENABLE_POOL = False
+    if (xbmc.getCondVisibility('System.Platform.Android') or xbmc.getCondVisibility('System.Platform.Windows')):
+        from multiprocessing.dummy import Pool as ThreadPool
+    else:
+        from multiprocessing.pool  import ThreadPool
+        
+    from multiprocessing  import cpu_count
+    from _multiprocessing import SemLock, sem_unlink #hack to raise two python issues. _multiprocessing import error, sem_unlink missing from native python (android).
+    SUPPORTS_POOL = True
+    CPU_COUNT     = cpu_count()
+except Exception as e:
+    CPU_COUNT     = 2
+    SUPPORTS_POOL = False
 
 try:
   basestring #py2
@@ -55,12 +63,13 @@ ROUTER        = routing.Plugin()
 LOGO          = os.path.join('special://home/addons/%s/'%(ADDON_ID),'resources','images','logo.png')
 DEBUG         = REAL_SETTINGS.getSettingBool('Enable_Debugging')
 GUIDE_URL     = 'https://service-channels.clusters.pluto.tv/v1/guide?start=%s&stop=%s&%s'
+MEDIA_VOD     = 'https://service-vod.clusters.pluto.tv/v4/vod/categories/%s/items?offset=1000'
 BASE_API      = 'https://api.pluto.tv'
 BASE_LINEUP   = BASE_API + '/v2/channels.json?%s'
 BASE_GUIDE    = BASE_API + '/v2/channels?start=%s&stop=%s&%s'
 LOGIN_URL     = BASE_API + '/v1/auth/local?deviceType=web&%s'
 BASE_CLIPS    = BASE_API + '/v2/episodes/%s/clips.json'
-BASE_VOD      = BASE_API + '/v3/vod/categories?includeItems=true&deviceType=web&%s'
+BASE_VOD      = BASE_API + '/v3/vod/categories?offset=1000&includeItems=true&deviceType=web&%s'
 SEASON_VOD    = BASE_API + '/v3/vod/series/%s/seasons?includeItems=true&deviceType=web&%s'
 
 INPUTSTREAM       = 'inputstream.adaptive'
@@ -117,6 +126,10 @@ def getSeason(sid):
 @ROUTER.route('/play/vod')#unknown bug causing this route to be called during /ondemand parse. todo find issue.
 def dummy():
     pass
+    
+@ROUTER.route('/play/live')#unknown bug causing this route to be called during /ondemand parse. todo find issue.
+def dummy():
+    pass
 
 @ROUTER.route('/play/vod/<id>')
 def playOD(id):
@@ -146,7 +159,7 @@ def iptv_epg():
      
 def getInputStream():
     if xbmc.getCondVisibility('System.AddonIsEnabled(%s)'%(INPUTSTREAM_BETA)):
-        return INPUTSTREAM_BETA
+          return INPUTSTREAM_BETA
     else: return INPUTSTREAM
 
 def setUUID():
@@ -182,7 +195,7 @@ def slugify(text):
     text = non_url_safe_regex.sub('', text).strip()
     text = u'_'.join(re.split(r'\s+', text))
     return text
-
+ 
 class PlutoTV(object):
     def __init__(self, sysARG=sys.argv):
         log('__init__, sysARG = %s'%(sysARG))
@@ -209,13 +222,14 @@ class PlutoTV(object):
 
       
     def buildHeader(self):
-        header_dict               = {}
-        header_dict['Accept']     = 'application/json, text/javascript, */*; q=0.01'
-        header_dict['Host']       = 'api.pluto.tv'
-        header_dict['Connection'] = 'keep-alive'
-        header_dict['Referer']    = 'http://pluto.tv/'
-        header_dict['Origin']     = 'http://pluto.tv'
-        header_dict['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.2; rv:24.0) Gecko/20100101 Firefox/24.0'
+        header_dict                  = {}
+        header_dict['Accept']        = 'application/json, text/javascript, */*; q=0.01'
+        header_dict['Host']          = 'api.pluto.tv'
+        header_dict['Connection']    = 'keep-alive'
+        header_dict['Referer']       = 'http://pluto.tv/'
+        header_dict['Origin']        = 'http://pluto.tv'
+        header_dict['User-Agent']    = 'Mozilla/5.0 (Windows NT 6.2; rv:24.0) Gecko/20100101 Firefox/24.0'
+        header_dict['authority']     = 'service-vod.clusters.pluto.tv'
         return header_dict
 
 
@@ -308,7 +322,8 @@ class PlutoTV(object):
                 epdur      = int(episode.get('duration','0') or '0') // 1000
                 urls       = (item.get('stitched',{}).get('urls',[]) or urls)
                 if len(urls) == 0: continue
-                if isinstance(urls, list): urls  = [url['url'] for url in urls if url['type'].lower() == 'hls'][0] # todo select quality
+                if isinstance(urls, list): 
+                    urls  = [url['url'] for url in urls if url['type'].lower() == 'hls'][0] # todo select quality
                 
                 try:
                     start  = strpTime(item['start'],'%Y-%m-%dT%H:%M:%S.000Z') + datetime.timedelta(seconds=tz)
@@ -316,6 +331,7 @@ class PlutoTV(object):
                 except:
                     start  = totstart
                     stop   = start + datetime.timedelta(seconds=epdur)
+                    
                 totstart   = stop                  
                 type       = series.get('type','')
                 tvtitle    = series.get('name',''                           or chname)
@@ -346,20 +362,18 @@ class PlutoTV(object):
                     try:    vodlogo   = [image.get('url',[]) for image in vodimages if image.get('aspectRatio','') == '1:1'][0]
                     except: pass
 
-                chlogo     = (vodlogo or chlogo)
-                epposter   = (episode.get('poster',{}).get('path','')        or vodlogo   or vodposter or vodthumb  or tvthumb)
-                epthumb    = (episode.get('thumbnail',{}).get('path','')     or vodlogo   or vodthumb  or vodposter or tvthumb)
-                epfanart   = (episode.get('featuredImage',{}).get('path','') or vodfanart or tvfanart)
+                chlogo   = (vodlogo or chlogo)
+                epposter = (episode.get('poster',{}).get('path','')        or vodlogo   or vodposter or vodthumb  or tvthumb)
+                epthumb  = (episode.get('thumbnail',{}).get('path','')     or vodlogo   or vodthumb  or vodposter or tvthumb)
+                epfanart = (episode.get('featuredImage',{}).get('path','') or vodfanart or tvfanart)
                 
                 if type == 'series':
                     mtype   = 'tvshows'
                     label   = tvtitle
-                    tvtitle = tvtitle
                     epname  = ''
                     thumb   = tvthumb
                 elif type in ['tv','episode']:
                     mtype  = 'episodes'
-                    tvtitle = chname
                     epname  = epname
                     thumb  = epthumb
                     if epseason > 0 and epnumber > 0:
@@ -378,7 +392,6 @@ class PlutoTV(object):
                 
                 # elif type == 'series':
                     # mtype   = 'tvshow'
-                    # tvtitle = chname
                         # else: label  = '%s - %s'%(tvtitle, label)
                     # elif type != 'series': label = '%s - %s'%(chname,epname)
                     # else: label = epname
@@ -395,7 +408,10 @@ class PlutoTV(object):
                     elif type in ['tv','series']:
                         mtype = 'episodes'
                         thumb = epposter
-                        label = "%s : [B]%s - %s[/B]" % (label, tvtitle, epname)
+                        if label == tvtitle:
+                            label = "%s : [B]%s[/B]" % (label, epname)
+                        else:
+                            label = "%s : [B]%s - %s[/B]" % (label, tvtitle, epname)
                     elif len(epname) > 0: label = '%s: [B]%s - %s[/B]'%(label, title, epname)
                     epname = label
                     if type == 'music' or epgenre.lower() == 'music': mtype = 'musicvideo'
@@ -454,11 +470,22 @@ class PlutoTV(object):
        
     def browseOndemand(self, id=None, opt='ondemand'):
         log('browseOndemand, opt = %s'%(opt))
-        self.browseGuide(id, opt, data=self.getOndemand()['categories'])
+        self.browseGuide(id, opt, data=self.getOndemand().get('categories',[]))
+        # if opt == 'vod':
+            # print(id)
+            # content = self.getContent(id)
+            # print(content)
+        # else: 
+            # content = self.getOndemand().get('categories',[])
+        # self.browseGuide(id, opt, data=content)
         
        
     def getOndemand(self):
         return self.getURL(BASE_VOD%(LANGUAGE(30022)%(getUUID())), header=self.buildHeader(), life=datetime.timedelta(hours=1))
+
+
+    def getContent(self, id):
+        return self.getURL(MEDIA_VOD%(id), header=self.buildHeader(), life=datetime.timedelta(hours=1))
 
 
     def getVOD(self, epid):
@@ -477,7 +504,7 @@ class PlutoTV(object):
         start = (datetime.datetime.fromtimestamp(getLocalTime()).strftime('%Y-%m-%dT%H:00:00Z'))
         stop  = (datetime.datetime.fromtimestamp(getLocalTime()) + datetime.timedelta(hours=4)).strftime('%Y-%m-%dT%H:00:00Z')
         if full: return self.getURL(GUIDE_URL %(start,stop,LANGUAGE(30022)%(getUUID())), life=datetime.timedelta(hours=1))
-        else: return sorted((self.getURL(BASE_GUIDE %(start,stop,LANGUAGE(30022)%(getUUID())), life=datetime.timedelta(hours=1))), key=lambda i: i['number'])
+        else:    return sorted((self.getURL(BASE_GUIDE %(start,stop,LANGUAGE(30022)%(getUUID())), life=datetime.timedelta(hours=1))), key=lambda i: i['number'])
 
         
     def getCategories(self):
@@ -505,16 +532,16 @@ class PlutoTV(object):
         
             
     def getChans(self):
-        log('getChannels')
+        log('getChans')
         # https://github.com/add-ons/service.iptv.manager/wiki/JSON-STREAMS-format
-        stations  = self.getGuidedata(full=True).get('channels',[])
+        stations = self.getGuidedata(full=True).get('channels',[])
         return list(self.poolList(self.buildStation, stations,'channel'))
 
 
     def getGuide(self):
         log('getGuide')
         # https://github.com/add-ons/service.iptv.manager/wiki/JSON-EPG-format
-        stations  = self.getGuidedata(full=True).get('channels',[])
+        stations = self.getGuidedata(full=True).get('channels',[])
         return {k:v for x in self.poolList(self.buildStation, stations,'programmes') for k,v in x.items()}
         
 
@@ -543,7 +570,11 @@ class PlutoTV(object):
                     "logo"  :(chlogo or LOGO),
                     "preset":stnum,
                     "group" :[category,ADDON_NAME],
-                    "radio" :False}
+                    "radio" :False}#,
+                    #"kodiprops":{"inputstream":inputstream,
+                    #             "%s.manifest_type":"hls"%(inputstream),
+                    #             "http-reconnect":"true"}
+                    
         if favorite: channel['group'].append(LANGUAGE(49012))
         channel['group'] = ';'.join(channel['group'])
         if REAL_SETTINGS.getSettingBool('Build_Favorites') and not favorite: return None
@@ -561,35 +592,40 @@ class PlutoTV(object):
                 except: aired = starttime
                 program = {"start"      :starttime.strftime(DTFORMAT),
                            "stop"       :(starttime + datetime.timedelta(seconds=(int(episode['duration']) // 1000))).strftime(DTFORMAT),
-                           "title"      :listing.get('title',channel['name']),
-                           "description":(episode.get('description','') or xbmc.getLocalizedString(161)),
-                           "subtitle"   :episode.get('name',''),
+                           "title"      :self.cleanString(listing.get('title',channel['name'])),
+                           "description":self.cleanString(episode.get('description','') or xbmc.getLocalizedString(161)),
+                           "subtitle"   :self.cleanString(episode.get('name','')),
                            "genre"      :episode.get('genres',""),
                            "image"      :(episode.get('poster','') or episode.get('thumbnail','') or episode.get('featuredImage',{})).get('path',chfanart),
                            "date"       :aired.strftime('%Y-%m-%d'),
                            "credits"    :"",
                            "stream"     :'plugin://%s/play/vod/%s'%(ADDON_ID,uri)}
+
                 programmes[channel['id']].append(program)
             return programmes
-                       
              
-    def poolList(self, method, items=None, args=None, chunk=25):
-        log("poolList")
+    
+    def cleanString(self, text):
+        return text.replace(' (Embed)','')
+             
+        
+    def poolList(self, func, items=[], args=None, chunk=1): 
         results = []
-        if ENABLE_POOL:
-            pool = ThreadPool(CORES)
-            if args is not None: 
-                results = pool.map(method, zip(items,repeat(args)))
-            elif items: 
-                results = pool.map(method, items)#, chunksize=chunk)
-            pool.close()
-            pool.join()
-        else:
-            if args is not None: 
-                results = [method((item, args)) for item in items]
-            elif items: 
-                results = [method(item) for item in items]
-        return filter(None, results)
+        if SUPPORTS_POOL:
+            try:    
+                pool = ThreadPool(processes=CPU_COUNT)
+                if args is not None: 
+                    results = pool.imap(func, zip(items,repeat(args)), chunksize=chunk)
+                else:
+                    results = pool.imap(func, items, chunksize=chunk)
+                pool.close()
+                pool.join()
+            except Exception as e: 
+                log("poolList, threadPool Failed! %s"%(e), xbmc.LOGERROR)
+                
+        if not results: results = [results.append(func(i)) for i in items]
+        try:    return list(filter(None,results))
+        except: return list(results)
 
 
     def resolveURL(self, id, opt):
@@ -623,10 +659,13 @@ class PlutoTV(object):
         liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name,"duration":epdur})
         liz.setArt({'thumb':data.get('thumbnail',ICON),'fanart':data.get('thumbnail',FANART)})
         liz.setProperty("IsPlayable","true")
+        liz.setProperty('IsInternetStream','true')
+        
         if 'm3u8' in url.lower() and inputstreamhelper.Helper('hls').check_inputstream():
             inputstream = getInputStream()
             liz.setProperty('inputstream',inputstream)
             liz.setProperty('%s.manifest_type'%(inputstream),'hls')
+            liz.setProperty('http-reconnect','true')
             liz.setMimeType('application/vnd.apple.mpegurl')
         xbmcplugin.setResolvedUrl(ROUTER.handle, True, liz)
         
@@ -646,10 +685,14 @@ class PlutoTV(object):
             url = url.replace('deviceType=&','deviceType=web&').replace('deviceMake=&','deviceMake=Chrome&') .replace('deviceModel=&','deviceModel=Chrome&').replace('appName=&','appName=web&')#todo replace with regex!
             log('playVideo, url = %s'%url)
             liz.setPath(url)
+            liz.setProperty("IsPlayable","true")
+            liz.setProperty('IsInternetStream','true')
+        
             if 'm3u8' in liz.getPath().lower() and inputstreamhelper.Helper('hls').check_inputstream():
                 inputstream = getInputStream()
                 liz.setProperty('inputstream',inputstream)
                 liz.setProperty('%s.manifest_type'%(inputstream),'hls')
+                liz.setProperty('http-reconnect','true')
                 liz.setMimeType('application/vnd.apple.mpegurl')
         xbmcplugin.setResolvedUrl(ROUTER.handle, found, liz)
 

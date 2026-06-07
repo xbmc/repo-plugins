@@ -7,15 +7,21 @@
 from __future__ import unicode_literals
 from builtins import str
 import re
+import json
 
 from codequick import Listitem, Resolver, Route
 import urlquick
 
-from resources.lib import resolver_proxy
+from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
 
-URL_ROOT = "https://www.africa24tv.com"
+URL_ROOT = "https://africa24tv.com"
+URL_LIVE = URL_ROOT + '/africa-24-live'
+
+URL_INFOMANIAK = 'https://player.infomaniak.com/playerConfig.php?channel=%s&player=%s'
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Route.register
@@ -166,6 +172,16 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_ROOT)
-    live_id = re.compile(r"youtube\.com\/embed\/(.*?)\"").findall(resp.text)[0]
-    return resolver_proxy.get_stream_youtube(plugin, live_id, False)
+    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse("iframe")
+    url_player = root.get('src')
+    datas = re.search(r'channel\=([0-9]+)\&player\=([0-9]+)', url_player)
+
+    url_json = URL_INFOMANIAK % (datas.group(1), datas.group(2))
+    resp = urlquick.get(url_json, headers=GENERIC_HEADERS, max_age=-1)
+    data_json = json.loads(resp.text)
+    possible_formats = data_json['data']['integrations']
+
+    for video_type in possible_formats:
+        if video_type['type'] == 'hls':
+            return resolver_proxy.get_stream_with_quality(plugin, video_type['url'])

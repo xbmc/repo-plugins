@@ -3,6 +3,7 @@
 import os
 import io
 import sys
+import importlib
 
 import xbmcgui
 
@@ -21,7 +22,7 @@ class ChannelInfo(object):
 
     def __init__(self, guid, name, description, icon, category, path,
                  channel_code=None, sort_order=255, language=None,
-                 ignore=False, fanart=None, poster=None):
+                 ignore=False, fanart=None, poster=None, has_iptv=None):
         """ Creates a ChannelInfo object with basic information for a channel
 
         :param str guid:                        A unique GUID.
@@ -37,6 +38,7 @@ class ChannelInfo(object):
         :param bool ignore:                     Should the channel be ignored? Defaults to False
         :param str fanart:                      A fanart url/path.
         :param str poster:                      A poster url/path.
+        :param str has_iptv:                    True if channel has support for IPTV Manager
 
         """
 
@@ -71,6 +73,7 @@ class ChannelInfo(object):
         self.icon = icon
         self.fanart = fanart
         self.poster = poster
+        self.has_iptv = has_iptv
         self.enabled = False                  # enabled from the settings
         self.visible = False                  # hidden/visible due to country settings
         self.adaptiveAddonSelectable = False  # can the InputStream Adaptive be selected
@@ -80,7 +83,7 @@ class ChannelInfo(object):
         return "{0}-{1}".format(self.sortOrderPerCountry, self.channelName)
 
     def get_channel(self):
-        """ Instantiates a channel from a ChannelInfo object 
+        """ Instantiates a channel from a ChannelInfo object
 
         :returns: an instantiated Channel object based on this ChannelInfo object.
 
@@ -89,12 +92,10 @@ class ChannelInfo(object):
         Logger.trace("Importing module %s from path %s", self.moduleName, self.path)
 
         sys.path.append(self.path)
-        exec("import {}".format(self.moduleName))
-
-        channel_command = '%s.Channel(self)' % (self.moduleName,)
+        channel_module = importlib.import_module(self.moduleName)
         try:
-            Logger.trace("Running command: %s", channel_command)
-            channel = eval(channel_command)
+            Logger.trace(f"Creating channel: {self}")
+            channel = channel_module.Channel(self)
         except:
             Logger.error("Cannot Create channel for %s", self, exc_info=True)
             return None
@@ -113,7 +114,7 @@ class ChannelInfo(object):
 
     def get_kodi_item(self):
         """ Creates an Kodi ListItem object for this channel
-        
+
         :return: a Kodi ListItem with all required properties set.
         :rtype: xbmcgui.ListItem
 
@@ -262,7 +263,8 @@ class ChannelInfo(object):
                 language=channel.get("language", None),
                 ignore=channel.get("ignore", False),
                 fanart=channel.get("fanart", None),
-                poster=channel.get("poster", None)
+                poster=channel.get("poster", None),
+                has_iptv=channel.get("hasIptv", None)
             )
 
             channel_info.firstTimeMessage = channel.get("message", None)

@@ -12,6 +12,7 @@
       "channelcode": "nickelodeon",
       "sortorder": 22,
       "language": "nl",
+      "ignore": true,
       "poster": "nickposter.png",
       "fanart": "nickfanart.jpg"
     },
@@ -28,7 +29,8 @@
       "sortorder": 22,
       "language": "no",
       "poster": "nickposter.png",
-      "fanart": "nickfanart.jpg"
+      "fanart": "nickfanart.jpg",
+      "ignore": true
     },
     {
       "guid": "7C52452A-F2F9-11DD-BE3F-3F7356D89593",
@@ -42,6 +44,24 @@
       "channelcode": "mtvnl",
       "sortorder": 20,
       "language": "nl",
+      "ignore": true,
+      "fanart": "mtvfanart2.jpg",
+      "poster": "mtvposter.png"
+    },
+    {
+      "guid": "55635AAA-183C-11E2-ABEC-36706188709B",
+      "name": "MTV.de",
+      "description": {
+        "en": "Episodes and videos from MTV.de.",
+        "de": "Episoden und Videos von MTV.de.",
+        "nl": "Afleveringen en video's vna MTV.de."
+      },
+      "icon": "mtvnllarge.png",
+      "category": "Video",
+      "channelcode": "mtvde",
+      "sortorder": 20,
+      "language": "de",
+      "ignore": true,
       "fanart": "mtvfanart2.jpg",
       "poster": "mtvposter.png"
     }

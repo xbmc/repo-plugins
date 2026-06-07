@@ -12,7 +12,6 @@
 """
 
 import re
-import threading
 
 from kodi_six import xbmcgui  # pylint: disable=import-error
 
@@ -145,11 +144,11 @@ class SubscriptionManager:  # pylint: disable=too-many-instance-attributes,
         # will need the info anyway
         msg = self.msg(players)
         if self.subscribers:
-            with threading.RLock():
-                is_nav = len(players) == 0
-                subs = self.subscribers.values()
-                for sub in subs:
-                    sub.send_update(msg, is_nav)
+            is_nav = len(players) == 0
+            subs = self.subscribers.values()
+            for sub in subs:
+                sub.send_update(msg, is_nav)
+
         self.notify_server(players)
 
         return True
@@ -196,25 +195,22 @@ class SubscriptionManager:  # pylint: disable=too-many-instance-attributes,
 
     def add_subscriber(self, data):
         sub = Subscriber(data, self.request_manager, self)
-        with threading.RLock():
-            self.subscribers[sub.uuid] = sub
+        self.subscribers[sub.uuid] = sub
         return sub
 
     def remove_subscriber(self, uuid):
-        with threading.RLock():
-            subs = self.subscribers.values()
-            for sub in subs:
-                if uuid in [sub.uuid, sub.host]:
-                    sub.cleanup()
-                    del self.subscribers[sub.uuid]
+        subs = self.subscribers.values()
+        for sub in subs:
+            if uuid in [sub.uuid, sub.host]:
+                sub.cleanup()
+                del self.subscribers[sub.uuid]
 
     def cleanup(self):
-        with threading.RLock():
-            subs = self.subscribers.values()
-            for sub in subs:
-                if sub.age > 30:
-                    sub.cleanup()
-                    del self.subscribers[sub.uuid]
+        subs = self.subscribers.values()
+        for sub in subs:
+            if sub.age > 30:
+                sub.cleanup()
+                del self.subscribers[sub.uuid]
 
     def get_player_properties(self, player_id):
         info = {}

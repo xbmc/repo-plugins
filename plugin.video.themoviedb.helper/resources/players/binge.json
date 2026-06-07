@@ -2,7 +2,9 @@
     "name"              : "BiNGE",
     "plugin"            : "slyguy.binge",
     "priority"          : 100,
+    "provider"          : "BINGE",
     "is_resolvable"     : "true",
+    "make_playlist"     : "true",
     "assert"            : {
                             "play_movie":       ["title", "year"],
                             "play_episode":     ["showname", "season", "episode"],
@@ -10,23 +12,15 @@
                             "search_episode":   ["showname"]
                           },
     "play_movie"        : [
-                            "plugin://slyguy.binge/?_=search",
-                            {"keyboard": "{title}"},
+                            "plugin://slyguy.binge/?_=search&query={title_url}",
                             {"title": "{title}", "year": "{year}"}
                           ],
     "play_episode"      : [
-                            "plugin://slyguy.binge/?_=search",
-                            {"keyboard": "{showname}"},
+                            "plugin://slyguy.binge/?_=search&query={showname_url}",
                             {"title": "{showname}"},
                             {"title": "Season {season}"},
                             {"season": "{season}", "episode": "{episode}"}
                           ],
-    "search_movie"      : [
-                            "plugin://slyguy.binge/?_=search",
-                            {"keyboard": "{title}"}
-                          ],
-    "search_episode"    : [
-                            "plugin://slyguy.binge/?_=search",
-                            {"keyboard": "{showname}"}
-                          ]
+    "search_movie"      : "plugin://slyguy.binge/?_=search&query={title_url}",
+    "search_episode"    : "plugin://slyguy.binge/?_=search&query={showname_url}"
 }

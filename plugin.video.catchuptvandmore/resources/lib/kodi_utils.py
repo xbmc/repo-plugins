@@ -6,6 +6,7 @@
 
 from __future__ import unicode_literals
 import binascii
+import json
 import pickle
 import sys
 try:
@@ -137,3 +138,47 @@ def get_params_in_query(query_string):
         params.update(unpickled)
 
     return params
+
+
+def get_setting(key):
+    params = {
+        'jsonrpc': '2.0',
+        'id': 1,
+        'method': 'Settings.GetSettingValue',
+        'params': {
+            'setting': key,
+        },
+    }
+    request = xbmc.executeJSONRPC(json.dumps(params))
+    result = json.loads(request)
+    return result.get('result', {}).get('value')
+
+
+def get_proxy():
+    proxy_active = get_setting('network.usehttpproxy')
+    proxy_type = get_setting('network.httpproxytype')
+    if not proxy_active:
+        return
+
+    proxy_types = ['http', 'socks4', 'socks4a', 'socks5', 'socks5h']
+
+    proxy = {
+        'scheme': proxy_types[proxy_type],
+        'server': get_setting('network.httpproxyserver'),
+        'port': get_setting('network.httpproxyport'),
+        'username': get_setting('network.httpproxyusername'),
+        'password': get_setting('network.httpproxypassword'),
+    }
+    if (proxy['username'] and proxy['password']
+            and proxy['server'] and proxy['port']):
+        proxy_address = (
+            '{scheme}://{username}:{password}@{server}:{port}'.format(**proxy))
+    elif proxy['username'] and proxy['server'] and proxy['port']:
+        proxy_address = '{scheme}://{username}@{server}:{port}'.format(**proxy)
+    elif proxy['server'] and proxy['port']:
+        proxy_address = '{scheme}://{server}:{port}'.format(**proxy)
+    elif proxy['server']:
+        proxy_address = '{scheme}://{server}'.format(**proxy)
+    else:
+        return
+    return proxy_address

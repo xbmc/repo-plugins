@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.ampache" version="2.0.2+matrix.1" name="Ampache" provider-name="lusum">
+<addon id="plugin.audio.ampache" version="3.2.6+matrix.1" name="Ampache" provider-name="lusum">
     <requires>
-        <import addon="script.module.future" version="0.17.1"/>
-        <import addon="xbmc.python" version="3.0.0"/>
+      <import addon="script.module.future" version="1.0.0"/>
+      <import addon="xbmc.python" version="3.0.0"/>
     </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>audio</provides>
   </extension>
   <extension point="xbmc.python.module" library="resources/lib/"/>
-  <extension point="xbmc.service" library="resources/lib/service.py" />
+  <extension point="xbmc.service" library="service.py" />
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">Stream music from Ampache XML-API</summary>
     <summary lang="de_DE">Streame Musik von der Ampache XML-API</summary>
     <summary lang="it_IT">Streaming Musicale per l'XML-API di Ampache</summary>
+    <summary lang="es_ES">Retransmitir música a través de la XML-API de Ampache</summary>
+    <summary lang="sv_SE">Streama musik från Ampache XML-API</summary>
     <description lang="en_GB">A web based audio/video streaming application and file manager allowing you to access your music and videos from anywhere, using almost any internet enabled device.</description>
+    <description lang="sv_SE">En webbaserad applikation för strömning av ljud och video samt filhantering som gör att du kan komma åt din musik och dina videor var du än befinner dig, med nästan alla internetanslutna enheter.</description>
     <platform>all</platform>
     <forum>https://forum.kodi.tv/showthread.php?tid=230736</forum>
-    <website>http://ampache.org/</website>
+    <website>https://ampache.org/</website>
     <license>GPL-2.0-or-later</license>
     <assets>
         <icon>resources/icon.png</icon>

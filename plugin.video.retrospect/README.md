@@ -1,9 +1,9 @@
 # Retrospect - Public GIT Repository #
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/retrospect-addon/plugin.video.retrospect)](https://github.com/retrospect-addon/plugin.video.retrospect/releases)
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/retrospect-addon/plugin.video.retrospect/Unit%20Tests/master)](https://github.com/retrospect-addon/plugin.video.retrospect/actions)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=retrospect-addon:plugin.video.retrospect&metric=alert_status)](https://sonarcloud.io/dashboard?id=retrospect-addon:plugin.video.retrospect)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/retrospect-addon/plugin.video.retrospect/unittests.yml?branch=master)](https://github.com/retrospect-addon/plugin.video.retrospect/actions)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=retrospect-addon-plugin.video.retrospect&metric=alert_status)](https://sonarcloud.io/dashboard?id=retrospect-addon-plugin.video.retrospect)
 [![License](https://img.shields.io/github/license/retrospect-addon/plugin.video.retrospect)](https://github.com/retrospect-addon/plugin.video.retrospect/blob/master/LICENSE.md)
-[![Python](https://img.shields.io/badge/python-2.7%20%7C%203.6-blue?logo=python)](https://kodi.tv/article/attention-addon-developers-migration-python-3)
+[![Python](https://img.shields.io/badge/python-3.8-blue?logo=python)](https://kodi.tv/article/attention-addon-developers-migration-python-3)
 [![Weblate](https://kodi.weblate.cloud/widgets/kodi-add-ons-video/-/plugin-video-retrospect/svg-badge.svg)](https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/)
 
 This repository holds the main code for Retrospect. For more information on bug reporting, please visit https://github.com/retrospect-addon/plugin.video.retrospect or https://github.com/retrospect-addon/plugin.video.retrospect/wiki.
@@ -22,8 +22,35 @@ Starting from Kodi Leia (v18), you can easily install Retrospect from the offici
 
 ![alt text](./resources/media/retrospect01.jpg "The Retrospect information screen")
 
-### Kodi Krypton    
+### Kodi Krypton
 We have a -1/+1 Kodi release policy: we support the previous, the current and the future release of Kodi. So with the release of Kodi Matrix, the support for Kodi Krypton has been removed.
+
+## Automation of Retrospect
+Listing of folders or playing of media can be automated for Retrospect. In order for this to work, you will need to create _shortcuts_ for the folders and/or videos you want to automate. This can be done as follows:
+
+- On each folder or video item you can go to:
+  - Retrospect Favourites.
+  - Add Shortcut.
+  - Provide a `[simple name]`.
+  - Remember the `simple name` as you need it later.
+- Then you can use this url to directly open or play the shortcut:
+  - `plugin://plugin.video.retrospect/?action=openshortcut&shortcut=[simple name]`
+
+Listing a folder can be done by caling the Kodi API `Addons.ExecuteAddon` with the given shortcut url. Media can be played using the `Player.Open` API.
+
+If you were to use the Kodi JSON-RPC API (documented [here](https://kodi.wiki/view/JSON-RPC_API)) the following are your options:
+
+1. You could start the playback of a media file with `Player.Open`:
+
+```shell
+curl -X POST -H "content-type:application/json" http://<kodi-ip>:<kodi-port>/jsonrpc -d '{"jsonrpc": "2.0", "method": "Player.Open", "params": {"item": {"file": "plugin://plugin.video.retrospect/?action=openshortcut&shortcut=<shortcut-name>"}}, "id": 1}'
+```
+2. Or open a shortcut to a folder with `Addons.ExecuteAddon`:
+```shell
+curl -X POST -H "content-type:application/json" http://<kodi-ip>:<kodi-port>/jsonrpc -d '{"jsonrpc": "2.0", "method": "Addons.ExecuteAddon", "params": {"addonid": "plugin.video.retrospect","params": {"action": "openshortcut","shortcut": "<shortcut-name>" }}, "id": 1}'**
+```
+
+Replace `<shortcut-name>`, `<kodi-ip>` and `<kodi-port>` with the correct values.
 
 ## Contributing
 You can help develop Retrospect via our [Github](https://github.com/retrospect-addon/plugin.video.retrospect) page and/or help translating Retrospect via the [Kodi Add-on Weblate](https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/).
@@ -52,11 +79,11 @@ As more and more people are starting to make channels for Retrospect, we want to
 The following persons have supported Retrospect by donating (the list is sorted chronologically):
 
 - David Testas
-- Stef Olde Scholtenhuis 
-- Gerhard ten Hove 
-- J.C. Frerichs 
-- Kenny Horbach 
-- Laurens De Graaff 
+- Stef Olde Scholtenhuis
+- Gerhard ten Hove
+- J.C. Frerichs
+- Kenny Horbach
+- Laurens De Graaff
 - Stehpan van Rooij
 - Niels Walta
 - Rene Wieldraaijer
@@ -64,42 +91,42 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Anton Vanhoucke
 - Niels van den Boogaard
 - Ferry Plekkenpol
-- Michel Bos 
-- M. Spaans 
-- Rogier Duurkoop 
-- Jonthe Grotenhuis 
-- Maurice van Trijffel 
-- Bjorn Stam 
-- Prism Open Source 
-- Serge Kapitein 
-- Robbert Hilgeman 
-- Jorn Luttikhold 
+- Michel Bos
+- M. Spaans
+- Rogier Duurkoop
+- Jonthe Grotenhuis
+- Maurice van Trijffel
+- Bjorn Stam
+- Prism Open Source
+- Serge Kapitein
+- Robbert Hilgeman
+- Jorn Luttikhold
 - Tom de Goeij
 - Gecko (Martijn Pet)
-- Henri Lier 
-- Edwin Endstra 
-- Fabian Labohm 
-- Jeroen van den Burg 
-- Ronald Geerlings 
-- Simon Algera 
-- Floris Dirkzwager 
-- Jurjen van Dijk 
-- J. Tebbes 
-- Dennis808 
-- Joost Wouterse 
-- Slashbot28 
-- Jasper Westerhof 
-- Jacques Overdijk 
+- Henri Lier
+- Edwin Endstra
+- Fabian Labohm
+- Jeroen van den Burg
+- Ronald Geerlings
+- Simon Algera
+- Floris Dirkzwager
+- Jurjen van Dijk
+- J. Tebbes
+- Dennis808
+- Joost Wouterse
+- Slashbot28
+- Jasper Westerhof
+- Jacques Overdijk
 - Ramon Broekhuijzen
 - Eymert Versteegt
-- Rick van Venrooij 
-- Frans Hondeman 
-- RSJ Kok 
-- Jamie Janssen 
-- Thomas Novin 
-- Emiel Havinga 
-- De php programmeur 
-- Tijs Gerritsen  
+- Rick van Venrooij
+- Frans Hondeman
+- RSJ Kok
+- Jamie Janssen
+- Thomas Novin
+- Emiel Havinga
+- De php programmeur
+- Tijs Gerritsen
 - Bonny Gijzen
 - Dennis van Kapel
 - Cameq
@@ -130,7 +157,7 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Patrik Johansson
 - Willy van Knippenberg
 - Stephan van Rooij
-- D J vd Wielen 
+- D J vd Wielen
 - Erik Bots
 - Alexander Jongeling
 - Robert Thörnberg
@@ -157,7 +184,7 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Arnd Brugman
 - David Kvarnberg
 - Jasper van den Broek
-- Jeroen Koning 
+- Jeroen Koning
 - Saskia Dijk
 - Erik Hond
 - Frank Hart
@@ -440,7 +467,7 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Peter Notebaert
 - Mjm De Frankrijker
 - Kris Provoost (via Brickshop.nl)
-- Lord_Drubibu (via World of Tanks) 
+- Lord_Drubibu (via World of Tanks)
 - Christian Johansson
 - Johan Johansson
 - Tpj Mulder
@@ -459,7 +486,7 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Cor Kuin
 - Ingos Data o PPDesign
 - Jules Harms
-- Reinier 
+- Reinier
 - Johan Pieter Zoetekouw
 - Michiel Modderman
 - Nick Corthals
@@ -477,3 +504,53 @@ The following persons have supported Retrospect by donating (the list is sorted 
 - Jasper-Laurens Van Daele
 - Olle Brink
 - Magnus Bertilsson
+- Per-Eric Larsson
+- Arjen Heidinga (Monthly)
+- Jim Altis
+- Jelte Veldstra
+- Jules Harms
+- Peter Vollebregt
+- Danny Sikke
+- Stefan Abramsson
+- Ingos Data o PPDesign
+- Jeroen L. Hendrix
+- Magnus Holmquist
+- Martin Skillingshage
+- Olle Damgaard
+- T Kuipers
+- Ingemar Pahtajärvi
+- Sape Sikkema
+- Ffj Winkelman
+- Magnus Holmquist
+- Pascal Rutgers
+- Ruben Van Dijk
+- Egbert Van der Haring
+- P G M Schoonderwoerd
+- Jonas Koekenbier
+- Danny Sikke
+- M J Poortman
+- Robert Wijnands
+- Roger Ekholm
+- Magnus Holmquist
+- Lars-Gunnar Carlsson
+- Daniel Polders (Monthly)
+- Tim Hosman
+- Tobias Skoglund
+- M J Poortman
+- Steven Hoving
+- Remco Wulms
+- A Majoor
+- Dimitri Dekker
+- Gfp Van Dijck
+- Matthijs Droes
+- John L Lardee
+- Philip Johansson
+- Nancy Creemers
+- Daniel Enochsson
+- Anders Björk
+- Sape Sikkema
+- Jules Harms
+- Aaj Majoor
+- Marc Luijten
+- J. Konings
+- Reinier

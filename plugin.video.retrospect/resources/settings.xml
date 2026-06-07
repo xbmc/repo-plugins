@@ -33,6 +33,13 @@
         <setting id="hide_types" type="enum" label="30082" lvalues="30083|30084" default="1" />
         <setting id="geo_region" type="select" label="30085" lvalues="30074|30306|30309|30308|30307|30303|30304|30301|30305|30302" />
         <setting id="geo_label" type="text" label="30073" enable="false" />
+
+        <setting type="lsep" label="30109" />
+        <setting label="30110" type="action" action="InstallAddon(service.iptv.manager)" option="close" visible="!System.HasAddon(service.iptv.manager)"/>
+        <setting label="30111" type="bool" id="iptv.enabled" default="true" visible="System.HasAddon(service.iptv.manager)" />
+        <setting label="30112" type="action" action="Addon.OpenSettings(service.iptv.manager)" enable="eq(-1,true)" option="close" visible="System.HasAddon(service.iptv.manager)" subsetting="true"/>
+        <setting id="iptv.channels_uri" default="plugin://plugin.video.retrospect/?action=iptvmanager&amp;request=streams" visible="false"/>
+        <setting id="iptv.epg_uri" default="plugin://plugin.video.retrospect/?action=iptvmanager&amp;request=epg" visible="false"/>
     </category>
 
     <category id="channels" label="30040">
@@ -42,12 +49,11 @@
 
         <setting type="lsep" label="30060" />
         <!--<setting type="action" label="30598" action="RunScript(special://home/addons/plugin.video.retrospect/menu_enable.py)" option="close" />-->
-    
+
         <!-- start of channel selection -->
         <setting id="show_other" type="bool" label="30300" subsetting="false" default="true" />
         <setting id="show_belgium" type="bool" label="30306" subsetting="false" default="true" />
         <setting id="show_german" type="bool" label="30309" subsetting="false" default="true" />
-        <setting id="show_danish" type="bool" label="30310" subsetting="false" default="true" />
         <setting id="show_estonia" type="bool" label="30308" subsetting="false" default="true" />
         <setting id="show_engb" type="bool" label="30307" subsetting="false" default="true" />
         <setting id="show_lithuanian" type="bool" label="30303" subsetting="false" default="true" />
@@ -61,46 +67,48 @@
     <category id="channelsettings" label="30032">
         <setting type="lsep" label="30063" />
         <!-- start of active channels -->
-        <setting id="config_channel" type="select" label="30040" values="NPO Start|RTL XL [RTL 4,5,7 &amp; 8]|Kijk.nl|Vier|Vijf|Zes|VTM.be|Stievie|VRT NU|Ketnet|SVT Play|Kanal 5|discovery plus|Kanal 9|Kanal 11" />
+        <setting id="config_channel" type="select" label="30040" values="NPO Start|Videoland|Kijk.nl|Play.tv|VTM.be|Stievie|VRT NU|SVT Play|UR Play|TV4 Play" />
         <!-- end of active channels -->
 
         <setting type="lsep" label="30032" />
         <setting id="channel_00000000-0000-0000-0000-000000000000_none" label="30034" type="text" enable="false" visible="eq(-2,)" />
 
         <!-- begin of channel settings -->
-        <!-- chn_ketnet.py -->
-        <setting id="channel_756FFEC8-B6BA-11E0-898D-1F434824019B_hls_over_dash" label="30099" type="bool" default="" visible="eq(-3,Ketnet)" />
         <!-- chn_kijknl.py -->
-        <setting id="channel_271456ED-6E84-4FAB-A7AF-77A1C669F942_hls_over_dash" label="30099" type="bool" default="false" visible="eq(-4,Kijk.nl)" />
+        <setting id="channel_271456ED-6E84-4FAB-A7AF-77A1C669F942_hls_over_dash" label="30099" type="bool" default="false" visible="eq(-3,Kijk.nl)" />
         <!-- chn_nos2010.py -->
-        <setting id="channel_ED8FDB9C-3870-11E2-B1C2-192A6288709B_username" type="text" label="30094" default="" visible="eq(-5,NPO Start)" />
-        <setting id="channel_ED8FDB9C-3870-11E2-B1C2-192A6288709B_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=channel_ED8FDB9C-3870-11E2-B1C2-192A6288709B_password&amp;settingname=NPO.nl password&amp;tabfocus=102)" option="close" visible="eq(-6,NPO Start)" />
-        <setting id="channel_ED8FDB9C-3870-11E2-B1C2-192A6288709B_password" default="" visible="eq(-7,NPO Start)" />
-        <!-- chn_rtl.py -->
-        <setting id="channel_15D92364-42F4-11DD-AF9B-7BFF55D89593_rtlxl_username" type="text" label="30094" default="" visible="eq(-8,RTL XL [RTL 4,5,7 &amp; 8])" />
-        <setting id="channel_15D92364-42F4-11DD-AF9B-7BFF55D89593_rtlxl_password" default="" visible="eq(-9,RTL XL [RTL 4,5,7 &amp; 8])" />
-        <setting id="channel_15D92364-42F4-11DD-AF9B-7BFF55D89593_rtlxl_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=channel_15D92364-42F4-11DD-AF9B-7BFF55D89593_rtlxl_password&amp;settingname=RTL XL&amp;tabfocus=102)" option="close" visible="eq(-10,RTL XL [RTL 4,5,7 &amp; 8])" />
-        <!-- chn_sbs.py -->
-        <setting id="dplayse_username" type="text" label="30094" default="" visible="eq(-11,Kanal 11)|eq(-11,Kanal 9)|eq(-11,discovery plus)|eq(-11,Kanal 5)" />
-        <setting id="dplayse_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=dplayse_password&amp;settingname=Dplay password&amp;tabfocus=102)" option="close" visible="eq(-12,Kanal 11)|eq(-12,Kanal 9)|eq(-12,discovery plus)|eq(-12,Kanal 5)" />
-        <setting id="dplayse_password" default="" visible="eq(-13,Kanal 11)|eq(-13,Kanal 9)|eq(-13,discovery plus)|eq(-13,Kanal 5)" />
+        <setting id="channel_ED8FDB9C-3870-11E2-B1C2-192A6288709B_username" type="text" label="30094" default="" visible="eq(-4,NPO Start)" />
+        <setting id="channel_ED8FDB9C-3870-11E2-B1C2-192A6288709B_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=channel_ED8FDB9C-3870-11E2-B1C2-192A6288709B_password&amp;settingname=NPO.nl password&amp;tabfocus=102)" option="close" visible="eq(-5,NPO Start)" />
+        <setting id="channel_ED8FDB9C-3870-11E2-B1C2-192A6288709B_password" default="" visible="eq(-6,NPO Start)" />
+        <setting id="channel_ED8FDB9C-3870-11E2-B1C2-192A6288709B_show_future" type="bool" default="true" label="30125" visible="eq(-7,NPO Start)" />
         <!-- chn_svt.py -->
-        <setting id="channel_3AF9C61E-88B2-11E1-A03F-08F6BAE59B18_show_programs_folder" label="30582" type="bool" default="true" visible="eq(-14,SVT Play)" />
+        <setting id="channel_3AF9C61E-88B2-11E1-A03F-08F6BAE59B18_show_programs_folder" label="30582" type="bool" default="true" visible="eq(-8,SVT Play)" />
+        <setting id="channel_3AF9C61E-88B2-11E1-A03F-08F6BAE59B18_show_accessibility_videos" label="30587" type="bool" default="true" visible="eq(-9,SVT Play)" />
+        <!-- chn_tv4se.py -->
+        <setting id="set_refresh_token" label="30113" type="action" action="RunScript(plugin.video.retrospect, 0, ?channel=channel.se.tv4se&amp;channelcode=tv4segroup&amp;action=execute&amp;command=fetch_token)" option="close" visible="eq(-10,TV4 Play)" />
+        <!-- chn_urplay.py -->
+        <setting id="channel_9F0F57D6-B897-11E0-AF2E-92314924019B_mainlist_pages" type="number" label="30586" default="25" visible="eq(-11,UR Play)" />
+        <!-- chn_videolandnl.py -->
+        <setting id="channel_C5182B93-6B71-44BE-948F-0B74E6C2BAA6_videolandnl_username" type="text" label="30094" default="" visible="eq(-12,Videoland)" />
+        <setting id="channel_C5182B93-6B71-44BE-948F-0B74E6C2BAA6_videolandnl_password" default="" visible="eq(-13,Videoland)" />
+        <setting id="channel_C5182B93-6B71-44BE-948F-0B74E6C2BAA6_videolandnl_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=channel_C5182B93-6B71-44BE-948F-0B74E6C2BAA6_videolandnl_password&amp;settingname=Videoland&amp;tabfocus=102)" option="close" visible="eq(-14,Videoland)" />
+        <setting id="channel_C5182B93-6B71-44BE-948F-0B74E6C2BAA6_filter_premium" type="select" lvalues="30126|30127|30128" default="0" label="30081" visible="eq(-15,Videoland)" />
+        <setting id="channel_C5182B93-6B71-44BE-948F-0B74E6C2BAA6_re-authenticate" label="30129" type="action" action="RunScript(plugin.video.retrospect, 0, ?channel=channel.videoland.videolandnl&amp;action=execute&amp;command=log_off)" option="close" visible="eq(-16,Videoland)" />
         <!-- chn_vier.py -->
-        <setting id="viervijfzes_username" type="text" label="30094" default="" visible="eq(-15,Zes)|eq(-15,Vijf)|eq(-15,Vier)" />
-        <setting id="viervijfzes_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=viervijfzes_password&amp;settingname=Vier/Vijf/Zes.be password&amp;tabfocus=102)" option="close" visible="eq(-16,Zes)|eq(-16,Vijf)|eq(-16,Vier)" />
-        <setting id="viervijfzes_password" default="" visible="eq(-17,Zes)|eq(-17,Vijf)|eq(-17,Vier)" />
-        <setting id="viervijfzes_refresh_token" default="" visible="eq(-18,Zes)|eq(-18,Vijf)|eq(-18,Vier)" />
+        <setting id="viervijfzes_username" type="text" label="30094" default="" visible="eq(-17,Play.tv)" />
+        <setting id="viervijfzes_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=viervijfzes_password&amp;settingname=Vier/Vijf/Zes.be password&amp;tabfocus=102)" option="close" visible="eq(-18,Play.tv)" />
+        <setting id="viervijfzes_password" default="" visible="eq(-19,Play.tv)" />
+        <setting id="viervijfzes_refresh_token" default="" visible="eq(-20,Play.tv)" />
         <!-- chn_vrtnu.py -->
-        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_username" label="30094" type="text" default="" visible="eq(-19,VRT NU)" />
-        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=channel_F530A9EC-3C0D-49B6-96C2-480273417460_password&amp;settingname=VRT NU password&amp;tabfocus=102)" option="close" visible="eq(-20,VRT NU)" />
-        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_password" default="" visible="eq(-21,VRT NU)" />
-        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_hls_over_dash" label="30099" type="bool" default="" visible="eq(-22,VRT NU)" />
+        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_username" label="30094" type="text" default="" visible="eq(-21,VRT NU)" />
+        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=channel_F530A9EC-3C0D-49B6-96C2-480273417460_password&amp;settingname=VRT NU password&amp;tabfocus=102)" option="close" visible="eq(-22,VRT NU)" />
+        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_password" default="" visible="eq(-23,VRT NU)" />
+        <setting id="channel_F530A9EC-3C0D-49B6-96C2-480273417460_hls_over_dash" label="30099" type="bool" default="" visible="eq(-24,VRT NU)" />
         <!-- chn_vtmbe.py -->
-        <setting id="mediaan_username" type="text" label="30094" default="" visible="eq(-23,Stievie)|eq(-23,VTM.be)" />
-        <setting id="mediaan_password" default="" visible="eq(-24,Stievie)|eq(-24,VTM.be)" />
-        <setting id="mediaan_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=mediaan_password&amp;settingname=Mediaan Wachtwoord.be&amp;tabfocus=102)" option="close" visible="eq(-25,Stievie)|eq(-25,VTM.be)" />
-        <setting id="mediaan_signature" default="" visible="eq(-26,Stievie)|eq(-26,VTM.be)" />
+        <setting id="mediaan_username" type="text" label="30094" default="" visible="eq(-25,Stievie)|eq(-25,VTM.be)" />
+        <setting id="mediaan_password" default="" visible="eq(-26,Stievie)|eq(-26,VTM.be)" />
+        <setting id="mediaan_password_set" label="30093" type="action" action="RunScript(plugin.video.retrospect, 0, ?action=encryptsetting&amp;settingid=mediaan_password&amp;settingname=Mediaan Wachtwoord.be&amp;tabfocus=102)" option="close" visible="eq(-27,Stievie)|eq(-27,VTM.be)" />
+        <setting id="mediaan_signature" default="" visible="eq(-28,Stievie)|eq(-28,VTM.be)" />
         <!-- end of channel settings -->
     </category>
 
@@ -110,7 +118,7 @@
         <setting id="empty_folder" type="select" label="30075" default="2" lvalues="30076|30077|30078" />
         <setting id="folder_prefix" type="text" label="30043" default="" />
         <setting id="hide_fanart" type="bool" label="30086" default="false" />
-        <setting id="use_thumbs_as_fanart" type="bool" label="30088" default="false" />
+        <setting id="use_thumbs_as_fanart" type="bool" label="30088" default="true" />
         <setting id="ignore_ssl_errors" type="bool" label="30569" default="false" />
         <setting id="http_cache" type="bool" label="30031" default="true" />
         <setting id="cleanup_retrospect" type="action" label="30604" action="RunScript(plugin.video.retrospect, 0, ?action=cleanup)"  option="close" />

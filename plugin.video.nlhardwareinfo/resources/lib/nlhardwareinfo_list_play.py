@@ -17,7 +17,7 @@ from time import strptime
 import xbmcgui
 import xbmcplugin
 
-from .nlhardwareinfo_const import LANGUAGE, IMAGES_PATH, HEADERS, convertToUnicodeString, log, getSoup
+from resources.lib.nlhardwareinfo_const import LANGUAGE, IMAGES_PATH, HEADERS, convertToUnicodeString, log, getSoup
 
 
 #

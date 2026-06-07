@@ -5,12 +5,10 @@ import os
 import re
 from operator import itemgetter
 from resources.lib.ipwww_common import translation, AddMenuEntry, OpenURL, \
-                                       CheckLogin, CreateBaseDirectory
+                                       CheckLogin, CreateBaseDirectory, GeoBlockedError, ProgressDlg
 
-major_version = sys.version_info.major
 import xbmc
-if major_version == 3:
-    import xbmcvfs
+import xbmcvfs
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
@@ -19,319 +17,327 @@ import json
 
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 
+
+def GetJWT(url):
+    html = OpenURL(url)
+    try:
+        match = re.search(r'<script> window.__PRELOADED_STATE__ = (.*?);\s*</script>', html, re.DOTALL)
+        if match:
+            json_data = json.loads(match[1])
+            if 'smp' in json_data:
+                if 'liveStreamJwt' in json_data['smp']:
+                   return json_data['smp']['liveStreamJwt']
+    except:
+        pass
+    return None
+
+
 def GetAtoZPage(page_url, just_episodes=False):
     """   Generic Radio page scraper.   """
 
-    pDialog = xbmcgui.DialogProgressBG()
-    pDialog.create(translation(30319))
-    html = OpenURL(page_url)
-    total_pages = 1
-    current_page = 1
-    page_range = list(range(1))
-    paginate = re.search(r'<ol class="pagination">.*?</ol>', html, re.DOTALL)
-    next_page = 1
-    if paginate:
+    with ProgressDlg(translation(30319)) as pDialog:
+        html = OpenURL(page_url)
+        total_pages = 1
+        current_page = 1
+        page_range = list(range(1))
+        paginate = re.search(r'<ol class="pagination">.*?</ol>', html, re.DOTALL)
+        next_page = 1
+        if paginate:
+            if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
+                current_page_match = re.search(r'page=(\d*)', page_url)
+                if current_page_match:
+                    current_page = int(current_page_match.group(1))
+                page_range = list(range(current_page, current_page+1))
+                next_page_match = re.search(r'<li class="pagination__next"><a href="(.*?page=)(.*?)">', paginate.group(0))
+                if next_page_match:
+                    page_base_url = next_page_match.group(1)
+                    next_page = int(next_page_match.group(2))
+                else:
+                    next_page = current_page
+                page_range = list(range(current_page, current_page+1))
+            else:
+                pages = re.findall(r'<li.+?class="pagination__page.*?</li>',paginate.group(0),re.DOTALL)
+                if pages:
+                    last = pages[-1]
+                    last_page = re.search(r'<a.+?href="(.*?=)(.*?)"',last)
+                    page_base_url = page_url+last_page.group(1)
+                    total_pages = int(last_page.group(2))
+                page_range = list(range(1, total_pages+1))
+
+        for page in page_range:
+
+            if page > current_page:
+                page_url = page_base_url + str(page)
+                html = OpenURL(page_url)
+
+            masthead_title = ''
+            masthead_title_match = re.search(r'<div.+?id="programmes-main-content".*?<span property="name">(.+?)</span>', html)
+            if masthead_title_match:
+                masthead_title = masthead_title_match.group(1)
+            else:
+                alternative_masthead_title_match = re.search(r'<div class="br-masthead__title">.*?<a href="[^"]+">([^<]+?)</a>', html, re.M | re.S)
+                if alternative_masthead_title_match:
+                    masthead_title = alternative_masthead_title_match.group(1)
+
+            list_item_num = 1
+
+            programmes = html.split('<li class="grid 1/1 atoz-title">')
+            for programme in programmes:
+
+                if not re.search(r'programme--radio', programme):
+                    continue
+
+                series_id = ''
+                series_id_match = re.search(r'/programmes/(.+?)/episodes/player', programme)
+                if series_id_match:
+                    series_id = series_id_match.group(1)
+
+                programme_id = ''
+                programme_id_match = re.search(r'data-pid="(.+?)"', programme)
+                if programme_id_match:
+                    programme_id = programme_id_match.group(1)
+
+                name = ''
+                name_match = re.search(r'<span class="programme__title delta"><span>(.+?)</span>', programme)
+                if name_match:
+                    name = name_match.group(1)
+                else:
+                    alternative_name_match = re.search(r'<meta property="name" content="([^"]+?)"', programme)
+                    if alternative_name_match:
+                        name = alternative_name_match.group(1)
+
+                image = ''
+                image_match = re.search(r'data-src="(.+?)" />', programme)
+                if image_match:
+                    image = image_match.group(1)
+
+                synopsis = ''
+                synopsis_match = re.search(r'p class="programme__synopsis.*?<span>(.+?)<\/span>', programme)
+                if synopsis_match:
+                    synopsis = synopsis_match.group(1)
+
+                station = ''
+                station_match = re.search(r'<p class="programme__service micro text--subtle">(.+?)<\/p>', programme)
+                if station_match:
+                    station = station_match.group(1).strip()
+
+                series_title = "[B]%s - %s[/B]" % (station, name)
+                if just_episodes:
+                    title = "[B]%s[/B] - %s" % (masthead_title, name)
+                else:
+                    title = "[B]%s[/B] - %s" % (station, name)
+
+                if series_id:
+                    AddMenuEntry(series_title, series_id, 131, image, synopsis, '')
+                elif programme_id: #TODO maybe they are not always mutually exclusive
+                    url = "https://www.bbc.co.uk/sounds/play/%s" % programme_id
+                    CheckAutoplay(title, url, image, ' ', '')
+
+                percent = int(100*(page+list_item_num/len(programmes))/total_pages)
+                pDialog.update(percent,translation(30319),name)
+
+                list_item_num += 1
+
+            percent = int(100*page/total_pages)
+            pDialog.update(percent,translation(30319))
+
+
         if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
-            current_page_match = re.search(r'page=(\d*)', page_url)
-            if current_page_match:
-                current_page = int(current_page_match.group(1))
-            page_range = list(range(current_page, current_page+1))
-            next_page_match = re.search(r'<li class="pagination__next"><a href="(.*?page=)(.*?)">', paginate.group(0))
-            if next_page_match:
-                page_base_url = next_page_match.group(1)
-                next_page = int(next_page_match.group(2))
-            else:
-                next_page = current_page
-            page_range = list(range(current_page, current_page+1))
-        else:
-            pages = re.findall(r'<li.+?class="pagination__page.*?</li>',paginate.group(0),re.DOTALL)
-            if pages:
-                last = pages[-1]
-                last_page = re.search(r'<a.+?href="(.*?=)(.*?)"',last)
-                page_base_url = page_url+last_page.group(1)
-                total_pages = int(last_page.group(2))
-            page_range = list(range(1, total_pages+1))
+            if current_page < next_page:
+                page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
+                AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 138, '', '', '')
 
-    for page in page_range:
-
-        if page > current_page:
-            page_url = page_base_url + str(page)
-            html = OpenURL(page_url)
-
-        masthead_title = ''
-        masthead_title_match = re.search(r'<div.+?id="programmes-main-content".*?<span property="name">(.+?)</span>', html)
-        if masthead_title_match:
-            masthead_title = masthead_title_match.group(1)
-        else:
-            alternative_masthead_title_match = re.search(r'<div class="br-masthead__title">.*?<a href="[^"]+">([^<]+?)</a>', html, re.M | re.S)
-            if alternative_masthead_title_match:
-                masthead_title = alternative_masthead_title_match.group(1)
-
-        list_item_num = 1
-
-        programmes = html.split('<li class="grid 1/1 atoz-title">')
-        for programme in programmes:
-
-            if not re.search(r'programme--radio', programme):
-                continue
-
-            series_id = ''
-            series_id_match = re.search(r'/programmes/(.+?)/episodes/player', programme)
-            if series_id_match:
-                series_id = series_id_match.group(1)
-
-            programme_id = ''
-            programme_id_match = re.search(r'data-pid="(.+?)"', programme)
-            if programme_id_match:
-                programme_id = programme_id_match.group(1)
-
-            name = ''
-            name_match = re.search(r'<span class="programme__title delta"><span>(.+?)</span>', programme)
-            if name_match:
-                name = name_match.group(1)
-            else:
-                alternative_name_match = re.search(r'<meta property="name" content="([^"]+?)"', programme)
-                if alternative_name_match:
-                    name = alternative_name_match.group(1)
-
-            image = ''
-            image_match = re.search(r'data-src="(.+?)" />', programme)
-            if image_match:
-                image = image_match.group(1)
-
-            synopsis = ''
-            synopsis_match = re.search(r'p class="programme__synopsis.*?<span>(.+?)<\/span>', programme)
-            if synopsis_match:
-                synopsis = synopsis_match.group(1)
-
-            station = ''
-            station_match = re.search(r'<p class="programme__service micro text--subtle">(.+?)<\/p>', programme)
-            if station_match:
-                station = station_match.group(1).strip()
-
-            series_title = "[B]%s - %s[/B]" % (station, name)
-            if just_episodes:
-                title = "[B]%s[/B] - %s" % (masthead_title, name)
-            else:
-                title = "[B]%s[/B] - %s" % (station, name)
-
-            if series_id:
-                AddMenuEntry(series_title, series_id, 131, image, synopsis, '')
-            elif programme_id: #TODO maybe they are not always mutually exclusive
-                url = "https://www.bbc.co.uk/sounds/play/%s" % programme_id
-                CheckAutoplay(title, url, image, ' ', '')
-
-            percent = int(100*(page+list_item_num/len(programmes))/total_pages)
-            pDialog.update(percent,translation(30319),name)
-
-            list_item_num += 1
-
-        percent = int(100*page/total_pages)
-        pDialog.update(percent,translation(30319))
-
-
-    if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
-        if current_page < next_page:
-            page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
-            AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 138, '', '', '')
-
-    #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
-
-    pDialog.close()
+        #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
+        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
 
 
 def GetPage(page_url, just_episodes=False):
     """   Generic Radio page scraper.   """
 
-    pDialog = xbmcgui.DialogProgressBG()
-    pDialog.create(translation(30319))
+    with ProgressDlg(translation(30319)) as pDialog:
+        html = OpenURL(page_url)
 
-    html = OpenURL(page_url)
-
-    total_pages = 1
-    current_page = 1
-    page_range = list(range(1))
-    paginate = re.search(r'<ol.+?class="pagination.*?</ol>',html)
-    next_page = 1
-    if paginate:
-        if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
-            current_page_match = re.search(r'page=(\d*)', page_url)
-            if current_page_match:
-                current_page = int(current_page_match.group(1))
-            page_range = list(range(current_page, current_page+1))
-            next_page_match = re.search(r'<li class="pagination__next"><a href="(.*?page=)(.*?)">', paginate.group(0))
-            if next_page_match:
-                page_base_url = next_page_match.group(1)
-                next_page = int(next_page_match.group(2))
+        total_pages = 1
+        current_page = 1
+        page_range = list(range(1))
+        paginate = re.search(r'<ol.+?class="pagination.*?</ol>',html)
+        next_page = 1
+        if paginate:
+            if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
+                current_page_match = re.search(r'page=(\d*)', page_url)
+                if current_page_match:
+                    current_page = int(current_page_match.group(1))
+                page_range = list(range(current_page, current_page+1))
+                next_page_match = re.search(r'<li class="pagination__next"><a href="(.*?page=)(.*?)">', paginate.group(0))
+                if next_page_match:
+                    page_base_url = next_page_match.group(1)
+                    next_page = int(next_page_match.group(2))
+                else:
+                    next_page = current_page
+                page_range = list(range(current_page, current_page+1))
             else:
-                next_page = current_page
-            page_range = list(range(current_page, current_page+1))
-        else:
-            pages = re.findall(r'<li.+?class="pagination__page.*?</li>',paginate.group(0))
-            if pages:
-                last = pages[-1]
-                last_page = re.search(r'<a.+?href="(.*?=)(.*?)"',last)
-                page_base_url = last_page.group(1)
-                total_pages = int(last_page.group(2))
-            page_range = list(range(1, total_pages+1))
+                pages = re.findall(r'<li.+?class="pagination__page.*?</li>',paginate.group(0))
+                if pages:
+                    last = pages[-1]
+                    last_page = re.search(r'<a.+?href="(.*?=)(.*?)"',last)
+                    page_base_url = last_page.group(1)
+                    total_pages = int(last_page.group(2))
+                page_range = list(range(1, total_pages+1))
 
-    for page in page_range:
+        for page in page_range:
 
-        if page > current_page:
-            page_url = 'http://www.bbc.co.uk' + page_base_url + str(page)
-            html = OpenURL(page_url)
+            if page > current_page:
+                page_url = 'http://www.bbc.co.uk' + page_base_url + str(page)
+                html = OpenURL(page_url)
 
-        masthead_title = ''
-        masthead_title_match = re.search(r'<div.+?id="programmes-main-content".*?<span property="name">(.+?)</span>', html)
-        if masthead_title_match:
-            masthead_title = masthead_title_match.group(1)
-        else:
-            alternative_masthead_title_match = re.search(r'<div class="br-masthead__title">.*?<a href="[^"]+">([^<]+?)</a>', html, re.M | re.S)
-            if alternative_masthead_title_match:
-                masthead_title = alternative_masthead_title_match.group(1)
+            masthead_title = ''
+            masthead_title_match = re.search(r'<div.+?id="programmes-main-content".*?<span property="name">(.+?)</span>', html)
+            if masthead_title_match:
+                masthead_title = masthead_title_match.group(1)
+            else:
+                alternative_masthead_title_match = re.search(r'<div class="br-masthead__title">.*?<a href="[^"]+">([^<]+?)</a>', html, re.M | re.S)
+                if alternative_masthead_title_match:
+                    masthead_title = alternative_masthead_title_match.group(1)
 
-        list_item_num = 1
-        data = ''
-        data_match = re.findall(r'<script type="application\/ld\+json">(.*?)<\/script>',
-                                html, re.S)
-        if data_match:
-            for matches in data_match:
-                json_data = json.loads(matches)
-                if 'episode' in json_data:
-                    for episode in json_data['episode']:
-                        programme_id = ''
-                        programme_id = episode['identifier']
+            list_item_num = 1
+            data = ''
+            data_match = re.findall(r'<script type="application\/ld\+json">(.*?)<\/script>',
+                                    html, re.S)
+            if data_match:
+                for matches in data_match:
+                    json_data = json.loads(matches)
+                    if 'episode' in json_data:
+                        for episode in json_data['episode']:
+                            programme_id = ''
+                            programme_id = episode['identifier']
 
-                        name = ''
-                        name = episode['name']
-                        title = "[B]%s[/B] - %s" % (masthead_title, name)
+                            name = ''
+                            name = episode['name']
+                            title = "[B]%s[/B] - %s" % (masthead_title, name)
 
-                        image = ''
-                        image = episode['image']
+                            image = ''
+                            image = episode['image']
 
-                        synopsis = ''
-                        synopsis = episode['description']
+                            synopsis = ''
+                            synopsis = episode['description']
 
-                        url = "https://www.bbc.co.uk/sounds/play/%s" % programme_id
-                        CheckAutoplay(title, url, image, synopsis, '')
+                            url = "https://www.bbc.co.uk/sounds/play/%s" % programme_id
+                            CheckAutoplay(title, url, image, synopsis, '')
 
-                        percent = int(100*(page+list_item_num/len(json_data['episode']))/total_pages)
-                        pDialog.update(percent,translation(30319),name)
+                            percent = int(100*(page+list_item_num/len(json_data['episode']))/total_pages)
+                            pDialog.update(percent,translation(30319),name)
 
-                        list_item_num += 1
+                            list_item_num += 1
 
-        percent = int(100*page/total_pages)
-        pDialog.update(percent,translation(30319))
+            percent = int(100*page/total_pages)
+            pDialog.update(percent,translation(30319))
 
 
-    if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
-        if current_page < next_page:
-            page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
-            AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 136, '', '', '')
+        if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
+            if current_page < next_page:
+                page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
+                AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 136, '', '', '')
 
-    #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
-
-    pDialog.close()
-
+        #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
+        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
 
 
 def GetCategoryPage(category, just_episodes=False):
 
-    pDialog = xbmcgui.DialogProgressBG()
-    pDialog.create(translation(30319))
+    with ProgressDlg(translation(30319)) as pDialog:
+        page_base_url = category
+        page_url = page_base_url+'?sort=title'
+        # print('Opening '+page_url)
+        html = OpenURL(page_url)
 
-    page_base_url = 'https://www.bbc.co.uk/sounds/category/'+category
-    page_url = page_base_url+'?sort=title'
-    # print('Opening '+page_url)
-    html = OpenURL(page_url)
+        total_pages = 1
+        current_page = 1
+        page_range = list(range(1))
+        paginate = re.search(r'pagination-button__number',html)
+        next_page = 1
+        if paginate:
+            pages = re.findall(r'class="sc-c-pagination-button__number.*?</li>', html, flags=(re.DOTALL | re.MULTILINE))
+            if pages:
+                last = pages[-1]
+                last_page = re.search(r'<span>(.*?)</span>',last)
+                total_pages = int(last_page.group(1))
+                page_range = list(range(1, total_pages+1))
 
-    total_pages = 1
-    current_page = 1
-    page_range = list(range(1))
-    paginate = re.search(r'pagination-button__number',html)
-    next_page = 1
-    if paginate:
-        pages = re.findall(r'class="sc-c-pagination-button__number.*?</li>', html, flags=(re.DOTALL | re.MULTILINE))
-        if pages:
-            last = pages[-1]
-            last_page = re.search(r'<span>(.*?)</span>',last)
-            total_pages = int(last_page.group(1))
-            page_range = list(range(1, total_pages+1))
+        for page in page_range:
+            # print('Processing page '+str(page))
+            if page > current_page:
+                page_url = page_base_url+'?page='+str(page)+'&sort=title'
+                # print(page_url)
+                html = OpenURL(page_url)
+            match = re.search(r'window.__PRELOADED_STATE__ = (.*?);\s*</script>', html, re.DOTALL)
+            if match:
+                data = match.group(1)
+                json_data = json.loads(data)
+                # print(json_data)
+                if 'modules' in json_data:
+                    # print('Has modules')
+                    if 'data' in json_data['modules']:
+                        # print('Has data')
+                        for data in json_data['modules']['data']:
+                            # print('Data-ID: '+data['id'])
+                            if ('id' in data and data['id'] == 'container_list'):
+                                if 'data' in data:
+                                   for programme in data['data']:
+                                       # print(programme)
+                                       pro_name = []
+                                       pro_url = []
+                                       pro_icon = []
+                                       pro_syn = []
+                                       pro_brand = []
+                                       pro_brand_url = []
+                                       pro_brand_syn = []
+                                       if 'titles' in programme:
+                                           pro_name = programme['titles']['primary']
+                                       if ('secondary' in programme['titles'] and programme['titles']['secondary'] is not None):
+                                           pro_name += ' - '+programme['titles']['secondary']
+                                       if ('tertiary' in programme['titles'] and programme['titles']['tertiary'] is not None):
+                                           pro_name += ' - '+programme['titles']['tertiary']
+                                       if 'image_url' in programme:
+                                           pro_icon = programme['image_url'].replace("{recipe}","624x624")
+                                       if 'urn' in programme:
+                                           pro_url = 'https://www.bbc.co.uk/sounds/play/'+programme['urn'][-8:]
+                                       if 'synopses' in programme:
+                                           if ('long' in programme['synopses'] and programme['synopses']['long'] is not None):
+                                               pro_syn = programme['synopses']['long']
+                                           elif ('medium' in programme['synopses'] and programme['synopses']['medium'] is not None):
+                                               pro_syn = programme['synopses']['medium']
+                                           elif ('short' in programme['synopses'] and programme['synopses']['short'] is not None):
+                                               pro_syn = programme['synopses']['short']
+                                       # print(pro_name)
+                                       # print(pro_icon)
+                                       # print(pro_url)
+                                       # print(pro_syn)
+                                       CheckAutoplay(pro_name, pro_url, pro_icon, pro_syn, '')
+                                       if ('container' in programme and programme['container'] is not None):
+                                           # print('Has container')
+                                           if programme['container']['type'] == 'brand':
+                                               pro_brand = '[B]'+programme['container']['title']+'[/B]'
+                                               pro_brand_url = 'https://www.bbc.co.uk/sounds/brand/'+programme['container']['id']
+                                               # print(pro_brand_url)
+                                               if 'synopses' in programme['container']:
+                                                   if ('long' in programme['container']['synopses'] and
+                                                       programme['container']['synopses']['long'] is not None):
+                                                        pro_brand_syn = programme['container']['synopses']['long']
+                                                   elif ('medium' in programme['container']['synopses'] and
+                                                         programme['container']['synopses']['medium'] is not None):
+                                                        pro_brand_syn = programme['container']['synopses']['medium']
+                                                   elif ('short' in programme['container']['synopses'] and
+                                                         programme['container']['synopses']['short'] is not None):
+                                                       pro_brand_syn = programme['container']['synopses']['short']
+                                               if not(page_base_url.startswith(pro_brand_url)):
+                                                   AddMenuEntry(pro_brand, pro_brand_url, 137, pro_icon, pro_brand_syn, '')
+            percent = int(100*page/total_pages)
+            pDialog.update(percent,translation(30319))
 
-    for page in page_range:
-        # print('Processing page '+str(page))
-        if page > current_page:
-            page_url = page_base_url+'?page='+str(page)+'&sort=title'
-            # print(page_url)
-            html = OpenURL(page_url)
-        match = re.search(r'window.__PRELOADED_STATE__ = (.*?);\s*</script>', html, re.DOTALL)
-        if match:
-            data = match.group(1)
-            json_data = json.loads(data)
-            # print(json_data)
-            if 'modules' in json_data:
-                # print('Has modules')
-                if 'data' in json_data['modules']:
-                    # print('Has data')
-                    for data in json_data['modules']['data']:
-                        # print('Data-ID: '+data['id'])
-                        if ('id' in data and data['id'] == 'container_list'):
-                            if 'data' in data:
-                               for programme in data['data']:
-                                   # print(programme)
-                                   pro_name = []
-                                   pro_url = []
-                                   pro_icon = []
-                                   pro_syn = []
-                                   pro_brand = []
-                                   pro_brand_url = []
-                                   pro_brand_syn = []
-                                   if 'titles' in programme:
-                                       pro_name = programme['titles']['primary']
-                                   if ('secondary' in programme['titles'] and programme['titles']['secondary'] is not None):
-                                       pro_name += ' - '+programme['titles']['secondary']
-                                   if ('tertiary' in programme['titles'] and programme['titles']['tertiary'] is not None):
-                                       pro_name += ' - '+programme['titles']['tertiary']
-                                   if 'image_url' in programme:
-                                       pro_icon = programme['image_url'].replace("{recipe}","624x624")
-                                   if 'urn' in programme:
-                                       pro_url = 'https://www.bbc.co.uk/sounds/play/'+programme['urn'][-8:]
-                                   if 'synopses' in programme:
-                                       if ('long' in programme['synopses'] and programme['synopses']['long'] is not None):
-                                           pro_syn = programme['synopses']['long']
-                                       elif ('medium' in programme['synopses'] and programme['synopses']['medium'] is not None):
-                                           pro_syn = programme['synopses']['medium']
-                                       elif ('short' in programme['synopses'] and programme['synopses']['short'] is not None):
-                                           pro_syn = programme['synopses']['short']
-                                   # print(pro_name)
-                                   # print(pro_icon)
-                                   # print(pro_url)
-                                   # print(pro_syn)
-                                   CheckAutoplay(pro_name, pro_url, pro_icon, pro_syn, '')
-                                   if ('container' in programme and programme['container'] is not None):
-                                       if programme['container']['type'] == 'brand':
-                                           pro_brand = '[B]'+programme['container']['title']+'[/B]'
-                                           pro_brand_url = programme['container']['id']
-                                           if 'synopses' in programme['container']:
-                                               if ('long' in programme['container']['synopses'] and
-                                                   programme['container']['synopses']['long'] is not None):
-                                                    pro_brand_syn = programme['container']['synopses']['long']
-                                               elif ('medium' in programme['container']['synopses'] and
-                                                     programme['container']['synopses']['medium'] is not None):
-                                                    pro_brand_syn = programme['container']['synopses']['medium']
-                                               elif ('short' in programme['container']['synopses'] and
-                                                     programme['container']['synopses']['short'] is not None):
-                                                   pro_brand_syn = programme['container']['synopses']['short']
-                                           AddMenuEntry(pro_brand, pro_brand_url, 137, pro_icon, pro_brand_syn, '')
-        percent = int(100*page/total_pages)
-        pDialog.update(percent,translation(30319))
-
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
 
 
 def GetEpisodes(url):
@@ -341,7 +347,9 @@ def GetEpisodes(url):
 
 def AddAvailableLiveStreamItem(name, channelname, iconimage):
     """Play a live stream based on settings for preferred live source and bitrate."""
-    streams = ParseStreams(channelname)
+    URL = 'https://www.bbc.co.uk/sounds/play/live:'+channelname
+    jwt = GetJWT(URL)
+    streams = ParseStreams(channelname, jwt)
     # print('Located live streams')
     # print(streams)
     source = int(ADDON.getSetting('radio_source'))
@@ -359,7 +367,9 @@ def AddAvailableLiveStreamItem(name, channelname, iconimage):
 
 
 def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
-    streams = ParseStreams(channelname)
+    URL = 'https://www.bbc.co.uk/sounds/play/live:'+channelname
+    jwt = GetJWT(URL)
+    streams = ParseStreams(channelname, jwt)
     suppliers = ['', 'Akamai', 'Limelight', 'Cloudfront']
     for href, protocol, supplier, transfer_format, bitrate in streams:
         title = name + ' - [I][COLOR ffd3d3d3]%s - %s kbps[/COLOR][/I]' % (suppliers[supplier], bitrate)
@@ -373,9 +383,7 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
         '<H1>Access Denied</H1>', html)
     if check_geo or not html:
         # print "Geoblock detected, raising error message"
-        dialog = xbmcgui.Dialog()
-        dialog.ok(translation(30400), translation(30401))
-        raise
+        raise GeoBlockedError(translation(30414))
     liz = xbmcgui.ListItem(name)
     liz.setArt({'icon':'DefaultVideo.png', 'thumb':iconimage})
 
@@ -390,7 +398,7 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
 def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
     """Will create one menu entry for each available stream of a particular stream_id"""
 
-    streams = ParseStreams(stream_id)
+    streams = ParseStreams(stream_id, None)
     suppliers = ['', 'Akamai', 'Limelight', 'Cloudfront']
     for href, protocol, supplier, transfer_format, bitrate in streams:
         title = name + ' - [I][COLOR ffd3d3d3]%s - %s kbps[/COLOR][/I]' % (suppliers[supplier], bitrate)
@@ -404,7 +412,7 @@ def AddAvailableStreamItem(name, url, iconimage, description):
         #TODO check CBeeBies for special cases
         xbmcgui.Dialog().ok(translation(30403), translation(30404))
         return
-    streams = ParseStreams(stream_ids)
+    streams = ParseStreams(stream_ids, None)
     source = int(ADDON.getSetting('radio_source'))
     if source > 0:
         # Case 1: Selected source
@@ -468,7 +476,7 @@ def ListGenres():
                             if 'image_url' in category:
                                 cat_image = category['image_url'].replace("{recipe}","624x624")
                             if 'id' in category:
-                                cat_url = category['id']
+                                cat_url = 'https://www.bbc.co.uk/sounds/category/'+category['id']
                             # print(cat_name)
                             # print(cat_image)
                             # print(cat_url)
@@ -478,22 +486,31 @@ def ListGenres():
 def ListLive():
     channel_list = [
         ('bbc_radio_one', 'BBC Radio 1'),
+        ('bbc_radio_one_dance', 'BBC Radio 1 Dance'),
+        ('bbc_radio_one_relax', 'BBC Radio 1 Relax'),
         ('bbc_1xtra', 'BBC Radio 1Xtra'),
         ('bbc_radio_two', 'BBC Radio 2'),
         ('bbc_radio_three', 'BBC Radio 3'),
-        ('bbc_radio_fourfm', 'BBC Radio 4 FM'),
+        ('bbc_radio_fourfm', 'BBC Radio 4'),
         ('bbc_radio_fourlw', 'BBC Radio 4 LW'),
         ('bbc_radio_four_extra', 'BBC Radio 4 Extra'),
-        ('bbc_radio_five_live', 'BBC Radio 5 live'),
-        ('bbc_radio_five_live_sports_extra', 'BBC Radio 5 live sports extra'),
+        ('bbc_radio_five_live', 'BBC Radio 5 Live'),
+        ('bbc_radio_five_live_sports_extra', 'BBC Radio 5 Sports Extra'),
         ('bbc_6music', 'BBC Radio 6 Music'),
         ('bbc_asian_network', 'BBC Asian Network'),
+        ('bbc_world_service', 'BBC World Service'),
         ('bbc_radio_scotland_fm', 'BBC Radio Scotland'),
+        ('bbc_radio_scotland_mw', 'BBC Radio Scotland Extra'),
+        ('bbc_radio_orkney', 'BBC Radio Orkney'),
+        ('bbc_radio_shetland', 'BBC Radio Shetland'),
         ('bbc_radio_nan_gaidheal', u'BBC Radio nan Gàidheal'),
         ('bbc_radio_ulster', 'BBC Radio Ulster'),
         ('bbc_radio_foyle', 'BBC Radio Foyle'),
         ('bbc_radio_wales_fm', 'BBC Radio Wales'),
+        ('bbc_radio_wales_am', 'BBC Radio Wales Extra'),
         ('bbc_radio_cymru', 'BBC Radio Cymru'),
+        ('bbc_radio_cymru_2', 'BBC Radio Cymru 2'),
+        ('cbeebies_radio', 'CBeebies Radio'),
         ('bbc_radio_berkshire', 'BBC Radio Berkshire'),
         ('bbc_radio_bristol', 'BBC Radio Bristol'),
         ('bbc_radio_cambridge', 'BBC Radio Cambridgeshire'),
@@ -524,6 +541,7 @@ def ListLive():
         ('bbc_radio_sheffield', 'BBC Radio Sheffield'),
         ('bbc_radio_shropshire', 'BBC Radio Shropshire'),
         ('bbc_radio_solent', 'BBC Radio Solent'),
+        ('bbc_radio_solent_west_dorset', 'BBC Radio Solent Dorset'),
         ('bbc_radio_somerset_sound', 'BBC Somerset'),
         ('bbc_radio_stoke', 'BBC Radio Stoke'),
         ('bbc_radio_suffolk', 'BBC Radio Suffolk'),
@@ -532,27 +550,18 @@ def ListLive():
         ('bbc_tees', 'BBC Tees'),
         ('bbc_three_counties_radio', 'BBC Three Counties Radio'),
         ('bbc_radio_wiltshire', 'BBC Wiltshire'),
-        ('bbc_wm', 'BBC WM 95.6'),
+        ('bbc_wm', 'BBC WM'),
         ('bbc_radio_york', 'BBC Radio York'),
     ]
     for id, name in channel_list:
-        if major_version == 2:
-            iconimage = xbmc.translatePath(
-                os.path.join('special://home/addons/plugin.video.iplayerwww/media', id + '.png'))
-        elif major_version == 3:
-            iconimage = xbmcvfs.translatePath(
-                os.path.join('special://home/addons/plugin.video.iplayerwww/media', id + '.png'))
+        iconimage = 'resource://resource.images.iplayerwww/media/'+id+'.png'
         if ADDON.getSetting('streams_autoplay') == 'true':
             AddMenuEntry(name, id, 213, iconimage, '', '')
         else:
             AddMenuEntry(name, id, 133, iconimage, '', '')
 
 
-def ListListenList(logged_in):
-    if(CheckLogin(logged_in) == False):
-        CreateBaseDirectory('audio')
-        return
-
+def ListListenList():
     """Scrapes all episodes of the favourites page."""
     html = OpenURL('http://www.bbc.co.uk/radio/favourites')
 
@@ -619,11 +628,7 @@ def ListListenList(logged_in):
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
 
 
-def ListFollowing(logged_in):
-    if(CheckLogin(logged_in) == False):
-        CreateBaseDirectory('audio')
-        return
-
+def ListFollowing():
     """Scrapes all episodes of the favourites page."""
     html = OpenURL('https://www.bbc.co.uk/radio/favourites/programmes')
 
@@ -739,77 +744,71 @@ def Search(search_entered):
     url = 'https://www.bbc.co.uk/sounds/search?q=%s' % search_entered
     html = OpenURL(url)
 
-    pDialog = xbmcgui.DialogProgressBG()
-    pDialog.create(translation(30319))
+    with ProgressDlg(translation(30319)) as pDialog:
+        total_pages = 1
+        current_page = 1
+        page_range = list(range(1))
+        pages = re.findall(r'<div class="ssrcss-16didf7-StyledButtonContent e1b2sq420">(.+?)</div>',html)
+        next_page = 1
+        if pages:
+            total_pages = int(pages[-2])
+            page_base_url = url+'&page='
+            page_range = list(range(1, total_pages+1))
 
-    total_pages = 1
-    current_page = 1
-    page_range = list(range(1))
-    pages = re.findall(r'<div class="ssrcss-16didf7-StyledButtonContent e1b2sq420">(.+?)</div>',html)
-    next_page = 1
-    if pages:
-        total_pages = int(pages[-2])
-        page_base_url = url+'&page='
-        page_range = list(range(1, total_pages+1))
+        for page in page_range:
 
-    for page in page_range:
+            if page > current_page:
+                page_url = page_base_url + str(page)
+                html = OpenURL(page_url)
 
-        if page > current_page:
-            page_url = page_base_url + str(page)
-            html = OpenURL(page_url)
+            match = re.search(r'window.__INITIAL_DATA__=(.*?);\s*</script>', html, re.DOTALL)
 
-        match = re.search(r'window.__INITIAL_DATA__=(.*?);\s*</script>', html, re.DOTALL)
+            if match:
+                data = match.group(1)
+                json_data = json.loads(data)
+                # print(json_data)
+                if 'data' in json_data:
+                    # print('Has data')
+                    for data in json_data['data']:
+                        if data.startswith('search-results'):
+                            data = json_data['data'][data]
+                        # print(data)
+                        if ('name' in data and data['name'] == 'search-results'):
+                            # print(data['name'])
+                            if 'data' in data:
+                               if 'initialResults' in data['data']:
+                                   if 'items' in data['data']['initialResults']:
+                                       for programme in data['data']['initialResults']['items']:
+                                           pro_name = []
+                                           pro_url = []
+                                           pro_icon = []
+                                           pro_syn = []
+                                           if 'headline' in programme:
+                                               pro_name = programme['headline']
+                                           if 'image' in programme:
+                                               if 'src' in programme['image']:
+                                                   pro_icon = programme['image']['src'].replace("314x176","416x234")
+                                           if 'url' in programme:
+                                               pro_url = 'https://www.bbc.co.uk/sounds/play/'+programme['url'][-8:]
+                                           if 'description' in programme:
+                                               pro_syn = programme['description']
+                                           # print(pro_name)
+                                           # print(pro_icon)
+                                           # print(pro_url)
+                                           # print(pro_syn)
+                                           CheckAutoplay(pro_name, pro_url, pro_icon, pro_syn, '')
 
-        if match:
-            data = match.group(1)
-            json_data = json.loads(data)
-            # print(json_data)
-            if 'data' in json_data:
-                # print('Has data')
-                for data in json_data['data']:
-                    if data.startswith('search-results'):
-                        data = json_data['data'][data]
-                    # print(data)
-                    if ('name' in data and data['name'] == 'search-results'):
-                        # print(data['name'])
-                        if 'data' in data:
-                           if 'initialResults' in data['data']:
-                               if 'items' in data['data']['initialResults']:
-                                   for programme in data['data']['initialResults']['items']:
-                                       pro_name = []
-                                       pro_url = []
-                                       pro_icon = []
-                                       pro_syn = []
-                                       if 'headline' in programme:
-                                           pro_name = programme['headline']
-                                       if 'image' in programme:
-                                           if 'src' in programme['image']:
-                                               pro_icon = programme['image']['src'].replace("314x176","416x234")
-                                       if 'url' in programme:
-                                           pro_url = 'https://www.bbc.co.uk/sounds/play/'+programme['url'][-8:]
-                                       if 'description' in programme:
-                                           pro_syn = programme['description']
-                                       # print(pro_name)
-                                       # print(pro_icon)
-                                       # print(pro_url)
-                                       # print(pro_syn)
-                                       CheckAutoplay(pro_name, pro_url, pro_icon, pro_syn, '')
+            percent = int(100*page/total_pages)
+            pDialog.update(percent,translation(30319))
 
-        percent = int(100*page/total_pages)
-        pDialog.update(percent,translation(30319))
+        if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
+            if current_page < next_page:
+                page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
+                AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 136, '', '', '')
 
-
-    if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
-        if current_page < next_page:
-            page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
-            AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 136, '', '', '')
-
-    #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
-
-    pDialog.close()
-
+        #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
+        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
 
 
 def GetAvailableStreams(name, url, iconimage, description):
@@ -821,12 +820,15 @@ def GetAvailableStreams(name, url, iconimage, description):
         AddAvailableStreamsDirectory(name, stream_ids, iconimage, description)
 
 
-def ParseStreams(stream_id):
+def ParseStreams(stream_id, jwt):
     retlist = []
     # print('Parsing streams for PID:')
     # print(stream_id)
     # Open the page with the actual strem information and display the various available streams.
-    NEW_URL = 'https://open.live.bbc.co.uk/mediaselector/6/select/version/2.0/mediaset/pc/vpid/%s/format/json/jsfunc/JS_callbacks0' % stream_id
+    if jwt:
+        NEW_URL = 'https://open.live.bbc.co.uk/mediaselector/6/select/version/2.0/mediaset/pc/vpid/%s/format/json/jsfunc/JS_callbacks0?jwt_auth=%s' % (stream_id, jwt)
+    else:
+        NEW_URL = 'https://open.live.bbc.co.uk/mediaselector/6/select/version/2.0/mediaset/pc/vpid/%s/format/json/jsfunc/JS_callbacks0' % stream_id
     # print(NEW_URL)
     html = OpenURL(NEW_URL)
 
@@ -869,9 +871,7 @@ def ParseStreams(stream_id):
             elif 'result' in json_data:
                 if json_data['result'] == 'geolocation':
                     # print "Geoblock detected, raising error message"
-                    dialog = xbmcgui.Dialog()
-                    dialog.ok(translation(30400), translation(30401))
-                    raise
+                    raise GeoBlockedError(translation(30414))
     return retlist
 
 

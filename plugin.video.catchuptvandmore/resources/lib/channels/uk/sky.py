@@ -17,7 +17,7 @@ from codequick import Listitem, Resolver, Route
 import htmlement
 import urlquick
 
-from resources.lib import download, resolver_proxy
+from resources.lib import download, resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
 
@@ -44,18 +44,14 @@ URL_PCODE_EMBED_TOKEN = 'http://www.skysports.com/watch/video/auth/v4/23'
 
 VIDEO_PER_PAGE = 12
 
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
+
 
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
 
     if item_id == 'skynews':
-        item = Listitem()
-        item.label = 'Skynews (youtube)'
-        item.set_callback(list_videos_youtube,
-                          item_id=item_id,
-                          channel_youtube='UCoMdktPbSTixAyNGwb-UYkQ')
-        item_post_treatment(item)
-        yield item
+        yield from list_videos_news(plugin)
 
     elif item_id == 'skysports':
 
@@ -120,6 +116,56 @@ def list_videos_youtube(plugin, item_id, channel_youtube, **kwargs):
 
 
 @Route.register
+def list_videos_news(plugin, **kwargs):
+    headers = {
+        'x-skygdp-appversion': '6.14.0',
+        'x-skygdp-platform': 'android',
+        'x-skygdp-proposition': 'newsapp',
+        'x-api-key': '2e13aef9-a838-47d5-b5ba-060e1db74076',
+        'bff-vertical-video': 'editorial',
+        'user-agent': 'okhttp/4.12.0',
+    }
+
+    params = {
+        'includeRecommendations': 'true',
+    }
+
+    response = urlquick.get('https://newsmobile.digitalcontent.sky/app/v1/index/watch', params=params, headers=headers)
+
+    for component in json.loads(response.text).get('components'):
+        if component.get('type') == 'article-list':
+            if "items" in component:
+                for item in component.get("items"):
+                    data = item.get('data')
+                    if data.get('videoType') == 'vod':
+                        listitem = Listitem()
+                        listitem.label = item.get('title')
+
+                        image = item.get('image')
+                        if image:
+                            templated_url = image.get('templatedURL')
+                            if templated_url:
+                                image_url = templated_url.format(width=384, height=216)
+                                listitem.art['thumb'] = listitem.art['landscape'] = image_url
+
+                        last_updated = item.get('lastUpdated')
+                        if last_updated:
+                            listitem.info['date'] = last_updated
+
+                        label = item.get('label')
+                        duration = label.get('duration')
+                        if duration:
+                            duration_split = duration.split(':')
+                            listitem.info['duration'] = 60 * int(duration_split[0]) + int(duration_split[1])
+
+                        share_url = data.get('shareURL')
+                        listitem.set_callback(get_brightcove_video, video_url=share_url)
+                        item_post_treatment(listitem, is_playable=True, is_downloadable=True)
+
+                        yield listitem
+
+
+@Route.register
 def list_videos_sports(plugin, item_id, category_url, start, end, **kwargs):
 
     parser = htmlement.HTMLement()
@@ -148,13 +194,28 @@ def list_videos_sports(plugin, item_id, category_url, start, end, **kwargs):
 
     if at_least_one_item == VIDEO_PER_PAGE:
         # More videos...
-        yield Listitem.next_page(item_id=item_id,
-                                 category_url=category_url,
-                                 start=end,
-                                 end=end + VIDEO_PER_PAGE)
+        item = Listitem.next_page(item_id=item_id,
+                                  category_url=category_url,
+                                  start=end,
+                                  end=end + VIDEO_PER_PAGE)
+        item.property['SpecialSort'] = 'bottom'
+        yield item
     elif at_least_one_item == 0:
         plugin.notify(plugin.localize(30718), '')
         yield False
+
+
+@Resolver.register
+def get_brightcove_video(plugin,
+                         video_url,
+                         **kwargs):
+    resp = urlquick.get(video_url, headers=GENERIC_HEADERS, max_age=-1)
+    player = resp.parse().find(".//div[@class='ui-video-player']")
+    data_account = player.get('data-account-id')
+    data_player = player.get('data-player-id')
+    data_video_id = "ref:%s" % player.get('data-video-id')
+
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account, data_player, data_video_id)
 
 
 @Resolver.register
@@ -198,8 +259,4 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-
-    resp = urlquick.get(URL_LIVE_SKYNEWS)
-    live_id = re.compile(r'www.youtube.com/embed/(.*?)\?').findall(
-        resp.text)[0]
-    return resolver_proxy.get_stream_youtube(plugin, live_id, False)
+    return get_brightcove_video(plugin, URL_LIVE_SKYNEWS)

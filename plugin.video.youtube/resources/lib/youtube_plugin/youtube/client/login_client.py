@@ -2,324 +2,315 @@
 """
 
     Copyright (C) 2014-2016 bromix (plugin.video.youtube)
-    Copyright (C) 2016-2018 plugin.video.youtube
+    Copyright (C) 2016-2025 plugin.video.youtube
 
     SPDX-License-Identifier: GPL-2.0-only
     See LICENSES/GPL-2.0-only for more information.
 """
 
-from six.moves import urllib
+from __future__ import absolute_import, division, unicode_literals
 
-import time
-import requests
-from ...youtube.youtube_exceptions import InvalidGrant, LoginException
-from ...kodion import Context
-from .__config__ import api, youtube_tv, developer_keys, keys_changed
-
-context = Context(plugin_id='plugin.video.youtube')
+from .request_client import YouTubeRequestClient
+from ..youtube_exceptions import InvalidGrant, LoginException
+from ...kodion import logging
 
 
-class LoginClient(object):
-    api_keys_changed = keys_changed
+class YouTubeLoginClient(YouTubeRequestClient):
+    log = logging.getLogger(__name__)
 
-    CONFIGS = {
-        'youtube-tv': {
-            'system': 'YouTube TV',
-            'key': youtube_tv['key'],
-            'id': youtube_tv['id'],
-            'secret': youtube_tv['secret']
-        },
-        'main': {
-            'system': 'All',
-            'key': api['key'],
-            'id': api['id'],
-            'secret': api['secret']
-        },
-        'developer': developer_keys
+    DEVICE_CODE_URL = 'https://accounts.google.com/o/oauth2/device/code'
+    REVOKE_URL = 'https://accounts.google.com/o/oauth2/revoke'
+    TOKEN_URL = 'https://www.googleapis.com/oauth2/v4/token'
+    TOKEN_TYPES = {
+        0: 'tv',
+        'tv': 0,
+        1: 'user',
+        'user': 1,
+        2: 'vr',
+        'vr': 2,
+        3: 'dev',
+        'dev': 3,
     }
 
-    def __init__(self, config=None, language='en-US', region='', access_token='', access_token_tv=''):
-        self._config = self.CONFIGS['main'] if config is None else config
-        self._config_tv = self.CONFIGS['youtube-tv']
-        self._verify = context.get_settings().verify_ssl()
-        # the default language is always en_US (like YouTube on the WEB)
-        if not language:
-            language = 'en_US'
+    _configs = {
+        'dev': {},
+        'user': {},
+        'tv': {},
+        'vr': {},
+    }
+    _access_tokens = {
+        'dev': None,
+        'user': None,
+        'tv': None,
+        'vr': None,
+    }
+    _initialised = False
+    _logged_in = False
 
-        language = language.replace('-', '_')
+    def __init__(self,
+                 configs=None,
+                 access_tokens=None,
+                 **kwargs):
+        super(YouTubeLoginClient, self).__init__(
+            exc_type=LoginException,
+            **kwargs
+        )
+        YouTubeLoginClient.init(configs)
+        self.set_access_token(access_tokens)
+        self.initialised = any(self._configs.values())
 
-        self._language = language
-        self._region = region
-        self._access_token = access_token
-        self._log_error_callback = None
+    @classmethod
+    def init(cls, configs=None, **_kwargs):
+        _configs = cls._configs
+        if not configs:
+            return
+        for config_type, config in configs.items():
+            if config_type in _configs:
+                _configs[config_type] = config
 
-    def set_log_error(self, callback):
-        self._log_error_callback = callback
+    def reinit(self, **kwargs):
+        super(YouTubeLoginClient, self).reinit(**kwargs)
 
-    def log_error(self, text):
-        if self._log_error_callback:
-            self._log_error_callback(text)
+    @classmethod
+    def convert_access_tokens(cls,
+                              access_tokens=None,
+                              to_dict=False,
+                              to_list=False):
+        if access_tokens is None:
+            access_tokens = cls._access_tokens
+        if to_dict or isinstance(access_tokens, (list, tuple)):
+            access_tokens = {
+                cls.TOKEN_TYPES[token_idx]: token
+                for token_idx, token in enumerate(access_tokens)
+                if token and token_idx in cls.TOKEN_TYPES
+            }
+        elif to_list or isinstance(access_tokens, dict):
+            _access_tokens = [None, None, None, None]
+            for token_type, token in access_tokens.items():
+                token_idx = cls.TOKEN_TYPES.get(token_type)
+                if token_idx is None:
+                    continue
+                _access_tokens[token_idx] = token
+            access_tokens = _access_tokens
+        return access_tokens
+
+    def set_access_token(self, access_tokens=None):
+        existing_access_tokens = type(self)._access_tokens
+        if access_tokens:
+            if isinstance(access_tokens, (list, tuple)):
+                access_tokens = self.convert_access_tokens(
+                    access_tokens,
+                    to_dict=True,
+                )
+            token_status = 0
+            for token_type, token in existing_access_tokens.items():
+                if token_type in access_tokens:
+                    token = access_tokens[token_type]
+                    existing_access_tokens[token_type] = token
+                else:
+                    token = None
+                    existing_access_tokens[token_type] = None
+                if token:
+                    token_status |= 2
+                elif token_type != 'dev':
+                    token_status |= 1
+
+            if token_status & 1:
+                if token_status & 2:
+                    self.logged_in = 'partially'
+                else:
+                    self.logged_in = False
+            elif token_status & 2:
+                self.logged_in = 'fully'
+            else:
+                self.logged_in = False
+            self.log.info('User is %s logged in', self.logged_in or 'not')
         else:
-            print(text)
+            for token_type in existing_access_tokens:
+                existing_access_tokens[token_type] = None
+            self.logged_in = False
+            self.log.info('User is not logged in')
 
-    def verify(self):
-        return self._verify
+    @property
+    def initialised(self):
+        return self._initialised
 
-    def set_access_token(self, access_token=''):
-        self._access_token = access_token
+    @initialised.setter
+    def initialised(self, value):
+        type(self)._initialised = value
+
+    @property
+    def logged_in(self):
+        return self._logged_in
+
+    @logged_in.setter
+    def logged_in(self, value):
+        type(self)._logged_in = value
+
+    @staticmethod
+    def _login_error_hook(**kwargs):
+        json_data = getattr(kwargs['exc'], 'json_data', None)
+        if not json_data or 'error' not in json_data:
+            return None, None, None, None, LoginException
+        if json_data['error'] == 'authorization_pending':
+            return None, None, None, json_data, False
+        if (json_data['error'] == 'invalid_grant'
+                and json_data.get('code') == 400):
+            return None, None, None, json_data, InvalidGrant(json_data)
+        return None, None, None, json_data, LoginException(json_data)
 
     def revoke(self, refresh_token):
         # https://developers.google.com/youtube/v3/guides/auth/devices
         headers = {'Host': 'accounts.google.com',
-                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+                                 ' AppleWebKit/537.36 (KHTML, like Gecko)'
+                                 ' Chrome/61.0.3163.100 Safari/537.36',
                    'Content-Type': 'application/x-www-form-urlencoded'}
 
         post_data = {'token': refresh_token}
 
-        # url
-        url = 'https://accounts.google.com/o/oauth2/revoke'
+        self.request(
+            self.REVOKE_URL,
+            method='POST',
+            data=post_data,
+            headers=headers,
+            response_hook=self._response_hook_json,
+            error_hook=self._login_error_hook,
+            error_title='Logout failed - Refresh token revocation error',
+            raise_exc=True,
+        )
 
-        result = requests.post(url, data=post_data, headers=headers, verify=self._verify)
+    def refresh_token(self, token_type, refresh_token=None):
+        login_type = self.TOKEN_TYPES.get(token_type)
+        config = self._configs.get(login_type)
+        if config:
+            client_id = config.get('id')
+            client_secret = config.get('secret')
+        else:
+            return None
+        if not client_id or not client_secret or not refresh_token:
+            return None
 
-        try:
-            json_data = result.json()
-            if 'error' in json_data:
-                context.log_error('Revoke failed: Code: |%s| JSON: |%s|' % (str(result.status_code), json_data))
-                json_data.update({'code': str(result.status_code)})
-                raise LoginException(json_data)
-        except ValueError:
-            json_data = None
-
-        if result.status_code != requests.codes.ok:
-            response_dump = self._get_response_dump(result, json_data)
-            context.log_error('Revoke failed: Code: |%s| Response dump: |%s|' % (str(result.status_code), response_dump))
-            raise LoginException('Logout Failed')
-
-    def refresh_token(self, refresh_token, client_id='', client_secret=''):
         # https://developers.google.com/youtube/v3/guides/auth/devices
         headers = {'Host': 'www.googleapis.com',
-                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+                                 ' AppleWebKit/537.36 (KHTML, like Gecko)'
+                                 ' Chrome/61.0.3163.100 Safari/537.36',
                    'Content-Type': 'application/x-www-form-urlencoded'}
-
-        client_id = client_id or self._config['id']
-        client_secret = client_secret or self._config['secret']
 
         post_data = {'client_id': client_id,
                      'client_secret': client_secret,
                      'refresh_token': refresh_token,
                      'grant_type': 'refresh_token'}
 
-        # url
-        url = 'https://www.googleapis.com/oauth2/v4/token'
+        log_info = ('Refresh token request ({login_type})',
+                    'Params: {log_params!p}',)
+        self.log.debug(
+            log_info,
+            login_type=login_type,
+            log_params=post_data,
+        )
 
-        config_type = self._get_config_type(client_id, client_secret)
-        context.log_debug('Refresh token: Config: |%s| Client id [:5]: |%s| Client secret [:5]: |%s|' %
-                          (config_type, client_id[:5], client_secret[:5]))
+        json_data = self.request(
+            self.TOKEN_URL,
+            method='POST',
+            data=post_data,
+            headers=headers,
+            response_hook=self._response_hook_json,
+            error_hook=self._login_error_hook,
+            error_title='Login failed - Refresh token grant error',
+            error_info=log_info,
+            raise_exc=True,
+            login_type=login_type,
+            log_params=post_data,
+        )
+        return json_data
 
-        result = requests.post(url, data=post_data, headers=headers, verify=self._verify)
+    def request_access_token(self, token_type, code=None):
+        login_type = self.TOKEN_TYPES.get(token_type)
+        config = self._configs.get(login_type)
+        if config:
+            client_id = config.get('id')
+            client_secret = config.get('secret')
+        else:
+            return None
+        if not client_id or not client_secret or not code:
+            return None
 
-        try:
-            json_data = result.json()
-            if 'error' in json_data:
-                context.log_error('Refresh Failed: Code: |%s| JSON: |%s|' % (str(result.status_code), json_data))
-                json_data.update({'code': str(result.status_code)})
-                if json_data['error'] == 'invalid_grant' and json_data['code'] == '400':
-                    raise InvalidGrant(json_data)
-                raise LoginException(json_data)
-        except ValueError:
-            json_data = None
-
-        if result.status_code != requests.codes.ok:
-            response_dump = self._get_response_dump(result, json_data)
-            context.log_error('Refresh failed: Config: |%s| Client id [:5]: |%s| Client secret [:5]: |%s| Code: |%s| Response dump |%s|' %
-                              (config_type, client_id[:5], client_secret[:5], str(result.status_code), response_dump))
-            raise LoginException('Login Failed')
-
-        if result.headers.get('content-type', '').startswith('application/json'):
-            if not json_data:
-                json_data = result.json()
-            access_token = json_data['access_token']
-            expires_in = time.time() + int(json_data.get('expires_in', 3600))
-            return access_token, expires_in
-
-        return '', ''
-
-    def request_access_token(self, code, client_id='', client_secret=''):
         # https://developers.google.com/youtube/v3/guides/auth/devices
         headers = {'Host': 'www.googleapis.com',
-                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+                                 ' AppleWebKit/537.36 (KHTML, like Gecko)'
+                                 ' Chrome/61.0.3163.100 Safari/537.36',
                    'Content-Type': 'application/x-www-form-urlencoded'}
-
-        client_id = client_id or self._config['id']
-        client_secret = client_secret or self._config['secret']
 
         post_data = {'client_id': client_id,
                      'client_secret': client_secret,
                      'code': code,
                      'grant_type': 'http://oauth.net/grant_type/device/1.0'}
 
-        # url
-        url = 'https://www.googleapis.com/oauth2/v4/token'
+        log_info = ('Access token request ({login_type})',
+                    'Params: {log_params!p}',)
+        self.log.debug(
+            log_info,
+            login_type=login_type,
+            log_params=post_data,
+        )
 
-        config_type = self._get_config_type(client_id, client_secret)
-        context.log_debug('Requesting access token: Config: |%s| Client id [:5]: |%s| Client secret [:5]: |%s|' %
-                          (config_type, client_id[:5], client_secret[:5]))
+        json_data = self.request(
+            self.TOKEN_URL,
+            method='POST',
+            data=post_data,
+            headers=headers,
+            response_hook=self._response_hook_json,
+            error_hook=self._login_error_hook,
+            error_title='Login failed - Access token request error',
+            error_info=log_info,
+            raise_exc=True,
+            login_type=login_type,
+            log_params=post_data,
+        )
+        return json_data
 
-        result = requests.post(url, data=post_data, headers=headers, verify=self._verify)
-
-        authorization_pending = False
-        try:
-            json_data = result.json()
-            if 'error' in json_data:
-                if json_data['error'] != u'authorization_pending':
-                    context.log_error('Requesting access token: Code: |%s| JSON: |%s|' % (str(result.status_code), json_data))
-                    json_data.update({'code': str(result.status_code)})
-                    raise LoginException(json_data)
-                else:
-                    authorization_pending = True
-        except ValueError:
-            json_data = None
-
-        if (result.status_code != requests.codes.ok) and not authorization_pending:
-            response_dump = self._get_response_dump(result, json_data)
-            context.log_error('Requesting access token: Config: |%s| Client id [:5]: |%s| Client secret [:5]: |%s| Code: |%s| Response dump |%s|' %
-                              (config_type, client_id[:5], client_secret[:5], str(result.status_code), response_dump))
-            raise LoginException('Login Failed: Code %s' % str(result.status_code))
-
-        if result.headers.get('content-type', '').startswith('application/json'):
-            if json_data:
-                return json_data
-            else:
-                return result.json()
+    def request_device_and_user_code(self, token_type):
+        login_type = self.TOKEN_TYPES.get(token_type)
+        config = self._configs.get(login_type)
+        if config:
+            client_id = config.get('id')
         else:
-            response_dump = self._get_response_dump(result, json_data)
-            context.log_error('Requesting access token: Config: |%s| Client id [:5]: |%s| Client secret [:5]: |%s| Code: |%s| Response dump |%s|' %
-                              (config_type, client_id[:5], client_secret[:5], str(result.status_code), response_dump))
-            raise LoginException('Login Failed: Unknown response')
+            return None
+        if not client_id:
+            return None
 
-    def request_device_and_user_code(self, client_id=''):
         # https://developers.google.com/youtube/v3/guides/auth/devices
         headers = {'Host': 'accounts.google.com',
-                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+                                 ' AppleWebKit/537.36 (KHTML, like Gecko)'
+                                 ' Chrome/61.0.3163.100 Safari/537.36',
                    'Content-Type': 'application/x-www-form-urlencoded'}
-
-        client_id = client_id or self._config['id']
 
         post_data = {'client_id': client_id,
                      'scope': 'https://www.googleapis.com/auth/youtube'}
 
-        # url
-        url = 'https://accounts.google.com/o/oauth2/device/code'
+        log_info = ('Device/user code request ({login_type})',
+                    'Params: {log_params!p}',)
+        self.log.debug(
+            log_info,
+            login_type=login_type,
+            log_params=post_data,
+        )
 
-        config_type = self._get_config_type(client_id)
-        context.log_debug('Requesting device and user code: Config: |%s| Client id [:5]: |%s|' %
-                          (config_type, client_id[:5]))
-
-        result = requests.post(url, data=post_data, headers=headers, verify=self._verify)
-
-        try:
-            json_data = result.json()
-            if 'error' in json_data:
-                context.log_error('Requesting device and user code failed: Code: |%s| JSON: |%s|' % (str(result.status_code), json_data))
-                json_data.update({'code': str(result.status_code)})
-                raise LoginException(json_data)
-        except ValueError:
-            json_data = None
-
-        if result.status_code != requests.codes.ok:
-            response_dump = self._get_response_dump(result, json_data)
-            context.log_error('Requesting device and user code failed: Config: |%s| Client id [:5]: |%s| Code: |%s| Response dump |%s|' %
-                              (config_type, client_id[:5], str(result.status_code), response_dump))
-            raise LoginException('Login Failed')
-
-        if result.headers.get('content-type', '').startswith('application/json'):
-            if json_data:
-                return json_data
-            else:
-                return result.json()
-        else:
-            response_dump = self._get_response_dump(result, json_data)
-            context.log_error('Requesting access token: Config: |%s| Client id [:5]: |%s| Code: |%s| Response dump |%s|' %
-                              (config_type, client_id[:5], str(result.status_code), response_dump))
-            raise LoginException('Login Failed: Unknown response')
-
-    def get_access_token(self):
-        return self._access_token
-
-    def authenticate(self, username, password):
-        headers = {'device': '38c6ee9a82b8b10a',
-                   'app': 'com.google.android.youtube',
-                   'User-Agent': 'GoogleAuth/1.4 (GT-I9100 KTU84Q)',
-                   'content-type': 'application/x-www-form-urlencoded',
-                   'Host': 'android.clients.google.com',
-                   'Connection': 'Keep-Alive',
-                   'Accept-Encoding': 'gzip'}
-
-        post_data = {'device_country': self._region.lower(),
-                     'operatorCountry': self._region.lower(),
-                     'lang': self._language.replace('-', '_'),
-                     'sdk_version': '19',
-                     # 'google_play_services_version': '6188034',
-                     'accountType': 'HOSTED_OR_GOOGLE',
-                     'Email': username.encode('utf-8'),
-                     'service': 'oauth2:https://www.googleapis.com/auth/youtube '
-                                'https://www.googleapis.com/auth/youtube.force-ssl '
-                                'https://www.googleapis.com/auth/plus.me '
-                                'https://www.googleapis.com/auth/emeraldsea.mobileapps.doritos.cookie '
-                                'https://www.googleapis.com/auth/plus.stream.read '
-                                'https://www.googleapis.com/auth/plus.stream.write '
-                                'https://www.googleapis.com/auth/plus.pages.manage '
-                                'https://www.googleapis.com/auth/identity.plus.page.impersonation',
-                     'source': 'android',
-                     'androidId': '38c6ee9a82b8b10a',
-                     'app': 'com.google.android.youtube',
-                     # 'client_sig': '24bb24c05e47e0aefa68a58a766179d9b613a600',
-                     'callerPkg': 'com.google.android.youtube',
-                     # 'callerSig': '24bb24c05e47e0aefa68a58a766179d9b613a600',
-                     'Passwd': password.encode('utf-8')}
-
-        # url
-        url = 'https://android.clients.google.com/auth'
-
-        result = requests.post(url, data=post_data, headers=headers, verify=self._verify)
-        if result.status_code != requests.codes.ok:
-            raise LoginException('Login Failed')
-
-        lines = result.text.replace('\n', '&')
-        params = dict(urllib.parse.parse_qsl(lines))
-        token = params.get('Auth', '')
-        expires = int(params.get('Expiry', -1))
-        if not token or expires == -1:
-            raise LoginException('Failed to get token')
-
-        return token, expires
-
-    def _get_config_type(self, client_id, client_secret=None):
-        """used for logging"""
-        if client_secret is None:
-            using_conf_tv = (client_id == self.CONFIGS['youtube-tv'].get('id'))
-            using_conf_main = (client_id == self.CONFIGS['main'].get('id'))
-        else:
-            using_conf_tv = ((client_id == self.CONFIGS['youtube-tv'].get('id')) and (client_secret == self.CONFIGS['youtube-tv'].get('secret')))
-            using_conf_main = ((client_id == self.CONFIGS['main'].get('id')) and (client_secret == self.CONFIGS['main'].get('secret')))
-        if not using_conf_main and not using_conf_tv:
-            return 'None'
-        elif using_conf_tv:
-            return 'YouTube-TV'
-        elif using_conf_main:
-            return 'YouTube-Kodi'
-        else:
-            return 'Unknown'
-
-    @staticmethod
-    def _get_response_dump(response, json_data=None):
-        if json_data:
-            return json_data
-        else:
-            try:
-                return response.json()
-            except ValueError:
-                try:
-                    return response.text
-                except:
-                    return 'None'
+        json_data = self.request(
+            self.DEVICE_CODE_URL,
+            method='POST',
+            data=post_data,
+            headers=headers,
+            response_hook=self._response_hook_json,
+            error_hook=self._login_error_hook,
+            error_title='Login failed - Device/user code request error',
+            error_info=log_info,
+            raise_exc=True,
+            login_type=login_type,
+            log_params=post_data,
+        )
+        return json_data

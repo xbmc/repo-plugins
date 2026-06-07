@@ -45,7 +45,7 @@ class Channel(chn_class.Channel):
 
         # ========================== Actual channel setup STOPS here ===============================
         return
-    
+
     def create_episode_item(self, result_set):
         """ Creates a new MediaItem for an episode.
 
@@ -87,7 +87,7 @@ class Channel(chn_class.Channel):
         """
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
-        
+
         # get additional info
         data = UriHandler.open(item.url)
 
@@ -108,7 +108,7 @@ class Channel(chn_class.Channel):
             r'<meta property="og:video" content="http://player.extreme.com/FCPlayer.swf\?id=([^&]+)&amp[^"]+" />',
             data)
         if len(guid) > 0:
-            url = '%s/player/smil/%s' % (self.baseUrl, guid[0],) 
+            url = '%s/player/smil/%s' % (self.baseUrl, guid[0],)
             data = UriHandler.open(url)
 
             smiller = Smil(data)

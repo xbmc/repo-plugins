@@ -141,14 +141,31 @@ class Plugin(ActionParser):
                 from resources.lib.actions.favouritesaction import ShowFavouritesAction
                 addon_action = ShowFavouritesAction(self, None)
 
+            elif self.params[keyword.ACTION] == action.OPEN_SHORTCUT:
+                from resources.lib.actions.shortcutaction import OpenShortcutAction
+                addon_action = OpenShortcutAction(self)
+
             elif self.params[keyword.ACTION] == action.LIST_FOLDER:
                 # channelName and U.lib.aRL is present, Parse the folder
                 from resources.lib.actions.folderaction import FolderAction
                 addon_action = FolderAction(self, channel_object)
 
+            elif self.params[keyword.ACTION] == action.SEARCH:
+                needle: str = self.params.get(keyword.NEEDLE, None)
+                from resources.lib.actions.searchaction import SearchAction
+                addon_action = SearchAction(self, channel_object, needle)
+
             elif self.params[keyword.ACTION] == action.PLAY_VIDEO:
                 from resources.lib.actions.videoaction import VideoAction
                 addon_action = VideoAction(self, channel_object)
+
+            elif self.params[keyword.ACTION] == action.IPTVMANAGER:
+                from resources.lib.actions.iptvmanageraction import IPTVManagerAction
+                addon_action = IPTVManagerAction(self, self.params[keyword.REQUEST], int(self.params[keyword.PORT]))
+
+            elif self.params[keyword.ACTION] == action.EXEC:
+                from resources.lib.actions.executeaction import ExecuteAction
+                addon_action = ExecuteAction(self, channel_object, self.params[keyword.COMMAND])
 
             elif not self.params[keyword.ACTION] == "":
                 from resources.lib.actions.contextaction import ContextMenuAction

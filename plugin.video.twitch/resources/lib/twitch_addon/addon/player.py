@@ -75,7 +75,8 @@ class TwitchPlayer(xbmc.Player):
         seek_time = self.window.getProperty(key=self.seek_keys['seek_time'])
         if is_playing:
             is_playing = any(host_match in self.getPlayingFile() for host_match in twitch_host_matches)
-        log_utils.log('Player: |onPlayBackStarted| isTwitch |{0}| SeekTime |{1}|'.format(is_playing, seek_time), log_utils.LOGDEBUG)
+        log_utils.log('Player: |onPlayBackStarted| isTwitch |{0}| SeekTime |{1}|'.format(is_playing, seek_time),
+                      log_utils.LOGDEBUG)
         if not is_playing:
             self.reset()
         else:
@@ -107,12 +108,16 @@ class TwitchPlayer(xbmc.Player):
                     if monitor.abortRequested():
                         dialog = None
                     else:
-                        dialog = kodi.ProgressDialog(kodi.get_name(), line1=utils.i18n('attempt_reconnect') % display_name,
-                                                     line2=utils.i18n('attempt_number') % (retries + 1), line3=utils.i18n('retry_seconds') % 60)
+                        dialog = kodi.ProgressDialog(kodi.get_name(),
+                                                     line1=utils.i18n('attempt_reconnect') % display_name,
+                                                     line2=utils.i18n('attempt_number') % (retries + 1),
+                                                     line3=utils.i18n('retry_seconds') % 60,
+                                                     background=False)
                     if dialog:
                         need_reset = False
                         with dialog:
-                            while (not monitor.abortRequested()) and (retries < max_retries) and (not dialog.is_canceled()):
+                            while (not monitor.abortRequested()) and (retries < max_retries) and \
+                                    (not dialog.is_canceled()):
                                 wait_time = 0.0
                                 abort = False
                                 while wait_time <= 120.0:
@@ -122,7 +127,8 @@ class TwitchPlayer(xbmc.Player):
                                     wait_time += 1.0
                                     if (wait_time % 2) == 0:
                                         percent = int(((wait_time / 120) * 100))
-                                        dialog.update(percent=percent, line3=utils.i18n('retry_seconds') % ((120.0 - wait_time) / 2))
+                                        dialog.update(percent=percent, line3=utils.i18n('retry_seconds') %
+                                                                             ((120.0 - wait_time) / 2))
                                 if abort:
                                     break
                                 retries += 1
@@ -133,16 +139,33 @@ class TwitchPlayer(xbmc.Player):
                                         pass
                                     twitch = api.Twitch()
                                     videos = twitch.get_live(name)
-                                    result = twitch.get_channel_stream(channel_id)[Keys.STREAM]
+                                    result = twitch.get_channel_stream(channel_id).get(Keys.DATA, [{}])
+                                    result = result[0]
                                     item_dict = converter.stream_to_playitem(result)
                                     video = converter.get_video_for_quality(videos, ask=False, quality=quality)
                                     if video:
-                                        log_utils.log('Attempting playback using quality |%s| @ |%s|' % (video['name'], video['url']), log_utils.LOGDEBUG)
+                                        log_utils.log('Attempting playback using quality |%s| @ |%s|' %
+                                                      (video['name'], video['url']), log_utils.LOGDEBUG)
                                         item_dict['path'] = video['url']
+                                        if video['name'] == 'Adaptive':
+                                            request = twitch.live_request(name)
+                                            if request:
+                                                if kodi.get_kodi_version().major >= 18:
+                                                    request['headers']['verifypeer'] = 'false'
+                                                item_dict['path'] = \
+                                                    request['url'] + utils.append_headers(request['headers'])
                                         playback_item = kodi.create_item(item_dict, add=False)
-                                        stream_name = result[Keys.CHANNEL][Keys.DISPLAY_NAME] \
-                                            if result[Keys.CHANNEL][Keys.DISPLAY_NAME] else result[Keys.CHANNEL][Keys.NAME]
-                                        self.window.setProperty(self.reconnect_keys['stream'], '{0},{1},{2},{3}'.format(channel_id, name, stream_name, quality))
+                                        if video['name'] == 'Adaptive':
+                                            inputstream_property = 'inputstream'
+                                            if kodi.get_kodi_version().major < 19:
+                                                inputstream_property += 'addon'
+                                            playback_item.setProperty(inputstream_property, 'inputstream.adaptive')
+                                            playback_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+
+                                        stream_name = display_name or name
+                                        self.window.setProperty(self.reconnect_keys['stream'],
+                                                                '{0},{1},{2},{3}'.format(channel_id, name,
+                                                                                         stream_name, quality))
                                         self.play(item_dict['path'], playback_item)
                                         if utils.irc_enabled() and twitch.access_token:
                                             username = twitch.get_username()
@@ -150,8 +173,10 @@ class TwitchPlayer(xbmc.Player):
                                                 utils.exec_irc_script(username, name)
                                         break
                                 except:
-                                    log_utils.log('Player: |Reconnection| Failed attempt |{0}|'.format(retries), log_utils.LOGERROR)
-                                dialog.update(0, line2=utils.i18n('attempt_number') % (retries + 1), line3=utils.i18n('retry_seconds') % 60)
+                                    log_utils.log('Player: |Reconnection| Failed attempt |{0}|'.format(retries),
+                                                  log_utils.LOGERROR)
+                                dialog.update(0, line2=utils.i18n('attempt_number') % (retries + 1),
+                                              line3=utils.i18n('retry_seconds') % 60)
                         if dialog.is_canceled():
                             self.reset()
         if need_reset:

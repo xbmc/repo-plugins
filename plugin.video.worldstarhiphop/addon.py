@@ -13,7 +13,7 @@ import sys
 import urllib.parse
 import xbmc
 
-from resources.lib.worldstarhiphop_const import ADDON, DATE, VERSION, BASEURL
+from resources.lib.worldstarhiphop_const import ADDON, DATE, VERSION
 
 # Parse parameters...
 if len(sys.argv[2]) == 0:

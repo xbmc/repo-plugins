@@ -45,7 +45,8 @@
       "sortorder": 22,
       "language": "se",
       "poster": "nickposter.png",
-      "fanart": "nickfanart.jpg"
+      "fanart": "nickfanart.jpg",
+      "ignore": true
     }
   ]
 }

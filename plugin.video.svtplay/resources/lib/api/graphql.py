@@ -3,6 +3,7 @@ from __future__ import absolute_import,unicode_literals
 import json
 import re
 import requests
+from resources.lib.helper import strip_html_tags
 from resources.lib import logging
 from resources.lib.listing.listitem import VideoItem, ShowItem
 
@@ -22,16 +23,16 @@ class GraphQL:
     pass
 
   def getPopular(self):
-    return self.__get_start_page_selection("popular_start")
+    return self.getFionaPageContainer("popular_start")
 
   def getLatest(self):
-    return self.__get_start_page_selection("latest_start")
+    return self.getFionaPageContainer("latest_start")
   
   def getLastChance(self):
-    return self.__get_start_page_selection("lastchance_start")
+    return self.getFionaPageContainer("lastchance_start")
 
   def getLive(self):
-    return self.__get_start_page_selection("live_start")
+    return self.getFionaPageContainer("live_start")
 
   def getAtoO(self):
     return self.__get_all_programs()
@@ -52,13 +53,13 @@ class GraphQL:
     return items
 
   def getGenres(self):
-    operation_name = "AllGenres"
-    query_hash = "6bef51146d05b427fba78f326453127f7601188e46038c9a5c7b9c2649d4719c"
+    operation_name = "MainGenres"
+    query_hash = "65b3d9bccd1adf175d2ad6b1aaa482bb36f382f7bad6c555750f33322bc2b489"
     json_data = self.__get(operation_name, query_hash)
     if not json_data:
       return None
     genres = []
-    for item in json_data["genresSortedByName"]["genres"]:
+    for item in json_data["genresInMain"]["genres"]:
       genre = {}
       genre["title"] = item["name"]
       genre["genre"] = item["id"]
@@ -66,152 +67,148 @@ class GraphQL:
     return genres
 
   def getProgramsForGenre(self, genre):
-    operation_name = "GenreProgramsAO"
-    query_hash = "189b3613ec93e869feace9a379cca47d8b68b97b3f53c04163769dcffa509318"
-    variables = {"genre":[genre]}
+    operation_name = "CategoryPageQuery"
+    query_hash = "00be06320342614f4b186e9c7710c29a7fc235a1936bde08a6ab0f427131bfaf"
+    variables = {"id":genre, "tab": "all"}
     json_data = self.__get(operation_name, query_hash, variables=variables)
     if not json_data:
       return None
-    raw_items = []
-    for selection in json_data["genres"][0]["selectionsForWeb"]:
-      if selection["id"] == "all-{}".format(genre):
-        raw_items = selection
+    selections = []
+    for tab in json_data["categoryPage"]["lazyLoadedTabs"]:
+      if tab["id"] == "program-ao-{}".format(genre):
+        selections = tab["selections"][0]
         break
-    if not raw_items:
+    if not selections:
       logging.error("Could not find content for genre {}".format(genre))
       return None
     programs = []
-    for item in raw_items["items"]:
-      item = item["item"]
+    for teaser in selections["items"]:
+      item = teaser["item"]
       title = item["name"]
       item_id = item["urls"]["svtplay"]
-      thumbnail = self.get_thumbnail_url(item["image"]["id"], item["image"]["changed"]) if "image" in item else ""
+      thumbnail = self.get_thumbnail_url(teaser["images"]["wide"]["id"], teaser["images"]["wide"]["changed"]) if "images" in teaser else ""
+      fanart = self.get_fanart_url(item["images"]["cleanWide"]["id"], item["images"]["cleanWide"]["changed"]) if "images" in item else ""
       geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
       info = {
-        "plot" : item["longDescription"]
+        "plot" : teaser.get("description", "")
       }
       type_name = item["__typename"]
-      play_item = self.__create_item(title, type_name, item_id, geo_restricted, thumbnail, info)
+      play_item = self.__create_item(title, type_name, item_id, geo_restricted, thumbnail, info, fanart)
       programs.append(play_item)
     return programs
-  
-  def getVideoContent(self, slug):
-    operation_name = "TitlePage"
-    query_hash = "4122efcb63970216e0cfb8abb25b74d1ba2bb7e780f438bbee19d92230d491c5"
-    variables = {"titleSlugs":[slug]}
+
+  def getFionaPageContainer(self, selectionId):
+    operation_name = "GridPage"
+    query_hash = "1e2d15ff7ffa578d33ebf1287d3f7af7fd47125552b564e96fd277a744345a69"
+    variables = {"selectionId" : selectionId}
     json_data = self.__get(operation_name, query_hash, variables=variables)
     if not json_data:
       return None
-    if not json_data["listablesBySlug"]:
+    items = json_data["selectionById"]["items"]
+    list_items = []
+    for teaser in items:
+      item = teaser["item"]
+      title = item["name"]
+      if self.__is_video(item["__typename"]) and item["__typename"] != "Single":
+        title = "{tvshow} - {episode}".format(episode=item["name"], tvshow=item["parent"]["name"])
+      item_id = item["urls"]["svtplay"]
+      geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
+      thumbnail = self.get_thumbnail_url(item["images"]["cleanWide"]["id"], item["images"]["cleanWide"]["changed"]) if "images" in item else ""
+      fanart = self.get_fanart_url(teaser["images"]["wide"]["id"], teaser["images"]["wide"]["changed"]) if "images" in teaser else ""
+      info = {
+        "plot" : teaser["description"],
+        "duration" : item.get("duration", 0),
+        "episode" : item.get("number", 0),
+        "tvshowtitle" : item["parent"]["name"] if "parent" in item else ""
+      }
+      list_items.append(self.__create_item(title, item["__typename"], item_id, geo_restricted, thumbnail, info, fanart))
+    return list_items
+
+  def getEpisodesForPath(self, slug):
+    operation_name = "DetailsPageQuery"
+    query_hash = "e240d515657bbb54f33cf158cea581f6303b8f01f3022ea3f9419fbe3a5614b0"
+    variables = {"path":"/{}".format(slug)}
+    json_data = self.__post(operation_name, query_hash, variables=variables)
+    if not json_data:
+      return None
+    if not json_data["detailsPageByPath"]:
       return None
     video_items = []
-    show_data = json_data["listablesBySlug"][0]
-    show_image_id = show_data["image"]["id"]
-    show_image_changed = show_data["image"]["changed"]
-    for content in json_data["listablesBySlug"][0]["associatedContent"]:
-      if content["id"] == "upcoming":
+    show_data = json_data["detailsPageByPath"]
+    show_image_id = show_data["images"]["wide"]["id"]
+    show_image_changed = show_data["images"]["wide"]["changed"]
+    for selection in json_data["detailsPageByPath"]["associatedContent"]:
+      if selection["id"] == "upcoming":
         continue
-      for item in content["items"]:
-        item = item["item"]
-        season_title = ""
-        if content["type"] == "Season" and content["name"] and item["positionInSeason"]:
-          season_title = content["name"]
+      for teaser in selection["items"]:
+        item = teaser["item"]
+        season_title = selection["name"] if selection["selectionType"] == "season" else ""
         title = item["name"]
         video_id = item["urls"]["svtplay"]
         geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
-        thumbnail = self.get_thumbnail_url(item["image"]["id"], item["image"]["changed"]) if "image" in item else ""
+        thumbnail = self.get_thumbnail_url(item["images"]["cleanWide"]["id"], item["images"]["cleanWide"]["changed"]) if "images" in item else ""
         fanart = self.get_fanart_url(show_image_id, show_image_changed)
         info = {
-          "plot" : item["longDescription"],
-          "duration" : item.get("duration", 0)
+          "plot" : teaser["description"],
+          "duration" : item.get("duration", 0),
+          "episode" : item.get("number", 0),
+          "tvshowtitle" : item["parent"]["name"] if "parent" in item else ""
         }
         video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info, fanart, season_title)
         video_items.append(video_item)
     return video_items
 
-  def getLatestNews(self):
-    return self.__get_latest_for_genre("nyheter")
-  
-  def __get_latest_for_genre(self, genre):
-    operation_name = "GenreLists"
-    query_hash = "90dca0b51b57904ccc59a418332e43e17db21c93a2346d1c73e05583a9aa598c"
-    variables = {"genre":[genre]}
-    json_data = self.__get(operation_name, query_hash, variables=variables)
-    if not json_data or not json_data["genres"]:
-      return None
-    raw_items = []
-    if not json_data["genres"][0]["selectionsForWeb"]:
-      return None
-    for selection in json_data["genres"][0]["selectionsForWeb"]:
-      if selection["id"] != "latest-{}".format(genre):
-        continue
-      raw_items = selection["items"]
-    latest_items = []
-    for teaser in raw_items:
-      title = "{show} - {episode}".format(show=teaser["heading"], episode=teaser["subHeading"])
-      images = teaser.get("images", None)
-      item = teaser["item"]
-      video_id = item["urls"]["svtplay"]
-      thumbnail = self.get_thumbnail_url(images["wide"]["id"], images["wide"]["changed"]) if images else ""
-      fanart = self.get_fanart_url(images["wide"]["id"], images["wide"]["changed"]) if images else ""
-      geo_restricted = item["restrictions"].get("onlyAvailableInSweden", False)
-      info = {
-        "duration": item["duration"]
-      }
-      video_item = VideoItem(title, video_id, thumbnail, geo_restricted, info, fanart)
-      latest_items.append(video_item)
-    return latest_items
-
   def getSearchResults(self, query_string):
     operation_name = "SearchPage"
-    query_hash = "bed799b6f3105046779adff02a29028c1847782da4b171e9fe1bcc48622a342d"
-    variables = {"querystring":query_string}
+    query_hash = "f097c31299aa9b4ecdc4aaaf98a14444efda5dfbbc8cdaaeb7c3be37ae2b036a"
+    variables = {"query":query_string}
     json_data = self.__get(operation_name, query_hash, variables=variables)
     if not json_data:
       return None
+
+    if not json_data['searchPage']['flat']:
+        return []
+
     results = []
-    for search_hit in json_data["search"]:
-      item = search_hit["item"]
+
+    for search_hit in json_data["searchPage"]["flat"]["hits"]:
+      item = search_hit["teaser"]["item"]
       type_name = item["__typename"]
       if not self.__is_supported_type(type_name):
         logging.log("Unsupported search result type \"{}\"".format(type_name))
         logging.log(item)
         continue
-      title = item["name"]
-      if "parent" in item:
-        title = "{parent} - {name}".format(name=item["name"], parent=item["parent"]["name"])
+      title = search_hit["teaser"]["heading"]
       geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
       item_id = item["urls"]["svtplay"]
       thumbnail = self.get_thumbnail_url(item["image"]["id"], item["image"]["changed"]) if "image" in item else ""
       info = {
-        "plot" : item["longDescription"]
+        "plot" : search_hit["teaser"]["description"]
       }
       play_item = self.__create_item(title, type_name, item_id, geo_restricted, thumbnail, info)
       results.append(play_item)
     return results
 
-  def getVideoDataForLegacyId(self, legacy_id):
+  def getVideoDataForVideoUrl(self, video_url):
     """
-    legacy_id is the integer part of a video URL.
-    24186626 in the case of /video/24186626/filip-och-mona/filip-och-mona-sasong-1-avsnitt-1
+    Returns video data for any video url.
+
+    The returned data contains "svtId" and "blockedForChildren"
     """
-    operation_name = "VideoPage"
-    query_hash = "ae75c500d4f6f8743f6673f8ade2f8af89fb019d4b23f464ad84658734838c78"
-    variables = {"legacyIds":[legacy_id]}
+    operation_name = "DetailsPageQuery"
+    query_hash = "5be42eb4028ed8f2680ce2302f6887df3fed2dcb6f61ac091ff5a37a3d0bf477"
+    variables = {"path":video_url}
     json_data = self.__get(operation_name, query_hash, variables=variables)
     if not json_data:
       return None
-    if not json_data["listablesByEscenicId"]:
-      logging.error("Could not find legacy ID {}".format(legacy_id))
-      return None
     return {
-      "svtId" : json_data["listablesByEscenicId"][0]["svtId"],
-      "blockedForChildren" : json_data["listablesByEscenicId"][0]["restrictions"]["blockedForChildren"]
+      "svtId" : json_data["detailsPageByPath"]["video"]["svtId"],
+      "blockedForChildren": json_data["detailsPageByPath"]["moreDetails"]["restrictions"]["blockedForChildren"]
     }
 
   def getChannels(self):
     operation_name = "ChannelsQuery"
-    query_hash = "65ceeccf67cc8334bc14eb495eb921cffebf34300562900076958856e1a58d37"
+    query_hash = "210be4b72f03223b990f031d9a2e3501ff9284f8d2c66b01b255a807775f0b19"
     json_data = self.__get(operation_name, query_hash)
     if not json_data:
       return None
@@ -232,7 +229,6 @@ class GraphQL:
       channels.append(video_item)
     return channels
 
-
   def get_thumbnail_url(self, image_id, image_changed):
     return self.__get_image_url(image_id, image_changed, "thumbnail")
 
@@ -242,62 +238,30 @@ class GraphQL:
   def get_poster_url(self, image_id, image_changed):
     return self.__get_image_url(image_id, image_changed, "poster")
 
-  def __get_start_page_selection(self, selection_id):
-    operation_name = "StartPage"
-    query_hash = "c011159df51539c3604fc09a6ca856af833715d1477d0082afe5a9a871477569"
-    json_data = self.__get(operation_name, query_hash=query_hash)
-    if not json_data:
-      return None
-    selections = json_data["startForSvtPlay"]["selections"]
-    if not selections:
-      logging.error("No selections returned for start page")
-      return None
-    selection = {}
-    for raw_selection in selections:
-      if raw_selection["id"] == selection_id:
-        selection = raw_selection
-        break
-    if not selection:
-      logging.error("Selection {selection_id} was not found in selections".format(selection_id=selection_id))
-      return None
-    video_items = []
-    for item in selection["items"]:
-      image_id = item["images"]["cleanWide"]["id"]
-      image_changed = item["images"]["cleanWide"]["changed"]
-      title = "{show} - {episode}".format(show=item["heading"], episode=item["subHeading"])
-      item = item["item"]
-      video_id = item["urls"]["svtplay"]
-      parent_image_id = item["parent"]["images"]["wide"]["id"]
-      parent_image_changed = item["parent"]["images"]["wide"]["changed"]
-      thumbnail = self.get_thumbnail_url(image_id, image_changed)
-      geo_restricted = item["restrictions"]["onlyAvailableInSweden"]
-      video_info = {
-        "plot": item["longDescription"]
-      }
-      fanart = self.get_fanart_url(parent_image_id, parent_image_changed)
-      video_item = VideoItem(title, video_id, thumbnail, geo_restricted, video_info, fanart)
-      video_items.append(video_item)
-    return video_items
-
   def __get_all_programs(self):
     operation_name = "ProgramsListing"
-    query_hash = "1eeb0fb08078393c17658c1a22e7eea3fbaa34bd2667cec91bbc4db8d778580f"
+    query_hash = "17252e11da632f5c0d1b924b32be9191f6854723a0f50fb2adb35f72bb670efa"
     json_data = self.__get(operation_name, query_hash)
     if not json_data:
       return None
     items = []
-    for raw_item in json_data["programAtillO"]["flat"]:
-      if raw_item["oppetArkiv"]:
-        continue
-      title = raw_item["name"]
-      item_id = raw_item["urls"]["svtplay"]
-      item_type = raw_item["__typename"]
-      geo_restricted = raw_item["restrictions"]["onlyAvailableInSweden"]
-      item = self.__create_item(title, item_type, item_id, geo_restricted)
-      items.append(item)
+    for selection in json_data["programAtillO"]["selections"]:
+      for teaser in selection["items"]:
+        raw_item = teaser["item"]
+        title = teaser["heading"]
+        item_id = raw_item["urls"]["svtplay"]
+        item_type = raw_item["__typename"]
+        geo_restricted = raw_item["restrictions"]["onlyAvailableInSweden"]
+        item = self.__create_item(title, item_type, item_id, geo_restricted)
+        items.append(item)
     return sorted(items, key=lambda item: item.title)
 
   def __create_item(self, title, type_name, item_id, geo_restricted, thumbnail="", info={}, fanart=""):
+    title = strip_html_tags(title)
+
+    for k in info:
+        info[k] = strip_html_tags(info[k])
+
     if self.__is_video(type_name):
       return VideoItem(title, item_id, thumbnail, geo_restricted, info=info, fanart=fanart)
     elif self.__is_show(type_name):
@@ -340,23 +304,42 @@ class GraphQL:
       .format(base_url=base_url, ratio=ratio, size=size, image_type=image_type, image_id=image_id, image_changed=image_changed)
     
   def __get(self, operation_name, query_hash="", variables = {}):
+    return self.__fetch(operation_name, query_hash, variables, method="get")
+
+  def __post(self, operation_name, query_hash="", variables = {}):
+    return self.__fetch(operation_name, query_hash, variables, method="post")
+
+  def __fetch(self, operation_name, query_hash="", variables = {}, method="get"):
     base_url = "https://api.svt.se/contento/graphql"
-    param_ua = "svtplaywebb-play-render-prod-client"
+    param_ua = "svtplaywebb-play-render-produnction-client"
     ext = {}
     if query_hash:
         ext["persistedQuery"] = {"version":1,"sha256Hash":query_hash}
-    query_params = "operationName={op}&variables={variables}&extensions={ext}&ua={ua}"\
-      .format(\
-        ua=param_ua, \
-        op=operation_name, \
-        variables=json.dumps(variables, separators=(',', ':')), \
-        ext=json.dumps(ext, separators=(',', ':'))\
+    response = None
+    url = base_url
+    if method == "get":
+      query_params = "operationName={op}&variables={variables}&extensions={ext}&ua={ua}".format(
+        ua=param_ua,
+        op=operation_name,
+        variables=json.dumps(variables, separators=(',', ':')),
+        ext=json.dumps(ext, separators=(',', ':'))
       )
-    url = "{base}?{query_params}".format(base=base_url, query_params=query_params)
-    logging.log("GraphQL request: {}".format(url))
-    response = requests.get(url)
+      logging.log("GraphQL GET request: {}".format(url))
+      response = requests.get(url, params=query_params)
+    elif method == "post":
+        payload = {
+          "operationName": operation_name,
+          "variables": variables,
+          "extensions": ext
+        }
+        logging.log("GraphQL POST request: {}".format(url))
+        response = requests.post(url, json=payload)
     if response.status_code != 200:
       logging.error("Request failed, code: {code}, url: {url}".format(code=response.status_code, url=url))
       return None
     json_data = response.json()
-    return json_data["data"]
+    try:
+      return json_data["data"]
+    except KeyError:
+      logging.error("Missing key 'data' in JSON response: {} for operationName={}, variables={}, queryHash={}".format(response.json(), operation_name, variables, query_hash))
+      return None

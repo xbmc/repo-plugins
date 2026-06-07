@@ -2,11 +2,24 @@
 """
 
     Copyright (C) 2014-2016 bromix (plugin.video.youtube)
-    Copyright (C) 2016-2018 plugin.video.youtube
+    Copyright (C) 2016-2025 plugin.video.youtube
 
     SPDX-License-Identifier: GPL-2.0-only
     See LICENSES/GPL-2.0-only for more information.
 """
+
+from __future__ import absolute_import, division, unicode_literals
+
+
+VIDEO_CONTENT = 'videos'
+LIST_CONTENT = 'files'
+
+COMMENTS = 'comments'
+HISTORY = 'history'
+PLAYLIST = 'playlist'
+
+AUDIO_TYPE = 'music'
+VIDEO_TYPE = 'video'
 
 FILES = 'files'
 SONGS = 'songs'

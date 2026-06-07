@@ -1,40 +1,44 @@
 # -*- coding: utf-8 -*-
-# Copyright: (c) 2017, SylvainCecchetto
+# Copyright: (c) 2017, SylvainCecchetto, 2024, darodi
 # GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-from builtins import str
+
+import json
 import re
+from builtins import str
 
-from codequick import Listitem, Resolver, Route
 import urlquick
+# noinspection PyUnresolvedReferences
+from codequick import Listitem, Resolver, Route
 
-from resources.lib import download
+from resources.lib import download, resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
 # TO DO
-# Token (live) maybe more work todo
 # Fix Download Mode
 
 URL_ROOT = 'https://www.telemb.be'
 
 URL_LIVE = URL_ROOT + '/direct'
 
-URL_STREAM_LIVE = 'https://telemb.fcst.tv/player/embed/%s'
-# LiveId
+LIVE_PLAYER = 'https://tvlocales-player.freecaster.com/embed/%s.json'
+
+PATTERN_M3U8 = re.compile(r'file\":\"(.*?)\"')
+
+# example "live_token": "95d2f6c9-e85f-4388-8e9c-5962aaaa206f",
+PATTERN_LIVE_TOKEN = re.compile(r'\"live_token\":\s*\"(.*?)\",')
 
 
 @Route.register
 def list_programs(plugin, item_id, **kwargs):
-
     resp = urlquick.get(URL_ROOT)
     root = resp.parse()
     root2 = root.findall(".//li[@class='we-mega-menu-li dropdown-menu']")[3]
 
     for program_datas in root2.iterfind(".//li[@class='we-mega-menu-li']"):
-
         program_title = program_datas.find('.//a').text.strip()
         program_url = URL_ROOT + program_datas.find('.//a').get('href')
 
@@ -50,7 +54,6 @@ def list_programs(plugin, item_id, **kwargs):
 
 @Route.register
 def list_videos(plugin, item_id, program_url, page, **kwargs):
-
     resp = urlquick.get(program_url + '?page=%s' % page)
     root = resp.parse()
     root2 = root.findall(".//div[@class='view-content']")[1]
@@ -81,7 +84,6 @@ def get_video_url(plugin,
                   video_url,
                   download_mode=False,
                   **kwargs):
-
     resp = urlquick.get(video_url, max_age=-1)
     root = resp.parse()
     video_id_url = root.findall('.//iframe')[1].get('src')
@@ -96,11 +98,16 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    headers = {
+        "User-Agent": web_utils.get_random_ua(),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+        "referrer": "https://www.telemb.be/",
+    }
+    resp = urlquick.get(URL_LIVE, headers=headers, max_age=-1)
+    live_tokens = PATTERN_LIVE_TOKEN.findall(resp.text)
+    if len(live_tokens) == 0:
+        return False
+    resp2 = urlquick.get(LIVE_PLAYER % live_tokens[0], max_age=-1)
+    video_url = json.loads(resp2.text)['video']['src'][0]['src']
 
-    resp = urlquick.get(URL_LIVE, max_age=-1)
-    root = resp.parse()
-    live_datas = root.findall('.//iframe')[0].get('src')
-
-    resp2 = urlquick.get(live_datas, max_age=-1)
-    return re.compile(
-        r'file\"\:\"(.*?)\"').findall(resp2.text)[2] + '|referer=https://telemb.fcst.tv/'
+    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")

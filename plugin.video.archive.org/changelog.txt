@@ -1,0 +1,4 @@
+plugin.video.archive.org:
+---------------------------
+v1.0.0 (20240608)
+First Release

@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 # encoding: UTF-8
-'''
+"""
     Long term strategy should probably be to deprecate everything here in favor
     of api.py.
-'''
+"""
 from __future__ import absolute_import
-import itertools
+
 from datetime import datetime
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 from sarpur import logger  # noqa
+from util import strptime
 
 
 def duration_to_seconds(duration):
@@ -47,42 +48,12 @@ def get_live_url(channel):
     :param channel: Slug name of channel
     :return An url
     """
-    apiurl = (
-        "http://ruv.is/sites/all/themes/at_ruv/"
-        "scripts/ruv-stream.php?format=json"
-    )
     try:
-        json = requests.get(apiurl + "&channel=" + channel)
+        json = requests.get(f"https://geo.spilari.ruv.is/channel/{channel}")
     except Exception:
         return -1
 
-    return json.json()['result'][1]
-
-
-def get_podcast_shows(url):
-    """
-    Gets the names and rss urls of all the podcasts (shows)
-
-    :param url: The url to the podcast index
-    :return A generator of dictionaries
-    """
-    doc = get_document(url)
-
-    featured = ({
-        'url': show.find_all('a')[-1]['href'],
-        'img': show.a.img["src"],
-        'name': show.a.img["alt"]
-    } for show in doc.find_all(class_="podcast-container"))
-
-    rest = ({
-        'url': show.a['href'],
-        'img': None,
-        'name': show.parent.find('strong').a.text.capitalize()
-    } for show in doc.find_all('div', 'views-field-views-conditional'))
-
-    return sorted(
-        itertools.chain(featured, rest), key=lambda show: show['name']
-    )
+    return json.json()["url"]
 
 
 def get_podcast_episodes(url):
@@ -104,18 +75,18 @@ def get_podcast_episodes(url):
         :return: datetime object
         """
         date_formats = (
-            '%a, %d %b %Y %H:%M:%S +0000',
-            '%a, %d %b %Y',
-            '%a, %d %b %Y%H:%M:%S +0000',
-            '%a, %d %b %Y %H:%M',
-            '%a, %d %b %Y %H.%M'
+            "%a, %d %b %Y %H:%M:%S +0000",
+            "%a, %d %b %Y",
+            "%a, %d %b %Y%H:%M:%S +0000",
+            "%a, %d %b %Y %H:%M",
+            "%a, %d %b %Y %H.%M",
         )
         df_generator = (format for format in date_formats)
 
         date = None
         while date is None:
             try:
-                date = datetime.strptime(date_string, next(df_generator))
+                date = strptime(date_string, next(df_generator))
             except ValueError:
                 pass
             except StopIteration:
@@ -127,13 +98,13 @@ def get_podcast_episodes(url):
 
     return (
         {
-            'url': item.select('guid')[0].text,
-            'Premiered': parse_pubdate(
-                item.select('pubdate')[0].text
-            ).strftime("%d.%m.%Y"),
+            "url": item.enclosure["url"],  # Beautifulsoup parses <link> wrong
+            "Premiered": parse_pubdate(item.select("pubdate")[0].text).strftime(
+                "%d.%m.%Y"
+            ),
             # 'Duration': duration_to_seconds(item.find('itunes:duration').text),
-            'title': item.title.text,
-            'Plot': item.description.text
+            "title": item.title.text,
+            "Plot": item.description.text,
         }
         for item in doc.find_all("item")
     )

@@ -7,7 +7,10 @@ import sys, re, os, time
 import calendar, pytz
 import urllib, requests
 from datetime import date, datetime, timedelta
-from kodi_six import xbmc, xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs
+from dateutil.parser import parse
+import json
+from kodi_six import xbmc, xbmcvfs, xbmcplugin, xbmcgui, xbmcaddon
+import random
 
 if sys.version_info[0] > 2:
     import http
@@ -34,12 +37,16 @@ LOCAL_STRING = ADDON.getLocalizedString
 ROOTDIR = ADDON.getAddonInfo('path')
 
 #Settings
-USERNAME = ADDON.getSettingString("username")
-PASSWORD = ADDON.getSettingString("password")
-QUALITY = ADDON.getSettingString("quality")
-NO_SPOILERS = ADDON.getSetting("no_spoilers")
-FAV_TEAM = ADDON.getSettingString("fav_team")
-TIME_FORMAT = ADDON.getSetting("time_format")
+settings = xbmcaddon.Addon(id='plugin.video.milbtv')
+USERNAME = str(settings.getSetting(id='username'))
+PASSWORD = str(settings.getSetting(id='password'))
+QUALITY = str(settings.getSetting(id='quality'))
+NO_SPOILERS = str(settings.getSetting(id='no_spoilers'))
+DISABLE_VIDEO_PADDING = str(settings.getSetting(id='disable_video_padding'))
+FAV_TEAM = str(settings.getSetting(id='fav_team'))
+TIME_FORMAT = str(settings.getSetting(id='time_format'))
+CATCH_UP = str(settings.getSetting(id='catch_up'))
+ASK_TO_SKIP = str(settings.getSetting(id='ask_to_skip'))
 
 #Colors
 SCORE_COLOR = 'FF00B7EB'
@@ -61,12 +68,27 @@ PREV_ICON = ICON
 NEXT_ICON = ICON
 
 
+API_URL = 'https://statsapi.mlb.com'
 #User Agents
 UA_PC = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
 
 VERIFY = True
 
-AFFILIATES = {'Athletics':'237,400,524,499','Pirates':'452,484,3390,477','Padres':'510,4904,103,584','Mariners':'574,403,515,529','Giants':'3410,105,461,476','Cardinals':'235,279,443,440','Rays':'234,421,233,2498','Rangers':'102,540,448,485','Blue Jays':'422,463,424,435','Twins':'3898,1960,492,509','Phillies':'1410,427,522,566','Braves':'430,431,432,478','White Sox':'247,580,487,494','Marlins':'4124,564,554,479','Yankees':'531,1956,537,587','Brewers':'556,5015,249,572','Angels':'559,561,401,460','D-backs':'2310,419,516,5368','Orioles':'418,568,548,488','Red Sox':'533,546,414,428','Cubs':'553,451,521,550','Reds':'416,498,450,459','Indians':'402,445,437,481','Rockies':'538,259,342,486','Tigers':'106,512,570,582','Astros':'482,3712,573,5434','Royals':'541,3705,1350,565','Dodgers':'238,260,526,456','Nationals':'534,547,426,436','Mets':'552,505,453,507'}
+ALL_LEVELS = '11,12,13,14'
+
+AFFILIATES = { 'Angels': '401,559,561,460', 'Astros': '3712,573,482,5434', 'Athletics': '237,400,524,499', 'Blue Jays': '422,424,435,463', 'Braves': '430,431,432,478', 'Brewers': '249,556,572,5015', 'Cardinals': '235,279,440,443', 'Cubs': '521,553,451,550', 'D-backs': '2310,419,516,5368', 'Dodgers': '238,260,526,456', 'Giants': '3410,105,461,476', 'Guardians': '402,437,445,481', 'Mariners': '403,515,529,574', 'Marlins': '4124,564,554,479', 'Mets': '552,453,505,507', 'Nationals': '436,426,534,547', 'Orioles': '418,568,488,548', 'Padres': '103,584,510,4904', 'Phillies': '1410,427,522,566', 'Pirates': '3390,452,477,484', 'Rangers': '102,540,448,485', 'Rays': '233,234,421,2498', 'Red Sox': '414,428,533,546', 'Reds': '416,450,459,498', 'Rockies': '259,342,538,486', 'Royals': '3705,1350,541,565', 'Tigers': '106,570,582,512', 'Twins': '3898,492,509,1960', 'White Sox': '247,580,487,494', 'Yankees': '531,587,1956,537' }
+
+#Skip monitor
+#These are the break events to skip
+BREAK_TYPES = ['Game Advisory', 'Pitching Substitution', 'Offensive Substitution', 'Defensive Sub', 'Defensive Switch', 'Runner Placed On Base', 'Injury']
+#These are the action events to keep, in addition to the last event of each at-bat, if we're skipping non-decision pitches
+ACTION_TYPES = ['Wild Pitch', 'Passed Ball', 'Stolen Base', 'Caught Stealing', 'Pickoff', 'Error', 'Out', 'Balk', 'Defensive Indiff', 'Other Advance']
+#Pad events at both start (-) and end (+)
+EVENT_START_PADDING = 4
+EVENT_END_PADDING = 17
+MINIMUM_BREAK_DURATION = 10
+
+SECONDS_PER_SEGMENT = 4
 
 
 def find(source,start_str,end_str):
@@ -114,17 +136,8 @@ def UTCToLocal(utc_dt):
 
 
 def localToEastern():
-    eastern = pytz.timezone('US/Eastern')
-    local_to_utc = datetime.now(pytz.timezone('UTC'))
+    return get_eastern_game_date(datetime.now(pytz.timezone('UTC')))
 
-    eastern_hour = local_to_utc.astimezone(eastern).strftime('%H')
-    eastern_date = local_to_utc.astimezone(eastern)
-    #Don't switch to the current day until 4:01 AM est
-    if int(eastern_hour) < 3:
-        eastern_date = eastern_date - timedelta(days=1)
-
-    local_to_eastern = eastern_date.strftime('%Y-%m-%d')
-    return local_to_eastern
 
 def easternToUTC(eastern_time):
     utc = pytz.utc
@@ -133,6 +146,23 @@ def easternToUTC(eastern_time):
     # Convert it from Eastern to UTC
     utc_time = eastern_time.astimezone(utc)
     return utc_time
+
+
+def get_eastern_game_date(timestamp):
+    eastern = pytz.timezone('US/Eastern')
+    eastern_hour = timestamp.astimezone(eastern).strftime('%H')
+    eastern_date = timestamp.astimezone(eastern)
+    #Don't switch to the current day until 4:00 AM est
+    if int(eastern_hour) < 4:
+        eastern_date = eastern_date - timedelta(days=1)
+    return eastern_date.strftime('%Y-%m-%d')
+
+
+def yesterdays_date():
+    game_day = localToEastern()
+    display_day = stringToDate(game_day, "%Y-%m-%d")
+    prev_day = display_day - timedelta(days=1)
+    return prev_day.strftime("%Y-%m-%d")
 
 
 def get_params():
@@ -154,10 +184,10 @@ def get_params():
     return param
 
 
-def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, stream_date=None):
+def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, spoiler='True', suspended='False', start_inning='False', status='Preview'):
     ok=True
 
-    u=sys.argv[0]+"?mode="+str(104)+"&name="+urllib.quote_plus(name)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))
+    u=sys.argv[0]+"?mode="+str(104)+"&name="+urllib.quote_plus(name)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&spoiler="+urllib.quote_plus(str(spoiler))+"&suspended="+urllib.quote_plus(str(suspended))+"&start_inning="+urllib.quote_plus(str(start_inning))+"&status="+urllib.quote_plus(str(status))
 
     liz=xbmcgui.ListItem(name)
     if icon is None: icon = ICON
@@ -178,21 +208,21 @@ def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_in
     return ok
 
 
-def addDir(name,mode,icon=None,fanart=None,game_day=None,level=None,teams=None):
+def addDir(name,mode,game_day=None,start_inning='False',level=None,teams=None):
     ok=True
 
     u=sys.argv[0]+"?mode="+str(mode)+"&name="+urllib.quote_plus(name)
     if game_day is not None:
         u = u+"&game_day="+urllib.quote_plus(game_day)
+    if start_inning != 'False':
+        u = u+"&start_inning="+urllib.quote_plus(start_inning)
     if level is not None:
         u = u+"&level="+urllib.quote_plus(level)
     if teams is not None:
         u = u+"&teams="+urllib.quote_plus(teams)
 
     liz = xbmcgui.ListItem(name)
-    if icon is None: icon = ICON
-    if fanart is None: fanart = FANART
-    liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
+    liz.setArt({'icon': ICON, 'thumb': ICON, 'fanart': FANART})
 
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
 
@@ -272,8 +302,8 @@ def load_cookies():
     return cj
 
 
-def stream_to_listitem(stream_url, headers):
-    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
+def stream_to_listitem(stream_url, headers, start='1'):
+    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)') or (KODI_VERSION >= 19 and xbmc.getCondVisibility('System.AddonIsEnabled(inputstream.adaptive)')):
         listitem = xbmcgui.ListItem(path=stream_url)
         if KODI_VERSION >= 19:
             listitem.setProperty('inputstream', 'inputstream.adaptive')
@@ -281,8 +311,60 @@ def stream_to_listitem(stream_url, headers):
             listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
         listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
         listitem.setProperty('inputstream.adaptive.stream_headers', headers)
+        # if not using Kodi's resume function, set the start time
+        if sys.argv[3] != 'resume:true' and start != '-1':
+            listitem.setProperty('ResumeTime', start)
+            listitem.setProperty('TotalTime', start)
     else:
         listitem = xbmcgui.ListItem(path=stream_url + '|' + headers)
 
     listitem.setMimeType("application/x-mpegURL")
     return listitem
+
+
+def get_inning_start_options():
+    start_options = []
+    # add start options for each inning 1-12
+    for x in range(1, 13):
+        start_options.append(LOCAL_STRING(30422) + ' ' + LOCAL_STRING(30421) + ' ' + str(x)) # top
+        start_options.append(LOCAL_STRING(30423) + ' ' + LOCAL_STRING(30421) + ' ' + str(x)) # bottom
+    return start_options
+
+
+def calculate_inning_from_index(index):
+    inning_half = 'top'
+    inning = int(round(((index+0.5) / 2), 0))
+    if (index % 2) == 0 and ((index+1) % 2) == 1:
+        inning_half = 'bottom'
+    return inning, inning_half
+
+
+def get_last_name(full_name):
+    try:
+        return full_name.split(' ', 1)[1]
+    except:
+        pass
+    return full_name
+
+
+def get_broadcast_start_timestamp(stream_url):
+    broadcast_start_timestamp = None
+    try:
+        url = stream_url[:len(stream_url)-5] + '_5472K.m3u8'
+        headers = {
+            'User-Agent': UA_PC,
+             'Origin': 'https://www.milb.com',
+             'Referer': 'https://www.milb.com/'
+        }
+        r = requests.get(url, headers=headers, verify=VERIFY)
+        content = r.text
+        line_array = content.splitlines()
+        for line in line_array:
+            if line.startswith('#EXT-X-PROGRAM-DATE-TIME:'):
+                broadcast_start_timestamp = parse(line[25:])
+                xbmc.log('Found broadcast start timestamp ' + str(broadcast_start_timestamp))
+                break
+    except:
+        xbmc.log('Failed to find broadcast start timestamp')
+        pass
+    return broadcast_start_timestamp

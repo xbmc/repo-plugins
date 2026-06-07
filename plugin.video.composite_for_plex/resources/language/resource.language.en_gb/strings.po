@@ -16,6 +16,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
+msgctxt "Addon Description"
+msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "Composite is NOT an official Plex add-on and is not supported or endorsed by Plex."
+msgstr ""
+
 msgctxt "#30000"
 msgid "Confirm file delete?"
 msgstr ""
@@ -1566,4 +1574,12 @@ msgstr ""
 
 msgctxt "#30799"
 msgid "Configured library sections have been reset"
+msgstr ""
+
+msgctxt "#30800"
+msgid "Continue Watching"
+msgstr ""
+
+msgctxt "#30801"
+msgid "Detect Servers"
 msgstr ""

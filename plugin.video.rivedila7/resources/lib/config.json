@@ -1,0 +1,9 @@
+{
+  "exclusions": ["/meteola7", "/meteo-della-sera", "/tgla7", "/film", "/film-e-fiction"],
+  "mappings": {
+    "/facciaafaccia": "/faccia-a-faccia",
+    "/il-boss-dei-comici": "/boss-dei-comici",
+    "/lariadestate": "/laria-destate",
+    "/taga-doc": "/tagada-doc"
+  }
+}

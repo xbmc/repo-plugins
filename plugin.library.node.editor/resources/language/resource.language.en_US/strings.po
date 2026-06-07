@@ -16,6 +16,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "Addon Summary"
+msgid "Manage custom library nodes."
+msgstr "Manage custom library nodes."
+
+msgctxt "Addon Description"
+msgid "Create and edit custom library nodes."
+msgstr "Create and edit custom library nodes."
+
 msgctxt "#30000"
 msgid "Add content..."
 msgstr "Add content..."

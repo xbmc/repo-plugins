@@ -14,6 +14,7 @@ class LanguageHelper(object):
     ChannelsId = 30507
     NoFavsId = 30508
     NoPlaybackId = 30509
+    Profiles = 30513
     NewVersionId = 30516
     NewVersion2Id = 30517
     RepoWarningId = 30520
@@ -25,7 +26,6 @@ class LanguageHelper(object):
     AddOnSettingsId = 30528
     RefreshListId = 30529
     CheckUpdatesId = 30530
-    ItemInfo = 30014
     BitrateSelection = 30020
     Recent = 30024
     OtherAddon = 30007
@@ -37,6 +37,11 @@ class LanguageHelper(object):
     UpdateRequired = 30044
     UpdateToNewKodi = 30045
     YouTubeMissing = 30047
+
+    PasteRefreshToken = 30121
+    InvalidRefreshToken = 30122
+    ExpireRefreshToken = 30123
+    SetRefreshToken = 30124
 
     Monday = 30190
     Tuesday = 30191
@@ -71,8 +76,20 @@ class LanguageHelper(object):
     LatestNews = 30364
     Movies = 30365
     AvailableFrom = 30366
+    NewOnChannel = 30367
+    Extras = 30368
+    Fragments = 30369
+    AllEpisodes = 30370
+    Trending = 30371
+    NewSearch = 30372
+    Following = 30373
+    RecommendedTvShows = 30374
+    RecommendedVideos = 30375
+    ContinueWatching = 30376
 
     ChannelSelection = 30507
+    ShortCutName = 30512
+
     # Unused:
     # InitializingId = 30531
     # ImportCommonId = 30532
@@ -110,6 +127,10 @@ class LanguageHelper(object):
     CloakMessage = 30566
     AddonsNotEnabledTitle = 30567
     AddonsNotEnabledText = 30568
+    FetchMultiApi = 30584
+    PageOfPages = 30585
+    # 30586 and 30587 taken by settings.
+    GeoLockedMessageId = 30588
 
     Active = 30068
     InitChannelTitle = 30556

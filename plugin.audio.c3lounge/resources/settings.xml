@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30000">
+        <setting label="30001" type="lsep"/>
+        <setting id="stream_quality" type="select" label="30002" values="High|Medium|Low" default="High"/>
+    </category>
+</settings>

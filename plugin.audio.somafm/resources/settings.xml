@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+	<section id="plugin.audio.somafm">
+		<category help="" id="stream" label="32000">
+			<group id="1">
+				<setting help="" id="priority_quality" label="32001" type="integer">
+					<level>0</level>
+					<default>2</default>
+					<constraints>
+						<options>
+							<option label="32910">0</option>
+							<option label="32911">1</option>
+							<option label="32912">2</option>
+							<option label="32913">3</option>
+						</options>
+					</constraints>
+					<control format="string" type="spinner"/>
+				</setting>
+				<setting help="" id="priority_format" label="32002" type="integer">
+					<level>0</level>
+					<default>1</default>
+					<constraints>
+						<options>
+							<option label="32920">0</option>
+							<option label="32921">1</option>
+							<option label="32922">2</option>
+							<option label="32923">3</option>
+						</options>
+					</constraints>
+					<control format="string" type="spinner"/>
+				</setting>
+			</group>
+			<group id="2"/>
+			<group id="3" label="32009"/>
+		</category>
+		<category help="" id="cache" label="32006">
+			<group id="1">
+				<setting help="" id="cache_ttl" label="32008" type="integer">
+					<level>0</level>
+					<default>1</default>
+					<constraints>
+						<options>
+							<option label="32930">0</option>
+							<option label="32931">1</option>
+							<option label="32932">2</option>
+							<option label="32933">3</option>
+						</options>
+					</constraints>
+					<control format="string" type="spinner"/>
+				</setting>
+				<setting help="" id="vfmmjibxueyklmzyegakksgeiaptcxop" label="32007" type="action">
+					<level>0</level>
+					<data>Runscript(plugin.audio.somafm,0,clearcache)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="action" type="button"/>
+				</setting>
+			</group>
+			<group id="2" label="32009"/>
+		</category>
+	</section>
+</settings>

@@ -1,0 +1,28 @@
+# Kodi Media Center language file
+# Addon Name: c3lounge Radio
+# Addon id: plugin.audio.c3lounge
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.audio.c3lounge\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-31 12:00+0000\n"
+"PO-Revision-Date: 2025-12-31 12:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Stream Settings"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Stream Quality"
+msgstr ""

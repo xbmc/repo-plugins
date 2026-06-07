@@ -1,7 +1,2 @@
 2020.01.29
 - Initial version
-
-2021.03.23
-- Updates for Matrix compatability
-- Adding background for HSK, updates to broken backgrounds
-- New background for game icon images

@@ -1,200 +1,132 @@
 # -*- coding: utf-8 -*-
-# Copyright: (c) JUL1EN094, SPM, SylvainCecchetto
+# Copyright: (c) JUL1EN094, SPM, SylvainCecchetto, darodi
 # Copyright: (c) 2016, SylvainCecchetto
 # GNU General Public License v2.0+ (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-from builtins import str
-import json
-import re
 
-import inputstreamhelper
-from codequick import Listitem, Resolver, Route, Script, utils
-from kodi_six import xbmcgui
+import json
 import urlquick
 
-from resources.lib import web_utils
-from resources.lib.kodi_utils import get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
+# noinspection PyUnresolvedReferences
+from codequick import Listitem, Resolver, Route, utils
+
+# noinspection PyUnresolvedReferences
+from kodi_six import xbmcgui
+
+from resources.lib import resolver_proxy, web_utils
+from resources.lib.kodi_utils import (INPUTSTREAM_PROP, get_selected_item_art,
+                                      get_selected_item_info,
+                                      get_selected_item_label)
 from resources.lib.menu_utils import item_post_treatment
 
+URL_ROOT = "https://www.tf1info.fr"
 
-# TO DO
-# Add aired, date, duration etc...
-# Rework get_video_url (remove code not needed)
+URL_EMISSION = URL_ROOT + '/emissions'
+URL_LCI_EMISSIONS = URL_EMISSION + '/?channel=lci'
 
-URL_ROOT = utils.urljoin_partial("http://www.tf1.fr")
+URL_VIDEO_STREAM = "https://mediainfo.tf1.fr/mediainfocombo/%s"
+PARAMS_VIDEO_STREAM = {
+    'context': 'MYTF1',
+    'pver': '4008002',
+    'platform': 'web',
+    'os': 'windows',
+    'osVersion': '10.0',
+    'topDomain': 'www.tf1.fr'
+}
 
-URL_LCI_REPLAY = "http://www.lci.fr/emissions"
-URL_LCI_ROOT = "http://www.lci.fr"
-
-URL_VIDEO_STREAM = 'https://mediainfo.tf1.fr/mediainfocombo/%s?context=MYTF1&pver=4008002&platform=web&os=linux&osVersion=unknown&topDomain=www.tf1.fr'
-
-URL_LICENCE_KEY = 'https://drm-wide.tf1.fr/proxy?id=%s|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36&Host=drm-wide.tf1.fr|R{SSM}|'
 # videoId
+URL_LICENCE_KEY = "https://drm-wide.tf1.fr/proxy?id=%s"
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_windows_ua()}
 
 
 @Route.register
-def list_programs(plugin, item_id, **kwargs):
-    """
-    Build programs listing
-    - Les feux de l'amour
-    - ...
-    """
-    resp = urlquick.get(URL_LCI_REPLAY)
-    root = resp.parse("ul",
-                      attrs={"class": "topic-chronology-milestone-component"})
+def lci_root(plugin, item_id, **kwargs):
+    """Build programs listing."""
+    resp = urlquick.get(URL_LCI_EMISSIONS, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse("script", attrs={"id": "__NEXT_DATA__"})
+    json_parser = json.loads(root.text)
 
-    for program in root.iterfind(".//li"):
+    replay_list = json_parser['props']['pageProps']['page']['data'][3]['data'][3]['data'][0]['data']['elementList']
+
+    for emission in replay_list:
         item = Listitem()
-        program_url = URL_LCI_ROOT + program.find('.//a').get('href')
-        program_name = program.find(".//h2[@class='text-block']").text
-        img = program.findall('.//source')[0]
-        try:
-            img = img.get('data-srcset')
-        except Exception:
-            img = img.get('srcset')
-        img = img.split(',')[0].split(' ')[0]
-        item.label = program_name
-        item.art['thumb'] = item.art['landscape'] = img
-        item.set_callback(list_videos,
-                          item_id=item_id,
-                          program_url=program_url,
-                          page='1')
+        emission_url = URL_ROOT + emission['link']
+        item.label = emission['title']
+        item.art["thumb"] = item.art["landscape"] = emission['pictures']['elementList'][1]['url']
+        item.set_callback(list_videos, emission_url=emission_url, page="1")
         item_post_treatment(item)
         yield item
 
 
 @Route.register
-def list_videos(plugin, item_id, program_url, page, **kwargs):
+def list_videos(plugin, emission_url, page, **kwargs):
+    resp = urlquick.get(emission_url + "%s/" % page, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse("script", attrs={"id": "__NEXT_DATA__"})
+    json_parser = json.loads(root.text)
+    list_programs = json_parser['props']['pageProps']['page']['data'][3]['data'][3]['data'][0]['data']['elementList']
 
-    if page == '1':
-        resp = urlquick.get(program_url)
-    else:
-        resp = urlquick.get(program_url + '%s/' % page)
-    root = resp.parse()
-
-    for replay in root.iterfind(
-            ".//article[@class='grid-blk__item']"):
-
-        title = replay.find('.//h2').text
-        img = ''
-        for img in replay.findall('.//source'):
-            try:
-                img = img.get('data-srcset')
-            except Exception:
-                img = img.get('srcset')
-
-        img = img.split(',')[0].split(' ')[0]
-        program_id = URL_LCI_ROOT + replay.find('.//a').get('href')
-
+    for program in list_programs:
         item = Listitem()
-        item.label = title
-        item.art['thumb'] = item.art['landscape'] = img
-
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          program_id=program_id)
-        item_post_treatment(item,
-                            is_playable=True,
-                            is_downloadable=False)
+        video_url = URL_ROOT + program['link']
+        item.label = program['title']
+        item.art["thumb"] = item.art["landscape"] = program['pictures']['elementList'][1]['url']
+        item.info['plot'] = program['text']
+        item.info.date(program['date'].split('T')[0], "%Y-%m-%d")
+        item.set_callback(get_video_url, video_url=video_url)
+        item_post_treatment(item, is_playable=True, is_downloadable=False)
         yield item
 
     # More videos...
-    yield Listitem.next_page(item_id=item_id,
-                             program_url=program_url,
-                             page=str(int(page) + 1))
+    if 'next' in json_parser:
+        is_next = json_parser['props']['pageProps']['page']['data'][3]['data'][3]['data'][1]['data']['next']
+    else:
+        is_next = None
+
+    if is_next is not None:
+        yield Listitem.next_page(emission_url=emission_url, page=str(int(page) + 1))
 
 
 @Resolver.register
-def get_video_url(plugin,
-                  item_id,
-                  program_id,
-                  download_mode=False,
-                  **kwargs):
+def get_video_url(plugin, video_url, download_mode=False, **kwargs):
+    resp = urlquick.get(video_url, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse("script", attrs={"id": "__NEXT_DATA__"})
+    json_parser = json.loads(root.text)
+    video_id = json_parser["props"]["pageProps"]["page"]["video"]["id"]
 
-    if 'www.wat.tv/embedframe' in program_id:
-        url = 'http:' + program_id
-    elif "http" not in program_id:
-        if program_id[0] == '/':
-            program_id = program_id[1:]
-        url = URL_ROOT(program_id)
-    else:
-        url = program_id
-
-    video_html = urlquick.get(url).text
-
-    if 'www.wat.tv/embedframe' in program_id:
-        video_id = re.compile('UVID=(.*?)&').findall(video_html)[0]
-    elif item_id == 'lci':
-        video_id = re.compile(r'data-videoid="(.*?)"').findall(video_html)[0]
-    else:
-        root = video_html.parse()
-        iframe_player = root.find(".//div[@class='iframe_player']")
-        if iframe_player is not None:
-            video_id = iframe_player.get('data-watid')
-        else:
-            video_id = re.compile(
-                r'www\.tf1\.fr\/embedplayer\/(.*?)\"').findall(video_html)[0]
-
-    url_json = URL_VIDEO_STREAM % video_id
-    htlm_json = urlquick.get(url_json,
-                             headers={'User-Agent': web_utils.get_random_ua()},
-                             max_age=-1)
-    json_parser = json.loads(htlm_json.text)
-
-    if json_parser['delivery']['code'] > 400:
-        plugin.notify('ERROR', plugin.localize(30713))
+    json_parser = urlquick.get(URL_VIDEO_STREAM % video_id, params=PARAMS_VIDEO_STREAM, headers=GENERIC_HEADERS, max_age=-1).json()
+    if json_parser["delivery"]["code"] > 400:
+        plugin.notify("ERROR", plugin.localize(30713))
         return False
 
     if download_mode:
-        xbmcgui.Dialog().ok('Info', plugin.localize(30603))
+        xbmcgui.Dialog().ok("Info", plugin.localize(30603))
         return False
 
-    is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
-    if not is_helper.check_inputstream():
-        return False
+    video_url = json_parser["delivery"]["url"]
+    license_url = URL_LICENCE_KEY % video_id
 
-    item = Listitem()
-    item.path = json_parser['delivery']['url']
-    item.label = get_selected_item_label()
-    item.art.update(get_selected_item_art())
-    item.info.update(get_selected_item_info())
-    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
-    item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-    item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
-    item.property['inputstream.adaptive.license_key'] = URL_LICENCE_KEY % video_id
+    headers = {
+        'Content-Type': '',
+        'User-Agent': web_utils.get_random_windows_ua()
+    }
 
-    return item
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, manifest_type="mpd", license_url=license_url, headers=headers)
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    video_id = "L_%s" % item_id.upper()
+    json_parser = urlquick.get(URL_VIDEO_STREAM % video_id, params=PARAMS_VIDEO_STREAM, headers=GENERIC_HEADERS, max_age=-1).json()
 
-    video_id = 'L_%s' % item_id.upper()
-    url_json = URL_VIDEO_STREAM % (video_id)
-    htlm_json = urlquick.get(url_json,
-                             headers={'User-Agent': web_utils.get_random_ua()},
-                             max_age=-1)
-    json_parser = json.loads(htlm_json.text)
-
-    if json_parser['delivery']['code'] > 400:
-        plugin.notify('ERROR', plugin.localize(30713))
+    if json_parser["delivery"]["code"] > 400:
+        plugin.notify("ERROR", plugin.localize(30713))
         return False
 
-    is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
-    if not is_helper.check_inputstream():
-        return False
+    video_url = json_parser["delivery"]["url"]
+    license_url = URL_LICENCE_KEY % video_id
 
-    item = Listitem()
-    item.path = json_parser['delivery']['url']
-    item.label = get_selected_item_label()
-    item.art.update(get_selected_item_art())
-    item.info.update(get_selected_item_info())
-    item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
-    item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-    item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
-    item.property['inputstream.adaptive.license_key'] = URL_LICENCE_KEY % video_id
-
-    return item
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, manifest_type="mpd", license_url=license_url, workaround='1')

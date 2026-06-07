@@ -8,13 +8,13 @@ from __future__ import unicode_literals
 import re
 import urlquick
 
+# noinspection PyUnresolvedReferences
 from codequick import Resolver
 
-URL_LIVES = 'http://www.m24tv.ma/'
+from resources.lib import resolver_proxy, web_utils
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVES)
-    return re.compile(r'Direct\ TV[\S\s]*\"file\"\:\ \"(.*\.m3u8.*)\"\,').findall(resp.text)[0]
+    return resolver_proxy.get_stream_youtube(plugin, 'CinxQ7HtNQ8')

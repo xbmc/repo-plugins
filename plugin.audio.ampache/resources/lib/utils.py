@@ -1,10 +1,16 @@
 import time
 import datetime
-import xbmcaddon
+import xbmcaddon,xbmcplugin,xbmc
 import sys
 
 #main plugin/service library
 ampache = xbmcaddon.Addon("plugin.audio.ampache")
+
+CONTENT_TYPES = frozenset(['artists', 'albums', 'songs', 'videos'])
+
+def setContent(handle,object_type):
+    if object_type in CONTENT_TYPES:
+        xbmcplugin.setContent(handle, object_type)
 
 def otype_to_mode(object_type, object_subtype=None):
     mode = None
@@ -18,6 +24,8 @@ def otype_to_mode(object_type, object_subtype=None):
         mode = 4
     elif object_type == 'podcasts':
         mode = 5
+    elif object_type == 'live_streams':
+        mode = 6
     elif object_type == 'videos':
         mode = 8
     elif object_type == 'tags' or object_type == 'genres':
@@ -64,6 +72,8 @@ def otype_to_type(object_type,object_subtype=None):
     elif object_type == 'songs':
         if object_subtype == 'podcast_episodes':
             return 'podcast_episode'
+        elif object_subtype == 'live_streams':
+            return 'live_stream'
         return 'song'
     return None
 
@@ -140,20 +150,13 @@ def get_params(plugin_url):
 
 def get_objectId_from_fileURL( file_url ):
     params = get_params(file_url)
-    object_id = None
     #i use two kind of object_id, i don't know, but sometime i have different
     #url, btw, no problem, i handle both and i solve the problem in this way
-    try:
-            object_id=params["object_id"]
-            xbmc.log("AmpachePlugin::object_id " + object_id, xbmc.LOGDEBUG)
-    except:
-            pass
-    try:
-            object_id=params["oid"]
-            xbmc.log("AmpachePlugin::object_id " + object_id, xbmc.LOGDEBUG)
-    except:
-            pass
-    return object_id
+    for key in ("object_id", "oid"):
+        if key in params:
+            xbmc.log("AmpachePlugin::object_id " + params[key], xbmc.LOGDEBUG)
+            return params[key]
+    return None
 
 def getRating(rating):
     if rating:

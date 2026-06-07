@@ -31,7 +31,7 @@ class Main(object):
         # All Videos
         #
         parameters = {"action": "list-play", "plugin_category": LANGUAGE(30000),
-                      "url": "http://www.ggmania.com/more.php3?next=000", "next_page_possible": "True"}
+                      "url": "https://www.ggmania.com/more.php3?next=000", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30000))
         thumbnail_url = 'DefaultFolder.png'
@@ -45,7 +45,7 @@ class Main(object):
         # Movie
         #
         parameters = {"action": "list-play", "plugin_category": LANGUAGE(30001),
-                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=movie", "next_page_possible": "True"}
+                      "url": "https://www.ggmania.com/more.php3?next=000&kategory=movie", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30001))
         thumbnail_url = 'DefaultFolder.png'
@@ -59,7 +59,7 @@ class Main(object):
         # Console
         #
         parameters = {"action": "list-play", "plugin_category": LANGUAGE(30002),
-                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=console", "next_page_possible": "True"}
+                      "url": "https://www.ggmania.com/more.php3?next=000&kategory=console", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30002))
         thumbnail_url = 'DefaultFolder.png'
@@ -73,7 +73,7 @@ class Main(object):
         # Preview
         #
         parameters = {"action": "list-play", "plugin_category": LANGUAGE(30003),
-                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=preview", "next_page_possible": "True"}
+                      "url": "https://www.ggmania.com/more.php3?next=000&kategory=preview", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30003))
         thumbnail_url = 'DefaultFolder.png'
@@ -87,7 +87,7 @@ class Main(object):
         # Tech
         #
         parameters = {"action": "list-play", "plugin_category": LANGUAGE(30004),
-                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=tech", "next_page_possible": "True"}
+                      "url": "https://www.ggmania.com/more.php3?next=000&kategory=tech", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30004))
         thumbnail_url = 'DefaultFolder.png'
@@ -101,7 +101,7 @@ class Main(object):
         # Demo
         #
         parameters = {"action": "list-play", "plugin_category": LANGUAGE(30005),
-                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=demo", "next_page_possible": "True"}
+                      "url": "https://www.ggmania.com/more.php3?next=000&kategory=demo", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30005))
         thumbnail_url = 'DefaultFolder.png'
@@ -115,7 +115,7 @@ class Main(object):
         # Interview
         #
         parameters = {"action": "list-play", "plugin_category": LANGUAGE(30006),
-                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=interview",
+                      "url": "https://www.ggmania.com/more.php3?next=000&kategory=interview",
                       "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30006))
@@ -130,7 +130,7 @@ class Main(object):
         # FreeGame
         #
         parameters = {"action": "list-play", "plugin_category": LANGUAGE(30007),
-                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=freegame",
+                      "url": "https://www.ggmania.com/more.php3?next=000&kategory=freegame",
                       "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30007))
@@ -145,7 +145,7 @@ class Main(object):
         # Media
         #
         parameters = {"action": "list-play", "plugin_category": LANGUAGE(30008),
-                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=media", "next_page_possible": "True"}
+                      "url": "https://www.ggmania.com/more.php3?next=000&kategory=media", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30008))
         thumbnail_url = 'DefaultFolder.png'
@@ -159,7 +159,7 @@ class Main(object):
         # Gold
         #
         parameters = {"action": "list-play", "plugin_category": LANGUAGE(30009),
-                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=gold", "next_page_possible": "True"}
+                      "url": "https://www.ggmania.com/more.php3?next=000&kategory=gold", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30009))
         thumbnail_url = 'DefaultFolder.png'

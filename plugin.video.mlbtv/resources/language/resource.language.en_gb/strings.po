@@ -57,7 +57,7 @@ msgid "CDN"
 msgstr ""
 
 msgctxt "#30170"
-msgid "Hide Scores"
+msgid "Hide Scores & Timeline Spoilers"
 msgstr ""
 
 msgctxt "#30171"
@@ -109,40 +109,43 @@ msgid "24 Hour Clock (ex. 18:00)"
 msgstr ""
 
 msgctxt "#30304"
-msgid "Catch Up"
+msgid "Ask to Catch Up, start from beginning, or from inning"
 msgstr ""
 
+msgctxt "#30305"
+msgid "Show only free games"
+msgstr ""
 
-msgctxt "#30300"
-msgid "In Market Streams"
+msgctxt "#30306"
+msgid "Ask to automatically skip breaks"
+msgstr ""
+
+msgctxt "#30307"
+msgid "Auto-select favorite/home video stream"
 msgstr ""
 
 msgctxt "#30700"
 msgid "Sports"
 msgstr ""
 
-msgctxt "#30200"
-msgid "Proxy Settings"
+msgctxt "#30260"
+msgid "Logout Successful"
 msgstr ""
 
-msgctxt "#30210"
-msgid "Enabled"
+msgctxt "#30261"
+msgid "Logout completed successfully"
 msgstr ""
 
-msgctxt "#30220"
-msgid "Server"
+msgctxt "#30262"
+msgid "Login Failed"
 msgstr ""
 
-msgctxt "#30230"
-msgid "Port"
+msgctxt "#30263"
+msgid "Please check your credentials and try again"
 msgstr ""
 
-msgctxt "#30240"
-msgid "Username"
-msgstr ""
-
-msgctxt "#30250"
-msgid "Password"
+msgctxt "#30270"
+msgid "Error Occured"
 msgstr ""
 
 msgctxt "#30360"
@@ -155,6 +158,30 @@ msgstr ""
 
 msgctxt "#30362"
 msgid "Goto Date"
+msgstr ""
+
+msgctxt "#30363"
+msgid "Featured Videos"
+msgstr ""
+
+msgctxt "#30365"
+msgid "Invalid Date"
+msgstr ""
+
+msgctxt "#30366"
+msgid "The date entered is not in the format required."
+msgstr ""
+
+msgctxt "#30367"
+msgid "LIVE NOW: "
+msgstr ""
+
+msgctxt "#30368"
+msgid "MLB Big Inning"
+msgstr ""
+
+msgctxt "#30369"
+msgid "Big Inning may require inputstream adaptive to be enabled, or Kodi version 19+, to stream live properly"
 msgstr ""
 
 msgctxt "#30370"
@@ -170,7 +197,7 @@ msgid "Choose Stream Quality"
 msgstr ""
 
 msgctxt "#30375"
-msgid "Watch all the days highlights for "
+msgid "Click the date to watch all recaps or condensed games for "
 msgstr ""
 
 msgctxt "#30380"
@@ -184,4 +211,245 @@ msgstr ""
 msgctxt "#30382"
 msgid "Downloading "
 msgstr ""
+
+msgctxt "#30383"
+msgid "Streams Not Found"
+msgstr ""
+
+msgctxt "#30384"
+msgid "No playable streams found"
+msgstr ""
+
+msgctxt "#30390"
+msgid "Choose Stream"
+msgstr ""
+
+msgctxt "#30391"
+msgid "Highlights"
+msgstr ""
+
+msgctxt "#30392"
+msgid " TV"
+msgstr ""
+
+msgctxt "#30393"
+msgid " Radio"
+msgstr ""
+
+msgctxt "#30394"
+msgid ""
+msgstr ""
+
+msgctxt "#30395"
+msgid " Spanish"
+msgstr ""
+
+msgctxt "#30396"
+msgid "Select a Start Point"
+msgstr ""
+
+msgctxt "#30397"
+msgid "Catch Up"
+msgstr ""
+
+msgctxt "#30398"
+msgid "Beginning"
+msgstr ""
+
+msgctxt "#30399"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30400"
+msgid "View All"
+msgstr ""
+
+msgctxt "#30401"
+msgid "Recaps"
+msgstr ""
+
+msgctxt "#30402"
+msgid "Condensed Games"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Automatically Skip"
+msgstr ""
+
+msgctxt "#30404"
+msgid "Skip nothing"
+msgstr ""
+
+msgctxt "#30405"
+msgid "Skip all breaks plus idle time between pitches"
+msgstr ""
+
+msgctxt "#30406"
+msgid "Skip all breaks and non-action pitches"
+msgstr ""
+
+msgctxt "#30407"
+msgid "Inning"
+msgstr ""
+
+msgctxt "#30408"
+msgid "Skip all breaks"
+msgstr ""
+
+msgctxt "#30409"
+msgid "Top"
+msgstr ""
+
+msgctxt "#30410"
+msgid "Bottom"
+msgstr ""
+
+msgctxt "#30411"
+msgid "Play All"
+msgstr ""
+
+msgctxt "#30412"
+msgid "Auto-play live favorite games when starting addon"
+msgstr ""
+
+msgctxt "#30413"
+msgid "See Yesterday's Scores at inning"
+msgstr ""
+
+msgctxt "#30414"
+msgid "Watch in YouTube Add-on"
+msgstr ""
+
+msgctxt "#30415"
+msgid "USA Zip code (5 digits, for blackout labels)"
+msgstr ""
+
+msgctxt "#30416"
+msgid "Disable proxy (used for padding and alternate audio)"
+msgstr ""
+
+msgctxt "#30417"
+msgid "MLB.TV Game Changer"
+msgstr ""
+
+msgctxt "#30418"
+msgid "Automatically switches between the highest leverage active live games."
+msgstr ""
+
+msgctxt "#30419"
+msgid "Currently there are no active live games"
+msgstr ""
+
+msgctxt "#30420"
+msgid "Game Changer delay (seconds)"
+msgstr ""
+
+msgctxt "#30421"
+msgid "Skip to specific batter(s) or pitcher(s)"
+msgstr ""
+
+msgctxt "#30422"
+msgid "Select batter(s) or pitcher(s) (one at a time, click Cancel when done)"
+msgstr ""
+
+msgctxt "#30423"
+msgid "Skip commercial breaks"
+msgstr ""
+
+msgctxt "#30424"
+msgid "Skip adjust start (seconds)"
+msgstr ""
+
+msgctxt "#30425"
+msgid "Skip adjust end (seconds)"
+msgstr ""
+
+msgctxt "#30426"
+msgid "Minor League Games"
+msgstr ""
+
+msgctxt "#30427"
+msgid "Include favorite team's affiliates"
+msgstr ""
+
+msgctxt "#30428"
+msgid "Country (for blackout labels)"
+msgstr ""
+
+msgctxt "#30429"
+msgid "By Affiliate"
+msgstr ""
+
+msgctxt "#30430"
+msgid "AAA"
+msgstr ""
+
+msgctxt "#30431"
+msgid "AA"
+msgstr ""
+
+msgctxt "#30432"
+msgid "A+"
+msgstr ""
+
+msgctxt "#30433"
+msgid "A"
+msgstr ""
+
+msgctxt "#30434"
+msgid "Skip adjust in seconds (negative, earlier; positive, later)"
+msgstr ""
+
+msgctxt "#30435"
+msgid "Extra MiLB skip adjust (seconds)"
+msgstr ""
+
+msgctxt "#30436"
+msgid "Hide scores ticker"
+msgstr ""
+
+msgctxt "#30437"
+msgid "Disable closed captions"
+msgstr ""
+
+msgctxt "#30438"
+msgid "MLB Network"
+msgstr ""
+
+msgctxt "#30439"
+msgid "MLB Network live stream"
+msgstr ""
+
+msgctxt "#30440"
+msgid "SportsNet LA"
+msgstr ""
+
+msgctxt "#30441"
+msgid "SNLA live stream"
+msgstr ""
+
+msgctxt "#30442"
+msgid "SNY"
+msgstr ""
+
+msgctxt "#30443"
+msgid "SNY live stream"
+msgstr ""
+
+msgctxt "#30444"
+msgid "Stream Finder"
+msgstr ""
+
+msgctxt "#30445"
+msgid "Automatically switches between games according to your preferences. This addon is not affiliated with Baseball Reference, do not contact them for support. Visit http://bit.ly/bbrefsf to create and export your preferences, then upload and save them to Kodi at "
+msgstr ""
+
+msgctxt "#30446"
+msgid "MASN"
+msgstr ""
+
+msgctxt "#30447"
+msgid "MASN live stream"
+msgstr ""
+
 

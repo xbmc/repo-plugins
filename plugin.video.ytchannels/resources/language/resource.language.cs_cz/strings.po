@@ -1,0 +1,190 @@
+# XBMC Media Center language file
+# Addon Name: YouTube Channels
+# Addon id: plugin.video.ytchannels
+# Addon version: 0.5.0+matrix.1
+# Addon Provider: bromix
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: jirka.roubal@gmail.com\n"
+"POT-Creation-Date: 2023-10-31\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: JiRo jirka.roubal@gmail.com\n"
+"Language-Team: JiRo jirka.roubal@gmail.com\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs_cz\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
+
+msgctxt "#30000"
+msgid "Remove folder"
+msgstr "Odstranit složku"
+
+msgctxt "#30001"
+msgid "Add folder"
+msgstr "Přidat složku"
+
+msgctxt "#30002"
+msgid "Add channel to root"
+msgstr "Přidat kanál do hlavní složky"
+
+msgctxt "#30003"
+msgid "Remove channel"
+msgstr "Odstranit kanál"
+
+msgctxt "#30004"
+msgid "Playlists"
+msgstr "Playlisty"
+
+msgctxt "#30005"
+msgid "Next page"
+msgstr "Další strana"
+
+msgctxt "#30006"
+msgid "Search for channel"
+msgstr "Vyhledat kanál"
+
+msgctxt "#30007"
+msgid "Add by username"
+msgstr "Přidat podle uživatele"
+
+msgctxt "#30008"
+msgid "Choose option"
+msgstr "Vybrat možnosti"
+
+msgctxt "#30009"
+msgid "Add channel to"
+msgstr "Přidat kanál do"
+
+msgctxt "#30010"
+msgid "root"
+msgstr "hlavní složky"
+
+msgctxt "#30011"
+msgid "Folder name"
+msgstr "Název složky"
+
+msgctxt "#30012"
+msgid "Search channel"
+msgstr "Hledat kanál"
+
+msgctxt "#30013"
+msgid "Choose channel"
+msgstr "Vybrat kanál"
+
+msgctxt "#30014"
+msgid "Enter username"
+msgstr "Zadat uživatele"
+
+msgctxt "#30015"
+msgid "Erase database"
+msgstr "Vymazat databázi"
+
+msgctxt "#30016"
+msgid "Do you wish to erase your Youtube Channels database?"
+msgstr "Přejete si vymazat databázi kanálů Youtube?"
+
+msgctxt "#30017"
+msgid "Successfully erased folder database!"
+msgstr "Databáze složek byla úspěšně vymazána!"
+
+msgctxt "#30018"
+msgid "Channel with username"
+msgstr "Kanál se jménem uživatele"
+
+msgctxt "#30019"
+msgid "does not exist."
+msgstr "neexistuje."
+
+msgctxt "#30020"
+msgid "API Key Error"
+msgstr "Chyba API Key"
+
+msgctxt "#30021"
+msgid "You must enter a YouTube API Key to continue. Please use the addon settings to set the API key."
+msgstr "Chcete-li pokračovat, musíte zadat YouTube API Key. K nastavení API Key použijte nastavení doplňku."
+
+msgctxt "#30022"
+msgid "A YouTube API Key is required for this addon to work, please enter your API key now."
+msgstr "Pro správnou funkci doplńku, je vyžadován YouTube API Key. Zadejte prosím API Key."
+
+msgctxt "#30023"
+msgid "Move up"
+msgstr "Přesun nahoru"
+
+msgctxt "#30024"
+msgid "Move down"
+msgstr "Přesun dolů"
+
+msgctxt "#30025"
+msgid "Change folder"
+msgstr "Změna složky"
+
+msgctxt "#30026"
+msgid "Choose image"
+msgstr "Vyberte obrázek"
+
+msgctxt "#30027"
+msgid "Set thumbnail"
+msgstr "Nastavte thumbnail"
+
+msgctxt "#30028"
+msgid "Remove playlist"
+msgstr "Odstraňte playlist"
+
+msgctxt "#30029"
+msgid "Live"
+msgstr "Živě (Live)"
+
+msgctxt "#30031"
+msgid "Playing using YouTube"
+msgstr "Přehrávání s použitím Yutube"
+
+msgctxt "#30032"
+msgid "Sort Channels A-Z"
+msgstr "Seřadit kanály A-Z"
+
+msgctxt "#30099"
+msgid "Youtube channels"
+msgstr "Youtube kanály"
+
+msgctxt "#30200"
+msgid "General"
+msgstr "Všeobecný"
+
+msgctxt "#30201"
+msgid "Enable playlists"
+msgstr "Povolit playlisty"
+
+msgctxt "#30202"
+msgid "Show 'add folder/channel' options"
+msgstr "Zobrazit volbu 'Přidat složku/kanál'"
+
+msgctxt "#30203"
+msgid "Number of videos per page"
+msgstr "Počet položek na stranu"
+
+msgctxt "#30204"
+msgid "Number of channel search results"
+msgstr "Počet vyhledaných kanálů"
+
+msgctxt "#30205"
+msgid "Erase database"
+msgstr "Vymazat databázi"
+
+msgctxt "#30206"
+msgid "API Key"
+msgstr "API Key"
+
+msgctxt "#30207"
+msgid "YouTube API Key"
+msgstr "YouTube API Key"
+
+msgctxt "#30208"
+msgid "Enable live streams"
+msgstr "Povolit živá vysílání (Live streamy)"
+
+msgctxt "#30209"
+msgid "Filter out shorts"
+msgstr "Filtrovat krátká videa (< 1 minutu)"

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.cinetree" name="Cinetree" version="3.0.0" provider-name="Dimitri Kroon">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="inputstream.adaptive" version="19.0.7"/>
+    <import addon="script.module.requests" version="2.31.0"/>
+    <import addon="script.module.inputstreamhelper" version="0.8.5"/>
+    <import addon="script.module.codequick" version="1.0.3"/>
+    <import addon="script.module.pytz" version="2023.3.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en_GB">Films and documentaries from cinetree.nl (Benelux countries only, account required)</summary>
+    <summary lang="nl_NL">Films en documentaires van cinetree.nl (Alleen in de Benelux, account vereist)</summary>
+    <description lang="en_GB">
+      A privacy respecting way to watch free films or rent films from Dutch film platform cinetree.nl. Rental films can be rented directly by using your prepaid credit at Cinetree. If you prefer another payment method use the Cinetree website or the official Cinetree Android/Apple app to make the payment before watching the film on Kodi.[CR]This is an unofficial addon. It is not created or endorsed by Cinetree.
+    </description>
+    <description lang="nl_NL">
+      Een privacy respecterende manier om gratis films te kijken, of films te huren van het Nederlandse filmplatform cinetree.nl. Huurfilms kunnen direct worden gehuurd met je prepaid tegoed bij Cinetree. Als je de voorkeur geeft aan een andere betaalmethode gebruik dan de Cinetree website of de officiële Cinetree Android/Apple app om de betaling te doen voordat je de film op Kodi bekijkt.[CR]Dit is een onofficiële addon. Het is niet gemaakt of goedgekeurd door Cinetree.
+    </description>
+    <disclaimer lang="en_GB">
+      This addon is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    </disclaimer>
+    <disclaimer lang="nl_NL">
+      Deze addon is gedistribueerd in de hoop dat het nuttig zal zijn maar ZONDER ENIGE GARANTIE; zelfs zonder de impliciete garantie voor BRUIKBAARHEID VOOR EEN SPECIFIEK DOEL.
+    </disclaimer>
+    <language>nl</language>
+    <license>GPL-2.0-or-later</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=370761</forum>
+    <source>https://github.com/dimkroon/cinetree-for-kodi</source>
+    <assets>
+      <icon>resources/cinetree-logo.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+    <news>
+[B]Version 3.0.0[/B]
+- Updated for the new Cinetree website; fixes many listings.
+    </news>
+  </extension>
+</addon>

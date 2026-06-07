@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
-"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-30 21:31+0000\n"
+"PO-Revision-Date: 2024-11-02 13:46+0000\n"
 "Last-Translator: bas <bas@kodi.tv>\n"
 "Language-Team: English (United States) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/en_us/>\n"
 "Language: en_us\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
@@ -81,10 +81,6 @@ msgstr "Login Failed"
 msgctxt "#30013"
 msgid "Could not log on to the selected channel."
 msgstr "Could not log on to the selected channel."
-
-msgctxt "#30014"
-msgid "Show info"
-msgstr "Show info"
 
 msgctxt "#30015"
 msgid "via missing add-on"
@@ -460,6 +456,90 @@ msgctxt "#30108"
 msgid "Other"
 msgstr "Other"
 
+msgctxt "#30109"
+msgid "IPTV Manager"
+msgstr "IPTV Manager"
+
+msgctxt "#30110"
+msgid "Install IPTV Manager add-on"
+msgstr "Install IPTV Manager add-on"
+
+msgctxt "#30111"
+msgid "Enable IPTV Manager integration"
+msgstr "Enable IPTV Manager integration"
+
+msgctxt "#30112"
+msgid "IPTV Manager settings…"
+msgstr "IPTV Manager settings…"
+
+msgctxt "#30113"
+msgid "Set refresh token"
+msgstr "Set refresh token"
+
+msgctxt "#30114"
+msgid "Retrospect Web Dialog"
+msgstr "Retrospect Web Dialog"
+
+msgctxt "#30115"
+msgid "Setting up Retrospect webserver"
+msgstr "Setting up Retrospect webserver"
+
+msgctxt "#30116"
+msgid "Starting webserver on port {}"
+msgstr "Starting webserver on port {}"
+
+msgctxt "#30117"
+msgid "Waiting for input from browser"
+msgstr "Waiting for input from browser"
+
+msgctxt "#30118"
+msgid "Input received from browser"
+msgstr "Input received from browser"
+
+msgctxt "#30119"
+msgid "Open a browser and navigate to http://{}:{}"
+msgstr "Open a browser and navigate to http://{}:{}"
+
+msgctxt "#30120"
+msgid "Browser input cancelled"
+msgstr "Browser input cancelled"
+
+msgctxt "#30121"
+msgid "Paste refresh token here."
+msgstr "Paste refresh token here."
+
+msgctxt "#30122"
+msgid "Invalid Refresh Token"
+msgstr "Invalid Refresh Token"
+
+msgctxt "#30123"
+msgid "Expired Refresh Token"
+msgstr "Expired Refresh Token"
+
+msgctxt "#30124"
+msgid "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
+msgstr "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
+
+msgctxt "#30125"
+msgid "Show future episodes under 'Recent > Today'"
+msgstr "Show future episodes under 'Recent > Today'"
+
+msgctxt "#30126"
+msgid "Default"
+msgstr "Default"
+
+msgctxt "#30127"
+msgid "Show All"
+msgstr "Show All"
+
+msgctxt "#30128"
+msgid "Filter Premium"
+msgstr "Filter Premium"
+
+msgctxt "#30129"
+msgid "Re-Authenticate"
+msgstr "Re-Authenticate"
+
 # used for list limits
 # empty strings from id 30109 to 30189
 msgctxt "#30190"
@@ -655,6 +735,54 @@ msgctxt "#30366"
 msgid "Available from"
 msgstr "Available from"
 
+msgctxt "#30367"
+msgid "New on %s"
+msgstr "New on %s"
+
+msgctxt "#30368"
+msgid "Extras"
+msgstr "Extras"
+
+msgctxt "#30369"
+msgid "Fragments"
+msgstr "Fragments"
+
+msgctxt "#30370"
+msgid "All episodes"
+msgstr "All episodes"
+
+msgctxt "#30371"
+msgid "Trending"
+msgstr "Trending"
+
+msgctxt "#30372"
+msgid "New Search"
+msgstr "New Search"
+
+msgctxt "#30373"
+msgid "Following"
+msgstr "Following"
+
+msgctxt "#30374"
+msgid "Recommended TV Shows"
+msgstr "Recommended TV Shows"
+
+msgctxt "#30375"
+msgid "Recommended Videos"
+msgstr "Recommended Videos"
+
+msgctxt "#30376"
+msgid "Continue Watching"
+msgstr "Continue Watching"
+
+msgctxt "#30377"
+msgid "Clear Search History"
+msgstr ""
+
+msgctxt "#30378"
+msgid "Remove Item"
+msgstr ""
+
 # empty strings from id 30365 to 30400
 msgctxt "#30401"
 msgid "Dutch"
@@ -758,6 +886,18 @@ msgstr "Cannot start playback"
 msgctxt "#30510"
 msgid "New version available"
 msgstr "New version available"
+
+msgctxt "#30511"
+msgid "Add shortcut"
+msgstr "Add shortcut"
+
+msgctxt "#30512"
+msgid "Please provide a name for the shortcut."
+msgstr "Please provide a name for the shortcut."
+
+msgctxt "#30513"
+msgid "Profiles"
+msgstr "Profiles"
 
 # empty strings from id 30511 to 30515
 msgctxt "#30516"
@@ -1018,6 +1158,26 @@ msgctxt "#30583"
 msgid "Single episodes"
 msgstr "Single episodes"
 
+msgctxt "#30584"
+msgid "Fetching a long list of items using multiple API calls."
+msgstr "Fetching a long list of items using multiple API calls."
+
+msgctxt "#30585"
+msgid "Page {} of {}"
+msgstr "Page {} of {}"
+
+msgctxt "#30586"
+msgid "Number of pages to load for the main listing"
+msgstr "Number of pages to load for the main listing"
+
+msgctxt "#30587"
+msgid "Show streams with accessibility features"
+msgstr "Show streams with accessibility features"
+
+msgctxt "#30588"
+msgid "This stream cannot be played due to geographical restrictions."
+msgstr "This stream cannot be played due to geographical restrictions."
+
 # empty strings from id 30584 to 30589
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"
@@ -1098,6 +1258,10 @@ msgstr "Warning"
 msgctxt "#30609"
 msgid "Error"
 msgstr "Error"
+
+#~ msgctxt "#30014"
+#~ msgid "Show info"
+#~ msgstr "Show info"
 
 # empty string with id 30037
 #~ msgctxt "#30038"

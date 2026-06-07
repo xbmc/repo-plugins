@@ -322,7 +322,7 @@ class Channel(chn_class.Channel):
         item.set_date(year, month, day)
         item.complete = True
         return item
-    
+
     def create_video_item(self, result_set):
         """ Creates a MediaItem of type 'video' using the result_set from the regex.
 
@@ -364,7 +364,7 @@ class Channel(chn_class.Channel):
         # more description stuff
         # description = "%s\n\n" % (result_set[4],)
         description = ""
-        
+
         time_table = result_set[3]
         time_table_regex = \
             r'<ul>\W+<li><b>([^<]+)</b></li>\W+<li>\w+ (\d+:\d+)</li>\W+<li>\w+ (\d+:\d+)</li>'
@@ -383,10 +383,10 @@ class Channel(chn_class.Channel):
 
         description = description.strip(', ')
         item.description = description.strip()
-        
-        item.complete = False        
+
+        item.complete = False
         return item
-    
+
     def update_video_item(self, item):
         """ Updates an existing MediaItem with more data.
 
@@ -410,7 +410,7 @@ class Channel(chn_class.Channel):
         """
 
         Logger.debug('Starting update_video_item for %s (%s)', item.name, self.channelName)
-        
+
         data = UriHandler.open(item.url)
         videos = Regexer.do_regex(self.mediaUrlRegex, data)
 
@@ -421,6 +421,6 @@ class Channel(chn_class.Channel):
         for video in videos:
             Logger.trace(video)
             item.add_stream(video)
-        
+
         item.complete = True
         return item

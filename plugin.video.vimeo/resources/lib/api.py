@@ -4,7 +4,7 @@ import urllib.parse
 import xbmc
 
 from .api_collection import ApiCollection
-from .utils import webvtt_to_srt
+from .utils import m3u8_fix_audio, m3u8_without_av1, webvtt_to_srt
 from resources.lib.models.category import Category
 from resources.lib.models.channel import Channel
 from resources.lib.models.group import Group
@@ -25,11 +25,11 @@ class Api:
     api_oauth_scope = "public,private,interact"
     api_user_cache_key = "user.json"
 
-    # Extracted from public Vimeo Android App
+    # Base64 decoded from macos AUTH value in yt-dlp's Vimeo extractor
     # This is a special client ID which will return playable URLs
-    api_client_id = "74fa89b811a1cbb750d8528d163f48af28a2dbe1"
-    api_client_secret = "VJjDTzlnL6Vm/GbUDuwCwcc1mrdFUa9XFlg4ZoMQ4xX2UWuzbBomapujUcGKLNrt" \
-                        "wdtIIvy0paa7kFN0asWp2ooNSdqaEdwVkBLqau7MJFe0tSWez7HOakg/8BKtYzDe"
+    api_client_id = "4757be7f9f6f25771754de856f6c5612491e62bb"
+    api_client_secret = "pUCCYIAffjHxPrwAalF382c+66CywRkDBYewOpGlSNmv1eUZ6hMebOFqa7eoJVWe" \
+                        "bqe9hyVz9QkiPbyzjXdPibApWAENpyUexdHwhvgECD/ErJpsNakh7Mm/g1xVjxHs"
 
     # Access token of registered API app
     # Is used for specific routes and as a fallback if the client login request fails
@@ -38,11 +38,13 @@ class Api:
     api_access_token_cache_key = "api-access-token"
 
     video_stream = ""
+    video_hls_file_name = "hls.playlist.master.m3u8"
 
     def __init__(self, settings, lang, vfs, cache):
         self.settings = settings
         self.lang = lang
-        self.vfs = vfs
+        self.vfs = vfs[0]
+        self.vfs_cache = vfs[1]
         self.cache = cache
 
         self.api_limit = int(self.settings.get("search.items.size"))
@@ -145,33 +147,35 @@ class Api:
         res = self._do_api_request("/videos", params)
         return self._map_json_to_collection(res)
 
-    def resolve_texttracks(self, uri):
-        res = self._do_api_request(uri, {})
+    def resolve_texttracks(self, uri, password=None):
+        res = self._do_api_request(uri, {"password": password})
         subtitles = res.get("data")
         for subtitle in subtitles:
             subtitle["srt"] = webvtt_to_srt(self._do_request(subtitle["link"]))
         return subtitles
 
     def resolve_media_url(self, uri, password=None):
-        # If we have a on-demand URL, we need to fetch the trailer and return the uri
+        # If we have an on-demand URL, we need to fetch the trailer and return the uri
         if uri.startswith("/ondemand/"):
-            xbmc.log("plugin.video.vimeo::Api() resolving on-demand", xbmc.LOGDEBUG)
+            xbmc.log("plugin.video.vimeo::Api() Resolving on-demand", xbmc.LOGDEBUG)
             media_url = self._get_on_demand_trailer(uri)
 
         # Fallback (if official API client ID doesn't work)
         elif self.api_fallback:
-            xbmc.log("plugin.video.vimeo::Api() resolving fallback", xbmc.LOGDEBUG)
+            xbmc.log("plugin.video.vimeo::Api() Resolving fallback", xbmc.LOGDEBUG)
             uri = uri.replace("/videos/", "/video/")
             res = self._do_player_request(uri)
             media_url = self._extract_url_from_video_config(res)
 
         # Fetch media URL
         else:
-            xbmc.log("plugin.video.vimeo::Api() resolving video uri", xbmc.LOGDEBUG)
+            xbmc.log("plugin.video.vimeo::Api() Resolving video uri", xbmc.LOGDEBUG)
             params = self._get_default_params()
             params["password"] = password
             res = self._do_api_request(uri, params)
             media_url = self._extract_url_from_search_response(res["play"])
+
+        xbmc.log("plugin.video.vimeo::Api() Resolved video uri to " + media_url, xbmc.LOGDEBUG)
 
         return self._append_user_agent(media_url)
 
@@ -206,6 +210,9 @@ class Api:
 
         if self._request_was_bad(json_obj) == 2222:
             raise WrongPasswordException()
+
+        if "error_code" in json_obj and json_obj["error_code"] == 5451:
+            raise ResourceRestrictedException()
 
         if "type" in json_obj and json_obj["type"] in ("video", "live"):
             # If we are dealing with a single video, pack it into a dict
@@ -294,34 +301,33 @@ class Api:
         res = self._do_api_request(uri, {"fields": "uri,type,play"})
         return self._extract_url_from_search_response(res["play"])
 
-    def _video_matches(self, video, video_format):
-        video_height = video_format[1].replace("p", "")
-        return str(video["height"]) == video_height and video["codec"] == self._get_video_codec()
-
     def _extract_url_from_search_response(self, video_files):
         video_format = self.settings.VIDEO_FORMAT[self.video_stream]
         video_format = video_format.split(":")
         video_type = video_format[0]
 
         if video_type == "hls" and video_files.get("hls") is not None:
-            return video_files["hls"]["link"]
+            return self._hls_playlist_without_av1_streams(video_files["hls"]["link"])
 
         elif video_files.get("progressive") is None:
             # We are probably dealing with a live stream, so we can't use the progressive format
-            return video_files["hls"]["link"]
+            return self._hls_playlist_without_av1_streams(video_files["hls"]["link"])
 
         elif video_type == "progressive" or video_files.get("hls") is None:
-            for video_file in video_files["progressive"]:
-                if self._video_matches(video_file, video_format):
-                    return video_file["link"]
+            # Use a smart quality fallback for videos with weird ratios like 1000x1000
+            nearest_lower_quality = [0, None]
+            video_height = video_format[1].replace("p", "")
+            video_height = int(video_height) if video_height.isdigit() else 0
 
-            # Fallback if no matching quality was found
             for video_file in video_files["progressive"]:
                 if video_file["codec"] == self._get_video_codec():
-                    return video_file["link"]
+                    if video_file["height"] == video_height:
+                        return video_file["link"]
+                    if video_height > video_file["height"] > nearest_lower_quality[0]:
+                        nearest_lower_quality = [video_height, video_file["link"]]
 
-            # Fallback if fallback failed
-            return video_files["progressive"][0]["link"]
+            # Fallback if no exact match
+            return nearest_lower_quality[1] or video_files["progressive"][0]["link"]
 
         else:
             raise RuntimeError("Could not extract video URL")
@@ -375,6 +381,34 @@ class Api:
 
         return False
 
+    def _hls_playlist_without_av1_streams(self, playlist):
+        """
+        Kodi <= 18 doesn't support AV1 yet: https://forum.kodi.tv/showthread.php?tid=346272
+        That's why we have to remove those streams for older Kodi versions.
+        Also the Vimeo HLS streaming servers don't seem to support the AV1 codec yet:
+        > code=404, message=Could not chop_open: AV1 in MPEG-TS is unsupported.
+        """
+        # Don't remove AV1 streams if AV1 is enabled
+        if self.video_av1:
+            return playlist
+
+        # Download the playlist and strip AV1 streams
+        headers = {"Accept-Encoding": "gzip"}
+        response = requests.get(playlist, headers=headers)
+        response.encoding = "utf-8"
+        hls_master_playlist = response.text
+        hls_master_playlist_without_av1 = m3u8_without_av1(hls_master_playlist, response.url)
+        hls_master_playlist_without_av1 = m3u8_fix_audio(hls_master_playlist_without_av1)
+
+        # Return original playlist if playlist hasn't changed
+        if hls_master_playlist.count("\n") == hls_master_playlist_without_av1.count("\n"):
+            return playlist
+
+        xbmc.log("plugin.video.vimeo::Api() Stripped AV1 streams from HLS playlist", xbmc.LOGDEBUG)
+
+        # Write the playlist and return the path
+        return self.vfs_cache.write(self.video_hls_file_name, hls_master_playlist_without_av1)
+
     @staticmethod
     def _request_was_bad(json_obj):
         if "invalid_parameters" in json_obj and isinstance(json_obj["invalid_parameters"], list):
@@ -410,4 +444,8 @@ class PasswordRequiredException(Exception):
 
 
 class WrongPasswordException(Exception):
+    pass
+
+
+class ResourceRestrictedException(Exception):
     pass

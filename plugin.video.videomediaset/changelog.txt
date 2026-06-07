@@ -1,3 +1,12 @@
+[B]2.1.0[/B]
+- fixed movie category listing
+- fixed mediaset branding name
+- updated lib helper to fix nexus 20 problems (thx nixxo and CristianSumma)
+- fixed random videos erroring out (thx madpilot78)
+
+[B]2.0.8[/B]
+- added option to order like mediaset website
+
 [B]2.0.7[/B]
 - fix mistake in code refactoring
 

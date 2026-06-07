@@ -222,6 +222,8 @@ class Main(object):
 
             if str(item).find("title--premium") >= 0:
                 title = PREMIUM_ONLY_VIDEO_TITLE_PREFIX + ' ' + title
+            elif str(item).lower().find("premium") >= 0:
+                title = PREMIUM_ONLY_VIDEO_TITLE_PREFIX + ' ' + title
 
             # Make thumbnail
             try:

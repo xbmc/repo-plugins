@@ -20,13 +20,9 @@ class Player:
 
     def __init__(self):
         """ Initialise object """
-        self._auth = Auth(kodiutils.get_setting('username'),
-                          kodiutils.get_setting('password'),
-                          kodiutils.get_setting('loginprovider'),
-                          kodiutils.get_setting('profile'),
-                          kodiutils.get_tokens_path())
-        self._api = Api(self._auth)
-        self._stream = Stream(self._auth)
+        auth = Auth(kodiutils.get_tokens_path())
+        self._api = Api(auth.get_tokens())
+        self._stream = Stream(auth.get_tokens())
 
     def play(self, category, item):
         """ Play the requested item.
@@ -110,32 +106,12 @@ class Player:
             # This allows to play some programs that don't have metadata (yet).
             pass
 
-        # If we have enabled the Manifest proxy, route the call trough that.
-        if kodiutils.get_setting_bool('manifest_proxy'):
-            try:  # Python 3
-                from urllib.parse import urlencode
-            except ImportError:  # Python 2
-                from urllib import urlencode
-
-            port = kodiutils.get_setting_int('manifest_proxy_port')
-            if not port:
-                kodiutils.notification(message=kodiutils.localize(30718), icon='error')
-                kodiutils.end_of_directory()
-                return
-
-            url = 'http://127.0.0.1:{port}/manifest?{path}'.format(port=port,
-                                                                   path=urlencode({'path': resolved_stream.url}))
-        else:
-            url = resolved_stream.url
-
-        license_key = self._stream.create_license_key(resolved_stream.license_url)
-
         # Play this item
-        kodiutils.play(url, license_key, resolved_stream.title, {}, info_dict, prop_dict, stream_dict, subtitles=resolved_stream.subtitles)
+        kodiutils.play(resolved_stream.url, resolved_stream.license_key, resolved_stream.title, {}, info_dict, prop_dict, stream_dict, subtitles=resolved_stream.subtitles)
 
         # Wait for playback to start
         kodi_player = KodiPlayer()
-        if not kodi_player.waitForPlayBack(url=url):
+        if not kodi_player.waitForPlayBack(url=resolved_stream.url):
             # Playback didn't start
             return
 
@@ -176,7 +152,9 @@ class Player:
                 tvshowid=current_episode.program_id,
                 title=current_episode.name,
                 art={
-                    'thumb': current_episode.cover,
+                    'poster': current_episode.poster,
+                    'landscape': current_episode.thumb,
+                    'fanart': current_episode.fanart,
                 },
                 season=current_episode.season,
                 episode=current_episode.number,
@@ -192,7 +170,9 @@ class Player:
                 tvshowid=next_episode.program_id,
                 title=next_episode.name,
                 art={
-                    'thumb': next_episode.cover,
+                    'poster': next_episode.poster,
+                    'landscape': next_episode.thumb,
+                    'fanart': next_episode.fanart,
                 },
                 season=next_episode.season,
                 episode=next_episode.number,

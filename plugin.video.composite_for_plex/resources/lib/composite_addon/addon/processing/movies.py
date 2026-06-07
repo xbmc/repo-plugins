@@ -13,6 +13,7 @@
 import time
 
 from kodi_six import xbmcplugin  # pylint: disable=import-error
+from six import PY3
 
 from ..common import get_handle
 from ..containers import Item
@@ -42,7 +43,11 @@ def process_movies(context, url, tree=None):
     start_time = time.time()
     items = []
     append_item = items.append
-    branches = tree.getiterator()
+    if PY3:
+        branches = tree.iter()
+    else:
+        branches = tree.getiterator()
+
     for branch in branches:
         item = Item(server, url, tree, branch)
         if branch.tag.lower() == 'video':

@@ -11,6 +11,7 @@
 """
 
 from kodi_six import xbmcplugin  # pylint: disable=import-error
+from six import PY3
 
 from ..common import get_handle
 from ..containers import Item
@@ -29,7 +30,11 @@ def process_plex_online(context, url):
 
     items = []
     append_item = items.append
-    plugins = tree.getiterator()
+    if PY3:
+        plugins = tree.iter()
+    else:
+        plugins = tree.getiterator()
+
     for plugin in plugins:
         item = Item(server, url, tree, plugin)
         item = create_plex_online_item(context, item)

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.spursplay" name="SPURSPLAY" version="0.2.6" provider-name="LS80">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.31.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">Video content from https://play.tottenhamhotspur.com.</summary>
+        <description lang="en_GB">SPURSPLAY is the official streaming platform of Tottenham Hotspur Football Club, offering fans exclusive access to a wide range of content, including live and on-demand videos.</description>
+        <disclaimer lang="en_GB">This is an UNOFFICIAL plugin NOT endorsed by Tottenham Hotspur. Some content requires a SPURSPLAY subscription.</disclaimer>
+        <language>en</language>
+        <platform>all</platform>
+        <license>MIT</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=380119</forum>
+        <website>https://play.tottenhamhotspur.com</website>
+        <source>https://github.com/LS80/plugin.video.spursplay</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

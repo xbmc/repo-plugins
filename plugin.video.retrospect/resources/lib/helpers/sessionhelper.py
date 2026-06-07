@@ -4,7 +4,6 @@ import os
 import io
 import time
 
-from resources.lib.backtothefuture import unicode
 from resources.lib.retroconfig import Config
 
 
@@ -33,7 +32,7 @@ class SessionHelper(object):
 
         if logger:
             with io.open(SessionHelper.__get_session_path(), mode='w', encoding='utf-8') as fd:
-                fd.write(unicode(logger.minLogLevel))
+                fd.write(str(logger.minLogLevel))
         else:
             io.open(SessionHelper.__get_session_path(), 'w', encoding='utf-8').close()
 

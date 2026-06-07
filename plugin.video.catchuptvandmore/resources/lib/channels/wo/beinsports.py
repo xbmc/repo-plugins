@@ -10,12 +10,12 @@ import json
 from codequick import Listitem, Resolver, Route
 import urlquick
 
-from resources.lib import resolver_proxy
+from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
 
 # https://gist.github.com/sergeimikhan/1e90f28b8129335274b9
-URL_API_ROOT = 'http://api.beinsports.com'
+URL_API_ROOT = 'https://api.beinsports.com'
 
 URL_INFO_SITES = URL_API_ROOT + '/sites'
 
@@ -23,6 +23,8 @@ URL_CATEGORIES = URL_API_ROOT + '/dropdowns?site=%s'
 # siteId
 
 URL_VIDEOS = URL_API_ROOT + '/contents?itemsPerPage=30&type=3&site=%s&page=%s&taxonomy%%5B%%5D=%s&order%%5BpublishedAt%%5D=DESC'
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 # siteId, page
 
@@ -36,7 +38,7 @@ def list_sites(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    resp = urlquick.get(URL_INFO_SITES)
+    resp = urlquick.get(URL_INFO_SITES, headers=GENERIC_HEADERS, max_age=-1)
     json_parser = json.loads(resp.text)
 
     for site_datas in json_parser['hydra:member']:
@@ -54,7 +56,7 @@ def list_sites(plugin, item_id, **kwargs):
 @Route.register
 def list_categories(plugin, item_id, site_id, **kwargs):
 
-    resp = urlquick.get(URL_CATEGORIES % site_id)
+    resp = urlquick.get(URL_CATEGORIES % site_id, headers=GENERIC_HEADERS, max_age=-1)
     json_parser = json.loads(resp.text)
 
     for category_datas in json_parser['hydra:member']:
@@ -77,7 +79,7 @@ def list_categories(plugin, item_id, site_id, **kwargs):
 def list_sub_categories(plugin, item_id, site_id, category_reference,
                         **kwargs):
 
-    resp = urlquick.get(URL_CATEGORIES % site_id)
+    resp = urlquick.get(URL_CATEGORIES % site_id, headers=GENERIC_HEADERS, max_age=-1)
     json_parser = json.loads(resp.text)
 
     for category_datas in json_parser['hydra:member']:
@@ -103,7 +105,7 @@ def list_sub_categories(plugin, item_id, site_id, category_reference,
 @Route.register
 def list_videos(plugin, item_id, site_id, sub_category_id, page, **kwargs):
 
-    resp = urlquick.get(URL_VIDEOS % (site_id, page, sub_category_id))
+    resp = urlquick.get(URL_VIDEOS % (site_id, page, sub_category_id), headers=GENERIC_HEADERS, max_age=-1)
     json_parser = json.loads(resp.text)
 
     for list_videos_datas in json_parser['hydra:member']:

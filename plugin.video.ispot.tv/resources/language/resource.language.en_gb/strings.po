@@ -1,0 +1,133 @@
+# Kodi Media Center language file
+# Addon Name: iSpot.tv
+# Addon id: plugin.video.iSpot.tv
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.iSpot.tv\n"
+"Report-Msgid-Bugs-To: http://forum.kodi.tv/showthread.php?tid=311057\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Lunatixz Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "Addon Summary"
+msgid "iSpot.tv internet's most comprehensive database of nationally airing TV Commercials."
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Welcome to the Internet's most comprehensive database of nationally airing TV Commercials. Explore the actors, songs and offers in the spots you see on TV."
+msgstr ""
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr ""
+
+msgctxt "#30001"
+msgid "General"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Download location"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Install Log Uploader"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Submit Log"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Enable Download"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Download Folder"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Downloading (Finished!)"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Downloading Adverts (%s%%)"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Preparing Download..."
+msgstr ""
+
+msgctxt "#30014"
+msgid "Preparing Download..."
+msgstr ""
+
+msgctxt "#30015"
+msgid "Apparel, Footwear & Accessories"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Business & Legal"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Education"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Electronics & Communication"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Food & Beverage"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Health & Beauty"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Home & Real Estate"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Insurance"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Life & Entertainment"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Pharmaceutical & Medical"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Politics, Government & Organizations"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Restaurants"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Retail Stores"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Travel"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Vehicles"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Include Espanol"
+msgstr ""

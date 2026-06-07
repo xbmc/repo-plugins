@@ -6,10 +6,14 @@
 
 from __future__ import unicode_literals
 
+# noinspection PyUnresolvedReferences
 from codequick import Resolver
+
+from resources.lib import resolver_proxy
+
+URL_LIVE_STREAM = 'https://live.zendzend.com/cmaf/29375_107244/master.m3u8?HLS_version=ts'
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-
-    return 'http://api.new.livestream.com/accounts/27755193/events/8452381/live.m3u8'
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=URL_LIVE_STREAM, manifest_type="hls")

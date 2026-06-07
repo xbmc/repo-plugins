@@ -11,6 +11,7 @@
 """
 
 from kodi_six import xbmcgui  # pylint: disable=import-error
+from six import PY3
 
 from ..addon.common import get_argv
 from ..addon.logger import Logger
@@ -41,7 +42,12 @@ def run(context):
     append_label = display_list.append
     fl_select = False
     part_id = ''
-    subtitle_parts = tree.getiterator('Part')
+
+    if PY3:
+        subtitle_parts = tree.iter('Part')
+    else:
+        subtitle_parts = tree.getiterator('Part')
+
     for parts in subtitle_parts:
 
         part_id = parts.get('id')

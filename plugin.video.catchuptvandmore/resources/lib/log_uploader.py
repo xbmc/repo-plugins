@@ -19,7 +19,7 @@ import urlquick
 PROFILE = Script.get_info('profile')
 CWD = Script.get_info('path')
 URL = 'https://paste.kodi.tv/'
-LOGPATH = xbmc.translatePath('special://logpath')
+LOGPATH = xbmcvfs.translatePath('special://logpath')
 LOGFILE = os.path.join(LOGPATH, 'kodi.log')
 REPLACES = (
     ('//.+?:.+?@', '//USER:PASSWORD@'),

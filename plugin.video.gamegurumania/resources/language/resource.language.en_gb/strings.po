@@ -79,6 +79,10 @@ msgctxt "#30102"
 msgid "Website"
 msgstr ""
 
+msgctxt "#30103"
+msgid "General"
+msgstr ""
+
 msgctxt "#30104"
 msgid "Refresh"
 msgstr ""

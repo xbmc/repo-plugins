@@ -4,29 +4,26 @@
 #
 # Imports
 #
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-from builtins import object
+from builtins import str, object
 import os
 import sys
-import urllib.request, urllib.parse, urllib.error
-import re
+import urllib.parse
 import xbmcgui
 import xbmcplugin
 import requests
+import json
 
-from resources.lib.worldstarhiphop_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, HEADERS, BASEURL, convertToUnicodeString, log, getSoup
+# from future import standard_library
+# standard_library.install_aliases()
 
+# Import your custom modules
+from resources.lib.worldstarhiphop_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, HEADERS, INITIAL_API_VIDEO_URL, add_video_to_listing, log
 
-
-#
 # Main class
-#
 class Main(object):
-    #
-    # Init
-    #
+    """
+    Main class for the Kodi addon.
+    """
     def __init__(self):
         # Get the command line arguments
         # Get the plugin url in plugin:// notation
@@ -39,205 +36,134 @@ class Main(object):
 
         log("ARGV", repr(sys.argv))
 
+        self.next_url = None
+
         # Parse parameters...
+        # For the first fetch, assume there's a next page.
+        # Check if sys.argv[2] is empty to identify the first call.
         if len(sys.argv[2]) == 0:
             self.plugin_category = LANGUAGE(30000)
-            self.video_list_page_url = BASEURL + "/videos/?start=001"
-            self.next_page_possible = "True"
+            self.next_page_possible = 'True'
+            self.video_list_page_url = INITIAL_API_VIDEO_URL
         else:
             self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-            self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
             self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+            self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
 
-        if self.next_page_possible == 'True':
-            # Determine current item number, next item number, next_url
-            pos_of_page = self.video_list_page_url.rfind('start=')
-            if pos_of_page >= 0:
-                page_number_str = str(
-                    self.video_list_page_url[pos_of_page + len('start='):pos_of_page + len('start=') + len('000')])
-                page_number = int(page_number_str)
-                page_number_next = page_number + 1
-                if page_number_next >= 100:
-                    page_number_next_str = str(page_number_next)
-                elif page_number_next >= 10:
-                    page_number_next_str = '0' + str(page_number_next)
-                else:
-                    page_number_next_str = '00' + str(page_number_next)
-                self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
+        log("self.plugin_category", self.plugin_category)
+        log("self.next_page_possible", self.next_page_possible)
+        log("self.video_list_page_url", self.video_list_page_url)
 
-                log("self.next_url", self.next_url)
+        # Set search_mode switch to True if the items to be listed are the result of using the search function
+        if "searchTerm" in self.video_list_page_url:
+            self.list_search_results = True
+        else:
+            self.list_search_results = False
 
-        #
+        log("self.search_mode", self.list_search_results)
+
         # Get the videos...
-        #
         self.getVideos()
 
-    #
-    # Get videos...
-    #
     def getVideos(self):
-        #
+        """Fetches video data and populates the Kodi directory listing."""
         # Init
-        #
-        is_folder = False
-        # Create a list for our items.
         listing = []
 
-        #
-        # Get HTML page
-        #
-        response = requests.get(self.video_list_page_url, headers=HEADERS)
+        # Don't add a search item when processing search results
+        if self.list_search_results:
+            pass
+        else:
+            # Add Search item
+            search_item_title = LANGUAGE(30103)
+            search_item_url = f"{self.plugin_url}?{urllib.parse.urlencode({'action': 'search'})}"
+            search_list_item = xbmcgui.ListItem(search_item_title)
+            search_list_item.setArt({
+                'thumb': '',
+                'icon': '',
+                'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')
+            })
+            search_list_item.setInfo("video", {"Title": search_item_title, "Studio": ADDON})
+            xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=search_item_url, listitem=search_list_item, isFolder=True)
 
-        html_source = response.text
-        html_source = convertToUnicodeString(html_source)
+        # Get JSON data from the API
+        try:
+            response = requests.get(self.video_list_page_url, headers=HEADERS, timeout=15)
+            response.raise_for_status()
+            json_data = response.json()
+        except requests.exceptions.RequestException as e:
+            log("ERROR", f"Request failed: {e}")
+            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30508))
+            return
+        except json.JSONDecodeError as e:
+            log("ERROR", f"JSON decoding failed: {e}")
+            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30508))
+            return
 
-        # Parse response
-        soup = getSoup(html_source)
+        log("json_data", json_data)
 
-        # <section class="box" itemscope="" itemtype="http://schema.org/ImageObject">
-        #   <a itemprop="url" class="video-box" href="https://worldstar.com/video.php?v=wshhZazSI845PGtaW3In">
-        # 	    <img class="lazy" data-original="https://hw-static.worldstarhiphop.com/u/pic/2020/10/tjTbMYTEAZPf.jpg" alt="Busted: Husband Calls Cell Phone Store About His Wife's Call Logs &amp; Finds Out She Belongs To The Streets! " itemprop="thumbnailUrl" src="https://hw-static.worldstarhiphop.com/u/pic/2020/10/tjTbMYTEAZPf.jpg" style="display: block;" width="222" height="125">
-        # 		<noscript><img src="https://hw-static.worldstarhiphop.com/u/pic/2020/10/tjTbMYTEAZPf.jpg" width="222" height="125" alt="Busted: Husband Calls Cell Phone Store About His Wife&#039;s Call Logs &amp; Finds Out She Belongs To The Streets! " itemprop="thumbnailUrl"></noscript>
-        # 	</a>
-        # 	<strong class="title" itemprop="name"><a itemprop="url" href="https://worldstar.com/video.php?v=wshhZazSI845PGtaW3In">Busted: Husband Calls Cell Phone Store About His Wife's Call Logs &amp; Finds Out She Belongs To The Streets! </a></strong>
-        # 	<div>
-        # 		<span class="views">231,089</span>
-        # 		<span class="comments">
-        # 			<a href="https://worldstarhiphop.com/videos/video.php?v=wshhZazSI845PGtaW3In#disqus_thread" data-disqus-identifier="158920">3084</a>
-        # 		</span>
-        # 	</div>
-        #</section>
+        # Get the cursor position for pagination
+        # Note: This uses a try-except block to handle cases where 'page_cursor' is missing
+        try:
+            if self.list_search_results:
+                page_cursor = json_data["videos"]["pageCursor"]
+            else:
+                page_cursor = json_data["pageCursor"]
+            self.next_page_possible = 'True'
+            # Construct the next page URL
+            # Use urllib.parse to safely update the URL parameters
+            parsed_url = list(urllib.parse.urlparse(self.video_list_page_url))
+            query_params = urllib.parse.parse_qs(parsed_url[4])
+            query_params['pageCursor'] = [page_cursor]
+            parsed_url[4] = urllib.parse.urlencode(query_params, doseq=True)
+            self.next_url = urllib.parse.urlunparse(parsed_url)
+        except KeyError:
+            page_cursor = ""
+            self.next_page_possible = 'False'
 
-        items = soup.findAll('section', attrs={'class': re.compile("^box")})
+        log("pageCursor", page_cursor)
 
-        log("len(items)", len(items))
+        if self.list_search_results:
+            # Process videos found using the search function
+            for video in json_data.get("videos", {}).get("result", []):
+                add_video_to_listing(video, self.plugin_url, listing, ADDON, IMAGES_PATH, log)
+        else:
+            # Process featured videos if present
+            for video in json_data.get("featuredVideos", {}).get("hero", []):
+                add_video_to_listing(video, self.plugin_url, listing, ADDON, IMAGES_PATH, log)
 
-        # Add Search item
-        video_page_url = ""
-        title = LANGUAGE(30103)
-        thumbnail_url = ""
-        parameters = {"action": "search", "video_page_url": video_page_url}
-        url = sys.argv[0] + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(title)
-        list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
-                          'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setInfo("video", {"Title": title, "Studio": "WorldWideHipHop"})
-        folder = True
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=list_item, isFolder=folder)
+            # Process videos by date
+            for date_group in json_data.get("videosByDate", []):
+                log("Date", date_group.get('date', 'Unknown Date'))
+                for video in date_group.get('videos', []):
+                    add_video_to_listing(video, self.plugin_url, listing, ADDON, IMAGES_PATH, log)
 
-        for item in items:
-            try:
-                video_page_url = str(item.a['href'])
-            except:
-                # skip the item if it does not have a href
-
-                log("skipping item without href", item)
-
-                continue
-
-            log("video_page_url", video_page_url)
-
-            # skip the item if the video page url isn't a real video page url
-            if str(video_page_url).find('/video.php?v=') == -1:
-
-                log("skipping item because no video could be found", video_page_url)
-
-                continue
-
-            try:
-                thumbnail_url = item.img['data-original']
-            except:
-                thumbnail_url = item.img['src']
-
-            log("thumbnail_url", thumbnail_url)
-
-            title = item.img['alt']
-            title = title.replace('-', ' ')
-            title = title.replace('/', ' ')
-            title = title.replace(' i ', ' I ')
-            title = title.replace(' ii ', ' II ')
-            title = title.replace(' iii ', ' III ')
-            title = title.replace(' iv ', ' IV ')
-            title = title.replace(' v ', ' V ')
-            title = title.replace(' vi ', ' VI ')
-            title = title.replace(' vii ', ' VII ')
-            title = title.replace(' viii ', ' VIII ')
-            title = title.replace(' ix ', ' IX ')
-            title = title.replace(' x ', ' X ')
-            title = title.replace(' xi ', ' XI ')
-            title = title.replace(' xii ', ' XII ')
-            title = title.replace(' xiii ', ' XIII ')
-            title = title.replace(' xiv ', ' XIV ')
-            title = title.replace(' xv ', ' XV ')
-            title = title.replace(' xvi ', ' XVI ')
-            title = title.replace(' xvii ', ' XVII ')
-            title = title.replace(' xviii ', ' XVIII ')
-            title = title.replace(' xix ', ' XIX ')
-            title = title.replace(' xx ', ' XXX ')
-            title = title.replace(' xxi ', ' XXI ')
-            title = title.replace(' xxii ', ' XXII ')
-            title = title.replace(' xxiii ', ' XXIII ')
-            title = title.replace(' xxiv ', ' XXIV ')
-            title = title.replace(' xxv ', ' XXV ')
-            title = title.replace(' xxvi ', ' XXVI ')
-            title = title.replace(' xxvii ', ' XXVII ')
-            title = title.replace(' xxviii ', ' XXVIII ')
-            title = title.replace(' xxix ', ' XXIX ')
-            title = title.replace(' xxx ', ' XXX ')
-            title = title.replace('  ', ' ')
-            title = title.replace('  ', ' ')
-            # welcome to unescaping-hell
-            title = title.replace('&pound;', "Pound Sign")
-            title = title.replace('&amp;#039;', "'")
-            title = title.replace('&amp;#39;', "'")
-            title = title.replace('&amp;quot;', '"')
-            title = title.replace("&#039;", "'")
-            title = title.replace("&#39;", "'")
-            title = title.replace('&amp;amp;', '&')
-            title = title.replace('&amp;', '&')
-            title = title.replace('&quot;', '"')
-            title = title.replace('&ldquo;', '"')
-            title = title.replace('&rdquo;', '"')
-            title = title.replace('&rsquo;', "'")
-            title = title.replace('&ndash;', "/")
-
-            log("title", title)
-
-            # Add to list...
-            list_item = xbmcgui.ListItem(title)
-            list_item.setInfo("video", {"title": title, "studio": ADDON})
-            list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
-                              'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-            list_item.setProperty('IsPlayable', 'true')
-            parameters = {"action": "play", "video_page_url": video_page_url}
-            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-            is_folder = False
-            # Add refresh option to context menu
-            list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
-            # Add our item to the listing as a 3-element tuple.
-            listing.append((url, list_item, is_folder))
-
-        # Next page entry
+        # Add the "Next Page" item if available
         if self.next_page_possible == 'True':
-            thumbnail_url = os.path.join(IMAGES_PATH, 'next-page.png')
-            list_item = xbmcgui.ListItem(LANGUAGE(30503))
-            list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
-                              'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-            list_item.setProperty('IsPlayable', 'false')
-            parameters = {"action": "list", "plugin_category": self.plugin_category, "url": str(self.next_url),
-                          "next_page_possible": self.next_page_possible}
-            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-            is_folder = True
-            # Add refresh option to context menu
-            list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
-            # Add our item to the listing as a 3-element tuple.
-            listing.append((url, list_item, is_folder))
+            log("self.next_url", self.next_url)
+            next_page_thumbnail = os.path.join(IMAGES_PATH, 'next-page.png')
+            next_page_item = xbmcgui.ListItem(LANGUAGE(30503))
+            next_page_item.setArt({
+                'thumb': next_page_thumbnail,
+                'icon': next_page_thumbnail,
+                'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')
+            })
+            next_page_item.setProperty('IsPlayable', 'false')
 
-        # Add our listing to Kodi.
-        # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems
-        # instead of adding one by ove via addDirectoryItem.
+            next_page_params = {
+                "action": "list",
+                "plugin_category": self.plugin_category,
+                "url": self.next_url,
+                "next_page_possible": self.next_page_possible
+            }
+            next_page_url = f"{self.plugin_url}?{urllib.parse.urlencode(next_page_params)}"
+
+            next_page_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
+            listing.append((next_page_url, next_page_item, True))
+
+        # Add all items to the directory at once
         xbmcplugin.addDirectoryItems(self.plugin_handle, listing, len(listing))
-        # Disable sorting
+
+        # Disable sorting and finalize the directory
         xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
-        # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)

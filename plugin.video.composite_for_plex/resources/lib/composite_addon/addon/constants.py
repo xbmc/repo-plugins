@@ -52,6 +52,7 @@ COMMANDS = __enum(
     COMPOSITE_PLAYLIST='composite_playlist',
     SELECT_LIBRARY_SECTIONS='select_library_sections',
     RESET_LIBRARY_SECTIONS='reset_library_sections',
+    DETECTSERVERS='detect_servers',
 )
 
 MODES = __enum(

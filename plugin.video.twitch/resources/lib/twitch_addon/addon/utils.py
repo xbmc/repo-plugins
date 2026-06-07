@@ -21,7 +21,7 @@ from datetime import datetime
 
 from .common import kodi, json_store
 from .strings import STRINGS
-from .constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, REQUEST_LIMIT, COLORS, Keys, OLD_CLIENT_ID
+from .constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, COLORS, Keys
 from .search_history import StreamsSearchHistory, ChannelsSearchHistory, GamesSearchHistory, IdUrlSearchHistory
 
 from twitch.api.parameters import Boolean, Period, ClipPeriod, Direction, Language, SortBy, VideoSort
@@ -123,7 +123,7 @@ def get_redirect_uri():
         return kodi.decode_utf8(REDIRECT_URI)
 
 
-def get_client_id(default=False, old=False):
+def get_client_id(default=False):
     settings_id = kodi.get_setting('oauth_clientid')
     stripped_id = settings_id.strip()
     if settings_id != stripped_id:
@@ -132,10 +132,7 @@ def get_client_id(default=False, old=False):
     if settings_id and not default:
         return kodi.decode_utf8(settings_id)
     else:
-        if old:
-            return kodi.decode_utf8(b64decode(OLD_CLIENT_ID))
-        else:
-            return kodi.decode_utf8(b64decode(CLIENT_ID))
+        return kodi.decode_utf8(b64decode(CLIENT_ID))
 
 
 def get_private_client_id():
@@ -154,16 +151,16 @@ def clear_client_id():
 
 
 def get_oauth_token(token_only=True, required=False):
-    oauth_token = kodi.get_setting('oauth_token')
+    oauth_token = kodi.get_setting('oauth_token_helix')
     if not oauth_token or not oauth_token.strip():
         if not required: return ''
         kodi.notify(kodi.get_name(), i18n('token_required'), sound=False)
         kodi.show_settings()
-        oauth_token = kodi.get_setting('oauth_token')
+        oauth_token = kodi.get_setting('oauth_token_helix')
     stripped_token = oauth_token.strip()
     if oauth_token != stripped_token:
         oauth_token = stripped_token
-        kodi.set_setting('oauth_token', oauth_token)
+        kodi.set_setting('oauth_token_helix', oauth_token)
     if oauth_token:
         if token_only:
             idx = oauth_token.find(':')
@@ -212,25 +209,6 @@ def get_items_per_page():
     return int(kodi.get_setting('items_per_page'))
 
 
-def calculate_pagination_values(index):
-    index = int(index)
-    limit = get_items_per_page()
-    offset = index * limit
-    return index, offset, limit
-
-
-def get_offset(offset, item, items, key=None):
-    if item is None:
-        return int(offset) + REQUEST_LIMIT
-    try:
-        if key is None:
-            return int(offset) + next(index for (index, _item) in enumerate(items) if item == _item)
-        else:
-            return int(offset) + next(index for (index, _item) in enumerate(items) if item == _item[key])
-    except:
-        return None
-
-
 def get_thumbnail_size():
     size_map = [Keys.SOURCE, Keys.LARGE, Keys.MEDIUM, Keys.SMALL]
     return size_map[int(kodi.get_setting('thumbnail_size'))]
@@ -256,8 +234,6 @@ def the_art(art=None):
 
 
 def link_to_next_page(queries):
-    if 'index' in queries:
-        queries['index'] += 1
     return {'label': i18n('next_page'),
             'art': the_art(),
             'path': kodi.get_plugin_url(queries),
@@ -373,9 +349,8 @@ def extract_video(url):
                 seek_time += int(minutes) * 60
             if seconds:
                 seek_time += int(seconds)
-    if id_string.startswith('v') or id_string.startswith('c') or id_string.startswith('a'):
-        video_id = id_string
-    return video_id, seek_time
+
+    return id_string, seek_time
 
 
 _sorting_defaults = \
@@ -410,10 +385,6 @@ _sorting_defaults = \
 def get_stored_json():
     json_data = storage.load()
     needs_save = False
-    # set defaults
-    if 'blacklist' not in json_data:
-        json_data['blacklist'] = {'user': [], 'game': []}
-        needs_save = True
     if 'qualities' not in json_data:
         json_data['qualities'] = {'stream': [], 'video': [], 'clip': []}
         needs_save = True
@@ -434,48 +405,12 @@ def get_stored_json():
     return json_data
 
 
-def is_blacklisted(target, list_type='user'):
-    json_data = get_stored_json()
-    blacklist = json_data['blacklist'].get(list_type)
-    if not blacklist:
-        return False
-    if isinstance(target, int):
-        target = str(target)
-    if list_type == 'user':
-        return any(target == blacklist_id for blacklist_id, blacklist_name in blacklist)
-    else:
-        return any((target == blacklist_id or
-                    target == blacklist_name) for blacklist_id, blacklist_name in blacklist)
-
-
-def add_blacklist(target_id, name, list_type='user'):
-    json_data = get_stored_json()
-
-    if not is_blacklisted(target_id, list_type):
-        blacklist = json_data['blacklist'].get(list_type)
-        if not blacklist:
-            json_data['blacklist'][list_type] = []
-        json_data['blacklist'][list_type].append([target_id, name])
-        storage.save(json_data)
-        return True
-    return False
-
-
-def remove_blacklist(list_type='user'):
-    json_data = get_stored_json()
-    result = kodi.Dialog().select(i18n('remove_from_blacklist') % list_type,
-                                  [blacklist_name for blacklist_id, blacklist_name in json_data['blacklist'][list_type]])
-    if result == -1:
-        return None
-    else:
-        result = json_data['blacklist'][list_type].pop(result)
-        storage.save(json_data)
-        return result
-
-
 def get_language():
     json_data = get_stored_json()
-    return json_data['languages']
+    language = json_data['languages']
+    if language == 'all':
+        language = ''
+    return language
 
 
 def change_language(language=Language.ALL):
@@ -556,28 +491,24 @@ def clear_list(list_type, list_name):
         return False
 
 
-class BlacklistFilter(object):
-    def by_type(self, results, result_key, parent_keys=None,
-                id_key=None, game_key=None, list_type='user'):
-        if (id_key is None) and (game_key is None): return
-        # list_type = user, game, community
-        filtered_results = {result_key: list()}
-        for result in results[result_key]:
-            identification = None
-            id_parent = result
-            key = id_key if id_key else game_key
-            if parent_keys is None:
-                identification = id_parent[key]
-            else:
-                for parent_key in parent_keys:
-                    id_parent = id_parent[parent_key]
-                    identification = id_parent[key]
-            if game_key and identification:
-                identification = identification if identification else ''
-            if identification is not None:
-                if not is_blacklisted(identification, list_type=list_type):
-                    filtered_results[result_key].append(result)
-        return filtered_results
+def convert_duration(duration):
+    payload = 0
+
+    pattern = re.compile('(?:(?P<hours>[0-9]+)(?:h))?(?:(?P<minutes>[0-9]+)(?:m))?(?:(?P<seconds>[0-9]+)(?:s))?')
+    match = re.search(pattern, duration)
+
+    if match:
+        hours = match.group('hours')
+        minutes = match.group('minutes')
+        seconds = match.group('seconds')
+        if hours:
+            payload += int(hours) * 3600
+        if minutes:
+            payload += int(minutes) * 60
+        if seconds:
+            payload += int(seconds)
+
+    return payload
 
 
 class TitleBuilder(object):
@@ -588,6 +519,7 @@ class TitleBuilder(object):
         VIEWERS_STREAMER_TITLE = u"{viewers} - {streamer} - {title}"
         STREAMER_GAME_TITLE = u"{streamer} - {game} - {title}"
         GAME_VIEWERS_STREAMER_TITLE = u"[{game}] {viewers} | {streamer} - {title}"
+        GAME_STREAMER_TITLE = u"[{game}] | {streamer} - {title}"
         BROADCASTER_LANGUAGE_STREAMER_TITLE = u"{broadcaster_language} | {streamer} - {title}"
         ELLIPSIS = u'...'
 
@@ -596,7 +528,7 @@ class TitleBuilder(object):
 
     def format_title(self, title_values):
         title_setting = int(kodi.get_setting('title_display'))
-        template = self.get_title_template(title_setting)
+        template = self.get_title_template(title_setting, title_values)
 
         for key, value in iteritems(title_values):
             title_values[key] = self.clean_title_value(value)
@@ -605,14 +537,35 @@ class TitleBuilder(object):
         return self.truncate_title(title)
 
     @staticmethod
-    def get_title_template(title_setting):
-        options = {0: TitleBuilder.Templates.STREAMER_TITLE,
-                   1: TitleBuilder.Templates.VIEWERS_STREAMER_TITLE,
-                   2: TitleBuilder.Templates.TITLE,
-                   3: TitleBuilder.Templates.STREAMER,
-                   4: TitleBuilder.Templates.STREAMER_GAME_TITLE,
-                   5: TitleBuilder.Templates.GAME_VIEWERS_STREAMER_TITLE,
-                   6: TitleBuilder.Templates.BROADCASTER_LANGUAGE_STREAMER_TITLE}
+    def get_title_template(title_setting, title_values):
+        options = {
+            0: TitleBuilder.Templates.STREAMER_TITLE,
+            1: TitleBuilder.Templates.VIEWERS_STREAMER_TITLE,
+            2: TitleBuilder.Templates.TITLE,
+            3: TitleBuilder.Templates.STREAMER,
+            4: TitleBuilder.Templates.STREAMER_GAME_TITLE,
+            5: TitleBuilder.Templates.GAME_VIEWERS_STREAMER_TITLE,
+            6: TitleBuilder.Templates.BROADCASTER_LANGUAGE_STREAMER_TITLE,
+            7: TitleBuilder.Templates.GAME_STREAMER_TITLE,
+        }
+
+        if title_setting == 1:
+            if not title_values.get('viewers'):
+                title_setting = 0
+        elif title_setting == 4:
+            if not title_values.get('game'):
+                title_setting = 0
+        elif title_setting == 5:
+            if not title_values.get('game') and not title_values.get('viewers'):
+                title_setting = 0
+            elif title_values.get('game') and not title_values.get('viewers'):
+                title_setting = 7
+            elif not title_values.get('game') and title_values.get('viewers'):
+                title_setting = 1
+        elif title_setting == 6:
+            if not title_values.get('broadcaster_language'):
+                title_setting = 0
+
         return options.get(title_setting, TitleBuilder.Templates.STREAMER)
 
     @staticmethod

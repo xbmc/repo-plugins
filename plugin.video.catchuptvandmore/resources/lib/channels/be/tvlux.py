@@ -5,18 +5,22 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-from builtins import str
+
+import json
 import re
+from builtins import str
 
-from codequick import Listitem, Resolver, Route
 import urlquick
+# noinspection PyUnresolvedReferences
+from codequick import Listitem, Resolver, Route
 
-from resources.lib import download
+from resources.lib import download, resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
+LIVE_PLAYER = 'https://tvlocales-player.freecaster.com/embed/%s.json'
 
-# TO DO
-# ....
+# \"src\":[\"https:\\\/\\\/tvlux-live.freecaster.com\\\/live\\\/tvlux\\\/tvlux.m3u8\"]
+PATTERN_M3U8 = re.compile(r'https?:[^,]*?\.m3u8')
 
 URL_ROOT = 'https://www.tvlux.be'
 
@@ -56,12 +60,10 @@ def list_categories(plugin, item_id, **kwargs):
 
 @Route.register
 def list_programs(plugin, item_id, **kwargs):
-
     resp = urlquick.get(URL_EMISSIONS)
     root = resp.parse()
 
     for program_datas in root.iterfind(".//div[@class='col-sm-4']"):
-
         program_title = program_datas.find('.//img').get('alt')
         program_image = program_datas.find('.//img').get('src')
         program_url = URL_ROOT + '/' + program_datas.find(".//a").get("href")
@@ -79,7 +81,6 @@ def list_programs(plugin, item_id, **kwargs):
 
 @Route.register
 def list_videos(plugin, item_id, next_url, page, **kwargs):
-
     resp = urlquick.get(next_url + '?lim_un=%s' % page)
     root = resp.parse()
 
@@ -109,10 +110,9 @@ def get_video_url(plugin,
                   video_url,
                   download_mode=False,
                   **kwargs):
-
     resp = urlquick.get(video_url, max_age=-1)
     list_streams_datas = re.compile(
-        r'source src\=\"(.*?)\"').findall(resp.text)
+        r'source src=\"(.*?)\"').findall(resp.text)
     stream_url = ''
     for stream_datas in list_streams_datas:
         if 'm3u8' in stream_datas or \
@@ -126,11 +126,18 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    headers = {
+        "User-Agent": web_utils.get_random_ua(),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+        "Accept-Language": "fr-BE,en-US;q=0.7,en;q=0.3",
+        "referrer": URL_ROOT
+    }
 
-    resp = urlquick.get(URL_LIVE, max_age=-1)
-    list_live_datas = re.compile(
-        r'player\.freecaster\.com\/embed\/(.*?)\.js').findall(resp.text)[0]
+    resp = urlquick.get(URL_LIVE, headers=headers, max_age=-1)
+    root = resp.parse()
 
-    resp2 = urlquick.get(URL_LIVE_DATAS % list_live_datas, max_age=-1)
-    return re.compile(
-        r'file\"\:\"(.*?)\"').findall(resp2.text.replace('\\', ''))[1]
+    live_data = root.findall(".//div[@class='freecaster-player']")[0].get('data-fc-token')
+    resp = urlquick.get(LIVE_PLAYER % live_data, max_age=-1)
+    video_url = json.loads(resp.text)['video']['src'][0]['src']
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

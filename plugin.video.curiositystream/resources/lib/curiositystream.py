@@ -96,7 +96,7 @@ class CuriosityStream(object):
         self._load_session()
 
     def _save_session(self):
-        with open(self._session_file, "w") as fd:
+        with open(self._session_file, "wb") as fd:
             pickle.dump(
                 {
                     "headers": self._session.headers,
@@ -133,6 +133,7 @@ class CuriosityStream(object):
                 raise CSAuthFailed(
                     "Please provide username and password in the profile settings"
                 )
+            self._session.headers.update({"User-Agent": "Mozilla/5.0"})
             response = self._session.post(
                 "{}login".format(self._base_url),
                 json={"email": self._username, "password": self._password},
@@ -141,7 +142,8 @@ class CuriosityStream(object):
                 raise CSAuthFailed("Login attempt failed")
             data = response.json()
             self._session.headers.update(
-                {"x-auth-token": data["message"]["auth_token"]}
+                {"x-auth-token": data["message"]["auth_token"],
+				 "User-Agent": "Mozilla/5.0"}
             )
             self._save_session()
 
@@ -489,7 +491,7 @@ class CuriosityStream(object):
             "streams": [
                 encoding
                 for encoding in data["data"]["encodings"]
-                if encoding["type"] == "hd"
+                if encoding["type"].lower() == "hd" or encoding["type"].lower() == "4k"
             ],
             "subtitles": data["data"]["closed_captions"]
             if "closed_captions" in data["data"]

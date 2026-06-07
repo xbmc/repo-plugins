@@ -1,0 +1,259 @@
+v 1.7.5
+Fixes:
+- Some changes in web requests that could fix timeout errors on some systems.
+- Fixed typo, thanks to Andrew Bird.
+
+v 1.7.4
+Fixes:
+- Collection list was empty, due to changes at ITVX.
+
+Changes:
+- Re-enabled inputstream helper (undoing changes of 1.7.3 now that inputstreamhelper has been fixed).
+
+v 1.7.3
+Hotfix:
+- Videos fail to play with the message: "Could not make the request. Your internet may be down."
+
+v 1.7.2
+Fixes:
+- In some cases, Kodi continued to run the previous version for a while after the add-on was updated.
+- Short news clips fail to play in category News.
+- Support live items without start and end time.
+
+v 1.7.1
+Fixes:
+- Short sport clips fail to play with error 'Not Found'
+
+v 1.7.0
+New Features:
+- Optional full HD streams - must be enabled in settings, off by default.
+
+Fixes:
+- Search with live items in the results failed.
+- Some episode listings failed.
+
+v 1.6.2
+Fixes:
+- Logging in to IVX account with username and password works again.
+
+v 1.6.1
+Fixes:
+- NO IPTV EPG.
+
+Changes:
+- An attempt to correct some mistakes that are easily made when copying authentication tokens from a web browser.
+- More informative error messages and logs when importing tokens fails.
+- Some other minor changes.
+
+v 1.6.0
+Fixes:
+- 'Continue watching' items could sometimes have and incorrect resume point.
+- Another attempt to fix issues singing in with email and password.
+
+New Features:
+- Possibility to import authentication tokens copied from a web browser or another instance of
+  viwX as an alternative to authenticate.
+
+v 1.5.3
+Fixes:
+- Show a proper geo-blocked message again.
+- All catchup played in low resolution.
+- Sometimes a message to login was shown when the actual issue was a connection error.
+
+Changes:
+- Added support for hero items of type 'episode'.
+- Hero items of type 'series' now navigate directly into the intended series folder.
+  If the programme has more than 1 series the items has a context menu entry 'view all episodes' to navigate to the whole programme.
+
+v 1.5.2
+Fixes:
+- Login failed with error 'Forbidden' even though email and password were correct.
+
+v 1.5.1
+Fixes:
+- News clips failed to play with KeyError 'Brand'.
+- Error messages when opening an empty 'Continue Watching' list.
+- Stream-only FAST channels stalled in advert breaks.
+- Programmes are now reported as having been fully played when the user has skipped to the end while playing.
+- Some programmes were missing en IPTV EPG.
+- Search now requests the same number of items as a generic web browser does.
+
+New Features:
+- Paid items are excluded from search results based on the setting 'Hide premium content'.
+- On most live channels it's now possible to seek back up to 1 hour from the moment the channel is started.
+
+v1.5.0
+Fixes:
+- ViwX failed to start with 'FetchError: Forbidden'. And issue only experienced by users of OSMC and possibly some other systems that still use OpenSSL v1.1.1.
+
+New Features:
+- Episodes in 'Continue Watching' now have context menu item 'Show all episodes', which opens the programme folder with all series and episodes.
+- Trending now shows programmes with episodes as folder, rather than playing the first episode of series 1.
+
+v1.4.1
+Fixes:
+- Yet again sign-in errors. Now affecting both new users and existing users who had signed out.
+
+v1.4.0
+New features:
+- Support for signed programmes. (Enable the new setting 'Use signed programmes whenever available').
+- Live hero items (those in orange on the main menu) now have a context menu 'Watch from the start'.
+
+Fixes:
+- Collection ITV sport failed with KeyError('collection')
+- Again occasional sign-in errors for new users. Hopefully the final fix.
+- A rare failure to list live channels.
+- Adapt to changes at ITVX causing submenu 'My ITVX' to fail sometimes.
+
+v1.3.0
+Fixes:
+- Freezing streams on Kodi 21 (Omega).
+- A lot of timeout errors, only experienced by new users, particularly when trying to sign in or open a stream.
+- All categories failed to open with KeyError('encodeEpisodeId') due to a change at ITVX.
+- A workaround for a bug in ITVX causing full news programmes to fail with FetchError('Not Found').
+- Sometimes an episodes listing failed with KeyError('guidance').
+
+New features:
+
+
+v1.2.1
+Fixes:
+- All categories failed to open with KeyError('pathSegment') due to a change at ITVX.
+
+Changes:
+- Schedules of live channels are now listed up to 6 hours in the future (was 4 hrs).
+
+v1.2.0
+Fixes:
+- All categories failed to open due to various changes at ITVX.
+- Error on opening some series named 'Other Episodes', due to changes at ITVX.
+- Some sub-collections failed with error 'Not Found', due to error in ITVX data.
+- Added support for hero and collections items of type 'page'. Fixes some collections being empty, or hero item not shown.
+
+New features:
+- Added a 'My itvX' entry in the main menu with:
+    - My List - ITVX's My List.
+    - Continue Watching: supports continue watching on different devices and different platforms.
+    - Because You Watched: recommendations by ITV based on a recently watched programme.
+    - Recommended: general recommendations by ITV.
+- All programmes and series now have a context menu item to add/remove the programme to/from My List.
+
+Changes:
+- When not signed in, a user is now always offered to sign in via viwX's settings when an item was opened that required authentication.
+- Search now respects setting 'Hide premium content'.
+- Brushed up README thanks to JohnVeness.
+
+v 1.1.1
+- fix: playing VOD on kodi Omega failed with error.
+
+v 1.1.0
+- Updated user-agent string to Firefox 118.
+- Added support for Live TV items in collections. Fixes: collection 'ITVX Live Channels' is empty.
+- Added support for shortFromSlider in collection, like the folder with short news-like items in the collection 'Rugby World Cup'.
+- Added support for shorForm collections. Fixes: absence of the collection 'Rugby World Cup 2023'.
+- Adapt to a change at itvx causing an empty 'Kids Collection'.
+
+v 1.0.0
+ - First release.
+
+v1.0.0-rc.1
+- Support hero items and collection items of type collection.
+- Added some protection against future changes to ITVX's main page.
+- Fix: Some parts of subtitles missing when more than one colour was used on a single line.
+- Added support for an experimental addon that performs automatic subtitles translation.
+- Some other minor changes and improvements.
+
+v1.0.0-beta.6
+- Adapt to changes at ITVX which fixes:
+    - Almost all VOD fail to play.
+    - Programme folders fail to open.
+
+V1.0.0-beta.5
+- Start live streams a few seconds more in the past to fix stuttering and buffering issues.
+- Cleanup of some cookie and property black magic to fix other issues with stuttering and stalling live streams.
+- Adapt to changes at ITV which fixes:
+    - Missing 'News' collection on the add-on's home page.
+    - Most items in category 'News' fail to play.
+- Fix: All items now have the correct title and plot in the info screen while playing.
+- Fix: The addon becomes unresponsive for a very long time after an error.
+
+V1.0.0-beta.4
+- Fix: Very frequently a sign in to itvx is required.
+- Fix: Free playable items in collections and categories failed, claiming to be premium.
+- Fix: Premium content on the top level of a collection/category failed to play with a premium account.
+- A bit more resilient to errors in hero items.
+
+V1.0.0-beta.1
+- Renamed addon to viwx
+- Fix: some programmes with multiple episodes in categories were listed as single playable item, caused by changes at itvX.
+- Fix: page 'Live' failed to open with error 'NoneType is not subscriptable' caused by changes at itvX.
+- Fix: category 'News' failed to open caused by changes at itvX.
+- Fix: search sometimes does not return results when it should.
+- Fix: suport more types of hero items.
+- When available, local time zone is now obtained from Kodi's settings, rather than the OS.
+- VOD content in HD (720p, depending on the age of the episode).
+- Support more colours in subtitles
+
+v0.7.3
+- Fixed playable items in collections failed with error 'Not Found' caused by changes at itvX.
+- The main menu is always refreshed to ensure hero items are up to date.
+- Fixed regression in 0.7.2: live hero items failed to play.
+- Various minor changes under the hood.
+
+v0.7.2
+- Fix short news items from 'main menu/news' didn't play.
+- Fix 'main menu/news' sometimes failed with "KeyError 'synopsis'".
+- Fix fast channels won't play on kodi 20.
+
+v0.7.1
+- Fixed "KeyError 'type'" at addon start caused by changes at itvx.
+
+v0.7.0
+- Fix fast channels stop playing after a few minutes.
+- Fix crash of kodi 20 on playing video.
+- Proprer error message on access attempt to geo restricted content.
+- Now navigate into a series folder, rather then opening it in place.
+- Added settings to devide long lists up in pages and/or A-Z listing.
+- Series folder inherit the premium status of the program.
+- Series folders now have images.
+- Error message is shown on playing premium content without a premium account.
+- Times in live schedules now presented in the system locale/user preferences
+- Some other minor fixes, improvements and changes under the hood.
+
+v0.6.0
+- Added itvx promoted content to main menu.
+- Added itvx collections to main menu.
+- Removed shows A-Z due to lacking native support on itvx.
+- All other items are now also retrieved from itvx.
+- Added setting to hide paid itvX-premium content.
+- Add 'play from the start' to the context menu of the main live channels.
+- In live channel listing, display bare programme names rather than extended info.
+
+v.0.5.1
+- fix new icon not shown anymore after reboot
+
+v.0.5.0
+- itvX icon and fanart
+- Access to all itvX live channels.
+- Option to play live programs from the start, when enabled in settings. For the main live channels only.
+- Now possible to pause live programs.
+- New main menu item 'Search'.
+- Removed main menu item 'Full series'.
+
+v.0.4.0
+- List A-Z subfolders in menu 'Shows'.
+- Much improved account sign in experience.
+- Now possible to sign out of ITV account.
+- New setting to show password in plain text while you type.
+- Settings in new format, with help texts.
+- fix: catchup subtitles did not show anymore.
+- A little less confusing error messages.
+- Various small fixes, improvements, changes and adaptions to changes at ITV's web services.
+
+v.0.3.1
+fix: episode without subtitle fails to play
+update live channels' epg a bit more frequent
+fix: some episodes are missing in listings
+
+v.0.3.0
+Still a work in progress, but most things should be working reasonably well though

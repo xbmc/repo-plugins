@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.srgssr_ch_replay" name="Unofficial SRG SSR Replay" version="3.1.0" provider-name="Man Behind MooN">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" version="2.25.1+matrix.1"/>
+    <import addon="script.module.inputstreamhelper" version="0.5.8+matrix.1.zip"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+	 <news>[NEW] A new menu has been added with more features. Enjoy!
+[NEW] InputStream Adaptive has been implemented and is enabled by default.
+[NEW] Add-on settings have been overhauled. Have a look!
+[NEW] French translation has been added. Profitez bien!
+[INFO] This version has been totally refactored for upcoming features. Special thanks to Joachim. Embrace the future!
+[WARN] Favorites from previous versions do not work anymore. Delete and re-add them. Sorry!</news>
+	<assets>
+		<icon>resources/icon.png</icon>
+		<fanart>resources/fanart.png</fanart>
+		<banner>resources/banner.png</banner>
+		<clearlogo>resources/clearlogo.png</clearlogo>
+		<screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
+		<screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
+		<screenshot>resources/screenshots/screenshot-03.jpg</screenshot>
+		<screenshot>resources/screenshots/screenshot-04.jpg</screenshot>
+		<screenshot>resources/screenshots/screenshot-05.jpg</screenshot>
+	</assets>
+    <summary lang="en_GB">The unofficial SRG SSR Replay add-on lists and plays TV shows from the channels SRF, SwissInfo, RTS, RSI and RTR.</summary>
+    <description lang="en_GB">The unofficial SRG SSR Replay add-on lists recorded shows from the SRG SSR over their provided API. The channels SRF, SwissInfo, RTS, RSI and RTR are supported. All shows are legally owned by the SRG SSR and will only be streamed over this add-on. Some shows might be regional locked and can only be played by Swiss IP addresses.
+In order to stream the shows a SRG SSR account has to be created. The instructions can be found in the README.md (https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay).</description>
+    <disclaimer lang="en_GB">This add-on is not endorsed by SRG SSR and no support can be claimed. This add-on uses the officially provided API by SRG SSR.</disclaimer>
+	<summary lang="de_DE">Das inoffizielle SRG SSR Replay Add-on listet die meisten Sendungen von den Sendern SRF, SwissInfo, RTS, RSI und RTR auf und spielt sie ab.</summary>
+    <description lang="de_DE">Das inoffizielle SRG SSR Replay Add-on zeigt aufgezeichneten Sendungen der SRG SSR über das zur Verfügung gestellte API. Es werden die Sender SRF, SwissInfo, RTS, RSI und RTR unterstützt. Alle Sendungen gehören der SRG SSR und werden vom Add-on lediglich gestreamt. Einige Sendungen können auf Regionen beschränkt sein und nur mit Schweizer IP Adressen abgespielt werden.
+Um die Sendungen streamen zu können, muss ein Konto bei der SRG SSR erstellt werden. Die Anleitung dazu können in der README.md (https://github.com/ManBehindMooN/[CR]kodi_plugin_video_srgssr_ch_replay) entnommen werden.</description>
+    <disclaimer lang="de_DE">Dieses Add-on ist nicht offiziell von der SRG SSR und es bestehen keinerlei Support-Ansprüche. Das Add-on benutzt die von der SRG SSR offiziell zur Verfügung gestellten Schnittstellen.</disclaimer>
+    <summary lang="fr_FR">L'add-on non officiel SRG SSR Replay permet de lister et visionner des émissions TV de la SRF, SwissInfo, RTS, RSI et RTR.</summary>
+    <description lang="fr_FR">L'add-on non officiel SRG SSR Replay liste les émissions TV de la SRG SSR à l'aide de l'API fournie. Sont supportés la SRF, SwissInfo, RTS, RSI et RTR. Toutes les émissions appartiennent légalement à la SRG SSR et sont uniquement streamées sur cet add-on. Il est possible que certaines émissions soient régionalement bloquées et qu'elles ne soient que visionables avec une adresse IP suisse.</description>
+    <disclaimer lang="fr_FR">Cet add-on n'est pas cautionné par la SRG SSR et aucun support ne peut leur être demandé. Cet add-on utilise l'API officielle de la SRG SSR.</disclaimer>
+    <language>de</language>
+    <platform>all</platform>
+    <license>GPL-2.0-or-later</license>
+    <email>man_behind_moon at gmx dot net</email>
+    <source>https://github.com/ManBehindMooN/kodi_plugin_video_srgssr_ch_replay</source>
+    <website>https://www.srgssr.ch</website>
+    <forum>https://github.com/ManBehindMooN/kodi_plugin_video_srgssr_ch_replay/discussions</forum>
+  </extension>
+</addon>

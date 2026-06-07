@@ -56,3 +56,11 @@ msgstr ""
 msgctxt "#30910"
 msgid "View program"
 msgstr ""
+
+msgctxt "#30911"
+msgid "Search TV"
+msgstr ""
+
+msgctxt "#30912"
+msgid "Search Radio"
+msgstr ""

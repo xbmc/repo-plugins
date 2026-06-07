@@ -1,0 +1,210 @@
+# Kodi Media Center language file
+# Addon Name: Pluto TV
+# Addon id: plugin.video.plutotv
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.plutotv\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-12-04 13:13+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Danish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-plutotv/da_dk/>\n"
+"Language: da_dk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.9.1\n"
+
+msgctxt "Addon Summary"
+msgid "TV channels devoted to your favorite things, made from blockbuster movies from Paramount, ... “The genius of Pluto TV: This is real internet television”."
+msgstr "Tv-kanaler dedikeret til dine yndlingsting, lavet af storfilm fra Paramount... \"Det geniale ved Pluto TV: dette er ægte internet-tv\"."
+
+msgctxt "Addon Description"
+msgid "Watch Free TV on Kodi! Stream Pluto TV's 100+ channels of news, sports, and the Internet's best, completely free on your Kodi device."
+msgstr "Se gratis tv i Kodi! Stream Pluto TV's mere end 100 kanaler med nyheder, sport og internettets bedste, helt gratis på din Kodi-enhed."
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr "Aktiver fejfinding (logfør fejl)"
+
+msgctxt "#30011"
+msgid "Live"
+msgstr "Direkte"
+
+msgctxt "#30012"
+msgid "OnDemand"
+msgstr "OnDemand"
+
+msgctxt "#30013"
+msgid "Guide"
+msgstr "Guide"
+
+msgctxt "#30014"
+msgid "All Channels"
+msgstr "Alle kanaler"
+
+msgctxt "#30015"
+msgid ">> Next"
+msgstr ">> Næste"
+
+msgctxt "#30016"
+msgid "Featured"
+msgstr "Fremhævede"
+
+msgctxt "#30017"
+msgid "Categories"
+msgstr "Kategorier"
+
+msgctxt "#30018"
+msgid "Lineup"
+msgstr "Opstilling"
+
+msgctxt "#30019"
+msgid "&deviceMake=&deviceModel=&sid"
+msgstr "&deviceMake=&deviceModel=&sid"
+
+msgctxt "#30020"
+msgid "&deviceMake=&deviceModel=&sid=%s&deviceId=%s"
+msgstr "&deviceMake=&deviceModel=&sid=%s&deviceId=%s"
+
+msgctxt "#30021"
+msgid ""
+msgstr " "
+
+msgctxt "#30022"
+msgid "sid=%s&deviceId=%s"
+msgstr "sid=%s&deviceId=%s"
+
+msgctxt "#30023"
+msgid "On Now"
+msgstr "Direkte nu"
+
+msgctxt "#30024"
+msgid "Channel lineup"
+msgstr "Kanaloversigt"
+
+msgctxt "#30025"
+msgid "Channel by genre"
+msgstr "Kanal efter genre"
+
+msgctxt "#30026"
+msgid "Video On Demand"
+msgstr "Video On Demand"
+
+msgctxt "#30029"
+msgid "Coming Up Later..."
+msgstr "Kommer senere..."
+
+msgctxt "#30030"
+msgid "Allow this plugin to automatically configure IPTV Simple PVR Backend?"
+msgstr "Tillad dette plugin automatisk at konfigurere IPTV Simple PVR backend?"
+
+msgctxt "#30031"
+msgid "%s Updating..."
+msgstr "%s opdaterer..."
+
+msgctxt "#30032"
+msgid "M3U/XMLTV Path"
+msgstr "Sti til M3U/XMLTV"
+
+msgctxt "#30033"
+msgid "Enable M3U/XMLTV Generator Service"
+msgstr "Aktiver tjenesten for oprettelse af M3U/XMLTV"
+
+msgctxt "#30034"
+msgid "?terminate=false&deviceType=web&deviceMake=web&deviceModel=web&sid=246&deviceId=5331d5fb753499095a00045a&deviceVersion=DNT&appVersion=DNT&deviceDNT=0&userId=&advertisingId=&deviceLat=&deviceLon=&app_name=&appName=web&buildVersion=&appStoreUrl=&architecture=&includeExtendedEvents=false&marketingRegion=US&serverSideAds=false"
+msgstr "?terminate=false&deviceType=web&deviceMake=web&deviceModel=web&sid=246&deviceId=5331d5fb753499095a00045a&deviceVersion=DNT&appVersion=DNT&deviceDNT=0&userId=&advertisingId=&deviceLat=&deviceLon=&app_name=&appName=web&buildVersion=&appStoreUrl=&architecture=&includeExtendedEvents=false&marketingRegion=US&serverSideAds=false"
+
+msgctxt "#30035"
+msgid "Build Only Favorites"
+msgstr "Byg kun favoritter"
+
+msgctxt "#30036"
+msgid "%s added to Favorites"
+msgstr "%s føjet til favoritter"
+
+msgctxt "#30037"
+msgid "%s removed from Favorites"
+msgstr "%s fjernet fra favoritter"
+
+msgctxt "#30038"
+msgid "Add Channel to Favorites"
+msgstr "Tilføj kanal til favoritter"
+
+msgctxt "#30039"
+msgid "Remove Channel from Favorites"
+msgstr "Fjern kanal fra favoritter"
+
+msgctxt "#30040"
+msgid "Live (Favorites)"
+msgstr "Direkte (favoritter)"
+
+msgctxt "#30041"
+msgid "Use Direct stream"
+msgstr "Anvend direkte stream"
+
+msgctxt "#30042"
+msgid "PseudoTV Live Supported through Recommended Services"
+msgstr "PseudoTV Live understøttet gennem anbefalede tjenester"
+
+msgctxt "#30043"
+msgid "Prefer Color Channel Logos"
+msgstr "Foretræk kanallogoer i farve"
+
+msgctxt "#30044"
+msgid "General"
+msgstr "Generel"
+
+msgctxt "#49000"
+msgid "Integration"
+msgstr "Integration"
+
+msgctxt "#49001"
+msgid "Install PseudoTV Live add-on"
+msgstr "Installer PseudoTV Live add-on"
+
+msgctxt "#49002"
+msgid "Install IPTV Manager add-on"
+msgstr "Installer IPTV Manager add-on"
+
+msgctxt "#49003"
+msgid "Enable IPTV Manager integration"
+msgstr "Aktiver integration af IPTV Manager"
+
+msgctxt "#49004"
+msgid "IPTV Manager settings…"
+msgstr "Indstillinger for IPTV Manager…"
+
+msgctxt "#49005"
+msgid "PseudoTV Live settings…"
+msgstr "Indstillinger for PseudoTV Live…"
+
+msgctxt "#49006"
+msgid "Only add Favorites"
+msgstr "Tilføj kun favoritter"
+
+msgctxt "#49007"
+msgid "%s added to Favorites"
+msgstr "%s føjet til favoritter"
+
+msgctxt "#49008"
+msgid "%s removed from Favorites"
+msgstr "%s fjernet fra favoritter"
+
+msgctxt "#49009"
+msgid "Add Channel to Favorites"
+msgstr "Tilføj kanal til favoritter"
+
+msgctxt "#49010"
+msgid "Remove Channel from Favorites"
+msgstr "Fjern kanal fra favoritter"
+
+msgctxt "#49011"
+msgid "Live (Favorites)"
+msgstr "Direkte (favoritter)"
+
+msgctxt "#49012"
+msgid "Favorites"
+msgstr "Favoritter"

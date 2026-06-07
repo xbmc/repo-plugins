@@ -1,12 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from resources.lib.backtothefuture import PY2
-if PY2:
-    # noinspection PyUnresolvedReferences
-    import urlparse as parse
-else:
-    # noinspection PyUnresolvedReferences
-    import urllib.parse as parse
+import urllib.parse as parse
 
 from resources.lib import chn_class, mediatype
 from resources.lib.mediaitem import MediaItem
@@ -54,35 +48,11 @@ class Channel(chn_class.Channel):
             self.liveUrl = "https://cdn.rtvdrenthe.nl/live/rtvdrenthe/tv/index.m3u8"
             self.channelBitrate = 1350
 
-        elif self.channelCode == "rtvnoord":
-            self.noImage = "rtvnoordimage.png"
-            self.mainListUri = "http://noord.api.regiogrid.nl/apps/v520/programs.json"
-            self.baseUrl = "http://noord.api.regiogrid.nl"
-            # Uses NPO stream with smshield cookie
-            # self.liveUrl = "http://noord.api.regiogrid.nl/apps/v520/tv-live-kiezer.json"
-            self.liveUrl = "https://media.rtvnoord.nl/live/rtvnoord/tv/index.m3u8"
-            self.channelBitrate = 1350
-
         elif self.channelCode == "rtvnh":
             self.noImage = "rtvnhimage.png"
             self.baseUrl = "http://www.rtvnh.nl"
             self.liveUrl = "https://rrr.sz.xlcdn.com/?account=nhnieuws&file=live&type=live&service=wowza&protocol=https&output=playlist.m3u8"
             self.channelBitrate = 1200
-
-        elif self.channelCode == "omroepwest":
-            self.noImage = "omroepwestimage.png"
-            self.mainListUri = "http://west.api.regiogrid.nl/apps/v520/programs.json"
-            self.baseUrl = "http://www.omroepwest.nl"
-            self.liveUrl = "http://feeds.omroepwest.nl/v520/tv.json"
-            self.channelBitrate = 1500
-
-        elif self.channelCode == "omroepgelderland":
-            # TODO: move to chn_rpoapp?
-            self.noImage = "omroepgelderlandimage.png"
-            self.mainListUri = "https://web.omroepgelderland.nl/json/v400/programmas.json"
-            self.baseUrl = "https://web.omroepgelderland.nl"
-            self.liveUrl = "https://gelderland.rpoapp.nl/v02/livestreams/AndroidTablet.json"
-            self.channelBitrate = 1500
 
         elif self.channelCode == "omroepbrabant":
             self.noImage = "omroepbrabantimage.png"
@@ -439,7 +409,8 @@ class Channel(chn_class.Channel):
 
         if AddonSettings.use_adaptive_stream_add_on():
             stream = item.add_stream(url, 0)
-            M3u8.set_input_stream_addon_input(stream, item.HttpHeaders)
+            M3u8.set_input_stream_addon_input(
+                stream, stream_headers=item.HttpHeaders, manifest_headers=item.HttpHeaders)
             item.complete = True
         else:
             for s, b in M3u8.get_streams_from_m3u8(url, append_query_string=True):

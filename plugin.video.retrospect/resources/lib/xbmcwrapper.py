@@ -14,7 +14,6 @@ except AttributeError:
     translatePath = xbmc.translatePath
 
 from resources.lib.addonsettings import AddonSettings
-from resources.lib.backtothefuture import unichr
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.retroconfig import Config
 from resources.lib.locker import LockWithDialog
@@ -134,7 +133,7 @@ class XbmcWrapper:
         """ Returns the formatting string for the label of an item with an external add-on url
 
         :param str add_on_url:   The plugin://-handle for the add-on
-        
+
         :return: the name of the add-on or None if not installed
         :rtype: str
 
@@ -156,7 +155,7 @@ class XbmcWrapper:
             add_on_name = add_on_id
             via = LanguageHelper.get_localized_string(LanguageHelper.MissingAddon)
 
-        add_on_label = "{0} [COLOR gold]{1} '{2}'[/COLOR]".format(unichr(187), via, add_on_name)
+        add_on_label = "{0} [COLOR gold]{1} '{2}'[/COLOR]".format(chr(187), via, add_on_name)
         XbmcWrapper.__add_on_name_lookup[add_on_id] = add_on_label
         return add_on_label
 

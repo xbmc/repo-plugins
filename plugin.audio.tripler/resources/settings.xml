@@ -1,0 +1,112 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.audio.tripler">
+		<category id="subscriber account" label="30010" help="">
+			<group id="1">
+				<setting id="authenticated" type="boolean" label="30999" help="">
+					<level>4</level>
+					<default>false</default>
+				</setting>
+				<setting id="fullname" type="string" label="30017" help="">
+					<level>0</level>
+					<default/>
+					<enable>false</enable>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="!is" setting="authenticated">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>30017</heading>
+					</control>
+				</setting>
+				<setting id="emailaddress" type="string" label="30012" help="">
+					<level>0</level>
+					<default/>
+					<enable>false</enable>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="!is" setting="authenticated">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>30012</heading>
+					</control>
+				</setting>
+				<setting id="subscribed" type="integer" label="30075" help="30075">
+					<level>0</level>
+					<default>0</default>
+					<enable>false</enable>
+					<constraints>
+						<options>
+							<option label="No">0</option>
+							<option label="Yes">1</option>
+						</options>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="!is" setting="authenticated">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="list" format="string">
+						<heading>30075</heading>
+					</control>
+				</setting>
+				<setting id="subscribed-check" type="string" label="30999" help="">
+					<level>4</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>30999</heading>
+					</control>
+				</setting>
+				<setting id="sign-in" type="action" label="30013" help="30020">
+					<level>0</level>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="!is" setting="authenticated">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="button" format="action">
+						<data>RunPlugin("plugin://plugin.audio.tripler/sign-in")</data>
+					</control>
+				</setting>
+				<setting id="sign-out" type="action" label="30014" help="30021">
+					<level>0</level>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="!is" setting="authenticated">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="button" format="action">
+						<data>RunPlugin("plugin://plugin.audio.tripler/sign-out")</data>
+					</control>
+				</setting>
+			</group>
+			<group id="2">
+				<setting id="image_quality" type="integer" label="30022" help="30023">
+					<level>0</level>
+					<default>1</default>
+					<constraints>
+						<options>
+							<option label="30024">0</option>
+							<option label="30025">1</option>
+							<option label="30026">2</option>
+						</options>
+					</constraints>
+					<control type="list" format="string">
+						<heading>30022</heading>
+					</control>
+				</setting>
+			</group>
+		</category>
+	</section>
+</settings>

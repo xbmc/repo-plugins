@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <defaultcontrol always="false">1</defaultcontrol>
+  <menucontrol>1</menucontrol>
+  <backgroundcolor>0xff000000</backgroundcolor>
+  <animation effect="fade" time="100">WindowOpen</animation>
+  <animation effect="fade" time="100">WindowClose</animation>
+  <zorder>1</zorder>
+  <coordinates>
+    <left>0</left>
+    <top>0</top>
+  </coordinates>
+  <controls>
+	  <control type="list" id="1">
+		  <description>Comment list</description>
+		  <left>0</left>
+		  <top>0</top>
+		  <visible>true</visible>
+		  <viewtype label="Comments">list</viewtype>
+		  <orientation>vertical</orientation>
+		  <pagecontrol>25</pagecontrol>
+		  <itemlayout height="28">
+			  <control type="label">
+                  <left>0</left>
+				  <height>24</height>
+				  <font>font14</font>
+				  <aligny>center</aligny>
+				  <textcolor>blue</textcolor>
+				  <align>left</align>
+				  <label>$INFO[ListItem.Label]</label>
+			  </control>
+		  </itemlayout>
+		  <focusedlayout height="28">
+			  <control type="label">
+				  <left>0</left>
+				  <height>24</height>
+				  <font>font14</font>
+				  <aligny>center</aligny>
+				  <textcolor>red</textcolor>
+				  <align>left</align>
+				  <label>$INFO[ListItem.Label]</label>
+				  <scroll>true</scroll>
+				  <scrollspeed>250</scrollspeed>
+			  </control>
+		  </focusedlayout>
+	  </control>
+  </controls>
+</window>

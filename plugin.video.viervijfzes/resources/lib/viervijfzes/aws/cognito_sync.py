@@ -15,6 +15,7 @@ try:  # Python 3
     from urllib.parse import quote, urlparse
 except ImportError:  # Python 2
     from urllib import quote
+
     from urlparse import urlparse
 
 _LOGGER = logging.getLogger(__name__)

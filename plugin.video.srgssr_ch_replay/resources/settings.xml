@@ -1,0 +1,106 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="plugin.video.srgssr_ch_replay">
+		<category help="" id="srg ssr api" label="30100">
+			<group id="1">
+				<setting help="" id="consumerKey" label="30101" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="string" type="edit">
+						<heading>30101</heading>
+					</control>
+				</setting>
+				<setting help="" id="consumerSecret" label="30102" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control format="string" type="edit">
+						<heading>30102</heading>
+					</control>
+				</setting>
+				<setting help="" id="enable_subtitles" label="30103" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting help="" id="consumerKeySubtitles" label="30104" parent="enable_subtitles" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="enable_subtitles">true</condition>
+						</dependency>
+					</dependencies>
+					<control format="string" type="edit">
+						<heading>30104</heading>
+					</control>
+				</setting>
+				<setting help="" id="consumerSecretSubtitles" label="30105" parent="enable_subtitles" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="enable_subtitles">true</condition>
+						</dependency>
+					</dependencies>
+					<control format="string" type="edit">
+						<heading>30105</heading>
+					</control>
+				</setting>
+			</group>
+		</category>
+		<category help="" id="general" label="30200">
+			<group id="1">
+				<setting id="default_bu" type="string" label="30201" help="">
+					<level>0</level>
+					<default>choose</default>
+					<constraints>
+						<options>
+							<option label="30202">choose</option>
+							<option label="30014">srf</option>
+							<option label="30015">swi</option>
+							<option label="30016">rts</option>
+							<option label="30017">rsi</option>
+							<option label="30018">rtr</option>
+						</options>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting help="" id="number_of_episodes_per_page" label="30203" type="integer">
+					<level>0</level>
+					<default>10</default>
+					<control format="integer" type="edit">
+						<heading>30203</heading>
+					</control>
+				</setting>
+				<setting help="" id="enable_inputstream_adaptive" label="30204" type="boolean">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+		</category>
+		<category help="" id="experimental" label="30900">
+			<group id="1">
+				<setting help="" id="show_inactive_shows" label="30901" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+		</category>
+	</section>
+</settings>
+

@@ -8,7 +8,6 @@ import random
 import string
 import hashlib
 
-from resources.lib.backtothefuture import PY2
 from resources.lib.logger import Logger
 from resources.lib.addonsettings import AddonSettings, LOCAL, KODI
 from resources.lib.xbmcwrapper import XbmcWrapper
@@ -99,11 +98,8 @@ class Vault(object):
                 XbmcWrapper.Error)
             return False
 
-        if PY2:
-            encrypted_key = "%s=%s" % (self.__APPLICATION_KEY_SETTING, application_key)
-        else:
-            # make it text to store
-            encrypted_key = "%s=%s" % (self.__APPLICATION_KEY_SETTING, application_key.decode())
+        # make it text to store
+        encrypted_key = "%s=%s" % (self.__APPLICATION_KEY_SETTING, application_key.decode())
 
         # let's generate a pin using the scrypt password-based key derivation
         pin_key = self.__get_pbk(pin)
@@ -176,7 +172,23 @@ class Vault(object):
 
         return decrypted_value
 
-    def set_setting(self, setting_id, setting_name=None, setting_action_id=None):
+    def set_channel_setting(self, channel_guid, setting_id, setting_name=None,
+                            setting_action_id=None, default=""):
+        """ Prompts for a value via keyboard, then encrypts and stores it as a channel-specific setting.
+
+        :param str channel_guid:        The GUID of the channel.
+        :param str setting_id:          The setting identifier.
+        :param str setting_name:        The name to display in the keyboard heading.
+        :param str setting_action_id:   The name of the setting that shows ****** after encryption.
+        :param str default:             Optional value to pre-fill in the keyboard.
+
+        :rtype: None
+        """
+
+        full_setting_id = "channel_%s_%s" % (channel_guid, setting_id)
+        self.set_setting(full_setting_id, setting_name, setting_action_id, default)
+
+    def set_setting(self, setting_id, setting_name=None, setting_action_id=None, default=""):
         """ Reads a value for a setting from the keyboard and encrypts it in the Kodi
         Add-on settings.
 
@@ -186,6 +198,7 @@ class Vault(object):
         :param str setting_name:        The name to display in the keyboard.
         :param str setting_action_id:   The name of setting that shows the ***** if an value was
                                          encrypted.
+        :param str default:             Optional value to pre-fill in the keyboard.
 
         :rtype: None
 
@@ -193,7 +206,7 @@ class Vault(object):
 
         Logger.info("Encrypting value for setting '%s'", setting_id)
         input_value = XbmcWrapper.show_key_board(
-            "", LanguageHelper.get_localized_string(
+            default, LanguageHelper.get_localized_string(
                     LanguageHelper.VaultSpecifySetting
             ) % (setting_name or setting_id,)
         )
@@ -267,16 +280,20 @@ class Vault(object):
             XbmcWrapper.show_notification("", vault_incorrect_pin, XbmcWrapper.Error)
             raise RuntimeError("Incorrect Retrospect PIN specified")
         pin_key = self.__get_pbk(pin)
-        application_key = self.__decrypt(application_key_encrypted, pin_key)
+        try:
+            application_key = self.__decrypt(application_key_encrypted, pin_key)
+        except UnicodeDecodeError:
+            # An invalid pin usually causes a decode error.
+            Logger.critical("Error decoding Retrospect PIN", exc_info=True)
+            application_key = ""
+
         if not application_key.startswith(Vault.__APPLICATION_KEY_SETTING):
             Logger.critical("Invalid Retrospect PIN")
-            XbmcWrapper.show_notification("", vault_incorrect_pin, XbmcWrapper.Error)
+            XbmcWrapper.show_dialog(LanguageHelper.ErrorId, LanguageHelper.VaultIncorrectPin)
             raise RuntimeError("Incorrect Retrospect PIN specified")
 
         application_key_value = application_key[len(Vault.__APPLICATION_KEY_SETTING) + 1:]
         Logger.info("Successfully decrypted the ApplicationKey.")
-        if PY2:
-            return application_key_value
 
         # We return bytes on Python 3
         return application_key_value.encode()
@@ -294,8 +311,6 @@ class Vault(object):
 
         Logger.debug("Encrypting with keysize: %s", len(key))
         aes = pyaes.AESModeOfOperationCTR(key)
-        if PY2:
-            return base64.b64encode(aes.encrypt(data))
         return base64.b64encode(aes.encrypt(data)).decode()
 
     def __decrypt(self, data, key):
@@ -313,8 +328,6 @@ class Vault(object):
         Logger.debug("Decrypting with keysize: %s", len(key))
         aes = pyaes.AESModeOfOperationCTR(key)
 
-        if PY2:
-            return aes.decrypt(base64.b64decode(data))
         return aes.decrypt(base64.b64decode(data)).decode()
 
     def __get_new_key(self, length=32):
@@ -329,8 +342,6 @@ class Vault(object):
 
         new_key = ''.join(random.choice(string.digits + string.ascii_letters + string.punctuation)
                           for _ in range(length))
-        if PY2:
-            return new_key
 
         # The key is bytes in Py3
         return new_key.encode()
@@ -346,8 +357,8 @@ class Vault(object):
         """
 
         salt = AddonSettings.get_client_id()
-        pbk = pyscrypt.hash(password=pin if PY2 else pin.encode(),
-                            salt=salt if PY2 else salt.encode(),
+        pbk = pyscrypt.hash(password=pin.encode(),
+                            salt=salt.encode(),
                             N=2 ** 7,  # should be so that Raspberry Pi can handle it
                             # N=1024,
                             r=1,

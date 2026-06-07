@@ -21,7 +21,7 @@ URL_SCHEDULE_XML = 'https://fosdem.org/%s/schedule/xml'
 # Year
 
 BEGINING_YEAR_XML = 2012
-LAST_YEAR_XML = 2021
+LAST_YEAR_XML = 2023
 
 
 @Route.register

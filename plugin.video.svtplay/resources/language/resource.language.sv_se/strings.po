@@ -32,10 +32,6 @@ msgctxt "#30003"
 msgid "Latest programs"
 msgstr "Senaste program"
 
-msgctxt "#30004"
-msgid "Latest news broadcast"
-msgstr "Senaste nyhetsprogram"
-
 msgctxt "#30005"
 msgid "Recommended"
 msgstr "Rekommenderat"

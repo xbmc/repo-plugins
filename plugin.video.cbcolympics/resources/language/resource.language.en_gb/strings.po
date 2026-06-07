@@ -11,7 +11,7 @@ msgstr ""
 
 # Sport names
 msgctxt "#30000"
-msgid "All Sports"
+msgid "Archery"
 msgstr ""
 
 msgctxt "#30001"
@@ -19,7 +19,7 @@ msgid "Artistic Swimming"
 msgstr ""
 
 msgctxt "#30002"
-msgid "Archery"
+msgid "Athletics"
 msgstr ""
 
 msgctxt "#30003"
@@ -27,11 +27,11 @@ msgid "Badminton"
 msgstr ""
 
 msgctxt "#30004"
-msgid "Baseball"
+msgid "Basketball"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Basketball"
+msgid "3x3 Basketball"
 msgstr ""
 
 msgctxt "#30006"
@@ -43,107 +43,107 @@ msgid "Boxing"
 msgstr ""
 
 msgctxt "#30008"
-msgid "Canoe / Kayak"
+msgid "Breaking"
 msgstr ""
 
 msgctxt "#30009"
-msgid "Cycling"
+msgid "Canoe"
 msgstr ""
 
 msgctxt "#30010"
-msgid "Diving"
+msgid "Cycling"
 msgstr ""
 
 msgctxt "#30011"
-msgid "Equestrian"
+msgid "Diving"
 msgstr ""
 
 msgctxt "#30012"
-msgid "Fencing"
+msgid "Equestrian"
 msgstr ""
 
 msgctxt "#30013"
-msgid "Field Hockey"
+msgid "Fencing"
 msgstr ""
 
 msgctxt "#30014"
-msgid "Golf"
+msgid "Field Hockey"
 msgstr ""
 
 msgctxt "#30015"
-msgid "Gymnastics"
+msgid "Golf"
 msgstr ""
 
 msgctxt "#30016"
-msgid "Handball"
+msgid "Gymnastics (Artistic)"
 msgstr ""
 
 msgctxt "#30017"
-msgid "Judo"
+msgid "Gymnastics (Rhythmic)"
 msgstr ""
 
 msgctxt "#30018"
-msgid "Karate"
+msgid "Gymnastics (Trampoline)"
 msgstr ""
 
 msgctxt "#30019"
-msgid "Modern Pentathlon"
+msgid "Handball"
 msgstr ""
 
 msgctxt "#30020"
-msgid "Rowing"
+msgid "Judo"
 msgstr ""
 
 msgctxt "#30021"
-msgid "Rugby"
+msgid "Modern Pentathlon"
 msgstr ""
 
 msgctxt "#30022"
-msgid "Sailing"
+msgid "Rowing"
 msgstr ""
 
 msgctxt "#30023"
-msgid "Shooting"
+msgid "Rugby"
 msgstr ""
 
 msgctxt "#30024"
-msgid "Skateboarding"
+msgid "Sailing"
 msgstr ""
 
 msgctxt "#30025"
-msgid "Soccer"
+msgid "Shooting"
 msgstr ""
 
 msgctxt "#30026"
-msgid "Softball"
+msgid "Skateboarding"
 msgstr ""
 
 msgctxt "#30027"
-msgid "Sport Climbing"
+msgid "Soccer"
 msgstr ""
 
 msgctxt "#30028"
-msgid "Surfing"
+msgid "Sport Climbing"
 msgstr ""
 
 msgctxt "#30029"
-msgid "Swimming"
+msgid "Surfing"
 msgstr ""
 
 msgctxt "#30030"
-msgid "Table Tennis"
+msgid "Swimming"
 msgstr ""
 
 msgctxt "#30031"
-msgid "Taekwondo"
+msgid "Table Tennis"
 msgstr ""
 
 msgctxt "#30032"
-msgid "Tennis"
+msgid "Taekwondo"
 msgstr ""
 
 msgctxt "#30033"
-msgid "Track and Field"
+msgid "Tennis"
 msgstr ""
 
 msgctxt "#30034"
@@ -188,43 +188,59 @@ msgid "Team Canada"
 msgstr ""
 
 msgctxt "#30205"
-msgid "Features - Kraft While You Were Sleeping"
+msgid "Feature: Breakthrough"
 msgstr ""
 
 msgctxt "#30206"
-msgid "Features - Petro Canada The Bond"
+msgid "Feature: Make or Break"
 msgstr ""
 
 msgctxt "#30207"
-msgid "Features - RBC Spotlight"
+msgid "Feature: Faster Higher Stronger"
 msgstr ""
 
 msgctxt "#30208"
-msgid "Features - Toyota Breakthrough"
+msgid "Feature: Spotlight"
 msgstr ""
 
 msgctxt "#30209"
-msgid "Features - VISA Olympic Moments"
+msgid "Feature: Feed the Dream"
 msgstr ""
 
 msgctxt "#30210"
-msgid "Features - Bell Faster Higher Stronger"
+msgid "Feature: Betcha Didn't Know"
 msgstr ""
 
 msgctxt "#30211"
-msgid "Features - Sobeys Family Album"
+msgid "Feature: Medal Moments"
 msgstr ""
 
 msgctxt "#30212"
-msgid "Features - Uber Go Getters"
+msgid "Feature: Fly the Flag"
 msgstr ""
 
 msgctxt "#30213"
-msgid "Features - OLG The Quest"
+msgid "Feature: Lumières sur Paris"
 msgstr ""
 
 msgctxt "#30214"
-msgid "Features - Sugoi Tokyo"
+msgid "Feature: Celebrating Women in Sport"
+msgstr ""
+
+msgctxt "#30215"
+msgid "Feature: Real Magic"
+msgstr ""
+
+msgctxt "#30216"
+msgid "Feature: Paris Tonight"
+msgstr ""
+
+msgctxt "#30217"
+msgid "Feature: While You Were Sleeping"
+msgstr ""
+
+msgctxt "#30218"
+msgid "Feature: Road To The Olympic Games"
 msgstr ""
 
 # General

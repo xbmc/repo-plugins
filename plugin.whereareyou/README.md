@@ -6,11 +6,44 @@ Where Are You is a plugin for Kodi that accepts a URL from a stream file and the
 
 ## Usage
 
+### Standard
+
 The stream file is just a text file with a URL in it.  The format of the URL is:
 
 ```
     plugin://plugin.whereareyou?empty=pad&title=Available+streaming&message=This+is+available+via+the+Netflix+app+on+the+TV
 ```
+
+### Deep Linking with AppleTV and Home Assistant
+
+If you are using an AppleTV as your streaming device and Home Assistant control, you can include a URL in the streaming file to directly launch the episode or movie.  This doesn't work on every streaming service, but it does for a bunch of them.  For more details on this and how to get the URL, see the [Home Assistant AppleTV integration documention](https://www.home-assistant.io/integrations/apple_tv) and look for the section on deep links.
+
+You'll need to create a script called "Launch Streaming Video."  Make sure it has an entity ID of `script.launch_streaming_video`.  This is the script:
+
+```
+alias: Launch Streaming Video
+fields:
+  the_url:
+    description: The URL to the episode or movie
+    example: https://www.disneyplus.com/video/afdc98f1-26bf-48d8-8866-af185ba5d5ac
+sequence:
+  - service: media_player.play_media
+    data:
+      media_content_type: url
+      media_content_id: "{{ the_url }}"
+    target:
+      device_id: <CHANGE TO THE DEVICE ID FOR YOUR APPLETV>
+mode: single
+icon: mdi:television
+```
+
+The URL for the streaming file needs one more thing, the_url passed as an argument, like this:
+
+```
+    plugin://plugin.whereareyou?empty=pad&title=Available+Streaming&message=Available+on+Disney%2B&the_url=https://www.disneyplus.com/video/618050a1-5dbf-4b4f-91ca-3299fb077be1
+```
+
+## Naming
 
 The stream file should be named in a way that Kodi can scrape it as a TV show:
 

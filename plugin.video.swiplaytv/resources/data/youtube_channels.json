@@ -1,0 +1,30 @@
+{
+    "channels": [{
+        "name": " SWI swissinfo.ch - English",
+        "channel": "UCveNXE52LrCUmzelRMYS7NQ"
+    },
+    {
+        "name": "SWI swissinfo.ch - عربي",
+        "channel": "UCCx3AUQ3JicijU2R4H1XUPg"
+    },
+    {
+        "name": "SWI swissinfo.ch - Português",
+        "channel": "UCgisgMvEr3uNZzqDL4ivybw"
+    },
+    {
+        "name": "SWI swissinfo.ch - Español",
+        "channel": "UCZYXcK-UofeL-gcCbe5iP8Q"
+    },
+    {
+        "name": "SWI swissinfo.ch 瑞士资讯中文网",
+        "channel": "UCp-4YyWu8cD5cn9NxQHAUCQ"
+    },
+    {
+        "name": "SWI swissinfo.ch - 日本語",
+        "channel": "UCrnyUt8SaCD7ay5IjFiSQkA"
+    },
+    {
+        "name": "SWI swissinfo.ch - Pусский",
+        "channel": "UCdQ49Bwzo20_Bhmw7ljwm0ws"
+    }]
+}

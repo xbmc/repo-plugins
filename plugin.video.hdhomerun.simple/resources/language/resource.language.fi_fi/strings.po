@@ -1,0 +1,174 @@
+# Kodi Media Center language file
+# Addon Name: HDHomerun Simple
+# Addon id: plugin.video.hdhomerun.simple
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.hdhomerun.simple\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2022-08-15 05:14+0000\n"
+"Last-Translator: Oskari Lavinto <olavinto@protonmail.com>\n"
+"Language-Team: Finnish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-hdhomerun-simple/fi_fi/>\n"
+"Language: fi_fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.13\n"
+
+msgctxt "Addon Summary"
+msgid "Simple HDHomeRun Interface."
+msgstr "Yksinkertainen HDHomeRun-käyttöliittymä."
+
+msgctxt "Addon Description"
+msgid "Automatically find all the compatible HDHomeRun devices on your network, Simple and Easy HDHomeRun Interface."
+msgstr "Etsi yhteensopivat HDHomeRun-laitteet verkostasi automaattisesti. Yksinkertainen ja helppokäyttöinen HDHomeRun-käyttöliittymä."
+
+msgctxt "Addon Disclaimer"
+msgid "Requires a compatible HDHomeRun device"
+msgstr "Vaatii yhteensopivan HDHomeRun-laitteen"
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr "Käytä vianselvitystä (kirjaa virheet)"
+
+msgctxt "#30002"
+msgid "Preferred Transcoding"
+msgstr "Ensisijainen transkoodaus"
+
+msgctxt "#30020"
+msgid "Enable Timeshift"
+msgstr "Käytä ajansiirtoa"
+
+msgctxt "#30101"
+msgid "Available Devices"
+msgstr "Käytettävissä olevat laitteet"
+
+msgctxt "#30103"
+msgid "Tuner Details"
+msgstr "Viritintiedot"
+
+msgctxt "#30104"
+msgid "Name:"
+msgstr "Nimi:"
+
+msgctxt "#30105"
+msgid "Tuner Count:"
+msgstr "Viritinmäärä:"
+
+msgctxt "#30106"
+msgid "IP Address:"
+msgstr "IP-osoite:"
+
+msgctxt "#30107"
+msgid "Default Transcoding:"
+msgstr "Oletustranskoodaus:"
+
+msgctxt "#30108"
+msgid "Firmware:"
+msgstr "Laiteohjelmisto:"
+
+msgctxt "#30109"
+msgid "%s - Enter Search Term"
+msgstr "%1 - Syötä hakulauseke"
+
+msgctxt "#30110"
+msgid "Live"
+msgstr "Live"
+
+msgctxt "#30111"
+msgid "Recordings"
+msgstr "Tallenteet"
+
+msgctxt "#30112"
+msgid "Lineup"
+msgstr "Kanavalista"
+
+msgctxt "#30113"
+msgid "Search"
+msgstr "Haku"
+
+msgctxt "#30114"
+msgid "Guide"
+msgstr "Ohjelmaopas"
+
+msgctxt "#30115"
+msgid "%s - Enter Search Term"
+msgstr "%s - Syötä hakulauseke"
+
+msgctxt "#30116"
+msgid "Recorded"
+msgstr "Tallennettu"
+
+msgctxt "#30117"
+msgid "On Now"
+msgstr "Lähetetään parhaillaan"
+
+msgctxt "#30118"
+msgid "Coming Up"
+msgstr "Tulossa"
+
+msgctxt "#30119"
+msgid "No Search Results found for %s"
+msgstr "Haku \"%s\" ei tuottanut tuloksia"
+
+msgctxt "#30029"
+msgid "Coming Up Later..."
+msgstr "Tulossa myöhemmin..."
+
+msgctxt "#49000"
+msgid "Integration"
+msgstr "Integrointi"
+
+msgctxt "#49001"
+msgid "Install PseudoTV Live add-on"
+msgstr "Asenna PseudoTV Live -lisäosa"
+
+msgctxt "#49002"
+msgid "Install IPTV Manager add-on"
+msgstr "Asenna IPTV Manager -lisäosa"
+
+msgctxt "#49003"
+msgid "Enable IPTV Manager integration"
+msgstr "Käytä IPTV Manager -integrointia"
+
+msgctxt "#49004"
+msgid "IPTV Manager settings…"
+msgstr "IPTV Manager -asetukset…"
+
+msgctxt "#49005"
+msgid "PseudoTV Live settings…"
+msgstr "PseudoTV Live -asetukset…"
+
+msgctxt "#49006"
+msgid "Only add Favorites"
+msgstr "Lisää vain suosikit"
+
+msgctxt "#49007"
+msgid "%s added to Favorites"
+msgstr "\"%s\" lisättiin suosikkeihin"
+
+msgctxt "#49008"
+msgid "%s removed from Favorites"
+msgstr "\"%s\" poistettiin suosikeista"
+
+msgctxt "#49009"
+msgid "Add Channel to Favorites"
+msgstr "Lisää kanava suosikkeihin"
+
+msgctxt "#49010"
+msgid "Remove Channel from Favorites"
+msgstr "Poista kanava suosikeista"
+
+msgctxt "#49011"
+msgid "Live (Favorites)"
+msgstr "Suora (suosikit)"
+
+msgctxt "#49012"
+msgid "Favorites"
+msgstr "Suosikit"
+
+msgctxt "#49013"
+msgid "General"
+msgstr "Yleiset"

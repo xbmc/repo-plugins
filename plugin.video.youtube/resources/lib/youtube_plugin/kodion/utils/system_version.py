@@ -2,83 +2,92 @@
 """
 
     Copyright (C) 2014-2016 bromix (plugin.video.youtube)
-    Copyright (C) 2016-2018 plugin.video.youtube
+    Copyright (C) 2016-2025 plugin.video.youtube
 
     SPDX-License-Identifier: GPL-2.0-only
     See LICENSES/GPL-2.0-only for more information.
 """
 
-from six.moves import map
-from six import string_types
-from six import python_2_unicode_compatible
+from __future__ import absolute_import, division, unicode_literals
 
-import json
+from platform import python_version
 
-import xbmc
+from .methods import jsonrpc
+from ..compatibility import string_type
 
 
-@python_2_unicode_compatible
 class SystemVersion(object):
-    def __init__(self, version, releasename, appname):
-        if not isinstance(version, tuple):
-            self._version = (0, 0, 0, 0)
-        else:
+    RELEASE_NAME_MAP = {
+        22: 'Piers',
+        21: 'Omega',
+        20: 'Nexus',
+        19: 'Matrix',
+        18: 'Leia',
+        17: 'Krypton',
+        16: 'Jarvis',
+        15: 'Isengard',
+        14: 'Helix',
+        13: 'Gotham',
+        12: 'Frodo',
+    }
+
+    def __init__(self, version=None, release_name=None, app_name=None):
+        if isinstance(version, tuple):
             self._version = version
-
-        if not releasename or not isinstance(releasename, string_types):
-            self._releasename = 'UNKNOWN'
         else:
-            self._releasename = releasename
+            version = None
 
-        if not appname or not isinstance(appname, string_types):
-            self._appname = 'UNKNOWN'
+        if app_name and isinstance(app_name, string_type):
+            self._app_name = app_name
         else:
-            self._appname = appname
+            app_name = None
 
-        try:
-            json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Application.GetProperties", '
-                                             '"params": {"properties": ["version", "name"]}, "id": 1 }')
-            json_query = str(json_query)
-            json_query = json.loads(json_query)
+        if version is None or app_name is None:
+            try:
+                result = jsonrpc(
+                    method='Application.GetProperties',
+                    params={'properties': ['version', 'name']},
+                )['result'] or {}
+            except (KeyError, TypeError):
+                result = {}
 
-            version_installed = json_query['result']['version']
-            self._version = (version_installed.get('major', 1), version_installed.get('minor', 0))
-            self._appname = json_query['result']['name']
-        except:
-            self._version = (1, 0)  # Frodo
-            self._appname = 'Unknown Application'
+            if version is None:
+                version = result.get('version') or {}
+                self._version = (version.get('major', 1),
+                                 version.get('minor', 0))
 
-        self._releasename = 'Unknown Release'
-        if self._version >= (21, 0):
-            self._releasename = 'O*****'
-        elif self._version >= (20, 0):
-            self._releasename = 'N*****'
-        elif self._version >= (19, 0):
-            self._releasename = 'Matrix'
-        elif self._version >= (18, 0):
-            self._releasename = 'Leia'
-        elif self._version >= (17, 0):
-            self._releasename = 'Krypton'
-        elif self._version >= (16, 0):
-            self._releasename = 'Jarvis'
-        elif self._version >= (15, 0):
-            self._releasename = 'Isengard'
-        elif self._version >= (14, 0):
-            self._releasename = 'Helix'
-        elif self._version >= (13, 0):
-            self._releasename = 'Gotham'
-        elif self._version >= (12, 0):
-            self._releasename = 'Frodo'
+            if app_name is None:
+                self._app_name = result.get('name', 'Unknown application')
+
+        if release_name and isinstance(release_name, string_type):
+            self._release_name = release_name
+        else:
+            self._release_name = self.RELEASE_NAME_MAP.get(self._version[0],
+                                                           'Unknown release')
+
+        self._python_version = python_version()
 
     def __str__(self):
-        obj_str = "%s (%s-%s)" % (self._releasename, self._appname, '.'.join(map(str, self._version)))
-        return obj_str
+        return '{version[0]}.{version[1]} ({app_name} {release_name})'.format(
+            release_name=self._release_name,
+            app_name=self._app_name,
+            version=self._version
+        )
 
     def get_release_name(self):
-        return self._releasename
+        return self._release_name
 
     def get_version(self):
         return self._version
 
     def get_app_name(self):
-        return self._appname
+        return self._app_name
+
+    def get_python_version(self):
+        return self._python_version
+
+    def compatible(self, *version):
+        return self._version >= version
+
+
+current_system_version = SystemVersion()

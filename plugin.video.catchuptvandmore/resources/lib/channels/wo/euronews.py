@@ -7,35 +7,36 @@
 from __future__ import unicode_literals
 import json
 
+# noinspection PyUnresolvedReferences
 from codequick import Resolver, Script
 import urlquick
 
-from resources.lib import resolver_proxy
-from resources.lib import web_utils
-
+from resources.lib import resolver_proxy, web_utils
 
 # TODO
 # Replay add emissions
 
-URL_LIVE_API = 'http://%s.euronews.com/api/watchlive.json'
-# Language
 
-DESIRED_LANGUAGE = Script.setting['euronews.language']
+URL_LIVE_API = 'https://www.euronews.com/api/live/data'
+URL_LIVE_API_V2 = 'https://api.euronews.com/v2/apps/androidPhoneEuronews-6.3/languages/%s/livestream/%s'
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
     final_language = kwargs.get('language', Script.setting['euronews.language'])
+    lang = final_language.lower()
 
-    if final_language == 'EN':
-        url_live_json = URL_LIVE_API % 'www'
-    elif final_language == 'AR':
-        url_live_json = URL_LIVE_API % 'arabic'
-    else:
-        url_live_json = URL_LIVE_API % final_language.lower()
+    try:
+        url_live_json = URL_LIVE_API_V2 % (lang, lang)
+        json_parser = urlquick.get(url_live_json, headers=GENERIC_HEADERS, max_age=-1).json()
+        video_url = json_parser['primary']
 
-    resp = urlquick.get(url_live_json,
-                        headers={'User-Agent': web_utils.get_random_ua()},
-                        max_age=-1)
-    json_parser = json.loads(resp.text)
-    return resolver_proxy.get_stream_youtube(plugin, json_parser['videoId'], False)
+        return resolver_proxy.get_stream_with_quality(plugin, video_url)
+
+    except Exception:
+        params = {'locale': lang}
+        json_parser = urlquick.get(URL_LIVE_API, headers=GENERIC_HEADERS, params=params, max_age=-1).json()
+
+        return resolver_proxy.get_stream_youtube(plugin, json_parser['videoId'], False)

@@ -1,4 +1,3 @@
-import base64
 import datetime
 import time
 import urllib.parse
@@ -18,18 +17,18 @@ from resources.lib.models.video import Video
 class Api:
     """This class uses the Formula 1 v1 API."""
 
-    api_base_url = "https://api.formula1.com/v1/"
-    api_key = "jHveMyuKQgXOCG3DN2ucX5zVmCpWNsFM"  # Extracted from public Formula 1 Android App
+    api_base_url = "https://api.formula1.com"
+    api_key = "b3f7H0DKkuzGXT76hV0RakXWOh28tQqY"  # Extracted from public Formula 1 Android App
     api_limit = 10
     api_date_format = "%Y-%m-%dT%H:%M:%S"
+    api_locale = "en"
 
     # API endpoints
-    api_path_editorial = "editorial-assemblies/videos/2BiKQUC040cmuysoQsgwcK"
-    api_path_videos = "video-assets/videos"
-    api_path_constructors = "editorial-constructorlisting/listing"
-    api_path_drivers = "editorial-driverlisting/listing"
-    api_path_events = "editorial-eventlisting/events"
-    api_path_results = "fom-results/raceresults"
+    api_path_editorial = "/v1/editorial-assemblies/videos/2BiKQUC040cmuysoQsgwcK"
+    api_path_videos = "/v1/video-assets/videos"
+    api_path_constructors = "/v1/editorial-constructorlisting/listing"
+    api_path_drivers = "/v1/editorial-driverlisting/listing"
+    api_path_events = "/v1/editorial-eventlisting/events"
 
     # Brightcove (https://www.brightcove.com/)
     # Policy key is hardcoded and was extracted from public Formula 1 Android App
@@ -91,6 +90,7 @@ class Api:
         headers = {
             "Accept-Encoding": "gzip",
             "apikey": self.api_key,
+            "locale": self.api_locale,
         }
         path = self.api_base_url + path
 
@@ -134,15 +134,13 @@ class Api:
             items = json_obj.get("videos")
         elif "drivers" in json_obj:
             items = json_obj.get("drivers")
+            items.sort(key=lambda driver_obj: int(driver_obj.get("positionNumber", 99)))
             item_type = "drivers"
         elif "constructors" in json_obj:
             items = json_obj.get("constructors")
             item_type = "constructors"
         elif "events" in json_obj:
             items = json_obj.get("events")
-            item_type = "events"
-        elif "raceresults" in json_obj:
-            items = json_obj.get("raceresults")
             item_type = "events"
         elif "raceResultsRace" in json_obj:
             items = json_obj.get("raceResultsRace").get("results", [])

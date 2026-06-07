@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+import os.path
 
 from resources.lib.textures import TextureHandler
 
@@ -24,7 +25,10 @@ class Resources(TextureHandler):
         if file_name is None or file_name == "":
             return file_name
 
-        if file_name.startswith("http"):
+        local_texture = os.path.join(channel_path, file_name)
+        if os.path.isfile(local_texture):
+            return_value = local_texture
+        elif file_name.startswith("http"):
             return_value = file_name
         elif file_name.startswith("resource://"):
             return_value = file_name

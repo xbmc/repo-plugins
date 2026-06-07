@@ -34,7 +34,7 @@ menu = {
         'order': 15
     },
     'raiplay': {
-        'route': '/resources/lib/channels/it/raiplay:list_letters',
+        'route': '/resources/lib/channels/it/raiplay:list_root',
         'label': 'Rai Play',
         'thumb': 'channels/it/raiplay.png',
         'fanart': 'channels/it/raiplay_fanart.jpg',

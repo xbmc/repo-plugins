@@ -26,6 +26,26 @@ msgctxt "#32003"
 msgid "Anchor for most recent podcast, e.g. for bookmarking"
 msgstr ""
 
+msgctxt "#32005"
+msgid "Disclaimer"
+msgstr ""
+
+msgctxt "#32006"
+msgid "I haven't agreed yet"
+msgstr ""
+
+msgctxt "#32007"
+msgid "I have agreed"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Agreement"
+msgstr ""
+
+msgctxt "#32010"
+msgid "The author of this addon is not responsible for the contents which are streamed to this device. Especially the user of this addon is in responsibility to convince that copyrights and right of use are not violated. All contents are taken and streamed from ARD-aktuell (https://www.tagesschau.de/infoservices/podcast/). Do you agree?"
+msgstr ""
+
 msgctxt "#32101"
 msgid "most recent episode"
 msgstr ""

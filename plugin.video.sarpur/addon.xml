@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.sarpur"
        name="Sarpur"
-       version="5.0"
+       version="5.2"
        provider-name="Dagur Páll Ammendrup">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -25,8 +25,11 @@
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
         </assets>
-        <news>Version 5.0 (2021-02-23)
-- Upgraded to Python 3 for Kodi 19 compatibility
-- Fixed podcast scraping</news>
+        <news>Version 5.2(2025-04-26)
+- Fix search by updating api key (indridieinarsson)
+
+Version 5.1 (2024-03-14)
+- Various fixes because of API changes on ruv.is
+- Formatted code with black</news>
     </extension>
 </addon>

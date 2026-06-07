@@ -11,7 +11,7 @@
 
 from .common import kodi
 
-from twitch.oauth.v5 import scopes
+from twitch.oauth.helix import scopes
 
 
 def __enum(**enums):
@@ -76,9 +76,6 @@ ADAPTIVE_SOURCE_TEMPLATE = {'id': 'hls', 'name': 'Adaptive', 'bandwidth': -1, 'u
 CLIENT_ID = 'cHMyZWQ5emxqOHp5cXp0c2R6MnRsNHV5czg0Yjhr'
 REDIRECT_URI = 'https://anxdpanic.github.io/plugin.video.twitch/token/'
 
-OLD_CLIENT_ID = 'NjdlYnBmaHlvaWNhYjVrcjB5N3B6b2NzZm9oczd0eQ=='
-OLD_REDIRECT_URI = 'https://mrsprigster.github.io/Twitch-on-Kodi/token/'
-
 LIVE_PREVIEW_TEMPLATE = '%://static-cdn.jtvnw.net/previews-ttv/live_user_%-%x%.jpg'  # sqlite LIKE pattern
 
 
@@ -103,8 +100,13 @@ class Keys:
     BITRATE = 'bitrate'
     BLOCKS = 'blocks'
     BOX = 'box'
+    BOX_ART_URL = 'box_art_url'
     BROADCASTER = 'broadcaster'
+    BROADCASTER_ID = 'broadcaster_id'
     BROADCASTER_LANGUAGE = 'broadcaster_language'
+    BROADCASTER_LOGIN = 'broadcaster_login'
+    BROADCASTER_NAME = 'broadcaster_name'
+    BROADCASTER_TYPE = 'broadcaster_type'
     CHANNEL = 'channel'
     CHANNELS = 'channels'
     CHUNKS = 'chunks'
@@ -112,9 +114,11 @@ class Keys:
     COLLECTIONS = 'collections'
     CONNECT = 'connect'
     CREATED_AT = 'created_at'
+    CREATOR_NAME = 'creator_name'
     CURATOR = 'curator'
     CURRENT_VIEWERS = 'current_viewers'
     CURSOR = '_cursor'
+    DATA = 'data'
     DELAY = 'delay'
     DESCRIPTION = 'description'
     DISPLAY_NAME = 'display_name'
@@ -123,9 +127,13 @@ class Keys:
     FOLLOWERS = 'followers'
     FOLLOWS = 'follows'
     GAME = 'game'
+    GAME_ID = 'game_id'
+    GAME_NAME = 'game_name'
     GAMES = 'games'
     ID = 'id'
     IMAGE = 'image'
+    IS_LIVE = 'is_live'
+    IS_MATURE = 'is_mature'
     ITEMS = 'items'
     ITEMS_COUNT = 'items_count'
     ITEM_ID = 'item_id'
@@ -135,11 +143,13 @@ class Keys:
     LENGTH = 'length'
     LIVE = 'live'
     LOGO = 'logo'
+    LOGIN = 'login'
     MATURE = 'mature'
     MEDIUM = 'medium'
     META_GAME = 'meta_game'
     NAME = 'name'
     NEEDED_INFO = 'needed_info'
+    OFFLINE_IMAGE_URL = 'offline_image_url'
     OTHERS = 'others'
     OWNER = 'owner'
     PARTNER = 'partner'
@@ -147,6 +157,7 @@ class Keys:
     PLAYPATH = 'playpath'
     PREVIEW = 'preview'
     PROFILE_BANNER = 'profile_banner'
+    PROFILE_IMAGE_URL = 'profile_image_url'
     PUBLISHED_AT = 'published_at'
     QUALITY = 'quality'
     RESOLUTIONS = 'resolutions'
@@ -164,18 +175,26 @@ class Keys:
     SWF_URL = 'swfUrl'
     TEAMS = 'teams'
     THUMBNAILS = 'thumbnails'
+    THUMBNAIL_URL = 'thumbnail_url'
     TITLE = 'title'
+    TO_ID = 'to_id'
     TOKEN = 'token'
     TOP = 'top'
     TOTAL = '_total'
     TOTAL_DURATION = 'total_duration'
     TRACKING_ID = 'tracking_id'
+    TYPE = 'type'
     URL = 'url'
     USER = 'user'
+    USER_ID = 'user_id'
+    USER_LOGIN = 'user_login'
+    USER_NAME = 'user_name'
     USERS = 'users'
     VIDEOS = 'videos'
     VIDEO_BANNER = 'video_banner'
     VIDEO_HEIGHT = 'video_height'
+    VIEW_COUNT = 'view_count'
+    VIEWER_COUNT = 'viewer_count'
     VIEWERS = 'viewers'
     VIEWS = 'views'
     VOD = 'vod'
@@ -186,4 +205,5 @@ class Scripts:
     REFRESH = 'special://home/addons/plugin.video.twitch/resources/lib/twitch_addon/refresh.py'
 
 
-SCOPES = [scopes.user_read, scopes.user_follows_edit, scopes.user_subscriptions]
+SCOPES = [scopes.user_read_follows, scopes.user_edit_follows, scopes.user_read_subscriptions,
+          scopes.chat_read, scopes.chat_edit]

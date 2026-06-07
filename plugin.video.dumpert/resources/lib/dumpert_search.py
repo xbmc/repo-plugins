@@ -11,7 +11,7 @@ from builtins import object
 import sys
 import xbmc
 
-from dumpert_const import LANGUAGE, log, convertToUnicodeString
+from resources.lib.dumpert_const import LANGUAGE, log, convertToUnicodeString
 
 
 #

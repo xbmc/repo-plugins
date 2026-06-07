@@ -22,7 +22,7 @@ class Favourites:
 
         self.FavouriteFolder = path
 
-    def add(self, channel, item, action_url):
+    def add(self, channel, item, action_url, shortcut_name=None):
         """ Adds a favourite for a specific channel.
 
         :param channel:       The channel
@@ -32,7 +32,12 @@ class Favourites:
         """
 
         Logger.debug("Adding item %s\nfor channel %s\n%s", item, channel, action_url)
-        file_name = self.__filePattern % (channel.guid, item.guid)
+
+        if shortcut_name:
+            file_name = self.__filePattern % ("shortcut", shortcut_name)
+        else:
+            file_name = self.__filePattern % (channel.guid, item.guid)
+
         file_path = os.path.join(self.FavouriteFolder, file_name)
         pickle = self.__pickler.pickle_media_item(item)
 
@@ -86,58 +91,95 @@ class Favourites:
 
         Logger.debug("Fetching favourites for mask: %s", path_mask)
         for fav in glob.glob(path_mask):
-            Logger.trace("Fetching %s", fav)
-
-            try:
-                with io.open(fav, mode='r', encoding='utf-8') as file_handle:
-                    channel_name = file_handle.readline().rstrip()
-                    name = file_handle.readline().rstrip()
-                    action_url = file_handle.readline().rstrip()
-                    if "pickle=" in action_url and "pickle=%s" not in action_url:
-                        # see issue https://github.com/retrospect-addon/plugin.video.retrospect/issues/1037
-                        Logger.debug("Found favourite with full pickle, removing the pickle as we should use the one from the file.")
-                        action_url = self.__remove_pickle(action_url)
-
-                    pickle = file_handle.readline()
-            except:
-                Logger.error("Error fetching favourite", exc_info=True)
-                raise
-
-            if channel_name == "" or name == "" or action_url == "" or pickle == "":
-                Logger.error("Apparently the file had too few lines, corrupt Favourite, removing it:\n"
-                             "Pickle: %s\n"
-                             "Channel: %s\n"
-                             "Item: %s\n"
-                             "ActionUrl: %s\n"
-                             "Pickle: %s",
-                             fav, channel_name, name, action_url, pickle)
-
-                # Remove the invalid favourite
-                os.remove(fav)
+            item = self.__load_favourite(fav, channel)
+            if not item:
                 continue
 
-            Logger.debug("Found favourite: %s", name)
-            try:
-                item = self.__pickler.de_pickle_media_item(pickle)
-            except Exception:
-                Logger.error("Cannot depickle item.", exc_info=True)
-                # Let's not remove them for now. Just ignore.
-                # os.remove(fav)
-                continue
-
-            # clean up the .: from titles
-            if ".:" in item.name and ":." in item.name:
-                item.name = item.name.strip(".:\0\b ")
-
-            # add the channel name
-            if channel is None:
-                item.name = "%s [%s]" % (item.name, channel_name)
-
-            item.clear_date()
-
-            item.actionUrl = action_url % (pickle,)
             favs.append(item)
         return favs
+
+    def get_shortcut(self, shortcut_name):
+        """ Fetches a MediaItem stored in a shortcut file.
+
+        :param str shortcut_name: The name of the shortcut.
+
+        :return: The MediaItem stored in the give shorcut.
+        :rtype: MediaItem
+
+        """
+
+        file_name = self.__filePattern % ("shortcut", shortcut_name)
+        full_path = os.path.join(self.FavouriteFolder, file_name)
+        if not os.path.isfile(full_path):
+            Logger.error("Invalid shortcut: %s", full_path)
+            return None
+
+        item = self.__load_favourite(full_path)
+        return item
+
+    def __load_favourite(self, fav, channel=None):
+        """
+
+        :param str fav:             The path to the file to load.
+        :param Channel channel:     A channel object if one was present.
+
+        :return: The MediaItem stored in the give file.
+        :rtype: MediaItem
+
+        """
+
+        Logger.trace("Fetching %s", fav)
+
+        try:
+            with io.open(fav, mode='r', encoding='utf-8') as file_handle:
+                channel_name = file_handle.readline().rstrip()
+                name = file_handle.readline().rstrip()
+                action_url = file_handle.readline().rstrip()
+                if "pickle=" in action_url and "pickle=%s" not in action_url:
+                    # see issue https://github.com/retrospect-addon/plugin.video.retrospect/issues/1037
+                    Logger.debug(
+                        "Found favourite with full pickle, removing the pickle as we should use the one from the file.")
+                    action_url = self.__remove_pickle(action_url)
+
+                pickle = file_handle.readline()
+        except:
+            Logger.error("Error fetching favourite", exc_info=True)
+            raise
+
+        if channel_name == "" or name == "" or action_url == "" or pickle == "":
+            Logger.error("Apparently the file had too few lines, corrupt Favourite, removing it:\n"
+                         "Pickle: %s\n"
+                         "Channel: %s\n"
+                         "Item: %s\n"
+                         "ActionUrl: %s\n"
+                         "Pickle: %s",
+                         fav, channel_name, name, action_url, pickle)
+
+            # Remove the invalid favourite
+            os.remove(fav)
+            return None
+
+        Logger.debug("Found favourite: %s", name)
+        try:
+            item = self.__pickler.de_pickle_media_item(pickle)
+        except Exception:
+            Logger.error("Cannot depickle item.", exc_info=True)
+            # Let's not remove them for now. Just ignore.
+            # os.remove(fav)
+            return None
+
+        # clean up the .: from titles
+        if ".:" in item.name and ":." in item.name:
+            item.name = item.name.strip(".:\0\b ")
+
+        # add the channel name
+        if channel is None:
+            item.name = "%s [%s]" % (item.name, channel_name)
+
+        item.clear_date()
+        item.actionUrl = action_url % (pickle,)
+
+        return item
 
     def __remove_pickle(self, action_url):
         pickle = Regexer.do_regex("pickle=([^&]+)", action_url)

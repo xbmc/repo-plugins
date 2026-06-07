@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="49013">
+    <setting id="Enable_Debugging" type="bool"   label="30000" default="false" />
+    <setting id="Preferred_Transcoding"          label="30002" type="enum" values="Default|Heavy|Mobile|Internet540|Internet480|Internet360|Internet240" default="0"/>
+  </category>
+    <category label="30101">
+        <setting label="30103" visible="gt(1,0)" enable="false" type="lsep"/>
+        <setting id="HDHR.TotalDevices" type="number" visible="false" enable="false" default="0"/>
+        <setting id="HDHR.FriendlyName.1" type="text" label="30104" visible="gt(-1,0)" enable="false" default=""/>
+        <setting id="HDHR.TunerCount.1" type="text" label="30105" visible="gt(-2,0)" enable="false" default=""/>
+        <setting id="HDHR.LocalIP.1" type="text" label="30106" visible="gt(-3,0)" enable="false" default=""/>
+        <setting id="HDHR.TranscodeOption.1" type="text" label="30107" visible="gt(-4,0)" enable="false" default=""/>
+        <setting id="HDHR.FirmwareName.1" type="text" label="30108" visible="gt(-5,0)" enable="false" default=""/>
+        <setting label="30103" visible="gt(-6,1)" enable="false" type="lsep"/>
+        <setting id="HDHR.FriendlyName.2" type="text" label="30104" visible="gt(-7,1)" enable="false" default=""/>
+        <setting id="HDHR.TunerCount.2" type="text" label="30105"  visible="gt(-8,1)" enable="false" default=""/>
+        <setting id="HDHR.LocalIP.2" type="text" label="30106" visible="gt(-9,1)" enable="false" default=""/>
+        <setting id="HDHR.TranscodeOption.2" type="text" label="30107" visible="gt(-10,1)" enable="false" default=""/>
+        <setting id="HDHR.FirmwareName.2" type="text" label="30108" visible="gt(-11,1)" enable="false" default=""/>
+        <setting label="30103" visible="gt(-12,2)" enable="false" type="lsep"/>
+        <setting id="HDHR.FriendlyName.3" type="text" label="30104" visible="gt(-13,2)" enable="false" default=""/>
+        <setting id="HDHR.TunerCount.3" type="text" label="30105"  visible="gt(-14,2)" enable="false" default=""/>
+        <setting id="HDHR.LocalIP.3" type="text" label="30106" visible="gt(-15,2)" enable="false" default=""/>
+        <setting id="HDHR.TranscodeOption.3" type="text" label="30107" visible="gt(-16,2)" enable="false" default=""/>
+        <setting id="HDHR.FirmwareName.3" type="text" label="30108" visible="gt(-17,2)" enable="false" default=""/>
+        <setting label="30103" visible="gt(-18,3)" enable="false" type="lsep"/>
+        <setting id="HDHR.FriendlyName.4" type="text" label="30104" visible="gt(-19,3)" enable="false" default=""/>
+        <setting id="HDHR.TunerCount.4" type="text" label="30105"  visible="gt(-20,3)" enable="false" default=""/>
+        <setting id="HDHR.LocalIP.4" type="text" label="30106" visible="gt(-21,3)" enable="false" default=""/>
+        <setting id="HDHR.TranscodeOption.4" type="text" label="30107" visible="gt(-22,3)" enable="false" default=""/>
+        <setting id="HDHR.FirmwareName.4" type="text" label="30108" visible="gt(-23,3)" enable="false" default=""/>
+        <setting label="30103" visible="gt(-24,4))" enable="false" type="lsep"/>
+        <setting id="HDHR.FriendlyName.5" type="text" label="30104" visible="gt(-25,4)" enable="false" default=""/>
+        <setting id="HDHR.TunerCount.5" type="text" label="30105"  visible="gt(-26,4)" enable="false" default=""/>
+        <setting id="HDHR.LocalIP.5" type="text" label="30106" visible="gt(-27,4)" enable="false" default=""/>
+        <setting id="HDHR.TranscodeOption.5" type="text" label="30107" visible="gt(-28,4)" enable="false" default=""/>
+        <setting id="HDHR.FirmwareName.5" type="text" label="30108" visible="gt(-29,4)" enable="false" default=""/>
+    </category>
+    <category label="49000">
+      <setting label="49001"          type="action" action="InstallAddon(plugin.video.pseudotv.live)" option="close" visible="!System.HasAddon(plugin.video.pseudotv.live)"/>
+      <setting label="49002"          type="action" action="InstallAddon(service.iptv.manager)"       option="close" visible="!System.HasAddon(service.iptv.manager)"/>
+      <setting id="iptv.enabled"      type="bool"   label="49003" default="true"  visible="System.HasAddon(service.iptv.manager)" />
+      <setting id="Build_Favorites"   type="bool"   label="49006" default="false"                           enable="eq(-1,true)"                visible="System.HasAddon(service.iptv.manager)"       subsetting="true"/>
+      <setting label="49004"          type="action" action="Addon.OpenSettings(service.iptv.manager)"       enable="eq(-2,true)" option="close" visible="System.HasAddon(service.iptv.manager)"       subsetting="true"/>
+      <setting label="49005"          type="action" action="Addon.OpenSettings(plugin.video.pseudotv.live)" enable="eq(-3,true)" option="close" visible="System.HasAddon(plugin.video.pseudotv.live)" subsetting="true"/>
+      <setting id="iptv.channels_uri" default="plugin://plugin.video.hdhomerun.simple/iptv/channels" visible="false"/>
+      <setting id="iptv.epg_uri"      default="plugin://plugin.video.hdhomerun.simple/iptv/epg"      visible="false"/>
+  </category>
+</settings>
+        

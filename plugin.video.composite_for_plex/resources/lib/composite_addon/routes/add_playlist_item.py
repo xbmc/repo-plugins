@@ -12,6 +12,7 @@
 
 from kodi_six import xbmc  # pylint: disable=import-error
 from kodi_six import xbmcgui  # pylint: disable=import-error
+from six import PY3
 
 from ..addon.common import get_argv
 from ..addon.constants import CONFIG
@@ -88,7 +89,12 @@ def playlist_user_select(server):
     get_formatted_url = server.get_formatted_url
     tree = server.get_playlists()
 
-    for playlist in tree.getiterator('Playlist'):
+    if PY3:
+        playlist_iter = tree.iter('Playlist')
+    else:
+        playlist_iter = tree.getiterator('Playlist')
+
+    for playlist in playlist_iter:
         image = ''
         if playlist.get('composite'):
             image = get_formatted_url(server.join_url(server.get_url_location(),

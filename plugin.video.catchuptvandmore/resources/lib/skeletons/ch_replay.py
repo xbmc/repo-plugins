@@ -80,5 +80,13 @@ menu = {
         'fanart': 'channels/ch/lemanbleu_fanart.jpg',
         'enabled': True,
         'order': 22
+    },
+    'lfmtv': {
+        'route': '/resources/lib/channels/ch/lfmtv:list_programs',
+        'label': 'LFM TV',
+        'thumb': 'channels/ch/lfmtv.png',
+        'fanart': 'channels/ch/lfmtv_fanart.jpg',
+        'enabled': True,
+        'order': 23
     }
 }

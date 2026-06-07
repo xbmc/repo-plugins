@@ -17,14 +17,6 @@ from __future__ import unicode_literals
 root = 'live_tv'
 
 menu = {
-    'rougetv': {
-        'resolver': '/resources/lib/channels/ch/rougetv:get_live_url',
-        'label': 'Rouge TV',
-        'thumb': 'channels/ch/rougetv.png',
-        'fanart': 'channels/ch/rougetv_fanart.jpg',
-        'enabled': True,
-        'order': 6
-    },
     'tvm3': {
         'resolver': '/resources/lib/channels/ch/tvm3:get_live_url',
         'label': 'TVM3',
@@ -157,5 +149,109 @@ menu = {
         'fanart': 'channels/ch/telem1_fanart.jpg',
         'enabled': True,
         'order': 23
+    },
+    'lfmtv': {
+        'resolver': '/resources/lib/channels/ch/lfmtv:get_live_url',
+        'label': 'LFM TV',
+        'thumb': 'channels/ch/lfmtv.png',
+        'fanart': 'channels/ch/lfmtv_fanart.jpg',
+        'enabled': True,
+        'order': 24
+    },
+    'latele': {
+        'resolver': '/resources/lib/channels/ch/latele:get_live_url',
+        'label': 'LATELE',
+        'thumb': 'channels/ch/latele.png',
+        'fanart': 'channels/ch/latele.png',
+        'enabled': True,
+        'order': 25
+    },
+    'canal9': {
+        'resolver': '/resources/lib/channels/ch/canal9:get_live_url',
+        'label': 'CANAL9',
+        'thumb': 'channels/ch/canal9.png',
+        'fanart': 'channels/ch/canal9.png',
+        'enabled': True,
+        'order': 26
+    },
+    'canalalpha': {
+        'resolver': '/resources/lib/channels/ch/canalalpha:get_live_url',
+        'label': 'CANALALPHA',
+        'thumb': 'channels/ch/canalalpha.png',
+        'fanart': 'channels/ch/canalalpha.png',
+        'enabled': True,
+        'order': 27
+    },
+    'CARAC1': {
+        'resolver': '/resources/lib/channels/ch/carac:get_live_url',
+        'label': 'CARAC1',
+        'thumb': 'channels/ch/carac1.png',
+        'fanart': 'channels/ch/carac1.png',
+        'enabled': True,
+        'order': 28
+    },
+    'CARAC2': {
+        'resolver': '/resources/lib/channels/ch/carac:get_live_url',
+        'label': 'CARAC2',
+        'thumb': 'channels/ch/carac2.png',
+        'fanart': 'channels/ch/carac2.png',
+        'enabled': True,
+        'order': 29
+    },
+    'CARAC3': {
+        'resolver': '/resources/lib/channels/ch/carac:get_live_url',
+        'label': 'CARAC3',
+        'thumb': 'channels/ch/carac3.png',
+        'fanart': 'channels/ch/carac3.png',
+        'enabled': True,
+        'order': 30
+    },
+    'CARAC4': {
+        'resolver': '/resources/lib/channels/ch/carac:get_live_url',
+        'label': 'CARAC4',
+        'thumb': 'channels/ch/carac4.png',
+        'fanart': 'channels/ch/carac4.png',
+        'enabled': True,
+        'order': 31
+    },
+    'alpenwelle': {
+        'resolver': '/resources/lib/channels/ch/alpenwelle:get_live_url',
+        'label': 'alpen-welle',
+        'thumb': 'channels/ch/awpluslogo.png',
+        'fanart': 'channels/ch/awpluslogo.png',
+        'enabled': True,
+        'order': 32
+    },
+    'blick': {
+        'resolver': '/resources/lib/channels/ch/blick:get_live_url',
+        'label': 'Blick',
+        'thumb': 'channels/ch/blick.png',
+        'fanart': 'channels/ch/blick.png',
+        'enabled': True,
+        'order': 33
+    },
+    'dieneuezeit': {
+        'resolver': '/resources/lib/channels/ch/dieneuezeit:get_live_url',
+        'label': 'Die Neue Zeit',
+        'thumb': 'channels/ch/dieneuezeit.png',
+        'fanart': 'channels/ch/dieneuezeit.png',
+        'enabled': True,
+        'order': 34
+    },
+    'dieutv': {
+        'resolver': '/resources/lib/channels/ch/dieutv:get_live_url',
+        'label': 'DieuTV',
+        'thumb': 'channels/ch/dieutv.png',
+        'fanart': 'channels/ch/dieutv.png',
+        'enabled': True,
+        'order': 35
+    },
+    'dritatv': {
+        'resolver': '/resources/lib/channels/ch/dritatv:get_live_url',
+        'label': 'DritaTV',
+        'thumb': 'channels/ch/dritatv.png',
+        'fanart': 'channels/ch/dritatv.png',
+        'enabled': True,
+        'order': 36
     }
 }

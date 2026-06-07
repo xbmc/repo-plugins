@@ -5,7 +5,7 @@ class ContextMenuItem:
     """Context menu item class that is used to pass on contextmenu items."""
 
     def __init__(self, label, function_name, item_types=None):
-        """Instantiation of the class. 
+        """Instantiation of the class.
 
         :param str label:               The label/name of the item.
         :param str function_name:       The name of the method that is called when the

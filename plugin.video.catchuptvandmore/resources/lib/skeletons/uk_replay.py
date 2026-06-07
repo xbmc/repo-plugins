@@ -14,71 +14,103 @@ from __future__ import unicode_literals
 #     - thumb: Item thumb path relative to "media" folder
 #     - fanart: Item fanart path relative to "media" folder
 
-root = 'replay'
+root = "replay"
 
 menu = {
-    'blaze': {
-        'route': '/resources/lib/channels/uk/blaze:list_categories',
-        'label': 'Blaze',
-        'thumb': 'channels/uk/blaze.png',
-        'fanart': 'channels/uk/blaze_fanart.jpg',
-        'enabled': True,
-        'order': 1
+    "blaze": {
+        "route": "/resources/lib/channels/uk/blaze:list_categories",
+        "label": "Blaze",
+        "thumb": "channels/uk/blaze.png",
+        "fanart": "channels/uk/blaze_fanart.jpg",
+        "enabled": True,
+        "order": 1,
     },
-    'skynews': {
-        'route': '/resources/lib/channels/uk/sky:list_categories',
-        'label': 'Sky News',
-        'thumb': 'channels/uk/skynews.png',
-        'fanart': 'channels/uk/skynews_fanart.jpg',
-        'enabled': True,
-        'order': 6
+    "skynews": {
+        "route": "/resources/lib/channels/uk/sky:list_categories",
+        "label": "Sky News",
+        "thumb": "channels/uk/skynews.png",
+        "fanart": "channels/uk/skynews_fanart.jpg",
+        "enabled": True,
+        "order": 2,
     },
-    'skysports': {
-        'route': '/resources/lib/channels/uk/sky:list_categories',
-        'label': 'Sky Sports',
-        'thumb': 'channels/uk/skysports.png',
-        'fanart': 'channels/uk/skysports_fanart.jpg',
-        'enabled': True,
-        'order': 7
+    "skysports": {
+        "route": "/resources/lib/channels/uk/sky:list_categories",
+        "label": "Sky Sports",
+        "thumb": "channels/uk/skysports.png",
+        "fanart": "channels/uk/skysports_fanart.jpg",
+        "enabled": True,
+        "order": 3,
     },
-    'stv': {
-        'route': '/resources/lib/channels/uk/stv:list_programs',
-        'label': 'STV',
-        'thumb': 'channels/uk/stv.png',
-        'fanart': 'channels/uk/stv_fanart.jpg',
-        'enabled': True,
-        'order': 8
+    "channel4": {
+        "route": "/resources/lib/channels/uk/channel4:main_menu",
+        "label": "Channel 4",
+        "thumb": "channels/uk/channel4.png",
+        "fanart": "channels/uk/channel4_fanart.jpg",
+        "enabled": True,
+        "order": 4,
     },
-    'discoveryplus': {
-        'route': '/resources/lib/channels/uk/discoveryplus:discoveryplus_root',
-        'label': 'discovery+',
-        'thumb': 'channels/uk/discoveryplus.png',
-        'fanart': 'channels/uk/discoveryplus_fanart.jpg',
-        'enabled': False,
-        'order': 9
+    "stv": {
+        "route": "/resources/lib/channels/uk/stv:list_categories",
+        "label": "STV",
+        "thumb": "channels/uk/stv.png",
+        "fanart": "channels/uk/stv_fanart.jpg",
+        "enabled": True,
+        "order": 5,
     },
-    'uktvplay': {
-        'route': '/resources/lib/channels/uk/uktvplay:list_categories',
-        'label': 'UKTV Play',
-        'thumb': 'channels/uk/uktvplay.png',
-        'fanart': 'channels/uk/uktvplay_fanart.jpg',
-        'enabled': True,
-        'order': 17
+    "uktvplay": {
+        "route": "/resources/lib/channels/uk/uktvplay:list_categories",
+        "label": "UKTV Play",
+        "thumb": "channels/uk/uktvplay.png",
+        "fanart": "channels/uk/uktvplay_fanart.jpg",
+        "enabled": True,
+        "order": 6,
     },
-    'my5': {
-        'route': '/resources/lib/channels/uk/my5:channels',
-        'label': 'My 5',
-        'thumb': 'channels/uk/my5.png',
-        'fanart': 'channels/uk/my5_fanart.jpg',
-        'enabled': False,
-        'order': 20
+    "my5": {
+        "route": "/resources/lib/channels/uk/my5:list_main_page",
+        "label": "My 5",
+        "thumb": "channels/uk/my5.png",
+        "fanart": "channels/uk/my5_fanart.jpg",
+        "enabled": True,
+        "order": 7,
     },
-    'uklocaltv': {
-        'route': '/resources/lib/channels/uk/uklocaltv:channels',
-        'label': 'UK Local TV',
-        'thumb': 'channels/uk/uklocaltv.png',
-        'fanart': 'channels/uk/uklocaltv_fanart.jpg',
-        'enabled': True,
-        'order': 21
-    }
+    "uklocaltv": {
+        "route": "/resources/lib/channels/uk/uklocaltv:channels",
+        "label": "UK Local TV",
+        "thumb": "channels/uk/uklocaltv.png",
+        "fanart": "channels/uk/uklocaltv_fanart.jpg",
+        "enabled": False,
+        "order": 8,
+    },
+    "discoveryplus": {
+        "route": "/resources/lib/channels/uk/discoveryplus:discoveryplus_root",
+        "label": "discovery+",
+        "thumb": "channels/uk/discoveryplus.png",
+        "fanart": "channels/uk/discoveryplus_fanart.jpg",
+        "enabled": False,
+        "order": 9,
+    },
+    "watchfreeuk": {
+        "route": "/resources/lib/channels/uk/watchfreeuk:main_menu",
+        "label": "Watch Free UK",
+        "thumb": "channels/uk/watchfreeuk.png",
+        "fanart": "channels/uk/watchfreeuk_fanart.png",
+        "enabled": True,
+        "order": 10,
+    },
+    "greatplayer": {
+        "route": "/resources/lib/channels/uk/greatplayer:main_menu",
+        "label": "Great! Player",
+        "thumb": "https://235351de.customer.static.core.one.accedo.tv/235351de730a39f0/image/file/01K49NVDE1HH2MACRW1MFTFDA4",
+        "fanart": "https://235351de.customer.static.core.one.accedo.tv/235351de730a39f0/image/file/01K49NVDE1HH2MACRW1MFTFDA4",
+        "enabled": True,
+        "order": 11,
+    },
+    "tptvencore": {
+        "route": "/resources/lib/channels/uk/tptvencore:main_menu",
+        "label": "Talking Pictures TV Encore",
+        "thumb": "https://image-cdn.suggestedtv.com/api/client/v1/image/fab8eb03-eb6a-4261-969d-016065b0c9a6?tenant=ENCORE&mode=fit&format=png&width=1280&height=720",
+        "fanart": "",
+        "enabled": True,
+        "order": 12,
+    },
 }

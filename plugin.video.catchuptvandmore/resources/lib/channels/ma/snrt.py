@@ -5,23 +5,23 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-import re
+
 import urlquick
 
 from codequick import Resolver
 
-URL_LIVES = 'http://libs.easybroadcast.io/snrt/%s/EB%s_ads.js'
+from resources.lib import resolver_proxy, web_utils
+
+URL_ROOT = 'https://snrtlive.ma/'
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_windows_ua()}
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    if item_id == "alAoula":
-        first_id = "aoula"
-    elif item_id == "alMaghribia":
-        first_id = "maghribia"
-    else:
-        first_id = item_id
+    url_live = URL_ROOT + 'fr/' + item_id
+    resp = urlquick.get(url_live, headers=GENERIC_HEADERS, max_age=-1)
+    url_easy_brodcast = resp.parse('iframe').get('src')
 
-    resp = urlquick.get(URL_LIVES % (first_id, item_id))
-    return re.compile(r'autolaunch\:\!0\,autoplay\:\!0\,src\:\"(.*)\"\,playerID').findall(resp.text)[0]
+    return resolver_proxy.get_easybroadcast_stream(plugin, url=url_easy_brodcast)

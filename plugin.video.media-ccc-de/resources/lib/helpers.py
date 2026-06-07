@@ -42,7 +42,7 @@ def user_preference_sorter(prefer_quality, prefer_format, prefer_dash=False):
 
 def maybe_json(json, attr, default):
     try:
-        return json[attr]
+        return json[attr] if json is not None else default
     except KeyError:
         return default
 

@@ -23,7 +23,7 @@ class LogSender(object):
 
         self.__apiKey = api_key
         self.__logger = logger
-        
+
         self.__mode = mode
         self.__maxCharCount = None
         self.__maxSize = None

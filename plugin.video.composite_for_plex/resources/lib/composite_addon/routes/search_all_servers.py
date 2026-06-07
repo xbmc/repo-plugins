@@ -11,6 +11,7 @@
 
 from kodi_six import xbmc  # pylint: disable=import-error
 from kodi_six import xbmcplugin  # pylint: disable=import-error
+from six import PY3
 
 from ..addon.common import get_handle
 from ..addon.constants import MODES
@@ -227,7 +228,11 @@ def _list_content(context, server, section):
         10: 'Track'
     }
 
-    branches = tree.getiterator(iter_types.get(item_type, 'Directory'))
+    if PY3:
+        branches = tree.iter(iter_types.get(item_type, 'Directory'))
+    else:
+        branches = tree.getiterator(iter_types.get(item_type, 'Directory'))
+
     if not branches:
         return []
 

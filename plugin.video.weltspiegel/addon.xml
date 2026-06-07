@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon 
+    id="plugin.video.weltspiegel" 
+    version="1.0.0" 
+    name="Weltspiegel" 
+    provider-name="C.Prasch">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.libmediathek4" version="1.0.0"/>
+    <import addon="script.module.requests" version="2.19.1"/>
+  </requires>
+
+  <extension point="xbmc.python.pluginsource" library="main.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>en de</language>
+    <platform>all</platform>
+    <license>GPL-3.0-only</license>
+    <website>https://github.com/christianprasch/plugin.video.weltspiegel</website>
+    <source>https://github.com/christianprasch/plugin.video.weltspiegel</source>    
+    <summary lang="de_DE">Direktzugriff auf Videos des Weltspiegel in der Mediathek des ARD.</summary>
+    <summary lang="en_GB">Direct access to the Weltspiegel videos of Germany's public broadcaster ARD.</summary>
+    <description lang="de_DE">Dieses Add-on bietet direkten Zugriff auf die Sendungen des Weltspiegels der ARD Mediathek.</description>
+    <description lang="en_GB">Watch the Weltspiegel videos from the german ARD Mediathek.</description>
+    <disclaimer lang="de_DE">Benutzung auf eigene Gefahr. Anregungen, Verbesserungen oder Bugs bitte direkt über GitHub posten.</disclaimer>
+    <disclaimer lang="en_GB">Use at your own risk. Post suggestions, improvements or bug reports directly to GitHub.</disclaimer>
+    <assets>
+      <icon>resources/assets/icon.png</icon>
+      <fanart>resources/assets/fanart.jpg</fanart>
+      <screenshot>resources/assets/screenshot_1.png</screenshot>
+      <screenshot>resources/assets/screenshot_2.png</screenshot>
+      <screenshot>resources/assets/screenshot_3.png</screenshot>
+    </assets>
+    <news>
+version 1.0.0
+ * Initial release
+    </news>
+  </extension>
+</addon>

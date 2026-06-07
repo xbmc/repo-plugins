@@ -123,6 +123,14 @@ class VideoAction(AddonAction):
 
         if (media_item.isDrmProtected or media_item.isPaid) and AddonSettings.show_drm_paid_warning():
             if media_item.isDrmProtected:
+                try:
+                    import inputstreamhelper
+                    is_helper = inputstreamhelper.Helper("mpd", drm="com.widevine.alpha")
+                    if is_helper.check_inputstream():
+                        Logger.debug("Widevine available, skipping DRM warning regardless of setting")
+                        return
+                except Exception:
+                    pass
                 Logger.debug("Showing DRM Warning message")
                 title = LanguageHelper.get_localized_string(LanguageHelper.DrmTitle)
                 message = LanguageHelper.get_localized_string(LanguageHelper.DrmText)
@@ -222,7 +230,7 @@ class VideoAction(AddonAction):
                 # 'tvshow.poster': item.poster,
             },
             season=item.season or "",
-            episode=item.epsiode or "",
+            episode=item.episode or "",
             showtitle=item.tv_show_title or "",
             plot=item.description,
             playcount=1,

@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Addons\n"
-"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-05-07 12:40+0000\n"
+"PO-Revision-Date: 2021-11-09 11:30+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Danish <https://kodi.weblate.cloud/projects/kodi-add-ons-program/plugin-library-node-editor/da_dk/>\n"
 "Language: da_DK\n"
@@ -15,7 +15,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6.1\n"
+"X-Generator: Weblate 4.8.1\n"
+
+msgctxt "Addon Summary"
+msgid "Manage custom library nodes."
+msgstr "Administrer brugerdefinerede biblioteksnoder."
+
+msgctxt "Addon Description"
+msgid "Create and edit custom library nodes."
+msgstr "Opret og rediger brugerdefinerede biblioteksnoder."
 
 # Menu items
 msgctxt "#30000"
@@ -44,15 +52,15 @@ msgstr "Tilføj regel..."
 
 msgctxt "#30006"
 msgid "New node..."
-msgstr ""
+msgstr "Ny node..."
 
 msgctxt "#30007"
 msgid "New parent node..."
-msgstr ""
+msgstr "Ny overordnet node..."
 
 msgctxt "#30008"
 msgid "Reset library nodes to default..."
-msgstr ""
+msgstr "Nulstil biblioteksnoder til standard..."
 
 msgctxt "#30009"
 msgid "Add component..."
@@ -88,7 +96,7 @@ msgstr "Se efter ikon"
 
 msgctxt "#30104"
 msgid "Move node"
-msgstr ""
+msgstr "Flyt node"
 
 msgctxt "#30105"
 msgid "Edit visibility"
@@ -100,7 +108,7 @@ msgstr "Tilføj til hovedmenu"
 
 msgctxt "#30107"
 msgid "Browse for value"
-msgstr ""
+msgstr "Søg efter værdi"
 
 msgctxt "#30200"
 msgid "Content"
@@ -128,43 +136,43 @@ msgstr "Regel"
 
 msgctxt "#30206"
 msgid "Match"
-msgstr ""
+msgstr "Match"
 
 msgctxt "#30300"
 msgid "Set name"
-msgstr ""
+msgstr "Indstil navn"
 
 msgctxt "#30301"
 msgid "Set visibility condition"
-msgstr ""
+msgstr "Indstil synlighed"
 
 msgctxt "#30302"
 msgid "Set order index"
-msgstr ""
+msgstr "Indstil indeks for rækkefølge"
 
 msgctxt "#30303"
 msgid "Name of new parent node"
-msgstr ""
+msgstr "Navn på ny overordnet node"
 
 msgctxt "#30304"
 msgid "Start with defaults"
-msgstr ""
+msgstr "Start med standarder"
 
 msgctxt "#30305"
 msgid "Field"
-msgstr ""
+msgstr "Felt"
 
 msgctxt "#30306"
 msgid "Operator"
-msgstr ""
+msgstr "Operatør"
 
 msgctxt "#30307"
 msgid "Value"
-msgstr ""
+msgstr "Værdi"
 
 msgctxt "#30308"
 msgid "Content type"
-msgstr ""
+msgstr "Indholdstype"
 
 msgctxt "#30309"
 msgid "Content"
@@ -196,11 +204,11 @@ msgstr "Retning"
 
 msgctxt "#30316"
 msgid "Name of new node"
-msgstr ""
+msgstr "Navn på ny node"
 
 msgctxt "#30317"
 msgid "Retrieving values..."
-msgstr ""
+msgstr "Henter værdier..."
 
 msgctxt "#30318"
 msgid "Property"
@@ -208,108 +216,108 @@ msgstr "Egenskab"
 
 msgctxt "#30400"
 msgid "Unable to copy default library nodes"
-msgstr ""
+msgstr "Kan ikke kopiere standard biblioteksnoder"
 
 msgctxt "#30401"
 msgid "Are you sure you want to delete this node?"
-msgstr ""
+msgstr "Er du sikker på at du vil slette denne node?"
 
 msgctxt "#30402"
 msgid "Are you sure you want to reset all nodes?"
-msgstr ""
+msgstr "Er du sikker på at du vil slette alle noder?"
 
 msgctxt "#30403"
 msgid "Are you sure you want to delete this property?"
-msgstr ""
+msgstr "Er du sikker på at du vil slette denne egenskab?"
 
 msgctxt "#30404"
 msgid "Content parameter can't be deleted whilst this node still has an Order, Limit or Rule parameter."
-msgstr ""
+msgstr "Indholdsparameter kan ikke slettes, mens denne node stadig har et parameter for rækkefølge, begrænsning eller regel."
 
 msgctxt "#30405"
 msgid "Are you sure you want to delete this rule?"
-msgstr ""
+msgstr "Er du sikker på at du vil slette denne regel?"
 
 msgctxt "#30406"
 msgid "Order requires a Content parameter"
-msgstr ""
+msgstr "Rækkefølge kræver et parameter for indhold"
 
 msgctxt "#30407"
 msgid "Are you sure you want to delete this component?"
-msgstr ""
+msgstr "Er du sikker på at du vil slette denne komponent?"
 
 msgctxt "#30408"
 msgid "Custom property..."
-msgstr ""
+msgstr "Brugerdefineret egenskab..."
 
 msgctxt "#30409"
 msgid "No options to select from were found"
-msgstr ""
+msgstr "Der blev ikke fundet nogen muligheder at vælge imellem"
 
 msgctxt "#30410"
 msgid "Getting plugin listings..."
-msgstr ""
+msgstr "Henter indhold for plugin..."
 
 msgctxt "#30411"
 msgid "Link path to here"
-msgstr ""
+msgstr "Link stien hertil"
 
 msgctxt "#30500"
 msgid "Genre ID"
-msgstr ""
+msgstr "Genre-ID"
 
 msgctxt "#30501"
 msgid "Country ID"
-msgstr ""
+msgstr "ID for land"
 
 msgctxt "#30502"
 msgid "Studio ID"
-msgstr ""
+msgstr "Studio-ID"
 
 msgctxt "#30503"
 msgid "Director ID"
-msgstr ""
+msgstr "ID for instruktør"
 
 msgctxt "#30504"
 msgid "Actor ID"
-msgstr ""
+msgstr "ID for skuespiller"
 
 msgctxt "#30505"
 msgid "Set ID"
-msgstr ""
+msgstr "ID for sæt"
 
 msgctxt "#30506"
 msgid "Tag ID"
-msgstr ""
+msgstr "ID for mærkater"
 
 msgctxt "#30507"
 msgid "TV Show ID"
-msgstr ""
+msgstr "ID for tv-serie"
 
 msgctxt "#30508"
 msgid "Artist ID"
-msgstr ""
+msgstr "ID for kunstner"
 
 msgctxt "#30509"
 msgid "Album ID"
-msgstr ""
+msgstr "ID for album"
 
 msgctxt "#30510"
 msgid "Role ID"
-msgstr ""
+msgstr "ID for rolle"
 
 msgctxt "#30511"
 msgid "Song ID"
-msgstr ""
+msgstr "ID for sang"
 
 msgctxt "#30512"
 msgid "Album artists only"
-msgstr ""
+msgstr "Kun albumkunstnere"
 
 msgctxt "#30513"
 msgid "Show singles"
-msgstr ""
+msgstr "Vis singler"
 
 msgctxt "#30514"
 msgid "Plugin..."
-msgstr ""
+msgstr "Plugin..."

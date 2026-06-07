@@ -166,7 +166,7 @@ class Account:
 
     def get_stream_quality(self, stream_url):
         #Check if inputstream adaptive is on, if so warn user and return master m3u8
-        if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
+        if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)') or (KODI_VERSION >= 19 and xbmc.getCondVisibility('System.AddonIsEnabled(inputstream.adaptive)')):
             dialog = xbmcgui.Dialog()
             dialog.ok(LOCAL_STRING(30370), LOCAL_STRING(30371))
             return stream_url

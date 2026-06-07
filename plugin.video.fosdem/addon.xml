@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.fosdem" name="FOSDEM Videos" version="0.0.8+matrix.1" provider-name="Jelle van der Waa">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.routing" version="0.2.3"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="resources/lib/addon_entry.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Videos of FOSDEM talks</summary>
+        <description lang="en_GB">This addon provides access to videos published on https://video.fosdem.org</description>
+        <language>en</language>
+        <platform>all</platform>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <license>MIT</license>
+        <forum></forum>
+        <website>https://fosdem.org</website>
+        <email>jelle@vdwaa.nl</email>
+        <source>https://github.com/jelly/plugin.video.fosdem</source>
+	<news>v0.0.1 (2018-5-17)
+- Initial release
+v0.0.2
+- Support showing multiple years
+v0.0.3
+- Fixed videos list menu when persons tag is empty
+- Fixed option values at the settings menu
+- Added genres to the rooms list menu
+v0.0.4
+- Fixed performance issue retrieving xml data
+v0.0.5
+- Fetch XML data once by caching using reuselangagueinvoker
+v0.0.6
+- Add matrix compatibility
+v0.0.7
+- Improve listings
+v0.0.8
+- Bump version
+	</news>
+        <disclaimer lang="en_GB">Unofficial Addon - Use at your own risk</disclaimer>
+        <assets>
+	    <icon>resources/icon.png</icon>
+	    <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

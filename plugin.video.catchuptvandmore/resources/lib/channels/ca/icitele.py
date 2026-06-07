@@ -47,6 +47,8 @@ LIVE_ICI_TELE_REGIONS = {
     "Winnipeg": "cbwft",
     "Moncton": "cbaft",
     "Ottawa": "cboft",
+    "Sherbrooke": "cksh",
+    "Trois-Rivières": "cktm",
     "Montréal": "cbft"
 }
 

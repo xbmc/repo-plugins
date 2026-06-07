@@ -13,7 +13,8 @@ from datetime import datetime
 
 import requests
 
-from resources.lib.kodiutils import html_to_kodi, STREAM_DASH, STREAM_HLS
+from resources.lib import kodiutils
+from resources.lib.kodiutils import STREAM_DASH, STREAM_HLS, html_to_kodi
 from resources.lib.viervijfzes import ResolvedStream
 
 try:  # Python 3
@@ -28,6 +29,8 @@ _LOGGER = logging.getLogger(__name__)
 CACHE_AUTO = 1  # Allow to use the cache, and query the API if no cache is available
 CACHE_ONLY = 2  # Only use the cache, don't use the API
 CACHE_PREVENT = 3  # Don't use the cache
+
+PROXIES = kodiutils.get_proxies()
 
 
 class UnavailableException(Exception):
@@ -109,7 +112,7 @@ class Episode:
     """ Defines an Episode. """
 
     def __init__(self, uuid=None, nodeid=None, path=None, channel=None, program_title=None, title=None, description=None, thumb=None, duration=None,
-                 season=None, season_uuid=None, number=None, rating=None, aired=None, expiry=None, stream=None):
+                 season=None, season_uuid=None, number=None, rating=None, aired=None, expiry=None, stream=None, islongform=False):
         """
         :type uuid: str
         :type nodeid: str
@@ -127,6 +130,7 @@ class Episode:
         :type aired: datetime
         :type expiry: datetime
         :type stream: string
+        :type islongform: bool
         """
         self.uuid = uuid
         self.nodeid = nodeid
@@ -144,6 +148,7 @@ class Episode:
         self.aired = aired
         self.expiry = expiry
         self.stream = stream
+        self.islongform = islongform
 
     def __repr__(self):
         return "%r" % self.__dict__
@@ -173,7 +178,6 @@ class Category:
 class ContentApi:
     """ GoPlay Content API"""
     SITE_URL = 'https://www.goplay.be'
-    API_VIERVIJFZES = 'https://api.viervijfzes.be'
     API_GOPLAY = 'https://api.goplay.be'
 
     def __init__(self, auth=None, cache_path=None):
@@ -309,9 +313,9 @@ class ContentApi:
             result = regex_video_data.search(page)
             if result:
                 video_id = json.loads(unescape(result.group(1)))['id']
-                video_json_data = self._get_url('%s/api/video/%s' % (self.SITE_URL, video_id))
+                video_json_data = self._get_url('%s/web/v1/videos/short-form/%s' % (self.API_GOPLAY, video_id))
                 video_json = json.loads(video_json_data)
-                return dict(video=video_json)
+                return {'video': video_json}
 
             # Extract program JSON
             regex_program = re.compile(r'data-hero="([^"]+)', re.DOTALL)
@@ -327,7 +331,7 @@ class ContentApi:
                 episode_json_data = unescape(result.group(1))
                 episode_json = json.loads(episode_json_data)
 
-            return dict(program=program_json, episode=episode_json)
+            return {'program': program_json, 'episode': episode_json}
 
         # Fetch listing from cache or update if needed
         data = self._handle_cache(key=['episode', path], cache_mode=cache, update=update)
@@ -336,7 +340,7 @@ class ContentApi:
 
         if 'video' in data and data['video']:
             # We have found detailed episode information
-            episode = self._parse_episode_data(data['video'])
+            episode = self._parse_clip_data(data['video'])
             return episode
 
         if 'program' in data and 'episode' in data and data['program'] and data['episode']:
@@ -349,40 +353,65 @@ class ContentApi:
 
         return None
 
-    def get_stream_by_uuid(self, uuid):
-        """ Get the stream URL to use for this video.
+    def get_stream_by_uuid(self, uuid, islongform):
+        """ Return a ResolvedStream for this video.
         :type uuid: str
-        :rtype str
+        :type islongform: bool
+        :rtype: ResolvedStream
         """
-        response = self._get_url(self.API_VIERVIJFZES + '/content/%s' % uuid, authentication=True)
+        mode = 'long-form' if islongform else 'short-form'
+        response = self._get_url(self.API_GOPLAY + '/web/v1/videos/%s/%s' % (mode, uuid), authentication='Bearer %s' % self._auth.get_token())
         data = json.loads(response)
 
         if not data:
             raise UnavailableException
 
-        if 'videoDash' in data:
-            # DRM protected stream
+        # Get DRM license
+        license_key = None
+        if data.get('drmXml'):
+            # BuyDRM format
             # See https://docs.unified-streaming.com/documentation/drm/buydrm.html#setting-up-the-client
-            drm_key = data['drmKey']['S']
 
-            _LOGGER.debug('Fetching Authentication XML with drm_key %s', drm_key)
-            response_drm = self._get_url(self.API_GOPLAY + '/restricted/decode/%s' % drm_key, authentication=True)
-            data_drm = json.loads(response_drm)
+            # Generate license key
+            license_key = self.create_license_key('https://wv-keyos.licensekeyserver.com/', key_headers={
+                'customdata': data['drmXml']
+            })
 
+        # Get manifest url
+        if data.get('manifestUrls'):
+
+            if data.get('manifestUrls').get('dash'):
+                # DASH stream
+                return ResolvedStream(
+                    uuid=uuid,
+                    url=data['manifestUrls']['dash'],
+                    stream_type=STREAM_DASH,
+                    license_key=license_key,
+                )
+
+            # HLS stream
             return ResolvedStream(
                 uuid=uuid,
-                url=data['videoDash']['S'],
-                stream_type=STREAM_DASH,
-                license_url='https://wv-keyos.licensekeyserver.com/',
-                auth=data_drm.get('auth'),
+                url=data['manifestUrls']['hls'],
+                stream_type=STREAM_HLS,
+                license_key=license_key,
             )
 
-        # Normal HLS stream
-        return ResolvedStream(
-            uuid=uuid,
-            url=data['video']['S'],
-            stream_type=STREAM_HLS,
-        )
+        # No manifest url found, get manifest from Server-Side Ad Insertion service
+        if data.get('adType') == 'SSAI' and data.get('ssai'):
+            url = 'https://pubads.g.doubleclick.net/ondemand/dash/content/%s/vid/%s/streams' % (
+                data.get('ssai').get('contentSourceID'), data.get('ssai').get('videoID'))
+            ad_data = json.loads(self._post_url(url, data=''))
+
+            # Server-Side Ad Insertion DASH stream
+            return ResolvedStream(
+                uuid=uuid,
+                url=ad_data['stream_manifest'],
+                stream_type=STREAM_DASH,
+                license_key=license_key,
+            )
+
+        raise UnavailableException
 
     def get_program_tree(self, cache=CACHE_AUTO):
         """ Get a content tree with information about all the programs.
@@ -454,32 +483,62 @@ class ContentApi:
 
         # Categories regexes
         regex_articles = re.compile(r'<article[^>]+>(.*?)</article>', re.DOTALL)
-        regex_category = re.compile(r'<h1.*?>(.*?)</h1>(?:.*?<div class="visually-hidden">(.*?)</div>)?', re.DOTALL)
+        regex_category = re.compile(r'<h2.*?>(.*?)</h2>(?:.*?<div class="visually-hidden">(.*?)</div>)?', re.DOTALL)
 
         categories = []
         for result in regex_articles.finditer(raw_html):
             article_html = result.group(1)
 
             match_category = regex_category.search(article_html)
-            category_title = match_category.group(1).strip()
-            if match_category.group(2):
-                category_title += ' [B]%s[/B]' % match_category.group(2).strip()
+            category_title = None
+            if match_category:
+                category_title = match_category.group(1).strip()
+                if match_category.group(2):
+                    category_title += ' [B]%s[/B]' % match_category.group(2).strip()
 
-            # Extract programs and lookup in all_programs so we have more metadata
-            programs = []
-            for program in self._extract_programs(article_html):
-                try:
-                    rich_program = next(rich_program for rich_program in all_programs if rich_program.path == program.path)
-                    programs.append(rich_program)
-                except StopIteration:
-                    programs.append(program)
+            if category_title:
+                # Extract programs and lookup in all_programs so we have more metadata
+                programs = []
+                for program in self._extract_programs(article_html):
+                    try:
+                        rich_program = next(rich_program for rich_program in all_programs if rich_program.path == program.path)
+                        programs.append(rich_program)
+                    except StopIteration:
+                        programs.append(program)
 
-            episodes = self._extract_videos(article_html)
+                episodes = self._extract_videos(article_html)
 
-            categories.append(
-                Category(uuid=hashlib.md5(category_title.encode('utf-8')).hexdigest(), title=category_title, programs=programs, episodes=episodes))
+                categories.append(
+                    Category(uuid=hashlib.md5(category_title.encode('utf-8')).hexdigest(), title=category_title, programs=programs, episodes=episodes))
 
         return categories
+
+    def get_mylist(self):
+        """ Get the content of My List
+        :rtype list[Program]
+        """
+        data = self._get_url(self.API_GOPLAY + '/my-list', authentication='Bearer %s' % self._auth.get_token())
+        result = json.loads(data)
+
+        items = []
+        for item in result:
+            try:
+                program = self.get_program_by_uuid(item.get('programId'))
+                if program:
+                    program.my_list = True
+                    items.append(program)
+            except Exception as exc:  # pylint: disable=broad-except
+                _LOGGER.warning(exc)
+
+        return items
+
+    def mylist_add(self, program_id):
+        """ Add a program on My List """
+        self._post_url(self.API_GOPLAY + '/my-list', data={'programId': program_id}, authentication='Bearer %s' % self._auth.get_token())
+
+    def mylist_del(self, program_id):
+        """ Remove a program on My List """
+        self._delete_url(self.API_GOPLAY + '/my-list-item', params={'programId': program_id}, authentication='Bearer %s' % self._auth.get_token())
 
     @staticmethod
     def _extract_programs(html):
@@ -595,35 +654,35 @@ class ContentApi:
         """
         # Create Program info
         program = Program(
-            uuid=data['id'],
-            path=data['link'].lstrip('/'),
-            channel=data['pageInfo']['brand'],
-            title=data['title'],
-            description=html_to_kodi(data['description']),
-            aired=datetime.fromtimestamp(data.get('pageInfo', {}).get('publishDate')),
-            poster=data['images']['poster'],
-            thumb=data['images']['teaser'],
-            fanart=data['images']['hero'],
+            uuid=data.get('id'),
+            path=data.get('link').lstrip('/'),
+            channel=data.get('pageInfo').get('brand'),
+            title=data.get('title'),
+            description=html_to_kodi(data.get('description')),
+            aired=datetime.fromtimestamp(data.get('pageInfo', {}).get('publishDate', 0.0)),
+            poster=data.get('images').get('poster'),
+            thumb=data.get('images').get('teaser'),
+            fanart=data.get('images').get('teaser'),
         )
 
         # Create Season info
         program.seasons = {
             key: Season(
-                uuid=playlist['id'],
-                path=playlist['link'].lstrip('/'),
-                channel=playlist['pageInfo']['brand'],
-                title=playlist['title'],
+                uuid=playlist.get('id'),
+                path=playlist.get('link').lstrip('/'),
+                channel=playlist.get('pageInfo').get('brand'),
+                title=playlist.get('title'),
                 description=html_to_kodi(playlist.get('description')),
-                number=playlist['episodes'][0]['seasonNumber'],  # You did not see this
+                number=playlist.get('episodes')[0].get('seasonNumber'),  # You did not see this
             )
-            for key, playlist in enumerate(data['playlists']) if playlist['episodes']
+            for key, playlist in enumerate(data.get('playlists', [])) if playlist.get('episodes')
         }
 
         # Create Episodes info
         program.episodes = [
-            ContentApi._parse_episode_data(episode, playlist['id'])
-            for playlist in data['playlists']
-            for episode in playlist['episodes']
+            ContentApi._parse_episode_data(episode, playlist.get('id'))
+            for playlist in data.get('playlists', [])
+            for episode in playlist.get('episodes')
         ]
 
         return program
@@ -635,7 +694,6 @@ class ContentApi:
         :type season_uuid: str
         :rtype Episode
         """
-
         if data.get('episodeNumber'):
             episode_number = data.get('episodeNumber')
         else:
@@ -659,26 +717,105 @@ class ContentApi:
             season=data.get('seasonNumber'),
             season_uuid=season_uuid,
             number=episode_number,
-            aired=datetime.fromtimestamp(data.get('createdDate')),
-            expiry=datetime.fromtimestamp(data.get('unpublishDate')) if data.get('unpublishDate') else None,
+            aired=datetime.fromtimestamp(int(data.get('createdDate'))),
+            expiry=datetime.fromtimestamp(int(data.get('unpublishDate'))) if data.get('unpublishDate') else None,
             rating=data.get('parentalRating'),
             stream=data.get('path'),
+            islongform=data.get('isLongForm'),
         )
         return episode
 
-    def _get_url(self, url, params=None, authentication=False):
+    @staticmethod
+    def _parse_clip_data(data):
+        """ Parse the Clip JSON.
+        :type data: dict
+        :rtype Episode
+        """
+        episode = Episode(
+            uuid=data.get('videoUuid'),
+            program_title=data.get('title'),
+            title=data.get('title'),
+        )
+        return episode
+
+    @staticmethod
+    def create_license_key(key_url, key_type='R', key_headers=None, key_value='', response_value=''):
+        """ Create a license key string that we need for inputstream.adaptive.
+        :type key_url: str
+        :type key_type: str
+        :type key_headers: dict[str, str]
+        :type key_value: str
+        :type response_value: str
+        :rtype str
+        """
+        try:  # Python 3
+            from urllib.parse import quote, urlencode
+        except ImportError:  # Python 2
+            from urllib import quote, urlencode
+
+        header = ''
+        if key_headers:
+            header = urlencode(key_headers)
+
+        if key_type in ('A', 'R', 'B'):
+            key_value = key_type + '{SSM}'
+        elif key_type == 'D':
+            if 'D{SSM}' not in key_value:
+                raise ValueError('Missing D{SSM} placeholder')
+            key_value = quote(key_value)
+
+        return '%s|%s|%s|%s' % (key_url, header, key_value, response_value)
+
+    def _get_url(self, url, params=None, authentication=None):
         """ Makes a GET request for the specified URL.
         :type url: str
+        :type authentication: str
         :rtype str
         """
         if authentication:
-            if not self._auth:
-                raise Exception('Requested to authenticate, but not auth object passed')
             response = self._session.get(url, params=params, headers={
-                'authorization': self._auth.get_token(),
-            })
+                'authorization': authentication,
+            }, proxies=PROXIES)
         else:
-            response = self._session.get(url, params=params)
+            response = self._session.get(url, params=params, proxies=PROXIES)
+
+        if response.status_code != 200:
+            _LOGGER.error(response.text)
+            raise Exception('Could not fetch data')
+
+        return response.text
+
+    def _post_url(self, url, params=None, data=None, authentication=None):
+        """ Makes a POST request for the specified URL.
+        :type url: str
+        :type authentication: str
+        :rtype str
+        """
+        if authentication:
+            response = self._session.post(url, params=params, json=data, headers={
+                'authorization': authentication,
+            }, proxies=PROXIES)
+        else:
+            response = self._session.post(url, params=params, json=data, proxies=PROXIES)
+
+        if response.status_code not in (200, 201):
+            _LOGGER.error(response.text)
+            raise Exception('Could not fetch data')
+
+        return response.text
+
+    def _delete_url(self, url, params=None, authentication=None):
+        """ Makes a DELETE request for the specified URL.
+        :type url: str
+        :type authentication: str
+        :rtype str
+        """
+        if authentication:
+            response = self._session.delete(url, params=params, headers={
+                'authorization': authentication,
+            }, proxies=PROXIES)
+        else:
+            response = self._session.delete(url, params=params, proxies=PROXIES)
 
         if response.status_code != 200:
             _LOGGER.error(response.text)

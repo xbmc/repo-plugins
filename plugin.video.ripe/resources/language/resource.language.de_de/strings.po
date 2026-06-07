@@ -1,0 +1,55 @@
+# Kodi Media Center language file
+# Addon Name: RIPE Meetings
+# Addon id: plugin.video.ripe
+# Addon Provider: Jose Antonio Montes (jamontes)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Jose Antonio Montes (jamontes)\n"
+"Language-Team: German (http://www.transifex.com/projects/p/xbmc-addons/language/de/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30010"
+msgid "Next page"
+msgstr "Nachste seite"
+
+msgctxt "#30011"
+msgid "Video type not supported"
+msgstr "Video-Typ nicht unterstutzt"
+
+msgctxt "#30012"
+msgid "Couldn't locate video url"
+msgstr "Konnte Video-URL nicht finden"
+
+msgctxt "#30013"
+msgid "Previous page"
+msgstr "Vorherige seite"
+
+msgctxt "#30014"
+msgid "All videos"
+msgstr "Alle videos"
+
+msgctxt "#30015"
+msgid "Search"
+msgstr "Suchen"
+
+# Empty strings from id 30016 to 30100
+
+msgctxt "#30101"
+msgid "Debug (enable logs)"
+msgstr "Debug (logs)"
+
+msgctxt "#30102"
+msgid "Show only the best videos (default)"
+msgstr "Nur die besten videos anzeigen"
+
+msgctxt "#30103"
+msgid "Sort by most viewed"
+msgstr "Sortieren nach Popularität"

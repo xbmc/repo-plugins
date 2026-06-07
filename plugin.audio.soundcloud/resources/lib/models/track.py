@@ -26,6 +26,7 @@ class Track(ListItem):
             "genre": self.info.get("genre"),
             "title": self.label,
             "year": self.info.get("date")[:4],
+            "playcount": self.info.get("playback_count"),
             "comment": self.info.get("description")
         })
         list_item.setProperty("isPlayable", "true")

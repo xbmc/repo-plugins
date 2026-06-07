@@ -2,11 +2,11 @@
 
 
 class Comparable(object):
-    """ 
+    """
     Base Class for a simple comparison class. A derived class only needs to
     implement an __lt__(self, other) method. All the other required methods are
     implemented by this Comparable class and are based on the __lt__ method.
-    
+
     """
 
     def __init__(self):
@@ -14,13 +14,13 @@ class Comparable(object):
 
     def __eq__(self, other):
         """ Test two objects 'for Equality'
-        
+
         Arguments:
         other : Object - The other object.
-        
+
         Returns:
         True or False
-        
+
         """
 
         if other is None:
@@ -29,27 +29,27 @@ class Comparable(object):
         return not self < other and not other < self
 
     def __ne__(self, other):
-        """ Test two objects 'for non-equality'  
-        
+        """ Test two objects 'for non-equality'
+
         Arguments:
         other : Object - The other object.
-        
+
         Returns:
         True or False
-        
+
         """
 
         return not self.__eq__(other)
 
     def __gt__(self, other):
         """ Test two objects for 'greater than'
-        
+
         Arguments:
         other : Object - The other object.
-        
+
         Returns:
         True or False
-        
+
         """
 
         if other is None:
@@ -58,27 +58,27 @@ class Comparable(object):
         return other < self
 
     def __ge__(self, other):
-        """ Test two objects for 'greater or equal than'  
-        
+        """ Test two objects for 'greater or equal than'
+
         Arguments:
         other : Object - The other object.
-        
+
         Returns:
         True or False
-        
+
         """
 
         return not self < other
 
     def __le__(self, other):
         """ Test two objects for 'less than or equal'
-        
+
         Arguments:
         other : Object - The other object.
-        
+
         Returns:
         True or False
-        
+
         """
 
         return not other < self
@@ -130,9 +130,9 @@ class Version(Comparable):
             self.__extract_version(version)
 
     def are_compatible(self, other):
-        """ Checks if two versions have the same version up until the revision 
+        """ Checks if two versions have the same version up until the revision
         part of the version.
-        
+
         :param Version|None other:   The version to compare with.
 
         :return: True if equal.
@@ -168,7 +168,7 @@ class Version(Comparable):
 
     def __extract_version(self, version):
         """ Extracts the Major, Minor, Revision and Buildnumber from a version string
-        
+
         :param str|unicode version: The version string.
 
         :rtype: None
@@ -194,8 +194,8 @@ class Version(Comparable):
 
     def __none_is_zero(self, value):
         """ Returns 0 if a value is None. This is needed for comparison. As None
-        should be interpreted as Zero. 
-        
+        should be interpreted as Zero.
+
         :param int value: The value to check for None
 
         :return: 0 if the value was None
@@ -237,10 +237,10 @@ class Version(Comparable):
 
     def __lt__(self, other):
         """ Tests two versions for 'Lower Then'
-        
+
         Arguments:
         other : Version - The version to compare with.
-        
+
         Returns:
         True or False
 

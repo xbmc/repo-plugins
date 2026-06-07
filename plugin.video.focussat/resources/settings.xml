@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="metadata_last_updated" visible="false"/>
+    <category label="30800"> <!-- Credentials -->
+        <setting label="30801" type="lsep"/> <!-- Credentials -->
+        <setting label="30802" type="text" id="username"/>
+        <setting label="30803" type="text" id="password" option="hidden"/>
+        <setting               type="text" id="tenant" default="fsro" visible="false"/>
+    </category>
+    <category label="30820"> <!-- Interface -->
+        <setting label="30821" type="lsep"/> <!-- Channels -->
+        <setting label="30822" type="select" id="interface_adult" default="0" lvalues="30823|30824|30825"/>
+    </category>
+    <category label="30840"> <!-- Integrations -->
+        <setting label="30841" type="lsep"/> <!-- IPTV Manager -->
+        <setting label="30842" type="action" action="InstallAddon(service.iptv.manager)" option="close" visible="!System.HasAddon(service.iptv.manager)"/> <!-- Install IPTV Manager add-on -->
+        <setting label="30843" type="bool" id="iptv.enabled" default="true" visible="String.StartsWith(System.BuildVersion,18) + System.HasAddon(service.iptv.manager) | System.AddonIsEnabled(service.iptv.manager)" />
+        <setting label="30844" type="action" action="Addon.OpenSettings(service.iptv.manager)" enable="eq(-1,true)" option="close" visible="String.StartsWith(System.BuildVersion,18) + System.HasAddon(service.iptv.manager) | System.AddonIsEnabled(service.iptv.manager)" subsetting="true"/> <!-- IPTV Manager settings -->
+        <setting id="iptv.channels_uri" default="plugin://plugin.video.focussat/iptv/channels" visible="false"/>
+        <setting id="iptv.epg_uri" default="plugin://plugin.video.focussat/iptv/epg" visible="false"/>
+    </category>
+    <category label="30880"> <!-- Expert -->
+        <setting label="30881" type="lsep"/> <!-- Logging -->
+        <setting label="30882" type="bool" id="debug_logging" default="false"/>
+        <setting label="30883" type="action" action="InstallAddon(script.kodi.loguploader)" option="close" visible="!System.HasAddon(script.kodi.loguploader)"/> <!-- Install Kodi Logfile Uploader -->
+        <setting label="30884" type="action" action="RunAddon(script.kodi.loguploader)" visible="String.StartsWith(System.BuildVersion,18) + System.HasAddon(script.kodi.loguploader) | System.AddonIsEnabled(script.kodi.loguploader)" /> <!-- Open Kodi Logfile Uploader -->
+    </category>
+</settings>

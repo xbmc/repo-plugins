@@ -1,5 +1,5 @@
-[![GitHub release](https://img.shields.io/github/release/add-ons/plugin.video.viervijfzes.svg?include_prereleases)](https://github.com/add-ons/plugin.video.viervijfzes/releases)
-[![Build Status](https://img.shields.io/github/workflow/status/add-ons/plugin.video.viervijfzes/CI/master)](https://github.com/add-ons/plugin.video.viervijfzes/actions?query=branch%3Amaster)
+[![GitHub release](https://img.shields.io/github/v/release/add-ons/plugin.video.viervijfzes?display_name=tag)](https://github.com/add-ons/plugin.video.viervijfzes/releases)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/add-ons/plugin.video.viervijfzes/ci.yml?branch=master)](https://github.com/add-ons/plugin.video.viervijfzes/actions?query=branch%3Amaster)
 [![Codecov status](https://img.shields.io/codecov/c/github/add-ons/plugin.video.viervijfzes/master)](https://codecov.io/gh/add-ons/plugin.video.viervijfzes/branch/master)
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
 [![Contributors](https://img.shields.io/github/contributors/add-ons/plugin.video.viervijfzes.svg)](https://github.com/add-ons/plugin.video.viervijfzes/graphs/contributors)
@@ -11,7 +11,7 @@ account aanmaken op [goplay.be](https://www.goplay.be/).
 
 Meer informatie kan je vinden op de [Wiki pagina](https://github.com/add-ons/plugin.video.viervijfzes/wiki).
 
-> Let op dat er geen live-streams beschikbaar zijn op het GoPlay platform en je dus enkel kan kijken de beschikbare programma's in de catalogus.
+> Let op dat er geen live-streams beschikbaar zijn op het GoPlay platform en je dus enkel kan kijken naar de beschikbare programma's in de catalogus.
 
 ## Features
 

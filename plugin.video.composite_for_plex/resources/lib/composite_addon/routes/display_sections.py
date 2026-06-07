@@ -130,7 +130,7 @@ def server_section_menus_items(context, server_list, content_filter, display_sha
         server_items = []
         for section in sections:
 
-            if ((display_shared and server.is_owned()) or
+            if (display_shared and server.is_owned() or
                     (content_filter is not None and section.content_type() != content_filter)):
                 continue
 
@@ -278,6 +278,16 @@ def action_menu_items(context):
         }
 
         item_url = 'cmd:' + COMMANDS.SIGNOUT
+        gui_item = GUIItem(item_url, details, extra_data)
+        append_item(create_gui_item(context, gui_item))
+
+        details = {
+            'title': i18n('Detect Servers')
+        }
+        extra_data = {
+            'type': 'file'
+        }
+        item_url = 'cmd:' + COMMANDS.DETECTSERVERS
         gui_item = GUIItem(item_url, details, extra_data)
         append_item(create_gui_item(context, gui_item))
 

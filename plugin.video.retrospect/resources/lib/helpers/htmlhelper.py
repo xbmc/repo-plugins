@@ -10,9 +10,9 @@ class HtmlHelper(taghelperbase.TagHelperBase):
     """Class that could help with parsing of simple HTML"""
 
     __ToTextRegex = None
-    
+
     def get_tag_content(self, tag, *args, **kwargs):
-        """Gets the content of an HTML <tag> 
+        """Gets the content of an HTML <tag>
 
         Example: ('div', {'cls':'test'}, {'id':'divTest'}) will match
 
@@ -32,13 +32,13 @@ class HtmlHelper(taghelperbase.TagHelperBase):
         bool first_only:    only return the first result. Default: True
 
         """
-        
+
         first_only = True
         if "first_only" in kwargs:
             first_only = kwargs["first_only"]
 
         html_regex = "<%s" % (tag,)
-                
+
         for arg in args:
             name = list(arg.keys())[0]
             value = arg[list(arg.keys())[0]]

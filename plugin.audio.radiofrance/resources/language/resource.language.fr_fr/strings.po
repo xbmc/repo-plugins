@@ -1,0 +1,37 @@
+# Kodi Media Center language file
+# Addon Name: RadioFrance
+# Addon id: plugin.audio.radiofrance
+# Addon Provider: bateast
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: Bateast\n"
+"Language-Team: Français\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Integration settings (from 30100 to 30199)
+
+# Interface
+msgctxt "#30100"
+msgid "search"
+msgstr "? Rechercher"
+
+msgctxt "#30101"
+msgid "previous"
+msgstr "<< Précédent"
+
+msgctxt "#30102"
+msgid "next"
+msgstr ">> Suivant"
+
+msgctxt "#30103"
+msgid "search title"
+msgstr "Titre recherché"
+
+msgctxt "#30104"
+msgid "podcasts"
+msgstr "Les Podcasts"
+

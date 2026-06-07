@@ -13,7 +13,8 @@
       "sortorder": 11,
       "language": "be",
       "fanart": "vrtnufanart.jpg",
-      "adaptiveAddonSelectable": true
+      "adaptiveAddonSelectable": true,
+      "addonUrl": "plugin://plugin.video.vrt.nu"
     }
   ],
   "settings": [

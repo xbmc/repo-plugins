@@ -1,4 +1,4 @@
-<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.7.8+matrix.1">
+<addon id="plugin.video.hbogoeu" name="hGO EU" provider-name="arvvoid" version="2.7.9+matrix.1">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
     <import addon="script.module.kodi-six" version="0.1.0" />
@@ -14,6 +14,8 @@
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">Watch HBO® GO EU+Nordic content in Kodi. Valid HBO® account required.</summary>
     <description lang="en_GB">
+The add-on has reached end of life. The Hbo Go service has been replaced by Hbo Max in all regions supported by this add-on. Search the Kodi forums for the Hbo Max add-on.
+      
 Simple, Kodi add-on to access HBO® Go EU content. (This add-on is not officially commissioned/supported by HBO®.)
 
 Important, HBO® Go must be paid for!!!  You need a valid account!
@@ -44,8 +46,9 @@ If an official app is available for your platform, use it instead of this.
     <source>https://github.com/arvvoid/plugin.video.hbogoeu</source>
     <website>https://arvvoid.github.io/plugin.video.hbogoeu</website>
     <news>
-- Fixes "new version" errors on series/season listings
+- Add-on end of life
     </news>
+    <lifecyclestate type="broken" lang="en_GB">The add-on has reached end of life. The Hbo Go service has been replaced by Hbo Max in all regions supported by this add-on. Search the Kodi forums for the Hbo Max add-on.</lifecyclestate>
     <assets>
      <icon>resources/icon.png</icon>
      <fanart>resources/fanart.jpg</fanart>

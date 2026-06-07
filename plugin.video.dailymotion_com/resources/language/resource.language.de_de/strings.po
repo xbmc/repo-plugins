@@ -18,15 +18,15 @@ msgstr ""
 
 msgctxt "Addon Summary"
 msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
-msgstr ""
+msgstr "Filme, TV, Musik, User-Clips und Live-Streams"
 
 msgctxt "Addon Description"
-msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
-msgstr ""
+msgid "Dailymotion attracts 300 million users from around the world, who watch 3.5 billion videos on its player each month."
+msgstr "Dailymotion zieht 300 Millionen Nutzer aus der ganzen Welt an, die jeden Monat 3,5 Milliarden Videos auf ihrem Player ansehen."
 
 msgctxt "Addon Disclaimer"
 msgid "Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing."
-msgstr ""
+msgstr "Einige Teile dieses Addons sind in Ihrem Wohnsitzland möglicherweise nicht legal. Bitte informieren Sie sich vor der Installation bei den örtlichen Gesetzen."
 
 msgctxt "#30001"
 msgid "Next Page"

@@ -6,6 +6,7 @@ from resources.lib import chn_class, mediatype, contenttype
 
 from resources.lib.logger import Logger
 from resources.lib.mediaitem import MediaItem, FolderItem
+from resources.lib.regexer import Regexer
 from resources.lib.urihandler import UriHandler
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.helpers.encodinghelper import EncodingHelper
@@ -62,8 +63,10 @@ class Channel(chn_class.Channel):
                               # No longer used: preprocessor=self.AddNextPage,
                               json=True,
                               parser=['items', ],
-                              creator=self.create_json_video, updater=self.update_json_video,
+                              creator=self.create_json_video, #  updater=self.update_json_video,
                               postprocessor=self.filter_duplicate_streams)
+
+        self._add_data_parser("https://nos.nl/video/", updater=self.update_video_item)
         self._add_data_parser("*",
                               json=True,
                               parser=['links', ],
@@ -101,7 +104,7 @@ class Channel(chn_class.Channel):
         live_title = LanguageHelper.get_localized_string(LanguageHelper.LiveTv)
 
         cats = {
-            "Meest Bekeken": "https://api.nos.nl/mobile/videos/most-viewed/phone.json",
+            # "Meest Bekeken": "https://api.nos.nl/mobile/videos/most-viewed/phone.json",
             "Nieuws": "https://api.nos.nl/nosapp/v3/items?mainCategories=nieuws&types=video&limit={0}".format(self.__pageSize),
             "Sport": "https://api.nos.nl/nosapp/v3/items?mainCategories=sport&types=video&limit={0}".format(self.__pageSize),
             "Alles": "https://api.nos.nl/nosapp/v3/items?types=video&limit={0}".format(self.__pageSize),
@@ -164,7 +167,8 @@ class Channel(chn_class.Channel):
         # category = result_set["maincategory"].title()
         # subcategory = result_set["subcategory"].title()
 
-        url = "https://api.nos.nl/mobile/video/%s/phone.json" % (video_id, )
+        # url = "https://api.nos.nl/mobile/video/%s/phone.json" % (video_id, )
+        url = f"https://nos.nl/video/{video_id}"
         item = MediaItem(result_set['title'], url, media_type=mediatype.VIDEO)
         item.description = result_set["description"]
         item.complete = False
@@ -222,6 +226,35 @@ class Channel(chn_class.Channel):
         _, url = UriHandler.header(item.url)
         item.complete = M3u8.update_part_with_m3u8_streams(item, url, bitrate=0)
         return item
+
+    def update_video_item(self, item):
+        """ Updates an existing MediaItem with more data.
+
+        Used to update none complete MediaItems (self.complete = False). This
+        could include opening the item's URL to fetch more data and then process that
+        data or retrieve it's real media-URL.
+
+        The method should at least:
+        * cache the thumbnail to disk (use self.noImage if no thumb is available).
+        * set at least one MediaStream.
+        * set self.complete = True.
+
+        if the returned item does not have a MediaSteam then the self.complete flag
+        will automatically be set back to False.
+
+        :param MediaItem item: the original MediaItem that needs updating.
+
+        :return: The original item with more data added to it's properties.
+        :rtype: MediaItem
+
+        """
+
+        Logger.debug('Starting update_video_item: %s', item.name)
+
+        data = UriHandler.open(item.url, additional_headers=self.httpHeaders)
+        stream_url = Regexer.do_regex(r"contentUrl\"\W+\"([^\"]+)\"", data)[0]
+        item.url = stream_url
+        return self.update_resolved_stream(item)
 
     def update_json_video(self, item):
         """ Updates an existing MediaItem with more data.

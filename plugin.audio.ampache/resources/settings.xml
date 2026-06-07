@@ -2,10 +2,13 @@
 	<category label="30001">
 		<setting id="random_items" type="enum" label="30010" values="3|6|9|12|15|18|21" default="1"/>
 		<setting id="disable_ssl_certs" type="bool" label="30011" default="false"/>
+		<setting id="connection_timeout" type="number" label="30017" default="400"/>
 		<setting id="api-version" type="number" label="30012" default="350001"/>
 		<setting id="old-search-gui" type="bool" label="30013" default="false"/>
 		<setting id="images-long-list" type="bool" label="30014" default="false"/>
 		<setting id="auto-fullscreen" type="bool" label="30015" default="false"/>
+		<setting id="clean_art" type="action" label="30016" action="RunPlugin(plugin://plugin.audio.ampache/?mode=400)"/>
+
 	</category>
   <category label="30002">
 		<setting id="server.add" type="action" label="30020" action="RunPlugin(plugin://plugin.audio.ampache/?mode=301)"/>

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2016-09-18 00:54+0000\n"
-"PO-Revision-Date: 2021-08-05 10:29+0000\n"
+"PO-Revision-Date: 2022-08-12 09:14+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Danish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-twitch/da_dk/>\n"
 "Language: da_dk\n"
@@ -11,11 +11,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.13\n"
 
 msgctxt "Addon Summary"
 msgid "Twitch video plugin"
-msgstr "Twitch video plugin"
+msgstr "Twitch video-plugin"
 
 msgctxt "Addon Description"
 msgid "Watch your favorite gaming streams!"
@@ -38,8 +38,8 @@ msgid "Settings"
 msgstr "Indstillinger"
 
 msgctxt "#30005"
-msgid "Featured Streams"
-msgstr "Fremhævede streams"
+msgid "Popular Streams"
+msgstr ""
 
 msgctxt "#30006"
 msgid "Teams"
@@ -87,15 +87,15 @@ msgstr "Ingen arkiver fundet for"
 
 msgctxt "#30023"
 msgid "User Token Error"
-msgstr "Bruger Token Fejl"
+msgstr "Fejl ved bruger-token"
 
 msgctxt "#30024"
 msgid "Changed video settings"
-msgstr "Skiftet video indstillinger"
+msgstr "Skiftet videoindstillinger"
 
 msgctxt "#30025"
 msgid "Selected video settings are not available"
-msgstr "Valgte video indstillinger er ikke tilgængelige"
+msgstr "Valgte videoindstillinger er ikke tilgængelige"
 
 msgctxt "#30026"
 msgid "TwitchApi error"
@@ -107,15 +107,15 @@ msgstr "JSON fejl"
 
 msgctxt "#30028"
 msgid "Failed to parse the result set"
-msgstr "Kan ikke afkode resultat sættet"
+msgstr "Kan ikke afkode resultatsættet"
 
 msgctxt "#30029"
 msgid "Please check your internet connection"
-msgstr "Tjek din internet forbindelse"
+msgstr "Tjek venligst din internetforbindelse"
 
 msgctxt "#30040"
 msgid "Video Quality"
-msgstr "Video Kvalitet"
+msgstr "Videokvalitet"
 
 msgctxt "#30045"
 msgid "Display titles"
@@ -123,15 +123,15 @@ msgstr "Vis titler"
 
 msgctxt "#30046"
 msgid "Streamer - Stream Title"
-msgstr "Streamer - Stream Titel"
+msgstr "Streamer - Stream-titel"
 
 msgctxt "#30047"
 msgid "Viewers - Streamer - Stream Title"
-msgstr "Seere - Streamer - Stream Titel"
+msgstr "Seere - Streamer - Stream-titel"
 
 msgctxt "#30048"
 msgid "Stream Title"
-msgstr "Stream Titel"
+msgstr "Stream-titel"
 
 msgctxt "#30049"
 msgid "Streamer"
@@ -143,11 +143,11 @@ msgstr "Brugernavn"
 
 msgctxt "#30051"
 msgid "Streamer - Game Title - Stream Title"
-msgstr "Streamer - Spil Titel - Stream Titel"
+msgstr "Streamer - Spil-titel - Stream-titel"
 
 msgctxt "#30052"
 msgid "Enable"
-msgstr "Enable"
+msgstr "Aktiver"
 
 msgctxt "#30053"
 msgid "Password (OAuth Token)"
@@ -159,15 +159,15 @@ msgstr ""
 
 msgctxt "#30060"
 msgid "Unnamed Streamer"
-msgstr "Unavngivet Streamer"
+msgstr "Unavngivet streamer"
 
 msgctxt "#30061"
 msgid "Untitled Stream"
-msgstr "Unavngivet Stream"
+msgstr "Unavngivet stream"
 
 msgctxt "#30062"
 msgid "Unknown Number of Viewers"
-msgstr "Ukendt Nummer af Seere"
+msgstr "Ukendt antal seere"
 
 msgctxt "#30063"
 msgid "Unknown Language"
@@ -175,7 +175,7 @@ msgstr ""
 
 msgctxt "#30064"
 msgid "Unknown Game"
-msgstr "Ukendt Spil"
+msgstr "Ukendt spil"
 
 msgctxt "#30065"
 msgid "Truncate displayed titles"
@@ -183,11 +183,11 @@ msgstr "Afkort viste titler"
 
 msgctxt "#30066"
 msgid "Followed Games"
-msgstr "Fulgte Spil"
+msgstr "Fulgte spil"
 
 msgctxt "#30067"
 msgid "Game Title Viewers | Streamer - Stream Title"
-msgstr "Spil Titel Seere | Streamer - Stream Titel"
+msgstr "Spil-titel seere | Streamer - Stream-titel"
 
 msgctxt "#30068"
 msgid "Content Type"
@@ -223,7 +223,7 @@ msgstr ""
 
 msgctxt "#30076"
 msgid "General"
-msgstr ""
+msgstr "Generel"
 
 msgctxt "#30077"
 msgid "Play (Choose Quality)"
@@ -279,7 +279,7 @@ msgstr ""
 
 msgctxt "#30090"
 msgid "Language"
-msgstr ""
+msgstr "Sprog"
 
 msgctxt "#30091"
 msgid "Mature"
@@ -303,7 +303,7 @@ msgstr ""
 
 msgctxt "#30096"
 msgid "API"
-msgstr ""
+msgstr "API"
 
 msgctxt "#30097"
 msgid "OAuth Client ID"
@@ -371,7 +371,7 @@ msgstr ""
 
 msgctxt "#30113"
 msgid "Uploads"
-msgstr ""
+msgstr "Uploads"
 
 msgctxt "#30114"
 msgid "Confirm"
@@ -395,7 +395,7 @@ msgstr ""
 
 msgctxt "#30120"
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 msgctxt "#30121"
 msgid "Cache expire time (minutes)"
@@ -407,7 +407,7 @@ msgstr ""
 
 msgctxt "#30123"
 msgid "Items per page"
-msgstr ""
+msgstr "Emner per side"
 
 msgctxt "#30124"
 msgid "Video Id/Url"
@@ -419,7 +419,7 @@ msgstr ""
 
 msgctxt "#30126"
 msgid "Refresh"
-msgstr ""
+msgstr "Opdater"
 
 msgctxt "#30127"
 msgid "Login"
@@ -431,18 +431,18 @@ msgstr ""
 
 msgctxt "#30129"
 msgid "Error"
-msgstr ""
+msgstr "Fejl"
 
 msgctxt "#30130"
 msgid "Go to %s"
-msgstr ""
+msgstr "Gå til %s"
 
 msgctxt "#30131"
 msgid "No results returned"
 msgstr ""
 
 msgctxt "#30132"
-msgid "OAuth token is required for access to authorized user functions."
+msgid "OAuth token is required for access"
 msgstr ""
 
 msgctxt "#30133"
@@ -523,11 +523,11 @@ msgstr ""
 
 msgctxt "#30153"
 msgid "Blacklist"
-msgstr ""
+msgstr "Sortliste"
 
 msgctxt "#30154"
 msgid "Remove a user"
-msgstr ""
+msgstr "Fjern en bruger"
 
 msgctxt "#30155"
 msgid "Remove a game"
@@ -591,7 +591,7 @@ msgstr ""
 
 msgctxt "#30170"
 msgid "Playlists"
-msgstr ""
+msgstr "Playlister"
 
 msgctxt "#30171"
 msgid "Collections"
@@ -611,7 +611,7 @@ msgstr ""
 
 msgctxt "#30175"
 msgid "Videos"
-msgstr ""
+msgstr "Videoer"
 
 msgctxt "#30176"
 msgid "Clips"
@@ -747,7 +747,7 @@ msgstr ""
 
 msgctxt "#30211"
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiveret"
 
 msgctxt "#30212"
 msgid "Failed to connect to Twitch API"
@@ -779,7 +779,7 @@ msgstr ""
 
 msgctxt "#30219"
 msgid "Main Menu"
-msgstr ""
+msgstr "Hovedmenu"
 
 msgctxt "#30220"
 msgid "Failed to get url, try again shortly."
@@ -847,7 +847,7 @@ msgstr ""
 
 msgctxt "#30236"
 msgid "Search history size"
-msgstr ""
+msgstr "Størrelse på søgehistorik"
 
 msgctxt "#30237"
 msgid "Clear search history?"
@@ -863,7 +863,7 @@ msgstr ""
 
 msgctxt "#30240"
 msgid "Clear search history"
-msgstr ""
+msgstr "Ryd søgehistorik"
 
 msgctxt "#30241"
 msgid "Search history cleared"
@@ -875,7 +875,7 @@ msgstr ""
 
 msgctxt "#30243"
 msgid "Maintenance"
-msgstr ""
+msgstr "Vedligeholdelse"
 
 msgctxt "#30244"
 msgid "Search History"
@@ -923,7 +923,7 @@ msgstr ""
 
 msgctxt "#30255"
 msgid "Thumbnail size"
-msgstr ""
+msgstr "Størrelse på miniaturebillede"
 
 msgctxt "#30256"
 msgid "Large"
@@ -931,7 +931,7 @@ msgstr ""
 
 msgctxt "#30257"
 msgid "Medium"
-msgstr ""
+msgstr "Medium"
 
 msgctxt "#30258"
 msgid "Small"
@@ -943,7 +943,7 @@ msgstr ""
 
 msgctxt "#30260"
 msgid "Limit to 30 fps"
-msgstr ""
+msgstr "Begræns til 30 fps"
 
 msgctxt "#30261"
 msgid "Private API Credentials"
@@ -964,3 +964,39 @@ msgstr ""
 msgctxt "#30265"
 msgid "Unfollow"
 msgstr ""
+
+msgctxt "#30266"
+msgid "Add to queue"
+msgstr ""
+
+msgctxt "#30267"
+msgid "An OAuth token is required for access, go to '%s' - '%s' - '%s' to generate one"
+msgstr ""
+
+msgctxt "#30268"
+msgid "Private OAuth authentication error"
+msgstr ""
+
+msgctxt "#30269"
+msgid "Private OAuth credentials are incorrect, go to '%s' - '%s' - '%s' to correct the issue"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Subscriber and Turbo Benefits"
+msgstr ""
+
+msgctxt "#30271"
+msgid "For information on how to obtain this token, visit"
+msgstr ""
+
+msgctxt "#30272"
+msgid "https://twitchaddon.page.link/benefits"
+msgstr ""
+
+msgctxt "#30273"
+msgid "OAuth Token is expired or invalid"
+msgstr ""
+
+#~ msgctxt "#30005"
+#~ msgid "Featured Streams"
+#~ msgstr "Fremhævede streams"

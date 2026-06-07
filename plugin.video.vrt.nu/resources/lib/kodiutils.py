@@ -2,11 +2,13 @@
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """All functionality that requires Kodi imports"""
 
-from __future__ import absolute_import, division, unicode_literals
 from contextlib import contextmanager
 from sys import version_info
 from socket import timeout
 from ssl import SSLError
+
+from urllib.parse import quote, urlencode
+from urllib.request import HTTPErrorProcessor
 
 import xbmc
 import xbmcplugin
@@ -17,30 +19,24 @@ except ImportError:  # Kodi 19 alpha 1 and lower
     from xbmc import translatePath  # pylint: disable=ungrouped-imports
 
 from xbmcaddon import Addon
-from utils import from_unicode, to_unicode
-
-try:  # Python 3
-    from urllib.request import HTTPErrorProcessor
-except ImportError:  # Python 2
-    from urllib2 import HTTPErrorProcessor
 
 ADDON = Addon()
 DEFAULT_CACHE_DIR = 'cache'
 
-SORT_METHODS = dict(
-    # date=xbmcplugin.SORT_METHOD_DATE,
-    dateadded=xbmcplugin.SORT_METHOD_DATEADDED,
-    duration=xbmcplugin.SORT_METHOD_DURATION,
-    episode=xbmcplugin.SORT_METHOD_EPISODE,
-    # genre=xbmcplugin.SORT_METHOD_GENRE,
-    # label=xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
-    label=xbmcplugin.SORT_METHOD_LABEL,
-    title=xbmcplugin.SORT_METHOD_TITLE,
-    # none=xbmcplugin.SORT_METHOD_UNSORTED,
+SORT_METHODS = {
+    # 'date': xbmcplugin.SORT_METHOD_DATE,
+    'dateadded': xbmcplugin.SORT_METHOD_DATEADDED,
+    'duration': xbmcplugin.SORT_METHOD_DURATION,
+    'episode': xbmcplugin.SORT_METHOD_EPISODE,
+    # 'genre': xbmcplugin.SORT_METHOD_GENRE,
+    # 'label': xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
+    'label': xbmcplugin.SORT_METHOD_LABEL,
+    'title': xbmcplugin.SORT_METHOD_TITLE,
+    # 'none': xbmcplugin.SORT_METHOD_UNSORTED,
     # FIXME: We would like to be able to sort by unprefixed title (ignore date/episode prefix)
-    # title=xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE,
-    unsorted=xbmcplugin.SORT_METHOD_UNSORTED,
-)
+    # 'title': xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE,
+    'unsorted': xbmcplugin.SORT_METHOD_UNSORTED,
+}
 
 WEEKDAY_LONG = {
     '0': xbmc.getLocalizedString(17),
@@ -136,7 +132,7 @@ def addon_path():
 
 def translate_path(path):
     """Converts a Kodi special:// path to the corresponding OS-specific path"""
-    return to_unicode(translatePath(from_unicode(path)))
+    return translatePath(path)
 
 
 def addon_profile():
@@ -156,7 +152,7 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
     from addon import plugin
 
     set_property('container.url', 'plugin://' + addon_id() + plugin.path)
-    xbmcplugin.setPluginFanart(handle=plugin.handle, image=from_unicode(addon_fanart()))
+    xbmcplugin.setPluginFanart(handle=plugin.handle, image=addon_fanart())
 
     usemenucaching = get_setting_bool('usemenucaching', default=True)
     if cache is None:
@@ -172,7 +168,7 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
     category_label = ''
     if category:
         if not content:
-            category_label = 'VRT NU / '
+            category_label = 'VRT MAX / '
         if plugin.path.startswith(('/favorites/', '/resumepoints/')):
             category_label += localize(30428) + ' / '  # My
         if isinstance(category, int):
@@ -180,7 +176,7 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
         else:
             category_label += category
     elif not content:
-        category_label = 'VRT NU'
+        category_label = 'VRT MAX'
     xbmcplugin.setPluginCategory(handle=plugin.handle, category=category_label)
 
     # FIXME: Since there is no way to influence descending order, we force it here
@@ -217,11 +213,11 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
 
         list_item = ListItem(label=title_item.label)
 
-        prop_dict = dict(
-            IsInternetStream='true' if is_playable else 'false',
-            IsPlayable='true' if is_playable else 'false',
-            IsFolder='false' if is_folder else 'true',
-        )
+        prop_dict = {
+            'IsInternetStream': 'true' if is_playable else 'false',
+            'IsPlayable': 'true' if is_playable else 'false',
+            'IsFolder': 'false' if is_folder else 'true',
+        }
         if title_item.prop_dict:
             title_item.prop_dict.update(prop_dict)
         else:
@@ -239,7 +235,7 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
         if showfanart:
             # Add add-on fanart when fanart is missing
             if not title_item.art_dict:
-                title_item.art_dict = dict(fanart=addon_fanart())
+                title_item.art_dict = {'fanart': addon_fanart()}
             elif not title_item.art_dict.get('fanart'):
                 title_item.art_dict.update(fanart=addon_fanart())
             list_item.setArt(title_item.art_dict)
@@ -274,10 +270,7 @@ def show_listing(list_items, category=None, sort='unsorted', ascending=True, con
 
 def play(stream, video=None):
     """Create a virtual directory listing to play its only item"""
-    try:  # Python 3
-        from urllib.parse import unquote
-    except ImportError:  # Python 2
-        from urllib2 import unquote
+    from urllib.parse import unquote
 
     from xbmcgui import ListItem
     from addon import plugin
@@ -290,7 +283,10 @@ def play(stream, video=None):
             type='video',
             infoLabels=video.info_dict
         )
-    play_item.setProperty('inputstream.adaptive.max_bandwidth', str(get_max_bandwidth() * 1000))
+    if kodi_version_major() < 20:
+        play_item.setProperty('inputstream.adaptive.max_bandwidth', str(get_max_bandwidth() * 1000))
+    else:
+        play_item.setProperty('inputstream.adaptive.chooser_bandwidth_max', str(get_max_bandwidth() * 1000))
     play_item.setProperty('network.bandwidth', str(get_max_bandwidth() * 1000))
 
     if stream.stream_url is not None and stream.use_inputstream_adaptive:
@@ -309,12 +305,25 @@ def play(stream, video=None):
             play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
             play_item.setMimeType('application/vnd.apple.mpegurl')
 
-        if stream.license_key is not None:
+        if stream.license_url is not None:
             import inputstreamhelper
             is_helper = inputstreamhelper.Helper('mpd', drm='com.widevine.alpha')
             if is_helper.check_inputstream():
-                play_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
-                play_item.setProperty('inputstream.adaptive.license_key', stream.license_key)
+                if kodi_version_major() > 21:
+                    from json import dumps
+                    drm_cfg = {
+                        'com.widevine.alpha': {
+                            'license': {
+                                'server_url': stream.license_url,
+                                'req_headers': urlencode(stream.license_headers)
+                            }
+                        }
+                    }
+                    play_item.setProperty('inputstream.adaptive.drm', dumps(drm_cfg))
+                else:
+                    play_item.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
+                    license_key = generate_ia_license_key(stream.license_url, license_headers=stream.license_headers)
+                    play_item.setProperty('inputstream.adaptive.license_key', license_key)
 
     subtitles_visible = get_setting_bool('showsubtitles', default=True)
     # Separate subtitle url for hls-streams
@@ -335,8 +344,23 @@ def get_search_string(search_string=None):
     keyboard = xbmc.Keyboard(search_string, localize(30134))
     keyboard.doModal()
     if keyboard.isConfirmed():
-        search_string = to_unicode(keyboard.getText())
+        search_string = keyboard.getText()
     return search_string
+
+
+def generate_ia_license_key(license_url, license_headers='', postdata_type='R', postdata_value='', response_type=''):
+    """Generates an InputStream Adaptive license_key"""
+    if license_headers:
+        license_headers = urlencode(license_headers)
+
+    if postdata_type in ('A', 'R', 'B'):
+        postdata_value = postdata_type + '{SSM}'
+    elif postdata_type == 'D':
+        if 'D{SSM}' not in postdata_value:
+            raise ValueError('Missing D{SSM} placeholder')
+        postdata_value = quote(postdata_value)
+
+    return '{}|{}|{}|{}'.format(license_url, license_headers, postdata_value, response_type)
 
 
 def ok_dialog(heading='', message=''):
@@ -413,6 +437,11 @@ def localize_time(time):
 def localize_date(date, strftime):
     """Return a localized date, even if the system does not support your locale"""
     has_locale = set_locale()
+
+    # Workaround for Kodi xbmc.getRegion('datelong') bug on Android 21 and higher: https://github.com/xbmc/xbmc/issues/25066
+    if xbmc.getCondVisibility('System.Platform.Android') and kodi_version_major() > 20:
+        strftime = strftime.replace('%-d', date.strftime('%d').lstrip('0'))
+
     # When locale is supported, return original format
     if has_locale:
         return date.strftime(strftime)
@@ -425,10 +454,6 @@ def localize_date(date, strftime):
         strftime = strftime.replace('%B', MONTH_LONG[date.strftime('%m')])
     elif '%b' in strftime:
         strftime = strftime.replace('%b', MONTH_SHORT[date.strftime('%m')])
-
-    # %e isn't supported on Python 2.7 on Windows
-    if '%e' in strftime:
-        strftime = strftime.replace('%e', str(int(date.strftime('%d'))))
 
     return date.strftime(strftime)
 
@@ -449,7 +474,7 @@ def localize_from_data(name, data):
 def get_setting(key, default=None):
     """Get an add-on setting as string"""
     try:
-        value = to_unicode(ADDON.getSetting(key))
+        value = ADDON.getSetting(key)
     except RuntimeError:  # Occurs when the add-on is disabled
         return default
     if value == '' and default is not None:
@@ -497,7 +522,7 @@ def get_setting_float(key, default=None):
 
 def set_setting(key, value):
     """Set an add-on setting"""
-    return ADDON.setSetting(key, from_unicode(str(value)))
+    return ADDON.setSetting(key, str(value))
 
 
 def set_setting_bool(key, value):
@@ -535,7 +560,7 @@ def open_settings():
 
 def get_global_setting(key):
     """Get a Kodi setting"""
-    result = jsonrpc(method='Settings.GetSettingValue', params=dict(setting=key))
+    result = jsonrpc(method='Settings.GetSettingValue', params={'setting': key})
     return result.get('result', {}).get('value')
 
 
@@ -570,7 +595,7 @@ def get_advanced_setting_int(key, default=0):
 def get_property(key, default=None, window_id=10000):
     """Get a Window property"""
     from xbmcgui import Window
-    value = to_unicode(Window(window_id).getProperty(key))
+    value = Window(window_id).getProperty(key)
     if value == '' and default is not None:
         return default
     return value
@@ -579,7 +604,7 @@ def get_property(key, default=None, window_id=10000):
 def set_property(key, value, window_id=10000):
     """Set a Window property"""
     from xbmcgui import Window
-    return Window(window_id).setProperty(key, from_unicode(value))
+    return Window(window_id).setProperty(key, value)
 
 
 def clear_property(key, window_id=10000):
@@ -590,11 +615,11 @@ def clear_property(key, window_id=10000):
 
 def notify(sender, message, data):
     """Send a notification to Kodi using JSON RPC"""
-    result = jsonrpc(method='JSONRPC.NotifyAll', params=dict(
-        sender=sender,
-        message=message,
-        data=data,
-    ))
+    result = jsonrpc(method='JSONRPC.NotifyAll', params={
+        'sender': sender,
+        'message': message,
+        'data': data,
+    })
     if result.get('result') != 'OK':
         log_error('Failed to send notification: {error}', error=result.get('error').get('message'))
         return False
@@ -612,12 +637,12 @@ def get_playerid():
 
 def get_max_bandwidth():
     """Get the max bandwidth based on Kodi and add-on settings"""
-    vrtnu_max_bandwidth = int(get_setting('max_bandwidth', default='0'))
+    vrtmax_max_bandwidth = int(get_setting('max_bandwidth', default='0'))
     global_max_bandwidth = int(get_global_setting('network.bandwidth'))
-    if vrtnu_max_bandwidth != 0 and global_max_bandwidth != 0:
-        return min(vrtnu_max_bandwidth, global_max_bandwidth)
-    if vrtnu_max_bandwidth != 0:
-        return vrtnu_max_bandwidth
+    if vrtmax_max_bandwidth != 0 and global_max_bandwidth != 0:
+        return min(vrtmax_max_bandwidth, global_max_bandwidth)
+    if vrtmax_max_bandwidth != 0:
+        return vrtmax_max_bandwidth
     if global_max_bandwidth != 0:
         return global_max_bandwidth
     return 0
@@ -656,13 +681,13 @@ def get_proxies():
 
     proxy_types = ['http', 'socks4', 'socks4a', 'socks5', 'socks5h']
 
-    proxy = dict(
-        scheme=proxy_types[httpproxytype] if 0 <= httpproxytype < 5 else 'http',
-        server=get_global_setting('network.httpproxyserver'),
-        port=get_global_setting('network.httpproxyport'),
-        username=get_global_setting('network.httpproxyusername'),
-        password=get_global_setting('network.httpproxypassword'),
-    )
+    proxy = {
+        'scheme': proxy_types[httpproxytype] if 0 <= httpproxytype < 5 else 'http',
+        'server': get_global_setting('network.httpproxyserver'),
+        'port': get_global_setting('network.httpproxyport'),
+        'username': get_global_setting('network.httpproxyusername'),
+        'password': get_global_setting('network.httpproxypassword'),
+    }
 
     if proxy.get('username') and proxy.get('password') and proxy.get('server') and proxy.get('port'):
         proxy_address = '{scheme}://{username}:{password}@{server}:{port}'.format(**proxy)
@@ -675,7 +700,7 @@ def get_proxies():
     else:
         return None
 
-    return dict(http=proxy_address, https=proxy_address)
+    return {'http': proxy_address, 'https': proxy_address}
 
 
 def get_cond_visibility(condition):
@@ -720,16 +745,26 @@ def supports_drm():
     return kodi_version_major() > 17
 
 
-COLOUR_THEMES = dict(
-    dark=dict(highlighted='yellow', availability='blue', geoblocked='red', greyedout='gray'),
-    light=dict(highlighted='brown', availability='darkblue', geoblocked='darkred', greyedout='darkgray'),
-    custom=dict(
-        highlighted=get_setting('colour_highlighted'),
-        availability=get_setting('colour_availability'),
-        geoblocked=get_setting('colour_geoblocked'),
-        greyedout=get_setting('colour_greyedout')
-    )
-)
+COLOUR_THEMES = {
+    'dark': {
+        'highlighted': 'yellow',
+        'availability': 'blue',
+        'geoblocked': 'red',
+        'greyedout': 'gray',
+    },
+    'light': {
+        'highlighted': 'brown',
+        'availability': 'darkblue',
+        'geoblocked': 'darkred',
+        'greyedout': 'darkgray',
+    },
+    'custom': {
+        'highlighted': get_setting('colour_highlighted'),
+        'availability': get_setting('colour_availability'),
+        'geoblocked': get_setting('colour_geoblocked'),
+        'greyedout': get_setting('colour_greyedout'),
+    }
+}
 
 
 def themecolour(kind):
@@ -742,7 +777,10 @@ def themecolour(kind):
 def colour(text):
     """Convert stub color bbcode into colors from the settings"""
     theme = get_setting('colour_theme', 'dark')
-    text = text.format(**COLOUR_THEMES.get(theme))
+    try:
+        text = text.format(**COLOUR_THEMES.get(theme))
+    except KeyError:
+        log_error('BBCode colouring failed.')
     return text
 
 
@@ -762,7 +800,7 @@ def get_cache_dir(cache_dir=DEFAULT_CACHE_DIR):
 
 def get_addon_info(key):
     """Return addon information"""
-    return to_unicode(ADDON.getAddonInfo(key))
+    return ADDON.getAddonInfo(key)
 
 
 def listdir(path):
@@ -816,13 +854,13 @@ def delete(path):
 def delete_cached_thumbnail(url):
     """Remove a cached thumbnail from Kodi in an attempt to get a realtime live screenshot"""
     # Get texture
-    result = jsonrpc(method='Textures.GetTextures', params=dict(
-        filter=dict(
-            field='url',
-            operator='is',
-            value=url,
-        ),
-    ))
+    result = jsonrpc(method='Textures.GetTextures', params={
+        'filter': {
+            'field': 'url',
+            'operator': 'is',
+            'value': url,
+        },
+    })
     if result.get('result', {}).get('textures') is None:
         log_error('URL {url} not found in texture cache', url=url)
         return False
@@ -834,7 +872,7 @@ def delete_cached_thumbnail(url):
     log(2, 'found texture_id {id} for url {url} in texture cache', id=texture_id, url=url)
 
     # Remove texture
-    result = jsonrpc(method='Textures.RemoveTexture', params=dict(textureid=texture_id))
+    result = jsonrpc(method='Textures.RemoveTexture', params={'textureid': texture_id})
     if result.get('result') != 'OK':
         log_error('failed to remove {url} from texture cache: {error}', url=url, error=result.get('error', {}).get('message'))
         return False
@@ -924,7 +962,7 @@ def log(level=1, message='', **kwargs):
         from string import Formatter
         message = Formatter().vformat(message, (), SafeDict(**kwargs))
     message = '[{addon}] {message}'.format(addon=addon_id(), message=message)
-    xbmc.log(from_unicode(message), level % 3 if debug_logging else 2)
+    xbmc.log(message, level % 3 if debug_logging else 2)
 
 
 def log_access(argv):
@@ -938,7 +976,7 @@ def log_error(message, **kwargs):
         from string import Formatter
         message = Formatter().vformat(message, (), SafeDict(**kwargs))
     message = '[{addon}] {message}'.format(addon=addon_id(), message=message)
-    xbmc.log(from_unicode(message), 4)
+    xbmc.log(message, 4)
 
 
 def jsonrpc(*args, **kwargs):
@@ -1076,12 +1114,9 @@ def ttl(kind='direct'):
 
 def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_redirects=True, raise_errors=None):
     """Return a urllib http response"""
-    try:  # Python 3
-        from urllib.error import HTTPError, URLError
-        from urllib.parse import unquote
-        from urllib.request import build_opener, HTTPCookieProcessor, ProxyHandler, Request
-    except ImportError:  # Python 2
-        from urllib2 import build_opener, HTTPError, HTTPCookieProcessor, ProxyHandler, Request, URLError, unquote
+    from urllib.error import HTTPError, URLError
+    from urllib.parse import unquote
+    from urllib.request import build_opener, HTTPCookieProcessor, ProxyHandler, Request
 
     opener_args = []
     if not follow_redirects:
@@ -1101,7 +1136,7 @@ def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_r
         log(2, 'URL post: {url}', url=unquote(url))
         # Make sure we don't log the password
         debug_data = data
-        if 'password' in to_unicode(debug_data):
+        if 'password' in debug_data.decode('utf-8'):
             debug_data = '**redacted**'
         log(2, 'URL post data: {data}', data=debug_data)
     else:
@@ -1117,10 +1152,7 @@ def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_r
     except HTTPError as exc:
         if isinstance(raise_errors, list) and 401 in raise_errors or raise_errors == 'all':
             raise
-        if hasattr(req, 'selector'):  # Python 3.4+
-            url_length = len(req.selector)
-        else:  # Python 2.7
-            url_length = len(req.get_selector())
+        url_length = len(req.selector)
         if exc.code == 400 and 7600 <= url_length <= 8192:
             ok_dialog(heading='HTTP Error 400', message=localize(30967))
             log_error('HTTP Error 400: Probably exceeded maximum url length: '
@@ -1140,7 +1172,7 @@ def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_r
             ok_dialog(heading='HTTP Error {code}'.format(code=exc.code), message='{}\n{}'.format(url, exc.reason))
             log_error('HTTP Error {code}: {reason}', code=exc.code, reason=exc.reason)
             return None
-        if exc.code in (400, 403) and exc.headers.get('Content-Type') and 'application/json' in exc.headers.get('Content-Type'):
+        if exc.code in (400, 403, 503) and exc.headers.get('Content-Type') and 'application/json' in exc.headers.get('Content-Type'):
             return exc
         ok_dialog(heading='HTTP Error {code}'.format(code=exc.code), message='{}\n{}'.format(url, exc.reason))
         log_error('HTTP Error {code}: {reason}', code=exc.code, reason=exc.reason)
@@ -1161,7 +1193,7 @@ def open_url(url, data=None, headers=None, method=None, cookiejar=None, follow_r
         return None
     except timeout as exc:
         ok_dialog(heading=localize(30968), message=localize(30969))
-        log_error('Timeout: {error}\nurl: {url}', error=exc.reason, url=url)
+        log_error('Timeout: {error}\nurl: {url}', error=exc, url=url)
         return None
 
 
@@ -1170,7 +1202,7 @@ def get_json_data(response, fail=None):
     from json import load, loads
     try:
         if (3, 0, 0) <= version_info < (3, 6, 0):  # the JSON object must be str, not 'bytes'
-            return loads(to_unicode(response.read()))
+            return loads(response.read().decode('utf-8'))
         return load(response)
     except TypeError as exc:  # 'NoneType' object is not callable
         log_error('JSON TypeError: {exc}', exc=exc)

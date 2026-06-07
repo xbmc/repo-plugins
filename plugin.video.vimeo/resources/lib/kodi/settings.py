@@ -6,8 +6,8 @@ class Settings:
         "1080p": "progressive:1080p",
         "720p": "progressive:720p",
         "540p": "progressive:540p",
+        "480p": "progressive:480p",
         "360p": "progressive:360p",
-        "240p": "progressive:240p"
     }
 
     VIDEO_CODEC = {

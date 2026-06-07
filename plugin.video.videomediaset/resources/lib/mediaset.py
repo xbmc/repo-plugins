@@ -140,19 +140,18 @@ class Mediaset(rutils.RUtils):
             "password": password,
             "sessionExpiration": "31536000",
             "targetEnv": "jssdk",
-            "include": "profile,data,emails,subscriptions,preferences,",
+            "include": "profile,data,emails,subscriptions,preferences,id_token,data.fastLoginPIN,data.civico,",
             "includeUserInfo": "true",
             "loginMode": "standard",
             "lang": "it",
-            "APIKey": "3_NhZq9YZgkgeKfN08uFjs3NYGo2Txv4QQTULh0he2w337E-o0DPXzEp4aVnWIR4jg",
+            "APIKey": "3_l-A-KKZVONJdGd272x41mezO6AUV4mUoxOdZCMfccvEXAJa6COVXyT_tUdQI03dh",
             "cid": "mediaset-web-mediaset.it programmi-mediaset Default",
             "source": "showScreenSet",
             "sdk": "js_latest",
             "authMode": "cookie",
-            "pageURL": "https://www.mediasetplay.mediaset.it",
-            "format": "jsonp",
-            "callback": "gigya.callback",
-            "utf8": "&#x2713;"}
+            "pageURL": "https://mediasetinfinity.mediaset.it/",
+            "sdkBuild": 13622,
+            "format": "json"}
         res = self.createRequest(
             "https://login.mediaset.it/accounts.login", post=data)
         s = res.text.strip().replace('gigya.callback(', '', 1)
@@ -167,6 +166,7 @@ class Mediaset(rutils.RUtils):
         self.__UID = jsn['UID']
         self.__UIDSignature = jsn['UIDSignature']
         self.__signatureTimestamp = jsn['signatureTimestamp']
+        self.log('Logged with user {} successfully', 4)
         return self.__getAPIKeys(True)
 
     def anonymousLogin(self):
@@ -185,7 +185,7 @@ class Mediaset(rutils.RUtils):
                     "platform": "pc",
                     "appName": "web/mediasetplay-web/576ea90"}
             url = "https://api-ott-prod-fe.mediaset.net/PROD/play/idm/anonymous/login/v1.0"
-        res = self.SESSION.post(url, json=data, verify=True)
+        res = self.SESSION.post(url, json=data, verify=False)
         jsn = res.json()
         if not jsn['isOk']:
             return False
@@ -219,6 +219,49 @@ class Mediaset(rutils.RUtils):
                     res = data['response']
             elif 'entries' in data:
                 res = data['entries']
+        return res, hasMore
+
+    def __getElsFromUrlV2(self, url):
+        res = None
+        hasMore = False
+        r = self.SESSION.options(url)
+        if not r.ok:
+            return res, hasMore
+        data = self.getJson(url)
+        if data and 'isOk' in data and data['isOk']:
+            if 'response' in data and 'pagination' in data['response']:
+                if 'hasNextPage' in data['response']['pagination']:
+                    hasMore = data['response']['pagination']['hasNextPage']
+                if 'blocks' in data['response']:
+                    res = []
+                    for b in data['response']['blocks']:
+                        if 'items' in b:
+                            res.extend(b['items'])
+                else:
+                    res = None
+        return res, hasMore
+
+    def __getCatsFromUrlV2(self, url, tmpid):
+        res = None
+        hasMore = False
+        r = self.SESSION.options(url)
+        if not r.ok:
+            return res, hasMore
+        data = self.getJson(url)
+        if data and 'isOk' in data and data['isOk']:
+            if 'response' in data and 'pagination' in data['response']:
+                if 'hasNextPage' in data['response']['pagination']:
+                    hasMore = data['response']['pagination']['hasNextPage']
+                if 'blocks' in data['response']:
+                    res = []
+                    for b in data['response']['blocks']:
+                        if 'title' in b:
+                            if '_viewAll' in b:
+                                res.append({'id': b['_viewAll'], 'title': b['title']})
+                            else:
+                                res.append({'code': tmpid, 'title': b['title']})
+                else:
+                    res = None
         return res, hasMore
 
     def __getsectionsFromEntryID(self, eid):
@@ -305,7 +348,38 @@ class Mediaset(rutils.RUtils):
 
     def OttieniGeneriFilm(self):
         self.log('Trying to get the movie sections list', 4)
-        return self.__getsectionsFromEntryID("5acfcbc423eec6000d64a6bb")
+        return self.__getsectionsFromEntryID("60939f971de1c400174817cb")
+
+    def OttieniFilmPerTipo(self, catcode, pageels=24, page=1):
+        self.log('Trying to get the movie list', 4)
+        url = f"https://api-ott-prod-fe.mediaset.net/PROD/play/reco/anonymous/v2.0?uxReference={catcode}&shortId=&query=&params=&contentId=&sid=62b41c3e-e72f-4b49-ac50-499b764b1d01&property=play&tenant=play-prod-v2&userContext=iwiAeyJwbGF0Zm9ybSI6IndlYiJ9Aw%3D%3D&aresContext=&clientId=G00ACCwObNtI1hELC00Y%2F1lLGLO9DiMr61MsOinSApNJaWtOOU0CpThpZXaiw8YYOJa0mtUNXCoONJ7UmP4IHgM%3D&page={page}&hitsPerPage={pageels}"
+        return self.__getElsFromUrlV2(url)
+
+    def OttieniFilmPerId(self, id, pageels=10, page=1):
+        self.log('Trying to get the movie list', 4)
+        eid = quote(id)
+        url = f"https://api-ott-prod-fe.mediaset.net/PROD/play/reco/anonymous/v2.0?uxReference=&shortId={eid}&query=&params=&contentId=&sid=62b41c3e-e72f-4b49-ac50-499b764b1d01&property=play&tenant=play-prod-v2&userContext=iwiAeyJwbGF0Zm9ybSI6IndlYiJ9Aw%3D%3D&aresContext=&clientId=G00ACCwObNtI1hELC00Y%2F1lLGLO9DiMr61MsOinSApNJaWtOOU0CpThpZXaiw8YYOJa0mtUNXCoONJ7UmP4IHgM%3D&page={page}&hitsPerPage={pageels}"
+        return self.__getElsFromUrlV2(url)
+
+    def __OttieniBlocchi(self, catcode, pageels=15, page=1):
+        self.log('Trying to get the movie categories list', 4)
+        url = f"https://api-ott-prod-fe.mediaset.net/PROD/play/reco/anonymous/v2.0?uxReference={catcode}&shortId=&query=&params=&contentId=&sid=62b41c3e-e72f-4b49-ac50-499b764b1d01&property=play&tenant=play-prod-v2&userContext=iwiAeyJwbGF0Zm9ybSI6IndlYiJ9Aw%3D%3D&aresContext=&clientId=G00ACCwObNtI1hELC00Y%2F1lLGLO9DiMr61MsOinSApNJaWtOOU0CpThpZXaiw8YYOJa0mtUNXCoONJ7UmP4IHgM%3D&page={page}&hitsPerPage={pageels}"
+        return self.__getCatsFromUrlV2(url, catcode)
+
+    def OttieniBlocchiFilm(self):
+        catcodes24 = ["filmPiuVisti24H", "filmUltimiArrivi",
+                      "tvodPiuNoleggiati", "chnlsMovieMostRecentParamsChannel"]
+        catcodes15 = ["filmClustering", "multipleBlockFilm"]
+        cats = []
+        for catcode in catcodes24:
+            catl, _ = self.__OttieniBlocchi(catcode, pageels=24)
+            if catl:
+                cats.extend(catl)
+        for catcode in catcodes15:
+            catl, _ = self.__OttieniBlocchi(catcode, pageels=15)
+            if catl:
+                cats.extend(catl)
+        return cats
 
     def OttieniKids(self, inonda=None, pageels=100, page=None):
         self.log('Trying to get the kids list', 4)

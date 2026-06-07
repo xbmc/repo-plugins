@@ -15,17 +15,23 @@ import xml.etree.ElementTree as ET
 #main plugin library
 from resources.lib import json_storage
 from resources.lib import utils as ut
+from resources.lib.art_clean import clean_settings
+
+TOKEN_EXPIRE_DELTA = 2400
 
 class AmpacheConnect(object):
     
     class ConnectionError(Exception):
         pass
-    
+
     def __init__(self):
         self._ampache = xbmcaddon.Addon("plugin.audio.ampache")
         jsStorServer = json_storage.JsonStorage("servers.json")
         serverStorage = jsStorServer.getData()
-        self._connectionData = serverStorage["servers"][serverStorage["current_server"]]
+        try:
+            self._connectionData = serverStorage["servers"][serverStorage["current_server"]]
+        except KeyError:
+            self._connectionData = None
         #self._connectionData = None
         self.filter=None
         self.add=None
@@ -36,32 +42,39 @@ class AmpacheConnect(object):
         self.mode=None
         self.id=None
         self.rating=None
+        #force the latest version on the server
+        self.version="680001"
 
     def getBaseUrl(self):
         return '/server/xml.server.php'
 
     def fillConnectionSettings(self,tree,nTime):
+        clean_settings()
         token = tree.findtext('auth')
         version = tree.findtext('api')
         if not version:
-        #old api
+            #old api
             version = tree.findtext('version')
+        if not version:
+            raise self.ConnectionError
         #setSettings only string or unicode
         self._ampache.setSetting("api-version",version)
         self._ampache.setSetting("artists", tree.findtext("artists"))
         self._ampache.setSetting("albums", tree.findtext("albums"))
         self._ampache.setSetting("songs", tree.findtext("songs"))
-        self._ampache.setSetting("playlists", tree.findtext("playlists"))
-        videos = tree.findtext("videos")
-        if videos:
-            self._ampache.setSetting("videos", videos)
-        podcasts = tree.findtext("podcasts")
-        if podcasts:
-            self._ampache.setSetting("podcasts", podcasts)
+        apiVersion = int(version)
+        if apiVersion < 500001:
+            self._ampache.setSetting("playlists", tree.findtext("playlists"))
+        else:
+            self._ampache.setSetting("playlists", tree.findtext("playlists_searches"))
+        self._ampache.setSetting("videos", tree.findtext("videos") )
+        self._ampache.setSetting("podcasts", tree.findtext("podcasts") )
+        self._ampache.setSetting("live_streams", tree.findtext("live_streams") )
         self._ampache.setSetting("session_expire", tree.findtext("session_expire"))
         self._ampache.setSetting("add", tree.findtext("add"))
         self._ampache.setSetting("token", token)
-        self._ampache.setSetting("token-exp", str(nTime+24000))
+        #not 24000 seconds ( 6 hours ) , but 2400 ( 40 minutes ) expiration time
+        self._ampache.setSetting("token-exp", str(nTime+TOKEN_EXPIRE_DELTA))
 
     def getCodeMessError(self,tree):
         errormess = None
@@ -85,6 +98,8 @@ class AmpacheConnect(object):
         return errormess
 
     def getHashedPassword(self,timeStamp):
+        if self._connectionData is None:
+            raise self.ConnectionError
         enablePass = self._connectionData["enable_password"]
         if enablePass:
             sdf = self._connectionData["password"]
@@ -102,31 +117,46 @@ class AmpacheConnect(object):
         return passwordHash
 
     def get_user_pwd_login_url(self,nTime):
+        if self._connectionData is None:
+            raise self.ConnectionError
         myTimeStamp = str(nTime)
         myPassphrase = self.getHashedPassword(myTimeStamp)
         myURL = self._connectionData["url"] + self.getBaseUrl() + '?action=handshake&auth='
         myURL += myPassphrase + "&timestamp=" + myTimeStamp
-        myURL += '&version=' + self._ampache.getSetting("api-version") + '&user=' + self._connectionData["username"]
+        myURL += '&version=' + self.version + '&user=' + self._connectionData["username"]
         return myURL
 
     def get_auth_key_login_url(self):
+        if self._connectionData is None:
+            raise self.ConnectionError
         myURL = self._connectionData["url"] +  self.getBaseUrl() + '?action=handshake&auth='
         myURL += self._connectionData["api_key"]
-        myURL += '&version=' + self._ampache.getSetting("api-version")
+        myURL += '&version=' + self.version
         return myURL
 
     def handle_request(self,url):
         xbmc.log("AmpachePlugin::handle_request: url " + url, xbmc.LOGDEBUG)
         ssl_certs_str = self._ampache.getSetting("disable_ssl_certs")
+        timeout = self._ampache.getSetting("connection_timeout")
+        timeout = int(timeout)
         try:
             req = urllib.request.Request(url)
             if ut.strBool_to_bool(ssl_certs_str):
-                gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
-                response = urllib.request.urlopen(req, context=gcontext, timeout=400)
-                xbmc.log("AmpachePlugin::handle_request: ssl",xbmc.LOGDEBUG)
+                if PY2:
+                    response = urllib.request.urlopen(req, timeout=timeout)
+                else:
+                    #SSL verification DISABLED is a feature requested by users for local/self-signed certs
+                    gcontext = ssl._create_unverified_context()
+                    response = urllib.request.urlopen(req, context=gcontext, timeout=timeout)
+                xbmc.log("AmpachePlugin::handle_request: SSL verification DISABLED for local/self-signed certs", xbmc.LOGWARNING)
             else:
-                response = urllib.request.urlopen(req, timeout=400)
-                xbmc.log("AmpachePlugin::handle_request: nossl",xbmc.LOGDEBUG)
+                if PY2:
+                    gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+                    response = urllib.request.urlopen(req, context=gcontext, timeout=timeout)
+                else:
+                    gcontext = ssl.create_default_context()
+                    response = urllib.request.urlopen(req, context=gcontext, timeout=timeout)
+                xbmc.log("AmpachePlugin::handle_request: ssl certificates",xbmc.LOGDEBUG)
         except urllib.error.HTTPError as e:
             xbmc.log("AmpachePlugin::handle_request: HTTPError " +\
                     repr(e),xbmc.LOGDEBUG)
@@ -145,7 +175,8 @@ class AmpacheConnect(object):
         return headers,contents
 
     def AMPACHECONNECT(self,showok=False):
-        version = 350001
+        if self._connectionData is None:
+            raise self.ConnectionError
         socket.setdefaulttimeout(3600)
         nTime = int(time.time())
         use_api_key = self._connectionData["use_api_key"]
@@ -189,6 +220,7 @@ class AmpacheConnect(object):
         self.fillConnectionSettings(tree,nTime)
         return
 
+
     #handle request to the xml api that return binary files
     def ampache_binary_request(self,action):
         thisURL = self.build_ampache_url(action)
@@ -220,6 +252,8 @@ class AmpacheConnect(object):
         return tree
     
     def build_ampache_url(self,action):
+        if self._connectionData is None:
+            raise self.ConnectionError
         token = self._ampache.getSetting("token")
         thisURL = self._connectionData["url"] +  self.getBaseUrl() + '?action=' + action
         thisURL += '&auth=' + token

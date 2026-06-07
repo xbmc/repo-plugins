@@ -65,60 +65,51 @@ def list_contents(plugin, item_id, category_url, page, **kwargs):
     resp = urlquick.get(category_url + '?page=%s' % page)
     root = resp.parse()
 
-    for program_datas in root.iterfind(".//div[@class='serie']"):
+    for program_datas in root.iterfind(".//div[@class='card card--media   ']"):
 
-        program_title = program_datas.find(".//a").get('title')
+        program_title = program_datas.find(".//p").text.strip()
         program_image = program_datas.findall(".//img")[1].get('data-src')
         program_url = URL_ROOT_EDUCATION + program_datas.find(".//a").get('href')
 
         item = Listitem()
         item.label = program_title
         item.art['thumb'] = item.art['landscape'] = program_image
-        item.set_callback(list_videos,
-                          item_id=item_id,
-                          next_url=program_url)
+        item.set_callback(get_video_url, item_id=item_id, next_url=program_url)
         item_post_treatment(item)
         yield item
 
-    for program_datas in root.iterfind(".//div[@class='video']"):
+    for program_datas in root.iterfind(".//div[@class='card card--collection   ']"):
 
-        program_title = program_datas.find(".//div[@class='video-txt']/p").text.strip()
+        program_title = program_datas.find(".//p").text.strip()
         program_image = program_datas.find(".//img").get('data-src')
         program_url = URL_ROOT_EDUCATION + program_datas.find(".//a").get('href')
 
         item = Listitem()
         item.label = program_title
         item.art['thumb'] = item.art['landscape'] = program_image
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          next_url=program_url)
+        item.set_callback(list_videos, item_id=item_id, next_url=program_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
-    yield Listitem.next_page(item_id=item_id,
-                             category_url=category_url,
-                             page=str(int(page) + 1))
+    yield Listitem.next_page(item_id=item_id, category_url=category_url, page=str(int(page) + 1))
 
 
 @Route.register
 def list_videos(plugin, item_id, next_url, **kwargs):
 
     resp = urlquick.get(next_url)
-    root = resp.parse("div",
-                      attrs={"class": "contenu-capsule"})
+    root = resp.parse()
 
-    for video_data in root.iterfind(".//a"):
-        video_title = video_data.find(".//div[@class='capsule-text']/p").text.strip()
+    for video_data in root.iterfind(".//div[@class='card card--media   ']"):
+        video_title = video_data.find(".//p").text.strip()
         video_image = video_data.find(".//img").get('data-src')
-        video_url = URL_ROOT_EDUCATION + video_data.get('href')
+        video_url = URL_ROOT_EDUCATION + video_data.find(".//a").get('href')
 
         item = Listitem()
         item.label = video_title
         item.art['thumb'] = item.art['landscape'] = video_image
 
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          next_url=video_url)
+        item.set_callback(get_video_url, item_id=item_id, next_url=video_url)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 

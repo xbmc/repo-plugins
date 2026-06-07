@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<addon id="plugin.audio.radioplayerfrance" name="Radioplayer France" version="1.0.0" provider-name="sy6sy2">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+    <import addon="script.module.requests" version="2.31.0" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Radioplayer France addon</summary>
+    <description lang="en_GB">Listen radio stations of Radioplayer France website</description>
+    <summary lang="fr_FR">Plugin de Radioplayer France</summary>
+    <description lang="fr_FR">Écoutez les radios du site Radioplayer France</description>
+    <language>en fr</language> <!-- language of the content the add-on provides, omit if the add-on does not provide any content -->
+    <platform>all</platform>
+    <license>GPL-2.0-or-later</license>
+    <source>http://github.com/sy6sy2/plugin.audio.radioplayerfrance</source>
+    <news>v1.0.0 (2025-11-16)
+      First release
+    </news>
+    <assets>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

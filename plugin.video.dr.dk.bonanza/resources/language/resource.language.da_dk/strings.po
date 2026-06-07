@@ -32,6 +32,14 @@ msgctxt "#30004"
 msgid "Recently added on Bonanza"
 msgstr "Senest tilføjet på Bonanza"
 
+msgctxt "#30500"
+msgid "General"
+msgstr "Generelt"
+
+msgctxt "#30521"
+msgid "Inputstream type"
+msgstr "Inputstream type"
+
 msgctxt "#30900"
 msgid "There was an error while communicating with Bonanza."
 msgstr "Der er sket en fejl i kommunikationen med Bonanza."

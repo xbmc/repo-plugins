@@ -13,26 +13,26 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#32052"
+msgctxt "#32101"
 msgid "Most recent episode"
 msgstr "aktuelle Sendung"
 
-msgctxt "#32090"
+msgctxt "#32151"
 msgid "Connection Error"
 msgstr "Verbindungsfehler"
 
-msgctxt "#32091"
+msgctxt "#32152"
 msgid "HTTP Method %s not supported"
 msgstr "HTTP Methode %s wird nicht unterstützt"
 
-msgctxt "#32092"
+msgctxt "#32153"
 msgid "Request Exception: Pls. check URL and port. See logs for further details."
 msgstr "Request Fehler: Prüfe URL und Port. Für weitere Details prüfe die Log-Datei."
 
-msgctxt "#32093"
+msgctxt "#32154"
 msgid "Unexpected HTTP Status %i for %s"
 msgstr "Unerwarteter HTTP Status %i für %s"
 
-msgctxt "#32094"
+msgctxt "#32155"
 msgid "Unexpected content for podcast"
 msgstr "Unerwarteter Inhalt für Podcast"

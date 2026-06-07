@@ -61,7 +61,7 @@ def show_category(category_id):
     except:
         raise_notification()
 
-    match = re.findall(r'data-original-src="(.+?)".+?data-share-url=.+?title="(.+?)".+?source data-srcset="(.+?)" srcset', req, re.DOTALL)
+    match = re.findall(r'data-data-extrameta="newspaper-id.+?data-original-src="(.+?)".+?data-share-url=.+?title="(.+?)".+?source data-srcset="(.+?)" srcset', req, re.DOTALL)
     for cover, newspapper, thumb in match:
         if thumb.startswith('//'): thumb = '{}{}'.format('http:', thumb)
         newspapper = cleanup(newspapper)

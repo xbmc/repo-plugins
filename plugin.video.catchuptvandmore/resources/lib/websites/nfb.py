@@ -5,33 +5,35 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
+
 import json
 import re
 
-from codequick import Listitem, Resolver, Route
 import htmlement
 import urlquick
-
-from resources.lib import resolver_proxy
+from codequick import Listitem, Resolver, Route
 from resources.lib.menu_utils import item_post_treatment
 
 # TO DO
 
-URL_ROOT = 'https://www.nfb.ca'
+URL_ROOT = "https://www.nfb.ca"
 
-URL_VIDEOS = URL_ROOT + '/remote/explore-all-films/?language=en&genre=%s&availability=free&sort_order=publication_date&page=%s'
+URL_VIDEOS = (
+    URL_ROOT
+    + "/remote/explore-all-films/?language=en&genre=%s&availability=free&sort_order=publication_date&page=%s"
+)
 # Genre, Page
 
 
 GENRE_VIDEOS = {
-    '61': 'Animation',
-    '63': 'Children\'s film',
-    '30500': 'Documentary',
-    '62': 'Experimental',
-    '60': 'Feature-length fiction',
-    '59': 'Fiction',
-    '89': 'Interactive Materials',
-    '64': 'News Magazine (1940-1965)'
+    "61": "Animation",
+    "63": "Children's film",
+    "30500": "Documentary",
+    "62": "Experimental",
+    "60": "Feature-length fiction",
+    "59": "Fiction",
+    "89": "Interactive Materials",
+    "64": "News Magazine (1940-1965)",
 }
 
 
@@ -41,10 +43,9 @@ def website_root(plugin, item_id, **kwargs):
     for category_id, category_title in list(GENRE_VIDEOS.items()):
         item = Listitem()
         item.label = category_title
-        item.set_callback(list_videos,
-                          item_id=item_id,
-                          category_title=category_title,
-                          page=1)
+        item.set_callback(
+            list_videos, item_id=item_id, category_title=category_title, page=1
+        )
         item_post_treatment(item)
         yield item
 
@@ -63,37 +64,33 @@ def list_videos(plugin, item_id, category_title, page, **kwargs):
         for episode in root.iterfind(".//li"):
             at_least_one = True
             item = Listitem()
-            item.label = episode.find('.//img').get('alt')
-            video_url = URL_ROOT + episode.find('.//a').get('href')
-            item.art['thumb'] = item.art['landscape'] = episode.find('.//img').get('src')
+            item.label = episode.find(".//img").get("alt")
+            video_url = URL_ROOT + episode.find(".//a").get("href")
+            item.art["thumb"] = item.art["landscape"] = episode.find(".//img").get(
+                "src"
+            )
 
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              video_url=video_url)
+            item.set_callback(get_video_url, item_id=item_id, video_url=video_url)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
 
     if at_least_one:
         # More videos...
-        yield Listitem.next_page(item_id=item_id,
-                                 category_title=category_title,
-                                 page=page + 1)
+        yield Listitem.next_page(
+            item_id=item_id, category_title=category_title, page=page + 1
+        )
     else:
-        plugin.notify(plugin.localize(30718), '')
+        plugin.notify(plugin.localize(30718), "")
         yield False
 
 
 @Resolver.register
-def get_video_url(plugin,
-                  item_id,
-                  video_url,
-                  download_mode=False,
-                  **kwargs):
+def get_video_url(plugin, item_id, video_url, download_mode=False, **kwargs):
     """Get video URL and start video player"""
 
     video_html = urlquick.get(video_url).text
-    # Get Kalkura Id Video
-    video_url = re.compile(r'og\:video\:url" content="(.*?)"').findall(
-        video_html)[0]
-
-    return resolver_proxy.get_stream_kaltura(plugin, video_url, download_mode)
+    root = htmlement.fromstring(video_html)
+    iframe_src = URL_ROOT + root.find('.//iframe[@id="player-iframe"]').get("src")
+    player_html = urlquick.get(iframe_src).text
+    video_url = re.search("source: '(.*?)'", player_html).group(1)
+    return video_url

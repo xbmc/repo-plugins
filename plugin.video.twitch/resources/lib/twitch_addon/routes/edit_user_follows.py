@@ -31,16 +31,16 @@ def route(api, channel_id=None, channel_name=None, game_id=None, game_name=None,
         confirmed = kodi.Dialog().yesno(i18n('toggle_follow'), i18n('unfollow_confirm') % display_name)
         if confirmed:
             if not game_id:
-                result = api.unfollow(channel_id)
+                _ = api.unfollow(channel_id)
             else:
-                result = api.unfollow_game(game_id)
+                _ = api.unfollow_game(game_id)
             kodi.notify(msg=i18n('unfollowed') % display_name, sound=False)
     else:
         confirmed = kodi.Dialog().yesno(i18n('toggle_follow'), i18n('follow_confirm') % display_name)
         if confirmed:
             if not game_id:
-                result = api.follow(channel_id)
+                _ = api.follow(channel_id)
             else:
-                result = api.follow_game(game_id)
+                _ = api.follow_game(game_id)
             kodi.notify(msg=i18n('now_following') % display_name, sound=False)
     kodi.execute_builtin('RunScript(%s)' % Scripts.REFRESH)

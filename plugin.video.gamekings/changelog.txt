@@ -1,3 +1,19 @@
+v1.2.23 (2023-03-12)
+- improved constructing video urls
+
+v1.2.22 (2023-02-26)
+- fixed youtube videos
+
+v1.2.21 (2023-02-21)
+- fixed premium videos
+
+v1.2.20 (2023-01-15)
+- fixed some youtube-id's by removing leading/trailing spaces
+- fixed playing of videos using MPEG-DASH (kudo's to peak3d)
+- updated name
+- updated logo
+- less loging
+
 v1.2.19 (2020-11-10)
 - fixed premium videos after a website change
 

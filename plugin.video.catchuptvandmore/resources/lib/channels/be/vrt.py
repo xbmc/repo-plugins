@@ -7,6 +7,8 @@
 from __future__ import unicode_literals
 import json
 import re
+
+import inputstreamhelper
 import requests
 
 from codequick import Listitem, Resolver, Route
@@ -15,7 +17,15 @@ import urlquick
 
 from resources.lib import download
 from resources.lib.menu_utils import item_post_treatment
+from resources.lib.kodi_utils import (get_kodi_version, get_selected_item_art, get_selected_item_label,
+                                      get_selected_item_info, INPUTSTREAM_PROP)
 
+try:  # Python 3
+    from urllib.error import HTTPError
+    from urllib.parse import quote, urlencode
+except ImportError:  # Python 2
+    from urllib import urlencode
+    from urllib2 import quote, HTTPError
 
 # TO DO
 # Find a way to get APIKey ?
@@ -46,6 +56,8 @@ URL_LIVE = URL_API + '/videos/vualto_%s_geo?vrtPlayerToken=%s&client=vrtvideo'
 # ChannelName
 
 ROOT_VRT = {'/vrtnu/a-z/': 'A-Z', '/vrtnu/categorieen/': 'Categorieën'}
+
+VUPLAY_API_URL = 'https://api.vuplay.co.uk'
 
 
 def get_api_key():
@@ -82,7 +94,6 @@ def list_root(plugin, item_id, **kwargs):
 
 @Route.register
 def list_programs(plugin, item_id, root_url, **kwargs):
-
     resp = urlquick.get(root_url)
     root = resp.parse()
 
@@ -102,7 +113,6 @@ def list_programs(plugin, item_id, root_url, **kwargs):
 
 @Route.register
 def list_categories(plugin, item_id, root_url, **kwargs):
-
     resp = urlquick.get(root_url, max_age=-1)
     root = resp.parse()
 
@@ -124,13 +134,11 @@ def list_categories(plugin, item_id, root_url, **kwargs):
 
 @Route.register
 def list_category_programs(plugin, item_id, next_url, **kwargs):
-
     category_id = re.compile('categorieen/(.*?)/').findall(next_url)[0]
     resp = urlquick.get(URL_CATEGORIES_JSON % category_id)
     json_parser = json.loads(resp.text)
 
     for category_program_datas in json_parser:
-
         category_program_title = category_program_datas['title']
         category_program_image = 'https:' + category_program_datas['thumbnail']
         category_program_url = 'https:' + category_program_datas['targetUrl']
@@ -147,7 +155,6 @@ def list_category_programs(plugin, item_id, next_url, **kwargs):
 
 @Route.register
 def list_videos(plugin, item_id, next_url, **kwargs):
-
     resp = urlquick.get(next_url)
     root = resp.parse()
 
@@ -227,10 +234,9 @@ def get_video_url(plugin,
                   video_url,
                   download_mode=False,
                   **kwargs):
-
     session_requests = requests.session()
 
-    if plugin.setting.get_string('vrt.login') == '' or\
+    if plugin.setting.get_string('vrt.login') == '' or \
             plugin.setting.get_string('vrt.password') == '':
         xbmcgui.Dialog().ok(
             'Info',
@@ -258,13 +264,13 @@ def get_video_url(plugin,
         'Referer': URL_ROOT + '/vrtnu/'
     }
     data = '{"uid": "%s", ' \
-        '"uidsig": "%s", ' \
-        '"ts": "%s", ' \
-        '"email": "%s"}' % (
-            json_parser['UID'],
-            json_parser['UIDSignature'],
-            json_parser['signatureTimestamp'],
-            plugin.setting.get_string('vrt.login'))
+           '"uidsig": "%s", ' \
+           '"ts": "%s", ' \
+           '"email": "%s"}' % (
+               json_parser['UID'],
+               json_parser['UIDSignature'],
+               json_parser['signatureTimestamp'],
+               plugin.setting.get_string('vrt.login'))
     session_requests.post(URL_TOKEN, data=data, headers=headers)
 
     resp2 = session_requests.post(URL_TOKEN_LIVE)
@@ -284,9 +290,13 @@ def get_video_url(plugin,
             plugin.notify('ERROR', plugin.localize(30713))
             return False
 
+        stream_url = None
         for stream_datas in json_parser4['targetUrls']:
             if 'hls' in stream_datas['type']:
                 stream_url = stream_datas['url']
+
+        if stream_url is None:
+            return False
 
         if download_mode:
             return download.download_video(stream_url)
@@ -297,19 +307,48 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-
     resp = urlquick.post(URL_TOKEN_LIVE, max_age=-1)
-    json_parser_token = json.loads(resp.text)
+    json_parser_token = resp.json()
     resp2 = urlquick.get(URL_LIVE %
                          (item_id, json_parser_token["vrtPlayerToken"]),
                          max_age=-1)
-    json_parser_stream_datas = json.loads(resp2.text)
-    stream_url = ''
-    if "code" in json_parser_stream_datas:
-        if json_parser_stream_datas["code"] == "INVALID_LOCATION":
+    json_parser_stream_data = resp2.json()
+
+    if "code" in json_parser_stream_data:
+        if json_parser_stream_data["code"] == "INVALID_LOCATION":
             plugin.notify('ERROR', plugin.localize(30713))
         return False
-    for stream_datas in json_parser_stream_datas["targetUrls"]:
-        if stream_datas["type"] == "hls_aes":
-            stream_url = stream_datas["url"]
-    return stream_url
+
+    for target_url in json_parser_stream_data["targetUrls"]:
+        if target_url["type"] == "hls_aes":
+            return target_url["url"]
+        if target_url["type"] == "mpeg_dash" and json_parser_stream_data["drm"]:
+
+            if get_kodi_version() < 18:
+                continue
+
+            is_helper = inputstreamhelper.Helper("mpd", drm='widevine')
+            if not is_helper.check_inputstream():
+                continue
+
+            json_api = urlquick.get(VUPLAY_API_URL).json()
+
+            drm_token = json_parser_stream_data["drm"]
+            headers_licence = {'Content-Type': 'text/plain;charset=UTF-8'}
+            payload_licence = '{{"token":"{0}","drm_info":[D{{SSM}}],"kid":"{{KID}}"}}'.format(drm_token)
+            license_url = json_api.get('drm_providers', {}).get('widevine', {}).get('la_url') + '|%s|%s|'
+            licence_key = license_url % (urlencode(headers_licence), quote(payload_licence))
+
+            item = Listitem()
+            item.path = target_url["url"]
+            item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
+            item.property['inputstream.adaptive.manifest_type'] = 'mpd'
+            item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
+            item.property['inputstream.adaptive.license_key'] = licence_key
+            item.label = get_selected_item_label()
+            item.art.update(get_selected_item_art())
+            item.info.update(get_selected_item_info())
+            return item
+
+    plugin.notify(plugin.localize(30600), plugin.localize(30716))
+    return False

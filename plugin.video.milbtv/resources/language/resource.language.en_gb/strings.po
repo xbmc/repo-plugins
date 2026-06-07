@@ -49,7 +49,7 @@ msgid "Stream Quality"
 msgstr ""
 
 msgctxt "#30170"
-msgid "Hide Scores"
+msgid "Hide Scores & Timeline Spoilers"
 msgstr ""
 
 msgctxt "#30171"
@@ -88,6 +88,14 @@ msgctxt "#30303"
 msgid "24 Hour Clock (ex. 18:00)"
 msgstr ""
 
+msgctxt "#30304"
+msgid "Ask to start from beginning or from inning"
+msgstr ""
+
+msgctxt "#30306"
+msgid "Ask to automatically skip breaks"
+msgstr ""
+
 msgctxt "#30360"
 msgid "Today's Games"
 msgstr ""
@@ -113,7 +121,7 @@ msgid "High-A"
 msgstr ""
 
 msgctxt "#30366"
-msgid "Low-A"
+msgid "Single-A"
 msgstr ""
 
 msgctxt "#30367"
@@ -194,5 +202,61 @@ msgstr ""
 
 msgctxt "#30415"
 msgid "Streams Not Found"
+msgstr ""
+
+msgctxt "#30416"
+msgid "Automatically Skip"
+msgstr ""
+
+msgctxt "#30417"
+msgid "Skip nothing"
+msgstr ""
+
+msgctxt "#30418"
+msgid "Skip breaks"
+msgstr ""
+
+msgctxt "#30419"
+msgid "Skip breaks plus idle time"
+msgstr ""
+
+msgctxt "#30420"
+msgid "Skip breaks, idle time, and non-action pitches"
+msgstr ""
+
+msgctxt "#30421"
+msgid "Inning"
+msgstr ""
+
+msgctxt "#30422"
+msgid "Top"
+msgstr ""
+
+msgctxt "#30423"
+msgid "Bottom"
+msgstr ""
+
+msgctxt "#30424"
+msgid "See Yesterday's Scores at inning"
+msgstr ""
+
+msgctxt "#30425"
+msgid "Select a Start Point"
+msgstr ""
+
+msgctxt "#30426"
+msgid "Beginning"
+msgstr ""
+
+msgctxt "#30427"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30428"
+msgid "Skip adjust in seconds (negative, earlier; positive, later)"
+msgstr ""
+
+msgctxt "#30429"
+msgid "Disable video length padding (in case of proxy conflict)"
 msgstr ""
 

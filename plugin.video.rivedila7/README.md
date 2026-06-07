@@ -1,4 +1,4 @@
-# LA7-LA7d Kodi plugin
+# LA7-LA7Cinema Kodi plugin
 Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News & Weather, Teche LA7-The Protagonists (italian language)
 
 ### Install tips
@@ -7,12 +7,40 @@ Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News & Weat
 "sudo apt install kodi-inputstream-adaptive"
 
 ### Changelog
+7.0.0 (2025-10-23)
+- LA7d channel replaced with the new LA7 Cinema
+- New channel LA7 Eventi
+- Review function of the new LA7 Cinema channel
+- Added Tutti i Film page in the La7 Prime section
+- TG La7d replaced with TG Digital in the News and Weather section
+- Omnibus News replaced with Edicola in the News and Weather section
+- Protagonist section replaced with Personalities section
+
+6.3.0 (2025-05-11)
+- fix Programs title and added Config for manual added programs (thanks @24mu13)
+- patch text not found (thanks @lpuglia)
+
+6.2.1 (2024-05-09)
+- Solved program cataloging (thanks @fabpolli)
+
+6.2.0 (2022-03-5)
+- Solved 4h Live delay problem
+
+6.1.0 (2022-10-29)
+- Improved Regex that repair many Programs view
+- Added "Una giornata particolare" to Programs
+- Filter Omnibus News vs Omnibus
+
+6.0.2 (2022-05-22)
+- Removed html5lib dependence
+- Fix for UnicodeDecodeError (thanks @marcocalm)
+
 6.0.1 (2021-05-15)
 - inputstream.adaptive-2.6.15 adapt
 
 6.0.0 (2021-05-03)
 - Plugin reworked (thanks @CastagnaIT)
-- Temporary fix for Live  parameter suggestedPresentationDelay
+- Temporary fix for Live, parameter suggestedPresentationDelay
 
 5.4.0 (2021-04-17)
 - Temporary fix for decryption on L1 device

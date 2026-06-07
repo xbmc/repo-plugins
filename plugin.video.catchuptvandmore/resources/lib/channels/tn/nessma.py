@@ -11,7 +11,7 @@ import re
 from codequick import Listitem, Resolver, Route
 import urlquick
 
-from resources.lib import resolver_proxy
+from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
 
@@ -26,6 +26,8 @@ URL_LIVE = URL_ROOT + '/ar/live'
 URL_REPLAY = URL_ROOT + '/ar/replays'
 
 URL_VIDEOS = URL_ROOT + '/ar/videos'
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
 
 
 @Route.register
@@ -53,7 +55,7 @@ def list_programs(plugin, item_id, **kwargs):
     - Le JT
     - ...
     """
-    resp = urlquick.get(URL_REPLAY)
+    resp = urlquick.get(URL_REPLAY, headers=GENERIC_HEADERS, max_age=-1)
     root = resp.parse()
 
     for program_datas in root.iterfind(".//div[@class='col-sm-3']"):
@@ -66,10 +68,7 @@ def list_programs(plugin, item_id, **kwargs):
             item.label = program_title
             item.art['thumb'] = item.art['landscape'] = program_image
 
-            item.set_callback(list_videos_replays,
-                              item_id=item_id,
-                              program_url=program_url,
-                              page='1')
+            item.set_callback(list_videos_replays, item_id=item_id, program_url=program_url, page='1')
             item_post_treatment(item)
             yield item
 
@@ -77,7 +76,8 @@ def list_programs(plugin, item_id, **kwargs):
 @Route.register
 def list_videos_replays(plugin, item_id, program_url, page, **kwargs):
 
-    resp = urlquick.get(program_url + '?page=%s' % (page))
+    params = {'page': page}
+    resp = urlquick.get(program_url, params=params, headers=GENERIC_HEADERS, max_age=-1)
     root = resp.parse()
 
     if root.find(".//div[@class='row replaynessma-cats row-eq-height ']") is not None:
@@ -91,9 +91,7 @@ def list_videos_replays(plugin, item_id, program_url, page, **kwargs):
             item.label = video_title
             item.art['thumb'] = item.art['landscape'] = video_image
 
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              video_url=video_url)
+            item.set_callback(get_video_url, item_id=item_id, video_url=video_url)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
     else:
@@ -106,21 +104,18 @@ def list_videos_replays(plugin, item_id, program_url, page, **kwargs):
             item.label = video_title
             item.art['thumb'] = item.art['landscape'] = video_image
 
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              video_url=video_url)
+            item.set_callback(get_video_url, item_id=item_id, video_url=video_url)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
 
-        yield Listitem.next_page(item_id=item_id,
-                                 program_url=program_url,
-                                 page=str(int(page) + 1))
+        yield Listitem.next_page(item_id=item_id, program_url=program_url, page=str(int(page) + 1))
 
 
 @Route.register
 def list_videos(plugin, item_id, page, **kwargs):
 
-    resp = urlquick.get(URL_VIDEOS + '?page=%s' % (page))
+    params = {'page': page}
+    resp = urlquick.get(URL_VIDEOS, params=params, headers=GENERIC_HEADERS, max_age=-1)
     root = resp.parse()
 
     for video_datas in root.iterfind(".//div[@class='col-sm-4']"):
@@ -133,26 +128,18 @@ def list_videos(plugin, item_id, page, **kwargs):
             item.label = video_title
             item.art['thumb'] = item.art['landscape'] = video_image
 
-            item.set_callback(get_video_url,
-                              item_id=item_id,
-                              video_url=video_url)
+            item.set_callback(get_video_url, item_id=item_id, video_url=video_url)
             item_post_treatment(item, is_playable=True, is_downloadable=True)
             yield item
 
-    yield Listitem.next_page(item_id=item_id,
-                             page=str(int(page) + 1))
+    yield Listitem.next_page(item_id=item_id, page=str(int(page) + 1))
 
 
 @Resolver.register
-def get_video_url(plugin,
-                  item_id,
-                  video_url,
-                  download_mode=False,
-                  **kwargs):
+def get_video_url(plugin, item_id, video_url, download_mode=False, **kwargs):
 
-    resp = urlquick.get(video_url)
-    video_id = re.compile(r'youtube\.com\/embed\/(.*.)\?').findall(
-        resp.text)[0]
+    resp = urlquick.get(video_url, headers=GENERIC_HEADERS, max_age=-1)
+    video_id = re.compile(r'youtube\.com\/embed\/(.*.)\?').findall(resp.text)[0]
 
     return resolver_proxy.get_stream_youtube(plugin, video_id, download_mode)
 
@@ -160,7 +147,6 @@ def get_video_url(plugin,
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    resp = urlquick.get(URL_LIVE)
-    live_id = re.compile(r'dailymotion.com/embed/video/(.*?)[\?\"]').findall(
-        resp.text)[0]
+    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
+    live_id = re.compile(r'dailymotion.com/embed/video/(.*?)[\?\"]').findall(resp.text)[0]
     return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)

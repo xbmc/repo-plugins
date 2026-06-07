@@ -1,24 +1,18 @@
 # -*- coding: utf-8 -*-
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-"""This is the actual VRT NU video plugin entry point"""
+"""This is the actual VRT MAX video plugin entry point"""
 
-from __future__ import absolute_import, division, unicode_literals
+from urllib.parse import unquote_plus
+
 from routing import Plugin
-
-try:  # Python 3
-    from urllib.parse import unquote_plus
-except ImportError:  # Python 2
-    from urllib import unquote_plus
-
-from kodiutils import end_of_directory, execute_builtin, get_global_setting, localize, log_access, notification, ok_dialog, refresh_caches
-from utils import from_unicode, to_unicode
+from kodiutils import container_refresh, end_of_directory, execute_builtin, get_global_setting, localize, log_access, notification, ok_dialog, refresh_caches
 
 plugin = Plugin()  # pylint: disable=invalid-name
 
 
 @plugin.route('/')
 def main_menu():
-    """The VRT NU plugin main menu"""
+    """The VRT MAX plugin main menu"""
     from vrtplayer import VRTPlayer
     VRTPlayer().show_main_menu()
 
@@ -43,33 +37,22 @@ def delete_tokens():
     TokenResolver().delete_tokens()
 
 
-@plugin.route('/follow/<program>/<title>')
-def follow(program, title):
+@plugin.route('/follow/<program_id>/<program_title>')
+def follow(program_id, program_title):
     """The API interface to follow a program used by the context menu"""
-    from favorites import Favorites
-    Favorites().follow(program=program, title=to_unicode(unquote_plus(from_unicode(title))))
+    from api import set_favorite
+    set_favorite(program_id=program_id, program_title=unquote_plus(program_title))
+    notification(message=localize(30411, title=unquote_plus(program_title)))
+    container_refresh()
 
 
-@plugin.route('/unfollow/<program>/<title>')
-def unfollow(program, title):
+@plugin.route('/unfollow/<program_id>/<program_title>')
+def unfollow(program_id, program_title):
     """The API interface to unfollow a program used by the context menu"""
-    move_down = bool(plugin.args.get('move_down'))
-    from favorites import Favorites
-    Favorites().unfollow(program=program, title=to_unicode(unquote_plus(from_unicode(title))), move_down=move_down)
-
-
-@plugin.route('/watchlater/<path:url>/<asset_id>/<title>')
-def watchlater(asset_id, title, url):
-    """The API interface to watch an episode used by the context menu"""
-    from resumepoints import ResumePoints
-    ResumePoints().watchlater(asset_id=asset_id, title=to_unicode(unquote_plus(from_unicode(title))), url=url)
-
-
-@plugin.route('/unwatchlater/<path:url>/<asset_id>/<title>')
-def unwatchlater(asset_id, title, url):
-    """The API interface to unwatch an episode used by the context menu"""
-    from resumepoints import ResumePoints
-    ResumePoints().unwatchlater(asset_id=asset_id, title=to_unicode(unquote_plus(from_unicode(title))), url=url)
+    from api import set_favorite
+    set_favorite(program_id=program_id, program_title=unquote_plus(program_title), favorited=False)
+    notification(message=localize(30412, title=unquote_plus(program_title)))
+    container_refresh()
 
 
 @plugin.route('/favorites')
@@ -80,106 +63,79 @@ def favorites_menu():
 
 
 @plugin.route('/favorites/programs')
-def favorites_programs():
+@plugin.route('/favorites/programs/<end_cursor>')
+def favorites_programs(end_cursor=''):
     """The favorites 'My programs' listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_tvshow_menu(use_favorites=True)
-
-
-@plugin.route('/favorites/docu')
-def favorites_docu():
-    """The favorites docu listing"""
-    from vrtplayer import VRTPlayer
-    VRTPlayer().show_favorites_docu_menu()
-
-
-@plugin.route('/favorites/music')
-def favorites_music():
-    """The favorites music listing"""
-    from vrtplayer import VRTPlayer
-    VRTPlayer().show_favorites_music_menu()
+    VRTPlayer().show_favorites_tvshow_menu(end_cursor=end_cursor)
 
 
 @plugin.route('/favorites/recent')
-@plugin.route('/favorites/recent')
-@plugin.route('/favorites/recent/<page>')
-def favorites_recent(page=1):
+@plugin.route('/favorites/recent/<end_cursor>')
+def favorites_recent(end_cursor=''):
     """The favorites recent listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_recent_menu(page=page, use_favorites=True)
+    VRTPlayer().show_recent_menu(end_cursor=end_cursor, use_favorites=True)
 
 
 @plugin.route('/favorites/offline')
-@plugin.route('/favorites/offline/<page>')
-def favorites_offline(page=1):
+@plugin.route('/favorites/offline/<end_cursor>')
+def favorites_offline(end_cursor=''):
     """The favorites offline listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_offline_menu(page=page, use_favorites=True)
-
-
-@plugin.route('/favorites/refresh')
-def favorites_refresh():
-    """The API interface to refresh the favorites cache"""
-    from favorites import Favorites
-    Favorites().refresh(ttl=0)
-    notification(message=localize(30982))
-
-
-@plugin.route('/favorites/manage')
-def favorites_manage():
-    """The API interface to manage your favorites"""
-    from favorites import Favorites
-    Favorites().manage()
+    VRTPlayer().show_offline_menu(end_cursor=end_cursor, use_favorites=True)
 
 
 @plugin.route('/resumepoints/continue')
-def resumepoints_continue():
+@plugin.route('/resumepoints/continue/<end_cursor>')
+def resumepoints_continue(end_cursor=''):
     """The resumepoints continue listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_continue_menu(page=1)
+    VRTPlayer().show_continue_menu(end_cursor=end_cursor)
 
 
-@plugin.route('/resumepoints/refresh')
-def resumepoints_refresh():
-    """The API interface to refresh the resumepoints cache"""
-    from resumepoints import ResumePoints
-    ResumePoints().refresh(ttl=0)
-    notification(message=localize(30983))
+@plugin.route('/resumepoints/continue/delete/<episode_id>')
+def resumepoints_continue_delete(episode_id):
+    """The API interface to delete episodes from continue watching listing"""
+    from api import delete_continue
+    delete_continue(episode_id)
+    container_refresh()
 
 
-@plugin.route('/resumepoints/watchlater')
-def resumepoints_watchlater():
-    """The resumepoints watchlater listing"""
-    from vrtplayer import VRTPlayer
-    VRTPlayer().show_watchlater_menu(page=1)
+@plugin.route('/resumepoints/continue/finish/<episode_id>')
+def resumepoints_continue_finish(episode_id):
+    """The API interface to finish episodes from continue watching listing"""
+    from api import finish_continue
+    finish_continue(episode_id)
+    container_refresh()
 
 
-@plugin.route('/programs')
-@plugin.route('/programs/<program>')
-@plugin.route('/programs/<program>/<season>')
-def programs(program=None, season=None):
+@plugin.route('/programs/<program_name>')
+@plugin.route('/programs/<program_name>/<season_name>')
+@plugin.route('/programs/<program_name>/<season_name>/<end_cursor>')
+def programs(program_name=None, season_name=None, end_cursor=''):
     """The Programs / Seasons / Episodes listing"""
     from vrtplayer import VRTPlayer
-    if program:
-        VRTPlayer().show_episodes_menu(program=program, season=season)
-    else:
-        VRTPlayer().show_tvshow_menu()
+    if program_name:
+        VRTPlayer().show_episodes_menu(program_name=program_name, season_name=season_name, end_cursor=end_cursor)
 
 
 @plugin.route('/categories')
 @plugin.route('/categories/<category>')
-def categories(category=None):
+@plugin.route('/categories/<category>/<end_cursor>')
+def categories(category=None, end_cursor=''):
     """The categories menu and listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_category_menu(category=category)
+    VRTPlayer().show_category_menu(category=category, end_cursor=end_cursor)
 
 
 @plugin.route('/channels')
 @plugin.route('/channels/<channel>')
-def channels(channel=None):
+@plugin.route('/channels/<channel>/<end_cursor>')
+def channels(channel=None, end_cursor=''):
     """The channels menu and listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_channels_menu(channel=channel)
+    VRTPlayer().show_channels_menu(channel=channel, end_cursor=end_cursor)
 
 
 @plugin.route('/livetv')
@@ -190,37 +146,39 @@ def livetv():
 
 
 @plugin.route('/recent')
-@plugin.route('/recent/<page>')
-def recent(page=1):
+@plugin.route('/recent/<end_cursor>')
+def recent(end_cursor=''):
     """The most recent items listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_recent_menu(page=page)
+    VRTPlayer().show_recent_menu(end_cursor=end_cursor)
 
 
 @plugin.route('/offline')
-@plugin.route('/offline/<page>')
-def offline(page=1):
+@plugin.route('/offline/<end_cursor>')
+def offline(end_cursor=''):
     """The soon offline listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_offline_menu(page=page)
+    VRTPlayer().show_offline_menu(end_cursor=end_cursor)
 
 
 @plugin.route('/featured')
 @plugin.route('/featured/<feature>')
-def featured(feature=None):
+@plugin.route('/featured/<feature>/<end_cursor>')
+def featured(feature=None, end_cursor=''):
     """The featured menu and listing"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().show_featured_menu(feature=feature)
+    VRTPlayer().show_featured_menu(feature=feature, end_cursor=end_cursor)
 
 
 @plugin.route('/tvguide')
 @plugin.route('/tvguide/date')
 @plugin.route('/tvguide/date/<date>')
 @plugin.route('/tvguide/date/<date>/<channel>')
-def tvguide(date=None, channel=None):
+@plugin.route('/tvguide/date/<date>/<channel>/<end_cursor>')
+def tvguide(date=None, channel=None, end_cursor=None):
     """The TV guide menu and listings by date"""
     from tvguide import TVGuide
-    TVGuide().show_tvguide(date=date, channel=channel)
+    TVGuide().show_tvguide(date=date, channel=channel, end_cursor=end_cursor)
 
 
 @plugin.route('/tvguide/channel')
@@ -263,11 +221,11 @@ def edit_search(keywords=None):
 
 @plugin.route('/search/query')
 @plugin.route('/search/query/<keywords>')
-@plugin.route('/search/query/<keywords>/<page>')
-def search_query(keywords=None, page=1):
+@plugin.route('/search/query/<keywords>/<end_cursor>')
+def search_query(keywords=None, end_cursor=''):
     """The Search interface and query listing"""
     from search import Search
-    Search().search(keywords=keywords, page=page)
+    Search().search(keywords=keywords, end_cursor=end_cursor)
 
 
 @plugin.route('/search/remove/<keywords>')
@@ -279,31 +237,32 @@ def remove_search(keywords):
 
 @plugin.route('/play/id/<video_id>')
 @plugin.route('/play/id/<video_id>/<publication_id>')
-def play_id(video_id, publication_id=None):
+@plugin.route('/play/id/<video_id>/<publication_id>/<episode_id>')
+def play_id(video_id, publication_id=None, episode_id=None):  # pylint: disable=unused-argument
     """The API interface to play a video by video_id and/or publication_id"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().play(dict(video_id=video_id, publication_id=publication_id))
+    VRTPlayer().play({'video_id': video_id, 'publication_id': publication_id})
 
 
 @plugin.route('/play/url/<path:video_url>')
 def play_url(video_url):
-    """The API interface to play a video by using a URL"""
+    """The API interface to play a video by using a VRT MAX URL"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().play(dict(video_url=video_url))
+    VRTPlayer().play({'video_url': video_url})
 
 
-@plugin.route('/play/latest/<program>')
-def play_latest(program):
+@plugin.route('/play/latest/<program_name>')
+def play_latest(program_name):
     """The API interface to play the latest episode of a program"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().play_latest_episode(program=program)
+    VRTPlayer().play_latest_episode(program_name=program_name)
 
 
-@plugin.route('/play/upnext/<video_id>')
-def play_upnext(video_id):
+@plugin.route('/play/upnext/<episode_id>')
+def play_upnext(episode_id):
     """The API interface to play the next episode of a program"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().play_upnext(video_id=video_id)
+    VRTPlayer().play_upnext(episode_id=episode_id)
 
 
 @plugin.route('/play/airdate/<channel>/<start_date>')
@@ -314,11 +273,11 @@ def play_air_date(channel, start_date, end_date=None):
     VRTPlayer().play_episode_by_air_date(channel, start_date, end_date)
 
 
-@plugin.route('/play/whatson/<whatson_id>')
-def play_whatson_id(whatson_id):
-    """The API interface to play a video by using a whatson_id"""
+@plugin.route('/play/episode/<episode_id>')
+def play_episode_id(episode_id):
+    """The API interface to play a video by using a episodeId"""
     from vrtplayer import VRTPlayer
-    VRTPlayer().play_episode_by_whatson_id(whatson_id=whatson_id)
+    VRTPlayer().play_episode_by_episode_id(episode_id=episode_id)
 
 
 @plugin.route('/iptv/channels')

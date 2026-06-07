@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
     IMDB Trailers Kodi Addon
     Copyright (C) 2018 gujal

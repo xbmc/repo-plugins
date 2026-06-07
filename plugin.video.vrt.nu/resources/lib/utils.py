@@ -2,17 +2,10 @@
 # GNU General Public License v3.0 (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """Implements static functions used elsewhere in the add-on"""
 
-from __future__ import absolute_import, division, unicode_literals
 import re
 
-try:  # Python 3
-    from html import unescape
-except ImportError:  # Python 2
-    from HTMLParser import HTMLParser
-
-    def unescape(string):
-        """Expose HTMLParser's unescape"""
-        return HTMLParser().unescape(string)
+from html import unescape
+from datetime import timedelta
 
 HTML_MAPPING = [
     (re.compile(r'<(/?)i(|\s[^>]+)>', re.I), '[\\1I]'),
@@ -24,24 +17,35 @@ HTML_MAPPING = [
     (re.compile(r'<li>', re.I), '- '),
     (re.compile(r'</?(li|ul|ol)(|\s[^>]+)>', re.I), '\n'),
     (re.compile(r'</?(code|div|p|pre|span)(|\s[^>]+)>', re.I), ''),
-    (re.compile('<br>\n{0,1}', re.I), ' '),  # This appears to be specific formatting for VRT NU, but unwanted by us
+    (re.compile('<br>\n{0,1}', re.I), ' '),  # This appears to be specific formatting for VRT MAX, but unwanted by us
     (re.compile('(&nbsp;\n){2,}', re.I), '\n'),  # Remove repeating non-blocking spaced newlines
 ]
 
+ISO_DURATION = re.compile(
+    r'^P'                                     # starts with P
+    r'(?:(?P<days>\d+(?:\.\d+)?)D)?'          # days (with optional decimals)
+    r'(?:T'                                   # time part
+    r'(?:(?P<hours>\d+(?:\.\d+)?)H)?'         # hours
+    r'(?:(?P<minutes>\d+(?:\.\d+)?)M)?'       # minutes
+    r'(?:(?P<seconds>\d+(?:\.\d+)?)S)?'       # seconds
+    r')?$'
+)
 
-def to_unicode(text, encoding='utf-8', errors='strict'):
-    """Force text to unicode"""
-    if isinstance(text, bytes):
-        return text.decode(encoding, errors=errors)
-    return text
 
-
-def from_unicode(text, encoding='utf-8', errors='strict'):
-    """Force unicode to text"""
-    import sys
-    if sys.version_info.major == 2 and isinstance(text, unicode):  # noqa: F821; pylint: disable=undefined-variable
-        return text.encode(encoding, errors)
-    return text
+def parse_duration(s: str) -> timedelta:
+    """
+    Parse an ISO 8601 duration string (days, hours, minutes, seconds)
+    into a datetime.timedelta. Supports fractional values.
+    Does not support months or years.
+    """
+    match = ISO_DURATION.match(s)
+    if not match:
+        raise ValueError(f"Invalid ISO 8601 duration: {s}")
+    parts = {k: float(v) if v else 0.0 for k, v in match.groupdict().items()}
+    return timedelta(days=parts['days'],
+                     hours=parts['hours'],
+                     minutes=parts['minutes'],
+                     seconds=parts['seconds'])
 
 
 def capitalize(string):
@@ -57,6 +61,8 @@ def strip_newlines(text):
 
 def html_to_kodi(text):
     """Convert VRT HTML content into Kodi formatted text"""
+    if text is None:
+        return ''
     for key, val in HTML_MAPPING:
         text = key.sub(val, text)
     return unescape(text).strip()
@@ -70,7 +76,7 @@ def reformat_url(url, url_type, domain='www.vrt.be'):
         url = url[:pos]
     # long url
     if url_type == 'long':
-        if url.startswith('/vrtnu/a-z'):
+        if url.startswith('/vrtmax/a-z'):
             return 'https://' + domain + url
         if url.startswith('//'):  # This could be //www.vrt.be, or //images.vrt.be
             return 'https:' + url
@@ -79,7 +85,7 @@ def reformat_url(url, url_type, domain='www.vrt.be'):
     if url_type == 'medium':
         if url.startswith('https:'):
             return url.replace('https:', '')
-        if url.startswith('/vrtnu/a-z'):
+        if url.startswith('/vrtmax/a-z'):
             return '//' + domain + url
         return url
     # short url
@@ -93,27 +99,9 @@ def reformat_url(url, url_type, domain='www.vrt.be'):
 
 def reformat_image_url(url):
     """Reformat images.vrt.be urls"""
-    return add_https_proto(url.replace('images.vrt.be/orig', 'images.vrt.be/w1920hx'))
-
-
-def program_to_url(program, url_type):
-    """Convert a program url component (e.g. de-campus-cup) to:
-        - a short programUrl (e.g. /vrtnu/a-z/de-campus-cup/)
-        - a medium programUrl (e.g. //www.vrt.be/vrtnu/a-z/de-campus-cup/)
-        - a long programUrl (e.g. https://www.vrt.be/vrtnu/a-z/de-campus-cup/)
-   """
-    url = None
-    if program:
-        # short programUrl
-        if url_type == 'short':
-            url = '/vrtnu/a-z/' + program + '/'
-        # medium programUrl
-        elif url_type == 'medium':
-            url = '//www.vrt.be/vrtnu/a-z/' + program + '/'
-        # long programUrl
-        elif url_type == 'long':
-            url = 'https://www.vrt.be/vrtnu/a-z/' + program + '/'
-    return url
+    if url:
+        return add_https_proto(url.replace('images.vrt.be/orig', 'images.vrt.be/w1920hx'))
+    return ''
 
 
 def url_to_program(url):
@@ -132,10 +120,10 @@ def url_to_program(url):
     elif url.startswith('//www.vrt.be/vrtnu/a-z/'):
         # medium programUrl or targetUrl
         program = url.split('/')[5]
-    elif url.startswith('/vrtnu/a-z/'):
+    elif url.startswith('/vrtnu/a-z/') or url.startswith('/vrtmax/a-z/'):
         # short programUrl
         program = url.split('/')[3]
-        # Workaround: when adding a favourite on https://www.vrt.be/vrtnu/ sometimes '.html' is wrongly added to the short program Url
+        # Workaround: when adding a favourite on https://www.vrt.be/vrtmax/ sometimes '.html' is wrongly added to the short program Url
         if program.endswith('.html'):
             program = program.replace('.html', '')
     if program.endswith('.relevant'):
@@ -154,27 +142,27 @@ def url_to_episode(url):
     if url.startswith('//www.vrt.be/vrtnu/a-z/'):
         # medium episode url
         return url.replace('//www.vrt.be/vrtnu/a-z/', '/vrtnu/a-z/')
-    if url.startswith('/vrtnu/a-z/'):
+    if url.startswith('/vrtnu/a-z/') or url.startswith('/vrtmax/a-z/'):
         # short episode url
         return url
     return None
 
 
 def video_to_api_url(url):
-    """Convert a full VRT NU url (e.g. https://www.vrt.be/vrtnu/a-z/de-ideale-wereld/2019-nj/de-ideale-wereld-d20191010/)
+    """Convert a full VRT MAX url (e.g. https://www.vrt.be/vrtnu/a-z/de-ideale-wereld/2019-nj/de-ideale-wereld-d20191010/)
         to a VRT Search API url (e.g. //www.vrt.be/vrtnu/a-z/de-ideale-wereld/2019-nj/de-ideale-wereld-d20191010/)
    """
     if url.startswith('https:'):
         url = url.replace('https:', '')
-        # NOTE: add a trailing slash again because routing plugin removes it and VRT NU Search API needs it
+        # NOTE: add a trailing slash again because routing plugin removes it and VRT MAX Search API needs it
         if not url.endswith('/'):
             url += '/'
     return url
 
 
-def program_to_id(program):
+def program_to_str(program):
     """Convert a program url component (e.g. de-campus-cup)
-        to a favorite program_id (e.g. vrtnuazdecampuscup), used for lookups in favorites dict"""
+        to a favorite program_str (e.g. vrtnuazdecampuscup), used for lookups in favorites dict"""
     return 'vrtnuaz' + program.replace('-', '')
 
 
@@ -200,6 +188,10 @@ def play_url_to_id(url):
         play_id['video_url'] = video_to_api_url(url.split('play/url/')[1])
     elif 'play/whatson/' in url:
         play_id['whatson_id'] = url.split('play/whatson/')[1]
+    elif 'play/episode/' in url:
+        play_id['episode_id'] = url.split('play/episode/')[1]
+    elif 'play/airdate/' in url:
+        play_id['video_id'] = url.split('play/airdate/')[1].split('/')[0]
     return play_id
 
 
@@ -207,12 +199,12 @@ def shorten_link(url):
     """Create a link that is as short as possible"""
     if url is None:
         return None
-    if url.startswith('https://www.vrt.be/vrtnu/'):
+    if url.startswith('https://www.vrt.be/vrtmax/'):
         # As used in episode search result 'permalink'
-        return url.replace('https://www.vrt.be/vrtnu/', 'vrtnu.be/')
-    if url.startswith('//www.vrt.be/vrtnu/'):
+        return url.replace('https://www.vrt.be/vrtmax/', 'vrtmax.be/')
+    if url.startswith('//www.vrt.be/vrtmax/'):
         # As used in program a-z listing 'targetUrl'
-        return url.replace('//www.vrt.be/vrtnu/', 'vrtnu.be/')
+        return url.replace('//www.vrt.be/vrtmax/', 'vrtmax.be/')
     return url
 
 

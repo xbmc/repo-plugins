@@ -3,13 +3,9 @@
 import os
 import time
 
-from resources.lib.backtothefuture import PY2
-if PY2:
-    # noinspection PyCompatibility,PyUnresolvedReferences
-    from cookielib import Cookie, CookieJar, MozillaCookieJar
-else:
-    # noinspection PyCompatibility
-    from http.cookiejar import Cookie, CookieJar, MozillaCookieJar
+from http.cookiejar import Cookie, CookieJar, MozillaCookieJar
+import http.client
+http.client._MAXHEADERS = 200
 from collections import namedtuple
 
 import requests
@@ -28,6 +24,8 @@ UriStatus = namedtuple('UriStatus', [
     'url',
     'error'
 ])
+
+URI_STATUS_NETWORK_ERROR = -1
 
 
 class UriHandler(object):
@@ -104,27 +102,31 @@ class UriHandler(object):
 
     @staticmethod
     def open(uri, proxy=None, params=None, data=None, json=None,
-             referer=None, additional_headers=None, no_cache=False, force_text=False):
+             referer=None, additional_headers=None, no_cache=False,
+             force_text=False, force_cache_duration=None, method=""):
         """ Open an URL Async using a thread
 
-        :param str uri:                   The URI to download.
-        :param str params|bytes:          Data to send with the request (open(uri, params)).
-        :param dict[str, any]|str data:   Data to send with the request (open(uri, data)).
-        :param dict[str, any] json:       Json to send with the request (open(uri, params)).
-        :param ProxyInfo proxy:           The address and port (proxy.address.ext:port) of a
-                                          proxy server that should be used.
-        :param str referer:               The http referer to use.
-        :param dict additional_headers:   The optional headers.
-        :param bool no_cache:             Should cache be disabled.
-        :param bool force_text:           In case no content type is specified, force text.
+        :param str uri:                         The URI to download.
+        :param str params|bytes:                Data to send with the request (open(uri, params)).
+        :param dict[str, any]|str data:         Data to send with the request (open(uri, data)).
+        :param dict[str, any] json:             Json to send with the request (open(uri, params)).
+        :param ProxyInfo proxy:                 The address and port (proxy.address.ext:port) of a
+                                                proxy server that should be used.
+        :param str referer:                     The http referer to use.
+        :param dict additional_headers:         The optional headers.
+        :param bool no_cache:                   Should cache be disabled.
+        :param bool force_text:                 In case no content type is specified, force text.
+        :param int|None force_cache_duration:   Should a forced cache duration be used?
+        :param str|None method:                 Override for the method to use.
 
         :return: The data that was retrieved from the URI.
         :rtype: str|unicode
 
         """
 
-        return UriHandler.instance().open(uri, proxy, params, data, json,
-                                          referer, additional_headers, no_cache, force_text)
+        return UriHandler.instance().open(
+            uri, proxy, params, data, json, referer,
+            additional_headers, no_cache, force_text, force_cache_duration, method=method)
 
     @staticmethod
     def header(uri, proxy=None, referer=None, additional_headers=None):
@@ -313,7 +315,16 @@ class _RequestsHandler(object):
             self.cookieJar = MozillaCookieJar(cookie_jar)
             if not os.path.isfile(cookie_jar):
                 self.cookieJar.save()
-            self.cookieJar.load()
+
+            # Load the content, or reset in case of #1666
+            try:
+                self.cookieJar.load()
+            except:  # NOSONAR
+                Logger.error(
+                    "Error loading cookiejar (It got corrupted). "
+                    "Saving those cookies that are left.", exc_info=True)
+                self.cookieJar.save()
+
             self.cookieJarFile = True
         else:
             self.cookieJar = CookieJar()
@@ -376,17 +387,14 @@ class _RequestsHandler(object):
         Logger.info("Creating Downloader for url '%s' to filename '%s'", uri, download_path)
         r = self.__requests(uri, proxy=proxy, params=params, data=data, json=json,
                             referer=referer, additional_headers=additional_headers,
-                            no_cache=True, stream=True)
+                            no_cache=True, stream=True, force_cache_duration=None, method="")
         if r is None:
             return ""
 
         retrieved_bytes = 0
         total_size = int(r.headers.get('Content-Length', '0').strip())
-        # There is an issue with the way Requests checks for input and it does not like the newInt.
-        if PY2:
-            chunk_size = 10 * 1024
-        else:
-            chunk_size = 1024 if total_size == 0 else total_size // 100
+        # There is an issue with the way Requests checks for input: It does not like the newInt.
+        chunk_size = 1024 if total_size == 0 else total_size // 100
         cancel = False
         with open(download_path, 'wb') as fd:
             for chunk in r.iter_content(chunk_size=chunk_size):
@@ -410,7 +418,8 @@ class _RequestsHandler(object):
         return download_path
 
     def open(self, uri, proxy=None, params=None, data=None, json=None,
-             referer=None, additional_headers=None, no_cache=False, force_text=False):
+             referer=None, additional_headers=None, no_cache=False,
+             force_text=False, force_cache_duration=None, method=""):
         """ Open an URL Async using a thread
 
         :param str uri:                         The URI to download.
@@ -422,15 +431,24 @@ class _RequestsHandler(object):
         :param str referer:                     The http referer to use.
         :param dict|None additional_headers:    The optional headers.
         :param bool no_cache:                   Should cache be disabled.
-        :param bool force_text:                 In case no content type is specified, force text.
+        :param bool|None force_text:            In case no content type is specified, force text.
+        :param int|None force_cache_duration:   Should a forced cache duration be used?
+        :param str|None method:                 Override for the method to use.
 
         :return: The data that was retrieved from the URI.
         :rtype: str|unicode
 
+        Specifying `no_cache` completely disables the cache component and does not attach a
+        `CachHttpAdapter` to the session. Setting the `cache_duration` to 0, does make use of such
+        a `CachHttpAdapter`, but forces a cache duration of 0 seconds. This will make all the
+        caches invalid and force the requets with an 'etag' to revalidate.
+
         """
         r = self.__requests(uri, proxy=proxy, params=params, data=data, json=json,
                             referer=referer, additional_headers=additional_headers,
-                            no_cache=no_cache, stream=False)
+                            no_cache=no_cache, stream=False,
+                            force_cache_duration=force_cache_duration,
+                            method=method)
         if r is None:
             return ""
 
@@ -498,41 +516,66 @@ class _RequestsHandler(object):
 
     # noinspection PyUnusedLocal
     def __requests(self, uri, proxy, params, data, json, referer,
-                   additional_headers, no_cache, stream):
+                   additional_headers, no_cache, stream, force_cache_duration, method):
 
         with requests.session() as s:
             s.cookies = self.cookieJar
             s.verify = not self.ignoreSslErrors
             if self.cacheStore and not no_cache:
                 Logger.trace("Adding the %s to the request", self.cacheStore)
-                s.mount("https://", CacheHTTPAdapter(self.cacheStore))
-                s.mount("http://", CacheHTTPAdapter(self.cacheStore))
+                s.mount("https://", CacheHTTPAdapter(self.cacheStore, force_cache_duration))
+                s.mount("http://", CacheHTTPAdapter(self.cacheStore, force_cache_duration))
 
             proxies = self.__get_proxies(proxy, uri)
 
             headers = self.__get_headers(referer, additional_headers)
 
-            if params is not None:
-                # Old UriHandler behaviour. Set form header to keep compatible
-                if "content-type" not in headers:
-                    headers["content-type"] = "application/x-www-form-urlencoded"
+            r = None
 
-                Logger.info("Performing a POST with '%s' for %s", headers["content-type"], uri)
-                r = s.post(uri, data=params, proxies=proxies, headers=headers,
-                           stream=stream, timeout=self.webTimeOut)
-            elif data is not None:
-                # Normal Requests compatible data object
-                Logger.info("Performing a POST with '%s' for %s", headers.get("content-type", "<No Content-Type>"), uri)
-                r = s.post(uri, data=data, proxies=proxies, headers=headers,
-                           stream=stream, timeout=self.webTimeOut)
-            elif json is not None:
-                Logger.info("Performing a json POST with '%s' for %s", headers.get("content-type", "<No Content-Type>"), uri)
-                r = s.post(uri, json=json, proxies=proxies, headers=headers,
-                           stream=stream, timeout=self.webTimeOut)
-            else:
-                Logger.info("Performing a GET for %s", uri)
-                r = s.get(uri, proxies=proxies, headers=headers,
-                          stream=stream, timeout=self.webTimeOut)
+            http_method = method.upper() if method else ""
+            if not http_method:
+                has_body = params is not None or data is not None or json is not None
+                # Promote to POST when body arguments are present
+                http_method = "POST" if has_body else "GET"
+
+            try:
+                if http_method == "GET":
+                    Logger.info("Performing a GET for %s", uri)
+                    r = s.get(uri, proxies=proxies, headers=headers,
+                              stream=stream, timeout=self.webTimeOut)
+
+                elif http_method == "POST":
+                    body_data, body_json = data, json
+                    if params is not None:
+                        # Old UriHandler behavior. Set form header to keep compatible
+                        if "content-type" not in headers:
+                            headers["content-type"] = "application/x-www-form-urlencoded"
+                        body_data, body_json = params, None
+                    Logger.info("Performing a POST with '%s' for %s",
+                                headers.get("content-type", "<No Content-Type>"), uri)
+                    r = s.post(uri, data=body_data, json=body_json,
+                               proxies=proxies, headers=headers,
+                               stream=stream, timeout=self.webTimeOut)
+
+                elif http_method == "PATCH":
+                    Logger.info("Performing a PATCH with '%s' for %s",
+                                headers.get("content-type", "<No Content-Type>"), uri)
+                    r = s.patch(uri, data=data, json=json, proxies=proxies,
+                                headers=headers, stream=stream,
+                                timeout=self.webTimeOut)
+
+                elif http_method == "DELETE":
+                    Logger.info("Performing a DELETE for %s", uri)
+                    r = s.delete(uri, proxies=proxies, headers=headers,
+                                 stream=stream, timeout=self.webTimeOut)
+
+                else:
+                    raise ValueError("Unsupported HTTP Method %s" % http_method)
+
+            except OSError as e:
+                Logger.error("Network error for %s", uri, exc_info=True)
+                self.status = UriStatus(code=URI_STATUS_NETWORK_ERROR, url=uri, error=True, reason=str(e))
+                return None
 
             if r.ok:
                 Logger.info("%s resulted in '%s %s' (%s) for %s",

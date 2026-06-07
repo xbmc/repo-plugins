@@ -1,0 +1,90 @@
+# Playon Browser Media Center language file
+# Addon Name: Playon Browser
+# Addon id: plugin.video.playonbrowser
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.playonbrowser Addons\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-10-24 10:40+0000\n"
+"Last-Translator: Dmitry Petrov <dimakrm361@gmail.com>\n"
+"Language-Team: Russian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-playonbrowser/ru_ru/>\n"
+"Language: ru_ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.8\n"
+
+msgctxt "Addon Summary"
+msgid "Browse PlayOn from Kodi."
+msgstr "Просматривайте PlayOn из Kodi."
+
+msgctxt "Addon Description"
+msgid "PlayOn is a streaming media brand and software suite that enables users to view and record videos from numerous online content providers."
+msgstr "PlayOn - это бренд потокового мультимедиа и программный пакет, который позволяет пользователям просматривать и записывать видео от многочисленных поставщиков онлайн контента."
+
+msgctxt "Addon Disclaimer"
+msgid "Requires Playon Server Software"
+msgstr "Требуется серверное ПО Playon"
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr "Включить отладку [Запись ошибок]"
+
+msgctxt "#30001"
+msgid "Navigate to m.playon.tv in a browser to get the resolved IP."
+msgstr "Перейдите на сайт m.playon.tv в браузере, чтобы получить IP-адрес."
+
+msgctxt "#30002"
+msgid "Playon IP:Port"
+msgstr "Playon IP-адрес:порт"
+
+msgctxt "#30003"
+msgid "Preferred Playback Method"
+msgstr "Метод воспроизведения"
+
+msgctxt "#30004"
+msgid "UPNP Server"
+msgstr "UPNP сервер"
+
+msgctxt "#30005"
+msgid ""
+msgstr "  "
+
+msgctxt "#30010"
+msgid "Something went wrong, Try again..."
+msgstr "Что-то пошло не так. Повторите попытку..."
+
+msgctxt "#30011"
+msgid "Connect to PlayOn: %s"
+msgstr "Подключение к PlayOn: %s"
+
+msgctxt "#30012"
+msgid "Please Check Playon Server and IP:Port settings."
+msgstr "Пожалуйста проверьте настройки сервера Playon и IP-адрес:порт."
+
+msgctxt "#30013"
+msgid "Found Playon UPNP Server"
+msgstr "Найден UPNP сервер Playon"
+
+msgctxt "#30014"
+msgid "Navigate to UPNP, locate Playon Server"
+msgstr "Перейдите к UPNP, найдите Playon Server"
+
+msgctxt "#30015"
+msgid "Kodi UPNP Enabled"
+msgstr "Включён Kodi UPNP"
+
+msgctxt "#30016"
+msgid "Enter Search Term"
+msgstr "Введите поисковый запрос"
+
+msgctxt "#30017"
+msgid "Add to PlayLater"
+msgstr "Добавить в PlayLater"
+
+msgctxt "#30018"
+msgid "General"
+msgstr "Общие"

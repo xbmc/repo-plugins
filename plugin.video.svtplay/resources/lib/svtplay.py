@@ -1,10 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
-import os
 import re
-import sys
 
-import xbmc  # pylint: disable=import-error
 import xbmcaddon  # pylint: disable=import-error
 import xbmcgui  # pylint: disable=import-error
 import xbmcplugin  # pylint: disable=import-error
@@ -32,7 +29,6 @@ class SvtPlay:
     # List modes
     MODE_LIVE_PROGRAMS = "live"
     MODE_LATEST = "latest"
-    MODE_LATEST_NEWS = 'news'
     MODE_POPULAR = "popular"
     MODE_LAST_CHANCE = "last_chance"
     MODE_CHANNELS = "kanaler"
@@ -56,9 +52,6 @@ class SvtPlay:
         xbmcplugin.addSortMethod(plugin_handle, xbmcplugin.SORT_METHOD_UNSORTED)
         xbmcplugin.addSortMethod(plugin_handle, xbmcplugin.SORT_METHOD_LABEL)
         xbmcplugin.addSortMethod(plugin_handle, xbmcplugin.SORT_METHOD_DATEADDED)
-        self.default_fanart = os.path.join(
-            xbmc.translatePath(self.addon.getAddonInfo("path") + "/resources/images/"),
-            "background.png")
     
     def run(self, plugin_params):
         arg_params = helper.get_url_parameters(plugin_params)
@@ -106,8 +99,6 @@ class SvtPlay:
             mode == self.MODE_LAST_CHANCE or \
             mode == self.MODE_LIVE_PROGRAMS:
             self.view_start_section(mode)
-        elif mode == self.MODE_LATEST_NEWS:
-            self.view_latest_news()
         elif mode == self.MODE_CHANNELS:
             self.view_channels()
         elif mode == self.MODE_LETTER:
@@ -118,7 +109,6 @@ class SvtPlay:
     def view_start(self):
         self.__add_directory_item(self.localize(30009), {"mode": self.MODE_POPULAR})
         self.__add_directory_item(self.localize(30003), {"mode": self.MODE_LATEST})
-        self.__add_directory_item(self.localize(30004), {"mode": self.MODE_LATEST_NEWS})
         self.__add_directory_item(self.localize(30010), {"mode": self.MODE_LAST_CHANCE})
         self.__add_directory_item(self.localize(30002), {"mode": self.MODE_LIVE_PROGRAMS})
         self.__add_directory_item(self.localize(30008), {"mode": self.MODE_CHANNELS})
@@ -195,9 +185,9 @@ class SvtPlay:
 
     def view_episodes(self, slug):
         logging.log("View episodes for {}".format(slug))
-        episodes = self.graphql.getVideoContent(slug)
+        episodes = self.graphql.getEpisodesForPath(slug)
         if episodes is None:
-            logging.log("No episodes found")
+            logging.log("No episodes found for {}".format(slug))
             return
         self.__create_dir_items(episodes)
 
@@ -219,8 +209,7 @@ class SvtPlay:
         if channel_pattern.search(video_url):
             video_json = svt.getVideoJSON(video_url)
         else:
-            legacy_id = video_url.split("/")[2]
-            video_data = self.graphql.getVideoDataForLegacyId(legacy_id)
+            video_data = self.graphql.getVideoDataForVideoUrl(video_url)
             if self.settings.inappropriate_for_children and video_data["blockedForChildren"]:
                 raise BlockedForChildrenException()
             video_json = svt.getSvtVideoJson(video_data["svtId"])
@@ -267,10 +256,10 @@ class SvtPlay:
             logging.log("Hiding geo restricted item {} as setting is on".format(play_item.title))
             return
         info = play_item.info
-        fanart = play_item.fanart if play_item.item_type == PlayItem.VIDEO_ITEM else ""
+        fanart = play_item.fanart
         title = play_item.title
         if play_item.item_type == PlayItem.VIDEO_ITEM and play_item.season_title:
-            title = "{season} - {episode}".format(season=play_item.season_title, episode=play_item.title)
+            title = "{episode} ({season})".format(season=play_item.season_title, episode=play_item.title)
         self.__add_directory_item(title, params, play_item.thumbnail, folder, False, info, fanart)
 
     def __is_geo_restricted(self, play_item):
@@ -279,12 +268,12 @@ class SvtPlay:
     
     def __resolve_and_play_video(self, video_json):
         if video_json is None:
-            logging.log("ERROR: Could not get video JSON")
+            logging.error("Could not get video JSON")
             return
         try:
             show_obj = svt.resolveShowJson(video_json)
         except ValueError:
-            logging.log("Could not decode JSON for {}".format(video_json))
+            logging.error("Could not decode JSON for {}".format(video_json))
             return
         if show_obj["videoUrl"]:
             self.playback.play_video(show_obj["videoUrl"], show_obj.get("subtitleUrl", None), self.settings.show_subtitles)

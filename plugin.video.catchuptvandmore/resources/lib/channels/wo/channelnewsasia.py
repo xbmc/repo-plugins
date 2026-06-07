@@ -13,7 +13,7 @@ import re
 from codequick import Listitem, Resolver, Route
 import urlquick
 
-from resources.lib import download
+from resources.lib import download, resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
 
 
@@ -22,7 +22,7 @@ from resources.lib.menu_utils import item_post_treatment
 
 URL_ROOT = 'https://www.channelnewsasia.com'
 
-URL_LIVE_ID = URL_ROOT + '/news/livetv'
+URL_LIVE_ID = URL_ROOT + '/watch'
 
 URL_VIDEO_VOD = 'https://player.ooyala.com/sas/player_api/v2/authorization/' \
                 'embed_code/%s/%s?device=html5&domain=www.channelnewsasia.com'
@@ -221,24 +221,12 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    resp = urlquick.get(URL_LIVE_ID, max_age=-1)
+    root = resp.parse()
 
-    resp = urlquick.get(URL_LIVE_ID)
-    list_stream_id = re.compile('video-asset-id="(.*?)"').findall(resp.text)
-
-    if len(list_stream_id) <= 0:
-        return False
-
-    pcode_datas = urlquick.get(URL_GET_JS_PCODE)
-    pcode = re.compile(r'ooyalaPCode\:"(.*?)"').findall(pcode_datas.text)[0]
-    reps_stream_datas = urlquick.get(URL_VIDEO_VOD % (pcode, list_stream_id[0]))
-    json_parser = json.loads(reps_stream_datas.text)
-
-    if 'streams' not in json_parser["authorization_data"][list_stream_id[0]]:
-        plugin.notify('ERROR', plugin.localize(30713))
-        return False
-
-    # Get Value url encodebase64
-    for stream_datas in json_parser["authorization_data"][list_stream_id[0]]["streams"]:
-        if stream_datas["delivery_type"] == 'hls':
-            stream_url_base64 = stream_datas["url"]["data"]
-    return base64.standard_b64decode(stream_url_base64)
+    player = root.find('.//video-js')
+    data_account = player.get('data-account')
+    data_player = player.get('data-player')
+    data_video_id = player.get('data-video-id')
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account=data_account, data_video_id=data_video_id,
+                                                    data_player=data_player)

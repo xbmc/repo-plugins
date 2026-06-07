@@ -18,18 +18,20 @@ class GlobalVariables(object):
     THUMB_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
 
     URL_BASE = "https://www.la7.it"
-    URL_BASE_LA7D = "https://www.la7.it/la7d"
+    #URL_BASE_LA7CINEMA = "https://www.la7.it/la7cinema"
     URL_LIVE_LA7 = "https://www.la7.it/dirette-tv"
-    URL_LIVE_LA7D = "https://www.la7.it/live-la7d"
-    URL_TGLA7D = "https://tg.la7.it/listing/tgla7d"
+    URL_LIVE_LA7CINEMA = "https://www.la7.it/live-la7cinema"
+    URL_LIVE_LA7EVENTI = "https://www.la7.it/live-eventi-la7"
+    URL_MPD_LA7EVENTI = 'https://d15umi5iaezxgx.cloudfront.net/LA7FEED01/DRM/DASH/Live.mpd'
+    URL_TGDIGITAL = "https://tg.la7.it/listing/tg-digital?page=0"
+    URL_BASE_TGDIGITAL = "https://tg.la7.it"
     URL_RIVEDILA7 = "https://www.la7.it/rivedila7/0/la7"
-    URL_RIVEDILA7D = "https://www.la7.it/rivedila7/0/la7d"
+    URL_RIVEDILA7CINEMA = "https://www.la7.it/rivedila7/0/la7cinema"
     URL_PROGRAMMI = "https://www.la7.it/programmi"
-    URL_PROGRAMMILA7D = "https://www.la7.it/programmi-la7d"
     URL_TUTTI_PROGRAMMI = "https://www.la7.it/tutti-i-programmi"
-    URL_TECHE_LA7 = "https://www.la7.it/i-protagonisti"
+    #URL_TECHE_LA7 = "https://www.la7.it/i-protagonisti"
+    URL_TECHE_LA7 = "https://www.la7.it/tutti-i-personaggi"
 
-    FILTRO_OMNIBUS = 'Omnibus News'
 
     # DRM config
     DRM = 'com.widevine.alpha'
@@ -75,7 +77,6 @@ class GlobalVariables(object):
         self.PLAY = str(G.PARAMS.get("play", ""))
         self.PAGENUM = 0
         self.LIST_PROGRAMMI = []
-        self.OMNIBUS_NEWS = False
 
         if self.IS_ADDON_FIRSTRUN:
             # Global variables that do NOT need to be updated at every addon run

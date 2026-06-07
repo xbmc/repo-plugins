@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.roosterteeth"
        name="Rooster Teeth"
-       version="1.5.1+matrix.1"
+       version="1.5.2+matrix.1"
        provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="3.0.0"/>
@@ -24,12 +24,13 @@
     <forum>https://forum.kodi.tv/showthread.php?tid=235071</forum>
     <website>https://roosterteeth.com</website>
     <source>https://github.com/skipmodea1/plugin.video.roosterteeth.python3</source>
-    <news>1.5.1 (2021-03-18)
-    - website change
+    <news>1.5.2 (2024-08-13)
+    - website is discontinued
     </news>
     <assets>
       <icon>resources/icon.png</icon>
       <fanart>resources/fanart.jpg</fanart>
     </assets>
+    <broken>Marked addon BROKEN due to website being discontinued</broken>
   </extension>
 </addon>

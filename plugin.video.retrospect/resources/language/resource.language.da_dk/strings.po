@@ -4,27 +4,27 @@ msgstr ""
 "Project-Id-Version: Retrospect Add-on\n"
 "Report-Msgid-Bugs-To: https://github.com/retrospect-addon/plugin.video.retrospect/issues\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2021-07-30 21:17+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2024-04-14 12:13+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
 "Language-Team: Danish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-retrospect/da_dk/>\n"
 "Language: da_dk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 5.4.3\n"
 
 msgctxt "Addon Summary"
 msgid "Retrospect allows you to watch re-runs/catch-ups of TV shows made available via their official broadcasters."
-msgstr ""
+msgstr "Retrospect giver dig mulighed for at se genudsendelser/optagelser af tv-serier, der er tilgængelige via deres officielle tv-stationer."
 
 msgctxt "Addon Description"
 msgid "Retrospect uses the official websites and freely available streams of different broadcasting companies (mainly Dutch, Belgian, British, Norwegian and Swedish) to make their re-run/catch-up episodes available on the Kodi platform. [CR][CR]Some channels that are included are: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu, VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info and Ons.[CR][CR]More information can be found at https://github.com/retrospect-addon/plugin.video.retrospect or the Retrospect wiki at https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
-msgstr ""
+msgstr "Retrospect bruger de officielle websteder og frit tilgængelige streams fra forskellige tv-selskaber (hovedsageligt hollandske, belgiske, britiske, norske og svenske) til at gøre deres genudsendelser/indhentning af afsnit tilgængelige i Kodi-platformen.[CR][CR]Inkluderede kanaler er: NPO Start, Kijk.nl (SBS6, NET5, Veronica, SBS9), RTL XL, NOS, Nickelodeon, AT5, Omroep Flevoland, L1, RTV Drenthe, RTV Oost, RTV Noord, RTV Noord-Holland, RTV Rijnmond, Omroep West, Omroep Gelderland, Omroep Brabant, Omrop Fryslân, WOS, DTV, Omroep Venlo Omroep Horst aan de Maas, Studio 040, RTV Utrecht, Omroep Zeeland, Eén, Vier, VRT.nu , VTM, Stieve, Ketnet, DPlay, SVT, ViaFree, Viasat, UR Play, MTV, NRK, BBC, Dumpert, Fox Sports, Pathé Nederland, Hardware.info og Ons.[CR][CR]Mere information kan findes på https://github.com/retrospect-addon/plugin.video.retrospect eller Retrospect-wikien på https://github.com/retrospect-addon/plugin.video.retrospect/wiki/."
 
 msgctxt "Addon Disclaimer"
 msgid "Retrospect is provided as is. We do not take any responsibility for possible (but highly unlikely) damage caused to your system. Nor do we take responsibility for the content that can be watched using this add-on or any consequences of using this add-on to watch content via the content providers' platforms."
-msgstr ""
+msgstr "Retrospect udbydes som det er. Vi påtager os intet ansvar for mulige (men højst usandsynlige) skader forårsaget på dit system. Vi tager heller ikke ansvar for det indhold, der kan ses ved hjælp af dette add-on eller eventuelle konsekvenser af at bruge dette add-on til at se indhold via indholdsudbydernes platforme."
 
 msgctxt "#30000"
 msgid "Stream Quality"
@@ -44,7 +44,7 @@ msgstr "Høj"
 
 msgctxt "#30004"
 msgid "Release channel for update notifications"
-msgstr ""
+msgstr "Udgivelseskanal for meddelelser om opdatering"
 
 msgctxt "#30005"
 msgid "Stable"
@@ -52,7 +52,7 @@ msgstr "Stabil"
 
 msgctxt "#30006"
 msgid "Alpha/Beta"
-msgstr "Alfa/Beta"
+msgstr "Alfa/beta"
 
 msgctxt "#30007"
 msgid "via other add-on"
@@ -80,15 +80,11 @@ msgstr "Login fejlede"
 
 msgctxt "#30013"
 msgid "Could not log on to the selected channel."
-msgstr ""
-
-msgctxt "#30014"
-msgid "Show info"
-msgstr "Vis info"
+msgstr "Kunne ikke logge ind på den valgte kanal."
 
 msgctxt "#30015"
 msgid "via missing add-on"
-msgstr "Ved hjælp af manglende add-on"
+msgstr "ved hjælp af manglende add-on"
 
 msgctxt "#30016"
 msgid "Sort by"
@@ -104,15 +100,15 @@ msgstr "Dato"
 
 msgctxt "#30019"
 msgid "Show DRM/Paid warning before playback"
-msgstr ""
+msgstr "Vis advarsel om DRM/betaling før afspilning"
 
 msgctxt "#30020"
 msgid "Maximum Stream Bitrate [COLOR=gray](0=disabled)[/COLOR]"
-msgstr ""
+msgstr "Maksimal bithastighed for stream [COLOR=gray](0=deaktiveret)[/COLOR]"
 
 msgctxt "#30021"
 msgid "Enable subtitles by default when available"
-msgstr ""
+msgstr "Aktiver undertekster som standard, når de er tilgængelige"
 
 msgctxt "#30022"
 msgid "If available"
@@ -132,7 +128,7 @@ msgstr "Ingen"
 
 msgctxt "#30026"
 msgid "Group list if it exceeds # folders"
-msgstr ""
+msgstr "Grupper liste hvis den overstiger # mapper"
 
 msgctxt "#30027"
 msgid "Autorun Retrospect on Kodi start"
@@ -152,7 +148,7 @@ msgstr "Port"
 
 msgctxt "#30031"
 msgid "Cache HTTP(S) requests"
-msgstr ""
+msgstr "Cache HTTP(S)-anmodninger"
 
 msgctxt "#30032"
 msgid "Channel Settings"
@@ -172,7 +168,7 @@ msgstr "Brugernavn"
 
 msgctxt "#30036"
 msgid "Password"
-msgstr "Kodeord"
+msgstr "Adgangskode"
 
 msgctxt "#30037"
 msgid "Use 'Up Next' to play next episode"
@@ -398,11 +394,11 @@ msgstr ""
 
 msgctxt "#30093"
 msgid "Password"
-msgstr ""
+msgstr "Adgangskode"
 
 msgctxt "#30094"
 msgid "Username"
-msgstr ""
+msgstr "Brugernavn"
 
 msgctxt "#30095"
 msgid "Show Hidden Items"
@@ -426,11 +422,11 @@ msgstr ""
 
 msgctxt "#30100"
 msgid "None"
-msgstr ""
+msgstr "Ingen"
 
 msgctxt "#30101"
 msgid "Regional"
-msgstr ""
+msgstr "Regional"
 
 msgctxt "#30102"
 msgid "National"
@@ -458,6 +454,90 @@ msgstr ""
 
 msgctxt "#30108"
 msgid "Other"
+msgstr ""
+
+msgctxt "#30109"
+msgid "IPTV Manager"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Install IPTV Manager add-on"
+msgstr "Installer add-on til administrering af IPTV"
+
+msgctxt "#30111"
+msgid "Enable IPTV Manager integration"
+msgstr "Aktiver integration af IPTV-administration"
+
+msgctxt "#30112"
+msgid "IPTV Manager settings…"
+msgstr "Indstillinger for IPTV-administration…"
+
+msgctxt "#30113"
+msgid "Set refresh token"
+msgstr ""
+
+msgctxt "#30114"
+msgid "Retrospect Web Dialog"
+msgstr ""
+
+msgctxt "#30115"
+msgid "Setting up Retrospect webserver"
+msgstr ""
+
+msgctxt "#30116"
+msgid "Starting webserver on port {}"
+msgstr ""
+
+msgctxt "#30117"
+msgid "Waiting for input from browser"
+msgstr ""
+
+msgctxt "#30118"
+msgid "Input received from browser"
+msgstr ""
+
+msgctxt "#30119"
+msgid "Open a browser and navigate to http://{}:{}"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Browser input cancelled"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Paste refresh token here."
+msgstr ""
+
+msgctxt "#30122"
+msgid "Invalid Refresh Token"
+msgstr ""
+
+msgctxt "#30123"
+msgid "Expired Refresh Token"
+msgstr ""
+
+msgctxt "#30124"
+msgid "Find the <b>refresh token</b> for your account by examining the site's cookies and paste the <b>value</b> of the refresh token cookie here."
+msgstr ""
+
+msgctxt "#30125"
+msgid "Show future episodes under 'Recent > Today'"
+msgstr ""
+
+msgctxt "#30126"
+msgid "Default"
+msgstr "Standard"
+
+msgctxt "#30127"
+msgid "Show All"
+msgstr ""
+
+msgctxt "#30128"
+msgid "Filter Premium"
+msgstr ""
+
+msgctxt "#30129"
+msgid "Re-Authenticate"
 msgstr ""
 
 # used for list limits
@@ -589,11 +669,11 @@ msgstr ""
 # empty strings from id 30312 to 30349
 msgctxt "#30350"
 msgid "Search"
-msgstr ""
+msgstr "Søg"
 
 msgctxt "#30351"
 msgid "Categories"
-msgstr ""
+msgstr "Kategorier"
 
 msgctxt "#30352"
 msgid "TV shows"
@@ -653,6 +733,54 @@ msgstr ""
 
 msgctxt "#30366"
 msgid "Available from"
+msgstr ""
+
+msgctxt "#30367"
+msgid "New on %s"
+msgstr ""
+
+msgctxt "#30368"
+msgid "Extras"
+msgstr ""
+
+msgctxt "#30369"
+msgid "Fragments"
+msgstr ""
+
+msgctxt "#30370"
+msgid "All episodes"
+msgstr ""
+
+msgctxt "#30371"
+msgid "Trending"
+msgstr ""
+
+msgctxt "#30372"
+msgid "New Search"
+msgstr ""
+
+msgctxt "#30373"
+msgid "Following"
+msgstr ""
+
+msgctxt "#30374"
+msgid "Recommended TV Shows"
+msgstr ""
+
+msgctxt "#30375"
+msgid "Recommended Videos"
+msgstr ""
+
+msgctxt "#30376"
+msgid "Continue Watching"
+msgstr ""
+
+msgctxt "#30377"
+msgid "Clear Search History"
+msgstr ""
+
+msgctxt "#30378"
+msgid "Remove Item"
 msgstr ""
 
 # empty strings from id 30365 to 30400
@@ -725,7 +853,7 @@ msgstr ""
 
 msgctxt "#30502"
 msgid "Favourites"
-msgstr ""
+msgstr "Favoritter"
 
 msgctxt "#30503"
 msgid "Channel Favourites"
@@ -759,6 +887,18 @@ msgctxt "#30510"
 msgid "New version available"
 msgstr ""
 
+msgctxt "#30511"
+msgid "Add shortcut"
+msgstr ""
+
+msgctxt "#30512"
+msgid "Please provide a name for the shortcut."
+msgstr ""
+
+msgctxt "#30513"
+msgid "Profiles"
+msgstr ""
+
 # empty strings from id 30511 to 30515
 msgctxt "#30516"
 msgid "New Version Available."
@@ -783,7 +923,7 @@ msgstr ""
 
 msgctxt "#30523"
 msgid "Error"
-msgstr ""
+msgstr "Fejl"
 
 msgctxt "#30524"
 msgid "No videos were found for the selected item."
@@ -832,7 +972,7 @@ msgstr ""
 
 msgctxt "#30537"
 msgid "Page"
-msgstr ""
+msgstr "Side"
 
 msgctxt "#30538"
 msgid "The selected live stream has not yet|begun."
@@ -1018,6 +1158,26 @@ msgctxt "#30583"
 msgid "Single episodes"
 msgstr ""
 
+msgctxt "#30584"
+msgid "Fetching a long list of items using multiple API calls."
+msgstr ""
+
+msgctxt "#30585"
+msgid "Page {} of {}"
+msgstr ""
+
+msgctxt "#30586"
+msgid "Number of pages to load for the main listing"
+msgstr ""
+
+msgctxt "#30587"
+msgid "Show streams with accessibility features"
+msgstr ""
+
+msgctxt "#30588"
+msgid "This stream cannot be played due to geographical restrictions."
+msgstr ""
+
 # empty strings from id 30584 to 30589
 msgctxt "#30590"
 msgid "Set a new Retrospect PIN"
@@ -1097,4 +1257,8 @@ msgstr ""
 
 msgctxt "#30609"
 msgid "Error"
-msgstr ""
+msgstr "Fejl"
+
+#~ msgctxt "#30014"
+#~ msgid "Show info"
+#~ msgstr "Vis info"

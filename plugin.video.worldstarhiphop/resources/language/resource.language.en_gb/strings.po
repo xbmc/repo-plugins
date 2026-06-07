@@ -110,3 +110,7 @@ msgstr ""
 msgctxt "#30507"
 msgid "Error getting page: %s"
 msgstr ""
+
+msgctxt "#30508"
+msgid "Error parsing JSON"
+msgstr ""

@@ -1,4 +1,4 @@
-#   Copyright (C) 2018 Lunatixz
+#   Copyright (C) 2021 Lunatixz
 #
 #
 # This file is part of NewsOn.

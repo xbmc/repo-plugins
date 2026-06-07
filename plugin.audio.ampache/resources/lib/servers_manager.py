@@ -5,7 +5,7 @@ import xbmc,xbmcgui
 #main plugin library
 
 from resources.lib import gui
-from resources.lib.art_clean import clean_cache_art
+from resources.lib import art
 from resources.lib import utils as ut
 from resources.lib import json_storage
 from resources.lib import ampache_connect
@@ -13,20 +13,19 @@ from resources.lib import ampache_connect
 def initializeServer():
     jsStorServer = json_storage.JsonStorage("servers.json")
     serverData = jsStorServer.getData()
-    if serverData:
-        pass
-    else:
+    if not serverData:
         xbmc.log( "AmpachePlugin::initializeServer: no servers file",xbmc.LOGDEBUG)
+        serverData = {}
         serverData["servers"] = {}
         tempd = {}
         tempd["0"] = {}
         serverData["servers"].update(tempd)
-        serverData["servers"]["0"]["name"] = "ampache"
-        serverData["servers"]["0"]["url"] = "http://127.0.0.1/ampache"
+        serverData["servers"]["0"]["name"] = "Develop Demo"
+        serverData["servers"]["0"]["url"] = "http://develop.ampache.dev/"
         serverData["servers"]["0"]["use_api_key"] = "false"
         serverData["servers"]["0"]["enable_password"] = "true"
-        serverData["servers"]["0"]["username"] = "ampache"
-        serverData["servers"]["0"]["password"] = "ampache"
+        serverData["servers"]["0"]["username"] = "kodi_demo"
+        serverData["servers"]["0"]["password"] = "aNNKvApsECw7Tpc"
         serverData["servers"]["0"]["api_key"] = ""
         serverData["current_server"] = "0"
         jsStorServer.save(serverData)
@@ -88,19 +87,24 @@ def switchServer():
     serverData["current_server"] = i_curr
     jsStorServer.save(serverData)
     #clean cache_art, the server is different, so the cache is invalid
-    clean_cache_art()
+    art.clean_cache_art()
     #if we switch, reconnect
     try:
         ampacheConnect = ampache_connect.AmpacheConnect()
         ampacheConnect.AMPACHECONNECT(showok=True)
-    except:
-        pass
+    except Exception as e:
+        xbmc.log("AmpachePlugin::switchServer error: %s" % repr(e), xbmc.LOGERROR)
 
 def addServer():
     xbmc.log("AmpachePlugin::addServer" , xbmc.LOGDEBUG )
     jsStorServer = json_storage.JsonStorage("servers.json")
     serverData = jsStorServer.getData()
-    stnum = str(len(list(serverData["servers"])))
+    if len(list(serverData["servers"])) > 0:
+        #choose the max number of the server list plus one
+        stnum = str(max([int(i) for i in list(serverData["servers"])])+1)
+    else:
+        #empty list
+        stnum = "0"
     username = ""
     password = ""
     apikey = ""
@@ -150,7 +154,10 @@ def deleteServer():
     dialog = xbmcgui.Dialog()
     confirm = dialog.yesno(ut.tString(30189),ut.tString(30188))
     if confirm:
-        del serverData["servers"][i_rem]
+        #replace old server position with the latest server in the list
+        repl_num = str(max([int(i) for i in list(serverData["servers"])]))
+        serverData["servers"][i_rem] = serverData["servers"][repl_num].copy()
+        del serverData["servers"][repl_num]
         jsStorServer.save(serverData)
         return True
     else:
@@ -188,7 +195,7 @@ def modifyServer():
             value = gui.getFilterFromUser(ut.tString(30187))
         else:
             pass
-        if value != False:
+        if value is not False:
             serverData["servers"][i][key] = value
     xbmc.executebuiltin("PlayerControl(Stop)")
     jsStorServer.save(serverData)
@@ -196,5 +203,5 @@ def modifyServer():
     try:
         ampacheConnect = ampache_connect.AmpacheConnect()
         ampacheConnect.AMPACHECONNECT()
-    except:
-        pass
+    except Exception as e:
+        xbmc.log("AmpachePlugin::modifyServer error: %s" % repr(e), xbmc.LOGERROR)

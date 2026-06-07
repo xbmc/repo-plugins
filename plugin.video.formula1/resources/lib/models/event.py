@@ -16,7 +16,7 @@ class Event(ListItem):
         })
         url = addon_base + "/?" + urllib.parse.urlencode({
             "action": "call",
-            "call": "fom-results/race?meeting={id}".format(id=self.id)
+            "call": "/v2/fom-results/race?meeting={id}".format(id=self.id)
         })
 
         if self.info["hasEnded"]:

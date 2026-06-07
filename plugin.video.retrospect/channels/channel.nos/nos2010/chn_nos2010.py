@@ -1,26 +1,31 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
+import time
+from typing import Optional, List, Tuple, Union, Dict
+
 import pytz
-import re
 
 from resources.lib import chn_class
 from resources.lib import contenttype
 from resources.lib import mediatype
+from resources.lib.channelinfo import ChannelInfo
+from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.logger import Logger
+from resources.lib.parserdata import ParserData
 from resources.lib.regexer import Regexer
 from resources.lib.helpers import subtitlehelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.streams.npostream import NpoStream
 from resources.lib.urihandler import UriHandler
 from resources.lib.helpers.datehelper import DateHelper
-from resources.lib.parserdata import ParserData
 from resources.lib.helpers.languagehelper import LanguageHelper
-from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.vault import Vault
 from resources.lib.addonsettings import AddonSettings, LOCAL
 from resources.lib.mediaitem import MediaItem, FolderItem
 from resources.lib.xbmcwrapper import XbmcWrapper
+from resources.lib.actions import action
+from resources.lib.textures import TextureHandler
 
 
 class Channel(chn_class.Channel):
@@ -28,7 +33,7 @@ class Channel(chn_class.Channel):
     main class from which all channels inherit
     """
 
-    def __init__(self, channel_info):
+    def __init__(self, channel_info: ChannelInfo):
         """ Initialisation of the class.
 
         All class variables should be instantiated here and this method should not
@@ -45,7 +50,7 @@ class Channel(chn_class.Channel):
 
         # setup the urls
         if self.channelCode == "uzgjson":
-            self.baseUrl = "https://apps-api.uitzendinggemist.nl"
+            self.baseUrl = "https://npo.nl/start/api/"
             self.mainListUri = "#mainlist"
             self.noImage = "nosimage.png"
         else:
@@ -57,158 +62,241 @@ class Channel(chn_class.Channel):
         # live stuff
         self.baseUrlLive = "https://www.npostart.nl"
 
-        # live radio, the folders and items
-        self._add_data_parser("https://radio-app.omroep.nl/player/script/",
-                              name="Live Radio Streams",
-                              preprocessor=self.extract_json_for_live_radio, json=True,
-                              parser=[], creator=self.create_live_radio)
+        self.__user_name = self._get_setting("username")
 
-        self._add_data_parser("/live", match_type=ParserData.MatchEnd,
-                              name="Main Live Stream HTML parser",
-                              preprocessor=self.get_additional_live_items,
-                              parser=r'<a href="[^"]+/live/([^"]+)" class="npo-tile-link"[^>]+>[\w\W]{0,1000}?<img data-src="([^"]+)"[\w\W]{0,1000}?<h2>(?:Nu: )?([^<]+)</h2>\W+<p>(?:Straks: )?([^<]*)</p>',
-                              creator=self.create_live_tv,
+        self._add_data_parser("https://npo.nl/start/api/domain/guide-channels",
+                              name="Main Live TV Streams json", json=True,
+                              requires_logon=bool(self.__user_name),
+                              parser=[],
+                              creator=self.create_api_live_tv,
                               updater=self.update_video_item_live)
 
-        self._add_data_parser("https://www.npostart.nl/live/", name="Live Video Updater from HTML",
+        self._add_data_parser("https://npo.nl/start/api/domain/guide-channels",
+                              name="Recent Items", label="recent", json=True,
+                              preprocessor=self.create_epg_days)
+
+        self._add_data_parser("#recentday", name="EPG listing", json=True,
+                              preprocessor=self.load_all_epg_channels,
+                              parser=[], creator=self.create_api_epg_item)
+
+        self._add_data_parser("https://npo.nl/start/live?channel=",
+                              name="Live Video Updater from json",
+                              requires_logon=bool(self.__user_name),
                               updater=self.update_video_item_live)
 
-        # Use old urls with new Updater
-        self._add_data_parser("http://e.omroep.nl/metadata/", name="e.omroep.nl classic parser",
-                              updater=self.update_from_poms, requires_logon=True)
+        # If the user was logged in, we need to refresh the token otherwise it will result in 403
+        self._add_data_parsers([
+            "https://npo.nl/start/api/domain/page-collection?collectionId=",
+            "https://npo.nl/start/api/domain/page-collection?collectionType=SERIES&collectionId=",
+            "https://npo.nl/start/api/domain/search-collection-items?searchType=series"],
+            name="Collections with series", json=True,
+            requires_logon=bool(self.__user_name),
+            parser=["items"],
+            creator=self.create_api_program_item)
+        # Use the new `label` options for the collections
+        self._add_data_parser(
+            "https://npo.nl/start/api/domain/recommendation-collection?partyId=1&collectionId=", name="Collection with series",
+            json=True, label="collection-with-series",
+            requires_logon=bool(self.__user_name),
+            parser=["items"],
+            creator=self.create_api_program_item)
+
+        # If the user was logged in, we need to refresh the token otherwise it will result in 403
+        self._add_data_parsers([
+            "https://npo.nl/start/api/domain/search-collection-items?searchType=broadcasts",
+            "https://npo.nl/start/api/domain/page-collection?collectionType=PROGRAM&collectionId="
+        ],
+            name="Collections with videos", json=True,
+            requires_logon=bool(self.__user_name),
+            parser=["items"],
+            creator=self.create_api_episode_item_with_data
+        )
+        # Use the new `label` options for the collections
+        self._add_data_parser(
+            "https://npo.nl/start/api/domain/recommendation-collection?partyId=1&collectionId=", name="Collection with videos",
+            json=True, label="collection-with-videos",
+            requires_logon=bool(self.__user_name),
+            parser=["items"],
+            creator=self.create_api_episode_item_with_data)
+
+        self._add_data_parser(
+            "https://npo.nl/start/api/domain/series-seasons",
+            name="Season API parser (and updater for EPG)", json=True,
+            postprocessor=self.check_for_single_season,
+            parser=[], creator=self.create_api_season_item,
+            updater=self.update_epg_series_item)
+
+        self._add_data_parser(
+            "https://npo.nl/start/serie/",
+            name="Direct link to video", json=True,
+            updater=self.update_nextjs_video
+        )
+
+        self._add_data_parsers([
+            "https://npo.nl/start/api/domain/programs-by-season",
+            "https://npo.nl/start/api/domain/programs-by-series"],
+            name="Season content API parser", json=True,
+            parser=[], creator=self.create_api_episode_item)
+
+        self._add_data_parser("https://npo.nl/start/video/",
+                              name="Single video items from recent guid",
+                              updater=self.update_single_video)
 
         # Standard updater
-        self._add_data_parser("*", requires_logon=True,
+        self._add_data_parser("*",
+                              requires_logon=bool(self.__user_name),
                               updater=self.update_video_item)
 
-        # recent and popular stuff and other Json data
-        self._add_data_parser(".json", name="JSON List Parser for the recent/tips/populair",
-                              parser=[], creator=self.create_video_item_json,
-                              json=True, match_type=ParserData.MatchEnd)
+        self._add_data_parser("https://npo.nl/start/api/domain/page-layout?layoutId=",
+                              name="Bare pages layout", json=True,
+                              parser=["collections"], creator=self.create_api_page_layout)
 
-        self._add_data_parser("#recent", name="Recent items list",
-                              preprocessor=self.add_recent_items)
+        self._add_data_parsers([
+            "https://npo.nl/start/api/domain/page-collection?collectionType=PAGE&collectionId=",
+            # Not quite sure if dynamic_page still exists, but kept in just in case it does.
+            "https://npo.nl/start/api/domain/page-collection?collectionType=DYNAMIC_PAGE&collectionId="],
+            name="Categories layout", json=True,
+            parser=["items"], creator=self.create_api_category_item)
 
-        self._add_data_parser("https://start-api.npo.nl/media/series/", json=True,
-                              name="API based video items",
-                              parser=["items", ], creator=self.create_api_video_item,
-                              preprocessor=self.extract_api_pages)
-
-        self._add_data_parser("https://start-api.npo.nl/epg/", json=True,
-                              name="API based recent items",
-                              parser=[], creator=self.create_api_epg_item,
-                              preprocessor=self.extract_epi_epg_items)
-
-        # Alpha listing and paging for that list
-        self._add_data_parser("#alphalisting", preprocessor=self.alpha_listing)
-
-        episode_parser = Regexer.from_expresso(
-            r'id="(?<powid>[^"]+)"[^>]*>\W*<a href="(?<url>[^"]+)" title="(?<title>[^"]+)"[^>]+\W+'
-            r'<div[^(>]+>\s*(?:<img[^>]+data-src="(?<thumburl>[^"]+)")?')
-        self._add_data_parsers(["https://www.npostart.nl/media/series?page=", ],
-                               name="Parser for main series overview pages",
-                               preprocessor=self.extract_tiles,
-                               parser=episode_parser,
-                               creator=self.create_episode_item)
-
-        # very similar parser as the Live Channels!
-        video_parser = Regexer.from_expresso(
-            r'<div[^>]+class="(?<class>[^"]+)"[^>]+id="(?<powid>[^"]+)"[^>]*>\W*<a href="[^"]+/'
-            r'(?<url>[^/"]+)" class="npo-tile-link"[^>]+(?:data-scorecard=\'(?<videodata>[^\']*)\')?'
-            r'[^>]*>\W+<div[^>]+>\W+<div [^>]+data-from="(?<date>[^"]*)"[^>]+'
-            r'data-premium-from="(?<datePremium>[^"]*)"(?<videoDetection>[\w\W]{0,1000}?)<img[^>]+'
-            r'data-src="(?<thumburl>[^"]+)"[\w\W]{0,1000}?<h2>(?<title>[^<]+)</h2>\W+<p>'
-            r'(?<subtitle>[^<]*)</p>')
-        self._add_data_parsers(["https://www.npostart.nl/media/series/",
-                                "https://www.npostart.nl/search/extended",
-                                "https://www.npostart.nl/media/collections/"],
-                               name="Parser for shows on the main series sub pages, the search and the genres",
-                               preprocessor=self.extract_tiles,
-                               parser=video_parser,
-                               creator=self.create_npo_item)
-
-        # Genres
-        self._add_data_parser("https://www.npostart.nl/programmas",
-                              match_type=ParserData.MatchExact,
-                              name="Genres",
-                              parser=r'<a\W+class="close-dropdown"\W+href="/collectie/([^"]+)"\W+'
-                                     r'title="([^"]+)"[^>]+data-value="([^"]+)"[^>]+',
-                              creator=self.create_genre_item)
-
-        # Favourites
-        self._add_data_parser("https://www.npostart.nl/api/account/@me/profile",
-                              match_type=ParserData.MatchExact, json=True, requires_logon=True,
+        # Favourites (not yet implemented in the site).
+        self._add_data_parser("https://npo.nl/start/api/domain/user-profiles",
+                              match_type=ParserData.MatchExact, json=True,
+                              requires_logon=True,
                               name="Profile selection",
-                              parser=["profiles"], creator=self.create_profile_item)
-        self._add_data_parser("#list_profile",
-                              name="List favourites for profile",
+                              parser=[], creator=self.create_profile_item)
+
+        self._add_data_parser("#list_profile", name="List profile content", json=True,
                               preprocessor=self.switch_profile,
-                              requires_logon=True)
-        self._add_data_parser("https://www.npostart.nl/ums/accounts/@me/favourites?",
-                              preprocessor=self.extract_tiles,
-                              parser=episode_parser,
-                              creator=self.create_episode_item,
-                              requires_logon=True)
-        self._add_data_parser("https://www.npostart.nl/ums/accounts/@me/favourites/episodes?",
-                              preprocessor=self.extract_tiles,
-                              parser=video_parser,
-                              creator=self.create_npo_item,
+                              parser=["collections"], creator=self.create_profile_content_item,
                               requires_logon=True)
 
-        # Alpha listing based on JSON API
-        self._add_data_parser("https://start-api.npo.nl/page/catalogue", json=True,
-                              parser=["components", 1, "data", "items"],
-                              creator=self.create_json_episode_item)
+        self._add_data_parser("https://npo.nl/start/_next/data", name="NextJS data", json=True,
+                              preprocessor=self.extract_nextjs_data,
+                              parser=[], creator=self.create_next_js_item)
 
-        # New API endpoints:
-        # https://start-api.npo.nl/epg/2018-12-22?type=tv
-        # https://start-api.npo.nl/page/catalogue?az=C&pageSize=1000
-        # https://start-api.npo.nl/page/catalogue?pageSize=0
-        # https://start-api.npo.nl/page/catalogue?pageSize=500
-        # https://start-api.npo.nl/search?query=sinterklaas&pageSize=1000
-
-        tv_guide_regex = r'data-channel="(?<channel>[^"]+)"[^>]+data-title="(?<title>[^"]+)"[^>]+' \
-                         r'data-id=\'(?<url>[^\']+)\'[^>]*>\W*<div[^>]*>\W+<p>\W+<span[^>]+time"' \
-                         r'[^>]*>(?<hours>\d+):(?<minutes>\d+)</span>\W+<span[^<]+</span>\W+<span ' \
-                         r'class="npo-epg-active"></span>\W+<span class="npo-epg-play"></span>'
-        tv_guide_regex = Regexer.from_expresso(tv_guide_regex)
-        self._add_data_parser("https://www.npostart.nl/gids?date=",
-                              parser=tv_guide_regex, creator=self.create_tv_guide_item)
+        # OLD but still working?
+        # live radio, the folders and items
+        self._add_data_parser(
+            "https://npo.nl/luister", name="Live Radio Streams",
+            parser=Regexer.from_expresso(
+                "<li[^>]+><a[^>]+aria-label=\"[^\"]+ van (?<title>[^\"]+)\" [^>]+href=\"(?<url>https:[^\"]+)\"[^>]*>"),
+            creator=self.create_live_radio
+        )
+        self._add_data_parser(
+            "*", name="Live Radio Streams Updater",
+            updater=self.update_live_radio,
+            label="liveRadio"
+        )
 
         self.__ignore_cookie_law()
 
         # ===============================================================================================================
         # non standard items
-        self.__NextPageAdded = False
         self.__jsonApiKeyHeader = {"apikey": "07896f1ee72645f68bc75581d7f00d54"}
-        self.__useJson = True
-        self.__pageSize = 500
+        self.__max_page_count = 10
         self.__has_premium_cache = None
         self.__timezone = pytz.timezone("Europe/Amsterdam")
+        self.__show_future = self._get_setting("show_future", "true") == "true"
+        self.__build_version = None
 
         # use a dictionary so the lookup is O(1)
         self.__channel_name_map = {
             "_101_": None,  # "NPO1 Extra", -> Mainly paid
-            "CULT": None,   # "NPO2 Extra", -> Mainly paid
-            "OPVO": None,   # "NPO Zappelin", -> Mainly paid
-            "NOSJ": None,   # "NPO Nieuws" -> Cannot be played
+            "CULT": None,  # "NPO2 Extra", -> Mainly paid
+            "OPVO": None,  # "NPO Zappelin", -> Mainly paid
+            "NOSJ": None,  # "NPO Nieuws" -> Cannot be played
             "_mcr_": None,  # "NPO Politiek" -> Niet gevonden
-            "PO24": None,   # Cannot be played,
+            "PO24": None,  # Cannot be played,
             "NED1": "NPO 1",
             "NED2": "NPO 2",
             "NED3": "NPO 3",
         }
 
+        self.__collection_names = {
+            "follows": LanguageHelper.Following,
+            "trending": LanguageHelper.Trending,
+            "because-you-watched": LanguageHelper.RecommendedTvShows,
+            "recent": LanguageHelper.Recent,
+            "public-value": None,
+            "series": LanguageHelper.TvShows,
+            "crime": None,
+            "documentaries": None,
+            "continue": LanguageHelper.ContinueWatching,
+            "news": LanguageHelper.LatestNews,
+            "popular": LanguageHelper.Popular,
+            "recommended-for-you": LanguageHelper.RecommendedVideos,
+            "films": LanguageHelper.Movies,
+            "youth": None,
+        }
+
         # ====================================== Actual channel setup STOPS here =======================================
         return
 
-    def log_on(self):
+    @property
+    def build_version(self) -> str:
+        if not self.__build_version:
+            data = UriHandler.open("https://npo.nl/start")
+            try:
+                build_version = Regexer.do_regex(r"<script src=\"[^\"]+/([^/]+)/_buildManifest.js\"", data)[0]
+            except:
+                Logger.error(data)
+                raise
+            Logger.info(f"Found build version: {build_version}")
+            self.__build_version = build_version
+
+        return self.__build_version
+
+    def log_on(self) -> bool:
+        if self.loggedOn:
+            return True
+
         return self.__log_on(False)
 
-    def __log_on(self, force_log_off=False):
+    def create_next_js_item(self, result_set: dict) -> Optional[Union[MediaItem, List[MediaItem]]]:
+        next_js_type = result_set["next_js_type"]
+        if next_js_type == "SERIES":
+            return self.create_api_program_item(result_set)
+        elif next_js_type == "PROGRAM":
+            return self.create_api_episode_item_with_data(result_set)
+        else:
+            Logger.error(f"Missing NextJS Type: {next_js_type}")
+        return None
+
+    def extract_nextjs_data(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
+        data = JsonHelper(data)
+        result_data = []
+
+        pages = data.get_value("pageProps", "dehydratedState", "queries")
+        for page in pages:
+            if "items" in page.get("state", {}).get("data", {}):
+                items = page["state"]["data"]["items"]
+
+                # Update the items with the NextJS type.
+                next_js_type = page["state"]["data"]["type"]
+                _ = [i.update({"next_js_type": next_js_type}) for i in items]
+
+                # Append the result.
+                result_data += items
+            pass
+
+        result = JsonHelper("[]")
+        result.json = result_data
+        return result, []
+
+    def __log_on(self, force_log_off: bool = False) -> bool:
         """ Makes sure that we are logged on. """
 
-        username = self._get_setting("username")
+        def log_out_npo() -> None:
+            # Old cookies
+            UriHandler.delete_cookie(domain=".npostart.nl")
+            UriHandler.delete_cookie(domain=".npo.nl")
+            UriHandler.delete_cookie(domain="www.npostart.nl")
+            # New cookies
+            UriHandler.delete_cookie(domain="id.npo.nl")
+            UriHandler.delete_cookie(domain="npo.nl")
+            AddonSettings.set_channel_setting(self, "previous_username", username, store=LOCAL)
+
+        username = self.__user_name
         previous_name = AddonSettings.get_channel_setting(self, "previous_username", store=LOCAL)
         log_out = previous_name != username
         if log_out or force_log_off:
@@ -216,118 +304,84 @@ class Channel(chn_class.Channel):
                 Logger.info("Username changed for NPO from '%s' to '%s'", previous_name, username)
             else:
                 Logger.info("Forcing a new login for NPO")
-            UriHandler.delete_cookie(domain="www.npostart.nl")
-            UriHandler.delete_cookie(domain=".npostart.nl")
-            AddonSettings.set_channel_setting(self, "previous_username", username, store=LOCAL)
+            log_out_npo()
 
         if not username:
-            Logger.info("No user name for NPO, not logging in")
-            UriHandler.delete_cookie(domain="www.npostart.nl")
+            log_out_npo()
+            return False
+
+        # https://ccm.npo.nl/sites/NPO/npo.nl/version.txt -> app version (for live channels?)
+
+        # Check for a valid token.
+        session_info_url = "https://npo.nl/start/api/auth/session"
+        profile = UriHandler.open(session_info_url, no_cache=True)
+        profile = JsonHelper(profile)
+        expires = profile.get_value("tokenExpiresAt", fallback=0)
+        if expires:
+            Logger.debug("NPO Token expires at %s UTC",
+                         datetime.datetime.utcfromtimestamp(expires).strftime('%Y-%m-%d %H:%M:%S'))
+        if bool(profile.json) and expires > time.time():
             return True
 
-        cookie = UriHandler.get_cookie("isAuthenticatedUser", "www.npostart.nl")
-        if cookie and not log_out:
-            expire_date = DateHelper.get_date_from_posix(float(cookie.expires))
-            Logger.info("Found existing valid NPO token (valid until: %s)", expire_date)
-            return True
+        # Fetch a CSRF token
+        data = UriHandler.open("https://npo.nl/start/api/auth/csrf", no_cache=True)
+        csrf_token = JsonHelper(data).get_value("csrfToken")
 
+        # Start an authentication session. Will redirect to the new id.npo.nl site with a return url given.
+        sign_in_data = {
+            "callbackUrl": session_info_url,
+            "csrfToken": csrf_token,
+            "json": True
+        }
+        login_form = UriHandler.open("https://npo.nl/start/api/auth/signin/npo-id",
+                                     json=sign_in_data)
+
+        if UriHandler.instance().status.url == session_info_url:
+            # Already logged in so the login_form redirected to session info
+            profile = JsonHelper(login_form)
+            Logger.info("Refreshed NPO log in.")
+            expires = profile.get_value("tokenExpiresAt", fallback=0)
+            Logger.debug("NPO Token expires at %s UTC",
+                         datetime.datetime.utcfromtimestamp(expires).strftime('%Y-%m-%d %H:%M:%S'))
+            return bool(profile.json)
+
+        # Force a full check-out -> This can't be done as it removes the XSRF tokens.
+        # log_out_npo()
+
+        Logger.info("Starting new NPO log in.")
         v = Vault()
         password = v.get_channel_setting(self.guid, "password")
         if not bool(password):
             Logger.warning("No password found for %s", self)
             return False
 
-        xsrf_token = self.__get_xsrf_token()[0]
-        if not xsrf_token:
+        # Extract the verification token & Return Url.
+        return_url = Regexer.do_regex(r'name="ReturnUrl"[^>]+value="([^"]+)"', login_form)[
+            0].replace("&amp;", "&")
+        verification_code = \
+            Regexer.do_regex(r'name="__RequestVerificationToken"[^>]+value="([^"]+)"', login_form)[
+                0]
+        data = {
+            "EmailAddress": username,
+            "Password": password,
+            "ReturnUrl": return_url,
+            "__RequestVerificationToken": verification_code,
+            "button": "login"
+        }
+
+        # The actual call for logging in. It will result in the proper redirect.
+        profile = UriHandler.open("https://id.npo.nl/account/login", no_cache=True, data=data)
+        if "validation-summary" in profile:
+            error = Regexer.do_regex(r"<ul><li>(.+?)</li", profile)
+            if error:
+                Logger.critical(error[0])
+                XbmcWrapper.show_dialog(LanguageHelper.LoginErrorTitle, error[0])
+            else:
+                Logger.critical("Unknown NPO error.")
             return False
+        return bool(JsonHelper(profile).json)
 
-        data = "username=%s&password=%s" % (HtmlEntityHelper.url_encode(username),
-                                            HtmlEntityHelper.url_encode(password))
-        UriHandler.open("https://www.npostart.nl/api/login", no_cache=True,
-                        additional_headers={
-                            "X-Requested-With": "XMLHttpRequest",
-                            "X-XSRF-TOKEN": xsrf_token
-                        },
-                        params=data)
-
-        return not UriHandler.instance().status.error
-
-    def extract_tiles(self, data):  # NOSONAR
-        """ Extracts the JSON tiles data from the HTML.
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        items = []
-        new_data = ""
-
-        json_data = JsonHelper(data)
-        tiles = json_data.get_value("tiles")
-        if not isinstance(tiles, (tuple, list)):
-            Logger.debug("Found single tile data blob")
-            new_data = tiles
-        else:
-            Logger.debug("Found multiple tile data blobs")
-            for item_data in tiles:
-                new_data = "%s%s\n" % (new_data, item_data)
-
-        # More pages?
-        max_count = 5
-        current_count = 1
-        next_page = json_data.get_value("nextLink")
-        query_string = self.parentItem.url.split("&", 1)[-1]
-
-        http_headers = {"X-Requested-With": "XMLHttpRequest"}
-        http_headers.update(self.parentItem.HttpHeaders)
-        http_headers.update(self.httpHeaders)
-        while next_page and current_count < max_count:
-            current_count += 1
-            Logger.debug("Found next page: %s", next_page)
-            if next_page.startswith("/search/extended") or next_page.startswith("/media/series"):
-                next_page = next_page.split("&", 1)[0]
-                next_page = "%s%s&%s" % (self.baseUrlLive, next_page, query_string)
-            elif not next_page.startswith("http"):
-                next_page = "%s%s&%s" % (self.baseUrlLive, next_page, query_string)
-            else:
-                next_page = "%s&%s" % (next_page, query_string)
-
-            page_data = UriHandler.open(next_page, additional_headers=http_headers)
-            json_data = JsonHelper(page_data)
-            tiles = json_data.get_value("tiles")
-            if not isinstance(tiles, (tuple, list)):
-                Logger.debug("Found single tile data blob")
-                new_data = "%s%s\n" % (new_data, tiles)
-            else:
-                Logger.debug("Found multiple tile data blobs")
-                for item_data in tiles:
-                    new_data = "%s%s\n" % (new_data, item_data)
-            next_page = json_data.get_value("nextLink")
-
-        if next_page and current_count == max_count:
-            # There are more pages
-            if next_page.startswith("/search/extended") or next_page.startswith("/media/series"):
-                next_page = next_page.split("&", 1)[0]
-                next_page = "%s%s&%s" % (self.baseUrlLive, next_page, query_string)
-            elif not next_page.startswith("http"):
-                next_page = "%s%s&%s" % (self.baseUrlLive, next_page, query_string)
-            else:
-                next_page = "%s&%s" % (next_page, query_string)
-
-            title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
-            title = "\a.: %s :." % (title,)
-            more = FolderItem(
-                title, next_page, self.parentItem.content_type, self.parentItem.media_type)
-            more.HttpHeaders = http_headers
-            more.HttpHeaders.update(self.parentItem.HttpHeaders)
-            items.append(more)
-
-        return new_data, items
-
-    def get_initial_folder_items(self, data):
+    def get_initial_folder_items(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
         """ Creates the initial folder items for this channel.
 
         :param str data: The retrieve data that was loaded for the current item and URL.
@@ -338,48 +392,68 @@ class Channel(chn_class.Channel):
         """
 
         items = []
-        search = FolderItem(
-            LanguageHelper.get_localized_string(LanguageHelper.Search), "searchSite",
-            content_type=contenttype.EPISODES)
-        search.complete = True
-        search.dontGroup = True
-        search.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
-        items.append(search)
+
+        def add_item(language_id: int, url: str, content_type: str,
+                     description: str = "", headers: Optional[dict] = None, parser: str = "") -> FolderItem:
+            item = FolderItem(
+                LanguageHelper.get_localized_string(language_id), url, content_type=content_type)
+            item.description = description
+            item.complete = True
+            item.dontGroup = True
+            if headers:
+                item.HttpHeaders = headers
+            if parser:
+                item.metaData["retrospect:parser"] = parser
+            items.append(item)
+            return item
+
+        add_item(LanguageHelper.Search, self.search_url, contenttype.EPISODES,
+                 headers={"X-Requested-With": "XMLHttpRequest"})
 
         # Favorite items that require login
-        favs = FolderItem(
-            LanguageHelper.get_localized_string(LanguageHelper.FavouritesId),
-            "https://www.npostart.nl/api/account/@me/profile",
-            content_type=contenttype.NONE)
-        favs.complete = True
-        favs.description = "Favorieten van de NPO.nl website. Het toevoegen van favorieten " \
-                           "wordt nog niet ondersteund."
-        favs.dontGroup = True
-        favs.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
-        items.append(favs)
+        if self.__user_name:
+            add_item(LanguageHelper.Profiles, "https://npo.nl/start/api/domain/user-profiles",
+                     contenttype.NONE,
+                     description="Profile van de  npostart.nl website.")
 
-        extra = FolderItem(
-            LanguageHelper.get_localized_string(LanguageHelper.LiveRadio),
-            "https://radio-app.omroep.nl/player/script/player.js",
-            content_type=contenttype.SONGS)
-        extra.complete = True
-        extra.dontGroup = True
-        items.append(extra)
+        add_item(LanguageHelper.Trending,
+                 "https://npo.nl/start/api/domain/recommendation-collection?partyId=1&collectionId=trending-anonymous-v0&layoutType=RECOMMENDATION",
+                 content_type=contenttype.TVSHOWS, parser="collection-with-series")
 
-        extra = FolderItem(
-            LanguageHelper.get_localized_string(LanguageHelper.LiveTv),
-            "%s/live" % (self.baseUrlLive,),
+        add_item(LanguageHelper.LatestNews,
+                 f"https://npo.nl/start/_next/data/{self.build_version}/collectie/nieuws-en-achtergronden.json?slug=nieuws-en-achtergronden",
+                 content_type=contenttype.TVSHOWS)
+
+        add_item(LanguageHelper.Popular,
+                 f"https://npo.nl/start/_next/data/{self.build_version}/collectie/nieuw-en-populair.json?slug=nieuw-en-populair",
+                 content_type=contenttype.TVSHOWS)
+
+        # add_item(LanguageHelper.Categories,
+        #     "https://npo.nl/start/api/domain/page-collection?collectionId=2670b702-d621-44be-b411-7aae3c3820eb",
+        #         content_type=contenttype.TVSHOWS)
+
+        add_item(LanguageHelper.TvShows,
+                 "https://npo.nl/start/api/domain/page-layout?layoutId=programmas&layoutType=PAGE&includePremiumContent={}&partyId=1".format(
+                     'false' if AddonSettings.hide_premium_items() else 'true'),
+                 content_type=contenttype.TVSHOWS)
+
+        live_radio = add_item(
+            LanguageHelper.LiveRadio, "https://npo.nl/luister",
+            content_type=contenttype.SONGS, headers=self.__jsonApiKeyHeader)
+        live_radio.isLive = True
+
+        live_tv = add_item(
+            LanguageHelper.LiveTv, "https://npo.nl/start/api/domain/guide-channels",
             content_type=contenttype.VIDEOS)
-        extra.complete = True
-        extra.dontGroup = True
-        items.append(extra)
+        live_tv.isLive = True
 
         extra = FolderItem(
             "{} ({})".format(
                 LanguageHelper.get_localized_string(LanguageHelper.TvShows),
                 LanguageHelper.get_localized_string(LanguageHelper.FullList)
             ),
-            "https://start-api.npo.nl/page/catalogue?pageSize={}".format(self.__pageSize),
+            f"https://start-api.npo.nl/media/series?pageSize={50}&dateFrom=2014-01-01",
+            # "https://start-api.npo.nl/page/catalogue?pageSize={}".format(self.__pageSize),
             content_type=contenttype.TVSHOWS
         )
         extra.complete = True
@@ -387,184 +461,28 @@ class Channel(chn_class.Channel):
         extra.description = "Volledige programma lijst van NPO Start."
         extra.HttpHeaders = self.__jsonApiKeyHeader
         # API Key from here: https://packagist.org/packages/kro-ncrv/npoplayer?q=&p=0&hFR%5Btype%5D%5B0%5D=concrete5-package
-        items.append(extra)
+        # items.append(extra)
 
-        extra = FolderItem(
-            LanguageHelper.get_localized_string(LanguageHelper.Genres),
-            "https://www.npostart.nl/programmas",
-            content_type=contenttype.FILES)
-        extra.complete = True
-        extra.dontGroup = True
-        items.append(extra)
-
-        extra = FolderItem(
-            "{} (A-Z)".format(LanguageHelper.get_localized_string(LanguageHelper.TvShows)),
-            "#alphalisting",
-            content_type=contenttype.FILES)
-        extra.complete = True
-        extra.description = "Alfabetische lijst van de NPO.nl site."
-        extra.dontGroup = True
-        items.append(extra)
+        # extra = FolderItem(
+        #     LanguageHelper.get_localized_string(LanguageHelper.Genres),
+        #     "https://www.npostart.nl/programmas",
+        #     content_type=contenttype.VIDEOS)
+        # extra.complete = True
+        # extra.dontGroup = True
+        # items.append(extra)
 
         recent = FolderItem(
-            LanguageHelper.get_localized_string(LanguageHelper.Recent), "#recent",
-            content_type=contenttype.EPISODES)
+            LanguageHelper.get_localized_string(LanguageHelper.Recent), "https://npo.nl/start/api/domain/guide-channels",
+            content_type=contenttype.VIDEOS)
         recent.complete = True
         recent.dontGroup = True
+        recent.metaData["retrospect:parser"] = "recent"
+        recent.cacheToDisc = False
         items.append(recent)
 
         return data, items
 
-    def add_recent_items(self, data):
-        """ Builds the "Recent" folder for this channel.
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        items = []
-        today = datetime.datetime.now() - datetime.timedelta(hours=5)
-        days = LanguageHelper.get_days_list()
-        for i in range(0, 7, 1):
-            air_date = today - datetime.timedelta(i)
-            Logger.trace("Adding item for: %s", air_date)
-
-            # Determine a nice display date
-            day = days[air_date.weekday()]
-            if i == 0:
-                day = LanguageHelper.get_localized_string(LanguageHelper.Today)
-            elif i == 1:
-                day = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
-            # elif i == 2:
-            #     day = LanguageHelper.get_localized_string(LanguageHelper.DayBeforeYesterday)
-            title = "%04d-%02d-%02d - %s" % (air_date.year, air_date.month, air_date.day, day)
-
-            # url = "https://www.npostart.nl/media/series?page=1&dateFrom=%04d-%02d-%02d&tileMapping=normal&tileType=teaser&pageType=catalogue" % \
-            if self.__useJson:
-                url = "https://start-api.npo.nl/epg/%04d-%02d-%02d?type=tv" % \
-                      (air_date.year, air_date.month, air_date.day)
-            else:
-                url = "https://www.npostart.nl/gids?date=%04d-%02d-%02d&type=tv" % \
-                      (air_date.year, air_date.month, air_date.day)
-            extra = FolderItem(title, url, content_type=contenttype.EPISODES)
-            extra.complete = True
-            extra.dontGroup = True
-            if self.__useJson:
-                extra.HttpHeaders = self.__jsonApiKeyHeader
-            else:
-                extra.HttpHeaders["X-Requested-With"] = "XMLHttpRequest"
-            extra.HttpHeaders["Accept"] = "text/html, */*; q=0.01"
-            extra.set_date(air_date.year, air_date.month, air_date.day, text="")
-
-            items.append(extra)
-
-        return data, items
-
-    def get_additional_live_items(self, data):
-        """ Adds some missing live items to the list of live items.
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        Logger.info("Processing Live items")
-
-        items = []
-        if self.parentItem.url.endswith("/live"):
-            # let's add the 3FM live stream
-            parent = self.parentItem
-
-            live_streams = {
-                "3FM Live": {
-                    "url": "http://e.omroep.nl/metadata/LI_3FM_300881",
-                    "thumb": self.get_image_location("3fm-artwork.jpg")
-                },
-                "Radio 2 Live": {
-                    "url": "http://e.omroep.nl/metadata/LI_RADIO2_300879",
-                    "thumb": self.get_image_location("radio2image.jpg")
-                    # "thumb": "http://www.radio2.nl/image/rm/48254/NPO_RD2_Logo_RGB_1200dpi.jpg?width=848&height=477"
-                },
-                "Radio 1 Live": {
-                    "url": "http://e.omroep.nl/metadata/LI_RADIO1_300877",
-                    # "thumb": "http://statischecontent.nl/img/tweederdevideo/1e7db3df-030a-4e5a-b2a2-840bd0fd8242.jpg"
-                    "thumb": self.get_image_location("radio1image.jpg")
-                },
-                "Radio 4 Live": {
-                    "url": "http://e.omroep.nl/metadata/LI_RA4_698901",
-                    "thumb": self.get_image_location("radio4image.jpg")
-                },
-                "FunX": {
-                    "url": "http://e.omroep.nl/metadata/LI_3FM_603983",
-                    "thumb": self.get_image_location("funx.jpg")
-                }
-            }
-
-            for stream in live_streams:
-                Logger.debug("Adding video item to '%s' sub item list: %s", parent, stream)
-                live_data = live_streams[stream]
-                item = MediaItem(stream, live_data["url"], mediatype.VIDEO)
-                item.icon = parent.icon
-                item.thumb = live_data["thumb"]
-                item.isLive = True
-                item.complete = False
-                items.append(item)
-        return data, items
-
-    def extract_json_for_live_radio(self, data):
-        """ Extracts the JSON data from the HTML for the radio streams
-
-        @param data: the HTML data
-        @return:     a valid JSON string and no items
-
-        """
-
-        items = []
-        data = Regexer.do_regex(r'NPW.config.channels\s*=\s*([\w\W]+?);\s*NPW\.config\.comscore', data)[-1].rstrip(";")
-        # fixUp some json
-        data = re.sub(r'(\w+):([^/])', '"\\1":\\2', data)
-        Logger.trace(data)
-        return data, items
-
-    def alpha_listing(self, data):
-        """ Creates a alpha listing with items pointing to the alpha listing on line.
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        Logger.info("Generating an Alpha list for NPO")
-
-        items = []
-        # https://www.npostart.nl/media/series?page=1&dateFrom=2014-01-01&tileMapping=normal&tileType=teaser
-        # https://www.npostart.nl/media/series?page=2&dateFrom=2014-01-01&az=A&tileMapping=normal&tileType=teaser
-        # https://www.npostart.nl/media/series?page=2&dateFrom=2014-01-01&az=0-9&tileMapping=normal&tileType=teaser
-        # https://start-api.npo.nl/media/series?az=0-9&pageSize=200
-
-        title_format = LanguageHelper.get_localized_string(LanguageHelper.StartWith)
-        url_format = "https://www.npostart.nl/media/series?page=1&dateFrom=2014-01-01&az=%s&tileMapping=normal&tileType=teaser&pageType=catalogue"
-        for char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ0":
-            if char == "0":
-                char = "0-9"
-            sub_item = FolderItem(
-                title_format % (char,), url_format % (char,),
-                content_type=contenttype.TVSHOWS)
-            sub_item.complete = True
-            sub_item.dontGroup = True
-            sub_item.content_type = contenttype.TVSHOWS
-            sub_item.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
-            items.append(sub_item)
-        return data, items
-
-    def create_profile_item(self, result_set):
+    def create_profile_item(self, result_set: dict) -> Optional[MediaItem]:
         """ Creates a new MediaItem for a the profiles in NPO Start.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -583,10 +501,10 @@ class Channel(chn_class.Channel):
         item.thumb = result_set.get("thumburl", None)
         item.description = result_set.get("description", "")
         item.complete = True
-        item.metaData["id"] = result_set["id"]
+        item.metaData["id"] = result_set["guid"]
         return item
 
-    def switch_profile(self, data):
+    def switch_profile(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
         """ Switches to the selected profile.
 
         :param str data: The retrieve data that was loaded for the current item and URL.
@@ -601,502 +519,255 @@ class Channel(chn_class.Channel):
         if not profile_id:
             return data, items
 
-        profile_data = {"id": profile_id, "pinCode": ""}
+        xsrf_token = self.__get_xsrf_token()
+        profile_data = {
+            "csrfToken": xsrf_token,
+            "data": {"profile": {"guid": "0dba0d55-640e-4e70-9b00-1449816f13cf"}}
+        }
+        headers = {"x-xsrf-token": xsrf_token}
+        response = UriHandler.open(
+            "https://npo.nl/start/api/auth/session",
+            json=profile_data, additional_headers=headers)
 
-        xsrf_token = self.__get_xsrf_token()[0]
-        UriHandler.open("https://www.npostart.nl/api/account/@me/profile/switch",
-                        data=profile_data,
-                        additional_headers={
-                            "X-Requested-With": "XMLHttpRequest",
-                            "X-XSRF-TOKEN": xsrf_token,
-                            "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
-                        })
+        #     https://npo.nl/start/api/domain/recommendation-layout?
+        #     layoutId=home&partyId=1%3Ambsf8b0g%3A15625624970147ebb696ae0a9768d49
+        #     profileGuid=0dba0d55-640e-4e70-9b00-1449816f13cf&
+        #     subscriptionType=free
+        profile_content_url = (
+            f"https://npo.nl/start/api/domain/recommendation-layout?"
+            f"partyId=1&"
+            f"layoutId=home&"
+            f"partyId=1&"
+            f"profileGuid={profile_id}&"
+            # f"subscriptionType=free"
+            f"layoutType=RECOMMENDATION"
+        )
 
-        # Add the episodes/tvshows
-        epsisodes = FolderItem(
-            LanguageHelper.get_localized_string(LanguageHelper.Episodes),
-            "https://www.npostart.nl/ums/accounts/@me/favourites/episodes?page=1&dateFrom=2014-01-01&tileMapping=dedicated&tileType=asset",
-            content_type=contenttype.EPISODES)
-        items.append(epsisodes)
+        data = UriHandler.open(profile_content_url)
 
-        tvshows = FolderItem(
-            LanguageHelper.get_localized_string(LanguageHelper.TvShows),
-            "https://www.npostart.nl/ums/accounts/@me/favourites?page=1&type=series&tileMapping=normal&tileType=teaser",
-            content_type=contenttype.TVSHOWS)
-        items.append(tvshows)
+        # data = JsonHelper(data)
+        # t = data.get_value("collections")
+        # s = [tt["key"] + ":" + tt["type"] for tt in t]
+        # v = ", ".join(s)
         return data, items
 
-    def create_episode_item(self, result_set):
-        """ Creates a new MediaItem for an episode.
+    def create_profile_content_item(self, result_set: Dict[str, str]) -> Union[MediaItem, List[MediaItem], None]:
+        profile_id = self.parentItem.metaData["id"]
 
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
+        if "key" in result_set:
+            folder_key = result_set["key"]
+        else:
+            folder_key = result_set["collectionId"]
 
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
+        url = (
+            f"https://npo.nl/start/api/domain/recommendation-collection?"
+            f"partyId=1&"
+            f"collectionId={folder_key}&"
+            # f"partyId=1%3Alp08hirt%3A2c8e90d7048a467babf108e0146ad52d&"
+            f"profileGuid={profile_id}&"
+            # f"subscriptionType=free"
+            f"layoutType=RECOMMENDATION"
+        )
+        title_key = folder_key.rsplit("-", 2)[0]
+        title_id = self.__collection_names.get(title_key, None)
+        if not title_id:
+            return None
+        title = LanguageHelper.get_localized_string(title_id)
 
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
-
-        """
-
-        item = chn_class.Channel.create_episode_item(self, result_set)
-        if not item:
+        list_type = result_set["type"].lower()
+        if list_type == "program":
+            result = FolderItem(title, url, content_type=contenttype.EPISODES, media_type=mediatype.TVSHOW)
+            result.metaData["retrospect:parser"] = "collection-with-videos"
+        elif list_type == "series":
+            result = FolderItem(title, url, content_type=contenttype.TVSHOWS)
+            result.metaData["retrospect:parser"] = "collection-with-series"
+        else:
+            Logger.warning(f"Missing list type: {list_type}")
             return None
 
-        # Update the URL
-        item.url = self.__get_url_for_pom(result_set["powid"])
-        if self.__useJson:
-            item.HttpHeaders = self.__jsonApiKeyHeader
+        return result
+
+    # noinspection PyUnusedLocal
+    def check_for_single_season(self, data: JsonHelper, items: List[MediaItem]) -> List[MediaItem]:
+        if len(items) == 1:
+            # Retry with just this url.
+            self.parentItem.url = items[0].url
+            return self.process_folder_list(self.parentItem)
+
+        # Not the perfect way as we don't know for sure if the seasonkey is the right value
+        # to sort by.
+        # def season_index(item: MediaItem):
+        #     return int(item.metaData.get("seasonKey", 0))
+        #
+        # items.sort(key=season_index)
+        # last_season = items.pop()
+        # season_items = self.process_folder_list(last_season)
+        # return items + season_items
+
+        # If not seasons, or just one, fetch the episodes
+        guid = self.parentItem.metaData.get("guid")
+        if guid:
+            url = f"https://npo.nl/start/api/domain/programs-by-series?seriesGuid={guid}&limit=20&sort=-firstBroadcastDate"
+            recent_data = JsonHelper(UriHandler.open(url))
+            for result_set in recent_data.get_value():
+                item = self.create_api_episode_item(result_set)
+                if item:
+                    items.append(item)
+
+        return items
+
+    def create_api_program_item(self, result_set: dict) -> Optional[MediaItem]:
+        title = result_set["title"]
+        slug = result_set["slug"]
+        item_type = result_set["type"]
+        guid = result_set["guid"]
+
+        # timebound_daily, timeless_series
+        if item_type and item_type.endswith("series"):
+            # Series go by season
+            url = f"https://npo.nl/start/api/domain/series-seasons?slug={slug}&type={item_type}"
         else:
-            item.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
-        item.dontGroup = True
-        item.content_type = contenttype.EPISODES
+            # The dailies not.
+            url = f"https://npo.nl/start/api/domain/programs-by-series?seriesGuid={guid}&limit=20&sort=-firstBroadcastDate"
+
+        item = FolderItem(title, url, content_type=contenttype.EPISODES)
+        # Store the series GUID as we need it later one.
+        item.metaData["guid"] = guid
+        if "images" in result_set and result_set["images"]:
+            image_data = result_set["images"][0]
+            item.set_artwork(thumb=image_data["url"], fanart=image_data["url"])
+            item.description = image_data.get("description")
         return item
 
-    def create_json_episode_item(self, result_set):
-        """ Creates a new MediaItem for an episode.
+    def create_api_category_item(self, result_set: dict) -> Optional[MediaItem]:
+        title = result_set["title"]
+        slug = result_set["slug"]
 
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
+        url = f"https://npo.nl/start/_next/data/{self.build_version}/collectie/{slug}.json?slug={slug}"
+        item = FolderItem(title, url, content_type=contenttype.TVSHOWS)
 
-        :param list[str]|dict result_set: The result_set of the self.episodeItemRegex
+        if "images" in result_set and result_set["images"]:
+            image_data = result_set["images"][0]
+            item.set_artwork(thumb=image_data["url"], fanart=image_data["url"])
+            item.description = image_data.get("description")
+        return item
 
-        :return: A new MediaItem of type 'folder'.
-        :rtype: MediaItem|None
+    def create_api_page_layout(self, result_set: dict) -> Optional[MediaItem]:
+        if "guid" in result_set:
+            guid = result_set["guid"]
+        else:
+            guid = result_set["collectionId"]
+        page_type = result_set["type"]
+        include_premium = 'false' if AddonSettings.hide_premium_items() else 'true'
+        url = (f"https://npo.nl/start/api/domain/page-collection?collectionType={page_type}"
+               f"&collectionId={guid}&partyId=1&layoutType=PAGE&includePremiumContent={include_premium}")
+        info = UriHandler.open(url)
+        info = JsonHelper(info)
+        title = info.get_value("title")
+        if not title or title.strip() == "" and "layoutId=programmas" in self.parentItem.url:
+            title = LanguageHelper.get_localized_string(LanguageHelper.Categories)
 
-        """
-
-        Logger.trace(result_set)
-        if not result_set:
+        if page_type == "SERIES":
+            content_type = contenttype.TVSHOWS
+        elif page_type == "PROGRAM":
+            content_type = contenttype.EPISODES
+        elif page_type in ("DYNAMIC_PAGE", "PAGE"):
+            content_type = contenttype.VIDEOS
+        else:
+            Logger.error(f"Missing for page type: {page_type}")
             return None
 
-        # if we should not use the mobile listing and we have a non-mobile ID)
-        if 'id' in result_set:
-            url = self.__get_url_for_pom(result_set['id'])
-        else:
-            Logger.warning("Skipping (no '(m)id' ID): %(title)s", result_set)
+        item = FolderItem(title, url, content_type=content_type)
+        return item
+
+    def create_api_season_item(self, result_set: dict) -> Optional[MediaItem]:
+        guid = result_set["guid"]
+        label = result_set.get("label")
+        title = f"{LanguageHelper.get_localized_string(LanguageHelper.SeasonId)} {result_set['seasonKey']}"
+        if label:
+            title = f"{title} - {label}"
+        url = f"https://npo.nl/start/api/domain/programs-by-season?guid={guid}"
+        item = FolderItem(title, url, content_type=contenttype.EPISODES,
+                          media_type=mediatype.FOLDER)
+        item.description = result_set.get("synopsis")
+        item.metaData["seasonKey"] = result_set["seasonKey"]
+
+        if "images" in result_set and result_set["images"]:
+            image_data = result_set["images"][0]
+            item.set_artwork(thumb=image_data["url"], fanart=image_data["url"])
+        return item
+
+    def create_api_episode_item_with_data(self, result_set: dict) -> Optional[MediaItem]:
+        if "series" not in result_set:
+            Logger.warning("Cannot create episode with show info without a show.")
             return None
 
-        name = result_set['title']
-        description = result_set.get('description', '')
+        return self.create_api_episode_item(result_set, True)
 
-        item = FolderItem(name, url, media_type=mediatype.TVSHOW, content_type=contenttype.EPISODES)
-        item.complete = True
-        item.description = description
-        if self.__useJson:
-            item.HttpHeaders = self.__jsonApiKeyHeader
-        else:
-            item.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
-        # This should always be a full list as we already have a default alphabet listing available
-        # from NPO
-        item.dontGroup = True
+    def create_api_episode_item(self, result_set: dict, show_info: bool = False) -> (
+            Optional)[MediaItem]:
+        title = result_set["title"]
+        poms = result_set["productId"]
+        serie_info = result_set.get("series") or {}
 
-        if "images" not in result_set:
-            return item
+        if show_info and result_set["series"]:
+            show_title = result_set["series"]["title"]
+            if show_title:
+                title = f"{show_title} - {title}"
 
-        images = result_set["images"]
-        for image_type, image_data in images.items():
-            if image_type == "original" and "tv" in image_data["formats"]:
-                item.fanart = image_data["formats"]["tv"]["source"]
-            elif image_type == "grid.tile":
-                item.thumb = image_data["formats"]["tv"]["source"]
+        item = MediaItem(title, poms, media_type=mediatype.EPISODE)
+
+        if "images" in result_set and result_set["images"]:
+            image_data = result_set["images"][0]
+            item.set_artwork(thumb=image_data["url"])
+
+        item.description = (result_set.get("synopsis") or {}).get("long")
+        item.set_info_label(MediaItem.LabelDuration, result_set.get("durationInSeconds", 0))
+
+        # 'firstBroadcastDate'
+        if result_set.get("firstBroadcastDate"):
+            date_time = DateHelper.get_date_from_posix(result_set["firstBroadcastDate"],
+                                                       tz=pytz.UTC)
+            date_time = date_time.astimezone(self.__timezone)
+            item.set_date(date_time.year, date_time.month, date_time.day, date_time.hour,
+                          date_time.minute, date_time.second)
+
+            serie_slug = serie_info.get("slug", "")
+            if serie_slug in ("nos-journaal", "nos-journaal-met-gebarentaal"):
+                item.name = f"{item.name} {date_time.hour:02d}:{round(date_time.minute, -1):02d}"
+
+        if "restrictions" in result_set:
+            for restriction in result_set["restrictions"]:
+                subscription = restriction.get("subscriptionType", "free")
+                has_stream = restriction.get("isStreamReady", False)
+                if subscription == "free" and has_stream:
+                    # Check if the 'till' date was in the past
+                    till_stamp = restriction.get("available", {}).get("till", 0) or 0
+                    till = DateHelper.get_date_from_posix(till_stamp, tz=pytz.UTC)
+                    if till_stamp and till < datetime.datetime.now(tz=pytz.UTC):
+                        item.isPaid = True
+                        # Due to a bug in the NPO API, this content could be viewed for free.
+                        # for now we just don't show it.
+                        if not self.__has_premium():
+                            return None
+                        else:
+                            break
+                    item.isPaid = False
+                    # Always stop after a "free"
+                    break
+                if subscription == "premium":
+                    item.isPaid = True
+
+        episode_number = result_set.get("programKey")
+        season_number = (result_set.get("season") or {}).get("seasonKey")
+        show_type = serie_info.get("type")
+        if episode_number and season_number and show_type.endswith("series"):
+            item.set_season_info(season_number, episode_number)
 
         return item
 
     # noinspection PyUnusedLocal
-    def search_site(self, url=None):  # @UnusedVariable
-        """ Creates an list of items by searching the site.
-
-        This method is called when the URL of an item is "searchSite". The channel
-        calling this should implement the search functionality. This could also include
-        showing of an input keyboard and following actions.
-
-        The %s the url will be replaced with an URL encoded representation of the
-        text to search for.
-
-        :param str url:     Url to use to search with a %s for the search parameters.
-
-        :return: A list with search results as MediaItems.
-        :rtype: list[MediaItem]
-
-        """
-
-        # The Videos
-        url = "https://www.npostart.nl/search/extended?page=1&query=%s&filter=episodes&dateFrom=2014-01-01&tileMapping=search&tileType=asset&pageType=search"
-
-        # The Shows
-        # url = "https://www.npostart.nl/search/extended?page=1&query=%s&filter=programs&dateFrom=2014-01-01&tileMapping=normal&tileType=teaser&pageType=search"
-
-        self.httpHeaders = {"X-Requested-With": "XMLHttpRequest"}
-        return chn_class.Channel.search_site(self, url)
-
-    def create_tv_guide_item(self, result_set):
-        """ Creates a MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-        channel = result_set["channel"].replace("NED", "NPO ")
-        title = "{0[hours]}:{0[minutes]} - {1} - {0[title]}".format(result_set, channel)
-        item = MediaItem(title, result_set["url"], media_type=mediatype.EPISODE)
-        item.description = result_set["channel"]
-        item.HttpHeaders = self.httpHeaders
-        item.complete = False
-        return item
-
-    def create_npo_item(self, result_set):
-        """ Creates a generic NPO MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        item = chn_class.Channel.create_video_item(self, result_set)
-
-        # set the POW id based on either video of folder:
-        # This no longer works. Assuming video for now.
-        if "npo-asset-tile-timer" in result_set["videoDetection"]:
-            item.media_type = mediatype.EPISODE
-            item.url = result_set["powid"]
-        else:
-            item.media_type = mediatype.TVSHOW
-            item.content_type = contenttype.EPISODES
-            item.url = "https://www.npostart.nl/media/series/%(powid)s/episodes?page=1&tileMapping=dedicated&tileType=asset&pageType=franchise" % result_set
-            item.HttpHeaders = {"X-Requested-With": "XMLHttpRequest"}
-        item.isPaid = "premium" in result_set["class"]
-
-        # figure out the date
-        try:
-            date_time = result_set["subtitle"].strip().replace("  ", " ").split(" ")
-            date_premium = result_set["datePremium"]
-
-            # For #933 we check for NOS Journaal
-            if ":" in date_time[-1] and item.name == "NOS Journaal":
-                item.name = "{0} - {1}".format(item.name, date_time[-1])
-
-            if self.__determine_date_time_for_npo_item(item, date_time, date_premium):
-                # We don't need the subtitle as it contained the date
-                # item.name = result_set["title"]   # won't work when sorting by name
-                Logger.trace("Date found in subtitle: %s", result_set.get("subtitle"))
-
-        except:
-            Logger.debug("Cannot set date from label: %s", result_set.get("subtitle"), exc_info=True)
-            # 2016-07-05T00:00:00Z
-            date_value = result_set.get("date")
-            if date_value:
-                time_stamp = DateHelper.get_date_from_string(date_value, "%Y-%m-%dT%H:%M:%SZ")
-                item.set_date(*time_stamp[0:6])
-            else:
-                Logger.warning("Cannot set date from 'data-from': %s", result_set["date"],
-                               exc_info=True)
-
-        return item
-
-    def extract_api_pages(self, data):
-        """ Extracts the JSON tiles data from the HTML.
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-        items = []
-
-        data = JsonHelper(data)
-        next_url = data.get_value("_links", "next", "href")
-        if next_url:
-            next_title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
-            item = FolderItem(next_title, next_url, content_type=contenttype.EPISODES)
-            item.complete = True
-            item.HttpHeaders = self.__jsonApiKeyHeader
-            items.append(item)
-
-        return data, items
-
-    def create_api_video_item(self, result_set, for_epg=False):
-        """ Creates a MediaItem of type 'video' using the result_set from the API calls:
-
-        - https://start-api.npo.nl/media/series/{POM_ID}/episodes
-        - https://start-api.npo.nl/page/franchise/{POM_ID}
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param dict[str,Any] result_set:    The result_set of the self.episodeItemRegex
-        :param bool for_epg:                Use this item in an EPG listing
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-        
-        name = self.__get_name_for_api_video(result_set, for_epg)
-        description = result_set.get('descriptionLong')
-        if not description:
-            description = result_set.get('description')
-        video_id = result_set['id']
-        if video_id is None:
-            return None
-
-        item = MediaItem(name, video_id, media_type=mediatype.EPISODE)
-        item.description = description
-
-        season = result_set.get("seasonNumber")
-        episode = result_set.get("episodeNumber")
-        if bool(season) and bool(episode) and season < 100:
-            item.set_season_info(season, episode)
-            # TODO: setting it now is to messy. Perhaps we should make it configurable?
-            # item.name = "s{0:02d}e{1:02d} - {2}".format(season, episode, item.name)
-
-        date_format = "%Y-%m-%dT%H:%M:%SZ"
-        date = result_set.get('broadcastDate')
-        if date:
-            # The dates are in UTC, so we need to calculate the actual
-            # time and take the DST in consideration for each item.
-            date_time = DateHelper.get_datetime_from_string(
-                date, date_format=date_format, time_zone="UTC")
-            date_time = date_time.astimezone(self.__timezone)
-
-            if for_epg:
-                item.name = "{:02}:{:02} - {}".format(
-                    date_time.hour, date_time.minute, item.name)
-            else:
-                item.set_date(date_time.year, date_time.month, date_time.day,
-                              date_time.hour, date_time.minute, date_time.second)
-
-            # For #933 we check for NOS Journaal
-            if item.name == "NOS Journaal":
-                item.name = "{2} - {0:02d}:{1:02d}".format(date_time.hour, date_time.minute, item.name)
-
-        item.isPaid = result_set.get("isOnlyOnNpoPlus", False)
-        availability = result_set.get("availability")
-        if not item.isPaid and availability and availability["to"] and availability["to"] != availability["from"]:
-            to_date = DateHelper.get_date_from_string(availability["to"], date_format=date_format)
-            to_datetime = datetime.datetime(*to_date[:6])
-            item.isPaid = to_datetime < datetime.datetime.now()
-
-        item.set_info_label("duration", result_set['duration'])
-
-        images = result_set["images"]
-        for image_type, image_data in images.items():
-            if image_type == "original" and "original" in image_data["formats"]:
-                continue
-                # No fanart for now.
-                # item.fanart = image_data["formats"]["original"]["source"]
-            elif image_type == "grid.tile":
-                item.thumb = image_data["formats"]["web"]["source"]
-
-        region_restrictions = result_set.get('regionRestrictions', [])
-        # The PLUSVOD:EU is not a regional restriction as it seems (See #1392)
-        item.isGeoLocked = any([r for r in region_restrictions if r != "PLUSVOD:EU"])
-        return item
-
-    def extract_epi_epg_items(self, data):
-        """ Extracts the EPG items and wraps them in a JSON Helper objecgt.
-
-        :param str data: The retrieve data that was loaded for the current item and URL.
-
-        :return: A tuple of the data and a list of MediaItems that were generated.
-        :rtype: tuple[str|JsonHelper,list[MediaItem]]
-
-        """
-
-        json = JsonHelper(data)
-        epg_data = []
-
-        for channel_epg in json.get_value("epg"):
-            # Find the channel name
-            channel = channel_epg["channel"]
-            channel_name = channel["channel"]
-
-            # Update all videos that don't have a channel specified
-            epg_items = channel_epg.get("schedule", [])
-            [e["program"].update({"channel": channel_name}) for e in epg_items if not e["program"]["channel"]]
-            epg_data += epg_items
-
-        json.json = epg_data
-        return json, []
-
-    def create_api_epg_item(self, result_set):
-        """ Creates a MediaItem of type 'video' using the result_set from the API calls:
-
-        - https://start-api.npo.nl/media/series/{POM_ID}/episodes
-        - https://start-api.npo.nl/page/franchise/{POM_ID}
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param dict[str,dict[str,str]] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-        epg_result_set = result_set["program"]
-
-        # Check to see if the channel name needs updating. We check the mapping, if it is not
-        # in the mapping, the channel name stays the same.
-        # If the result from the mapping is None (or the channel name is None) filter them.
-        channel_name = epg_result_set["channel"]
-        channel_name = self.__channel_name_map.get(channel_name, channel_name)
-        if channel_name is None:
-            Logger.trace("Invalid EPG channel: %s", channel_name)
-            return None
-
-        epg_result_set["channel"] = channel_name
-        epg_result_set["broadcastDate"] = result_set.get("startsAt", epg_result_set["broadcastDate"])
-        item = self.create_api_video_item(epg_result_set, for_epg=True)
-
-        return item
-
-    def create_video_item_json(self, result_set):
-        """ Creates a MediaItem of type 'video' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-
-        # In some cases the name, posix and description are in the root, in other cases in the
-        # 'episode' node
-        posix = result_set.get('starts_at')
-        image = result_set.get('image')
-        name = result_set.get('name')
-        description = result_set.get('description', '')
-
-        # the tips has an extra 'episodes' key
-        if 'episode' in result_set:
-            Logger.debug("Found subnode: episodes")
-            # set to episode node
-            data = result_set['episode']
-        else:
-            Logger.warning("No subnode 'episodes' found, trying anyways")
-            data = result_set
-
-        # look for better values
-        posix = data.get('broadcasted_at', posix)
-        # noinspection PyTypeChecker
-        broadcasted = DateHelper.get_date_from_posix(posix)
-        description = result_set.get('description', description)
-        video_id = data.get('whatson_id')
-
-        # try to fetch more name data
-        names = []
-        name = data.get("name", name)
-        if name:
-            names = [name, ]
-        if "series" in data and "name" in data["series"]:
-            # noinspection PyTypeChecker
-            names.insert(0, data["series"]["name"])
-
-        # Filter the duplicates
-        title = " - ".join(set(names))
-
-        item = MediaItem(title, video_id, media_type=mediatype.EPISODE)
-        item.complete = False
-        item.description = description
-
-        images = data.get('stills')
-        if images:
-            # there were images in the stills
-            # noinspection PyTypeChecker
-            item.thumb = images[-1]['url']
-        elif image:
-            # no stills, or empty, check for image
-            item.thumb = image
-
-        item.set_date(broadcasted.year, broadcasted.month, broadcasted.day, broadcasted.hour,
-                      broadcasted.minute,
-                      broadcasted.second)
-
-        return item
-
-    def create_genre_item(self, result_set):
-        """ Creates a MediaItem for a genre of type 'folder' using the result_set from the regex.
-
-        This method creates a new MediaItem from the Regular Expression or Json
-        results <result_set>. The method should be implemented by derived classes
-        and are specific to the channel.
-
-        If the item is completely processed an no further data needs to be fetched
-        the self.complete property should be set to True. If not set to True, the
-        self.update_video_item method is called if the item is focussed or selected
-        for playback.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-
-        :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
-        :rtype: MediaItem|None
-
-        """
-
-        Logger.trace(result_set)
-
-        url = "https://www.npostart.nl/media/collections/%s?page=1&tileMapping=normal&tileType=asset&pageType=collection" % (result_set[0],)
-        item = FolderItem(result_set[1], url, content_type=contenttype.TVSHOWS)
-        item.HttpHeaders["X-Requested-With"] = "XMLHttpRequest"
-        item.complete = True
-        return item
-
-    def create_live_tv(self, result_set):
+    def create_api_live_tv(self, result_set: dict, show_info: bool = False) -> Optional[MediaItem]:
         """ Creates a MediaItem for a live item of type 'video' using the result_set from the regex.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -1115,40 +786,401 @@ class Channel(chn_class.Channel):
 
         """
 
-        Logger.trace("Content = %s", result_set)
+        name = result_set["title"]
+        guid = result_set["guid"]
+        poms = result_set["externalId"]
+        url = f"https://npo.nl/start/live?channel={name}"
 
-        # first regex matched -> video channel
-        channel_id = result_set[0]
-        if channel_id == "<exception>":
-            name = "NPO 3"
-        else:
-            name = result_set[0].replace("-", " ").title().replace("Npo", "NPO")
-
-        now_playing = result_set[2]
-        next_up = result_set[3]
-        name = "%s: %s" % (name, now_playing)
-        if next_up:
-            next_up = next_up.strip()
-            next_up = next_up.replace("Straks: ", "")
-            description = "Nu: %s\nStraks om %s" % (now_playing, next_up)
-        else:
-            description = "Nu: %s" % (result_set[3].strip(),)
-
-        item = MediaItem(name, "%s/live/%s" % (self.baseUrlLive, result_set[0]), media_type=mediatype.VIDEO)
-        item.description = description
-
-        if result_set[1].startswith("http"):
-            item.thumb = result_set[1].replace("regular_", "").replace("larger_", "")
-        elif result_set[1].startswith("//"):
-            item.thumb = "http:%s" % (result_set[1].replace("regular_", "").replace("larger_", ""),)
-        else:
-            item.thumb = "%s%s" % (self.baseUrlLive, result_set[1].replace("regular_", "").replace("larger_", ""))
+        item = MediaItem(name, url, media_type=mediatype.VIDEO)
+        item.metaData["poms"] = poms
+        item.metaData["live_pid"] = poms
+        # Store the series GUID as we need it later.
+        item.metaData["guid"] = guid
+        item.isLive = True
+        item.isGeoLocked = True
 
         item.complete = False
         item.isLive = True
         return item
 
-    def create_live_radio(self, result_set):
+    def create_epg_days(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
+        items = []
+        data = JsonHelper(data)
+        channels = {}
+        for channel in data.get_value():
+            title = channel["title"]
+            guid = channel["guid"]
+            if title not in ["NPO1", "NPO2", "NPO3"]:
+                continue
+            channels[guid] = title
+
+        today = datetime.datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(self.__timezone)
+        days = LanguageHelper.get_days_list()
+        for i in range(0, 7, 1):
+            air_date = today - datetime.timedelta(i)
+            Logger.trace("Adding item for: %s", air_date)
+
+            # Determine a nice display date
+            day = days[air_date.weekday()]
+            if i == 0:
+                day = LanguageHelper.get_localized_string(LanguageHelper.Today)
+            elif i == 1:
+                day = LanguageHelper.get_localized_string(LanguageHelper.Yesterday)
+            # elif i == 2:
+            #     day = LanguageHelper.get_localized_string(LanguageHelper.DayBeforeYesterday)
+            title = "%04d-%02d-%02d - %s" % (air_date.year, air_date.month, air_date.day, day)
+
+            extra = FolderItem(title, "#recentday", content_type=contenttype.EPISODES)
+            extra.complete = True
+            extra.dontGroup = True
+            extra.metaData["date"] = f"{air_date.day:02}-{air_date.month:02}-{air_date.year}"
+            extra.metaData["channels"] = channels
+            extra.set_date(air_date.year, air_date.month, air_date.day, text="")
+            items.append(extra)
+
+        return data, items
+
+    # noinspection PyUnusedLocal
+    def load_all_epg_channels(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
+        channels = self.parentItem.metaData["channels"]
+        date = self.parentItem.metaData["date"]
+
+        epg_data = None
+        for guid, title in channels.items():
+
+            data = JsonHelper(UriHandler.open(f"https://npo.nl/start/api/domain/guide-channel?guid={guid}&date={date}"))
+            for item in data.json:
+                item["channel"] = title
+            if not epg_data:
+                epg_data = data
+            else:
+                epg_data.json += data.json
+
+        return epg_data, []
+
+    def create_api_epg_item(self, result_set: dict) -> Optional[MediaItem]:
+        Logger.debug(result_set)
+        series_slug = (result_set.get("series") or {}).get("slug")
+        program_guid = (result_set.get("program") or {}).get("guid")
+        season_slug = None
+
+        if not series_slug and program_guid:
+            # It is a single video not belonging to a series.
+            program_slug = result_set["program"]["slug"]
+            url = f"https://npo.nl/start/video/{program_slug}"
+        elif series_slug and program_guid:
+            program_slug = result_set["program"]["slug"]
+            season_slug = result_set["season"]["slug"]
+            # url = f"https://npo.nl/start/api/domain/series-seasons?slug={series_slug}"
+            url = f"https://npo.nl/start/serie/{series_slug}/{season_slug}/{program_slug}"
+        else:
+            return None
+
+        name = result_set["mainTitle"]
+        start = result_set["programStart"]
+        channel = result_set["channel"]
+
+        date_stamp = DateHelper.get_date_from_posix(start, tz=self.__timezone)
+        # Check not needed. Programs in the future that are unavailable don't have a result_set.program property, which is already checked above.
+        # https://github.com/retrospect-addon/plugin.video.retrospect/pull/1754#issuecomment-1884550951
+        # if date_stamp > datetime.datetime.now(tz=pytz.UTC):
+        #     return None
+
+        item = MediaItem(f"{date_stamp.hour:02d}:{date_stamp.minute:02d} - {channel} - {name}", url, media_type=mediatype.EPISODE)
+        if season_slug and program_guid:
+            item.metaData = {
+                "season_slug": season_slug,
+                "program_guid": program_guid
+            }
+        item.set_date(date_stamp.year, date_stamp.month, date_stamp.day, date_stamp.hour, date_stamp.minute, date_stamp.second)
+
+        duration = result_set.get("durationInSeconds")
+        if duration:
+            item.set_info_label(MediaItem.LabelDuration, duration)
+
+        if "images" in result_set and result_set["images"]:
+            image_data = result_set["images"][0]
+            item.set_artwork(thumb=image_data["url"], fanart=image_data["url"])
+            item.description = image_data.get("description")
+        return item
+
+    def update_single_video(self, item: MediaItem) -> MediaItem:
+        data = UriHandler.open(item.url)
+        whatson_info = Regexer.do_regex(r'"productId"\W+"([^"]+)"', data)
+        if not whatson_info:
+            # Retry as with a login it might fail
+            data = UriHandler.open(item.url)
+            whatson_info = Regexer.do_regex(r'"productId"\W+"([^"]+)"', data)
+
+        whatson_id = whatson_info[0]
+        return self.__update_video_item(item, whatson_id)
+
+    def update_epg_series_item(self, item: MediaItem) -> MediaItem:
+        # Go from season slug, show slug & program guid ->
+        # ?? https://npo.nl/start/api/domain/series-detail?slug=boer-zoekt-vrouw
+        # ?? Fetch the type
+        # ?? https://npo.nl/start/api/domain/series-seasons?slug=boer-zoekt-vrouw&type=timebound_series
+        # https://npo.nl/start/api/domain/series-seasons?slug=boer-zoekt-vrouw
+        # Find the season guid for the season slug
+        # https://npo.nl/start/api/domain/programs-by-season?guid=605eac92-8fb1-493c-a251-e572d4b7127f&type=timebound_series
+        # From there with the video guid, find the POMS
+
+        season_slug = item.metaData["season_slug"]
+        season_info = UriHandler.open(item.url)
+        season_info = JsonHelper(season_info)
+        season = [s for s in season_info.json if s["slug"] == season_slug][0]
+        season_guid = season["guid"]
+
+        program_guid = item.metaData["program_guid"]
+        season_content = UriHandler.open(f"https://npo.nl/start/api/domain/programs-by-season?guid={season_guid}")
+        season_content = JsonHelper(season_content)
+        program = [p for p in season_content.json if p["guid"] == program_guid][0]
+
+        product_id = program["productId"]
+
+        return self.__update_video_item(item, product_id)
+
+    def update_nextjs_video(self, item: MediaItem) -> MediaItem:
+        data = UriHandler.open(item.url)
+        next_js_data = Regexer.do_regex(r"__NEXT_DATA__[^>]+>(.+?)</script>", data)[0]
+        next_js_json = JsonHelper(next_js_data)
+        data = next_js_json.get_value("props", "pageProps", "dehydratedState", "queries", -1, "state", "data")
+        if isinstance(data, list):
+            p = [p for p in data if p["guid"] == item.metaData["program_guid"]][0]
+        else:
+            p = data
+        return self.__update_video_item(item, p["productId"])
+
+    # noinspection PyUnusedLocal
+    def search_site(self, url: Optional[str] = None, needle: Optional[str] = None) -> List[MediaItem]:
+        """ Creates a list of items by searching the site.
+
+        This method is called when and item with `self.search_url` is opened. The channel
+        calling this should implement the search functionality. This could also include
+        showing of an input keyboard and following actions.
+
+        The %s the url will be replaced with a URL encoded representation of the
+        text to search for.
+
+        :param url:     Url to use to search with an %s for the search parameters.
+        :param needle:  The needle to search for.
+
+        :return: A list with search results as MediaItems.
+
+        """
+
+        if not needle:
+            raise ValueError("No needle present")
+
+        shows_url = "https://npo.nl/start/api/domain/search-collection-items?searchType=series&partyId=1&searchQuery=%s&subscriptionType=anonymous"
+        videos_url = "https://npo.nl/start/api/domain/search-collection-items?searchType=broadcasts&partyId=1&searchQuery=%s&subscriptionType=anonymous"
+
+        items = []
+        needle = HtmlEntityHelper.url_encode(needle)
+        search_url = shows_url % (needle, )
+        temp = MediaItem("Search", search_url, mediatype.FOLDER)
+        items += self.process_folder_list(temp)
+
+        search_url = videos_url % (needle, )
+        temp = MediaItem("Search", search_url, mediatype.FOLDER)
+        items += self.process_folder_list(temp)
+        return items
+
+    # def process_old_franchise_page(self, data):
+    #     """ Prepares the main folder for a show.
+    #
+    #     Lists the most recent episodes as shown on the website and app, and adds
+    #     folders for "Extra's" and "Fragmenten".
+    #
+    #     :param str data: The retrieve data that was loaded for the current item and URL.
+    #
+    #     :return: A tuple of the data and a list of MediaItems that were generated.
+    #     :rtype: tuple[str|JsonHelper,list[MediaItem]]
+    #
+    #     """
+    #
+    #     items = []
+    #     has_more_episodes = False
+    #     has_extras = False
+    #     has_fragments = False
+    #
+    #     data = JsonHelper(data)
+    #     # Create a list of episodes for the next processing step
+    #     data.json["items"] = []
+    #
+    #     # Parse the franchise JSON to find out which components are available
+    #     for component in data.get_value("components"):
+    #         Logger.debug(list(component.keys()))
+    #         if component["id"] in ("lane-last-published", "grid-episodes"):
+    #             # The most recent episodes, or the latest season
+    #             data.json["items"] += component["data"]["items"]
+    #             if "filter" in component and component["filter"] is not None:
+    #                 # There is a season filter, so there may be more episodes
+    #                 has_more_episodes = True
+    #             if component["data"]["_links"] is not None and "next" in component["data"][
+    #                 "_links"]:
+    #                 # There is a link to the next page with more episodes
+    #                 has_more_episodes = True
+    #         elif component["id"] == "grid-clips":
+    #             # There is an "Extra's" tab
+    #             has_extras = True
+    #         elif component["id"] == "grid-fragments":
+    #             # There is a "Fragmenten" tab
+    #             has_fragments = True
+    #
+    #     # Obtain the POM ID for this show
+    #     pom = Regexer.do_regex(r'https://start-api.npo.nl/page/franchise/([^/?]+)',
+    #                            self.parentItem.url)[0]
+    #
+    #     # Generate folders for episodes, extras, and fragments
+    #     links = [(LanguageHelper.AllEpisodes, "episodes", has_more_episodes),
+    #              (LanguageHelper.Extras, "clips", has_extras),
+    #              (LanguageHelper.Fragments, "fragments", has_fragments)]
+    #
+    #     for (title, path, available) in links:
+    #         if available:
+    #             url = 'https://start-api.npo.nl/media/series/%s/%s?pageSize=50' % (pom, path)
+    #             Logger.debug("Adding link to %s: %s", path, url)
+    #             title = LanguageHelper.get_localized_string(title)
+    #             item = FolderItem("\a.: %s :." % title, url, content_type=contenttype.EPISODES)
+    #             item.complete = True
+    #             item.HttpHeaders = self.__jsonApiKeyHeader
+    #             item.dontGroup = True
+    #             items.append(item)
+    #
+    #     return data, items
+    #
+    # def extract_old_api_pages(self, data):
+    #     """ Extracts the JSON tiles data from the HTML.
+    #
+    #     :param str data: The retrieve data that was loaded for the current item and URL.
+    #
+    #     :return: A tuple of the data and a list of MediaItems that were generated.
+    #     :rtype: tuple[str|JsonHelper,list[MediaItem]]
+    #
+    #     """
+    #     items = []
+    #
+    #     data = JsonHelper(data)
+    #     next_url = data.get_value("_links", "next", "href")
+    #     Logger.debug("Retrieving a total of %s items", data.get_value("total"))
+    #
+    #     if not next_url:
+    #         return data, items
+    #
+    #     # We will just try to download all items.
+    #     for _ in range(0, self.__max_page_count - 1):
+    #         page_data = UriHandler.open(next_url, additional_headers=self.parentItem.HttpHeaders)
+    #         page_json = JsonHelper(page_data)
+    #         page_items = page_json.get_value("items")
+    #         if page_items:
+    #             data.json["items"] += page_items
+    #         next_url = page_json.get_value("_links", "next", "href")
+    #         if not next_url:
+    #             break
+    #
+    #     if next_url:
+    #         next_title = LanguageHelper.get_localized_string(LanguageHelper.MorePages)
+    #         item = FolderItem("\b.: {} :.".format(next_title), next_url,
+    #                           content_type=contenttype.EPISODES)
+    #         item.complete = True
+    #         item.HttpHeaders = self.__jsonApiKeyHeader
+    #         item.dontGroup = True
+    #         items.append(item)
+    #
+    #     return data, items
+    #
+    # def create_old_api_video_item(self, result_set, for_epg=False):
+    #     """ Creates a MediaItem of type 'video' using the result_set from the API calls:
+    #
+    #     - https://start-api.npo.nl/media/series/{POM_ID}/episodes
+    #     - https://start-api.npo.nl/page/franchise/{POM_ID}
+    #
+    #     This method creates a new MediaItem from the Regular Expression or Json
+    #     results <result_set>. The method should be implemented by derived classes
+    #     and are specific to the channel.
+    #
+    #     If the item is completely processed an no further data needs to be fetched
+    #     the self.complete property should be set to True. If not set to True, the
+    #     self.update_video_item method is called if the item is focussed or selected
+    #     for playback.
+    #
+    #     :param dict[str,Any] result_set:    The result_set of the self.episodeItemRegex
+    #     :param bool for_epg:                Use this item in an EPG listing
+    #
+    #     :return: A new MediaItem of type 'video' or 'audio' (despite the method's name).
+    #     :rtype: MediaItem|None
+    #
+    #     """
+    #
+    #     Logger.trace(result_set)
+    #
+    #     name = self.__get_name_for_api_video(result_set, for_epg)
+    #     description = result_set.get('descriptionLong')
+    #     if not description:
+    #         description = result_set.get('description')
+    #     video_id = result_set['id']
+    #     if video_id is None:
+    #         return None
+    #
+    #     item = MediaItem(name, video_id, media_type=mediatype.EPISODE)
+    #     item.description = description
+    #
+    #     season = result_set.get("seasonNumber")
+    #     episode = result_set.get("episodeNumber")
+    #
+    #     # Check for seasons but don't add then for EPG
+    #     if bool(season) and bool(episode) and season < 100 and not for_epg:
+    #         item.set_season_info(season, episode)
+    #         # TODO: setting it now is to messy. Perhaps we should make it configurable?
+    #         # item.name = "s{0:02d}e{1:02d} - {2}".format(season, episode, item.name)
+    #
+    #     date_format = "%Y-%m-%dT%H:%M:%SZ"
+    #     date = result_set.get('broadcastDate')
+    #     if date:
+    #         # The dates are in UTC, so we need to calculate the actual
+    #         # time and take the DST in consideration for each item.
+    #         date_time = DateHelper.get_datetime_from_string(
+    #             date, date_format=date_format, time_zone="UTC")
+    #         date_time = date_time.astimezone(self.__timezone)
+    #
+    #         if for_epg:
+    #             item.name = "{:02}:{:02} - {}".format(
+    #                 date_time.hour, date_time.minute, item.name)
+    #         else:
+    #             item.set_date(date_time.year, date_time.month, date_time.day,
+    #                           date_time.hour, date_time.minute, date_time.second)
+    #
+    #         # For #933 we check for NOS Journaal
+    #         if item.name == "NOS Journaal":
+    #             item.name = "{2} - {0:02d}:{1:02d}".format(date_time.hour, date_time.minute,
+    #                                                        item.name)
+    #
+    #     item.isPaid = result_set.get("isOnlyOnNpoPlus", False)
+    #     availability = result_set.get("availability")
+    #     if not item.isPaid and availability and availability["to"] and availability["to"] != \
+    #             availability["from"]:
+    #         to_date = DateHelper.get_date_from_string(availability["to"], date_format=date_format)
+    #         to_datetime = datetime.datetime(*to_date[:6])
+    #         item.isPaid = to_datetime < datetime.datetime.now()
+    #
+    #     item.set_info_label("duration", result_set['duration'])
+    #
+    #     images = result_set["images"]
+    #     for image_type, image_data in images.items():
+    #         if image_type == "original" and "original" in image_data["formats"]:
+    #             continue
+    #             # No fanart for now.
+    #             # item.fanart = image_data["formats"]["original"]["source"]
+    #         elif image_type == "grid.tile":
+    #             item.thumb = image_data["formats"]["web"]["source"]
+    #
+    #     region_restrictions = result_set.get('regionRestrictions', [])
+    #     # The PLUSVOD:EU is not a regional restriction as it seems (See #1392)
+    #     item.isGeoLocked = any([r for r in region_restrictions if r != "PLUSVOD:EU"])
+    #     return item
+
+    def create_live_radio(self, result_set: dict) -> Optional[MediaItem]:
         """ Creates a MediaItem for a live radio item of type 'video' using the
         result_set from the regex.
 
@@ -1169,46 +1201,40 @@ class Channel(chn_class.Channel):
         """
 
         Logger.trace("Content = %s", result_set)
-        name = result_set["name"]
-        if name == "demo":
+        # url = f"{result_set['url']}/live"
+        url = result_set["url"].rstrip("/")
+        if "blend" in url:
             return None
-
-        item = MediaItem(name, "", media_type=mediatype.AUDIO)
+        title = result_set["title"]
+        item = MediaItem(title, url, media_type=mediatype.VIDEO)
         item.isLive = True
         item.complete = False
-
-        # noinspection PyTypeChecker
-        streams = result_set.get("audiostreams", [])
-
-        # first check for the video streams
-        # noinspection PyTypeChecker
-        for stream in result_set.get("videostreams", []):
-            Logger.trace(stream)
-            # url = stream["url"]
-            # if not url.endswith("m3u8"):
-            if not stream["protocol"] == "prid":
-                continue
-            item.url = "http://e.omroep.nl/metadata/%(url)s" % stream
-            item.complete = False
-            item.media_type = mediatype.EPISODE
-            return item
-
-        # else the radio streams
-        for stream in streams:
-            Logger.trace(stream)
-            if not stream["protocol"] or stream["protocol"] == "prid":
-                continue
-            bitrate = stream.get("bitrate", 0)
-            url = stream["url"]
-            item.add_stream(url, bitrate)
-            item.complete = True
-            # if not stream["protocol"] == "prid":
-            #     continue
-            # item.url = "http://e.omroep.nl/metadata/%(url)s" % stream
-            # item.complete = False
+        item.isLive = True
+        item.metaData["retrospect:parser"] = "liveRadio"
         return item
 
-    def update_video_item(self, item):
+    def update_live_radio(self, item: MediaItem) -> MediaItem:
+        # First fetch the Javascript data file
+        www_data = UriHandler.open(item.url)
+        js_data_url = Regexer.do_regex(r'(_next/static/chunks/pages/_app[^"]+.js)', www_data)[0]
+        js_data = UriHandler.open(f"{item.url}/{js_data_url}")
+
+        # Then fetch the slug
+        # slug = Regexer.do_regex(r'slug\W*:\W*"([^"]+)"', js_data)[0]
+        slug = Regexer.do_regex(r'var\W*r\W*=\W*"(npo[^"]+)"', js_data)[0]
+
+        # Get the channel info and media info.
+        channel_json = JsonHelper(UriHandler.open(f"{item.url}/api/miniplayer/info?channel={slug}"))
+        media_info = channel_json.get_value("data", "coreChannels", "data", 0, "liveVideo")
+        if not media_info:
+            media_info = channel_json.get_value("data", "coreChannels", "data", 0, "liveAudio")
+        token_url = media_info["tokenUrl"]
+        token_json = JsonHelper(UriHandler.open(token_url))
+
+        mid = token_json.get_value("mid")
+        return self.__update_video_item(item, mid, fetch_subtitles=False)
+
+    def update_video_item(self, item: MediaItem) -> MediaItem:
         """ Updates an existing MediaItem with more data.
 
         Used to update none complete MediaItems (self.complete = False). This
@@ -1237,32 +1263,7 @@ class Channel(chn_class.Channel):
         whatson_id = item.url
         return self.__update_video_item(item, whatson_id)
 
-    def update_from_poms(self, item):
-        """ Updates an existing MediaItem with more data based on the POMS Id.
-
-        Used to update none complete MediaItems (self.complete = False). This
-        could include opening the item's URL to fetch more data and then process that
-        data or retrieve it's real media-URL.
-
-        The method should at least:
-        * cache the thumbnail to disk (use self.noImage if no thumb is available).
-        * set at least one MediaStream.
-        * set self.complete = True.
-
-        if the returned item does not have a MediaSteam then the self.complete flag
-        will automatically be set back to False.
-
-        :param MediaItem item: the original MediaItem that needs updating.
-
-        :return: The original item with more data added to it's properties.
-        :rtype: MediaItem
-
-        """
-
-        poms = item.url.split("/")[-1]
-        return self.__update_video_item(item, poms)
-
-    def update_video_item_live(self, item):
+    def update_video_item_live(self, item: MediaItem) -> MediaItem:
         """ Updates an existing Live MediaItem with more data.
 
         Used to update none complete MediaItems (self.complete = False). This
@@ -1285,12 +1286,15 @@ class Channel(chn_class.Channel):
         """
 
         Logger.debug('Starting update_video_item: %s', item.name)
+        if "live_pid" in item.metaData:
+            return self.__update_video_item(item, item.metaData["live_pid"], False)
 
         # we need to determine radio or live tv
         Logger.debug("Fetching live stream data from item url: %s", item.url)
         html_data = UriHandler.open(item.url)
 
-        mp3_urls = Regexer.do_regex("""data-streams='{"url":"([^"]+)","codec":"[^"]+"}'""", html_data)
+        mp3_urls = Regexer.do_regex("""data-streams='{"url":"([^"]+)","codec":"[^"]+"}'""",
+                                    html_data)
         if len(mp3_urls) > 0:
             Logger.debug("Found MP3 URL")
             item.add_stream(mp3_urls[0], 192)
@@ -1299,7 +1303,8 @@ class Channel(chn_class.Channel):
             # NPO3 normal stream had wrong subs
             if "npo-3" in item.url and False:
                 # NPO3 has apparently switched the normal and hearing impaired streams?
-                json_urls = Regexer.do_regex('<div class="video-player-container"[^>]+data-alt-prid="([^"]+)"', html_data)
+                json_urls = Regexer.do_regex(
+                    '<div class="video-player-container"[^>]+data-alt-prid="([^"]+)"', html_data)
             else:
                 json_urls = Regexer.do_regex('<npo-player[^-][^>]*media-id="([^"]+)"', html_data)
 
@@ -1312,19 +1317,118 @@ class Channel(chn_class.Channel):
         item.complete = True
         return item
 
-    def __has_premium(self):
+    def create_iptv_streams(self, parameter_parser):
+        """ Fetch the available live channels using guide-channels endpoint and format them into JSON-STREAMS
+
+        :param ActionParser parameter_parser: a ActionParser object to is used to parse and
+                                                   create urls
+
+        :return: Formatted stations
+        :rtype: list
+        """
+        channel_data = JsonHelper(UriHandler.open(f"https://npo.nl/start/api/domain/guide-channels"))
+        parent_item = MediaItem("Live", "https://www.npostart.nl/live", media_type=mediatype.FOLDER)
+        items = []
+        iptv_streams = []
+
+        logo_sources = {
+            "NPO1": TextureHandler.instance().get_texture_uri(self, "npo1.png"),
+            "NPO2": TextureHandler.instance().get_texture_uri(self, "npo2.png"),
+            "NPO3": TextureHandler.instance().get_texture_uri(self, "npo3.png"),
+            "NPO1 Extra": TextureHandler.instance().get_texture_uri(self, "npo1extra.png"),
+            "NPO2 Extra": TextureHandler.instance().get_texture_uri(self, "npo2extra.png"),
+            "NPO Politiek en Nieuws": TextureHandler.instance().get_texture_uri(self, "npopolitiekennieuws.png")
+        }
+
+        for livestream in channel_data.json:
+            item_name = JsonHelper.get_from(livestream, "title")
+            if item_name not in logo_sources:
+                continue
+
+            item = self.create_api_live_tv(livestream)
+            items.append(item)
+
+            iptv_streams.append(dict(
+                id=JsonHelper.get_from(livestream, "guid"),
+                name=item_name,
+                logo=logo_sources[item_name],
+                group=self.channelName,
+                stream=parameter_parser.create_action_url(self, action=action.PLAY_VIDEO, item=item,
+                                                          store_id=parent_item.guid),
+            ))
+
+        parameter_parser.pickler.store_media_items(parent_item.guid, parent_item, items)
+        return iptv_streams
+
+    def create_iptv_epg(self, parameter_parser):
+        """ Fetch the EPG using the EPG endpoint and format it into JSON-EPG
+
+        :param ActionParser parameter_parser: a ActionParser object to is used to parse and
+                                                   create urls
+
+        :return: Formatted stations
+        :rtype: dict
+        """
+
+        channel_data = JsonHelper(UriHandler.open(f"https://npo.nl/start/api/domain/guide-channels"))
+        parent = MediaItem("EPG", "https://start-api.npo.nl/epg/", media_type=mediatype.FOLDER)
+        iptv_epg = dict()
+        media_items = []
+
+        for livestream in channel_data.json:
+            iptv_epg[livestream["guid"]] = []
+
+            # Fetch 3 days in the past and in the future
+            start = datetime.datetime.now() - datetime.timedelta(days=3)
+            for i in range(0, 6, 1):
+                air_date = start + datetime.timedelta(i)
+                date = air_date.strftime("%d-%m-%Y")
+                guid = livestream["guid"]
+                guide_data = JsonHelper(UriHandler.open(f"https://npo.nl/start/api/domain/guide-channel?guid={guid}&date={date}"))
+
+                for item in guide_data.json:
+                    item["channel"] = livestream["title"]
+                    media_item = self.create_api_epg_item(item)
+                    iptv_epg_item = dict(
+                        start=datetime.datetime.fromtimestamp(JsonHelper.get_from(item, "programStart"), datetime.timezone.utc).isoformat(),
+                        stop=datetime.datetime.fromtimestamp(JsonHelper.get_from(item, "programEnd"), datetime.timezone.utc).isoformat(),
+                        title=JsonHelper.get_from(item, "mainTitle"))
+
+                    if len(JsonHelper.get_from(item, "images")) > 0:
+                        iptv_epg_item["image"] = JsonHelper.get_from(item, "images")[0].get("url")
+
+                    genres = item.get("genres") or []
+                    if genres:
+                        iptv_epg_item["genre"] = genres[0].get("name", "")
+                    if item.get("synopsis"):
+                        iptv_epg_item["description"] = item["synopsis"]
+                    if item.get("episodeTitle"):
+                        iptv_epg_item["subtitle"] = item["episodeTitle"]
+
+                    if media_item is not None:
+                        iptv_epg_item["stream"] = parameter_parser.create_action_url(
+                            self, action=action.PLAY_VIDEO, item=media_item, store_id=parent.guid)
+                        media_items.append(media_item)
+
+                    iptv_epg[livestream["guid"]].append(iptv_epg_item)
+
+        parameter_parser.pickler.store_media_items(parent.guid, parent, media_items)
+        return iptv_epg
+
+    def __has_premium(self) -> bool:
         if self.__has_premium_cache is None:
-            subscription_cookie = UriHandler.get_cookie("subscription", "www.npostart.nl")
-            if subscription_cookie:
-                self.__has_premium_cache = subscription_cookie.value == "npoplus"
-                if self.__has_premium_cache:
-                    Logger.debug("NPO Plus account, so all items can be played.")
-            else:
-                self.__has_premium_cache = False
+            if not self.loggedOn:
+                self.log_on()
+
+            data = UriHandler.open("https://npo.nl/start/api/auth/session")
+            json = JsonHelper(data)
+            subscriptions = json.get_value("hasSubscription", fallback=None)
+            self.__has_premium_cache = subscriptions is not None
+            Logger.debug("Found subscriptions: %s", subscriptions)
 
         return self.__has_premium_cache
 
-    def __update_video_item(self, item, episode_id, fetch_subtitles=True):
+    def __update_video_item(self, item: MediaItem, episode_id: str, fetch_subtitles: bool = True) -> MediaItem:
         """ Updates an existing MediaItem with more data.
 
         Used to update none complete MediaItems (self.complete = False). This
@@ -1352,14 +1456,15 @@ class Channel(chn_class.Channel):
 
         # get the subtitle
         if fetch_subtitles:
-            sub_title_url = "https://assetscdn.npostart.nl/subtitles/original/nl/%s.vtt" % (episode_id,)
+            sub_title_url = f"https://cdn.npoplayer.nl/subtitles/nl/{episode_id}.vtt"
             sub_title_path = subtitlehelper.SubtitleHelper.download_subtitle(
                 sub_title_url, episode_id + ".nl.srt", format='srt')
+
             if sub_title_path:
                 item.subtitle = sub_title_path
 
-        if AddonSettings.use_adaptive_stream_add_on(
-                with_encryption=True, ignore_add_on_config=True):
+        if AddonSettings.use_adaptive_stream_add_on(with_encryption=True,
+                                                    ignore_add_on_config=True):
             error = NpoStream.add_mpd_stream_from_npo(None, episode_id, item, live=item.isLive)
             if bool(error) and self.__has_premium():
                 self.__log_on(force_log_off=True)
@@ -1400,14 +1505,10 @@ class Channel(chn_class.Channel):
         #     )
         return item
 
-    def __ignore_cookie_law(self):
+    def __ignore_cookie_law(self) -> None:
         """ Accepts the cookies from UZG in order to have the site available """
 
         Logger.info("Setting the Cookie-Consent cookie for www.uitzendinggemist.nl")
-
-        UriHandler.set_cookie(name='site_cookie_consent', value='yes',
-                              domain='.www.uitzendinggemist.nl')
-        UriHandler.set_cookie(name='npo_cc', value='tmp', domain='.www.uitzendinggemist.nl')
 
         UriHandler.set_cookie(name='site_cookie_consent', value='yes', domain='.npo.nl')
         UriHandler.set_cookie(name='npo_cc', value='30', domain='.npo.nl')
@@ -1416,129 +1517,14 @@ class Channel(chn_class.Channel):
         UriHandler.set_cookie(name='npo_cc', value='30', domain='.npostart.nl')
         return
 
-    def __get_url_for_pom(self, pom):
-        if self.__useJson:
-            url = "https://start-api.npo.nl/media/series/{0}/episodes?pageSize={1}"\
-                .format(pom, self.__pageSize)
-            # The Franchise URL will give use seasons
-            # url = "https://start-api.npo.nl/page/franchise/{0}".format(result_set['id'])
-        else:
-            url = "https://www.npostart.nl/media/series/{0}/episodes?page=1" \
-                  "&tileMapping=dedicated&tileType=asset&pageType=franchise".format(pom)
-        return url
-
-    def __determine_date_time_for_npo_item(self, item, date_time, date_premium):
-        """
-
-        :param MediaItem item:              The current item.
-        :param list[str|int] date_time:     The date time string items.
-        :param str date_premium:            The premium start date that we use to get the year from.
-
-        :return: whether the date time was found
-        :rtype: True
-
-        """
-
-        if date_premium:
-            date_premium = DateHelper.get_date_from_string(date_premium, "%Y-%m-%dT%H:%M:%SZ")
-
-        Logger.trace("Date Parts: %s", date_time)
-
-        if date_time[-2].lower() == "gisteren":
-            date_time = datetime.datetime.now() + datetime.timedelta(days=-1)
-            item.set_date(date_time.year, date_time.month, date_time.day)
-        elif date_time[-2].lower() == "vandaag":
-            date_time = datetime.datetime.now()
-            item.set_date(date_time.year, date_time.month, date_time.day)
-        elif ":" in date_time[-1]:
-            if date_time[-2].isalpha():
-                year = date_premium.tm_year if date_premium else datetime.datetime.now().year
-                date_time.insert(-1, year)
-
-            # For #933 we check for NOS Journaal
-            if item.name.startswith("NOS Journaal"):
-                item.name = "{0} - {1}".format(item.name, date_time[-1])
-            year = int(date_time[-2])
-
-            month = DateHelper.get_month_from_name(date_time[-3], language="nl")
-            day = int(date_time[-4])
-
-            stamp = datetime.datetime(year, month, day)
-            if stamp > datetime.datetime.now():
-                year -= 1
-            item.set_date(year, month, day)
-        else:
-            # there is an actual date present
-            if date_time[0].isalpha():
-                # first part is ma/di/wo/do/vr/za/zo
-                date_time.pop(0)
-
-            # translate the month
-            month = DateHelper.get_month_from_name(date_time[1], language="nl")
-
-            # if the year is missing, let's assume it is this year
-            if ":" in date_time[2]:
-                date_time[2] = datetime.datetime.now().year
-                # in the past of future, if future, we need to substract
-                stamp = datetime.datetime(int(date_time[2]), month, int(date_time[0]))
-                if stamp > datetime.datetime.now():
-                    date_time[2] -= 1
-
-            item.set_date(date_time[2], month, date_time[0])
-        return True
-
-    def __get_xsrf_token(self):
+    def __get_xsrf_token(self) -> str:
         """ Retrieves a JSON Token and XSRF token
 
         :return: XSRF Token and JSON Token
         :rtype: tuple[str|None,str|None]
         """
 
-        # get a token (why?), cookies and an xsrf token
-        token = UriHandler.open("https://www.npostart.nl/api/token",
-                                no_cache=True,
-                                additional_headers={"X-Requested-With": "XMLHttpRequest"})
-
-        json_token = JsonHelper(token)
-        token = json_token.get_value("token")
-        if not token:
-            return None, None
-
-        xsrf_token = UriHandler.get_cookie("XSRF-TOKEN", "www.npostart.nl").value
-        xsrf_token = HtmlEntityHelper.url_decode(xsrf_token)
-        return xsrf_token, token
-
-    def __get_name_for_api_video(self, result_set, for_epg):
-        """ Determines the name of the video item given the episode name, franchise name and
-        show title.
-
-        :param list[str]|dict[str,str] result_set: The result_set of the self.episodeItemRegex
-        :param bool for_epg: use this item in an EPG listing
-
-        :return: The name of the video item
-        :rtype: string
-
-        """
-
-        # We need to strip the : because some shows have them and they make no sense.
-        show_title = result_set["title"] or result_set["franchiseTitle"]
-        show_title = show_title.strip(":")
-        episode_title = result_set["episodeTitle"]
-        if for_epg:
-            channel = result_set["channel"]
-            name = "{} - {}".format(channel, show_title)
-            if episode_title and show_title != episode_title:
-                name = "{} - {}".format(name, episode_title)
-        else:
-            name = episode_title
-            if not bool(name):
-                name = result_set.get('franchiseTitle')
-
-            # In some cases the title of the show (not episode) is different from the franchise
-            # title. In that case we want to add the title of the show in front of the name, but
-            # only if that does not lead to duplication
-            elif show_title != result_set.get('franchiseTitle') \
-                    and show_title != name:
-                name = "{} - {}".format(show_title, name)
-
-        return name
+        # Fetch a CSRF token
+        data = UriHandler.open("https://npo.nl/start/api/auth/csrf", no_cache=True)
+        csrf_token = JsonHelper(data).get_value("csrfToken")
+        return csrf_token

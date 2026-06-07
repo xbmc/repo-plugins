@@ -5,20 +5,20 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-import re
+import json
 
 from codequick import Listitem, Resolver, Route
 import urlquick
 
-from resources.lib import resolver_proxy
+from resources.lib import web_utils, resolver_proxy, download
 from resources.lib.menu_utils import item_post_treatment
 
 
 URL_ROOT = 'https://www.lachainemeteo.com'
-
 URL_VIDEOS = URL_ROOT + '/videos-meteo/videos-la-chaine-meteo'
+URL_JWPLAYER = 'https://cdn.jwplayer.com/v2/media/%s'
 
-URL_BRIGHTCOVE_DATAS = URL_ROOT + '/jsdyn/lcmjs.js'
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Route.register
@@ -28,7 +28,7 @@ def list_programs(plugin, item_id, **kwargs):
     - Les feux de l'amour
     - ...
     """
-    resp = urlquick.get(URL_VIDEOS)
+    resp = urlquick.get(URL_VIDEOS, GENERIC_HEADERS, max_age=-1)
     root = resp.parse()
 
     for program_datas in root.iterfind(".//div[@class='viewVideosSeries']"):
@@ -38,18 +38,13 @@ def list_programs(plugin, item_id, **kwargs):
 
         item = Listitem()
         item.label = program_title
-        item.set_callback(list_videos,
-                          item_id=item_id,
-                          program_title_value=program_title)
+        item.set_callback(list_videos, program_title_value=program_title, root=root)
         item_post_treatment(item)
         yield item
 
 
 @Route.register
-def list_videos(plugin, item_id, program_title_value, **kwargs):
-
-    resp = urlquick.get(URL_VIDEOS)
-    root = resp.parse()
+def list_videos(plugin, program_title_value, root, **kwargs):
 
     for program_datas in root.iterfind(".//div[@class='viewVideosSeries']"):
         program_title = program_datas.find(
@@ -62,33 +57,24 @@ def list_videos(plugin, item_id, program_title_value, **kwargs):
                 video_title = video_datas.find(".//div[@class='txt']").text
                 video_image = video_datas.find('.//img').get('data-src')
                 video_url = video_datas.get('href')
-
                 item = Listitem()
                 item.label = video_title
                 item.art['thumb'] = item.art['landscape'] = video_image
-
-                item.set_callback(get_video_url,
-                                  item_id=item_id,
-                                  video_url=video_url)
-                item_post_treatment(item,
-                                    is_playable=True,
-                                    is_downloadable=True)
+                item.set_callback(get_video_url, video_url=video_url)
+                item_post_treatment(item, is_playable=True, is_downloadable=True)
                 yield item
 
 
 @Resolver.register
-def get_video_url(plugin,
-                  item_id,
-                  video_url,
-                  download_mode=False,
-                  **kwargs):
+def get_video_url(plugin, video_url, download_mode=False, **kwargs):
 
     resp = urlquick.get(video_url)
-    data_video_id = re.compile('data-video-id=\'(.*?)\'').findall(resp.text)[0]
-    data_player = re.compile('data-player=\'(.*?)\'').findall(resp.text)[0]
-    resp2 = urlquick.get(URL_BRIGHTCOVE_DATAS)
-    data_account = re.compile('players.brightcove.net/(.*?)/').findall(
-        resp2.text)[0]
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, data_video_id,
-                                                    download_mode)
+    data_video = resp.parse().find('.//video').get('data-video-id')
+
+    resp = urlquick.get(URL_JWPLAYER % data_video, GENERIC_HEADERS, max_age=-1)
+    video_url = json.loads(resp.text)['playlist'][0]['sources'][0]['file']
+
+    if download_mode:
+        return download.download_video(video_url)
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url)

@@ -129,8 +129,16 @@ menu = {
         'route': '/resources/lib/channels/wo/tv5mondeplus:list_categories',
         'label': 'TV5Monde Plus',
         'thumb': 'channels/wo/tv5mondeplus.png',
-        'fanart': 'channels/wo/tv5mondeplus_fanart.jpg',
-        'enabled': False,
+        'fanart': 'channels/wo/tv5mondeplus.png',
+        'enabled': True,
         'order': 26
+    },
+    'aljazeera': {
+        'route': '/resources/lib/channels/wo/aljazeera:list_programs',
+        'label': 'Aljazeera',
+        'thumb': 'channels/wo/aljazeera.png',
+        'fanart': 'channels/wo/aljazeera_fanart.png',
+        'enabled': True,
+        'order': 27
     }
 }

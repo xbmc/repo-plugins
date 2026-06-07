@@ -1,0 +1,177 @@
+# Kodi Media Center language file
+# Addon Name: Channels DVR
+# Addon id: plugin.video.channelsdvr
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.channelsdvr\n"
+"Report-Msgid-Bugs-To: http://forum.kodi.tv/showthread.php?tid=315513\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fa_af\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+
+msgctxt "Addon Summary"
+msgid "Live TV, everywhere"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Watch your favorite programs on Kodi. Channels delivers a unified experience across all your TVs, devices, and streaming platforms."
+msgstr ""
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Something went wrong, Please check settings and try again..."
+msgstr ""
+
+msgctxt "#30002"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Lineup"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Enable M3U/XMLTV Generator Service"
+msgstr ""
+
+msgctxt "#30005"
+msgid "M3U/XMLTV Path"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Use MPEG Video Streams"
+msgstr ""
+
+msgctxt "#30007"
+msgid "%s Updating..."
+msgstr ""
+
+msgctxt "#30008"
+msgid "General"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Enter Channels DVR Server IP"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Enter Channels DVR Server Port"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Allow this plugin to automatically configure IPTV Simple PVR Backend?"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Coming Up Later..."
+msgstr ""
+
+msgctxt "#30013"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Enter Search Term"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Recordings"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Build Only Favorites"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Live (Favorites)"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Use Direct stream"
+msgstr ""
+
+msgctxt "#30019"
+msgid "PseudoTV Live Supported through Recommended Services"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Enable Timeshift"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Reconfigure %s for use with %s"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Complete"
+msgstr ""
+
+msgctxt "#30023"
+msgid "%s not found, Please Install"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Sources"
+msgstr ""
+
+msgctxt "#49000"
+msgid "Integration"
+msgstr ""
+
+msgctxt "#49001"
+msgid "Install PseudoTV Live add-on"
+msgstr ""
+
+msgctxt "#49002"
+msgid "Install IPTV Manager add-on"
+msgstr ""
+
+msgctxt "#49003"
+msgid "Enable IPTV Manager integration"
+msgstr ""
+
+msgctxt "#49004"
+msgid "IPTV Manager settings…"
+msgstr ""
+
+msgctxt "#49005"
+msgid "PseudoTV Live settings…"
+msgstr ""
+
+msgctxt "#49006"
+msgid "Only add Favorites"
+msgstr ""
+
+msgctxt "#49007"
+msgid "%s added to Favorites"
+msgstr ""
+
+msgctxt "#49008"
+msgid "%s removed from Favorites"
+msgstr ""
+
+msgctxt "#49009"
+msgid "Add Channel to Favorites"
+msgstr ""
+
+msgctxt "#49010"
+msgid "Remove Channel from Favorites"
+msgstr ""
+
+msgctxt "#49011"
+msgid "Live (Favorites)"
+msgstr ""
+
+msgctxt "#49012"
+msgid "Favorites"
+msgstr ""

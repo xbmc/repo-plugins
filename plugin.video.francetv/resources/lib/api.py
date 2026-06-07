@@ -17,11 +17,11 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 from __future__ import unicode_literals
+
 import logging
 from os.path import dirname
 from os.path import join
 import re
-
 import time
 
 try:
@@ -96,6 +96,8 @@ _CHANNEL_ICONS = {
     "slash": join(_MEDIA_DIR, "slash.png"),
     "okoo": join(_MEDIA_DIR, "okoo.png"),
     "culturebox": join(_MEDIA_DIR, "culturebox.png"),
+    "serie": join(_MEDIA_DIR, "serie.png"),
+    "documentaire": join(_MEDIA_DIR, "documentaire.png"),
 }  # type: Dict[Optional[Text], Text]
 
 _ALL_TV_SHOWS_ICON = join(_MEDIA_DIR, "all-tv-shows.png")
@@ -137,7 +139,8 @@ class FranceTV:
         # type: (Text) -> Union[Item, Collection]
 
         return self._session.get(
-            "{}/{}".format(self._API_URL, path), params={"platform": "apps"},
+            "{}/{}".format(self._API_URL, path),
+            params={"platform": "apps"},
         ).json()
 
     @staticmethod
@@ -178,18 +181,19 @@ class FranceTV:
 
         art = {}  # type: Art
 
-        channel_icon = _CHANNEL_ICONS.get(FranceTV._get_channel_id(item))
+        channel = FranceTV._get_channel_id(item)
+        channel_icon = _CHANNEL_ICONS.get(channel)
         art.setdefault("icon", channel_icon)
 
         # Use channel logo as thumb for live videos
         if FranceTV._is_live(item, parent_item):
-            art.setdefault("thumb", channel_icon)
+            art.setdefault("poster", channel_icon)
 
         item_type = item.get("type")
 
         # Artwork provided by the france.tv API is really bad for
         # channels
-        if item_type == "channel":
+        if item_type == "channel" and channel:
             return art
 
         for image in item.get("images") or []:
@@ -363,7 +367,10 @@ class FranceTV:
                 info["cast"] = cast
         elif item.get("presenter"):
             info["cast"] = [
-                (p, "Présentateur",)
+                (
+                    p,
+                    "Présentateur",
+                )
                 for p in item["presenter"]
                 .replace("Présenté par ", "")
                 .rstrip(".")

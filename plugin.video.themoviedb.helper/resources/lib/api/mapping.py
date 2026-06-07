@@ -14,33 +14,33 @@ def get_empty_item():
         'context_menu': []}
 
 
-def set_show(item, base_item=None):
+def set_show(item, base_item=None, is_season=False):
     if not base_item:
         return item
     item['art'].update(
-        {'tvshow.{}'.format(k): v for k, v in base_item.get('art', {}).items()})
+        {f'tvshow.{k}': v for k, v in base_item.get('art', {}).items()})
     item['unique_ids'].update(
-        {'tvshow.{}'.format(k): v for k, v in base_item.get('unique_ids', {}).items()})
+        {f'tvshow.{k}': v for k, v in base_item.get('unique_ids', {}).items()})
     item['infoproperties'].update(
-        {'tvshow.{}'.format(k): v for k, v in base_item.get('infolabels', {}).items() if type(v) not in [dict, list, tuple]})
-    item['infolabels']['tvshowtitle'] = base_item['infolabels'].get('title')
+        {f'{"season." if is_season else "tvshow."}{k}': v for k, v in base_item.get('infolabels', {}).items() if type(v) not in [dict, list, tuple]})
+    item['infolabels']['tvshowtitle'] = base_item['infolabels'].get('tvshowtitle') or base_item['infolabels'].get('title')
     item['unique_ids']['tmdb'] = item['unique_ids'].get('tvshow.tmdb')
     return item
 
 
 class _ItemMapper(object):
-    def add_base(self, item, base_item=None, tmdb_type=None, key_blacklist=[]):
+    def add_base(self, item, base_item=None, tmdb_type=None, key_blacklist=[], is_season=False):
         if not base_item:
             return item
         for d in ['infolabels', 'infoproperties', 'art']:
             for k, v in base_item.get(d, {}).items():
-                if not v or item[d].get(k):
+                if not v or item[d].get(k) is not None:
                     continue
                 if k in key_blacklist:
                     continue
                 item[d][k] = v
         if tmdb_type in ['season', 'episode', 'tv']:
-            return set_show(item, base_item)
+            return set_show(item, base_item, is_season=is_season)
         return item
 
     def map_item(self, item, i):

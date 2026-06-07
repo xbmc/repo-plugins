@@ -93,6 +93,11 @@ def run(start_time):  # pylint: disable=too-many-locals, too-many-statements, to
         manage_servers.run(context)
         return _finished(start_time)
 
+    if command == COMMANDS.DETECTSERVERS:
+        from .routes import detect_servers
+        detect_servers.run(context)
+        return _finished(start_time)
+
     if command == COMMANDS.DELETEREFRESH:
         from .routes import delete_refresh
         delete_refresh.run(context)

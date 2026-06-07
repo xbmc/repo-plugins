@@ -1,27 +1,23 @@
 import json
 import os
-import re
 
-import xbmc
 import xbmcgui
 import xbmcplugin
-from bs4 import BeautifulSoup
 from resources.lib.rssaddon.abstract_rss_addon import AbstractRssAddon
 from resources.lib.rssaddon.http_client import http_request
 
 
 class BbcPodcastsAddon(AbstractRssAddon):
 
-    BBC_BASE_URL = "https://www.bbc.co.uk"
-    PODCASTS_URL = "/sounds/podcasts"
-
+    API_BASE = "https://rms.api.bbc.co.uk"
+    API_SPEECH = "/v2/experience/inline/speech"
     RSS_URL_PATTERN = "https://podcasts.files.bbci.co.uk/%s.rss"
 
-    def __init__(self, addon_handle):
+    def __init__(self, addon_handle) -> None:
 
         super().__init__(addon_handle)
 
-    def _make_root_menu(self):
+    def _make_root_menu(self) -> None:
 
         entries = list()
         entries += self._get_entries_for_categories()
@@ -36,12 +32,12 @@ class BbcPodcastsAddon(AbstractRssAddon):
 
         xbmcplugin.endOfDirectory(self.addon_handle, updateListing=True)
 
-    def _make_menu(self, path, page=None):
+    def _make_menu(self, path: str, params: 'dict[str]') -> None:
 
         if path.endswith("/"):
             path = path[:-1]
 
-        entries = self._get_podcasts(path, page)
+        entries = self._get_podcasts(path, params)
         for entry in entries:
             self.add_list_item(entry, path)
 
@@ -52,99 +48,72 @@ class BbcPodcastsAddon(AbstractRssAddon):
 
         xbmcplugin.endOfDirectory(self.addon_handle, updateListing=False)
 
-    def _get_podcasts(self, url, page=None):
+    def _get_podcasts(self, url: str, params: 'dict[str]') -> 'list[dict]':
 
-        def _parse_pager(soup):
-
-            navs = soup.select("nav")
-            if len(navs) == 3:
-                lis = navs[2].find_all("li")
-                if len(lis) > 0:
-                    if lis[-1].a:
-                        m = re.match(".*page=([0-9]+).*", lis[-1].a["href"])
-                        return m.group(1) if m else None
-
-            return None
-
-        params = list()
-        params.append("sort=title")
-        if page:
-            params.append("page=%s" % page)
-
-        _url_param = "?%s" % "&".join(params) if len(params) > 0 else ""
-
-        _data, _cookies = http_request(self.addon, "%s%s%s" % (
-            self.BBC_BASE_URL, url, _url_param))
-        soup = BeautifulSoup(_data, 'html.parser')
+        url_param = "?%s" % "&".join(
+            ["%s=%s" % (k, params[k][0]) for k in params]) if len(params) > 0 else ""
+        url = self.API_BASE + "/" + "/".join(url.split("/")[2:])
+        _data, _cookies = http_request(self.addon, url + url_param)
+        _json = json.loads(_data)
 
         entries = list()
-        for _tile in soup.select("article"):
-            entries.append(self._parse_podcast_tile(_tile))
 
-        pager_next = _parse_pager(soup)
-        if pager_next:
-            _params = [
-                {
-                    "page": pager_next,
-                }
-            ]
+        for _d in _json["data"]:
+            if "uris" not in _d or "download" not in _d or not _d["download"] or "quality_variants" not in _d["download"] or not _d["container"]:
+                continue
 
-            entries.append({
+            has_media = [True for _quality in _d["download"]["quality_variants"]
+                         if _d["download"]["quality_variants"][_quality]["file_url"]]
+
+            entry = {
                 "path": "",
-                "name": self.addon.getLocalizedString(32003) % pager_next,
-                "icon": os.path.join(
-                    self.addon_dir, "resources", "assets", "icon_arrow_right.png"),
-                "specialsort": "bottom",
-                "params": _params,
+                "name": _d["titles"]["primary"] + ("" if has_media else " ˟"),
+                "icon": _d["image_url"].replace("{recipe}", "896x896"),
+                "type": "music",
+                "params": [
+                    {
+                        "rss": self.RSS_URL_PATTERN % _d["container"]["id"]
+                    }
+                ],
                 "node": []
-            })
+            }
+
+            entries.append(entry)
 
         return entries
 
-    def _get_entries_for_categories(self):
+    def _get_entries_for_categories(self) -> 'list[dict]':
 
-        _data, _cookies = http_request(self.addon,
-                                       "%s%s" % (self.BBC_BASE_URL, self.PODCASTS_URL))
-        soup = BeautifulSoup(_data, 'html.parser')
+        _data, _cookies = http_request(
+            self.addon, "%s%s" % (self.API_BASE, self.API_SPEECH))
+        _json = json.loads(_data)
 
         result = list()
-        for _h3 in soup.select("h3"):
-            for _footer in _h3.parent.parent.select("footer"):
+
+        for _d in _json["data"]:
+
+            if _d["type"] != "inline_display_module" or not _d["uris"]:
+                continue
+
+            _name = _d["title"].strip()
+            _path: str = _d["uris"]["pagination"]["uri"]
+            _path = _path.replace("{offset}", str(
+                _d["uris"]["pagination"]["offset"]))
+            _path = _path.replace("{limit}", str(
+                _d["uris"]["pagination"]["total"]))
+            _data = "data" in _d and type(_d["data"]) == list
+
+            if _path and _name and _data:
                 result.append({
-                    "path": _footer.a["href"],
-                    "name": _h3.text,
+                    "path": "/__CATEGORIES__%s" % _path,
+                    "name": _name,
                     "icon": os.path.join(self.addon_dir, "resources", "assets", "icon_category.png"),
                     "node": []
                 })
 
         return result
 
-    def _parse_podcast_tile(self, tile):
-
-        _more_episodes = tile.select("a.more-episodes")
-        if len(_more_episodes) != 1:
-            return None
-
-        _bid = json.loads(_more_episodes[0]["data-bbc-metadata"])["BID"]
-        _title = re.sub(" +", " ", tile.span.text).replace("\n", "").strip()
-        _img = tile.a.div.img["src"]
-
-        entry = {
-            "path": _bid,
-            "name": _title,
-            "icon": _img,
-            "type": "music",
-            "params": [
-                {
-                    "rss": self.RSS_URL_PATTERN % _bid
-                }
-            ],
-            "node": []
-        }
-
-        return entry
-
-    def check_disclaimer(self):
+    def check_disclaimer(self) -> bool:
 
         if self.addon.getSetting("agreement") != "1":
             answer = xbmcgui.Dialog().yesno(self.addon.getLocalizedString(32005),
@@ -159,15 +128,10 @@ class BbcPodcastsAddon(AbstractRssAddon):
         else:
             return True
 
-    def route(self, path, url_params):
-
-        splitted_path = path.split("/")
+    def route(self, path: str, url_params: 'dict[str]') -> None:
 
         if path in ["/"]:
             self._make_root_menu()
 
-        elif len(splitted_path) in [4, 5] and path.startswith(self.PODCASTS_URL):
-            page = self.decode_param(
-                url_params["page"][0]) if "page" in url_params else None
-
-            self._make_menu(path, page=page)
+        elif "__CATEGORIES__" in path:
+            self._make_menu(path, url_params)

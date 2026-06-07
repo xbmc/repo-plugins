@@ -1,0 +1,178 @@
+# Kodi Media Center language file
+# Addon Name: Arte +7
+# Addon id: plugin.video.arteplussept
+# Addon Provider: bmf, thomas-ernest
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl_PL\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30044"
+msgid "General"
+msgstr "Głowny"
+
+msgctxt "#30045"
+msgid "Profile"
+msgstr "Profil"
+
+msgctxt "#30050"
+msgid "Language (Videos)"
+msgstr "Język"
+
+msgctxt "#30052"
+msgid "Stream video quality"
+msgstr "Jakość wideo"
+
+msgctxt "#30053"
+msgid "Show video stream options"
+msgstr "Pokaz opcje wideo"
+
+msgctxt "#30054"
+msgid "Email"
+msgstr "E-mail"
+
+msgctxt "#30056"
+msgid "Log level"
+msgstr "Log level"
+
+msgctxt "#30057"
+msgid "Log in"
+msgstr "Zalogować się"
+
+msgctxt "#30058"
+msgid "Log out"
+msgstr "Wyloguj się"
+
+
+msgctxt "#30011"
+msgid "View collection as menu"
+msgstr "Zobacz kolekcję jako menu"
+
+
+msgctxt "#30012"
+msgid "Search"
+msgstr "Wyszukiwanie"
+
+
+msgctxt "#30014"
+msgid "Authentication needed in addon settings"
+msgstr "Wymagane uwierzytelnienie w ustawieniach dodatku"
+
+msgctxt "#30015"
+msgid "User already logged in"
+msgstr "Użytkownik jest już zalogowany"
+
+msgctxt "#30016"
+msgid "Do you want to log in as \"{new_user}\" instead of \"{old_user}\" ?"
+msgstr "Czy chcesz się zalogować jako \"{new_user}\" zamiast \"{old_user}\" ?"
+
+msgctxt "#30017"
+msgid "Logged in as \"{user}\""
+msgstr "Zalogowany jako \"{user}\""
+
+msgctxt "#30018"
+msgid "Logged out"
+msgstr "Wylogowano"
+
+msgctxt "#30019"
+msgid "Enter password please:"
+msgstr "Proszę wprowadzić hasło:"
+
+msgctxt "#30020"
+msgid "Unable to authenticate"
+msgstr "Nie można uwierzytelnić"
+
+msgctxt "#30021"
+msgid "Email missing"
+msgstr "Brak e-mail"
+
+msgctxt "#30022"
+msgid "Password missing"
+msgstr "Brak hasła"
+
+
+msgctxt "#30023"
+msgid "Add to Arte favorites"
+msgstr "Dodaj do ulubionych Arte"
+
+msgctxt "#30024"
+msgid "Remove from Arte favorites"
+msgstr "Usuń z ulubionych Arte"
+
+msgctxt "#30025"
+msgid "\"{label}\" successfully added to favorites"
+msgstr "\"{label}\" pomyślnie dodano do ulubionych"
+
+msgctxt "#30026"
+msgid "Failed to add \"{label}\" to favorites"
+msgstr "Nie udało się dodać \"{label}\" do ulubionych"
+
+msgctxt "#30027"
+msgid "\"{label}\" successfully removed from favorites"
+msgstr "\"{label}\" pomyślnie usunięto z ulubionych"
+
+msgctxt "#30028"
+msgid "Failed to remove \"{label}\" from favorites"
+msgstr "Nie udało się usunąć \"{label}\" z ulubionych"
+
+msgctxt "#30029"
+msgid "Stream \"{strm}\" in \"{ln}\" is not available"
+msgstr "Strumień \"{strm}\" w języku \"{ln}\" jest niedostępny"
+
+msgctxt "#30030"
+msgid "Purge my history"
+msgstr "Wyczyść moją historię"
+
+msgctxt "#30031"
+msgid "Successfully purged history"
+msgstr "Pomyślnie wyczyszczono historię"
+
+msgctxt "#30032"
+msgid "Failed to purge my history"
+msgstr "Nie udało się wyczyścić mojej historii"
+
+msgctxt "#30033"
+msgid "Do you really want to purge your history ?"
+msgstr "Czy naprawdę chcesz wyczyścić swoją historię ?"
+
+
+msgctxt "#30035"
+msgid "Mark as watched in Arte"
+msgstr "Oznacz jako obejrzane w Arte"
+
+msgctxt "#30036"
+msgid "\"{label}\" successfully marked as watched"
+msgstr "Pomyślnie oznaczone \"{label}\" jako obejrzane"
+
+msgctxt "#30037"
+msgid "Failed to mark as watched \"{label}\""
+msgstr "Nie udało się oznaczyć jako oglądane \"{label}\""
+
+
+msgctxt "#30038"
+msgid "Next page"
+msgstr "Następna strona"
+
+msgctxt "#30039"
+msgid "Previous page"
+msgstr "Poprzednia strona"
+
+
+msgctxt "#30040"
+msgid "Purge my Arte favorites"
+msgstr "Wyczyść moje ulubione Arte"
+
+msgctxt "#30041"
+msgid "Successfully purged favorites"
+msgstr "Pomyślnie wyczyszczono ulubione"
+
+msgctxt "#30042"
+msgid "Failed to purge favorites"
+msgstr "Nie udało się wyczyścić ulubionych"
+
+msgctxt "#30043"
+msgid "Do you really want to purge Arte favorites ?"
+msgstr "Czy naprawdę chcesz wyczyścić ulubione Arte ?"

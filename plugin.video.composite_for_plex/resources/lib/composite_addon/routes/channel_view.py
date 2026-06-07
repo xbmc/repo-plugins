@@ -11,6 +11,7 @@
 """
 
 from kodi_six import xbmcplugin  # pylint: disable=import-error
+from six import PY3
 
 from ..addon.common import get_handle
 from ..addon.constants import MODES
@@ -34,7 +35,11 @@ def run(context, url):
 
     items = []
     append_item = items.append
-    directories = tree.getiterator('Directory')
+    if PY3:
+        directories = tree.iter('Directory')
+    else:
+        directories = tree.getiterator('Directory')
+
     for channels in directories:
 
         if channels.get('local', '') == '0' or channels.get('size', '0') == '0':

@@ -5,17 +5,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Composite\n"
-"Report-Msgid-Bugs-To: https://github.com/anxdpanic/plugin.video.composite_for_plex/issues\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2020-01-18 21:15+0500\n"
-"Last-Translator: A. Dambledore\n"
-"Language-Team: Hebrew\n"
+"PO-Revision-Date: 2022-03-27 01:19+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Hebrew (Israel) <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-composite_for_plex/he_il/>\n"
+"Language: he_il\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: he_IL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Weblate 4.11.2\n"
+
+msgctxt "Addon Description"
+msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "Composite is NOT an official Plex add-on and is not supported or endorsed by Plex."
+msgstr ""
 
 msgctxt "#30000"
 msgid "Confirm file delete?"
@@ -58,7 +66,6 @@ msgid "You are currently signed into myPlex. Are you sure you want to sign out?"
 msgstr "אתם כרגע מחובר אל myPlex. האם אתה בטוח שברצונך להתנתק?"
 
 #  30010
-
 msgctxt "#30011"
 msgid "You are not currently logged into myPlex. Continue to sign in, or cancel to return"
 msgstr "אתה לא מחובר כעת לתוך myPlex. אנא המשך לרישום, או על ביטול כדי לחזור"
@@ -289,7 +296,7 @@ msgstr "אין אפשרות ליצור קשר עם השרת:"
 
 msgctxt "#30068"
 msgid "Library refresh started"
-msgstr " עדכון הספרייה התחיל"
+msgstr "עדכון הספרייה התחיל"
 
 msgctxt "#30069"
 msgid "myPlex not configured"
@@ -573,7 +580,6 @@ msgid "Use WOL?"
 msgstr "להשתמש WOL?"
 
 # 30548
-
 msgctxt "#30549"
 msgid "Skip Genre/director/writer"
 msgstr "דלג על מידע-מטא של סגנון, במאי ותסריטאי"
@@ -903,18 +909,15 @@ msgid "Exit"
 msgstr ""
 
 #  30632
-
 #  30633
-
 msgctxt "#30634"
 msgid "Enter your myPlex details below"
 msgstr ""
 
 #  30635
-
 msgctxt "#30636"
 msgid "Unknown"
-msgstr ""
+msgstr "לא ידוע"
 
 msgctxt "#30637"
 msgid "myPlex Login"
@@ -974,7 +977,7 @@ msgstr ""
 
 msgctxt "#30651"
 msgid "Please wait..."
-msgstr ""
+msgstr "אנא המתן..."
 
 msgctxt "#30652"
 msgid "myPlex discovery..."
@@ -1014,7 +1017,7 @@ msgstr ""
 
 msgctxt "#30661"
 msgid "Cache"
-msgstr ""
+msgstr "מטמון"
 
 msgctxt "#30662"
 msgid "Server Cache TTL (minutes)"
@@ -1030,7 +1033,7 @@ msgstr ""
 
 msgctxt "#30665"
 msgid "Movies"
-msgstr ""
+msgstr "סרטים"
 
 msgctxt "#30666"
 msgid "Music"
@@ -1038,7 +1041,7 @@ msgstr ""
 
 msgctxt "#30667"
 msgid "TV Shows"
-msgstr ""
+msgstr "סדרות"
 
 msgctxt "#30668"
 msgid "Photos"
@@ -1054,11 +1057,11 @@ msgstr ""
 
 msgctxt "#30671"
 msgid "Default"
-msgstr ""
+msgstr "ברירת מחדל"
 
 msgctxt "#30672"
 msgid "Go to %s"
-msgstr ""
+msgstr "עבור אל %s"
 
 msgctxt "#30673"
 msgid "Delete %s from the %s playlist?"
@@ -1074,7 +1077,7 @@ msgstr ""
 
 msgctxt "#30676"
 msgid "Select playlist"
-msgstr ""
+msgstr "בחר רשימת השמעה"
 
 msgctxt "#30677"
 msgid "Add to playlist"
@@ -1202,7 +1205,7 @@ msgstr ""
 
 msgctxt "#30708"
 msgid "Enabled"
-msgstr ""
+msgstr "מופעל"
 
 msgctxt "#30709"
 msgid "Port"
@@ -1218,15 +1221,15 @@ msgstr ""
 
 msgctxt "#30712"
 msgid "Username"
-msgstr ""
+msgstr "שם משתמש"
 
 msgctxt "#30713"
 msgid "Password"
-msgstr ""
+msgstr "סיסמה"
 
 msgctxt "#30714"
 msgid "Main Menu"
-msgstr ""
+msgstr "תפריט ראשי"
 
 msgctxt "#30715"
 msgid "Show [B]myPlex Queue[/B] menu"
@@ -1314,7 +1317,7 @@ msgstr ""
 
 msgctxt "#30736"
 msgid "Default"
-msgstr ""
+msgstr "ברירת מחדל"
 
 msgctxt "#30737"
 msgid "Majority"
@@ -1454,15 +1457,15 @@ msgstr ""
 
 msgctxt "#30771"
 msgid "Shuffle"
-msgstr ""
+msgstr "אקראי"
 
 msgctxt "#30772"
 msgid "Source"
-msgstr ""
+msgstr "מקור"
 
 msgctxt "#30773"
 msgid "None"
-msgstr ""
+msgstr "ללא"
 
 msgctxt "#30774"
 msgid "Generating Playlist"
@@ -1566,4 +1569,12 @@ msgstr ""
 
 msgctxt "#30799"
 msgid "Configured library sections have been reset"
+msgstr ""
+
+msgctxt "#30800"
+msgid "Continue Watching"
+msgstr ""
+
+msgctxt "#30801"
+msgid "Detect Servers"
 msgstr ""

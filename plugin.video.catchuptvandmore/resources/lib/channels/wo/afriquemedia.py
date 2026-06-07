@@ -78,8 +78,10 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-
-    resp = urlquick.get(URL_LIVE)
-    live_id = re.compile(r'dailymotion.com/embed/video/(.*?)[\?\"]').findall(
-        resp.text)[0]
-    return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)
+    video_url = 'https://cloud.odysee.live/content/fe06b3cdc9412e359368b2455b6ea5e93856e382/master.m3u8'
+    headers = {
+        'referer': 'https://odysee.com',
+    }
+    return resolver_proxy.get_stream_with_quality(plugin,
+                                                  video_url,
+                                                  headers=headers)

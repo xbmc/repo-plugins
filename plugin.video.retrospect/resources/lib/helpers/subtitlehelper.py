@@ -260,7 +260,7 @@ class SubtitleHelper(object):
         result = ""
         for line in webvvt.split("\n"):
             line = line.strip()
-            if line.endswith("WEBVTT") or line.startswith("X-TIMESTAMP"):
+            if line.startswith("WEBVTT") or line.startswith("X-TIMESTAMP"):
                 continue
             if not line:
                 continue
@@ -275,6 +275,10 @@ class SubtitleHelper(object):
                     result = "%s\n%s --> %s" % (result, start.replace(".", ","), end.replace(".", ","))
             elif line == str(count + 1):
                 # we apparently have built-in numbering using WebVTT cue-numbering
+                continue
+            elif Regexer.do_regex("^[0-9a-f]{8}-?([0-9a-f]{4}-?){3}[0-9a-f]{12}", line):
+                continue
+            elif line.isnumeric() and len(line) > 4:
                 continue
             else:
                 result = "%s\n%s" % (result, HtmlEntityHelper.convert_html_entities(line))
@@ -311,6 +315,8 @@ class SubtitleHelper(object):
                 text = sub[4].replace("<br />", "\n")
                 text = HtmlEntityHelper.convert_html_entities(text)
                 text = text.replace("\r\n", "")
+                text = text.replace("\n\n", "")
+                text = text.replace("\t", "")
                 srt = "%s\n%s\n%s --> %s\n%s\n" % (srt, i, start, end, text.strip())
                 i += 1
             except:

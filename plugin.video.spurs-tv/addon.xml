@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.spurs-tv" name="Spurs TV" version="2.17.0" provider-name="Leopold">
+<addon id="plugin.video.spurs-tv" name="Spurs TV" version="2.17.1" provider-name="Leopold">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.xbmcswift2" version="19.0.5" optional="false"/>
@@ -24,12 +24,6 @@
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>
     </assets>
-    <news>
-      Compatible with Kodi 19 (Matrix)
-      Added search
-      Added separate Men's and Womens's team categories
-      Added Europa League category
-      Removed the broken New Stadium category
-    </news>
+    <broken>The Spurs TV website was discontinued.</broken>
   </extension>
 </addon>

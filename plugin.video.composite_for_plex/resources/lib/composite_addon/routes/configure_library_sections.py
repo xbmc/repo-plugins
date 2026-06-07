@@ -84,7 +84,14 @@ def get_sections(context, sections, details):
         section_uuid = section.get_uuid()
 
         server_uuid = section.get_server_uuid()
-        server = context.plex_network.get_server_from_uuid(server_uuid)
+        try:
+            server = context.plex_network.get_server_from_uuid(server_uuid)
+        except KeyError:
+            LOG.debug('Failed to map server from uuid.\nSection UUID: %s\n'
+                      'Section: %s\nServer UUID: %s' %
+                      (section_uuid, section, server_uuid))
+            continue
+
         server_name = server.get_name()
 
         list_item = None

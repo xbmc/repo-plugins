@@ -2,302 +2,523 @@
 """
 
     Copyright (C) 2014-2016 bromix (plugin.video.youtube)
-    Copyright (C) 2016-2018 plugin.video.youtube
+    Copyright (C) 2016-2025 plugin.video.youtube
 
     SPDX-License-Identifier: GPL-2.0-only
     See LICENSES/GPL-2.0-only for more information.
 """
 
-from ...kodion.utils.function_cache import FunctionCache
+from __future__ import absolute_import, division, unicode_literals
 
-from ... import kodion
-from ...youtube.helper import v3
+from .utils import get_thumbnail
+from ...kodion import KodionException, logging
+from ...kodion.constants import (
+    CHANNEL_ID,
+    CONTEXT_MENU,
+    KEYMAP,
+    FOLDER_URI,
+    PATHS,
+    PLAYLIST_ID,
+    PLAYLIST_ITEM_ID,
+    TITLE,
+    URI,
+    VIDEO_ID,
+)
 
 
-def _process_add_video(provider, context, keymap_action=False):
-    listitem_path = context.get_ui().get_info_label('Container.ListItem(0).FileNameAndPath')
+def _process_add_video(provider, context):
+    ui = context.get_ui()
+    li_path = ui.get_listitem_info(URI)
+    li_video_id = ui.get_listitem_property(VIDEO_ID)
 
     client = provider.get_client(context)
-    watch_later_id = context.get_access_manager().get_watch_later_id()
+    if not client.logged_in:
+        raise KodionException('Playlist/Add: not logged in')
 
-    playlist_id = context.get_param('playlist_id', '')
+    params = context.get_params()
+
+    playlist_id = params.get(PLAYLIST_ID)
     if not playlist_id:
-        raise kodion.KodionException('Playlist/Add: missing playlist_id')
+        raise KodionException('Playlist/Add: missing playlist_id')
+    elif playlist_id == 'watch_later':
+        playlist_id = context.get_access_manager().get_watch_later_id()
 
-    if playlist_id.lower() == 'watch_later':
-        playlist_id = watch_later_id
-
-    video_id = context.get_param('video_id', '')
+    video_id = params.get(VIDEO_ID, li_video_id)
     if not video_id:
-        if context.is_plugin_path(listitem_path, 'play'):
-            video_id = kodion.utils.find_video_id(listitem_path)
-            keymap_action = True
+        video_id = context.parse_item_ids(li_path).get(VIDEO_ID)
         if not video_id:
-            raise kodion.KodionException('Playlist/Add: missing video_id')
+            raise KodionException('Playlist/Add: missing video_id')
 
-    if playlist_id != 'HL':
-        json_data = client.add_video_to_playlist(playlist_id=playlist_id, video_id=video_id)
-        if not v3.handle_error(provider, context, json_data):
+    localize = context.localize
+    success = client.add_video_to_playlist(playlist_id, video_id)
+    if not success:
+        logging.debug('Playlist/Add: failed for playlist {playlist_id!r}'
+                      .format(playlist_id=playlist_id))
+        ui.show_notification(
+            message=localize(('failed.x', ('add.to.x', 'playlist'))),
+            time_ms=2500,
+            audible=False,
+        )
+        return False, {provider.FORCE_RETURN: True}
+
+    ui.show_notification(
+        message=localize(('added.to.x', 'playlist')),
+        time_ms=2500,
+        audible=False,
+    )
+
+    if params.get(KEYMAP) or not params.get(CONTEXT_MENU):
+        ui.set_focus_next_item()
+
+    data_cache = context.get_data_cache()
+    playlist_cache = data_cache.get_item_like(','.join((playlist_id, '%')))
+    if playlist_cache:
+        cache_key, _, cached_last_page = playlist_cache[0]
+        if cached_last_page:
+            data_cache.update_item(cache_key, None)
+
+    return True, {provider.FORCE_RETURN: True}
+
+
+def _process_remove_video(provider,
+                          context,
+                          playlist_id=None,
+                          playlist_item_id=None,
+                          video_id=None,
+                          video_name=None,
+                          confirmed=None):
+    ui = context.get_ui()
+    container_uri = ui.get_container_info(FOLDER_URI)
+    li_playlist_id = ui.get_listitem_property(PLAYLIST_ID)
+    li_playlist_item_id = ui.get_listitem_property(PLAYLIST_ITEM_ID)
+    li_video_id = ui.get_listitem_property(VIDEO_ID)
+    li_video_name = ui.get_listitem_info(TITLE)
+
+    client = provider.get_client(context)
+    if not client.logged_in:
+        raise KodionException('Playlist/Remove: not logged in')
+
+    params = context.get_params()
+
+    if playlist_id is None:
+        playlist_id = params.pop(PLAYLIST_ID, li_playlist_id)
+    if playlist_item_id is None:
+        playlist_item_id = params.pop(PLAYLIST_ITEM_ID,
+                                      li_playlist_item_id)
+    if video_id is None:
+        video_id = params.pop(VIDEO_ID, li_video_id)
+    if video_name is None:
+        video_name = params.pop('item_name', li_video_name)
+    if confirmed is None:
+        confirmed = params.pop('confirmed', False)
+
+    if not playlist_id:
+        if confirmed:
+            return False
+        raise KodionException('Playlist/Remove: missing playlist ID')
+    elif playlist_id == 'watch_later':
+        playlist_id = context.get_access_manager().get_watch_later_id()
+    elif playlist_id.lower() == 'hl':
+        logging.debug('Playlist/Remove: failed for playlist {playlist_id!r}'
+                      .format(playlist_id=playlist_id))
+        return False
+
+    localize = context.localize
+    if confirmed or ui.on_remove_content(video_name):
+        success = provider.get_client(context).remove_video_from_playlist(
+            playlist_id=playlist_id,
+            playlist_item_id=playlist_item_id,
+            video_id=video_id,
+        )
+        if not success:
+            ui.show_notification(
+                message=localize(('failed.x', ('remove.from.x', 'playlist'))),
+                time_ms=2500,
+                audible=False,
+            )
             return False
 
-        if playlist_id == watch_later_id:
-            notify_message = context.localize(provider.LOCAL_MAP['youtube.added.to.watch.later'])
-        else:
-            notify_message = context.localize(provider.LOCAL_MAP['youtube.added.to.playlist'])
-
-        context.get_ui().show_notification(
-            message=notify_message,
-            time_milliseconds=2500,
-            audible=False
-        )
-
-        if keymap_action:
-            context.get_ui().set_focus_next_item()
-
-        return True
-    else:
-        context.log_debug('Cannot add to playlist id |%s|' % playlist_id)
-
-    return False
-
-
-def _process_remove_video(provider, context):
-    listitem_playlist_id = context.get_ui().get_info_label('Container.ListItem(0).Property(playlist_id)')
-    listitem_playlist_item_id = context.get_ui().get_info_label('Container.ListItem(0).Property(playlist_item_id)')
-    listitem_title = context.get_ui().get_info_label('Container.ListItem(0).Title')
-    keymap_action = False
-
-    playlist_id = context.get_param('playlist_id', '')
-    video_id = context.get_param('video_id', '')
-    video_name = context.get_param('video_name', '')
-
-    if not playlist_id and not video_id:  # keymap support
-        if listitem_playlist_id and listitem_playlist_id.startswith('PL') \
-                and listitem_playlist_item_id and listitem_playlist_item_id.startswith('UE'):
-            playlist_id = listitem_playlist_id
-            video_id = listitem_playlist_item_id
-            keymap_action = True
-
-    if not playlist_id:
-        raise kodion.KodionException('Playlist/Remove: missing playlist_id')
-
-    if not video_id:
-        raise kodion.KodionException('Playlist/Remove: missing video_id')
-
-    if not video_name:
-        if listitem_title:
-            video_name = listitem_title
-        else:
-            raise kodion.KodionException('Playlist/Remove: missing video_name')
-
-    if playlist_id != 'HL' and playlist_id.strip().lower() != 'wl':
-        if context.get_ui().on_remove_content(video_name):
-            json_data = provider.get_client(context).remove_video_from_playlist(playlist_id=playlist_id,
-                                                                                playlist_item_id=video_id)
-            if not v3.handle_error(provider, context, json_data):
-                return False
-
-            context.get_ui().refresh_container()
-
-            context.get_ui().show_notification(
-                message=context.localize(provider.LOCAL_MAP['youtube.removed.from.playlist']),
-                time_milliseconds=2500,
-                audible=False
+        if not confirmed:
+            ui.show_notification(
+                message=localize(('removed.from.x', 'playlist')),
+                time_ms=2500,
+                audible=False,
             )
 
-            if keymap_action:
-                context.get_ui().set_focus_next_item()
-
+        if not container_uri:
             return True
-    else:
-        context.log_debug('Cannot remove from playlist id |%s|' % playlist_id)
 
+        if params.get(KEYMAP) or not params.get(CONTEXT_MENU):
+            ui.set_focus_next_item()
+
+        path, params = context.parse_uri(container_uri)
+        if path.rstrip('/').endswith('/'.join((PATHS.PLAYLIST, playlist_id))):
+            if 'refresh' not in params:
+                params['refresh'] = True
+        else:
+            path = params.pop('reload_path', False if confirmed else None)
+
+        if path is not False:
+            provider.reroute(
+                context,
+                path=path,
+                params=params,
+            )
+        return True
     return False
 
 
 def _process_remove_playlist(provider, context):
-    playlist_id = context.get_param('playlist_id', '')
+    ui = context.get_ui()
+    channel_id = ui.get_listitem_property(CHANNEL_ID)
+    li_playlist_id = ui.get_listitem_property(PLAYLIST_ID)
+    li_playlist_name = ui.get_listitem_info(TITLE)
+
+    params = context.get_params()
+    localize = context.localize
+
+    playlist_id = params.get(PLAYLIST_ID, li_playlist_id)
     if not playlist_id:
-        raise kodion.KodionException('Playlist/Remove: missing playlist_id')
+        raise KodionException('Playlist/Remove: missing playlist_id')
 
-    playlist_name = context.get_param('playlist_name', '')
+    playlist_name = params.get('item_name', li_playlist_name)
     if not playlist_name:
-        raise kodion.KodionException('Playlist/Remove: missing playlist_name')
+        raise KodionException('Playlist/Remove: missing item_name')
 
-    if context.get_ui().on_delete_content(playlist_name):
-        json_data = provider.get_client(context).remove_playlist(playlist_id=playlist_id)
-        if not v3.handle_error(provider, context, json_data):
-            return False
+    if ui.on_delete_content(playlist_name):
+        success = provider.get_client(context).remove_playlist(playlist_id)
+        if not success:
+            ui.show_notification(
+                message=localize(('failed.x', ('remove.x', 'playlist'))),
+                time_ms=2500,
+                audible=False,
+            )
+            return False, None
 
-        context.get_ui().refresh_container()
-    return True
+        ui.show_notification(
+            message=localize('removed.name.x', playlist_name),
+            time_ms=2500,
+            audible=False,
+        )
+
+        if channel_id:
+            data_cache = context.get_data_cache()
+            data_cache.del_item(channel_id)
+            return True, {provider.FORCE_REFRESH: True}
+
+    return False, None
 
 
 def _process_select_playlist(provider, context):
-    listitem_path = context.get_ui().get_info_label('Container.ListItem(0).FileNameAndPath')  # do this asap, relies on listitems focus
-    keymap_action = False
     ui = context.get_ui()
+    li_path = ui.get_listitem_info(URI)
+    li_video_id = ui.get_listitem_property(VIDEO_ID)
+
+    params = context.get_params()
     page_token = ''
     current_page = 0
 
-    video_id = context.get_param('video_id', '')
+    video_id = params.get(VIDEO_ID, li_video_id)
     if not video_id:
-        if context.is_plugin_path(listitem_path, 'play'):
-            video_id = kodion.utils.find_video_id(listitem_path)
-            if video_id:
-                context.set_param('video_id', video_id)
-                keymap_action = True
-        if not video_id:
-            raise kodion.KodionException('Playlist/Select: missing video_id')
-
-    while True:
-        current_page += 1
-        if not page_token:
-            json_data = context.get_function_cache().get((FunctionCache.ONE_MINUTE // 3),
-                                                         provider.get_client(context).get_playlists_of_channel,
-                                                         channel_id='mine')
+        item_ids = context.parse_item_ids(li_path)
+        if item_ids and VIDEO_ID in item_ids:
+            context.set_params(**item_ids)
         else:
-            json_data = context.get_function_cache().get((FunctionCache.ONE_MINUTE // 3),
-                                                         provider.get_client(context).get_playlists_of_channel,
-                                                         channel_id='mine', page_token=page_token)
+            raise KodionException('Playlist/Select: missing video_id')
 
+    function_cache = context.get_function_cache()
+    client = provider.get_client(context)
+    resource_manager = provider.get_resource_manager(context)
+
+    # add the 'Watch Later' playlist
+    playlists = resource_manager.get_related_playlists('mine')
+    if playlists and 'watchLater' in playlists:
+        watch_later_id = playlists['watchLater'] or 'WL'
+    else:
+        watch_later_id = context.get_access_manager().get_watch_later_id()
+
+    # add the 'History' playlist
+    if playlists and 'watchHistory' in playlists:
+        watch_history_id = playlists['watchHistory'] or 'HL'
+    else:
+        watch_history_id = context.get_access_manager().get_watch_history_id()
+
+    account_playlists = {watch_later_id, watch_history_id}
+
+    thumb_size = context.get_settings().get_thumbnail_size()
+    default_thumb = context.create_resource_path('media', 'playlist.png')
+
+    while 1:
+        current_page += 1
+        json_data = function_cache.run(
+            client.get_playlists_of_channel,
+            function_cache.ONE_MINUTE // 3,
+            _refresh=context.refresh_requested(),
+            channel_id='mine',
+            page_token=page_token,
+        )
+        if not json_data:
+            break
         playlists = json_data.get('items', [])
-        page_token = json_data.get('nextPageToken', False)
+        page_token = json_data.get('nextPageToken', '')
 
         items = []
         if current_page == 1:
-            # create playlist
-            items.append((ui.bold(context.localize(provider.LOCAL_MAP['youtube.playlist.create'])), '',
-                          'playlist.create', context.create_resource_path('media', 'playlist.png')))
+            # Create a new playlist
+            items.append((
+                ui.bold(context.localize('playlist.create')), '',
+                'playlist.create',
+                default_thumb,
+            ))
 
-            # add the 'Watch Later' playlist
-            resource_manager = provider.get_resource_manager(context)
-            my_playlists = resource_manager.get_related_playlists(channel_id='mine')
-            if 'watchLater' in my_playlists:
-                watch_later_playlist_id = context.get_access_manager().get_watch_later_id()
-                if watch_later_playlist_id:
-                    items.append((ui.bold(context.localize(provider.LOCAL_MAP['youtube.watch_later'])), '',
-                                  watch_later_playlist_id, context.create_resource_path('media', 'watch_later.png')))
+            # Add the 'Watch Later' playlist
+            if watch_later_id:
+                items.append((
+                    ui.bold(context.localize('watch_later')), '',
+                    watch_later_id,
+                    context.create_resource_path('media', 'watch_later.png')
+                ))
+
+            # Add the custom 'History' playlist
+            # Can't directly add items to the YouTube Watch History list
+            if watch_history_id and watch_history_id.upper() != 'HL':
+                items.append((
+                    ui.bold(context.localize('history')), '',
+                    watch_history_id,
+                    context.create_resource_path('media', 'history.png')
+                ))
 
         for playlist in playlists:
+            playlist_id = playlist.get('id')
+            if playlist_id in account_playlists:
+                continue
             snippet = playlist.get('snippet', {})
-            title = snippet.get('title', '')
-            description = snippet.get('description', '')
-            thumbnail = snippet.get('thumbnails', {}).get('default', {}).get('url', context.create_resource_path('media', 'playlist.png'))
-            playlist_id = playlist.get('id', '')
+            title = snippet.get('title')
             if title and playlist_id:
-                items.append((title, description, playlist_id, thumbnail))
+                items.append((
+                    title,
+                    snippet.get('description', ''),
+                    playlist_id,
+                    get_thumbnail(
+                        thumb_size, snippet.get('thumbnails'), default_thumb
+                    )
+                ))
 
         if page_token:
-            items.append((ui.bold(context.localize(provider.LOCAL_MAP['youtube.next_page'])).replace('%d', str(current_page + 1)), '',
-                          'playlist.next', 'DefaultFolder.png'))
+            next_page = current_page + 1
+            items.append((
+                ui.bold(context.localize('page.next', next_page)), '',
+                'playlist.next',
+                'DefaultFolder.png',
+            ))
 
-        result = context.get_ui().on_select(context.localize(provider.LOCAL_MAP['youtube.playlist.select']), items)
-        if result == 'playlist.create':
-            result, text = context.get_ui().on_keyboard_input(
-                context.localize(provider.LOCAL_MAP['youtube.playlist.create']))
-            if result and text:
-                json_data = provider.get_client(context).create_playlist(title=text)
-                if not v3.handle_error(provider, context, json_data):
-                    break
-
-                playlist_id = json_data.get('id', '')
-                if playlist_id:
-                    new_params = {}
-                    new_params.update(context.get_params())
-                    new_params['playlist_id'] = playlist_id
-                    new_context = context.clone(new_params=new_params)
-                    _process_add_video(provider, new_context, keymap_action)
-            break
-        elif result == 'playlist.next':
+        playlist_id = None
+        result = ui.on_select(context.localize('playlist.select'), items)
+        if result == 'playlist.next':
             continue
+        elif result == 'playlist.create':
+            result, text = ui.on_keyboard_input(
+                context.localize('playlist.create'))
+            if result and text:
+                json_data = client.create_playlist(title=text)
+                if not json_data:
+                    break
+                playlist_id = json_data.get('id', '')
         elif result != -1:
-            new_params = {}
-            new_params.update(context.get_params())
-            new_params['playlist_id'] = result
+            playlist_id = result
+
+        if playlist_id:
+            new_params = dict(params, playlist_id=playlist_id)
             new_context = context.clone(new_params=new_params)
-            _process_add_video(provider, new_context, keymap_action)
-            break
-        else:
-            break
+            _process_add_video(provider, new_context)
+        break
 
 
 def _process_rename_playlist(provider, context):
-    playlist_id = context.get_param('playlist_id', '')
+    ui = context.get_ui()
+    li_playlist_id = ui.get_listitem_property(PLAYLIST_ID)
+    li_playlist_name = ui.get_listitem_info(TITLE)
+
+    params = context.get_params()
+    localize = context.localize
+
+    playlist_id = params.get(PLAYLIST_ID, li_playlist_id)
     if not playlist_id:
-        raise kodion.KodionException('playlist/rename: missing playlist_id')
+        raise KodionException('Playlist/Rename: missing playlist_id')
 
-    current_playlist_name = context.get_param('playlist_name', '')
-    result, text = context.get_ui().on_keyboard_input(context.localize(provider.LOCAL_MAP['youtube.rename']),
-                                                      default=current_playlist_name)
-    if result and text:
-        json_data = provider.get_client(context).rename_playlist(playlist_id=playlist_id, new_title=text)
-        if not v3.handle_error(provider, context, json_data):
-            return
+    result, text = ui.on_keyboard_input(
+        localize('rename'),
+        default=params.get('item_name', li_playlist_name),
+    )
+    if not result or not text:
+        return False, None
 
-        context.get_ui().refresh_container()
+    success = provider.get_client(context).rename_playlist(
+        playlist_id=playlist_id, new_title=text,
+    )
+    if not success:
+        ui.show_notification(
+            message=localize(('failed.x', ('rename', 'playlist'))),
+            time_ms=2500,
+            audible=False,
+        )
+        return False, None
+
+    ui.show_notification(
+        message=localize('succeeded'),
+        time_ms=2500,
+        audible=False,
+    )
+
+    data_cache = context.get_data_cache()
+    data_cache.del_item(playlist_id)
+    return True, {provider.FORCE_REFRESH: True}
 
 
-def _watchlater_playlist_id_change(context, method):
-    playlist_id = context.get_param('playlist_id', '')
+def _playlist_id_change(context, playlist, command):
+    ui = context.get_ui()
+    li_playlist_id = ui.get_listitem_property(PLAYLIST_ID)
+    li_playlist_name = ui.get_listitem_info(TITLE)
+
+    playlist_id = context.get_param(PLAYLIST_ID, li_playlist_id)
     if not playlist_id:
-        raise kodion.KodionException('watchlater_list/%s: missing playlist_id' % method)
-    playlist_name = context.get_param('playlist_name', '')
+        raise KodionException('{type}/{command}: missing playlist_id'
+                              .format(type=playlist, command=command))
+
+    playlist_name = context.get_param('item_name', li_playlist_name)
     if not playlist_name:
-        raise kodion.KodionException('watchlater_list/%s: missing playlist_name' % method)
+        raise KodionException('{type}/{command}: missing item_name'
+                              .format(type=playlist, command=command))
 
-    if method == 'set':
-        if context.get_ui().on_yes_no_input(context.get_name(), context.localize(30570) % playlist_name):
+    if ui.on_yes_no_input(
+            context.get_name(),
+            context.localize('{type}.list.{command}.check'.format(
+                type=playlist, command=command
+            ), playlist_name),
+    ):
+        if command == 'unassign':
+            playlist_id = None
+        if playlist == 'watch_later':
             context.get_access_manager().set_watch_later_id(playlist_id)
         else:
-            return
-    elif method == 'remove':
-        if context.get_ui().on_yes_no_input(context.get_name(), context.localize(30569) % playlist_name):
-            context.get_access_manager().set_watch_later_id(' WL')
-        else:
-            return
-    else:
-        return
-    context.get_ui().refresh_container()
-
-
-def _history_playlist_id_change(context, method):
-    playlist_id = context.get_param('playlist_id', '')
-    if not playlist_id:
-        raise kodion.KodionException('history_list/%s: missing playlist_id' % method)
-    playlist_name = context.get_param('playlist_name', '')
-    if not playlist_name:
-        raise kodion.KodionException('history_list/%s: missing playlist_name' % method)
-
-    if method == 'set':
-        if context.get_ui().on_yes_no_input(context.get_name(), context.localize(30574) % playlist_name):
             context.get_access_manager().set_watch_history_id(playlist_id)
-        else:
-            return
-    elif method == 'remove':
-        if context.get_ui().on_yes_no_input(context.get_name(), context.localize(30573) % playlist_name):
-            context.get_access_manager().set_watch_history_id('HL')
-        else:
-            return
-    else:
-        return
-    context.get_ui().refresh_container()
+        return True
+    return False
 
 
-def process(method, category, provider, context):
-    if method == 'add' and category == 'video':
-        return _process_add_video(provider, context)
-    elif method == 'remove' and category == 'video':
-        return _process_remove_video(provider, context)
-    elif method == 'remove' and category == 'playlist':
-        return _process_remove_playlist(provider, context)
-    elif method == 'select' and category == 'playlist':
-        return _process_select_playlist(provider, context)
-    elif method == 'rename' and category == 'playlist':
-        return _process_rename_playlist(provider, context)
-    elif (method == 'set' or method == 'remove') and category == 'watchlater':
-        return _watchlater_playlist_id_change(context, method)
-    elif (method == 'set' or method == 'remove') and category == 'history':
-        return _history_playlist_id_change(context, method)
+def _process_rate_playlist(provider,
+                           context,
+                           rating,
+                           playlist_id=None,
+                           playlist_name=None,
+                           confirmed=None):
+    ui = context.get_ui()
+    container_uri = ui.get_container_info(FOLDER_URI)
+    li_path = ui.get_listitem_info(URI)
+    li_playlist_id = ui.get_listitem_property(PLAYLIST_ID)
+    li_playlist_name = ui.get_listitem_info(TITLE)
+
+    params = context.get_params()
+    if playlist_id is None:
+        playlist_id = params.pop(PLAYLIST_ID, li_playlist_id)
+    if playlist_name is None:
+        playlist_name = params.pop('item_name', li_playlist_name)
+    if confirmed is None:
+        confirmed = rating == 'like' or params.pop('confirmed', False)
+
+    localize = context.localize
+
+    if not playlist_id:
+        playlist_id = context.parse_item_ids(li_path).get(PLAYLIST_ID)
+        if not playlist_id:
+            raise KodionException('Playlist/Rate: missing playlist_id')
+
+    client = provider.get_client(context)
+    if (rating == 'like'
+            or confirmed
+            or context.get_ui().on_remove_content(playlist_name)):
+        success = client.rate_playlist(playlist_id, rating)
     else:
-        raise kodion.KodionException("Unknown category '%s' or method '%s'" % (category, method))
+        success = None
+
+    if success:
+        ui.show_notification(
+            message=(localize('saved')
+                     if rating == 'like' else
+                     localize('removed.name.x', playlist_name)),
+            time_ms=2500,
+            audible=False,
+        )
+
+        if not container_uri:
+            return True
+
+        if params.get(KEYMAP) or not params.get(CONTEXT_MENU):
+            ui.set_focus_next_item()
+
+        path, params = context.parse_uri(container_uri)
+        if path.startswith(PATHS.SAVED_PLAYLISTS):
+            if 'refresh' not in params:
+                params['refresh'] = True
+        else:
+            path = params.pop('reload_path', False if confirmed else None)
+
+        if path is not False:
+            provider.reroute(
+                context,
+                path=path,
+                params=params,
+            )
+        return True
+
+    elif success is False:
+        ui.show_notification(
+            message=(localize(('failed.x', 'save'))
+                     if rating == 'like' else
+                     localize('remove')),
+            time_ms=2500,
+            audible=False,
+        )
+        return False
+
+    return None
+
+
+def process(provider,
+            context,
+            re_match=None,
+            command=None,
+            category=None,
+            **kwargs):
+    if re_match:
+        if command is None:
+            command = re_match.group('command')
+        if category is None:
+            category = re_match.group('category')
+
+    if category == 'video':
+        if command == 'add':
+            return _process_add_video(provider, context)
+
+        if command == 'remove':
+            return _process_remove_video(provider, context, **kwargs)
+
+    elif category == 'playlist':
+        if command == 'remove':
+            return _process_remove_playlist(provider, context)
+
+        if command == 'select':
+            return _process_select_playlist(provider, context)
+
+        if command == 'rename':
+            return _process_rename_playlist(provider, context)
+
+        if command in {'like', 'unlike'}:
+            return _process_rate_playlist(provider, context, command)
+
+    elif category in {'watch_later', 'history'}:
+        if command in {'assign', 'unassign'}:
+            return _playlist_id_change(context, category, command)
+
+    raise KodionException('Unknown playlist category {0!r} or command {1!r}'
+                          .format(category, command))

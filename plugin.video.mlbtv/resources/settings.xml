@@ -4,37 +4,55 @@
   <category label="30100">
     <setting id="username" type="text" label="30140" default=""/>
     <setting id="password" type="text" label="30150" option="hidden" default=""/>
-    <setting id="single_team" type="bool" label="30151" default="false"/>
+    <setting id="single_team" type="bool" label="30151" default="false" visible="false"/>
+    <setting id="zip_code" type="number" label="30415" default="" visible="false"/>
+    <setting id="country" type="labelenum" label="30428" default="USA" values="USA|Angola|Anguilla|Antigua and Barbuda|Argentina|Aruba|Australia|Bahamas|Barbados|Belize|Belize|Benin|Bermuda|Bolivia|Bonaire|Botswana|Brazil|British Virgin Islands|Burkina Faso|Burundi|Canada|Cameroon|Cape Verde|Cayman Islands|Central African Republic|Chad|Chile|Colombia|Comoros|Cook Islands|Costa Rica|Cote d'Ivoire|Curacao|Democratic Republic of the Congo|Djibouti|Dominica|Dominican Republic|Ecuador|El Salvador|England|Equatorial Guinea|Eritrea|Eswatini|Ethiopia|Falkland Islands|Falkland Islands|Fiji|French Guiana|French Guiana|French Polynesia|Gabon|Ghana|Grenada|Guadeloupe|Guatemala|Guinea|Guinea Bissau|Guyana|Guyana|Haiti|Honduras|Ireland|Jamaica|Kenya|Kiribati|Lesotho|Liberia|Madagascar|Malawi|Mali|Marshall Islands|Martinique|Mayotte|Mexico|Micronesia|Montserrat|Mozambique|Namibia|Netherlands|New Zealand|Nicaragua|Niger|Nigeria|Niue|Northern Ireland|Palau Islands|Panama|Paraguay|Peru|Republic of Ireland|Reunion|Rwanda|Saba|Saint Maarten|Samoa|Sao Tome &amp; Principe|Scotland|Senegal|Seychelles|Sierra Leone|Solomon Islands|Somalia|South Africa|St. Barthelemy|St. Eustatius|St. Kitts and Nevis|St. Lucia|St. Martin|St. Vincent and the Grenadines|Sudan|Surinam|Suriname|Tahiti|Tanzania &amp; Zanzibar|The Gambia|The Republic of Congo|Togo|Tokelau|Tonga|Trinidad and Tobago|Turks and Caicos Islands|Tuvalu|Uganda|Uruguay|Venezuela|Wales|Zambia|Zimbabwe|other" visible="false"/>
+    <setting id="old_country" type="text" label="" default="" visible="false"/>
+    <setting id="old_zip_code" type="number" label="" default="" visible="false"/>
+    <setting id="blackout_teams" type="text" label="" default="[]" visible="false"/>
     <setting label="30156" type="action" action="RunPlugin(plugin://plugin.video.mlbtv/?url=junk&amp;mode=400)" option="close" />
     <!--Hidden-->
+    <setting id='entitlements' type='text' visible="false" default=''/>
     <setting id='session_key' type='text' visible="false" default=''/>
     <setting id='device_id' type='text' visible="false" default=''/>
-    <setting id='last_login' type='text' visible="false" default=''/>
+    <setting id='okta_id' type='text' visible="false" default=''/>
     <setting id='login_token' type='text' visible="false" default=''/>
+    <setting id='login_token_expiry' type='text' visible="false" default=''/>
   </category>
 
   <category label="30159">
     <setting id="quality" type="labelenum" label="30160" values="Best Available|Always Ask" default="Best Available" />
     <setting id="cdn" type="labelenum" label="30165" values="Akamai|Level 3|No Preference" default="No Preference"/>
     <setting id="no_spoilers" type="enum" label="30170" lvalues="30171|30172|30173|30174|30175" />
-    <setting id="fav_team" type="labelenum" label="30180" default="None" values="None|Washington Nationals|Toronto Blue Jays|Texas Rangers|Tampa Bay Rays|St. Louis Cardinals|Seattle Mariners|San Francisco Giants|San Diego Padres|Pittsburgh Pirates|Philadelphia Phillies|Oakland Athletics|New York Yankees|New York Mets|Minnesota Twins|Milwaukee Brewers|Los Angeles Dodgers|Los Angeles Angels|Kansas City Royals|Miami Marlins|Houston Astros|Detroit Tigers|Colorado Rockies|Cleveland Indians|Cincinnati Reds|Chicago White Sox|Chicago Cubs|Boston Red Sox|Baltimore Orioles|Atlanta Braves|Arizona Diamondbacks" />
+    <setting id="hide_scores_ticker" type="bool" label="30436" default="false" />
+    <setting id="disable_video_padding" type="bool" label="30416" default="false" />
+    <setting id="disable_closed_captions" type="bool" label="30437" default="false" />
+    <setting id="fav_team" type="select" label="30180" default="None" values="None|Washington Nationals|Toronto Blue Jays|Texas Rangers|Tampa Bay Rays|St. Louis Cardinals|Seattle Mariners|San Francisco Giants|San Diego Padres|Pittsburgh Pirates|Philadelphia Phillies|New York Yankees|New York Mets|Minnesota Twins|Milwaukee Brewers|Miami Marlins|Los Angeles Dodgers|Los Angeles Angels|Kansas City Royals|Houston Astros|Detroit Tigers|Colorado Rockies|Cleveland Guardians|Cincinnati Reds|Chicago White Sox|Chicago Cubs|Boston Red Sox|Baltimore Orioles|Atlanta Braves|Athletics|Arizona Diamondbacks" />
+    <setting id="include_fav_affiliates" type="bool" label="30427" default="true" />
 
-    <setting id="in_market" type="labelenum" label="30300" default="Show" values="Show|Hide" />
-    
     <setting id="team_names" type="select" label="30190" lvalues="30191|30192" default="0" />
-    <setting id="time_format" type="select" label="30301" lvalues="30302|30301" default="0" />
+    <setting id="time_format" type="select" label="30301" lvalues="30302|30303" default="0" />
+    <setting id="auto_select_stream" type="bool" label="30307" default="false" />
     <setting id="catch_up" type="bool" label="30304" default="true" />
+    <setting id="ask_to_skip" type="bool" label="30306" default="true" />
+    <setting id="skip_adjust_start" type="slider" label="30424" default="0" range="-99,1,99" />
+    <setting id="skip_adjust_end" type="slider" label="30425" default="0" range="-99,1,99" />
+    <setting id="milb_skip_adjust" type="slider" label="30435" default="0" range="-99,1,99" visible="false" />
+    <setting id="auto_play_fav" type="bool" label="30412" default="false" />
+    <setting id="only_free_games" type="bool" label="30305" default="false" />
+    <setting id="game_changer_delay" type="slider" label="30420" default="0" range="0,5,20" />
 
     <setting id="old_username" type="text" label="" default="" visible="false"/>
     <setting id="old_password" type="text" label="" default="" visible="false"/>
-  </category>
-  <!--Proxy-->
-  <category label='30200'>
-    <setting id='use_proxy' type='bool' label='30210' default='false'/>
-    <setting id='proxy_server' type='text' label='30220' default=''/>
-    <setting id='proxy_port' type='number' label='30230' default=''/>
-    <setting id='proxy_user' type='text' label='30240' default=''/>
-    <setting id='proxy_pwd' type='text' label='30250' option='hidden' default=''/>
+
+    <setting id="stream_date" type="text" label="" default="" visible="false"/>
+    <setting id="big_inning_date" type="text" label="" default="" visible="false"/>
+    <setting id="big_inning_schedule" type="text" label="" default="" visible="false"/>
+    <setting id="mlb_monitor_started" type="text" label="" default="" visible="false"/>
+    <setting id="auto_play_game_date" type="text" label="" default="" visible="false"/>
+    <setting id="auto_play_next_game" type="text" label="" default="" visible="false"/>
+    <setting id="auto_play_game_checked" type="text" label="" default="" visible="false"/>
+    <setting id="stream_finder_settings" type="text" label="" default="{}" visible="false"/>
   </category>
 </settings>
 

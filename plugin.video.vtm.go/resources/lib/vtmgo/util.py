@@ -3,24 +3,25 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
+import json
 import logging
 
 import requests
 from requests import HTTPError
 
 from resources.lib import kodiutils
-from resources.lib.vtmgo.exceptions import InvalidLoginException, InvalidTokenException, LimitReachedException, UnavailableException
+from resources.lib.vtmgo.exceptions import InvalidLoginException, InvalidTokenException, LimitReachedException, UnavailableException, StreamGeoblockedException
 
 _LOGGER = logging.getLogger(__name__)
 
 # Setup a static session that can be reused for all calls
 SESSION = requests.Session()
 SESSION.headers = {
-    'User-Agent': 'VTMGO/10.3 (be.vmma.vtm.zenderapp; build:13259; Android 25) okhttp/4.9.0',
-    'x-app-version': '10',
+    'User-Agent': 'VTM_GO/15.231023 (be.vmma.vtm.zenderapp; build:18041; Android 23) okhttp/4.11.0',
+    'x-app-version': '15',
     'x-persgroep-mobile-app': 'true',
     'x-persgroep-os': 'android',
-    'x-persgroep-os-version': '25',
+    'x-persgroep-os-version': '28',
 }
 
 PROXIES = kodiutils.get_proxies()
@@ -44,6 +45,12 @@ def http_get(url, params=None, token=None, profile=None, headers=None):
         if exc.response.status_code == 401:
             raise InvalidTokenException(exc)
         if exc.response.status_code == 403:
+            try:
+                body = json.loads(exc.response.content)
+            except Exception:  # pylint: disable=broad-except
+                body = {}
+            if body.get('type') == 'videoPlaybackGeoblocked':
+                raise StreamGeoblockedException(exc)
             raise InvalidLoginException(exc)
         if exc.response.status_code == 404:
             raise UnavailableException(exc)

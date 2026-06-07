@@ -11,7 +11,7 @@ import re
 from codequick import Listitem, Resolver, Route, Script
 import urlquick
 
-from resources.lib import download, resolver_proxy
+from resources.lib import download, resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
 
 
@@ -39,6 +39,8 @@ CATEGORIES_VIDEOS_FR = {
 }
 
 CATEGORIES_VIDEOS_EN = {URL_ROOT_EN + '/shows/': 'Shows'}
+
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Route.register
@@ -329,27 +331,10 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    final_language = kwargs.get('language', DESIRED_LANGUAGE)
 
-    if final_language == 'AR':
-        url_live = URL_LIVE_AR
-        resp = urlquick.get(url_live, max_age=-1)
-        live_id = re.compile(r'youtube\.com\/embed\/(.*?)[\?\"]').findall(resp.text)[0]
-        return resolver_proxy.get_stream_youtube(plugin, live_id, False)
+    url_live = URL_LIVE_AR
+    resp = urlquick.get(url_live, headers=GENERIC_HEADERS, max_age=-1)
+    root = resp.parse("div", attrs={"class": "live-player__main-video main-video"})
+    video_url = root.get('data-src')
 
-    if final_language == 'FR':
-        url_live = URL_LIVE_FR
-        resp = urlquick.get(url_live, max_age=-1)
-        return re.compile(r'file\: \"(.*?)\"').findall(resp.text)[0]
-
-    if final_language == 'ES':
-        url_live = URL_LIVE_ES
-        resp = urlquick.get(url_live, max_age=-1)
-        live_id = re.compile(r'youtube\.com\/embed\/(.*?)[\?\"]').findall(resp.text)[0]
-        return resolver_proxy.get_stream_youtube(plugin, live_id, False)
-
-    # Use EN by default
-    url_live = URL_LIVE_EN
-    resp = urlquick.get(url_live, max_age=-1)
-    live_id = re.compile(r'youtube\.com\/embed\/(.*?)[\?\"]').findall(resp.text)[0]
-    return resolver_proxy.get_stream_youtube(plugin, live_id, False)
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

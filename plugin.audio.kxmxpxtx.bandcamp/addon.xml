@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.kxmxpxtx.bandcamp" name="Bandcamp" version="0.4.1+matrix.1" provider-name="kxmxpxtx">
+<addon id="plugin.audio.kxmxpxtx.bandcamp" name="Bandcamp" version="0.5.2+matrix.1" provider-name="Simon Mollema">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
-        <import addon="script.module.requests" version="2.22.0+matrix.1"/>
         <import addon="script.module.future" version="0.18.2+matrix.1"/>
         <import addon="script.common.plugin.cache" version="2.6.1.1"/>
     </requires>
@@ -10,19 +9,37 @@
         <provides>audio</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">https://bandcamp.com</summary>
+        <summary lang="en_GB">Use Bandcamp to discover new music and browse your collection.</summary>
         <license>MIT</license>
-        <description lang="en_GB">Discover new artists and browse your collection</description>
+        <description lang="en_GB">Bandcamp is an online record store and music community where passionate fans discover, connect with, and directly support the artists they love. Visit https://bandcamp.com to support your favourite bands!</description>
         <platform>all</platform>
-        <news>v0.4.1+matrix.1 (2021-02-05)
-            - Fix dependencies for Kodi 19 rc 1
+        <email>xbmc@molzy.com</email>
+        <source>https://github.com/molzy/plugin.audio.kxmxpxtx.bandcamp</source>
+        <news>v0.5.2+matrix.1 (2025-04)
+ - Fixed search function which was broken due to upstream change
+     - Thank you to everyone who reported and contributed a fix!
+ - Extended API timeout, to help those with a large collection or wishlist
+
+v0.5.1+matrix.1 (2024-08)
+ - Resolved 403 forbidden error when accessing bandcamp API
+
+v0.5.0+matrix.1 (2023-01)
+ - Added image quality settings and band fanart
+ - Changed default view for user collection and wishlist
+     - Now matches the user-sorted list of albums on the Bandcamp website
+     - Moved the previous view (grouping by artist) to a submenu
+ - Added folder icons to the main menu
+ - Add German and Dutch translations
+ - Updated provider, thanks @kxmxpxtx for creating this plugin!
         </news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.png</fanart>
-            <screenshot>screenshot/collection.png</screenshot>
-            <screenshot>screenshot/discover.png</screenshot>
-            <screenshot>screenshot/genre.png</screenshot>
+            <screenshot>screenshot/menu.jpg</screenshot>
+            <screenshot>screenshot/discover-genres.jpg</screenshot>
+            <screenshot>screenshot/discover.jpg</screenshot>
+            <screenshot>screenshot/collection-albums.jpg</screenshot>
+            <screenshot>screenshot/collection-artists.jpg</screenshot>
         </assets>
     </extension>
 </addon>

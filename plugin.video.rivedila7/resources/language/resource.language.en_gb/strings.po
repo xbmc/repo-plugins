@@ -21,7 +21,7 @@ msgid "LA7 Replay"
 msgstr ""
 
 msgctxt "#32004"
-msgid "LA7d Replay"
+msgid "LA7 Cinema Replay"
 msgstr ""
 
 msgctxt "#32002"
@@ -29,7 +29,7 @@ msgid "LA7 Live"
 msgstr ""
 
 msgctxt "#32009"
-msgid "LA7d Live"
+msgid "LA7 Cinema Live"
 msgstr ""
 
 msgctxt "#32003"
@@ -45,13 +45,17 @@ msgid "News & Weather"
 msgstr ""
 
 msgctxt "#32006"
-msgid "On-Demand Programs"
+msgid "Programs"
 msgstr ""
 
 msgctxt "#32008"
-msgid "Teche LA7 - The Protagonists"
+msgid "Personalities"
 msgstr ""
 
 msgctxt "#32010"
 msgid "LA7 Prime"
+msgstr ""
+
+msgctxt "#32011"
+msgid "LA7 Eventi Live"
 msgstr ""

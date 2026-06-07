@@ -1,5 +1,61 @@
 # Changelog
 
+## [v1.1.4](https://github.com/add-ons/plugin.video.streamz/tree/v1.1.4) (2024-02-26)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.1.3...v1.1.4)
+
+**Fixed bugs:**
+
+- Bump API to 15 [\#60](https://github.com/add-ons/plugin.video.streamz/pull/60) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.1.3](https://github.com/add-ons/plugin.video.streamz/tree/v1.1.3) (2023-11-04)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.1.2...v1.1.3)
+
+**Fixed bugs:**
+
+- Upgrade API to 14 [\#58](https://github.com/add-ons/plugin.video.streamz/pull/58) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.1.2](https://github.com/add-ons/plugin.video.streamz/tree/v1.1.2) (2023-01-13)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.1.1...v1.1.2)
+
+**Implemented enhancements:**
+
+- Remove manifest proxy [\#52](https://github.com/add-ons/plugin.video.streamz/pull/52) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Merged pull requests:**
+
+- Update to version 13 API \(part 2\) [\#54](https://github.com/add-ons/plugin.video.streamz/pull/54) ([michaelarnauts](https://github.com/michaelarnauts))
+- Add support for media protected with drmtoday [\#53](https://github.com/add-ons/plugin.video.streamz/pull/53) ([michaelarnauts](https://github.com/michaelarnauts))
+- Update to version 13 API [\#51](https://github.com/add-ons/plugin.video.streamz/pull/51) ([mediaminister](https://github.com/mediaminister))
+- Support Python 3.10 [\#49](https://github.com/add-ons/plugin.video.streamz/pull/49) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.1.1](https://github.com/add-ons/plugin.video.streamz/tree/v1.1.1) (2022-06-06)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.1.0...v1.1.1)
+
+**Implemented enhancements:**
+
+- Allow to clear the cache and don't use bad cached values [\#48](https://github.com/add-ons/plugin.video.streamz/pull/48) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Changes for API 12 [\#47](https://github.com/add-ons/plugin.video.streamz/pull/47) ([michaelarnauts](https://github.com/michaelarnauts))
+
+## [v1.1.0](https://github.com/add-ons/plugin.video.streamz/tree/v1.1.0) (2021-12-19)
+
+[Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.6...v1.1.0)
+
+**Implemented enhancements:**
+
+- Update artwork [\#41](https://github.com/add-ons/plugin.video.streamz/pull/41) ([michaelarnauts](https://github.com/michaelarnauts))
+- Upgrade to API v10 [\#40](https://github.com/add-ons/plugin.video.streamz/pull/40) ([michaelarnauts](https://github.com/michaelarnauts))
+
+**Fixed bugs:**
+
+- Use new authentication flow [\#43](https://github.com/add-ons/plugin.video.streamz/pull/43) ([michaelarnauts](https://github.com/michaelarnauts))
+
 ## [v1.0.6](https://github.com/add-ons/plugin.video.streamz/tree/v1.0.6) (2021-04-01)
 
 [Full Changelog](https://github.com/add-ons/plugin.video.streamz/compare/v1.0.5...v1.0.6)

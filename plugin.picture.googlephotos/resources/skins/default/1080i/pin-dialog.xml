@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+  <coordinates>
+    <left>385</left>
+    <top>315</top>
+  </coordinates>
+  <controls>
+    <animation type="WindowOpen" reversible="false">
+      <effect type="zoom" start="80" end="100" center="960,540" delay="160" tween="back" time="240" />
+      <effect type="fade" delay="160" end="100" time="240" />
+    </animation>
+    <animation type="WindowClose" reversible="false">
+      <effect type="zoom" start="100" end="80" center="960,540" easing="in" tween="back" time="240" />
+      <effect type="fade" start="100" end="0" time="240" />
+    </animation>
+    <control type="image">
+      <left>-1920</left>
+      <top>-1080</top>
+      <width>5760</width>
+      <height>3240</height>
+      <animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
+      <animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+      <texture colordiffuse="C2FFFFFF">black.png</texture>
+    </control>
+    <!-- Dialog panel -->
+    <control type="image">
+      <left>0</left>
+      <top>0</top>
+      <width>1150</width>
+      <height>450</height>
+      <texture border="2">dialog-bg.png</texture>
+    </control>
+    <!-- Title bar -->
+    <control type="image">
+      <left>0</left>
+      <top>0</top>
+      <width>1150</width>
+      <height>70</height>
+      <texture colordiffuse="FF147A96" border="2">white.png</texture>
+    </control>
+    <!-- Title label -->
+    <control type="label" id="1000">
+      <textoffsetx>20</textoffsetx>
+      <left>0</left>
+      <top>0</top>
+      <width>1150</width>
+      <height>70</height>
+      <font>font30_title</font>
+      <align>left</align>
+      <aligny>center</aligny>
+      <shadowcolor>FF000000</shadowcolor>
+    </control>
+    <!-- QR image -->
+    <control type="image" id="1001">
+      <left>20</left>
+      <top>90</top>
+      <width>340</width>
+      <height>340</height>
+      <aspectratio aligny="center" align="center">keep</aspectratio>
+    </control>
+    <!-- Text panel -->
+    <control type="textbox" id="1002">
+      <left>380</left>
+      <top>90</top>
+      <width>770</width>
+      <height>340</height>
+      <font>font12_title</font>
+      <align>left</align>
+      <aligny>top</aligny>
+      <shadowcolor>FF000000</shadowcolor>
+    </control>
+    <!-- Cancel button -->
+    <control type="button" id="1003">
+      <left>850</left>
+      <top>350</top>
+      <width>300</width>
+      <height>100</height>
+      <font>font12_title</font>
+      <textcolor>FFFFFFFF</textcolor>
+      <label>222</label>
+      <align>center</align>
+      <aligny>center</aligny>
+    </control>
+  </controls>
+</window>

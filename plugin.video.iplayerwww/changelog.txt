@@ -1,3 +1,93 @@
+v4.1.4
+Bug fixes:
+- Issues with watchlist/added.
+- Watch from start for HD channels.
+- Catch unhandled exceptions and log them.
+- Recommendations is no longer available on the website.
+New features:
+- Now supports Red Button content in listings.
+
+v4.1.3
+Fixes for requests exceptions.
+Fix for scrape mode "All at once".
+Updated user agent.
+
+v4.1.2
+Watching now is Continue Watching.
+Added now is Watchlist.
+Fixes for rare issue with Continue Watching.
+Fix for rare issue with Highlight listings.
+
+v4.1.1
+Fixed initialization of param dictionary.
+Fix for JSON changes on the website.
+
+v4.1.0
+New features:
+- Watching status synced when logged in. Thus, resuming is possible on other devices using the same BBCiD.
+- Live programmes can be watched from the start. Right click on the item to and select "Watch from the start".
+Massive thanks to @dimkroon for the contribution.
+Bug fixes:
+- Introduced stream prioritisation. This improves the availability of subtitles as they are sometimes released with replacement streams only.
+- Removed empty lines in subtitle conversion, which caused parts of the subtitles to be lost.
+
+v4.0.17
+Live radio authentication token fixes and simplifications.
+
+v4.0.16
+Live radio now needs an authentication token. Credits to dimkroon/kereltje once again.
+
+v4.0.15
+Fix for new login mechanism. Credits to dimkroon/kereltje.
+
+v4.0.14
+Fix for further changes to JSON format.
+
+v4.0.13
+Optimization for slice processing (which no longer seems to be needed at all).
+Fix for yet a different twist in A-Z.
+
+v4.0.12
+Fix for new A-Z format.
+
+v4.0.11
+Fixed Most Popular.
+Improved handling of new JSON format for single episodes and synopsis.
+
+v4.0.10
+Fix for next round of JSON changes.
+
+v4.0.9
+Fix for multiple subtitles with identical timestamps.
+
+v4.0.8
+Further adjustments for new JSON format.
+Fix for pagination in A-Z.
+Updated user agent.
+
+v4.0.7
+More subtitle optimizations.
+Preliminary fix for broken Most Popular (no thumbnails).
+
+v4.0.6
+Optimized subtitle support.
+
+v4.0.5
+Adapted to new mediaselector URL.
+
+v4.0.4
+Removed http streams for video. Now only https streams will be available.
+
+v4.0.3
+Added BBC Three live.
+
+v4.0.2
+Fixed typo in settings.xml which broke subtitles on new installations.
+
+v4.0.1
+Moved icons to separate add-on resource.images.iplayerwwww which becomes a new requirement.
+Changed settings to new format.
+
 v4.0.0
 Initial release for Matrix.
 New dependency inputstream.adaptive.

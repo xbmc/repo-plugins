@@ -5,57 +5,75 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
+
+import base64
 import json
 import re
-try:  # Python 3
-    from urllib.parse import urlencode
-except ImportError:  # Python 2
-    from urllib import urlencode
+import random
 
-import inputstreamhelper
+# noinspection PyUnresolvedReferences
 from codequick import Route, Resolver, Listitem
 import htmlement
+# noinspection PyUnresolvedReferences
 from kodi_six import xbmcgui
 import urlquick
 
-from resources.lib import download, resolver_proxy
-from resources.lib.kodi_utils import get_kodi_version, get_selected_item_art, get_selected_item_label, get_selected_item_info, INPUTSTREAM_PROP
+from resources.lib import download, web_utils, resolver_proxy
+from resources.lib.kodi_utils import get_kodi_version
 from resources.lib.menu_utils import item_post_treatment
 
+# TODO oauth helper class to persist tokens until expiration
 
-# TODO
-# Add geoblock (info in JSON)
-# Add Quality Mode
+# TODO manage favorites
+# GET https://u2c-service.rtbf.be/auvio/v1.20/users/{UID}/favorites?
+# type=PROGRAM&userAgent=Chrome-web-3.0
 
-URL_EMISSIONS_AUVIO = 'https://www.rtbf.be/auvio/emissions'
 
-URL_JSON_EMISSION_BY_ID2 = 'https://www.rtbf.be/api/media/video?' \
-                           'method=getVideoListByEmissionOrdered&args[]=%s'
+#  with   "headers": {
+#         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/116.0",
+#         "Accept": "*/*",
+#         "Accept-Language": "fr-BE,en-US;q=0.7,en;q=0.3",
+#         "authorization": "Bearer ...",
+#         "x-rtbf-redbee": "Bearer ...",
+#         "referrer": "https://auvio.rtbf.be/"
+#     }
+# and {UID} from RTBF_LOGIN_URL
 
-# I made the choice to select video only because it seems that some audio and video program have the same id but are different
-URL_JSON_EMISSION_BY_ID = 'https://www.rtbf.be/api/partner/generic/media/'\
-                          'objectlist?v=8&program_id=%s&content_type=complete'\
+# TODO manage play history
+# GET https://u2c-service.rtbf.be/auvio/v1.20/users/{UID}/play-history?isOngoing=true&_limit=16&userAgent=Chrome-web-3.0
+# same headers and {UID}
+
+# TODO Add geo-block (info in JSON)
+
+# TODO clean up old APIs used before redbee?
+
+AUTH_SERVICE_API_TOKEN = "https://auth-service.rtbf.be/oauth/v1/token"
+
+AUVIO_ROOT = "https://auvio.rtbf.be/"
+
+# I made the choice to select video only because it seems that some audio and video program have the same id but are
+# different
+URL_JSON_EMISSION_BY_ID = 'https://www.rtbf.be/api/partner/generic/media/' \
+                          'objectlist?v=8&program_id=%s&content_type=complete' \
                           '&type=video&target_site=mediaz&limit=100&partner_key=%s'
 
 # emission_id
 
-URL_CATEGORIES2 = 'https://www.rtbf.be/news/api/menu?site=media'
-URL_CATEGORIES = 'https://www.rtbf.be/api/partner/generic/embed/'\
+URL_CATEGORIES = 'https://www.rtbf.be/api/partner/generic/embed/' \
                  'category?method=getTree&v=1&partnerID=%s'
 
-# Doesn't contains all the TV Show
+# Doesn't contain all the TV Show
 URL_PROGRAMS2 = 'https://www.rtbf.be/api/partner/generic/embed/program?v=1&partnerID=%s'
 
 URL_LIST_TV_CHANNELS = 'https://www.rtbf.be/api/partner/generic/epg/channellist?v=7&type=tv&partner_key=%s'
 URL_PROGRAMS = 'https://www.rtbf.be/api/partner/generic/program/getprograms?channel=%s&partner_key=%s'
 
-URL_LIST_SEARCH = 'https://www.rtbf.be/api/partner/generic/search/query?index=media&q=%s&type=media&target_site=mediaz&v=8&partner_key=%s'
-URL_LIST_SEARCH_PROG = 'https://www.rtbf.be/api/partner/generic/search/query?index=program&is_paid=0&q=%s&target_site=mediaz&v=8&partner_key=%s'
+URL_LIST_SEARCH = 'https://bff-service.rtbf.be/auvio/v1.23/search?query=%s'
 
 URL_SUB_CATEGORIES = 'https://www.rtbf.be/news/api/block?data[0][uuid]=%s&data[0][type]=widget&data[0][settings][id]=%s'
 # data-uuid and part of data-uuid
 
-URL_VIDEOS_BY_CAT_ID = 'https://www.rtbf.be/api/partner/generic/media/objectlist?'\
+URL_VIDEOS_BY_CAT_ID = 'https://www.rtbf.be/api/partner/generic/media/objectlist?' \
                        'v=8&category_id=%s&target_site=mediaz&limit=100&content_type=complete&partner_key=%s'
 
 URL_VIDEO_BY_ID = 'https://www.rtbf.be/auvio/embed/media?id=%s&autoplay=1'
@@ -70,35 +88,47 @@ URL_JSON_LIVE = 'https://www.rtbf.be/api/partner/generic/live/' \
 URL_JSON_LIVE_CHANNEL = 'http://www.rtbf.be/api/partner/generic/live/' \
                         'planningcurrent?v=8&channel=%s&target_site=mediaz&partner_key=%s'
 
-URL_LICENCE_KEY = 'https://wv-keyos.licensekeyserver.com/|%s|R{SSM}|'
+URL_LICENCE_KEY = 'https://wv-keyos.licensekeyserver.com'
 
 URL_TOKEN = 'https://www.rtbf.be/api/partner/generic/drm/encauthxml?%s=%s&partner_key=%s'
-
+URL_LIVE_LAUNE = 'https://rtbf-live.fl.freecaster.net/live/rtbf/geo/drm/laune_aes.m3u8'
+URL_LIVE_LADEUX = 'https://rtbf-live.fl.freecaster.net/live/rtbf/geo/drm/ladeux_aes.m3u8'
+URL_LIVE_LATROIS = 'https://rtbf-live.fl.freecaster.net/live/rtbf/geo/drm/latrois_aes.m3u8'
 
 URL_ROOT_LIVE = 'https://www.rtbf.be/auvio/direct#/'
 
+# redbee variables
+GIGYA_API_KEY = '3_kWKuPgcdAybqnqxq_MvHVk0-6PN8Zk8pIIkJM_yXOu-qLPDDsGOtIDFfpGivtbeO'
+REDBEE_BASE_URL = 'https://exposure.api.redbee.live/v2/customer/RTBF/businessunit/Auvio'
+RTBF_LOGIN_URL = 'https://login.rtbf.be/accounts.login'
+RTBF_GETJWT_URL = 'https://login.rtbf.be/accounts.getJWT'
 
-def get_partener_key():
-    # Get partener key
-    resp = urlquick.get(URL_ROOT_LIVE, max_age=-1)
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua()}
+
+# partner_key
+PARTNER_KEY = '82ed2c5b7df0a9334dfbda21eccd8427'  # get_partner_key()
+
+URL_AUVIO_PAGES = 'https://bff-service.rtbf.be/auvio/v1.23/pages%s'
+URL_LICENCE_KEY2 = '%s|Content-Type=&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3041.0 Safari/537.36|R{SSM}|R'
+
+
+def get_partner_key():
+    # Get partner key
+    resp = urlquick.get(URL_ROOT_LIVE, headers=GENERIC_HEADERS, max_age=-1)
     list_js_files = re.compile(
-        r'<script type="text\/javascript" src="(.*?)">').findall(resp.text)
+        r'<script type="text/javascript" src="(.*?)">').findall(resp.text)
 
     # Brute force :)
-    partener_key_value = ''
+    partner_key_value = ''
     for js_file in list_js_files:
-        resp2 = urlquick.get(js_file)
-        partener_key_datas = re.compile('partner_key: \'(.+?)\'').findall(
+        resp2 = urlquick.get(js_file, headers=GENERIC_HEADERS, max_age=-1)
+        partner_key_datas = re.compile('partner_key: \'(.+?)\'').findall(
             resp2.text)
-        if len(partener_key_datas) > 0:
-            partener_key_value = partener_key_datas[0]
+        if len(partner_key_datas) > 0:
+            partner_key_value = partner_key_datas[0]
             break
-    # print 'partener_key_value : ' + partener_key_value
-    return partener_key_value
-
-
-# partener_key
-PARTNER_KEY = get_partener_key()
+    # print 'partner_key_value : ' + partner_key_value
+    return partner_key_value
 
 
 def format_hours(date, **kwargs):
@@ -117,391 +147,478 @@ def format_day(date, **kwargs):
 
 @Route.register
 def list_categories(plugin, item_id, **kwargs):
+    params = {
+        'userAgent': 'Chrome-web-3.0',
+    }
+    response = urlquick.get(
+        url=URL_AUVIO_PAGES % '/home',
+        headers=GENERIC_HEADERS,
+        params=params,
+        max_age=-1
+    )
 
-    item = Listitem.search(list_videos_search, item_id=item_id, page='0')
-    item_post_treatment(item)
-    yield item
+    json_parser = response.json()
+    for array in json_parser["data"]['widgets']:
+        category_type = array['type']
+        if category_type.upper().endswith('_LIST') and 'FAVORITE_PROGRAM_LIST' not in category_type:
+            category_title = array["title"]
+            category_id = array["id"]
+            category_url = array['contentPath']
 
-    item = Listitem.search(list_videos_search_prog, item_id=item_id, page='0')
-    item.label = plugin.localize(30715)
-    item_post_treatment(item)
-    yield item
-
-    item = Listitem()
-    item.label = plugin.localize(30717)
-    item.set_callback(list_programs, item_id=item_id)
-    item_post_treatment(item)
-    yield item
-
-    resp = urlquick.get(URL_CATEGORIES % PARTNER_KEY)
-    json_parser = json.loads(resp.text)
-
-    for category_datas in json_parser["data"]:
-        category_title = category_datas["name"]
-        category_id = category_datas["id"]
-        item = Listitem()
-        item.label = category_title
-        if "subCategory" in category_datas:
-            item.set_callback(list_sub_categories,
+            item = Listitem()
+            item.label = category_title
+            item.set_callback(main_list_programs,
                               item_id=item_id,
-                              category_datas=category_datas,
+                              category_url=category_url,
                               category_id=category_id)
-        else:
-            item.set_callback(list_videos_category,
+            item_post_treatment(item)
+            yield item
+
+    # search items
+    item = Listitem.search(list_search, item_id=item_id, page='0')
+    item_post_treatment(item)
+    yield item
+
+    # TODO: all programs
+    # item = Listitem()
+    # item.label = plugin.localize(30717)
+    # item.set_callback(list_all_programs, item_id=item_id)
+    # item_post_treatment(item)
+    # yield item
+
+
+@Route.register
+def main_list_programs(plugin, item_id, category_url, category_id, **kwargs):
+    params = {
+        'userAgent': 'Chrome-web-3.0',
+    }
+    response = urlquick.get(
+        url=category_url,
+        headers=GENERIC_HEADERS,
+        params=params,
+        max_age=-1
+    )
+    if not response and response.status_code != 200:
+        return None
+
+    json_parser = response.json()
+    if 'pageType' in json_parser['data']:
+        if 'widgets' in json_parser['data']:
+            if json_parser['data']['pageType'] != 'MEDIA' and len(json_parser["data"]['widgets']) > 0:
+                for array in json_parser["data"]['widgets']:
+                    category_type = array['type']
+                    if category_type.upper().endswith('_LIST'):
+                        category_title = array["title"]
+                        if len(category_title) == 0:
+                            continue
+                        category_id = array["id"]
+                        category_url = array['contentPath']
+
+                        item = Listitem()
+                        item.label = category_title
+                        item.set_callback(main_list_programs,
+                                          item_id=item_id,
+                                          category_url=category_url,
+                                          category_id=category_id)
+                        item_post_treatment(item)
+                        yield item
+
+            elif 'content' in json_parser['data']:
+                if 'VIDEO' == json_parser["data"]['content']['type'] and json_parser["data"]['content']['pageType'] == "MEDIA":
+                    asset_id = json_parser["data"]['content']['assetId']
+
+                    item = Listitem()
+                    item.label = json_parser["data"]['content']['title']
+                    if "subtitle" in json_parser["data"]['content']:
+                        subtitle = json_parser["data"]['content']['subtitle']
+                        if len(subtitle) > 0:
+                            item.label += " - " + subtitle
+                    item.art['thumb'] = item.art['landscape'] = json_parser["data"]['content']['background']['l']
+                    item.info['plot'] = json_parser["data"]['content']['description']
+                    item.info['duration'] = json_parser["data"]['content']['duration']
+                    date_value = format_day(json_parser["data"]['content']["publishedFrom"])
+                    item.info.date(date_value, '%Y/%m/%d')
+                    item.set_callback(main_video_url, item_id=item_id, video_id=asset_id, download_mode=False)
+                    item_post_treatment(item, is_playable=True, is_downloadable=False)
+                    yield item
+    else:
+        if 'content' in json_parser['data']:
+            category_type = json_parser['data']['type']
+            for array in json_parser['data']['content']:
+                if 'assetId' in array:
+                    asset_id = array['assetId']
+
+                    item = Listitem()
+                    item.label = array['title']
+                    if "subtitle" in array:
+                        subtitle = array['subtitle']
+                        if len(subtitle) > 0:
+                            item.label += " - " + subtitle
+                    item.art['thumb'] = item.art['landscape'] = array['illustration']['l']
+                    if 'description' in array:
+                        item.info['plot'] = array['description']
+                    item.info['duration'] = array['duration']
+                    if 'publishedFrom' in array:
+                        date_value = format_day(array["publishedFrom"])
+                        item.info.date(date_value, '%Y/%m/%d')
+                    item.set_callback(main_video_url, item_id=item_id, video_id=asset_id, download_mode=False)
+                    item_post_treatment(item, is_playable=True, is_downloadable=False)
+                    yield item
+
+                else:
+                    category_id = str(array['id'])
+                    if 'title' in array:
+                        category_title = array['title']
+                    else:
+                        category_title = array['label']
+                    if 'contentPath' in array:
+                        category_url = array['contentPath']
+                    else:
+                        category_url = URL_AUVIO_PAGES % array['path']
+
+                    item = Listitem()
+                    item.label = category_title
+                    if 'illustration' in array:
+                        item.art['thumb'] = item.art['landscape'] = array['illustration']['l']
+                    item.set_callback(main_list_programs,
+                                      item_id=item_id,
+                                      category_url=category_url,
+                                      category_id=category_id)
+                    item_post_treatment(item)
+                    yield item
+
+
+@Resolver.register
+def main_video_url(plugin, item_id, video_id, download_mode=False, **kwargs):
+    is_ok, session_token, _ = get_redbee_session_token(plugin)
+    if is_ok is False:
+        return False
+
+    url = REDBEE_BASE_URL + '/entitlement/{}/play'.format(video_id)
+    params = {
+        'supportedFormats': 'dash,hls,mss,mp3,aac',
+        'supportedDrms': 'widevine'
+    }
+    headers = {
+        'User-Agent': web_utils.get_random_ua(),
+        'Authorization': 'Bearer {}'.format(session_token)
+    }
+    response = urlquick.get(url, headers=headers, params=params, max_age=-1, raise_for_status=False)
+    if response.status_code != 200:
+        plugin.notify(plugin.localize(30600), plugin.localize(30716))
+        return False
+
+    json_paser = json.loads(response.text)
+    video_format = json_paser['formats']
+
+    if video_format is None:
+        plugin.notify('ERROR', plugin.localize(30721))
+        return False
+
+    final_video_url, license_url = get_final_video_url(plugin, video_format)
+    license_key = None
+
+    if license_url:
+        license_key = URL_LICENCE_KEY2 % license_url
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=final_video_url, manifest_type='mpd',
+                                                  subtitles=None, license_url=license_key)
+
+
+def get_final_video_url(plugin, video_format):
+    FORMAT_PRIORITY = {"": 0, "mss": 1, "aac": 2, "mp3": 3, "smoothstreaming": 4, "hls": 5, "dash": 6}
+
+    if video_format is None:
+        plugin.notify('ERROR', plugin.localize(30721))
+        return None
+
+    license_url = manifest = None
+    formats = sorted(
+        video_format, reverse=True,
+        key=lambda f: FORMAT_PRIORITY.get(f.get("format", "").lower(), 0)
+    )
+
+    for current_format in formats:
+        if len(current_format.get("format", "")) == 0:
+            continue
+
+        manifest = current_format["mediaLocator"]
+        if len(current_format.get("drm", {}).keys()) == 0:
+            break
+
+        license_url = None
+        for k, v in current_format["drm"].items():
+            if "widevine" not in k.lower():
+                continue
+
+            license_url = v["licenseServerUrl"]
+            break
+
+        if license_url is not None:
+            break
+        manifest = None
+
+    return manifest, license_url
+
+
+@Route.register
+def list_search(plugin, search_query, item_id, page, **kwargs):
+    is_ok, session_token, id_token = get_redbee_session_token(plugin)
+    if is_ok is False:
+        yield False
+
+    rtbf_oauth = get_rtbf_token(plugin, id_token)
+    if rtbf_oauth is None:
+        yield False
+
+    headers = {
+        'User-Agent': web_utils.get_random_ua(),
+        'Content-Type': '',
+        'authorization': 'Bearer %s' % rtbf_oauth['access_token'],
+        'x-rtbf-redbee': 'Bearer %s' % session_token,
+        'referrer': AUVIO_ROOT
+    }
+
+    resp = urlquick.get(URL_LIST_SEARCH % search_query, headers=headers, max_age=-1)
+    json_parser = resp.json()
+
+    result_status = json_parser["status"]
+    found_result = False
+    if result_status == 200:
+        if "data" in json_parser:
+            for data_item in json_parser["data"]:
+                if (data_item['type'] == "PROGRAM_LIST"
+                        or (data_item['type'] == "MEDIA_LIST"
+                            and not data_item['content'][0]['resourceType'] == 'LIVE')):
+                    item = Listitem()
+                    item.label = data_item['title']
+                    item.set_callback(list_search_content,
+                                      item_id=item_id,
+                                      content=data_item['content'])
+                    item_post_treatment(item)
+                    found_result = True
+                    yield item
+
+                elif data_item['type'] == "MEDIA_PREMIUM_LIST":
+                    pass  # I don't have an account to implement this
+
+    if not found_result:
+        plugin.notify(plugin.localize(30600), plugin.localize(30718))
+        yield False
+
+
+@Route.register
+def list_search_content(plugin, item_id, content, **kwargs):
+    for content_item in content:
+        if content_item['resourceType'] == "PROGRAM":
+            item = Listitem()
+            item.label = content_item['title']
+            item.art['thumb'] = item.art['landscape'] = content_item['illustration']['l']
+            item.set_callback(list_videos_program,
                               item_id=item_id,
-                              cat_id=category_id)
-        item_post_treatment(item)
-        yield item
+                              program_id=content_item['id'])
+            item_post_treatment(item)
+            yield item
+
+        elif content_item['resourceType'] == "MEDIA" and content_item['type'] == "VIDEO":
+            item = Listitem()
+            item.label = content_item['title']
+            if "subtitle" in content_item:
+                item.label += " - " + content_item['subtitle']
+            item.art['thumb'] = item.art['landscape'] = content_item['illustration']['l']
+            item.info['plot'] = content_item['description']
+            item.info['duration'] = content_item['duration']
+            date_value = format_day(content_item["publishedFrom"])
+            item.info.date(date_value, '%Y/%m/%d')
+            item.set_callback(get_video_url,
+                              item_id=item_id,
+                              video_url=None,
+                              video_id=content_item['assetId'],
+                              is_drm=True,
+                              is_redbee=True)
+            item_post_treatment(item,
+                                is_playable=True,
+                                is_downloadable=False)
+            yield item
 
 
-@Route.register
-def list_videos_search(plugin, search_query, item_id, page, **kwargs):
-    resp = urlquick.get(URL_LIST_SEARCH % (search_query, PARTNER_KEY))
-    json_parser = json.loads(resp.text)
-    for results_datas in json_parser["results"]:
-        video_datas = results_datas["data"]
-        if "subtitle" in video_datas:
-            video_title = video_datas["title"] + ' - ' + video_datas["subtitle"]
-        else:
-            video_title = video_datas["title"]
-        video_image = video_datas["images"]["illustration"]["16x9"]["1248x702"]
-        video_plot = ''
-        if "description" in video_datas:
-            video_plot = video_datas["description"]
-        video_duration = video_datas["duration"]
-        date_value = format_day(video_datas["date_publish_from"])
-        video_url = ""
-        if "url_streaming" in video_datas:
-            is_drm = video_datas["drm"]
-            if is_drm:
-                if "url_hls" in video_datas["url_streaming"]:
-                    video_url = video_datas["url_streaming"]["url_hls"]
-                    if "master.m3u8" in video_url:
-                        video_url = video_url.replace('/master.m3u8', '-aes/master.m3u8')
-                    is_drm = False
-                elif "url_dash" in video_datas["url_streaming"]:
-                    video_url = video_datas["url_streaming"]["url_dash"]
-                    is_drm = video_datas["drm"]
-                else:
-                    video_url = video_datas["url_streaming"]["url"]
-                    is_drm = False
-            else:
-                if "url_hls" in video_datas["url_streaming"]:
-                    video_url = video_datas["url_streaming"]["url_hls"]
-                else:
-                    video_url = video_datas["url_streaming"]["url"]
-        else:
-            video_url = video_datas["url_embed"]
-            is_drm = False
-
-        video_id = video_datas["id"]
-        item = Listitem()
-        item.label = video_title
-        item.art['thumb'] = item.art['landscape'] = video_image
-        item.info['plot'] = video_plot
-        item.info['duration'] = video_duration
-        item.info.date(date_value, '%Y/%m/%d')
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          video_url=video_url,
-                          video_id=video_id,
-                          is_drm=is_drm)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
-        yield item
+def get_random_uuid():
+    # TODO hexa random 8-4-4-4-12 at each login and persisted?
+    return '-'.join([random_hexa(8), random_hexa(4), random_hexa(4), random_hexa(4), random_hexa(12)])
 
 
-@Route.register
-def list_videos_search_prog(plugin, search_query, item_id, page, **kwargs):
-    resp = urlquick.get(URL_LIST_SEARCH_PROG % (search_query, PARTNER_KEY))
-    json_parser = json.loads(resp.text)
-
-    for search_datas in json_parser["results"]:
-        search_title = search_datas["data"]["label"]
-        search_id = search_datas["id"]
-        search_image = search_datas["data"]["images"]["illustration"]["16x9"]["1248x702"]
-        item = Listitem()
-        item.label = search_title
-        item.art['thumb'] = item.art['landscape'] = search_image
-        item.set_callback(list_videos_program,
-                          item_id=item_id,
-                          program_id=search_id)
-        item_post_treatment(item)
-        yield item
+def random_hexa(i):
+    return ''.join(random.choice('0123456789abcdef') for _ in range(i))
 
 
-# Not used at the moment but could be used if we want to display all the programs per channel via API
-# (doesn't work at the moment because display folders that are empties)
-@Route.register
-def list_channels(plugin, item_id, **kwargs):
-    resp = urlquick.get(URL_LIST_TV_CHANNELS % PARTNER_KEY)
-    json_parser = json.loads(resp.text)
+def get_rtbf_token(plugin, id_token):
+    headers_oauth = {
+        'User-Agent': web_utils.get_random_ua(),
+        "Accept": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
 
-    for channel_datas in json_parser:
-        channel_title = channel_datas["name"]
-        channel_image = channel_datas["images"]["illustration"]["16x9"]["1248x702"]
-        channel_key = channel_datas["key"]
-        item = Listitem()
-        item.label = channel_title
-        item.art['thumb'] = item.art['landscape'] = channel_image
-        item.set_callback(list_programs,
-                          item_id=item_id,
-                          channel_key=channel_key)
-        item_post_treatment(item)
-        yield item
+    body_oauth = {
+        'grant_type': "gigya",
+        "client_id": "94efc52c-f55f-4c40-84fc-b4b5bd7de3ca",
+        "client_secret": "gVF7hFScJrDGwWu9uzu0mYdlKXxBKASczO2Q6K3y",
+        "platform": "WEB",
+        "device_id": get_random_uuid(),
+        "token": id_token,
+        "scope": "visitor"
+    }
 
+    resp = urlquick.post(AUTH_SERVICE_API_TOKEN, headers=headers_oauth, data=body_oauth, max_age=-1)
+    if not resp:
+        plugin.notify(plugin.localize(30600), 'rtbf_login response: empty')
+        return None
 
-@Route.register
-def list_programs(plugin, item_id, **kwargs):
-
-    resp = urlquick.get(URL_EMISSIONS_AUVIO)
-    root = resp.parse()
-
-    for program_datas in root.iterfind(
-            ".//article[@class='rtbf-media-item rtbf-media-item--program-wide col-xxs-12 col-xs-6 col-md-4 col-lg-3 ']"
-    ):
-        program_title = program_datas.find('.//a').get('title')
-        program_image = ''
-        list_program_image_datas = program_datas.find('.//img').get(
-            'data-srcset').split(' ')
-        for program_image_data in list_program_image_datas:
-            if 'jpg' in program_image_data:
-                if ',' in program_image_data:
-                    program_image = program_image_data.split(',')[1]
-                else:
-                    program_image = program_image_data
-        program_id = program_datas.get('data-id')
-
-        item = Listitem()
-        item.label = program_title
-
-        item.art['thumb'] = item.art['landscape'] = program_image
-        item.set_callback(list_videos_program,
-                          item_id=item_id,
-                          program_id=program_id)
-        item_post_treatment(item)
-        yield item
+    return resp.json()
 
 
 @Route.register
 def list_videos_program(plugin, item_id, program_id, **kwargs):
+    resp = urlquick.get(URL_JSON_EMISSION_BY_ID % (program_id, PARTNER_KEY), headers=GENERIC_HEADERS, max_age=-1)
+    json_parser = resp.json()
 
-    resp = urlquick.get(URL_JSON_EMISSION_BY_ID % (program_id, PARTNER_KEY))
-    json_parser = json.loads(resp.text)
-
-    for video_datas in json_parser:
-
-        if "subtitle" in video_datas:
-            video_title = video_datas["title"] + ' - ' + video_datas["subtitle"]
-        else:
-            video_title = video_datas["title"]
-        video_image = video_datas["images"]["illustration"]["16x9"]["1248x702"]
-        video_plot = ''
-        if "description" in video_datas:
-            video_plot = video_datas["description"]
-        video_duration = video_datas["duration"]
-        date_value = format_day(video_datas["date_publish_from"])
-        video_url = ""
-        if "url_streaming" in video_datas:
-            is_drm = video_datas["drm"]
-            if is_drm:
-                if "url_hls" in video_datas["url_streaming"]:
-                    video_url = video_datas["url_streaming"]["url_hls"]
-                    if "master.m3u8" in video_url:
-                        video_url = video_url.replace('/master.m3u8', '-aes/master.m3u8')
-                    is_drm = False
-                elif "url_dash" in video_datas["url_streaming"]:
-                    video_url = video_datas["url_streaming"]["url_dash"]
-                    is_drm = video_datas["drm"]
-                else:
-                    video_url = video_datas["url_streaming"]["url"]
-                    is_drm = False
-            else:
-                if "url_hls" in video_datas["url_streaming"]:
-                    video_url = video_datas["url_streaming"]["url_hls"]
-                else:
-                    video_url = video_datas["url_streaming"]["url"]
-        else:
-            video_url = video_datas["url_embed"]
-            is_drm = False
-
-        video_id = video_datas["id"]
-        item = Listitem()
-        item.label = video_title
-        item.art['thumb'] = item.art['landscape'] = video_image
-        item.info['plot'] = video_plot
-        item.info['duration'] = video_duration
-        item.info.date(date_value, '%Y/%m/%d')
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          video_url=video_url,
-                          video_id=video_id,
-                          is_drm=is_drm)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
-        yield item
+    found_result = {"value": False}
+    for video_data in json_parser:
+        for i in yield_video_data(item_id, video_data, found_result):
+            yield i
 
 
-@Route.register
-def list_sub_categories(plugin, item_id, category_datas, category_id, **kwargs):
-    for sub_category_datas in category_datas["subCategory"]:
-        sub_category_title = sub_category_datas["name"]
-        sub_category_id = sub_category_datas["id"]
+def yield_video_data(item_id, video_data, found_result):
+    is_drm = video_data["drm"]
+    is_redbee = False
+    if video_data.get("external_id") is not None:
+        is_redbee = True
+    video_id = video_data["id"]
+    video_title = video_data["title"]
+    if "subtitle" in video_data:
+        video_title += " - " + video_data['subtitle']
+    video_plot = ''
+    if "description" in video_data:
+        video_plot = video_data["description"]
+    video_image = video_data["images"]["illustration"]["16x9"]["1248x702"]
+    video_duration = video_data["duration"]
+    date_value = format_day(video_data["date_publish_from"])
 
-        item = Listitem()
-        item.label = sub_category_title
-        item.set_callback(list_videos_category,
-                          item_id=item_id,
-                          cat_id=sub_category_id)
-        item_post_treatment(item)
-        yield item
+    video_url = None
+    if "url" in video_data:
+        video_url = video_data["url"]
+        is_redbee = True
+    elif "url_streaming" in video_data:
+        url_streaming = video_data["url_streaming"]
+        if is_drm:
+            if "url_hls" in url_streaming:
+                video_url = url_streaming["url_hls"]
+                if "master.m3u8" in video_url:
+                    video_url = video_url.replace('/master.m3u8', '-aes/master.m3u8')
+                is_drm = False
+            elif "url_dash" in url_streaming:
+                video_url = url_streaming["url_dash"]
+        elif "url_hls" in url_streaming:
+            video_url = url_streaming["url_hls"]
+    elif "url_embed" in video_data:
+        video_url = video_data["url_embed"]
+        is_drm = False
 
-    category_url = 'https://www.rtbf.be/auvio/categorie?id=' + str(category_id)
-    resp = urlquick.get(category_url)
+    if video_url is None:
+        return False
 
-    list_data_uuid = re.compile(r'data-uuid\=\"(.*?)\"').findall(resp.text)
-    for sub_category_data_uuid in list_data_uuid:
-        resp2 = urlquick.get(
-            URL_SUB_CATEGORIES %
-            (sub_category_data_uuid, sub_category_data_uuid.split('-')[1]))
-        json_parser = json.loads(resp2.text)
-        if sub_category_data_uuid in json_parser["blocks"]:
-
-            parser = htmlement.HTMLement()
-            parser.feed(json_parser["blocks"][sub_category_data_uuid])
-            root_2 = parser.close()
-
-            for sub_category_dl_data in root_2.iterfind(
-                    ".//section[@class='js-item-container']"):
-
-                if sub_category_dl_data.find('.//h2').text is not None:
-                    sub_category_dl_title = sub_category_dl_data.find(
-                        './/h2').text.strip()
-                else:
-                    sub_category_dl_title = sub_category_dl_data.find(
-                        './/h2/a').text.strip()
-                sub_category_dl_id = sub_category_dl_data.get('id')
-
-                item = Listitem()
-                item.label = sub_category_dl_title + ' download'
-                item.set_callback(
-                    list_videos_sub_category_dl,
-                    item_id=item_id,
-                    sub_category_data_uuid=sub_category_data_uuid,
-                    sub_category_id=sub_category_dl_id)
-                item_post_treatment(item)
-                yield item
-
-
-@Route.register
-def list_videos_category(plugin, item_id, cat_id, **kwargs):
-
-    resp = urlquick.get(URL_VIDEOS_BY_CAT_ID % (cat_id, PARTNER_KEY))
-    json_parser = json.loads(resp.text)
-
-    for video_datas in json_parser:
-        if "subtitle" in video_datas:
-            video_title = video_datas["title"] + ' - ' + video_datas["subtitle"]
-        else:
-            video_title = video_datas["title"]
-        video_image = video_datas["images"]["illustration"]["16x9"]["1248x702"]
-        video_plot = ''
-        if "description" in video_datas:
-            video_plot = video_datas["description"]
-        video_duration = video_datas["duration"]
-        date_value = format_day(video_datas["date_publish_from"])
-        video_url = ""
-        if "url_streaming" in video_datas:
-            is_drm = video_datas["drm"]
-            if is_drm:
-                if "url_hls" in video_datas["url_streaming"]:
-                    video_url = video_datas["url_streaming"]["url_hls"]
-                    if "master.m3u8" in video_url:
-                        video_url = video_url.replace('/master.m3u8', '-aes/master.m3u8')
-                    is_drm = False
-                elif "url_dash" in video_datas["url_streaming"]:
-                    video_url = video_datas["url_streaming"]["url_dash"]
-                    is_drm = video_datas["drm"]
-                else:
-                    video_url = video_datas["url_streaming"]["url"]
-                    is_drm = False
-            else:
-                if "url_hls" in video_datas["url_streaming"]:
-                    video_url = video_datas["url_streaming"]["url_hls"]
-                else:
-                    video_url = video_datas["url_streaming"]["url"]
-        else:
-            video_url = video_datas["url_embed"]
-            is_drm = False
-        video_id = video_datas["id"]
-        # is_downloadable = False
-        # if video_datas["url_download"]:
-        # is_downloadable = True
-        # video_url = video_datas["url_download"]
-
-        item = Listitem()
-        item.label = video_title
-        item.art['thumb'] = item.art['landscape'] = video_image
-        item.info['plot'] = video_plot
-        item.info['duration'] = video_duration
-        item.info.date(date_value, '%Y/%m/%d')
-
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          video_url=video_url,
-                          video_id=video_id,
-                          is_drm=is_drm)
-        item_post_treatment(item,
-                            is_playable=True,
-                            is_downloadable=True)
-        yield item
+    item = Listitem()
+    item.label = video_title
+    item.art['thumb'] = item.art['landscape'] = video_image
+    item.info['plot'] = video_plot
+    item.info['duration'] = video_duration
+    item.info.date(date_value, '%Y/%m/%d')
+    item.set_callback(get_video_url,
+                      item_id=item_id,
+                      video_url=video_url,
+                      video_id=video_id,
+                      is_drm=is_drm,
+                      is_redbee=is_redbee)
+    item_post_treatment(item,
+                        is_playable=True,
+                        is_downloadable=not is_drm)
+    found_result["value"] = True
+    yield item
 
 
-@Route.register
-def list_videos_sub_category_dl(plugin, item_id, sub_category_data_uuid,
-                                sub_category_id, **kwargs):
+def get_video_redbee(plugin, video_id, is_drm):
+    is_ok, session_token, _ = get_redbee_session_token(plugin)
+    if is_ok is False:
+        return False
 
-    resp = urlquick.get(
-        URL_SUB_CATEGORIES %
-        (sub_category_data_uuid, sub_category_data_uuid.split('-')[1]))
-    json_parser = json.loads(resp.text)
+    video_format, forced_drm = get_redbee_format(plugin, video_id, session_token, is_drm)
+    if video_format is None:
+        return False
 
-    parser = htmlement.HTMLement()
-    parser.feed(json_parser["blocks"][sub_category_data_uuid])
-    root = parser.close()
+    video_url = video_format['mediaLocator']
 
-    for sub_category_dl_datas in root.iterfind(".//section[@class='js-item-container']"):
-        if sub_category_dl_datas.get('id') != sub_category_id:
-            continue
+    if not is_drm and not forced_drm:
+        if re.match('.*m3u8.*', video_url) is not None:
+            return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, manifest_type="hls")
+        return video_url
 
-        list_videos_datas = sub_category_dl_datas.findall('.//article')
+    if get_kodi_version() < 18:
+        xbmcgui.Dialog().ok(plugin.localize(30600), plugin.localize(30602))
+        return False
 
-        for video_datas in list_videos_datas:
-            if video_datas.get('data-card') is None:
-                continue
+    certificate_data = None
+    if 'drm' in video_format:
+        license_server_url = video_format['drm']['com.widevine.alpha']['licenseServerUrl']
+        certificate_url = video_format['drm']['com.widevine.alpha'].get('certificateUrl')
+        if len(certificate_url) > 0:
+            resp_cert = urlquick.get(certificate_url, headers=GENERIC_HEADERS, max_age=-1).text
+            certificate_data = base64.b64encode(resp_cert.encode("utf-8")).decode("utf-8")
+    else:
+        return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, manifest_type="mpd")
 
-            data_card = video_datas.get('data-card')
-            if not data_card:
-                continue
+    # TODO subtitles?
+    # subtitles = video_format['sprites'][0]['vtt']
 
-            json_parser = json.loads(data_card)
-            if not json_parser["isVideo"]:
-                continue
+    headers = {
+        'User-Agent': web_utils.get_random_ua(),
+        'Content-Type': ''
+    }
 
-            if "mediaId" not in json_parser:
-                continue
+    input_stream_properties = {}
+    if certificate_data is not None:
+        input_stream_properties = {"server_certificate": certificate_data}
 
-            video_title = json_parser["title"] + ' - ' + json_parser["subtitle"]
-            video_image = json_parser["illustration"]["format1248"]
-            video_id = json_parser["mediaId"]
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, manifest_type='mpd', headers=headers,
+                                                  license_url=license_server_url,
+                                                  input_stream_properties=input_stream_properties)
 
-            item = Listitem()
-            item.label = video_title
-            item.art['thumb'] = item.art['landscape'] = video_image
 
-            item.set_callback(get_video_url2,
-                              item_id=item_id,
-                              video_id=video_id)
-            item_post_treatment(item, is_playable=True, is_downloadable=True)
-            yield item
+def get_redbee_session_token(plugin):
+    """
+    @param plugin: the plugin
+    @return:
+        is_ok: false if an error happened;
+        session_token ;
+        id_token
+    """
+    login = plugin.setting.get_string('rtbf.login')
+    password = plugin.setting.get_string('rtbf.password')
+    if login == '' or password == '':
+        xbmcgui.Dialog().ok(
+            plugin.localize(30600),
+            plugin.localize(30604) % ('RTBF (BE)', 'https://www.rtbf.be/auvio/'))
+        return False, None, None
+
+    rtbf_login_data = rtbf_login(plugin, login, password)
+    if rtbf_login_data is None:
+        return False, None, None
+
+    rtbf_jwt = get_rtbf_jwt(plugin, rtbf_login_data['sessionInfo']['cookieValue'])
+    if rtbf_jwt is None:
+        return False, None, None
+
+    id_token = rtbf_jwt['id_token']
+    redbee_jwt = get_redbee_jwt(plugin, id_token)
+    return True, redbee_jwt['sessionToken'], id_token
 
 
 @Resolver.register
@@ -511,211 +628,244 @@ def get_video_url(plugin,
                   video_id,
                   is_drm,
                   download_mode=False,
+                  is_redbee=False,
                   **kwargs):
+    if is_redbee:
+        return main_video_url(plugin, item_id, video_id)
+
     if 'youtube.com' in video_url:
         video_id = video_url.rsplit('/', 1)[1]
-        return resolver_proxy.get_stream_youtube(plugin, video_id,
-                                                 download_mode)
+        return resolver_proxy.get_stream_youtube(plugin, video_id, download_mode)
 
     if 'arte.tv' in video_url:
         video_id = re.compile("(?<=fr%2F)(.*)(?=&autostart)").findall(video_url)[0]
-        return resolver_proxy.get_arte_video_stream(plugin,
-                                                    'fr',
-                                                    video_id,
-                                                    download_mode)
+        return resolver_proxy.get_arte_video_stream(plugin, 'fr', video_id, download_mode)
 
     if is_drm:
-        if get_kodi_version() < 18:
-            xbmcgui.Dialog().ok('Info', plugin.localize(30602))
-            return False
+        return get_drm_item(plugin, video_id, video_url, 'media_id')
 
-        is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
-        if not is_helper.check_inputstream():
-            return False
-
-        token_url = URL_TOKEN % ('media_id', video_id, PARTNER_KEY)
-        token_value = urlquick.get(token_url, max_age=-1)
-        json_parser_token = json.loads(token_value.text)
-
-        item = Listitem()
-        item.path = video_url
-        item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
-        item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-        item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
-        headers2 = {
-            'customdata':
-            json_parser_token["auth_encoded_xml"],
-        }
-        item.property['inputstream.adaptive.license_key'] = URL_LICENCE_KEY % urlencode(headers2)
-        item.property['inputstream.adaptive.manifest_update_parameter'] = 'full'
-        item.label = get_selected_item_label()
-        item.art.update(get_selected_item_art())
-        item.info.update(get_selected_item_info())
-        return item
+    if video_url.endswith('m3u8'):
+        return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url)
 
     return video_url
 
 
-@Resolver.register
-def get_video_url2(plugin,
-                   item_id,
-                   video_id,
-                   download_mode=False,
-                   **kwargs):
-
-    resp = urlquick.get(URL_VIDEO_BY_ID % video_id, max_age=-1)
-    json_parser = json.loads(
-        re.compile('data-media=\"(.*?)\"').findall(resp.text)[0].replace(
-            '&quot;', '"'))
-
-    if json_parser["urlHls"] is None:
-        if 'youtube.com' in json_parser["url"]:
-            video_id = json_parser["url"].rsplit('/', 1)[1]
-            return resolver_proxy.get_stream_youtube(plugin, video_id,
-                                                     download_mode)
-        return json_parser["url"]
-
-    stream_url = json_parser["urlHls"]
-    if 'drm' in stream_url:
-        stream_url = json_parser["urlHlsAes128"]
-
-    if download_mode:
-        return download.download_video(stream_url)
-    return stream_url
+# TODO clean up? redbee is used instead everywhere now?
+def get_drm_item(plugin, video_id, video_url, url_token_parameter):
+    token_url = URL_TOKEN % (url_token_parameter, video_id, PARTNER_KEY)
+    token_value = urlquick.get(token_url, headers=GENERIC_HEADERS, max_age=-1)
+    json_parser_token = json.loads(token_value.text)
+    headers = {'customdata': json_parser_token["auth_encoded_xml"]}
+    input_stream_properties = {"manifest_update_parameter": 'full'}
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, headers=headers, manifest_type='mpd',
+                                                  license_url=URL_LICENCE_KEY,
+                                                  input_stream_properties=input_stream_properties)
 
 
 @Resolver.register
 def set_live_url(plugin, item_id, **kwargs):
+    resp = urlquick.get(URL_JSON_LIVE_CHANNEL % (item_id, PARTNER_KEY), headers=GENERIC_HEADERS, max_age=-1)
+    video_data = resp.json()
 
-    resp = urlquick.get(URL_JSON_LIVE_CHANNEL % (item_id, PARTNER_KEY), max_age=-1)
-    json_parser = json.loads(resp.text)
+    if "url_streaming" not in video_data:
+        plugin.notify(plugin.localize(30600), plugin.localize(30716))
+        return False
 
-    if "url_streaming" in json_parser:
-        is_drm = json_parser["drm"]
-        if is_drm:
-            if 'url_hls' in json_parser["url_streaming"]:
-                live_url = json_parser["url_streaming"]["url_hls"]
-                if "_drm.m3u8" in live_url:
-                    live_url = live_url.replace('_drm.m3u8', '_aes.m3u8')
-                live_id = json_parser["id"]
-                is_drm = False
-            elif 'url_dash' in json_parser["url_streaming"]:
-                live_url = json_parser["url_streaming"]["url_dash"]
-                live_id = json_parser["id"]
-            else:
-                live_url = json_parser["url_streaming"]["url_hls"]
-                live_id = json_parser["id"]
-                is_drm = False
+    return get_live_item(item_id, video_data)
+
+
+def get_live_item(item_id, video_data, found_result=None):
+    if found_result is None:
+        found_result = {"value": False}
+    is_drm = video_data["drm"]
+    is_redbee = False
+    if video_data.get("external_id") is not None:
+        is_redbee = True
+    video_id = video_data["id"]
+    if type(video_data["channel"]) is dict:
+        live_channel_title = video_data["channel"]["label"]
+    else:
+        live_channel_title = 'Exclu Auvio'
+    video_title = video_data["title"]
+    video_title = live_channel_title + " - " + video_title
+    if "subtitle" in video_data:
+        video_title += " - " + video_data['subtitle']
+
+    video_plot = ''
+    if "description" in video_data:
+        video_plot = video_data["description"]
+
+    start_time_value = format_hours(video_data["start_date"])
+    end_time_value = format_hours(video_data["end_date"])
+    date_value = format_day(video_data["start_date"])
+    video_plot = 'Début le %s à %s (CET)' % (date_value, start_time_value) + '\n\r' + \
+                 'Fin le %s à %s (CET)' % (date_value, end_time_value) + '\n\r' + \
+                 'Accessibilité: ' + video_data["geolock"]["title"] + '\n\r' + \
+                 video_plot
+
+    video_image = video_data["images"]["illustration"]["16x9"]["1248x702"]
+    url_streaming = video_data["url_streaming"]
+    if is_drm:
+        if "url_hls" in url_streaming:
+            video_url = url_streaming["url_hls"]
+            if "_drm.m3u8" in video_url or "/.m3u8?" in video_url:
+                video_url = video_url.replace('_drm.m3u8', '_aes.m3u8')
+        elif "url_dash" in url_streaming:
+            video_url = url_streaming["url_dash"]
         else:
-            live_url = json_parser["url_streaming"]["url_hls"]
-            live_id = json_parser["id"]
-    live_channel_title = json_parser["channel"]["label"]
-    # start_time_value = format_hours(json_parser["start_date"])
-    # end_time_value = format_hours(json_parser["end_date"])
-    # date_value = format_day(json_parser["start_date"])
-    live_title = live_channel_title + " - " + json_parser["title"]
-    if json_parser['subtitle']:
-        live_title += " - " + json_parser['subtitle']
-    live_plot = json_parser["description"]
-    live_image = json_parser["images"]["illustration"]["16x9"]["1248x702"]
+            video_url = url_streaming["url_hls"]
+    else:
+        video_url = url_streaming["url_hls"]
 
     item = Listitem()
-    item.label = live_title
-    item.art['thumb'] = item.art['landscape'] = live_image
-    item.info['plot'] = live_plot
-    item.set_callback(get_live_url, item_id=item_id, live_url=live_url, is_drm=is_drm, live_id=live_id)
+    item.label = video_title
+    item.art['thumb'] = item.art['landscape'] = video_image
+    item.info['plot'] = video_plot
+    # commented this line because otherwise sorting is made by date and then by title
+    # and doesn't help to find the direct
+    # item.info.date(date_time_value, '%Y/%m/%d')
+    item.set_callback(get_live_url,
+                      item_id=item_id,
+                      live_url=video_url,
+                      is_drm=is_drm,
+                      live_id=video_id,
+                      is_redbee=is_redbee,
+                      external_id=video_data.get("external_id"))
     item_post_treatment(item, is_playable=True)
-    yield item
+    found_result["value"] = True
+    return item
 
 
 @Route.register
 def list_lives(plugin, item_id, **kwargs):
+    resp = urlquick.get(URL_JSON_LIVE % PARTNER_KEY, headers=GENERIC_HEADERS, max_age=-1)
+    json_parser = resp.json()
 
-    resp = urlquick.get(URL_JSON_LIVE % (PARTNER_KEY), max_age=-1)
-    json_parser = json.loads(resp.text)
+    found_result = {"value": False}
+    for video_data in json_parser:
 
-    for live_datas in json_parser:
-
-        if "url_streaming" in live_datas:
-            is_drm = live_datas["drm"]
-            if is_drm:
-                # check if we can add prochainnement if stream is not present
-                if 'url_hls' in live_datas["url_streaming"]:
-                    live_url = live_datas["url_streaming"]["url_hls"]
-                    if "_drm.m3u8" in live_url:
-                        live_url = live_url.replace('_drm.m3u8', '_aes.m3u8')
-                    live_id = live_datas["id"]
-                    is_drm = False
-                elif 'url_dash' in live_datas["url_streaming"]:
-                    live_url = live_datas["url_streaming"]["url_dash"]
-                    live_id = live_datas["id"]
-                else:
-                    live_url = live_datas["url_streaming"]["url_hls"]
-                    live_id = live_datas["id"]
-                    is_drm = False
-            else:
-                live_url = live_datas["url_streaming"]["url_hls"]
-                live_id = live_datas["id"]
-        if type(live_datas["channel"]) is dict:
-            live_channel_title = live_datas["channel"]["label"]
-        else:
-            live_channel_title = 'Exclu Auvio'
-        if live_channel_title in ['La Une', 'Tipik', 'La Trois']:
+        if not video_data["is_live"]:
             continue
-        start_time_value = format_hours(live_datas["start_date"])
-        end_time_value = format_hours(live_datas["end_date"])
-        date_value = format_day(live_datas["start_date"])
-        live_title = live_channel_title + " - " + live_datas["title"]
-        if live_datas['subtitle']:
-            live_title += " - " + live_datas['subtitle']
-        live_plot = 'Début le %s à %s (CET)' % (date_value, start_time_value) + \
-            '\n\r' + 'Fin le %s à %s (CET)' % (date_value, end_time_value) + '\n\r' + \
-            'Accessibilité: ' + live_datas["geolock"]["title"] + '\n\r' + \
-            live_datas["description"]
-        live_image = live_datas["images"]["illustration"]["16x9"]["1248x702"]
 
-        item = Listitem()
-        item.label = live_title
-        item.art['thumb'] = item.art['landscape'] = live_image
-        item.info['plot'] = live_plot
-        # commented this line because othrewie sorting is made by date and then by title
-        # and doesn't help to find the direct
-        # item.info.date(date_time_value, '%Y/%m/%d')
-        item.set_callback(get_live_url, item_id=item_id, live_url=live_url, is_drm=is_drm, live_id=live_id)
-        item_post_treatment(item, is_playable=True)
-        yield item
+        if "url_streaming" not in video_data:
+            # plugin.notify(plugin.localize(30600), plugin.localize(30716))
+            continue
+
+        yield get_live_item(item_id, video_data, found_result)
+
+    if not found_result["value"]:
+        plugin.notify(plugin.localize(30600), plugin.localize(30716))
 
 
 @Resolver.register
-def get_live_url(plugin, item_id, live_url, is_drm, live_id, **kwargs):
-
+def get_live_url(plugin, item_id, live_url, is_drm, live_id, is_redbee=False, external_id=None, **kwargs):
+    if is_redbee:
+        return get_video_redbee(plugin, external_id, is_drm)
     if is_drm:
-        if get_kodi_version() < 18:
-            xbmcgui.Dialog().ok('Info', plugin.localize(30602))
-            return False
-
-        is_helper = inputstreamhelper.Helper('mpd', drm='widevine')
-        if not is_helper.check_inputstream():
-            return False
-
-        token_url = URL_TOKEN % ('planning_id', live_id, PARTNER_KEY)
-        token_value = urlquick.get(token_url, max_age=-1)
-        json_parser_token = json.loads(token_value.text)
-
-        item = Listitem()
-        item.path = live_url
-        item.property[INPUTSTREAM_PROP] = 'inputstream.adaptive'
-        item.property['inputstream.adaptive.manifest_type'] = 'mpd'
-        item.property['inputstream.adaptive.license_type'] = 'com.widevine.alpha'
-        headers2 = {
-            'customdata':
-            json_parser_token["auth_encoded_xml"],
-        }
-        item.property['inputstream.adaptive.license_key'] = URL_LICENCE_KEY % urlencode(headers2)
-        item.property['inputstream.adaptive.manifest_update_parameter'] = 'full'
-        item.label = get_selected_item_label()
-        item.art.update(get_selected_item_art())
-        item.info.update(get_selected_item_info())
-        return item
+        return get_drm_item(plugin, live_id, live_url, 'planning_id')
 
     return live_url
+
+
+# redbee functions
+def rtbf_login(plugin, user_login, user_pwd):
+    url_params = {
+        'loginID': user_login,
+        'password': user_pwd,
+        'apiKey': GIGYA_API_KEY,
+        'format': 'json',
+        'lang': 'fr'
+    }
+
+    resp = urlquick.get(RTBF_LOGIN_URL, params=url_params, headers=GENERIC_HEADERS, max_age=-1)
+
+    if not resp:
+        plugin.notify(plugin.localize(30600), 'rtbf_login response: empty')
+        return None
+
+    json_parser = resp.json()
+
+    if 'errorMessage' in json_parser:
+        plugin.notify(plugin.localize(30600), 'rtbf_login errorMessage: %s' % (json_parser['errorMessage']))
+        return None
+
+    if json_parser['errorCode'] != 0:
+        plugin.notify(plugin.localize(30600), "rtbf_login errorCode: #%s" % (json_parser['errorCode']))
+        return None
+
+    if json_parser['statusCode'] != 200:
+        plugin.notify(plugin.localize(30600), "rtbf_login statusCode: #%s" % (json_parser['statusCode']))
+        return None
+
+    return json_parser
+
+
+def get_rtbf_jwt(plugin, login_token):
+    url_params = {
+        'apiKey': GIGYA_API_KEY,
+        'login_token': login_token,
+        'format': 'json'
+    }
+
+    resp = urlquick.get(RTBF_GETJWT_URL, params=url_params, headers=GENERIC_HEADERS, max_age=-1)
+
+    if not resp:
+        plugin.notify(plugin.localize(30600), 'get_rtbf_jwt response: empty')
+        return None
+
+    json_parser = resp.json()
+
+    if 'errorMessage' in json_parser:
+        plugin.notify(plugin.localize(30600), 'rtbf_getJWT errorMessage: %s' % (json_parser['errorMessage']))
+
+    if json_parser['errorCode'] != 0:
+        plugin.notify(plugin.localize(30600), "rtbf_getJWT errorCode: #%s" % (json_parser['errorCode']))
+        return None
+
+    if json_parser['statusCode'] != 200:
+        plugin.notify(plugin.localize(30600), "rtbf_getJWT statusCode: #%s" % (json_parser['statusCode']))
+        return None
+
+    return json_parser
+
+
+def get_redbee_jwt(plugin, rtbf_jwt):
+    url = REDBEE_BASE_URL + '/auth/gigyaLogin'
+
+    data_string = '{"jwt":"' + rtbf_jwt + ('","device":{"deviceId":"%s","name":"","type":"WEB"}}' % get_random_uuid())
+    data = data_string.encode("utf-8")
+
+    headers = {
+        'User-Agent': web_utils.get_random_ua(),
+        'Content-Type': 'application/json'
+    }
+
+    return urlquick.post(url, headers=headers, data=data, max_age=-1).json()
+
+
+def get_redbee_format(plugin, media_id, session_token, is_drm):
+    url = REDBEE_BASE_URL + '/entitlement/{}/play'.format(media_id)
+
+    headers = {
+        'User-Agent': web_utils.get_random_ua(),
+        'Authorization': 'Bearer {}'.format(session_token)
+    }
+    response = urlquick.get(url, headers=headers, max_age=-1, raise_for_status=False)
+    if response.status_code != 200:
+        plugin.notify(plugin.localize(30600), plugin.localize(30716))
+        return None, True
+
+    json_paser = json.loads(response.text)
+    formats = json_paser['formats']
+
+    if not is_drm:
+        for fmt in formats:
+            if fmt['format'] == 'HLS' and 'drm' not in fmt:
+                return fmt, is_drm
+
+    # all formats have drm, switch to DASH
+    for fmt in formats:
+        if fmt['format'] == 'DASH':
+            return fmt, True
+
+    return None, True

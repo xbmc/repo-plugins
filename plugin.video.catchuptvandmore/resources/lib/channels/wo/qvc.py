@@ -52,16 +52,19 @@ def get_live_url(plugin, item_id, **kwargs):
         resp = urlquick.get(URL_LIVE_QVC_DE_UK_US % '.de')
         live_datas_json = re.compile(r'oLiveStreams=(.*?)}},').findall(resp.text)[0] + '}}'
         json_parser = json.loads(live_datas_json)
-        return 'http:' + json_parser["QVC"]["url"]
+        url = json_parser["QVC"]["url"]
+        return url if url.startswith("http") else 'http:' + url
 
     if final_language == 'UK':
         resp = urlquick.get(URL_LIVE_QVC_DE_UK_US % 'uk.com')
         live_datas_json = re.compile(r'oLiveStreams=(.*?)}},').findall(resp.text)[0] + '}}'
         json_parser = json.loads(live_datas_json)
-        return 'http:' + json_parser["QVC"]["url"]
+        url = json_parser["QVC"]["url"]
+        return url if url.startswith("http") else 'http:' + url
 
     # Use US by default
     resp = urlquick.get(URL_LIVE_QVC_DE_UK_US % '.com')
     live_datas_json = re.compile(r'oLiveStreams=(.*?)}},').findall(resp.text)[0] + '}}'
     json_parser = json.loads(live_datas_json)
-    return 'http:' + json_parser["QVC"]["url"]
+    url = json_parser["QVC"]["url"]
+    return url if url.startswith("http") else 'http:' + url

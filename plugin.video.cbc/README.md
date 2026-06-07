@@ -9,6 +9,18 @@ online services.
 * Live events
 * Shows
 
+## Setup Instructions
+
+Install this add-on via Kodi's GUI using the [Add-on Manager](https://kodi.wiki/view/Add-ons).
+Once installed, you will have immediate access to live programming. If you wish
+to access TV shows and other on-demand content, you need a CBC Gem account.
+
+Sign up for CBC Gem [here](https://gem.cbc.ca/join-now). It is suggested to
+first login to your account via web browser and you should see a prompt for your
+name and postal code. After confirming your information via web browser, you
+should then be able to use your login email and password on the add-on
+configuration page in Kodi.
+
 ## API Details
 
 Content is keyed off of the following links:
@@ -28,5 +40,13 @@ The following is for a season one episode of still standing that requies both
 device registration and user authorization.
 
 ```
-./test.py -v https://api-cbc.cloud.clearleap.com/cloffice/client/web/play/?contentId=5639c1a4-91ac-4c7b-bc36-b84257f40ab3&categoryId=2b9afb4e-49d2-4c2c-b1d2-32d9577c1638
+./test.py -s
+./test.py -C shows-categories-comedy
+./test.py -S crawford
+
+...
+crawford/s01e01 - I'm Not Crazy, I Love You - https://services.radio-canada.ca/media/validation/v2?appCode=gem&idMedia=932390&manifestType=desktop&output=json&tech=hls
+...
+
+./test.py -e https://services.radio-canada.ca/media/validation/v2?appCode=gem&idMedia=932390&manifestType=desktop&output=json&tech=hls
 ```

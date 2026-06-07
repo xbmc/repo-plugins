@@ -16,6 +16,18 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "Addon Summary"
+msgid "Browse PlayOn from Kodi."
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "PlayOn is a streaming media brand and software suite that enables users to view and record videos from numerous online content providers."
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "Requires Playon Server Software"
+msgstr ""
+
 msgctxt "#30000"
 msgid "Enable Debugging [Log errors]"
 msgstr ""

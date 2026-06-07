@@ -5,40 +5,34 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-import re
 
+# noinspection PyUnresolvedReferences
 from codequick import Resolver
+
 import urlquick
+import json
 
 from resources.lib import resolver_proxy, web_utils
-
 
 # TODO
 # Add Videos, Replays ?
 
-URL_ROOT = 'http://www.news24.jp'
-
-URL_LIVE = URL_ROOT + '/livestream/'
+URL_ROOT = 'https://news.ntv.co.jp'
+URL_LIVE = URL_ROOT + '/live'
+URL_TOKEN = URL_ROOT + '/api/generate-pta'
+VIDEO_LIVE = 'https://n24-cdn-live-x.ntv.co.jp/ch01/index.m3u8'
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    headers = {
+        'referer': URL_LIVE,
+        'User-Agent': web_utils.get_random_ua()
+    }
 
-    resp = urlquick.get(URL_LIVE,
-                        headers={'User-Agent': web_utils.get_random_ua()},
-                        max_age=-1)
-    data_account = ''
-    data_player = ''
-    data_video_id = ''
-    if len(re.compile(r'data-account="(.*?)"').findall(resp.text)) > 0:
-        data_account = re.compile(r'data-account="(.*?)"').findall(
-            resp.text)[0]
-        data_player = re.compile(r'data-player="(.*?)"').findall(resp.text)[0]
-        data_video_id = re.compile(r'data-video-id="(.*?)"').findall(
-            resp.text)[0]
-    else:
-        data_account = re.compile(r'accountId\: "(.*?)"').findall(resp.text)[0]
-        data_player = re.compile(r'player\: "(.*?)"').findall(resp.text)[0]
-        data_video_id = re.compile(r'videoId\: "(.*?)"').findall(resp.text)[0]
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, data_video_id)
+    resp = urlquick.get(URL_TOKEN, headers=headers, max_age=-1)
+    json_parser = json.loads(resp.text)
+    pta = json_parser['pta']
+    video_url = VIDEO_LIVE + '?pta=%s' % pta
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url)

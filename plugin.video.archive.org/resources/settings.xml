@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+	<category label="30000">
+		<setting id="timeout" type="number" label="30001" default="8"/>
+		<setting id="clear_cache" type="action" label="30002" action="RunPlugin(plugin://plugin.video.archive.org/?action=clear)"/>
+		<setting id="DebugMode" type="bool" label="30003" default="false"/>
+	</category>
+</settings>

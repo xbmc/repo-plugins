@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <addon id="plugin.audio.indigitube" name="indigiTUBE" version="1.0.0" provider-name="Simon Mollema">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.common.plugin.cache" version="2.6.1.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Unofficial plugin for indigiTUBE: the Australian national media platform by and for First Nations people.</summary>
+        <license>MIT</license>
+        <description lang="en_GB">indigiTUBE (www.indigitube.com.au) connects and supports the preservation of language and culture for our future generations. A living modern midden where technology and culture are woven together. indigiTUBE gathers First Nations stories from the desert to the sea, connecting and sharing culture from our extremely remote to urban regions; from our fresh new talent to archived histories. indigiTUBE is a digital meeting place for First Nations song, dance, language and lore; creating a unified space to share our evolving and living culture. It also live streams 27 different radio stations to hear what's going on around the country. The visually stunning media platform reflects the rich culture of our First Nations people, and the vibrant colours represent ochre, land and sea.</description>
+        <platform>all</platform>
+        <email>xbmc@molzy.com</email>
+        <source>https://github.com/molzy/plugin.audio.indigitube</source>
+        <news>v1.0.0
+- Initial release, with content from the homepage including radio, albums, videos and more
+        </news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/screenshots/home.jpg</screenshot>
+            <screenshot>resources/screenshots/radio.jpg</screenshot>
+            <screenshot>resources/screenshots/album.jpg</screenshot>
+        </assets>
+    </extension>
+</addon>

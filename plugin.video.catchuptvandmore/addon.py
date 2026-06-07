@@ -17,6 +17,8 @@ def main():
     if isinstance(exception, Exception):
         main = importlib.import_module('resources.lib.main')
         main.error_handler(exception)
+        sys = importlib.import_module('sys')
+        sys.exit(1)
 
 
 if __name__ == "__main__":

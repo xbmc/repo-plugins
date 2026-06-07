@@ -25,10 +25,9 @@ msgid "Watch movie trailers available on IMDb."
 msgstr "Filmtrailer auf IMDb ansehen"
 
 msgctxt "Addon Disclaimer"
-msgid ""
-"This third party addon is not in any way commissioned or endorsed by Amazon or IMDb"
-msgstr ""
-"Dieses Drittanbieter-Addon wird in keiner Weise von Amazon oder IMDb in Auftrag gegeben oder unterstützt"
+msgid "This third party addon is not in any way commissioned or endorsed by Amazon or IMDb"
+msgstr "Dieses Drittanbieter-Addon wird in keiner Weise von Amazon oder IMDb in Auftrag gegeben oder unterstützt"
+
 
 msgctxt "#30000"
 msgid "IMDb Trailers"
@@ -58,7 +57,12 @@ msgctxt "#30006"
 msgid "Video Menu Mode"
 msgstr "Videomenümodus"
 
-# empty strings from id 30007 to 30200
+msgctxt "#30007"
+msgid "Enable Debug Mode"
+msgstr "Debug-Modus aktivieren"
+
+# empty strings from id 30008 to 30200
+
 msgctxt "#30201"
 msgid "In Cinemas"
 msgstr "In Kinos"

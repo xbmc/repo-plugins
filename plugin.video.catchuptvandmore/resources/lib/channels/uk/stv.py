@@ -5,38 +5,87 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
+
 import json
 import re
 
-from codequick import Listitem, Resolver, Route
 import urlquick
-
-from resources.lib import resolver_proxy
+# noinspection PyUnresolvedReferences
+from codequick import Listitem, Resolver, Route, Script
+# noinspection PyUnresolvedReferences
+from kodi_six import xbmcplugin
+from resources.lib import resolver_proxy, web_utils, download
 from resources.lib.menu_utils import item_post_treatment
 
-
-# TO DO
-
+PATTERN_PLAYER = re.compile(r"PLAYER_ID:\"(.*?)\"")
+PATTERN_ACCOUNT = re.compile(r"ACCOUNT_ID:\"(.*?)\"")
+PATTERN_KEY = re.compile(r"POLICY_KEY:\"(.*?)\"")
 # Live
-URL_LIVE_JSON = 'https://player.api.stv.tv/v1/streams/%s/'
+URL_LIVE_JSON = "https://player.api.stv.tv/v1/channels/%s/"
 # channel name
 
-URL_PROGRAMS_JSON = 'https://player.api.stv.tv/v1/programmes/?limit=300&orderBy=name'
+URL_CATEGORIES_JSON = "https://player.api.stv.tv/v1/categories"
 
-URL_VIDEOS_JSON = 'https://player.api.stv.tv/v1/episodes'
+URL_PROGRAMS_JSON = "https://player.api.stv.tv/v1/programmes"
+
+URL_VIDEOS_JSON = "https://player.api.stv.tv/v1/episodes"
 # guidProgramm
 
-URL_BRIGHTCOVE_DATAS = 'https://player.stv.tv/player-web/players/vod/bundle.js'
+URL_BRIGHTCOVE_DATAS = "https://player.stv.tv/player-web/players/vod/bundle.js"
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_ua(), 'stv-drm': 'true'}
+
+DEVICE_PRIORITY = {
+    "fvp_dash": 0,
+    "desktop": 1,
+    "mobile": 2
+}
 
 
 @Route.register
-def list_programs(plugin, item_id, **kwargs):
+def list_categories(plugin, item_id, **kwargs):
+    """List categroies from https://player.stv.tv/categories/."""
+    resp = urlquick.get(URL_CATEGORIES_JSON, headers=GENERIC_HEADERS, max_age=-1)
+    json_parser = json.loads(resp.text)
+
+    # Most popular category
+    item = Listitem()
+    item.label = Script.localize(30727)
+    item.set_callback(list_videos, item_id=item_id, order_by="-views")
+    item_post_treatment(item)
+    yield item
+
+    # Recently added category
+    item = Listitem()
+    item.label = Script.localize(30728)
+    item.set_callback(list_videos, item_id=item_id, order_by="-availability.from")
+    item_post_treatment(item)
+    yield item
+
+    # Other categories
+    for category_datas in json_parser["results"]:
+        item = Listitem()
+        item.label = category_datas["name"]
+        if "images" in category_datas and category_datas["images"] is not None:
+            if "_filepath" in category_datas["images"]:
+                item.art["thumb"] = item.art["landscape"] = category_datas["images"]["_filepath"]
+        item.set_callback(
+            list_programs, item_id=item_id, category_guid=category_datas["guid"]
+        )
+        item_post_treatment(item)
+        yield item
+
+
+@Route.register
+def list_programs(plugin, item_id, category_guid, **kwargs):
     """
     Build programs listing
     - Les feux de l'amour
     - ...
     """
-    resp = urlquick.get(URL_PROGRAMS_JSON)
+    params = {"category": category_guid,
+              "limit": "1000"}
+    resp = urlquick.get(URL_PROGRAMS_JSON, params=params, headers=GENERIC_HEADERS, max_age=-1)
     json_parser = json.loads(resp.text)
 
     for program_datas in json_parser["results"]:
@@ -47,77 +96,80 @@ def list_programs(plugin, item_id, **kwargs):
 
         item = Listitem()
         item.label = program_title
-        item.art['thumb'] = item.art['landscape'] = program_image
-        item.info['plot'] = program_plot
-        item.set_callback(list_videos,
-                          item_id=item_id,
-                          program_guid=program_guid)
+        item.art["thumb"] = item.art["landscape"] = program_image
+        item.info["plot"] = program_plot
+        item.set_callback(list_videos, item_id=item_id, program_guid=program_guid)
         item_post_treatment(item)
         yield item
 
 
 @Route.register
-def list_videos(plugin, item_id, program_guid, **kwargs):
-
-    payload = {'programme_guid': program_guid, 'limit': '300'}
-    resp = urlquick.get(URL_VIDEOS_JSON, params=payload)
+def list_videos(plugin, item_id, program_guid=None, order_by=None, **kwargs):
+    plugin.add_sort_methods(xbmcplugin.SORT_METHOD_UNSORTED)
+    payload = {"limit": "300"}
+    if program_guid:
+        payload["programme_guid"] = program_guid
+    if order_by:
+        payload["orderBy"] = order_by
+    resp = urlquick.get(URL_VIDEOS_JSON, params=payload, headers=GENERIC_HEADERS, max_age=-1)
     json_parser = json.loads(resp.text)
 
     for video_datas in json_parser["results"]:
-        video_title = video_datas["programme"]["name"] + ' - ' + video_datas[
-            "title"]
+        video_title = video_datas["programme"]["name"] + " - " + video_datas["title"]
         video_image = video_datas["images"][0]["_filepath"]
         video_plot = video_datas["summary"]
-        video_duration_datas = video_datas["video"]["_duration"].split(' ')
-        if (len(video_duration_datas) > 2):
-            video_duration = 3600 * int(video_duration_datas[0]) + 60 * int(video_duration_datas[2])
+        video_duration_datas = video_datas["video"]["_duration"].split(" ")
+        if len(video_duration_datas) > 2:
+            video_duration = 3600 * int(video_duration_datas[0]) + 60 * int(
+                video_duration_datas[2]
+            )
         else:
             video_duration = 60 * int(video_duration_datas[0])
         video_id = video_datas["video"]["id"]
 
+        try:
+            subtitle = video_datas["_subtitles"]["webvtt"]
+        except Exception:
+            subtitle = None
+
+        drm_enabled = bool(video_datas["programme"].get("drmEnabled", False))
+
         item = Listitem()
         item.label = video_title
-        item.art['thumb'] = item.art['landscape'] = video_image
-        item.info['plot'] = video_plot
-        item.info['duration'] = video_duration
+        item.art["thumb"] = item.art["landscape"] = video_image
+        item.info["plot"] = video_plot
+        item.info["duration"] = video_duration
 
         if video_datas["schedule"] is not None:
-            date_value = video_datas["schedule"]["startTime"].split('T')[0]
-            item.info.date(date_value, '%Y-%m-%d')
+            date_value = video_datas["schedule"]["startTime"].split("T")[0]
+            item.info.date(date_value, "%Y-%m-%d")
 
-        item.set_callback(
-            get_video_url,
-            item_id=item_id,
-            video_id=video_id,
-        )
+        item.set_callback(get_video_url, item_id=item_id, video_id=video_id, subtitle=subtitle, drm_enabled=drm_enabled)
         item_post_treatment(item, is_playable=True, is_downloadable=True)
         yield item
 
 
 @Resolver.register
-def get_video_url(plugin,
-                  item_id,
-                  video_id,
-                  download_mode=False,
-                  **kwargs):
-
-    resp = urlquick.get(URL_BRIGHTCOVE_DATAS)
-
-    data_account = re.compile(r'ACCOUNT_ID\:\"(.*?)\"').findall(resp.text)[1]
-    data_player = re.compile(r'PLAYER_ID\:\"(.*?)\"').findall(resp.text)[1]
+def get_video_url(plugin, item_id, video_id, subtitle, drm_enabled, download_mode=False, **kwargs):
+    resp = urlquick.get(URL_BRIGHTCOVE_DATAS, headers=GENERIC_HEADERS, max_age=-1)
+    index = 1 if drm_enabled else 0
+    data_account = PATTERN_ACCOUNT.findall(resp.text)[index]
+    data_player = PATTERN_PLAYER.findall(resp.text)[index]
+    key = PATTERN_KEY.findall(resp.text)[index]
     data_video_id = video_id
 
-    return resolver_proxy.get_brightcove_video_json(plugin, data_account,
-                                                    data_player, data_video_id,
-                                                    download_mode)
+    return resolver_proxy.get_brightcove_video_json(plugin, data_account, data_player, data_video_id, key, download_mode, subtitle)
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    if item_id == "stv_plusone":
+        item_id = "stv-plus-1"
 
-    if item_id == 'stv_plusone':
-        item_id = 'stv-plus-1'
-
-    resp = urlquick.get(URL_LIVE_JSON % item_id)
+    resp = urlquick.get(URL_LIVE_JSON % item_id, headers=GENERIC_HEADERS, max_age=-1)
     json_parser = json.loads(resp.text)
-    return json_parser["results"]["streamUrl"]
+    streams = json_parser.get("results", {}).get("streams", [])
+    best_stream = min(streams, key=lambda entry: DEVICE_PRIORITY.get(entry.get("device"), float('inf')), default=None)
+    url = best_stream.get("streamUrl") if best_stream else None
+
+    return resolver_proxy.get_stream_with_quality(plugin, url)

@@ -18,12 +18,8 @@ class Search:
 
     def __init__(self,):
         """ Initialise object """
-        self._auth = Auth(kodiutils.get_setting('username'),
-                          kodiutils.get_setting('password'),
-                          kodiutils.get_setting('loginprovider'),
-                          kodiutils.get_setting('profile'),
-                          kodiutils.get_tokens_path())
-        self._api = Api(self._auth)
+        auth = Auth(kodiutils.get_tokens_path())
+        self._api = Api(auth.get_tokens())
 
     def show_search(self, query=None):
         """ Shows the search dialog.

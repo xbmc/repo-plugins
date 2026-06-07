@@ -9,9 +9,8 @@
     See LICENSES/GPL-2.0-or-later.txt for more information.
 """
 
-from six import PY3
-
 from kodi_six import xbmc  # pylint: disable=import-error
+from six import PY3
 
 from .constants import CONFIG
 from .logger import Logger
@@ -219,6 +218,8 @@ STRINGS = {
     'Library - Movie Sections': 30794,
     'Library - TV Show Sections': 30795,
     'Configured library sections have been reset': 30799,
+    'Continue Watching': 30800,
+    'Detect Servers': 30801,
 }
 
 
@@ -273,6 +274,7 @@ def directory_item_translate(title, thumb):
             'By Folder': 'By Folder',
             'Search Shows...': 'Search Shows...',
             'Search Episodes...': 'Search Episodes...',
+            'Continue Watching': 'Continue Watching',
         }
 
     elif thumb.endswith('artist.png'):
@@ -311,6 +313,7 @@ def directory_item_translate(title, thumb):
             'By First Letter': 'By First Letter',
             'By Folder': 'By Folder',
             'Search...': 'Search...',
+            'Continue Watching': 'Continue Watching',
         }
         if thumb.endswith('video.png') and title.startswith('All '):
             return i18n('All_') % title.replace('All ', '')

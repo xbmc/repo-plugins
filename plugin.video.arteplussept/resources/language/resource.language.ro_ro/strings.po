@@ -1,0 +1,178 @@
+# Kodi Media Center language file
+# Addon Name: Arte +7
+# Addon id: plugin.video.arteplussept
+# Addon Provider: bmf, thomas-ernest
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ro_RO\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30044"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30045"
+msgid "Profile"
+msgstr "Profil"
+
+msgctxt "#30050"
+msgid "Language (Videos)"
+msgstr "Limbă (Videoclipuri)"
+
+msgctxt "#30052"
+msgid "Stream video quality"
+msgstr "Calitate video preferată"
+
+msgctxt "#30053"
+msgid "Show video stream options"
+msgstr "Afișați opțiunile de streaming video"
+
+msgctxt "#30054"
+msgid "Email"
+msgstr "Adresa de e-mail"
+
+msgctxt "#30056"
+msgid "Log level"
+msgstr "Nivel jurnal"
+
+msgctxt "#30057"
+msgid "Log in"
+msgstr "Conectează-te"
+
+msgctxt "#30058"
+msgid "Log out"
+msgstr "Deconectare"
+
+
+msgctxt "#30011"
+msgid "View collection as menu"
+msgstr "Vizualizare colecție ca meniu"
+
+
+msgctxt "#30012"
+msgid "Search"
+msgstr "Caută un program"
+
+
+msgctxt "#30014"
+msgid "Authentication needed in addon settings"
+msgstr "Autentificare necesară în setările suplimentului"
+
+msgctxt "#30015"
+msgid "User already logged in"
+msgstr "Utilizatorul este deja autentificat"
+
+msgctxt "#30016"
+msgid "Do you want to log in as \"{new_user}\" instead of \"{old_user}\" ?"
+msgstr "Doriți să vă conectați ca \"{new_user}\" în loc de \"{old_user}\" ?"
+
+msgctxt "#30017"
+msgid "Logged in as \"{user}\""
+msgstr "Conectat ca \"{user}\""
+
+msgctxt "#30018"
+msgid "Logged out"
+msgstr "Deconectat"
+
+msgctxt "#30019"
+msgid "Enter password please:"
+msgstr "Parolă:"
+
+msgctxt "#30020"
+msgid "Unable to authenticate"
+msgstr "Nu se poate autentifica"
+
+msgctxt "#30021"
+msgid "Email missing"
+msgstr "E-mail lipsă"
+
+msgctxt "#30022"
+msgid "Password missing"
+msgstr "Parolă lipsă"
+
+
+msgctxt "#30023"
+msgid "Add to Arte favorites"
+msgstr "Adaugă la listă Arte"
+
+msgctxt "#30024"
+msgid "Remove from Arte favorites"
+msgstr "Șterge din listă Arte"
+
+msgctxt "#30025"
+msgid "\"{label}\" successfully added to favorites"
+msgstr "\"{label}\" adăugat cu succes la listă"
+
+msgctxt "#30026"
+msgid "Failed to add \"{label}\" to favorites"
+msgstr "Nu s-a putut adăuga \"{label}\" la listă"
+
+msgctxt "#30027"
+msgid "\"{label}\" successfully removed from favorites"
+msgstr "\"{label}\" șterge cu succes din listă"
+
+msgctxt "#30028"
+msgid "Failed to remove \"{label}\" from favorites"
+msgstr "Nu s-a putut șterge \"{label}\" din listă"
+
+msgctxt "#30029"
+msgid "Stream \"{strm}\" in \"{ln}\" is not available"
+msgstr "Fluxul \"{strm}\" din \"{ln}\" nu este disponibil"
+
+msgctxt "#30030"
+msgid "Purge my history"
+msgstr "Șterge istoricul meu"
+
+msgctxt "#30031"
+msgid "Successfully purged history"
+msgstr "Istoricul șters cu succes"
+
+msgctxt "#30032"
+msgid "Failed to purge my history"
+msgstr "Ștergerea istoricului meu nu a reușit"
+
+msgctxt "#30033"
+msgid "Do you really want to purge your history ?"
+msgstr "Doriți cu adevărat să ștergeți istoricul ?"
+
+
+msgctxt "#30035"
+msgid "Mark as watched in Arte"
+msgstr "Marchează ca urmărit în Arte"
+
+msgctxt "#30036"
+msgid "\"{label}\" successfully marked as watched"
+msgstr "\"{label}\" marcat cu succes ca urmărit"
+
+msgctxt "#30037"
+msgid "Failed to mark as watched \"{label}\""
+msgstr "Marcarea ca urmărită \"{label}\" nu a reușit"
+
+
+msgctxt "#30038"
+msgid "Next page"
+msgstr "Pagina următoare"
+
+msgctxt "#30039"
+msgid "Previous page"
+msgstr "Pagina anterioară"
+
+
+msgctxt "#30040"
+msgid "Purge my Arte favorites"
+msgstr "Ștergeți favoritele mele Arte"
+
+msgctxt "#30041"
+msgid "Successfully purged favorites"
+msgstr "Favoritele au fost șterse cu succes"
+
+msgctxt "#30042"
+msgid "Failed to purge favorites"
+msgstr "Favoritele nu au putut fi șterse"
+
+msgctxt "#30043"
+msgid "Do you really want to purge Arte favorites ?"
+msgstr "Doriți cu adevărat să ștergeți favoritele Arte ?"

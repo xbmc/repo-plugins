@@ -1,170 +1,339 @@
-import requests, uuid, urllib.request, urllib.parse, urllib.error, json
-from xml.dom.minidom import *
-import xml.etree.ElementTree as ET
+"""Module for general CBC stuff"""
+from uuid import uuid4
+from base64 import b64encode, b64decode, urlsafe_b64encode
+import hashlib
+import secrets
+import json
+# import http.client as http_client
+from urllib.parse import urlparse, parse_qs, quote
 
-from .utils import saveCookies, loadCookies, saveAuthorization, log
+import requests
+
+from .utils import saveAuthorization, log, iso8601_to_local, is_pending
+
+# http_client.HTTPConnection.debuglevel = 1
+
+CALLSIGN = 'cbc$callSign'
+CHANNEL_GUID = 'guid'
+CHANNEL_ID = 'idMedia'
+API_KEY = '3f4beddd-2061-49b0-ae80-6f1f2ed65b37'
+SCOPES = 'openid '\
+        'offline_access '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/email '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/id.account.create '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/id.account.delete '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/id.account.info '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/id.account.modify '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/id.account.reset-password '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/id.account.send-confirmation-email '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/id.write '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/media-drmt '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/media-meta '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/media-validation '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/media-validation.read '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/metrik '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/oidc4ropc '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/ott-profiling '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/ott-subscription '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/profile '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/subscriptions.validate '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/subscriptions.write '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/toutv '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/toutv-presentation '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/toutv-profiling '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/testapiwithjwtendpoint.admin '\
+        'https://rcmnb2cprod.onmicrosoft.com/84593b65-0ef6-4a72-891c-d351ddd50aab/id.account.info'
+POLICY = 'B2C_1A_SSO_Login_CBC'
+TENANT_ID = 'bef1b538-1950-4283-9b27-b096cbc18070'
+AUTHORIZE_LOGIN = f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/oauth2/v2.0/authorize'
+SELF_ASSERTED_LOGIN = f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/SelfAsserted'
+CONFIRM_LOGIN = f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/api/SelfAsserted/confirmed'
+SIGNIN_LOGIN = f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/api/CombinedSigninAndSignup/confirmed'
+CLAIMS_PROVIDER_SELECTION = f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/api/ClaimsProviderSelection/selected'
+TOKEN_LOGIN = f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/oauth2/v2.0/token'
+RADIUS_LOGIN_FMT = 'https://api.loginradius.com/identity/v2/auth/login?{}'
+RADIUS_JWT_FMT = 'https://cloud-api.loginradius.com/sso/jwt/api/token?{}'
+TOKEN_URL = 'https://services.radio-canada.ca/ott/cbc-api/v2/token'
+PROFILE_URL = 'https://services.radio-canada.ca/ott/subscription/v2/gem/subscriber/profile'
+
 
 class CBC:
+    """Class for CBC stuff."""
 
     def __init__(self):
-        self.ENV_JS = 'https://watch.cbc.ca/public/js/env.js'
-        self.API_KEY = '3f4beddd-2061-49b0-ae80-6f1f2ed65b37'
-        self.RADIUS_LOGIN_FMT = 'https://api.loginradius.com/identity/v2/auth/login?{}'
-        self.RADIUS_JWT_FMT = 'https://cloud-api.loginradius.com/sso/jwt/api/token?{}'
-        self.IDENTITIES_URL='https://api-cbc.cloud.clearleap.com/cloffice/client/identities'
-        self.DEVICE_XML_FMT = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<device>
-  <type>web</type>
-</device>"""
-        self.LOGIN_XML_FMT = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<login>
-  <token>{}</token>
-  <device>
-    <deviceId>{}</deviceId>
-    <type>web</type>
-  </device>
-</login>"""
+        """Initialize the CBC class."""
         # Create requests session object
         self.session = requests.Session()
-        session_cookies = loadCookies()
-        if not session_cookies == None:
-            self.session.cookies = session_cookies
 
-    def authorize(self, username = None, password = None, callback = None):
-        full_auth = not username == None and not password == None
-        r = self.session.get(self.IDENTITIES_URL)
-        if not callback == None:
-            callback(20 if full_auth else 50)
-        if not r.status_code == 200:
-            log('ERROR: {} returns status of {}'.format(self.IDENTITIES_URL, r.status_code), True)
-            return None
-
-        dom = parseString(r.content)
-        reg_url = dom.getElementsByTagName('registerDeviceUrl')[0].firstChild.nodeValue
-        login_url = dom.getElementsByTagName('loginUrl')[0].firstChild.nodeValue
-
-        auth = self.registerDevice(reg_url)
-        if not callback == None:
-            callback(40 if full_auth else 100)
-        if auth == None:
-            log('Device registration failed', True)
+    @staticmethod
+    def azure_authorize_authorize(sess: requests.Session):
+        """
+        Make the first authorization call.
+        @param sess A requests session
+        """
+        nonce = str(uuid4())
+        guid = str(uuid4())
+        state_str = f'{guid}|{{"action":"login","returnUrl":"/","fromSubscription":false}}'.encode()
+        state = b64encode(state_str).decode('ascii')
+        code_verifier = secrets.token_urlsafe(32).rstrip('=')
+        code_challenge = urlsafe_b64encode(hashlib.sha256(code_verifier.encode()).digest()).decode('ascii').rstrip('=')
+        sess.code_verifier = code_verifier
+        params = {
+            'client_id': 'fc05b0ee-3865-4400-a3cc-3da82c330c23',
+            'nonce': nonce,
+            'redirect_uri': 'https://gem.cbc.ca/auth-changed',
+            'scope': SCOPES,
+            'response_type': 'code',
+            'response_mode': 'fragment',
+            'response_mode_value': 'fragment',
+            'state': state,
+            'state_value': state,
+            'ui_locales': 'en',
+            'code_challenge': code_challenge,
+            'code_challenge_method': 'S256',
+        }
+        cookies = sess.cookies.get_dict()
+        if 'cbc_external_visitor' in cookies:
+            params['cv'] = cookies['cbc_external_visitor']
+        resp = sess.get(AUTHORIZE_LOGIN, params=params)
+        if resp.status_code != 200:
+            log('Call to authorize fails', True)
             return False
 
+        if not 'x-ms-gateway-requestid' in resp.headers:
+            log('authorize authorize response had no x-ms-gateway-requestid header')
+            return False
 
-        if full_auth:
-            token = self.radiusLogin(username, password)
-            if not callback == None:
-                callback(60)
-            if token == None:
-                log('Radius Login failed', True)
-                return False
+        return resp.headers['x-ms-gateway-requestid']
 
-            jwt = self.radiusJWT(token)
-            if not callback == None:
-                callback(80)
-            if jwt == None:
-                log('Radius JWT retrieval failed', True)
-                return False
+    @staticmethod
+    def azure_authorize_self_asserted(sess: requests.Session, username: str, tx_arg: str, password: str = None):
+        """
+        Make the second authorization call.
+        @param sess The requests session
+        """
+        cookies = sess.cookies.get_dict()
+        if 'x-ms-cpim-csrf' in cookies:
+            sess.cookies.set('x-ms-cpim-csrf', cookies['x-ms-cpim-csrf'], domain='login.cbc.radio-canada.ca', path='/')
+        if 'x-ms-cpim-trans' in cookies:
+            sess.cookies.set('x-ms-cpim-trans', cookies['x-ms-cpim-trans'], domain='login.cbc.radio-canada.ca', path='/')
+        headers = {
+            'x-csrf-token': cookies['x-ms-cpim-csrf'],
+            'x-requested-with': 'XMLHttpRequest',
+            'Origin': 'https://login.cbc.radio-canada.ca',
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Referer': f'https://login.cbc.radio-canada.ca/{TENANT_ID}/{POLICY}/api/ClaimsProviderSelection/selected?accountId=CE-GetUserPassword&csrf_token={cookies["x-ms-cpim-csrf"]}&tx={tx_arg}&p={POLICY}',
+        }
+        data = { 'request_type': 'RESPONSE', 'email': username}
+        if password:
+            data['password'] = password
 
-            token = self.login(login_url, auth['devid'], jwt)
-            if not callback == None:
-                callback(100)
-            if token == None:
-                log('Final login failed', True)
-                return False
-            auth['token'] = token
+        url = f'{SELF_ASSERTED_LOGIN}?tx={tx_arg}&p={POLICY}'
+        resp = sess.post(url, headers=headers, data=data)
+        if not resp.status_code == 200:
+            log('Call to SelfAsserted fails', True)
+            return False
+        return True
 
-        saveAuthorization(auth)
-        saveCookies(self.session.cookies)
+    @staticmethod
+    def azure_authorize_confirmed(sess: requests.Session, tx_arg: str):
+        """
+        Call ClaimsProviderSelection/selected.
+        @param sess The requests session
+        @param tx_arg the tx parameter
+        """
+        cookies = sess.cookies.get_dict()
+        headers = {
+            'x-csrf-token': cookies['x-ms-cpim-csrf'],
+            'x-requested-with': 'XMLHttpRequest',
+            'Origin': 'https://login.cbc.radio-canada.ca',
+        }
+        csrf = quote(cookies['x-ms-cpim-csrf'], safe='')
+        url = f'{CLAIMS_PROVIDER_SELECTION}?accountId=CE-GetUserPassword&csrf_token={csrf}&tx={tx_arg}&p={POLICY}'
+
+        resp = sess.get(url, headers=headers)
+        if resp.status_code != 200:
+            log('Call to ClaimsProviderSelection fails', True)
+            return False
 
         return True
 
-
-    def registerDevice(self, url):
-        r = self.session.post(url, data=self.DEVICE_XML_FMT)
-        if not r.status_code == 200:
-            log('ERROR: {} returns status of {}'.format(url, r.status_code), True)
-            return None
-        saveCookies(self.session.cookies)
-        # Parse the authorization response
-        dom = parseString(r.content)
-        status = dom.getElementsByTagName('status')[0].firstChild.nodeValue
-        if status != "Success":
-            log('Error: Unable to authorize device', True)
-            return None
-        auth = {
-            'devid': dom.getElementsByTagName('deviceId')[0].firstChild.nodeValue,
-            'token': dom.getElementsByTagName('deviceToken')[0].firstChild.nodeValue
+    @staticmethod
+    def azure_authorize_sign_in(sess: requests.Session, tx_arg: str):
+        """
+        Make the third authorization call.
+        @param sess The requests session
+        @param csrf The csrf token
+        @param tx_arg the tx parameter
+        """
+        cookies = sess.cookies.get_dict()
+        params = {
+            'tx': tx_arg,
+            'p': POLICY,
+            'csrf_token': cookies['x-ms-cpim-csrf'],
+            'rememberMe': 'true',
         }
 
-        return auth
+        resp = sess.get(SIGNIN_LOGIN, params=params, allow_redirects=False)
+        if resp.status_code != 302:
+            log('Call to authorize fails', True)
+            return None
 
+        url = urlparse(resp.headers['location'])
+        frags = parse_qs(url.fragment)
+        try:
+            code = frags['code'][0]
+        except KeyError:
+            log(f'Call to Authorize fails. Invalid user credentials?')
+            return None
+        return code
 
-    def radiusLogin(self, username, password):
-        query = urllib.parse.urlencode({'apikey': self.API_KEY})
-
+    @staticmethod
+    def azure_authorize_exchange_code(sess: requests.Session, code: str):
+        """
+        Exchange authorization code for tokens.
+        @param sess The requests session
+        @param code The authorization code from redirect
+        """
+        headers = {
+            'Accept': 'application/json',
+            'Origin': 'https://gem.cbc.ca',
+            'Referer': 'https://gem.cbc.ca/',
+        }
         data = {
-            'email': username,
-            'password': password
+            'grant_type': 'authorization_code',
+            'code_verifier': getattr(sess, 'code_verifier', ''),
+            'code': code,
+            'client_secret': '',
         }
-        url = self.RADIUS_LOGIN_FMT.format(query)
-        r = self.session.post(url, json = data)
-        if not r.status_code == 200:
-            log('{} returns status {}'.format(r.url, r.status_code))
+        resp = sess.post(TOKEN_LOGIN, headers=headers, data=data)
+        if resp.status_code != 200:
+            log('Call to token endpoint fails', True)
             return None
-
-        token = json.loads(r.content)['access_token']
-
-        return token
+        tokens = resp.json()
+        return (tokens.get('access_token'), tokens.get('id_token'))
 
 
-    def radiusJWT(self, token):
-        query = urllib.parse.urlencode({
-            'access_token': token,
-            'apikey': self.API_KEY,
-            'jwtapp': 'jwt'
-        })
-        url = self.RADIUS_JWT_FMT.format(query)
-        r = self.session.get(url)
-        if not r.status_code == 200:
-            log('{} returns status {}'.format(r.url, r.status_code))
+    def azure_authorize(self, username=None, password=None, callback=None):
+        """
+        Perform multi-step authorization with CBC's azure authorization platform.
+        ** Azure Active Directory B2C **
+        """
+        sess = requests.Session()
+
+        if callback:
+            callback(0)
+        gw_req_id = CBC.azure_authorize_authorize(sess)
+        if not gw_req_id:
+            log('Authorization "authorize" step failed', True)
+            return False
+
+        if callback:
+            callback(20)
+        cookies = sess.cookies.get_dict()
+        if 'x-ms-cpim-csrf' not in cookies:
+            log('Unable to get csrt token for self asserted', True)
+            return False
+
+        if 'x-ms-cpim-trans' not in cookies:
+            log('Unable to get transaction for self asserted', True)
+            return False
+
+        trans = cookies['x-ms-cpim-trans']
+        trans = b64decode(trans).decode()
+        trans = json.loads(trans)
+        if not 'C_ID' in trans:
+            log('Unable to get C_ID from trans', True)
+            return False
+        tid = trans['C_ID']
+
+        tid_str = f'{{"TID":"{tid}"}}'.encode()
+        b64_tid = b64encode(tid_str).decode('ascii')
+        b64_tid = b64_tid.rstrip('=')
+        tx_arg = f'StateProperties={b64_tid}'
+
+        if callback:
+            callback(40)
+        if not CBC.azure_authorize_confirmed(sess, tx_arg):
+            log('Authorization "ClaimsProviderSelection" step failed', True)
+            return False
+
+        if callback:
+            callback(60)
+        if not CBC.azure_authorize_self_asserted(sess, username, tx_arg, password):
+            log('Authorization "SelfAsserted" step failed', True)
+            return False
+        code = CBC.azure_authorize_sign_in(sess, tx_arg)
+        if code is None:
+            log('Authorization "confirmed" step failed', True)
+            return False
+        resp = CBC.azure_authorize_exchange_code(sess, code)
+        if resp is None:
+            log('Authorization "confirmed" step failed', True)
+            return False
+        access_token, id_token = resp
+        if not access_token or not id_token:
+            log('Authorization "confirmed" step failed', True)
+            return False
+
+        if callback:
+            callback(90)
+        claims_token = self.get_claims_token(access_token)
+
+        saveAuthorization({'token': access_token, 'claims': claims_token})
+        if callback:
+            callback(100)
+
+        return True
+
+    def get_claims_token(self, access_token):
+        """Get the claims token for tied to the access token."""
+        headers = {'Authorization': f'Bearer {access_token}'}
+        params = {'device': 'web'}
+        req = self.session.get(PROFILE_URL, headers=headers, params=params)
+        if not req.status_code == 200:
+            log(f'{req.url} returns status {req.status_code}', True)
             return None
-        return json.loads(r.content)['signature']
+        return json.loads(req.content)['claimsToken']
 
-
-    def login(self, url, devid, jwt):
-        data = self.LOGIN_XML_FMT.format(jwt, devid)
-        headers = {'Content-type': 'content_type_value'}
-        r = self.session.post(url, data = data, headers = headers)
-        if not r.status_code == 200:
-            log('{} returns status {}'.format(r.url, r.status_code))
-            return None
-
-        dom = parseString(r.content)
-        res = dom.getElementsByTagName('result')[0]
-        token = res.getElementsByTagName('token')[0].firstChild.nodeValue
-
-        return token
-
-
-    def getImage(self, item):
+    def get_image(self, item):
+        """Get an image."""
         # ignore 'cbc$liveImage' - the pix don't make sense after the first load
         if 'defaultThumbnailUrl' in item:
             return item['defaultThumbnailUrl']
-        elif 'cbc$staticImage' in item:
+        if 'cbc$staticImage' in item:
             return item['cbc$staticImage']
-        elif 'cbc$featureImage' in item:
+        if 'cbc$featureImage' in item:
             return item['cbc$featureImage']
+        if 'image' in item:
+            return item['image']
+        if 'images' in item:
+            if 'card' in item['images']:
+                if 'url' in item['images']['card']:
+                    return item['images']['card']['url']
         return None
 
+    @staticmethod
+    def get_callsign(item):
+        """Get the callsign for a channel."""
+        if CALLSIGN in item:
+            return item[CALLSIGN]
+        if CHANNEL_GUID in item:
+            return item[CHANNEL_GUID]
+        if CHANNEL_ID in item:
+            return item[CHANNEL_ID]
+        return None
 
-    def getLabels(self, item):
+    @staticmethod
+    def get_labels(item):
+        """Get labels for a CBC item."""
         labels = {
             'studio': 'Canadian Broadcasting Corporation',
             'country': 'Canada'
         }
-        if 'cbc$callSign' in item:
-            labels['title'] = '{} {}'.format(item['cbc$callSign'], item['title'])
+        if 'streamTitle' in item:
+            labels['title'] = item['streamTitle'].encode('utf-8')
         else:
             labels['title'] = item['title'].encode('utf-8')
 
@@ -200,21 +369,15 @@ class CBC:
             if item['cbc$audioVideo'].lower() == 'video':
                 labels['mediatype'] = 'video'
 
+        if 'airDate' in item:
+            local_dt = iso8601_to_local(item['airDate'])
+            if local_dt is not None:
+                is_pending(local_dt, item=labels)
+
         return labels
 
 
-    def parseSmil(self, smil):
-        r = self.session.get(smil)
-
-        if not r.status_code == 200:
-            log('ERROR: {} returns status of {}'.format(url, r.status_code), True)
-            return None
-        saveCookies(self.session.cookies)
-
-        dom = parseString(r.content)
-        seq = dom.getElementsByTagName('seq')[0]
-        video = seq.getElementsByTagName('video')[0]
-        src = video.attributes['src'].value
-        title = video.attributes['title'].value
-        abstract = video.attributes['abstract'].value
-        return src
+    @staticmethod
+    def get_session():
+        """Get a requests session object with CBC cookies."""
+        return requests.Session()

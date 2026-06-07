@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 
 class NoLoginException(Exception):
-    """ Is thrown when the user has no credentials. """
+    """ Is thrown when the user need to follow the authorization flow. """
 
 
 class InvalidTokenException(Exception):
@@ -14,14 +14,6 @@ class InvalidTokenException(Exception):
 
 class InvalidLoginException(Exception):
     """ Is thrown when the credentials are invalid. """
-
-
-class LoginErrorException(Exception):
-    """ Is thrown when we could not login. """
-
-    def __init__(self, code):
-        super(LoginErrorException, self).__init__()
-        self.code = code
 
 
 class UnavailableException(Exception):

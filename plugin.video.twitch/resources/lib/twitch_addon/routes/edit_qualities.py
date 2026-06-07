@@ -22,7 +22,8 @@ def route(api, content_type, target_id=None, name=None, video_id=None, remove=Fa
     converter = JsonListItemConverter(LINE_LENGTH)
     if not remove:
         videos = None
-        if not target_id or not name: return
+        if not target_id or not name:
+            return
         if content_type == 'video' and video_id:
             videos = api.get_vod(video_id)
         elif content_type == 'clip' and clip_id:

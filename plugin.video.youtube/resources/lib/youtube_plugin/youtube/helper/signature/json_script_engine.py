@@ -2,13 +2,11 @@
 """
 
     Copyright (C) 2014-2016 bromix (plugin.video.youtube)
-    Copyright (C) 2016-2018 plugin.video.youtube
+    Copyright (C) 2016-2025 plugin.video.youtube
 
     SPDX-License-Identifier: GPL-2.0-only
     See LICENSES/GPL-2.0-only for more information.
 """
-
-from six.moves import range
 
 
 class JsonScriptEngine(object):
@@ -20,7 +18,7 @@ class JsonScriptEngine(object):
 
         _actions = self._json_script['actions']
         for action in _actions:
-            func = ''.join(['_', action['func']])
+            func = ''.join(('_', action['func']))
             params = action['params']
 
             if func == '_return':
@@ -37,7 +35,7 @@ class JsonScriptEngine(object):
             if method:
                 _signature = method(*params)
             else:
-                raise Exception("Unknown method '%s'" % func)
+                raise Exception('Unknown method: %s' % func)
 
         return _signature
 

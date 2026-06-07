@@ -2,81 +2,88 @@
 """
 
     Copyright (C) 2014-2016 bromix (plugin.video.youtube)
-    Copyright (C) 2016-2018 plugin.video.youtube
+    Copyright (C) 2016-2025 plugin.video.youtube
 
     SPDX-License-Identifier: GPL-2.0-only
     See LICENSES/GPL-2.0-only for more information.
 """
 
-from six import string_types
+from __future__ import absolute_import, division, unicode_literals
 
 import json
+from datetime import date, datetime
 
-from .video_item import VideoItem
+from .bookmark_item import BookmarkItem
 from .directory_item import DirectoryItem
-from .audio_item import AudioItem
 from .image_item import ImageItem
+from .media_item import AudioItem, VideoItem
+from .. import logging
+from ..compatibility import string_type, to_str
+from ..utils.datetime import strptime
 
 
-def from_json(json_data):
+_ITEM_TYPES = {
+    'AudioItem': AudioItem,
+    'BookmarkItem': BookmarkItem,
+    'DirectoryItem': DirectoryItem,
+    'ImageItem': ImageItem,
+    'VideoItem': VideoItem,
+}
+
+
+def _decoder(obj):
+    date_in_isoformat = obj.get('__isoformat__')
+    if date_in_isoformat:
+        if obj['__class__'] == 'date':
+            return date.fromisoformat(date_in_isoformat)
+        return datetime.fromisoformat(date_in_isoformat)
+
+    format_string = obj.get('__format_string__')
+    if format_string:
+        value = obj['__value__']
+        value = strptime(value, format_string)
+        if obj['__class__'] == 'date':
+            return value.date()
+        return value
+
+    return obj
+
+
+def from_json(json_data, *args):
     """
-    Creates a instance of the given json dump or dict.
+    Creates an instance of the given json dump or dict.
     :param json_data:
     :return:
     """
+    if args and args[0] and len(args[0]) == 4:
+        bookmark_id = args[0][0]
+        bookmark_timestamp = args[0][1]
+    else:
+        bookmark_id = None
+        bookmark_timestamp = None
 
-    def _from_json(_json_data):
-        mapping = {'VideoItem': lambda: VideoItem(u'', u''),
-                   'DirectoryItem': lambda: DirectoryItem(u'', u''),
-                   'AudioItem': lambda: AudioItem(u'', u''),
-                   'ImageItem': lambda: ImageItem(u'', u'')}
+    if isinstance(json_data, string_type):
+        if json_data == to_str(None):
+            # Channel bookmark that will be updated. Store timestamp for update
+            return bookmark_timestamp
+        json_data = json.loads(json_data, object_hook=_decoder)
 
-        item = None
-        item_type = _json_data.get('type', None)
-        for key in mapping:
-            if item_type == key:
-                item = mapping[key]()
-                break
+    item_type = json_data.get('type')
+    if not item_type or item_type not in _ITEM_TYPES:
+        logging.warning_trace(('Unsupported item type', 'Data: {data!r}'),
+                              data=json_data)
+        return None
 
-        if item is None:
-            return _json_data
+    item_data = json_data.get('data')
+    if not item_data:
+        return None
 
-        data = _json_data.get('data', {})
-        for key in data:
-            if hasattr(item, key):
-                setattr(item, key, data[key])
+    item = _ITEM_TYPES[item_type](name='', uri='')
+    item.__dict__.update(item_data)
 
-        return item
+    if bookmark_id:
+        item.bookmark_id = bookmark_id
+    if bookmark_timestamp:
+        item.set_bookmark_timestamp(bookmark_timestamp)
 
-    if isinstance(json_data, string_types):
-        json_data = json.loads(json_data)
-    return _from_json(json_data)
-
-
-def to_jsons(base_item):
-    return json.dumps(to_json(base_item))
-
-
-def to_json(base_item):
-    """
-    Convert the given @base_item to json
-    :param base_item:
-    :return: json string
-    """
-
-    def _to_json(obj):
-        if isinstance(obj, dict):
-            return obj.__dict__
-
-        mapping = {VideoItem: 'VideoItem',
-                   DirectoryItem: 'DirectoryItem',
-                   AudioItem: 'AudioItem',
-                   ImageItem: 'ImageItem'}
-
-        for key in mapping:
-            if isinstance(obj, key):
-                return {'type': mapping[key], 'data': obj.__dict__}
-
-        return obj.__dict__
-
-    return _to_json(base_item)
+    return item

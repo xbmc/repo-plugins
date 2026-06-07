@@ -19,7 +19,7 @@ import threading
 
 from .addon.common import kodi, log_utils
 from .addon.constants import Keys
-from .addon.utils import BlacklistFilter, i18n, get_stamp_diff, get_vodcast_color, to_string
+from .addon.utils import i18n, get_stamp_diff, get_vodcast_color
 from .addon.player import TwitchPlayer
 from .addon import api, cache
 
@@ -41,7 +41,6 @@ class LiveNotificationsThread(threading.Thread):
     def run(self):
         log_utils.log('LiveNotificationsThread: Starting...', log_utils.LOGDEBUG)
 
-        blacklist_filter = BlacklistFilter()
         monitor = xbmc.Monitor()
         window = kodi.Window(10000)
 
@@ -70,7 +69,7 @@ class LiveNotificationsThread(threading.Thread):
                     if twitch:
                         has_token = True if twitch.access_token else False
                         if has_token and do_notification:
-                            current_live = self.get_followed_streams(twitch, monitor, blacklist_filter)
+                            current_live = self.get_followed_streams(twitch, monitor)
                             if current_live is None: break  # if aborted during api requests
                             if current_live:
                                 current_online = self.get_online_followed(window)
@@ -131,49 +130,55 @@ class LiveNotificationsThread(threading.Thread):
                 group = kodi.get_setting('live_notify_group_start') == 'true'
         return notify, audible, start, group
 
-    def get_followed_streams(self, twitch_api, monitor, blacklist_filter):
+    def get_followed_streams(self, twitch_api, monitor):
+        user_id = twitch_api.get_user_id()
+
         all_followed = {Keys.STREAMS: []}
-        offset = 0
-        stream_count = 100
+        followed_ids = []
+        cursor = 'MA=='
+        next_page = True
+        while next_page:
+            if monitor.waitForAbort(1):
+                return None
 
-        while stream_count == 100:
-            if offset > 0:
-                if monitor.waitForAbort(1):
-                    return None
+            streams = twitch_api.get_followed_streams(user_id=user_id, first=100, after=cursor)
+            next_page = False
+            if Keys.DATA in streams:
+                for follow in streams[Keys.DATA]:
+                    if follow.get(Keys.USER_ID):
+                        followed_ids.append(follow[Keys.USER_ID])
 
-            try:
-                streams = twitch_api.get_followed_streams(stream_type='live', offset=offset, limit=100)
-                stream_count = len(streams.get(Keys.STREAMS, []))
-            except:
-                break
+                channels = twitch_api.get_users(followed_ids)
+                if Keys.DATA in channels:
+                    for channel in channels[Keys.DATA]:
+                        channel[Keys.STREAMS] = {}
+                        for follow in streams[Keys.DATA]:
+                            if channel.get(Keys.ID) == follow.get(Keys.USER_ID):
+                                channel[Keys.STREAM] = follow
+                                break
+                        all_followed[Keys.STREAMS].append(channel)
 
-            if (stream_count > 0) and (Keys.STREAMS in streams):
-                for stream in streams[Keys.STREAMS]:
-                    all_followed[Keys.STREAMS].append(stream)
+                if len(streams[Keys.DATA]) > 0:
+                    cursor = streams.get('pagination', {}).get('cursor')
+                    if cursor:
+                        next_page = True
 
-            if stream_count < 100:
-                break
-            else:
-                offset += 100
-
-        filtered = \
-            blacklist_filter.by_type(all_followed, Keys.STREAMS, parent_keys=[Keys.CHANNEL], id_key=Keys._ID, list_type='user')
-        filtered = \
-            blacklist_filter.by_type(filtered, Keys.STREAMS, game_key=Keys.GAME, list_type='game')
         colorized = []
 
-        for stream in filtered[Keys.STREAMS]:
-            if not self.logos.get(stream[Keys.CHANNEL][Keys._ID]):
-                self.logos[stream[Keys.CHANNEL][Keys._ID]] = stream[Keys.CHANNEL][Keys.LOGO]
-            if stream.get(Keys.STREAM_TYPE) != 'live':
+        for stream in all_followed[Keys.STREAMS]:
+            if not self.logos.get(stream[Keys.ID]):
+                self.logos[stream[Keys.ID]] = stream[Keys.PROFILE_IMAGE_URL]
+            if stream[Keys.STREAM].get(Keys.TYPE) != 'live':
                 color = get_vodcast_color()
-                if stream[Keys.CHANNEL].get(Keys.DISPLAY_NAME):
-                    stream[Keys.CHANNEL][Keys.DISPLAY_NAME] = u'[COLOR={color}]{name}[/COLOR]'.format(name=to_string(stream[Keys.CHANNEL][Keys.DISPLAY_NAME]), color=color)
-                if stream[Keys.CHANNEL].get(Keys.NAME):
-                    stream[Keys.CHANNEL][Keys.NAME] = u'[COLOR={color}]{name}[/COLOR]'.format(name=to_string(stream[Keys.CHANNEL][Keys.NAME]), color=color)
+                if stream.get(Keys.DISPLAY_NAME):
+                    stream[Keys.DISPLAY_NAME] = u'[COLOR={color}]{name}[/COLOR]'\
+                        .format(name=stream[Keys.DISPLAY_NAME], color=color)
+                if stream.get(Keys.LOGIN):
+                    stream[Keys.LOGIN] = u'[COLOR={color}]{name}[/COLOR]'\
+                        .format(name=stream[Keys.LOGIN], color=color)
             colorized.append(stream)
-        followed_tuples = [(stream[Keys.CHANNEL][Keys._ID], to_string(stream[Keys.CHANNEL][Keys.NAME]),
-                            to_string(stream[Keys.CHANNEL][Keys.DISPLAY_NAME]), to_string(stream[Keys.GAME]))
+        followed_tuples = [(stream[Keys.ID], stream[Keys.LOGIN],
+                            stream[Keys.DISPLAY_NAME], stream[Keys.STREAM].get(Keys.GAME_NAME))
                            for stream in colorized]
         return followed_tuples
 

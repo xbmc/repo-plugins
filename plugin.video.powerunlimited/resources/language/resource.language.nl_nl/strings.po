@@ -28,12 +28,12 @@ msgid "For bugs, requests or general questions visit the PowerUnlimited Tv threa
 msgstr "Bugs of andere feedback op deze plugin kan geplaatst worden in de PowerUnlimited Tv thread op het Kodi forum."
 
 msgctxt "#30000"
-msgid "All Videos"
-msgstr "Alles"
+msgid "Videos"
+msgstr "Videos"
 
 msgctxt "#30001"
-msgid "PU-TV"
-msgstr "PU-TV"
+msgid "Podcasts"
+msgstr "Podcasts"
 
 msgctxt "#30002"
 msgid "Trailers"

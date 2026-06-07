@@ -5,29 +5,41 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-from builtins import str
-import re
 
-from codequick import Listitem, Resolver, Route
+from builtins import str
+import xbmcaddon
 import htmlement
 import urlquick
-
+# noinspection PyUnresolvedReferences
+from codequick import Listitem, Resolver, Route
 from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
-
 
 # URL :
 URL_ROOT_SITE = 'https://www.cnews.fr'
 
 # Live :
 URL_LIVE_CNEWS = URL_ROOT_SITE + '/le-direct'
+URL_LIVE_CNEWS_PRIME = URL_ROOT_SITE + '-cnews-prime'
 
 # Replay CNews
-URL_REPLAY_CNEWS = URL_ROOT_SITE + '/replay'
+URL_REPLAY_CNEWS = URL_ROOT_SITE + '/les-replays'
 URL_EMISSIONS_CNEWS = URL_ROOT_SITE + '/service/dm_loadmore/dm_emission_index_emissions/%s/0'
 # num Page
 URL_VIDEOS_CNEWS = URL_ROOT_SITE + '/service/dm_loadmore/dm_emission_index_sujets/%s/0'
+
+GENERIC_HEADERS = {'User-Agent': web_utils.get_random_windows_ua()}
+
+URLLIB3_ADDON = xbmcaddon.Addon('script.module.urllib3')
+URLLIB3_VERSION = URLLIB3_ADDON.getAddonInfo('version')
+
+if URLLIB3_VERSION == "2.2.3":
+    from urllib.request import urlopen, Request
+
 # num Page
+
+# TODO: Add more emissions button
+# TODO: Check if all videos are here
 
 
 @Route.register
@@ -39,81 +51,166 @@ def list_categories(plugin, item_id, **kwargs):
     - Informations
     - ...
     """
-    resp = urlquick.get(URL_REPLAY_CNEWS)
-    root = resp.parse("menu", attrs={"class": "index-emission-menu"})
-
-    for category in root.iterfind("ul/li"):
-        if category.find('a') is not None:
-            category_name = category.find('a').text
-        else:
-            category_name = category.text
-        if 'mission' in category_name:
-            category_url = URL_EMISSIONS_CNEWS
-        else:
-            category_url = URL_VIDEOS_CNEWS
-
-        if category_name != 'Les tops':
-            item = Listitem()
-            item.label = category_name
-            item.set_callback(list_videos,
-                              item_id=item_id,
-                              category_url=category_url,
-                              page='0')
-            item_post_treatment(item)
-            yield item
+    for (label, url, callback) in [('Nos émissions', URL_EMISSIONS_CNEWS, list_emissions),
+                                   ('Nos vidéos', URL_VIDEOS_CNEWS, list_videos)]:
+        item = Listitem()
+        item.label = label
+        item.set_callback(callback, item_id=item_id, category_url=url, page='0')
+        item_post_treatment(item)
+        yield item
 
 
 @Route.register
 def list_videos(plugin, item_id, category_url, page, **kwargs):
+    if URLLIB3_VERSION == "2.2.3":
+        url_req = Request(URL_REPLAY_CNEWS, headers=GENERIC_HEADERS, method='GET')
+        resp = urlopen(url_req).read().decode('utf8')
+        parser = htmlement.HTMLement()
+        parser.feed(resp)
+        data = parser.close()
+    else:
+        resp = urlquick.get(category_url % page, headers=GENERIC_HEADERS, verify=False, max_age=-1)
+        parser = htmlement.HTMLement()
+        parser.feed(resp.json())
+        data = parser.close()
 
-    resp = urlquick.get(category_url % page, max_age=-1)
+    for video_datas in data.iterfind(".//div[@class='wrapper-article-middle']"):
+        exists_video = video_datas.find(".//div[@id='embed-main-video']")
+        if exists_video is not None:
+            item = Listitem()
+            item.label = video_datas.find(".//h1[@class='article-title']").text
+            video_id = exists_video.get('data-videoid')
+            item.set_callback(get_video_id, video_id=video_id)
+            item_post_treatment(item)
+            yield item
+
+    # More videos...
+    yield Listitem.next_page(item_id=item_id, category_url=category_url, page=str(int(page) + 1))
+
+
+@Resolver.register
+def get_video_id(plugin, video_id, download_mode=False, **kwargs):
+    return resolver_proxy.get_stream_dailymotion(plugin, video_id, download_mode)
+
+
+@Route.register
+def list_emissions(plugin, item_id, category_url, page, **kwargs):
+    if URLLIB3_VERSION == "2.2.3":
+        url_req = Request(URL_REPLAY_CNEWS, headers=GENERIC_HEADERS, method='GET')
+        resp = urlopen(url_req).read().decode('utf8')
+        parser = htmlement.HTMLement()
+        parser.feed(resp)
+        data = parser.close()
+    else:
+        resp = urlquick.get(URL_REPLAY_CNEWS, headers=GENERIC_HEADERS, verify=False, max_age=-1)
+        data = resp.parse("div", attrs={"class": "les-emissions"})
+
+    for video_datas in data.iterfind(".//a[@class='emission-item-wrapper']"):
+        item = Listitem()
+        item.label = video_datas.find(".//div[@class='emission-name']").text
+        video_image = video_datas.find('.//img').get('data-src')
+        video_url = URL_ROOT_SITE + video_datas.get('href')
+        item.art['thumb'] = item.art['landscape'] = video_image
+
+        item.set_callback(list_videos_emission, item_id=item_id, video_url=video_url)
+        item_post_treatment(item)
+        yield item
+
+
+@Route.register
+def list_emissions_old(plugin, item_id, category_url, page, **kwargs):
+    resp = urlquick.get(category_url % page, headers=GENERIC_HEADERS, max_age=-1)
     parser = htmlement.HTMLement()
     parser.feed(resp.json())
     data = parser.close()
 
-    for video_datas in data.iterfind(".//a"):
-        video_title = video_datas.find('.//img').get('title')
-        video_image = video_datas.find('.//img').get('data-echo')
-        video_url = URL_ROOT_SITE + video_datas.get('href')
-
+    for video_datas in data.iterfind(".//a[@class='emission-item-wrapper']"):
         item = Listitem()
-        item.label = video_title
+        item.label = video_datas.find(".//div[@class='emission-name']").text
+        video_image = video_datas.find('.//img').get('data-src')
+        video_url = URL_ROOT_SITE + video_datas.get('href')
         item.art['thumb'] = item.art['landscape'] = video_image
 
-        item.set_callback(get_video_url,
-                          item_id=item_id,
-                          video_url=video_url)
-        item_post_treatment(item, is_playable=True, is_downloadable=True)
+        item.set_callback(list_videos_emission, item_id=item_id, video_url=video_url)
+        item_post_treatment(item)
         yield item
 
     # More videos...
-    yield Listitem.next_page(item_id=item_id,
-                             category_url=category_url,
-                             page=str(int(page) + 1))
+    yield Listitem.next_page(item_id=item_id, category_url=category_url, page=str(int(page) + 1))
+
+
+@Route.register
+def list_videos_emission(plugin, item_id, video_url, **kwargs):
+    if URLLIB3_VERSION == "2.2.3":
+        url_req = Request(video_url, headers=GENERIC_HEADERS, method='GET')
+        resp = urlopen(url_req).read().decode('utf8')
+        parser = htmlement.HTMLement()
+        parser.feed(resp)
+        root = parser.close()
+    else:
+        resp = urlquick.get(video_url, headers=GENERIC_HEADERS, verify=False, max_age=-1)
+        root = resp.parse()
+
+    info = root.findall(".//p")[0].text
+    video_image = root.findall('.//img')[1].get('data-echo')
+
+    for article in root.iterfind(".//article"):
+        item = Listitem()
+        item.art['thumb'] = item.art['landscape'] = video_image
+        item.info['plot'] = info
+        item.label = article.find(".//div[@class='part-right']/h1").text
+        item.set_callback(get_video_url, item_id=item_id, video_url=video_url)
+        item_post_treatment(item)
+        yield item
+
+    for video_datas in root.iterfind(".//a[@class='emission-item-wrapper']"):
+        item = Listitem()
+        item.art['thumb'] = item.art['landscape'] = video_image
+        item.info['plot'] = info
+        item.label = video_datas.find(".//span[@class='emission-title']").text
+        video_url = URL_ROOT_SITE + video_datas.get('href')
+        item.set_callback(get_video_url, item_id=item_id, video_url=video_url)
+        item_post_treatment(item)
+        yield item
+
+    # yield Listitem.next_page(item_id=item_id,
+    #                          category_url=category_url,
+    #                          page=str(int(page) + 1))
 
 
 @Resolver.register
-def get_video_url(plugin,
-                  item_id,
-                  video_url,
-                  download_mode=False,
-                  **kwargs):
+def get_video_url(plugin, item_id, video_url, download_mode=False, **kwargs):
+    if URLLIB3_VERSION == "2.2.3":
+        url_req = Request(video_url, headers=GENERIC_HEADERS, method='GET')
+        resp = urlopen(url_req).read().decode('utf8')
+        parser = htmlement.HTMLement()
+        parser.feed(resp)
+        root = parser.close()
+    else:
+        root = urlquick.get(video_url, headers=GENERIC_HEADERS, verify=False, max_age=-1).parse()
 
-    resp = urlquick.get(video_url,
-                        headers={'User-Agent': web_utils.get_random_ua()},
-                        max_age=-1)
-    video_id = re.compile(r'video_id\"\:\"(.*?)[\?\"]').findall(
-        resp.text)[0]
-    return resolver_proxy.get_stream_dailymotion(plugin, video_id,
-                                                 download_mode)
+    video_id = root.find(".//div[@id='embed-main-video']").get('data-videoid')
+
+    return resolver_proxy.get_stream_dailymotion(plugin, video_id, download_mode)
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
+    if item_id == 'cnews':
+        live = 'x3b68jn'
+        url_live = URL_LIVE_CNEWS
+    else:
+        live = 'x9u4hka'
+        url_live = URL_LIVE_CNEWS_PRIME
+    try:
+        if URLLIB3_VERSION == "2.2.3":
+            url_req = Request(url_live, headers=GENERIC_HEADERS, method='GET')
+            root = urlopen(url_req).read().decode('utf8')
+        else:
+            resp = urlquick.get(url_live, headers=GENERIC_HEADERS, verify=False, max_age=-1)
+            root = resp.parse()
+        live_id = root.find(".//div[@data-muted='true']").get('data-videoid')
+    except Exception:
+        live_id = live
 
-    resp = urlquick.get(URL_LIVE_CNEWS,
-                        headers={'User-Agent': web_utils.get_random_ua()},
-                        max_age=-1)
-    live_id = re.compile(r'video_id\"\:\"(.*?)[\?\"]',
-                         re.DOTALL).findall(resp.text)[0]
     return resolver_proxy.get_stream_dailymotion(plugin, live_id, False)

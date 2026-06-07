@@ -128,6 +128,26 @@ msgctxt "#30220"
 msgid "Live CDN source"
 msgstr ""
 
+msgctxt "#30221"
+msgid "Any"
+msgstr ""
+
+msgctxt "#30222"
+msgid "Akamai"
+msgstr ""
+
+msgctxt "#30223"
+msgid "Limelight"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Bidi"
+msgstr ""
+
+msgctxt "#30225"
+msgid "Cloudfront"
+msgstr ""
+
 msgctxt "#30230"
 msgid "Live bitrate"
 msgstr ""
@@ -142,6 +162,30 @@ msgstr ""
 
 msgctxt "#30233"
 msgid "Max Live Radio bitrate"
+msgstr ""
+
+msgctxt "#30234"
+msgid "48 Kbps"
+msgstr ""
+
+msgctxt "#30235"
+msgid "96 Kbps"
+msgstr ""
+
+msgctxt "#30236"
+msgid "128 Kbps"
+msgstr ""
+
+msgctxt "#30237"
+msgid "320 Kpbs"
+msgstr ""
+
+msgctxt "#30238"
+msgid "UK"
+msgstr ""
+
+msgctxt "#30239"
+msgid "International"
 msgstr ""
 
 msgctxt "#30240"
@@ -173,11 +217,11 @@ msgid "Watch Live"
 msgstr ""
 
 msgctxt "#30306"
-msgid "Watching"
+msgid "Continue Watching"
 msgstr ""
 
 msgctxt "#30307"
-msgid "Added"
+msgid "Watchlist"
 msgstr ""
 
 msgctxt "#30308"
@@ -292,6 +336,10 @@ msgctxt "#30335"
 msgid "UHD Trial Channels"
 msgstr ""
 
+msgctxt "#30336"
+msgid "Recommendations"
+msgstr ""
+
 msgctxt "#30400"
 msgid "Error"
 msgstr ""
@@ -348,6 +396,26 @@ msgctxt "#30413"
 msgid "Please check you installed this plugin correctly."
 msgstr ""
 
+msgctxt "#30414"
+msgid "This BBC Sounds programme is available to play in the UK only."
+msgstr ""
+
+msgctxt "#30415"
+msgid "The start position of the current programme is not available.\nPlaying live now."
+msgstr ""
+
+msgctxt "#30416"
+msgid "This programme started too long ago and cannot be played from the start anymore."
+msgstr ""
+
+msgctxt "#30417"
+msgid "Play from 2 hours back"
+msgstr ""
+
+msgctxt "#30418"
+msgid "Play live"
+msgstr ""
+
 msgctxt "#30500"
 msgid "Display"
 msgstr ""
@@ -393,11 +461,11 @@ msgid "iPlayer: Red Button"
 msgstr ""
 
 msgctxt "#30520"
-msgid "iPlayer: Watching"
+msgid "iPlayer: Continue Watching"
 msgstr ""
 
 msgctxt "#30521"
-msgid "iPlayer: Added"
+msgid "iPlayer: Watchlist"
 msgstr ""
 
 msgctxt "#30522"
@@ -430,4 +498,20 @@ msgstr ""
 
 msgctxt "#30529"
 msgid "iPlayer: UHD Trial Channels"
+msgstr ""
+
+msgctxt "#30530"
+msgid "iPlayer: Recommendations"
+msgstr ""
+
+msgctxt "#30600"
+msgid "View all episodes"
+msgstr ""
+
+msgctxt "#30601"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#30603"
+msgid "Watch from the start"
 msgstr ""

@@ -44,7 +44,6 @@ class CognitoIdentity:
             'x-amz-target': 'AWSCognitoIdentityService.GetId',
             'content-type': 'application/x-amz-json-1.1',
         })
-        _LOGGER.debug(response.text)
 
         result = json.loads(response.text)
 
@@ -64,7 +63,6 @@ class CognitoIdentity:
             'x-amz-target': 'AWSCognitoIdentityService.GetCredentialsForIdentity',
             'content-type': 'application/x-amz-json-1.1',
         })
-        _LOGGER.debug(response.text)
 
         result = json.loads(response.text)
 

@@ -70,7 +70,7 @@ def run():
     if action:
         eval("%s(params)" % action)
     else:
-        create_index(params)
+        menu_direct(params)
 
 
 # Main menu

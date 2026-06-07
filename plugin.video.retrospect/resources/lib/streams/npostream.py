@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from typing import Optional
 
 from resources.lib.helpers.jsonhelper import JsonHelper
-from resources.lib.regexer import Regexer
 from resources.lib.streams.m3u8 import M3u8
 from resources.lib.streams.mpd import Mpd
 from resources.lib.helpers.subtitlehelper import SubtitleHelper
@@ -29,7 +29,9 @@ class NpoStream(object):
         return SubtitleHelper.download_subtitle(sub_title_url, stream_id + ".srt", format='srt')
 
     @staticmethod
-    def add_mpd_stream_from_npo(url, episode_id, item, headers=None, live=False):
+    def add_mpd_stream_from_npo(url, episode_id: str, item: MediaItem,
+                                headers: Optional[dict] = None, live: bool = False,
+                                use_post: bool = False) -> Optional[str]:
         """ Extracts the Dash streams for the given url or episode id
 
         :param str|None url:        The url to download
@@ -37,6 +39,7 @@ class NpoStream(object):
         :param MediaItem item:      The Media item to update
         :param dict headers:        Possible HTTP Headers
         :param bool live:           Is this a live stream?
+        :param bool use_post:       Use a POST request.
 
         :rtype: str|None
         :return: An error message if an error occurred.
@@ -58,55 +61,39 @@ class NpoStream(object):
             Logger.error("No url or streamId specified!")
             return None
 
-        token_headers = {"x-requested-with": "XMLHttpRequest"}
-        token_headers.update(headers or {})
-        data = UriHandler.open("https://www.npostart.nl/api/token",
-                               additional_headers=token_headers)
-        token = JsonHelper(data).get_value("token")
+        if use_post:
+            token_data = {"productId": episode_id}
+            token = UriHandler.open("https://npo.nl/start/api/domain/player-token", json=token_data)
+        else:
+            token = UriHandler.open(f"https://npo.nl/start/api/domain/player-token?productId={episode_id}", no_cache=True)
 
-        post_data = {"_token": token}
-        data = UriHandler.open("https://www.npostart.nl/player/{0}".format(episode_id),
-                               additional_headers=headers,
-                               data=post_data)
-        Logger.trace("Episode Data: %s", data)
+        token_json = JsonHelper(token)
+        token_value = token_json.get_value("jwt")
 
-        token = JsonHelper(data).get_value("token")
-        Logger.debug("Found token %s", token)
+        video_headers = {"authorization": token_value}
+        video_data = {
+            "profileName": "dash",
+            "drmType": "widevine",
+            "referrerUrl": "https://npo.nl/"
+        }
+        data = UriHandler.open("https://prod.npoplayer.nl/stream-link", json=video_data, additional_headers=video_headers)
+        video_info = JsonHelper(data)
 
-        stream_data_url = "https://start-player.npo.nl/video/{0}/streams?" \
-                          "profile=dash-widevine" \
-                          "&quality=npo" \
-                          "&tokenId={1}" \
-                          "&streamType=broadcast" \
-                          "&mobile=0" \
-                          "&isChromecast=0".format(episode_id, token)
+        status = video_info.get_value("status", fallback=0)
+        if status:
+            message = video_info.get_value("body")
+            return message
 
-        data = UriHandler.open(stream_data_url, additional_headers=headers)
-        Logger.trace("Stream Data: %s", data)
-        stream_data = JsonHelper(data)
-        error = stream_data.get_value("html")
-        if error:
-            error = Regexer.do_regex(r'message">\s*<p[^>]*>([^<]+)', error)
-            if bool(error):
-                return error[0]
-            return "Unspecified error retrieving streams"
-
-        stream_url = stream_data.get_value("stream", "src")
-        if stream_url is None:
-            return None
+        drm_token = video_info.get_value("stream", "drmToken")
+        stream_url = video_info.get_value("stream", "streamURL")
 
         # Encryption?
-        license_url = stream_data.get_value("stream", "keySystemOptions", 0, "options", "licenseUrl")
-        if license_url:
+        if drm_token:
+            drm_url = f"https://npo-drm-gateway.samgcloud.nepworldwide.nl/authentication?custom_data={drm_token}"
             Logger.info("Using encrypted Dash for NPO")
-            license_headers = stream_data.get_value("stream", "keySystemOptions", 0, "options", "httpRequestHeaders")
-            if license_headers:
-                license_headers = '&'.join(["{}={}".format(k, v) for k, v in license_headers.items()])
-            license_type = stream_data.get_value("stream", "keySystemOptions", 0, "name")
-            license_key = "{0}|{1}|R{{SSM}}|".format(license_url, license_headers or "")
+            license_key = "{0}|{1}|R{{SSM}}|".format(drm_url, "")
         else:
             Logger.info("Using non-encrypted Dash for NPO")
-            license_type = None
             license_key = None
 
         # Actually set the stream
@@ -114,9 +101,7 @@ class NpoStream(object):
         Mpd.set_input_stream_addon_input(stream,
                                          headers,
                                          license_key=license_key,
-                                         license_type=license_type,
-                                         manifest_update=None if not live else "full")
-
+                                         manifest_update_params=None if not live else "full")
         return None
 
     @staticmethod

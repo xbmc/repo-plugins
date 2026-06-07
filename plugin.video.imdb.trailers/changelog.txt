@@ -1,0 +1,146 @@
+plugin.video.imdb.trailers:
+---------------------------
+v2.1.22 (20250809)
+[fix] In Cinemas listing
+[new] Play specific season trailer for tvshows
+      plugin://plugin.video.imdb.trailers/?action=play_id&imdb={imdb_id}&season={season_number}
+
+v2.1.21 (20250513)
+[fix] listing when character names not available
+[fix] add Trailer to tile to avoid scrobbling by trakt module
+
+v2.1.20 (20250209)
+[fix] listing
+[new] charcater names in meta
+[update] improve caching
+
+v2.1.19 (20231121)
+[fix] playback
+
+v2.1.18 (20230825)
+[fix] Popular
+[new] Threading
+
+v2.1.17 (20230103)
+[fix] Coming soon
+[fix] Recently added
+[new] Kodi Nexus compliance
+
+v2.1.16 (20220815)
+[fix] Now Playing
+[fix] Coming soon
+[new] cast images in meta
+
+v2.1.15 (20220522)
+[fix] playback fix
+
+v2.1.14 (20211015)
+[fix] code breaking on Kodi18
+[fix] Search dialog popup after playing a searched trailer
+[fix] play by imdb_id
+
+v2.1.13 (20210815)
+[fix] html parser breaking on Kodi20
+[fix] handle exceptions such as empty plot or no art
+[new] Use common plugin cache to improve caching
+
+v2.1.12 (20200918)
+[fix] api changes
+
+v2.1.11 (20200516)
+[new] Add new api calls for categories
+[fix] Fix occasional playback issues
+
+v2.1.10 (29.02.2020)
+[fix] Python2 syntax issue breaking on Kodi18
+
+v2.1.9 (28.02.2020)
+[fix] Playback shifted to HLS
+[new] Search option
+
+v2.1.8 (15.06.2019)
+[fix] Rewrite using requests-cache module
+
+v2.1.7 (1.06.2019)
+[new] In Theatres and Coming soon sections
+[fix] Python3 compatible
+
+v2.1.5 (01.2.2019)
+-Add view modes (Tested on Estuary Only)
+
+v2.1.4 (08.12.2018)
+-fix playback issue
+-process html encoding
+
+v2.1.3 (19.08.2018)
+-removed couchpotato support
+-scrape the site as no api calls available
+-Krypton and above only due to use of TLS1.2
+
+v2.1.1 (14.06.2017)
+-display non English European characters corectly
+
+v2.1.0 (19.11.2016)
+-forked the code from queeup
+-removed tempfile library and used common plugin cache
+-fix bug when no release year for the movie
+
+v2.0.7 (30.03.2013)
+-removed couchpotato V1 support
+
+v2.0.6 (06.03.2013)
+-fixes Useragent filtering
+-add all genres as comma separated list
+-thanks to thomaswr.
+
+v2.0.5 (09.01.2013)
+-fix content list if there is no genre.
+
+v2.0.4 (23.12.2012)
+-tormovies mailwarn removed
+-xbmc label2 duration removed.
+-params parse code changed.
+-use jsonrpc notification insted of executebuiltin
+
+v2.0.3 (23.12.2012)
+-fixed video link
+-fixed title
+
+v2.0.2 (24.06.2012)
+-fixed listing without poster movies
+
+v2.0.1 (16.06.2012)
+-fixed new website structure
+-remove unused Beautifulsoup import
+-cosmetic
+
+v2.0.0 (27.04.2012)
+-video quality setting change to enum to labelenum
+-code cleanup and reorder with pep8 rules
+-added fanart support for all levels.
+-updated beautifulsoup to 3.2.0
+-updated xbmc.python to 2.0
+
+v1.0.5 (14.03.2012)
+-fixed error on infoLabels writer and cast
+
+v1.0.4 (14.03.2012)
+-added new infoLabels: tagline, genre, mpaa, writer, cast
+-port setting type changed text to number.
+-chanced recent trailer second to first on list.
+
+v1.0.3 (12.03.2012)
+-fixed ascii error on Turkish notification
+-CouchPotato quality sort reordered.
+
+v1.0.2 (12.03.2012)
+-added tormovies.org mail warn integration
+-removed unneeded variables and imports.
+-some code cleaning and organizing.
+
+v1.0.1 (03.07.2011)
+-added CouchPotato download support (BETA)
+-added Cache support.
+
+v1.0.0 (19.02.2011)
+First Release

@@ -1,16 +1,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 import re
 
-from resources.lib.backtothefuture import PY2, PY3, unichr
-
-if PY2:
-    import urllib
-    # noinspection PyUnresolvedReferences
-    import htmlentitydefs as htmldefs
-else:
-    # noinspection PyUnresolvedReferences
-    import urllib.parse
-    import html.entities as htmldefs
+import urllib.parse
+import html.entities as htmldefs
 
 from resources.lib.logger import Logger
 
@@ -65,19 +57,7 @@ class HtmlEntityHelper(object):
 
         """
 
-        if PY3:
-            # noinspection PyUnresolvedReferences
-            return urllib.parse.quote(url)
-
-        # noinspection PyUnresolvedReferences
-        if isinstance(url, unicode):
-            Logger.trace("Unicode url: %s", url)
-            # noinspection PyUnresolvedReferences
-            return urllib.quote(url.encode())
-        else:
-            # this is the main time waster
-            # noinspection PyUnresolvedReferences
-            return urllib.quote(url)
+        return urllib.parse.quote(url)
 
     @staticmethod
     def url_decode(url):
@@ -90,11 +70,6 @@ class HtmlEntityHelper(object):
 
         """
 
-        if PY2:
-            # noinspection PyUnresolvedReferences
-            return urllib.unquote(url)
-
-        # noinspection PyUnresolvedReferences
         return urllib.parse.unquote(url)
 
     @staticmethod
@@ -127,11 +102,11 @@ class HtmlEntityHelper(object):
         try:
             if entity.group(1) == "#":
                 # Logger.Trace("%s: %s", entity.group(2), chr(int(entity.group(2))))
-                return unichr(int(entity.group(2), 10))
+                return chr(int(entity.group(2), 10))
 
             elif entity.group(1) == "#x":
                 # check for hex values
-                return unichr(int(entity.group(2), 16))
+                return chr(int(entity.group(2), 16))
 
             elif entity.group(2) == 'apos':
                 # this one is not covert in name2codepoint
@@ -139,7 +114,7 @@ class HtmlEntityHelper(object):
 
             else:
                 # Logger.Trace("%s: %s", entity.group(2), htmldefs.name2codepoint[entity.group(2)])
-                return unichr(htmldefs.name2codepoint[entity.group(2)])
+                return chr(htmldefs.name2codepoint[entity.group(2)])
         except:
             Logger.error("Error converting HTMLEntities: &%s%s", entity.group(1), entity.group(2), exc_info=True)
             return '&%s%s;' % (entity.group(1), entity.group(2))

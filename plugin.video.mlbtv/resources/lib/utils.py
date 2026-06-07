@@ -1,5 +1,5 @@
 import os, re, sys
-from kodi_six import xbmc, xbmcaddon
+from kodi_six import xbmc, xbmcvfs, xbmcaddon
 
 if sys.version_info[0] > 2:
     import http
@@ -7,6 +7,10 @@ if sys.version_info[0] > 2:
 else:
     import cookielib
 
+try:
+    xbmc.translatePath = xbmcvfs.translatePath
+except AttributeError:
+    pass
 
 class Util:
     addon_path = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))

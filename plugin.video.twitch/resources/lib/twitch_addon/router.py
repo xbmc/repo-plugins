@@ -59,11 +59,11 @@ def _new_search(content):
     new_search.route(content)
 
 
-@dispatcher.register(MODES.SEARCHRESULTS, args=['content', 'query'], kwargs=['index'])
+@dispatcher.register(MODES.SEARCHRESULTS, args=['content', 'query'], kwargs=['after'])
 @error_handler(route_type=1)
-def _search_results(content, query, index=0):
+def _search_results(content, query, after='MA=='):
     from .routes import search_results
-    search_results.route(twitch_api, content, query, index)
+    search_results.route(twitch_api, content, query, after)
 
 
 @dispatcher.register(MODES.FOLLOWING)
@@ -76,36 +76,36 @@ def _following():
 @dispatcher.register(MODES.FEATUREDSTREAMS)
 @error_handler(route_type=1)
 def _list_featured_streams():
-    from .routes import featured_streams
-    featured_streams.route(twitch_api)
+    from .routes import popular_streams
+    popular_streams.route(twitch_api)
 
 
-@dispatcher.register(MODES.GAMES, kwargs=['offset'])
+@dispatcher.register(MODES.GAMES, kwargs=['after'])
 @error_handler(route_type=1)
-def _list_all_games(offset=0):
+def _list_all_games(after='MA=='):
     from .routes import games
-    games.route(twitch_api, offset)
+    games.route(twitch_api, after)
 
 
-@dispatcher.register(MODES.STREAMLIST, kwargs=['stream_type', 'offset', 'platform'])
+@dispatcher.register(MODES.STREAMLIST, kwargs=['after'])
 @error_handler(route_type=1)
-def _list_streams(stream_type=StreamType.LIVE, offset=0, platform=Platform.ALL):
+def _list_streams(after='MA=='):
     from .routes import streams
-    streams.route(twitch_api, stream_type, offset, platform)
+    streams.route(twitch_api, after)
 
 
-@dispatcher.register(MODES.FOLLOWED, args=['content'], kwargs=['offset', 'cursor'])
+@dispatcher.register(MODES.FOLLOWED, args=['content'], kwargs=['after'])
 @error_handler(route_type=1)
-def _list_followed(content, offset=0, cursor='MA=='):
+def _list_followed(content, after='MA=='):
     from .routes import followed
-    followed.route(twitch_api, content, offset, cursor)
+    followed.route(twitch_api, content, after)
 
 
-@dispatcher.register(MODES.CHANNELVIDEOS, kwargs=['channel_id', 'channel_name', 'display_name', 'game'])
+@dispatcher.register(MODES.CHANNELVIDEOS, kwargs=['channel_id', 'channel_name', 'display_name', 'game', 'game_name'])
 @error_handler
-def _list_channel_video_categories(channel_id=None, channel_name=None, display_name=None, game=None):
+def _list_channel_video_categories(channel_id=None, channel_name=None, display_name=None, game=None, game_name=None):
     from .routes import channel_video_categories
-    channel_video_categories.route(channel_id, channel_name, display_name, game)
+    channel_video_categories.route(channel_id, channel_name, display_name, game, game_name)
 
 
 @dispatcher.register(MODES.COLLECTIONS, args=['channel_id'], kwargs=['cursor'])
@@ -122,32 +122,32 @@ def _list_collection_videos(collection_id):
     collection_videos.route(twitch_api, collection_id)
 
 
-@dispatcher.register(MODES.CLIPSLIST, kwargs=['cursor', 'channel_name', 'game'])
+@dispatcher.register(MODES.CLIPSLIST, kwargs=['after', 'channel_id', 'game_id'])
 @error_handler(route_type=1)
-def _list_clips(cursor='MA==', channel_name=None, game=None):
+def _list_clips(after='MA==', channel_id='', game_id=''):
     from .routes import clips
-    clips.route(twitch_api, cursor, channel_name, game)
+    clips.route(twitch_api, after, channel_id, game_id)
 
 
-@dispatcher.register(MODES.CHANNELVIDEOLIST, args=['broadcast_type'], kwargs=['offset', 'channel_id', 'game'])
+@dispatcher.register(MODES.CHANNELVIDEOLIST, args=['broadcast_type'], kwargs=['after', 'channel_id', 'game'])
 @error_handler(route_type=1)
-def _list_channel_videos(broadcast_type, channel_id=None, game=None, offset=0):
+def _list_channel_videos(broadcast_type, channel_id=None, game=None, after='MA=='):
     from .routes import channel_videos
-    channel_videos.route(twitch_api, broadcast_type, channel_id, game, offset)
+    channel_videos.route(twitch_api, broadcast_type, channel_id, game, after)
 
 
-@dispatcher.register(MODES.GAMELISTS, args=['game'])
+@dispatcher.register(MODES.GAMELISTS, args=['game_id', 'game_name'])
 @error_handler
-def _game_lists(game):
+def _game_lists(game_id, game_name):
     from .routes import game_categories
-    game_categories.route(game)
+    game_categories.route(game_id, game_name)
 
 
-@dispatcher.register(MODES.GAMESTREAMS, args=['game'], kwargs=['offset'])
+@dispatcher.register(MODES.GAMESTREAMS, args=['game'], kwargs=['after'])
 @error_handler(route_type=1)
-def _list_game_streams(game, offset=0):
+def _list_game_streams(game, after='MA=='):
     from .routes import game_streams
-    game_streams.route(twitch_api, game, offset)
+    game_streams.route(twitch_api, game, after)
 
 
 @dispatcher.register(MODES.PLAY, kwargs=['seek_time', 'channel_id', 'video_id', 'slug', 'ask', 'use_player', 'quality', 'channel_name'])

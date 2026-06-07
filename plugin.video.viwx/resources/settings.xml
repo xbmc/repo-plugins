@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings version="1">
+    <section id="plugin.video.viwx">
+        <!-- General -->
+        <category id="general" label="30100" help="">
+			<group id="grp-strm-quality" label="30140">
+				<setting id="FHD_enabled" label="30141" type="boolean" help="30341">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+			<group id="grp1" label="30101">
+				<setting id="subtitles_show" label="30102" type="boolean" help="30302">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="subtitles_color" label="30103" type="boolean" help="30303">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="enable" setting="subtitles_show">true</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting id="prefer_bsl" label="30107" type="boolean">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="hide_paid" label="30104" type="boolean" help="30304">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="a-z_size" label="30106" type="integer" help="30306">
+					<level>1</level>
+					<default>250</default>
+					<constraints>
+						<minimum>150</minimum>
+						<step>10</step>
+						<maximum>1000</maximum>
+					</constraints>
+					<control type="slider" format="integer">
+						<popup>false</popup>
+					</control>
+				</setting>
+				<setting id="page_len" label="30105" type="integer" help="30305">
+					<level>1</level>
+					<default>60</default>
+					<constraints>
+						<minimum>30</minimum>
+						<step>10</step>
+						<maximum>400</maximum>
+					</constraints>
+					<control type="slider" format="integer">
+						<popup>false</popup>
+					</control>
+				</setting>
+			</group>
+			<group id="grp_live" label="30120">
+				<setting id="live_play_from_start" label="30121" type="boolean" help="30321">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle" />
+				</setting>
+				<setting id="tv_region" label="30122" type="string" help="30322">
+					<level>0</level>
+					<default>by_account</default>
+					<constraints>
+						<options>
+                            <option label="By ITVX account">by_account</option>
+							<option label="Default">london</option>
+							<option label="London">london</option>
+							<option label="Meridian">meridian_east</option>
+							<option label="Central">central_west</option>
+							<option label="Wales">wales</option>
+							<option label="Granada">granada</option>
+							<option label="Ulster">ulster</option>
+						</options>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable" setting="FHD_enabled">true</dependency>
+					</dependencies>
+					<control type="list" format="string">
+						<heading>30122</heading>
+						<multiselect>false</multiselect>
+						<hidevalue>false</hidevalue>
+					</control>
+				</setting>
+				<setting id="install_iptvmanager" label="30131" type="action" help="">
+					<level>0</level>
+					<data>InstallAddon(service.iptv.manager)</data>
+					<control type="button" format="action">
+						<close>true</close>
+					</control>
+					<dependencies>
+						<dependency type="visible" on="property" name="infobool" operator="!is">System.HasAddon(service.iptv.manager)</dependency>
+					</dependencies>
+				</setting>
+				<setting id="iptv.enabled" label="30132" type="boolean" help="30332">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+					<dependencies>
+						<dependency type="visible" on="property" name="infobool">System.HasAddon(service.iptv.manager)</dependency>
+					</dependencies>
+				</setting>
+				<setting id="iptvmanager-settings" label="30133" type="action" help="" parent="iptv.enabled">
+					<data>Addon.OpenSettings(service.iptv.manager)</data>
+					<dependencies>
+						<dependency type="enable" setting="iptv.enabled">true</dependency>
+						<dependency type="visible" on="property" name="infobool">System.HasAddon(service.iptv.manager)</dependency>
+					</dependencies>
+					<control type="button" format="action">
+						<close>true</close>
+					</control>
+				</setting>
+				<setting id="iptv.channels_uri" label="" type="string" help="">
+					<default>plugin://plugin.video.viwx/resources/lib/iptvmanager/channels</default>
+					<visible>false</visible>
+					<control type="edit" format="string" />
+				</setting>
+				<setting id="iptv.epg_uri" label="" type="string" help="">
+					<default>plugin://plugin.video.viwx/resources/lib/iptvmanager/epg</default>
+					<visible>false</visible>
+					<control type="edit" format="string" />
+				</setting>
+			</group>
+			<group id="grp2" label="30110">
+				<setting id="log-handler" label="30111" type="string" help="30311">
+					<level>2</level>
+					<default>Kodi log</default>
+					<constraints>
+						<allowempty>false</allowempty>
+					</constraints>
+					<control type="button" format="action">
+						<data>RunPlugin(plugin://plugin.video.viwx/resources/lib/settings/change_logger)</data>
+					</control>
+				</setting>
+				<setting id="log-level" label="30113" type="integer" help="30313">
+					<level>3</level>
+					<default>2</default>
+					<constraints>
+						<options>
+							<option label="debug">0</option>
+							<option label="info">1</option>
+							<option label="warning">2</option>
+							<option label="error">3</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+			</group>
+        </category>
+        <!-- Account sing in, sing out-->
+        <category id="account" label="30200" help="">
+			<group id="grp3">
+				<setting id="account-sign-in" label="30201" type="action" help="30401">
+					<level>0</level>
+					<data>RunPlugin(plugin://$ID/resources/lib/settings/login)</data>
+					<control type="button" format="action">
+						<close>false</close>
+					</control>
+				</setting>
+				<setting id="show_password_chars" label="30203" type="boolean" help="30403">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="import-cookie" label="30204" type="action" help="30404">
+					<level>0</level>
+					<data>RunPlugin(plugin://$ID/resources/lib/settings/import_tokens)</data>
+					<control type="button" format="action">
+						<close>false</close>
+					</control>
+				</setting>
+				<setting id="export-cookie" label="30205" type="action" help="30405">
+					<level>0</level>
+					<data>RunPlugin(plugin://$ID/resources/lib/settings/export_tokens)</data>
+					<control type="button" format="action">
+						<close>false</close>
+					</control>
+				</setting>
+				<setting id="account-sign-out" label="30202" type="action" help="30402">
+					<level>0</level>
+					<data>RunPlugin(plugin://$ID/resources/lib/settings/logout)</data>
+					<control type="button" format="action" />
+				</setting>
+			</group>
+        </category>
+    </section>
+
+</settings>

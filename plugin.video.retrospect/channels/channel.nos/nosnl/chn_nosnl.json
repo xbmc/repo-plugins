@@ -12,7 +12,8 @@
       "channelcode": "nosnl",
       "sortorder": 200,
       "language": "nl",
-      "fanart": "nosnlfanart.jpg"
+      "fanart": "nosnlfanart.jpg",
+      "poster": "nosnlposter.png"
     }
   ]
 }

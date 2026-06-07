@@ -3,8 +3,7 @@
 
 import re
 import json
-
-from resources.lib.backtothefuture import unichr
+from typing import Dict, List, Union, Optional, Any
 
 
 #noinspection PyShadowingNames
@@ -12,15 +11,20 @@ class JsonHelper(object):
     def __init__(self, data, logger=None):
         """Creates a class that wraps json.
 
-        :param str|unicode data:    JSON data to parse.
-        :param any logger:      If specified it is used for logging.
+        :param str|unicode|dict|list data:    JSON data to parse.
+        :param any logger:                    If specified it is used for logging.
 
         """
+
+        self.logger = logger
+
+        if isinstance(data, dict) or isinstance(data, list):
+            self.json = data
+            return
 
         if isinstance(data, bytes):
             data = data.decode('utf-8')
 
-        self.logger = logger
         self.data = data.strip()
         self.json = dict()
 
@@ -105,7 +109,7 @@ class JsonHelper(object):
 
         hex_string = "0x%s" % (match.group(2))
         hex_value = int(hex_string, 16)
-        return unichr(hex_value)
+        return chr(hex_value)
 
     #noinspection PyUnboundLocalVariable
     def get_value(self, *args, **kwargs):
@@ -118,18 +122,86 @@ class JsonHelper(object):
 
         """
 
+        return JsonHelper.get_from(self.json, *args, logger=self.logger, **kwargs)
+
+    def find_dict_by_key_value(self, key: str, value: Any) -> Optional[Dict]:
+        return JsonHelper.find_dict_by_key_value_from(self.json, key, value)
+
+    def find_dict_by_key(self, key: str) -> Optional[Dict]:
+        return JsonHelper.find_dict_by_key_from(self.json, key)
+
+    @staticmethod
+    def find_dict_by_key_value_from(data: Union[List, Dict], key: str, value: Any) -> Optional[Dict]:
+        """
+        Search recursively for a dictionary containing a specific key-value pair.
+        Returns the dictionary and all its content if found, otherwise None.
+        """
+
+        if isinstance(data, dict):
+            if key in data and data[key] == value:
+                return data
+
+            for child in data.values():
+                result = JsonHelper.find_dict_by_key_value_from(child, key, value)
+                if result is not None:
+                    return result
+
+        elif isinstance(data, list):
+            for item in data:
+                result = JsonHelper.find_dict_by_key_value_from(item, key, value)
+                if result is not None:
+                    return result
+
+        return None
+
+    @staticmethod
+    def find_dict_by_key_from(data: Union[List, Dict], key: str) -> Optional[Dict]:
+        """
+        Search recursively for a dictionary containing a specific key-value pair.
+        Returns the dictionary and all its content if found, otherwise None.
+        """
+
+        if isinstance(data, dict):
+            if key in data:
+                return data[key]
+
+            for child in data.values():
+                result = JsonHelper.find_dict_by_key_from(child, key)
+                if result is not None:
+                    return result
+
+        elif isinstance(data, list):
+            for item in data:
+                result = JsonHelper.find_dict_by_key_from(item, key)
+                if result is not None:
+                    return result
+
+        return None
+
+    #noinspection PyUnboundLocalVariable
+    @staticmethod
+    def get_from(data, *args, logger=None, **kwargs):
+        """ Retrieves data from a generic JSON object based on the input parameters
+
+        :param str data         The JSON data
+        :param str args|int:    The dictionary keys, or list indexes.
+        :param any kwargs:      Possible value = fallback and allows the specification of a fallback value.
+
+        :return: the selected JSON object
+
+        """
+
         try:
-            data = self.json
             for arg in args:
                 data = data[arg]
         except KeyError:
             if "fallback" in kwargs:
-                if self.logger:
-                    self.logger.debug("Key ['%s'] not found in Json", arg)
+                if logger:
+                    logger.debug("Key ['%s'] not found in Json", arg)
                 return kwargs["fallback"]
 
-            if self.logger:
-                self.logger.warning("Key ['%s'] not found in Json", arg, exc_info=True)
+            if logger:
+                logger.warning("Key ['%s'] not found in Json", arg, exc_info=True)
             return None
 
         return data

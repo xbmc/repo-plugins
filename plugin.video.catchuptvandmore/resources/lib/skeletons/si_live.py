@@ -41,7 +41,7 @@ menu = {
         'enabled': True,
         'order': 3
     },
-    'koper': {
+    'kp1': {
         'resolver': '/resources/lib/channels/si/rtvslo:get_live_url',
         'label': 'Koper',
         'thumb': 'channels/si/koper.png',
@@ -49,7 +49,7 @@ menu = {
         'enabled': True,
         'order': 4
     },
-    'maribor': {
+    'mb1': {
         'resolver': '/resources/lib/channels/si/rtvslo:get_live_url',
         'label': 'Maribor',
         'thumb': 'channels/si/maribor.png',
@@ -57,7 +57,7 @@ menu = {
         'enabled': True,
         'order': 5
     },
-    'mmc': {
+    'mmctv': {
         'resolver': '/resources/lib/channels/si/rtvslo:get_live_url',
         'label': 'MMC',
         'thumb': 'channels/si/mmc.png',

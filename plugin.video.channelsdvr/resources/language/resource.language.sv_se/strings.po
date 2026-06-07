@@ -1,0 +1,178 @@
+# Kodi Media Center language file
+# Addon Name: Channels DVR
+# Addon id: plugin.video.channelsdvr
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.channelsdvr\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2022-10-27 11:15+0000\n"
+"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"Language-Team: Swedish <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-channelsdvr/sv_se/>\n"
+"Language: sv_se\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.14.1\n"
+
+msgctxt "Addon Summary"
+msgid "Live TV, everywhere"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Watch your favorite programs on Kodi. Channels delivers a unified experience across all your TVs, devices, and streaming platforms."
+msgstr ""
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr "Aktivera felsökning [logga fel]"
+
+msgctxt "#30001"
+msgid "Something went wrong, Please check settings and try again..."
+msgstr ""
+
+msgctxt "#30002"
+msgid "Live"
+msgstr "Live"
+
+msgctxt "#30003"
+msgid "Lineup"
+msgstr "Rada upp"
+
+msgctxt "#30004"
+msgid "Enable M3U/XMLTV Generator Service"
+msgstr "Aktivera generatortjänst för M3U/XMLTV"
+
+msgctxt "#30005"
+msgid "M3U/XMLTV Path"
+msgstr "M3U/XMLTV-sökväg"
+
+msgctxt "#30006"
+msgid "Use MPEG Video Streams"
+msgstr ""
+
+msgctxt "#30007"
+msgid "%s Updating..."
+msgstr "%s uppdateras..."
+
+msgctxt "#30008"
+msgid "General"
+msgstr "Allmänt"
+
+msgctxt "#30009"
+msgid "Enter Channels DVR Server IP"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Enter Channels DVR Server Port"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Allow this plugin to automatically configure IPTV Simple PVR Backend?"
+msgstr "Tillåta detta tillägg att automatiskt konfigurera IPTV Simple PVR Backend?"
+
+msgctxt "#30012"
+msgid "Coming Up Later..."
+msgstr "Kommer senare..."
+
+msgctxt "#30013"
+msgid "Search"
+msgstr "Sök"
+
+msgctxt "#30014"
+msgid "Enter Search Term"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Recordings"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Build Only Favorites"
+msgstr "Bygg endast favoriter"
+
+msgctxt "#30017"
+msgid "Live (Favorites)"
+msgstr "Live (favoriter)"
+
+msgctxt "#30018"
+msgid "Use Direct stream"
+msgstr "Använd direktström"
+
+msgctxt "#30019"
+msgid "PseudoTV Live Supported through Recommended Services"
+msgstr "PseudoTV Live stöds genom rekommenderade tjänster"
+
+msgctxt "#30020"
+msgid "Enable Timeshift"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Reconfigure %s for use with %s"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Complete"
+msgstr ""
+
+msgctxt "#30023"
+msgid "%s not found, Please Install"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Sources"
+msgstr ""
+
+msgctxt "#49000"
+msgid "Integration"
+msgstr "Integration"
+
+msgctxt "#49001"
+msgid "Install PseudoTV Live add-on"
+msgstr "Installera tillägget PseudoTV Live"
+
+msgctxt "#49002"
+msgid "Install IPTV Manager add-on"
+msgstr "Installera tillägget IPTV Manager"
+
+msgctxt "#49003"
+msgid "Enable IPTV Manager integration"
+msgstr "Aktivera IPTV Manager"
+
+msgctxt "#49004"
+msgid "IPTV Manager settings…"
+msgstr "Inställningar för IPTV Manager…"
+
+msgctxt "#49005"
+msgid "PseudoTV Live settings…"
+msgstr "Inställningar för PseudoTV Live…"
+
+msgctxt "#49006"
+msgid "Only add Favorites"
+msgstr "Lägg endast till favoriter"
+
+msgctxt "#49007"
+msgid "%s added to Favorites"
+msgstr "%s tillagd till favoriter"
+
+msgctxt "#49008"
+msgid "%s removed from Favorites"
+msgstr "%s borttagen från favoriter"
+
+msgctxt "#49009"
+msgid "Add Channel to Favorites"
+msgstr "Lägg till kanal till favoriter"
+
+msgctxt "#49010"
+msgid "Remove Channel from Favorites"
+msgstr "Ta bort kanal från favoriter"
+
+msgctxt "#49011"
+msgid "Live (Favorites)"
+msgstr "Live (favoriter)"
+
+msgctxt "#49012"
+msgid "Favorites"
+msgstr "Favoriter"

@@ -1,104 +1,141 @@
+"""Manage views like home menu, dynamic menus, search, favorites..."""
+# pylint: disable=import-error
+from xbmcswift2 import xbmc
 
-import api
-import mapper
-import hof
-import utils
+from resources.lib.mapper.arteitem import ArteItem
+from resources.lib.mapper.live import ArteLiveItem
+from resources.lib.mapper.artesearch import ArteSearch
+from resources.lib import api
+from resources.lib import hof
+from resources.lib.mapper import mapper
+from resources.lib import settings as stg
+from resources.lib import user
 
 
-def build_categories(settings):
-    categories = [
-        mapper.create_newest_item(),
-        mapper.create_most_viewed_item(),
-        mapper.create_last_chance_item(),
+def build_home_page(plugin, settings, cached_categories):
+    """Display home menu based on fixed entries and then content from API home page"""
+    addon_menu = [
+        ArteSearch(plugin, settings).build_item()
     ]
-    categories.extend([mapper.map_categories_item(
-        item) for item in api.categories(settings.language)])
-    # categories.append(mapper.create_creative_item())
-    categories.append(mapper.create_magazines_item())
-    categories.append(mapper.create_week_item())
+    try:
+        addon_menu.append(
+            ArteLiveItem(plugin, api.player_video(settings.language, 'LIVE'))
+            .build_item_live())
+    # pylint: disable=broad-exception-caught
+    # Could be improve. possible exceptions are limited to auth. errors
+    except Exception as error:
+        xbmc.log("Unable to build live stream item with " +
+                 f"lang:{settings.language} quality:{settings.quality} " +
+                 f"because \"{str(error)}\"")
 
-    return categories
-
-
-def build_category(category_code, settings):
-    category = [mapper.map_category_item(
-        item, category_code) for item in api.category(category_code, settings.language)]
-
-    return category
-
-
-def build_magazines(settings):
-    return [mapper.map_generic_item(item, settings.show_video_streams) for item in api.magazines(settings.language)]
-
-
-def build_newest(settings):
-    return [mapper.map_generic_item(item, settings.show_video_streams) for
-            item in api.home_category('mostRecent', settings.language)]
+    arte_home = api.page_content(settings.language)
+    for zone in arte_home.get('zones'):
+        menu_item = mapper.map_zone_to_item(plugin, settings, zone, cached_categories)
+        if menu_item:
+            addon_menu.append(menu_item)
+    return addon_menu
 
 
-def build_most_viewed(settings):
-    return [mapper.map_generic_item(item, settings.show_video_streams) for
-            item in api.home_category('mostViewed', settings.language)]
+def get_cached_category(zone_id, cached_categories):
+    """Return the menu for a category that is stored
+    in cache from previous api call like home page"""
+    return cached_categories[zone_id]
 
 
-def build_last_chance(settings):
-    return [mapper.map_generic_item(item, settings.show_video_streams) for
-            item in api.home_category('lastChance', settings.language)]
+def mark_as_watched(plugin, usr, program_id, label):
+    """
+    Get program duration and synch progress with total duration
+    in order to mark a program as watched
+    """
+    status = -1
+    try:
+        program_info = api.player_video(stg.languages[0], program_id)
+        total_time = program_info.get('attributes').get('metadata').get('duration').get('seconds')
+        status = api.sync_last_viewed(user.get_cached_token(plugin, usr), program_id, total_time)
+    # pylint: disable=broad-exception-caught
+    except Exception as excp:
+        xbmc.log(f" exception caught :{str(excp)}")
+
+    if 200 == status:
+        msg = plugin.addon.getLocalizedString(30036).format(label=label)
+        plugin.notify(msg=msg, image='info')
+    else:
+        msg = plugin.addon.getLocalizedString(30037).format(label=label)
+        plugin.notify(msg=msg, image='error')
 
 
-def build_sub_category_by_code(sub_category_code, settings):
-    return [mapper.map_generic_item(item, settings.show_video_streams) for item in api.subcategory(sub_category_code, settings.language)]
+def build_mixed_collection(plugin, kind, collection_id, settings):
+    """Build menu of content available in collection collection_id thanks to HBB TV API"""
+    return [mapper.map_generic_item(plugin, item, settings.show_video_streams) for item in
+            api.collection(kind, collection_id, settings.language)]
 
 
-def build_sub_category_by_title(category_code, sub_category_title, settings):
-    category = api.category(category_code, settings.language)
-    unquoted_title = utils.decode_string(sub_category_title)
-
-    sub_category = hof.find(lambda i: i.get('title') == unquoted_title, category)
-
-    return [mapper.map_generic_item(item, settings.show_video_streams) for item in sub_category.get('teasers')]
-
-
-def build_mixed_collection(kind, collection_id, settings):
-    return [mapper.map_generic_item(item, settings.show_video_streams) for item in api.collection(kind, collection_id, settings.language)]
-
-
-def build_video_streams(program_id, settings):
+def build_video_streams(plugin, settings, program_id):
+    """Build the menu with the audio streams available for content program_id"""
     item = api.video(program_id, settings.language)
 
     if item is None:
         raise RuntimeError('Video not found...')
 
-    programId = item.get('programId')
+    program_id = item.get('programId')
     kind = item.get('kind')
 
-    return mapper.map_streams(item, api.streams(kind, programId, settings.language), settings.quality)
+    return mapper.map_streams(
+        plugin, item, api.streams(kind, program_id, settings.language), settings.quality)
 
 
-def build_stream_url(kind, program_id, audio_slot, settings):
-    return mapper.map_playable(api.streams(kind, program_id, settings.language), settings.quality, audio_slot)
+def build_sibling_playlist(plugin, settings, program_id):
+    """
+    Return a pair with videos belonging to the same parent as program id
+    e.g. other episodes of a same serie, videos around the same topic
+    and the start program id of this collection i.e. program_id
+    """
+    parent_program = None
+    # get parent of prefered kind first. for the moment TV_SERIES only
+    for prefered_kind in ArteItem.PREFERED_KINDS:
+        # pylint: disable=cell-var-from-loop
+        parent_program = hof.find(
+            lambda parent: api.is_of_kind(parent, prefered_kind),
+            api.get_parent_collection(settings.language, program_id))
+        if parent_program:
+            break
+    # if a parent was found, then return the list of kodi playable dict.
+    if parent_program:
+        sibling_arte_items = api.collection_with_last_viewed(
+            settings.language, user.get_cached_token(plugin, settings.username, True),
+            parent_program.get('kind'), parent_program.get('programId'))
+        return mapper.map_collection_as_playlist(plugin, sibling_arte_items, program_id)
+    return None
 
 
-_useless_kinds = ['CLIP', 'MANUAL_CLIP', 'TRAILER']
+def build_collection_playlist(plugin, settings, kind, collection_id):
+    """
+    Return a pair with collection with collection_id
+    and program id of the first element in the collection
+    """
+    return mapper.map_collection_as_playlist(plugin, api.collection_with_last_viewed(
+        settings.language,
+        user.get_cached_token(plugin, settings.username, True),
+        kind, collection_id))
 
 
-def build_weekly(settings):
-    programs = hof.flatten([api.daily(date, settings.language)
-                            for date in utils.past_week()])
-
-    def keep_video_item(item):
-        video = hof.get_property(item, 'video')
-
-        if video is None:
-            return False
-        return hof.get_property(item, 'kind') not in _useless_kinds
-
-    videos_filtered = [hof.get_property(item, 'video')
-                       for item in programs if keep_video_item(item)]
-
-    videos_mapped = [mapper.map_generic_item(
-        item, settings.show_video_streams) for item in videos_filtered]
-    videos_mapped.sort(key=lambda item: hof.get_property(
-        item, 'info.aired'), reverse=True)
-
-    return videos_mapped
+def build_stream_url(plugin, kind, program_id, audio_slot, settings):
+    """
+    Return URL to stream content.
+    If the content is not available, it tries to return a related trailer or teaser.
+    """
+    # first try with content
+    program_stream = api.streams(kind, program_id, settings.language)
+    if program_stream:
+        return mapper.map_playable(
+            program_stream, settings.quality, audio_slot, mapper.match_hbbtv)
+    # second try to fallback clip. It allows to display a trailer,
+    # when a documentary is not available anymore like on arte tv website
+    clip_stream = api.streams('CLIP', program_id, settings.language)
+    if clip_stream:
+        return mapper.map_playable(
+            clip_stream, settings.quality, audio_slot, mapper.match_hbbtv)
+    # otherwise raise the error
+    msg = plugin.addon.getLocalizedString(30029)
+    plugin.notify(msg=msg.format(strm=program_id, ln=settings.language), image='error')
+    return None

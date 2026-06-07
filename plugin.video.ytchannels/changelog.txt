@@ -1,6 +1,54 @@
 ===============================
 Youtube Channels addon by yeahme49/mintsoft/natko1412
 ===============================
+v0.5.5 [Sep-2024]
+- Fixing bug with upcoming videos causing a crash due to missing duration
+
+v0.5.4 [12-Feb-2024]
+- Fixing total-breakage bug
+
+v0.5.3 [25-Jan-2024]
+- Users can now change the minimum length a video needs to be to visible
+
+v0.5.2 [11-Nov-2023]
+-Removing noisy logging of shorts
+
+v0.5.1 [01-Nov-2023]
+-Added Czech translation (thanks @jirkoun)
+-Fixed: The setting parameter "Show 'add folder/channels'" doesn't work correctly in Folder list #41 (thanks @jirkoun)
+
+v0.5.0 [23-Oct-2023]
+-Fixed non-refresh of the list when adding channels or folders (#32)
+-Added the ability to sort a folder A-Z
+-Fixed the sort index being inconsistent, the sort number should now always be unique in a given folder
+
+v0.4.6 [12-Sept-2023]
+-Fixed bug where playlists that didn't have a thumbnail would blow up the addon
+
+v0.4.5 [04-June-2023]
+-Reimplemented shorts filtering out so that any video <= 60 seconds long is regarded as a short
+
+v0.4.4 [11-May-2023]
+-Tweak to the useragent to reduce "Content not available" errors (thanks to mcarni)
+
+v0.4.3 [05-November-2022]
+-Russian Language support (thanks to sryze)
+-Added functionality to filter out YouTube shorts
+
+v0.4.2 [24-April-2022]
+-Polish Language support (thanks to hevet)
+
+v0.4.1 [25-March-2022]
+-Make "Show 'add folder/channel options'" setting work properly
+
+v0.4.0 [06-Feb-2022]
+-URL encode channel name to support UTF-8 encoding
+-Update yt_time function
+-Add thumbnail and channel description when searching for new channels to add
+
+v0.3.6 [28-Aug-2021]
+-Show live streams for a channel
+
 v0.3.5 [19-May-2021]
 -Add ability to add a playlist to a folder, similar to a channel
 -Resets sort value when moving channel to a different folder

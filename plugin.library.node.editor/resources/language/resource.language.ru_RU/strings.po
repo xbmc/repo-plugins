@@ -5,65 +5,74 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Addons\n"
-"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Kodi Translation Team\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/xbmc-addons/language/ru/)\n"
-"Language: ru\n"
+"PO-Revision-Date: 2021-07-23 14:15+0000\n"
+"Last-Translator: vdkbsd <valexgus@gmail.com>\n"
+"Language-Team: Russian <https://kodi.weblate.cloud/projects/kodi-add-ons-program/plugin-library-node-editor/ru_ru/>\n"
+"Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.7.2\n"
+
+msgctxt "Addon Summary"
+msgid "Manage custom library nodes."
+msgstr "Управление узлами пользовательских медиатек."
+
+msgctxt "Addon Description"
+msgid "Create and edit custom library nodes."
+msgstr "Создание и редактирование пользовательских узлов медиатеки."
 
 # Menu items
 msgctxt "#30000"
 msgid "Add content..."
-msgstr ""
+msgstr "Содержимое..."
 
 msgctxt "#30001"
 msgid "Add path..."
-msgstr ""
+msgstr "Путь..."
 
 msgctxt "#30002"
 msgid "Add order..."
-msgstr ""
+msgstr "Сортировка..."
 
 msgctxt "#30003"
 msgid "Add limit..."
-msgstr ""
+msgstr "Лимит..."
 
 msgctxt "#30004"
 msgid "Add grouping..."
-msgstr ""
+msgstr "Группирование..."
 
 msgctxt "#30005"
 msgid "Add rule..."
-msgstr ""
+msgstr "Добавить правило..."
 
 msgctxt "#30006"
 msgid "New node..."
-msgstr ""
+msgstr "Новый узел..."
 
 msgctxt "#30007"
 msgid "New parent node..."
-msgstr ""
+msgstr "Новый родительский узел..."
 
 msgctxt "#30008"
 msgid "Reset library nodes to default..."
-msgstr ""
+msgstr "Сбросить узлы медиатеки на значения по умолчанию..."
 
 msgctxt "#30009"
 msgid "Add component..."
-msgstr ""
+msgstr "Добавить компонент..."
 
 msgctxt "#30010"
 msgid "Manually edit..."
-msgstr ""
+msgstr "Редактировать вручную..."
 
 msgctxt "#30091"
 msgid "Video Library"
-msgstr "Библиотека видео"
+msgstr "Видеотека"
 
 msgctxt "#30092"
 msgid "Music Library"
@@ -79,7 +88,7 @@ msgstr "Изменить название"
 
 msgctxt "#30102"
 msgid "Edit icon"
-msgstr "Изменить иконку"
+msgstr "Изменить значок"
 
 msgctxt "#30103"
 msgid "Browse for icon"
@@ -87,19 +96,19 @@ msgstr "Найти значок"
 
 msgctxt "#30104"
 msgid "Move node"
-msgstr ""
+msgstr "Переместить узел"
 
 msgctxt "#30105"
 msgid "Edit visibility"
-msgstr ""
+msgstr "Редактировать видимость"
 
 msgctxt "#30106"
 msgid "Add to main menu"
-msgstr ""
+msgstr "Добавить в главное меню"
 
 msgctxt "#30107"
 msgid "Browse for value"
-msgstr ""
+msgstr "Поиск значения"
 
 msgctxt "#30200"
 msgid "Content"
@@ -107,15 +116,15 @@ msgstr "Содержимое"
 
 msgctxt "#30201"
 msgid "Order"
-msgstr ""
+msgstr "Сортировка"
 
 msgctxt "#30202"
 msgid "Grouping"
-msgstr ""
+msgstr "Группирование"
 
 msgctxt "#30203"
 msgid "Limit"
-msgstr ""
+msgstr "Лимит"
 
 msgctxt "#30204"
 msgid "Path"
@@ -127,35 +136,35 @@ msgstr "Правило"
 
 msgctxt "#30206"
 msgid "Match"
-msgstr ""
+msgstr "Соответствие"
 
 msgctxt "#30300"
 msgid "Set name"
-msgstr ""
+msgstr "Введите имя"
 
 msgctxt "#30301"
 msgid "Set visibility condition"
-msgstr ""
+msgstr "Введите условие видимости"
 
 msgctxt "#30302"
 msgid "Set order index"
-msgstr ""
+msgstr "Установите индекс сортировки"
 
 msgctxt "#30303"
 msgid "Name of new parent node"
-msgstr ""
+msgstr "Имя нового родительского узла"
 
 msgctxt "#30304"
 msgid "Start with defaults"
-msgstr ""
+msgstr "Начните с настроек по умолчанию"
 
 msgctxt "#30305"
 msgid "Field"
-msgstr ""
+msgstr "Поле"
 
 msgctxt "#30306"
 msgid "Operator"
-msgstr ""
+msgstr "Оператор"
 
 msgctxt "#30307"
 msgid "Value"
@@ -163,7 +172,7 @@ msgstr "Значение"
 
 msgctxt "#30308"
 msgid "Content type"
-msgstr ""
+msgstr "Тип содержимого"
 
 msgctxt "#30309"
 msgid "Content"
@@ -175,7 +184,7 @@ msgstr "Группа"
 
 msgctxt "#30311"
 msgid "Limit"
-msgstr ""
+msgstr "Лимит"
 
 msgctxt "#30312"
 msgid "Path"
@@ -195,120 +204,120 @@ msgstr "Направление"
 
 msgctxt "#30316"
 msgid "Name of new node"
-msgstr ""
+msgstr "Имя нового узла"
 
 msgctxt "#30317"
 msgid "Retrieving values..."
-msgstr ""
+msgstr "Получение значений..."
 
 msgctxt "#30318"
 msgid "Property"
-msgstr ""
+msgstr "Свойство"
 
 msgctxt "#30400"
 msgid "Unable to copy default library nodes"
-msgstr ""
+msgstr "Невозможно скопировать узлы медиатеки"
 
 msgctxt "#30401"
 msgid "Are you sure you want to delete this node?"
-msgstr ""
+msgstr "Вы действительно хотите удалить этот узел?"
 
 msgctxt "#30402"
 msgid "Are you sure you want to reset all nodes?"
-msgstr ""
+msgstr "Вы действительно хотите сбросить все узлы?"
 
 msgctxt "#30403"
 msgid "Are you sure you want to delete this property?"
-msgstr ""
+msgstr "Вы действительно хотите удалить это свойство?"
 
 msgctxt "#30404"
 msgid "Content parameter can't be deleted whilst this node still has an Order, Limit or Rule parameter."
-msgstr ""
+msgstr "Параметр содержимого не может быть удален, пока в этом узле установлены значения сортировки, лимита или правила."
 
 msgctxt "#30405"
 msgid "Are you sure you want to delete this rule?"
-msgstr ""
+msgstr "Вы действительно хотите удалить это правило?"
 
 msgctxt "#30406"
 msgid "Order requires a Content parameter"
-msgstr ""
+msgstr "Необходимо установить значение для содержания"
 
 msgctxt "#30407"
 msgid "Are you sure you want to delete this component?"
-msgstr ""
+msgstr "Вы действительно хотите удалить этот компонент?"
 
 msgctxt "#30408"
 msgid "Custom property..."
-msgstr ""
+msgstr "Пользовательское..."
 
 msgctxt "#30409"
 msgid "No options to select from were found"
-msgstr ""
+msgstr "Не найдено ни одного варианта для выбора"
 
 msgctxt "#30410"
 msgid "Getting plugin listings..."
-msgstr ""
+msgstr "Получение списков плагинов..."
 
 msgctxt "#30411"
 msgid "Link path to here"
-msgstr ""
+msgstr "Путь по ссылке здесь"
 
 msgctxt "#30500"
 msgid "Genre ID"
-msgstr ""
+msgstr "ID жанра"
 
 msgctxt "#30501"
 msgid "Country ID"
-msgstr ""
+msgstr "ID страны"
 
 msgctxt "#30502"
 msgid "Studio ID"
-msgstr ""
+msgstr "ID студии"
 
 msgctxt "#30503"
 msgid "Director ID"
-msgstr ""
+msgstr "ID режиссёра"
 
 msgctxt "#30504"
 msgid "Actor ID"
-msgstr ""
+msgstr "ID актёра"
 
 msgctxt "#30505"
 msgid "Set ID"
-msgstr ""
+msgstr "ID киноцикла"
 
 msgctxt "#30506"
 msgid "Tag ID"
-msgstr ""
+msgstr "ID метки"
 
 msgctxt "#30507"
 msgid "TV Show ID"
-msgstr ""
+msgstr "ID сериала"
 
 msgctxt "#30508"
 msgid "Artist ID"
-msgstr ""
+msgstr "ID исполнителя"
 
 msgctxt "#30509"
 msgid "Album ID"
-msgstr ""
+msgstr "ID альбома"
 
 msgctxt "#30510"
 msgid "Role ID"
-msgstr ""
+msgstr "ID роли"
 
 msgctxt "#30511"
 msgid "Song ID"
-msgstr ""
+msgstr "ID песни"
 
 msgctxt "#30512"
 msgid "Album artists only"
-msgstr ""
+msgstr "Только исполнители альбомов"
 
 msgctxt "#30513"
 msgid "Show singles"
-msgstr ""
+msgstr "Показывать синглы"
 
 msgctxt "#30514"
 msgid "Plugin..."
-msgstr ""
+msgstr "Плагин..."

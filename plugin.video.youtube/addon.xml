@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="7.4.3" provider-name="anxdpanic, bromix, MoojMidge">
+<addon id="plugin.video.youtube" name="YouTube" version="7.4.4" provider-name="anxdpanic, bromix, MoojMidge">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.27.1"/>
@@ -116,26 +116,20 @@
         <disclaimer lang="vi_VN">Plugin này không được xác nhận bởi Google</disclaimer>
         <disclaimer lang="zh_CN">此插件未被谷歌认可</disclaimer>
         <disclaimer lang="zh_TW">此附加元件未由Google支持</disclaimer>
-    <news>## v7.4.3
+    <news>## v7.4.4
 ### Fixed
-- Limit chunk size when reading stream proxy response
-- Fix regressions with accessing http urls
-- Improve handling of retries upon server error
-- Improve identification of post-live streams
-- Updates to resolve inconsistent Python2 string encoding/decoding
-- Ensure parameters to Kodi builtin functions are parsed as string literals
-- Allow trailing slashes in url of html pages served by internal http server
+- Fix not including FolderPath in current container details
+- Fix current plugin item window properties sometimes not updating correctly
+- Fix not updating remote history upon consecutive playback events for certain video types
+- Fix using unimplemented change to localisation identifier when showing API config page address
+- Fix play uri parameters/properties not being able to be forced off
+- Limit retrying feeds that cannot be accessed
 
 ### Changed
-- Rename Subscriptions to Subscribed Channels
-- Open confirmation dialog, with a link for further information, when sign in process fails
-- Update API config page html
-- Improve handling of API key settings changes
-- Detect and notify when API requests cannot be completed
-- Use consistent language for signing in/out
+- Improve responsiveness of service loop upon plugin invocation
+- Log redacted visitorData details
+- More aggressively utilise cached data for My Subscriptions feed failures
 
 ### New
-- Add button in API settings to view address of API config page
-- Fallback to playing channel uploads if no live stream is available
-- Add fallback method to load playlists when v3 API request cannot be made</news></extension>
+- Add option to play YouTube error notification video upon playback failure</news></extension>
 </addon>

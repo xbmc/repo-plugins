@@ -25,6 +25,7 @@ from .utils.redact import (
     parse_and_redact_uri,
     redact_auth_header,
     redact_params,
+    redact_value,
 )
 from .utils.system_version import current_system_version
 
@@ -89,9 +90,9 @@ class RecordFormatter(logging.Formatter):
                         process=parse_and_redact_uri,
                         url_marker='url: ',
                     )
-                record.stack_text = stack_text
+                record.stack_text = '\n' + stack_text
             if s[-1:] != '\n':
-                s += '\n\n'
+                s += '\n'
             s += record.stack_text
 
         if record.exc_info:
@@ -103,9 +104,9 @@ class RecordFormatter(logging.Formatter):
                         process=parse_and_redact_uri,
                         url_marker='url: ',
                     )
-                record.exc_text = exc_text
+                record.exc_text = '\n' + exc_text
             if s[-1:] != '\n':
-                s += '\n\n'
+                s += '\n'
             s += record.exc_text
 
         return s
@@ -189,6 +190,11 @@ class PrettyPrintFormatter(Formatter):
         # redact params
         if conversion == 'p':
             return self._pretty_printer.pformat(redact_params(value))
+        
+        # redact value
+        if conversion == 'v':
+            return self._pretty_printer.pformat(redact_value(value))
+
         if conversion in {'d', 'e', 't', 'u', 'w'}:
             _sort_dicts = sort_dicts = getattr(self._pretty_printer,
                                                '_sort_dicts',

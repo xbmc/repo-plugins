@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.channelme"
+       name="ChannelMe!"
+       version="1.0.0"
+       provider-name="GaianHelmers">
+  <requires>
+    <import addon="xbmc.python" version="3.0.1"/>
+  </requires>
+
+  <!-- The plugin: builds the channel list and handles playback clicks -->
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+
+  <!-- The background service: will auto-queue the next item (used from I.5 on) -->
+  <extension point="xbmc.service" library="service.py"/>
+
+  <!-- Library context items. Order = menu order: "Add to Channel" above, then
+       "Play Randomized" last. Add-to-Channel omits seasons (channels are built
+       from whole shows / sets / folders). -->
+  <extension point="kodi.context.item">
+    <menu id="kodi.core.main">
+      <item library="context_add.py">
+        <label>32112</label>
+        <visible>[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,set) | [ListItem.IsFolder + String.IsEmpty(ListItem.DBType) + !String.StartsWith(ListItem.FolderPath,plugin://) + !String.StartsWith(ListItem.FolderPath,addons://)]]</visible>
+      </item>
+      <item library="context.py">
+        <label>32110</label>
+        <visible>[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,season) | [ListItem.IsFolder + String.IsEmpty(ListItem.DBType) + !String.StartsWith(ListItem.FolderPath,plugin://) + !String.StartsWith(ListItem.FolderPath,addons://)]]</visible>
+      </item>
+    </menu>
+  </extension>
+
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Custom TV-style channels built from your library</summary>
+    <description lang="en_GB">Create channels that mix your shows and movies, then play them continuously. Each show advances in episode order while the choice of which title plays next can be serialized-random or pure random.</description>
+    <platform>all</platform>
+    <license>GPL-3.0-or-later</license>
+    <source>https://github.com/GaianHelmers/plugin.video.channelme</source>
+    <news>Maiden voyage of Channel Me! Create channels of any combination of movies and shows, randomized and serialized as desired. Enjoy granular control of playback settings, as well as control of channel resume points. English localization built in, ready for other language additions from volunteer translators.</news>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/ChannelMeFullscreenBackground.png</fanart>
+    </assets>
+  </extension>
+</addon>

@@ -1,0 +1,295 @@
+# Kodi Media Center language file
+# Addon Name: ChannelMe!
+# Addon id: plugin.video.channelme
+# Addon Provider: GaianHelmers
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.channelme\n"
+"Report-Msgid-Bugs-To: gaianhelmers@genomestudios.ca\n"
+"POT-Creation-Date: 2026-06-22 00:00+0000\n"
+"PO-Revision-Date: 2026-06-22 00:00+0000\n"
+"Last-Translator: GaianHelmers\n"
+"Language-Team: English (United Kingdom)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_gb\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Editor - sidebar categories
+msgctxt "#32001"
+msgid "Name"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Titles"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Mode"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Back-to-back"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Starting eps"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Artwork"
+msgstr ""
+
+# Editor - panel hints
+msgctxt "#32010"
+msgid "Type a name for this channel."
+msgstr ""
+
+msgctxt "#32011"
+msgid "Select the media to include in this channel."
+msgstr ""
+
+msgctxt "#32012"
+msgid "Determine the playback mode."
+msgstr ""
+
+msgctxt "#32013"
+msgid "Cap consecutive plays, or always play a fixed run, of the same title."
+msgstr ""
+
+msgctxt "#32014"
+msgid "Manually set where in the series the random will start from."
+msgstr ""
+
+msgctxt "#32015"
+msgid "Select the artwork this channel will display."
+msgstr ""
+
+# Editor - controls and dialogs
+msgctxt "#32020"
+msgid "New channel"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Edit channel"
+msgstr ""
+
+msgctxt "#32022"
+msgid "(not set)"
+msgstr ""
+
+msgctxt "#32023"
+msgid "(unnamed)"
+msgstr ""
+
+msgctxt "#32024"
+msgid "Search titles..."
+msgstr ""
+
+msgctxt "#32025"
+msgid "Search titles"
+msgstr ""
+
+msgctxt "#32026"
+msgid "Channel name"
+msgstr ""
+
+msgctxt "#32027"
+msgid "(select some TV shows or sets first)"
+msgstr ""
+
+msgctxt "#32028"
+msgid "(no episodes)"
+msgstr ""
+
+msgctxt "#32029"
+msgid "Give the channel a name first."
+msgstr ""
+
+msgctxt "#32030"
+msgid "Select at least one show or movie first."
+msgstr ""
+
+msgctxt "#32031"
+msgid "No playable episodes found for {0}."
+msgstr ""
+
+msgctxt "#32032"
+msgid "Start {0} at..."
+msgstr ""
+
+msgctxt "#32033"
+msgid "Save"
+msgstr ""
+
+msgctxt "#32034"
+msgid "Cancel"
+msgstr ""
+
+# Editor - type filters / list section headers
+msgctxt "#32040"
+msgid "TV"
+msgstr ""
+
+msgctxt "#32041"
+msgid "Sets"
+msgstr ""
+
+msgctxt "#32042"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#32043"
+msgid "Files"
+msgstr ""
+
+# Playback modes (long, shown in the editor)
+msgctxt "#32050"
+msgid "Serialized random (each show in episode order)"
+msgstr ""
+
+msgctxt "#32051"
+msgid "Pure random (any episode, any time)"
+msgstr ""
+
+# Playback modes (short, shown in the channel preview)
+msgctxt "#32052"
+msgid "Serialized random"
+msgstr ""
+
+msgctxt "#32053"
+msgid "Pure random"
+msgstr ""
+
+# Back-to-back / artwork option labels
+msgctxt "#32060"
+msgid "Unlimited"
+msgstr ""
+
+msgctxt "#32061"
+msgid "{0} in a row"
+msgstr ""
+
+msgctxt "#32062"
+msgid "Random (changes each reload)"
+msgstr ""
+
+# Back-to-back mode toggle (Up to = cap / Always = fixed run)
+msgctxt "#32065"
+msgid "Up to"
+msgstr ""
+
+msgctxt "#32066"
+msgid "Always"
+msgstr ""
+
+# Channel list and info panel
+msgctxt "#32070"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#32071"
+msgid "{0} Channel"
+msgstr ""
+
+msgctxt "#32072"
+msgid "Episodes:"
+msgstr ""
+
+msgctxt "#32073"
+msgid "Mode:"
+msgstr ""
+
+msgctxt "#32074"
+msgid "Back-to-back:"
+msgstr ""
+
+msgctxt "#32075"
+msgid "Titles ({0}):"
+msgstr ""
+
+msgctxt "#32076"
+msgid "[ + Add new channel ]"
+msgstr ""
+
+# Context menu
+msgctxt "#32080"
+msgid "Reset progress"
+msgstr ""
+
+msgctxt "#32081"
+msgid "Remove channel"
+msgstr ""
+
+msgctxt "#32082"
+msgid "Add new channel"
+msgstr ""
+
+# Playback notifications
+msgctxt "#32090"
+msgid "This channel has no titles yet."
+msgstr ""
+
+msgctxt "#32091"
+msgid "No playable episodes found for this channel."
+msgstr ""
+
+msgctxt "#32092"
+msgid "Now playing: {0}"
+msgstr ""
+
+# Library context menu (Play Randomized)
+msgctxt "#32110"
+msgid "Play Randomized"
+msgstr ""
+
+msgctxt "#32111"
+msgid "No playable videos found."
+msgstr ""
+
+# Library context menu (Add to Channel)
+msgctxt "#32112"
+msgid "Add to Channel"
+msgstr ""
+
+msgctxt "#32113"
+msgid "Add to which channel?"
+msgstr ""
+
+msgctxt "#32114"
+msgid "[ New channel ]"
+msgstr ""
+
+msgctxt "#32115"
+msgid "Added {0} to {1}"
+msgstr ""
+
+msgctxt "#32116"
+msgid "{0} is already in {1}"
+msgstr ""
+
+msgctxt "#32117"
+msgid "Could not add this item."
+msgstr ""
+
+# Add / edit / remove notifications
+msgctxt "#32100"
+msgid "Added channel: {0}"
+msgstr ""
+
+msgctxt "#32101"
+msgid "Updated channel: {0}"
+msgstr ""
+
+msgctxt "#32102"
+msgid "Progress reset"
+msgstr ""
+
+msgctxt "#32103"
+msgid "Removed channel: {0}"
+msgstr ""
+
+msgctxt "#32104"
+msgid "Remove channel \"{0}\"?"
+msgstr ""

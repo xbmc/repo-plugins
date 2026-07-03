@@ -2,7 +2,7 @@
 # pylint: disable=import-error
 from xbmcswift2 import xbmc
 from resources.lib import hof
-from resources.lib.mapper.arteapicategory import ArteApiCategory
+from resources.lib import utils
 from resources.lib.mapper.arteitem import ArteVideoItem
 from resources.lib.mapper.arteitem import ArteTvVideoItem
 from resources.lib.mapper.arteitem import ArteHbbTvVideoItem
@@ -10,6 +10,20 @@ from resources.lib.mapper.arteitem import ArteCollectionItem
 from resources.lib.mapper.artezone import ArteZone
 from resources.lib.mapper.artefavorites import ArteFavorites
 from resources.lib.mapper.artehistory import ArteHistory
+
+
+def map_category_item(plugin, item, category_code):
+    """Return menu entry to access a category content"""
+    title = item.get('title')
+    path = plugin.url_for(
+        'sub_category_by_title',
+        category_code=category_code,
+        sub_category_title=utils.encode_string(title))
+
+    return {
+        'label': title,
+        'path': path
+    }
 
 
 def map_generic_item(plugin, item, show_video_streams):
@@ -75,7 +89,8 @@ def map_video_as_playlist_item(plugin, item):
         kind = kind.get('code')
 
     path = plugin.url_for(
-        'play_siblings', kind=kind, program_id=program_id, audio_slot='1', from_playlist='1')
+        'play_siblings', kind=kind, program_id=program_id,
+        mpaa="Unknown", audio_slot='1', from_playlist='1')
     result = ArteVideoItem(plugin, item).build_item(path, True)
     return result
 
@@ -91,7 +106,7 @@ def map_video_as_item(plugin, item):
     """Create a playable video menu item from a json returned by Arte HBBTV API"""
     program_id = item.get('programId')
     kind = item.get('kind')
-    path = plugin.url_for('play', kind=kind, program_id=program_id)
+    path = plugin.url_for('play', kind=kind, program_id=program_id, mpaa="Unknown")
     return ArteHbbTvVideoItem(plugin, item).build_item(path, True)
 
 
@@ -121,7 +136,8 @@ def map_streams(plugin, item, streams, quality):
         video_item['label'] = audio_label
         video_item['is_playable'] = True
         video_item['path'] = plugin.url_for(
-            'play_specific', kind=kind, program_id=program_id, audio_slot=str(audio_slot))
+            'play_specific', kind=kind, program_id=program_id,
+            mpaa='Unknown', audio_slot=str(audio_slot))
 
         return video_item
 
@@ -139,8 +155,8 @@ def map_zone_to_item(plugin, settings, zone, cached_categories):
         menu_item = ArteHistory(plugin, settings).build_item(title)
     elif zone.get('content') and zone.get('content').get('data'):
         menu_item = ArteZone(plugin, settings, cached_categories).build_item(zone)
-    elif zone.get('link') and zone.get('link').get('page'):
-        menu_item = ArteApiCategory(plugin, settings, cached_categories).build_item(zone)
+    elif zone.get('link'):
+        menu_item = map_api_categories_item(plugin, zone)
     else:
         xbmc.log(f"Zone \"{title}\" will be ignored. No link. No content. id unknown.")
 
@@ -157,6 +173,16 @@ def get_authenticated_content_type(artetv_zone):
     if not isinstance(artetv_zone.get('authenticatedContent'), dict):
         return None
     return artetv_zone.get('authenticatedContent', {}).get('contentId', None)
+
+
+def map_api_categories_item(plugin, item):
+    """Return a menu entry to access content of category item.
+    :param dict item: JSON node item
+    """
+    return {
+        'label': item.get('title'),
+        'path': plugin.url_for('api_category', category_code=item.get('link').get('page'))
+    }
 
 
 def map_playable(streams, quality, audio_slot, match):

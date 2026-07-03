@@ -10,6 +10,7 @@ import dateutil.parser
 from xbmcswift2 import xbmc
 # pylint: disable=import-error
 from xbmcswift2 import actions
+from resources.lib import utils
 
 
 # pylint: disable=too-few-public-methods
@@ -67,6 +68,7 @@ class ArteVideoItem(ArteItem):
                 'duration': self._get_duration(),
                 'plot': item.get('shortDescription') or item.get('fullDescription'),
                 'plotoutline': item.get('teaserText'),
+                'mpaa': self._get_mpaa_age_rating(),
                 'aired': self._get_air_date()
             },
             'properties': {
@@ -101,6 +103,19 @@ class ArteVideoItem(ArteItem):
             if isinstance(duration.get('seconds', None), int):
                 return duration.get('seconds')
         return None
+
+    def _get_mpaa_age_rating(self):
+        """
+        Return mpaa mapped from age rating
+
+        G – General Audiences
+        PG – Parental Guidance Suggested
+        PG-13 – Parents Strongly Cautioned
+        R – Restricted
+        NC-17 – Adults Only
+        """
+        # 'Unknown' instead of None or '' to avoid TypeError with addon routes
+        return 'Unknown'
 
     def _get_air_date(self):
         """
@@ -159,7 +174,8 @@ class ArteTvVideoItem(ArteVideoItem):
         Return video menu item to show content from Arte TV API.
         Manage specificities of various types : playlist, menu or video items
         """
-        program_id = self._get_program_id()
+        item = self.json_dict
+        program_id = item.get('programId')
         kind = self._get_kind()
         if kind == 'EXTERNAL':
             return None
@@ -168,7 +184,9 @@ class ArteTvVideoItem(ArteVideoItem):
         if self.is_playlist():
             if kind in self.PREFERED_KINDS:
                 # content_type = Content.PLAYLIST
-                path = self.plugin.url_for('play_collection', kind=kind, collection_id=program_id)
+                path = self.plugin.url_for(
+                    'play_collection', kind=kind, collection_id=program_id,
+                    mpaa=self._get_mpaa_age_rating())
                 is_playable = True
                 additional_context_menu = [(
                     self.plugin.addon.getLocalizedString(30011),
@@ -181,7 +199,9 @@ class ArteTvVideoItem(ArteVideoItem):
                 is_playable = False
         else:
             # content_type = Content.VIDEO
-            path = self.plugin.url_for('play', kind=kind, program_id=program_id)
+            path = self.plugin.url_for(
+                'play', kind=kind, program_id=program_id,
+                mpaa=self._get_mpaa_age_rating())
             is_playable = True
 
         xbmc_item = self.build_item(path, is_playable)
@@ -207,7 +227,6 @@ class ArteTvVideoItem(ArteVideoItem):
                     'playcount': '1' if progress >= 0.95 else '0',
                 },
                 'properties': {
-                    'fanart_image': self._get_image_url('1920x1080', False),
                     # ResumeTime and TotalTime deprecated.
                     # Use InfoTagVideo.setResumePoint() instead.
                     'ResumeTime': str(self._get_time_offset()),
@@ -218,7 +237,11 @@ class ArteTvVideoItem(ArteVideoItem):
             basic_item['info'] = {**basic_item['info'], **artetv_item['info']}
             basic_item['properties'] = {**basic_item['properties'], **artetv_item['properties']}
 
+        basic_item['properties']['fanart_image'] = self._get_image_url('1920x1080', False)
         return basic_item
+
+    def _get_mpaa_age_rating(self):
+        return utils.mpaa_from_age(self.json_dict.get('ageRating', None))
 
     def _get_air_date(self):
         airdate = self.json_dict.get('beginsAt')
@@ -285,19 +308,6 @@ class ArteTvVideoItem(ArteVideoItem):
     def _get_time_offset(self):
         item = self.json_dict
         return item.get('lastviewed') and item.get('lastviewed').get('timecode') or 0
-
-    def _get_program_id(self):
-        """
-        Return item program's identifier or
-        item's identifier and fix JSON dictionary if None in some playlist
-        """
-        item = self.json_dict
-        program_id = item.get('programId')
-        if program_id is None:
-            program_id = item.get('id')
-            item['programId'] = program_id
-
-        return program_id
 
 
 class ArteHbbTvVideoItem(ArteVideoItem):

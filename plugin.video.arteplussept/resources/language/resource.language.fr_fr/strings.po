@@ -176,3 +176,7 @@ msgstr "Echec de la purge des favoris"
 msgctxt "#30043"
 msgid "Do you really want to purge Arte favorites ?"
 msgstr "Voulez vous vraiment purger les favoris Arte ?"
+
+msgctxt "#30055"
+msgid "{label} - This program contains scenes not suitable for young or sensitive audience"
+msgstr "{label} - Ce programme comporte des scènes déconseillées a un public jeune ou sensible"

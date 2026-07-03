@@ -21,7 +21,7 @@ class ArteCollection:
 
     def _build_menu(self, json_dict, collection_type, **nav_arg):
         """
-        Build a menu to acces items maanged inside the collection.
+        Build a menu to acces items managed inside the collection.
         It builds previous page and next page items in the menu,
         if additional pages are available before or after respectively.
         """

@@ -176,3 +176,7 @@ msgstr "Favoritele nu au putut fi șterse"
 msgctxt "#30043"
 msgid "Do you really want to purge Arte favorites ?"
 msgstr "Doriți cu adevărat să ștergeți favoritele Arte ?"
+
+msgctxt "#30055"
+msgid "{label} - This program contains scenes not suitable for young or sensitive audience"
+msgstr "{label} - Programul conține scene care nu sunt potrivite pentru oamenii tineri sau sensibili"

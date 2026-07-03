@@ -177,3 +177,7 @@ msgstr "Impossibile eliminare i preferiti"
 msgctxt "#30043"
 msgid "Do you really want to purge Arte favorites ?"
 msgstr "Vuoi davvero eliminare i preferiti di Arte ?"
+
+msgctxt "#30055"
+msgid "{label} - This program contains scenes not suitable for young or sensitive audience"
+msgstr "{label} - Questo programma contiene scene sconsigliate ad un pubblico giovane o sensible"

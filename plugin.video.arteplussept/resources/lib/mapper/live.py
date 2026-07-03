@@ -5,7 +5,9 @@ for map_playable and match_hbbtv
 
 import html
 # the goal is to break/limit this dependency as much as possible
+from resources.lib.mapper import mapper
 from resources.lib.mapper.arteitem import ArteTvVideoItem
+from resources.lib import utils
 
 
 class ArteLiveItem(ArteTvVideoItem):
@@ -26,11 +28,10 @@ class ArteLiveItem(ArteTvVideoItem):
             label += f" - {html.unescape(subtitle)}"
         return label
 
-    def build_item_live(self):
+    def build_item_live(self, quality, audio_slot):
         """Return menu entry to watch live content from Arte TV API"""
+        # program_id = item.get('id')
         item = self.json_dict
-        # Remove language at the end e.g. _fr, _de
-        program_id = item.get('id')[:-3]
         attr = item.get('attributes')
         meta = attr.get('metadata')
 
@@ -48,10 +49,13 @@ class ArteLiveItem(ArteTvVideoItem):
             #    smallerImage = item.get('images')[0].get('alternateResolutions')[3]
             #    if smallerImage and smallerImage.get('url'):
             #        thumbnailUrl = smallerImage.get('url').replace('?type=TEXT', '')
+        stream_url = mapper.map_playable(
+            attr.get('streams'), quality, audio_slot, mapper.match_artetv).get('path')
 
         return {
             'label': self.format_title_and_subtitle(),
-            'path': self.plugin.url_for('play', kind='SHOW', program_id=program_id),
+            'path': self.plugin.url_for(
+                'play_live', stream_url=stream_url, mpaa=self._get_mpaa_age_restriction()),
             # playing the stream from program id makes the live starts from the beginning
             # while it starts the video like the live tv, with the above
             #  'path': plugin.url_for('play', kind='SHOW', program_id=programId.replace('_fr', '')),
@@ -62,11 +66,15 @@ class ArteLiveItem(ArteTvVideoItem):
                 'title': meta.get('title'),
                 'duration': duration,
                 'plot': meta.get('description'),
-                # 'director': item.get('director'),
-                # 'aired': airdate
                 'playcount': '0',
+                'mpaa': self._get_mpaa_age_restriction(),
             },
             'properties': {
                 'fanart_image': fanart_url,
             }
         }
+
+    def _get_mpaa_age_restriction(self):
+        item = self.json_dict
+        age_restriction = item.get('attributes').get('restriction').get('ageRestriction', None)
+        return utils.mpaa_from_age(age_restriction)

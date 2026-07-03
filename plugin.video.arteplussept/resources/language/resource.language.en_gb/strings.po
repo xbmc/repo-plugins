@@ -175,3 +175,7 @@ msgstr ""
 msgctxt "#30043"
 msgid "Do you really want to purge Arte favorites ?"
 msgstr ""
+
+msgctxt "#30055"
+msgid "{label} - This program contains scenes not suitable for young or sensitive audience"
+msgstr ""

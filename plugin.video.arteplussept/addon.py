@@ -28,13 +28,13 @@ from xbmcswift2 import Plugin
 from xbmcswift2 import xbmc
 from resources.lib import user
 from resources.lib import view
-from resources.lib.mapper.arteapicategory import ArteApiCategory
 from resources.lib.mapper.artefavorites import ArteFavorites
 from resources.lib.mapper.artehistory import ArteHistory
 from resources.lib.mapper.artesearch import ArteSearch
 from resources.lib.mapper.artezone import ArteZone
 from resources.lib.player import Player
 from resources.lib.settings import Settings
+from resources.lib import utils
 
 # global declarations
 # plugin stuff
@@ -52,9 +52,7 @@ def index():
 @plugin.route('/api_category/<category_code>', name='api_category')
 def api_category(category_code):
     """Display the menu for a category that needs an api call"""
-    return ArteApiCategory(plugin, settings,
-                           plugin.get_storage('cached_categories', TTL=60)) \
-        .build_menu(category_code)
+    return view.build_api_category(plugin, category_code, settings)
 
 
 @plugin.route('/cached_category/<zone_id>', name='cached_category')
@@ -71,8 +69,8 @@ def category_page(zone_id, page, page_id):
         .build_menu(zone_id, page, page_id)
 
 
-@plugin.route('/play_collection/<kind>/<collection_id>', name='play_collection')
-def play_collection(kind, collection_id):
+@plugin.route('/play_collection/<kind>/<collection_id>/<mpaa>', name='play_collection')
+def play_collection(kind, collection_id, mpaa):
     """
     Load a playlist and start playing its first item.
     """
@@ -87,6 +85,7 @@ def play_collection(kind, collection_id):
     # try to seek parent collection, when out of the context of playlist creation
     # Start playing with the first playlist item
     result = plugin.set_resolved_url(plugin.add_to_playlist(playlist['collection'])[0])
+    utils.warn_if_age_restricted(plugin, mpaa)
     synch_during_playback(synched_player)
     del synched_player
     return result
@@ -157,14 +156,14 @@ def streams(program_id):
     return plugin.finish(view.build_video_streams(plugin, settings, program_id))
 
 
+@plugin.route('/play_live/<stream_url>/<mpaa>', name='play_live')
+def play_live(stream_url, mpaa):
+    """Play live content."""
+    utils.warn_if_age_restricted(plugin, mpaa)
+    return plugin.set_resolved_url({'path': stream_url})
+
 # Cannot read video new arte tv program API. Blocked by FFMPEG issue #10149
 # @plugin.route('/play_artetv/<program_id>', name='play_artetv')
-#
-# @plugin.route('/play_live/<stream_url>', name='play_live')
-# def play_live(stream_url):
-#    """Play live content."""
-#    return plugin.set_resolved_url({'path': stream_url})
-#
 # def play_artetv(program_id):
 #     item = api.player_video(settings.language, program_id)
 #     attr = item.get('attributes')
@@ -172,10 +171,10 @@ def streams(program_id):
 #     return plugin.set_resolved_url({'path': streamUrl})
 
 
-@plugin.route('/play/<kind>/<program_id>', name='play')
-@plugin.route('/play/<kind>/<program_id>/<audio_slot>', name='play_specific')
-@plugin.route('/play/<kind>/<program_id>/<audio_slot>/<from_playlist>', name='play_siblings')
-def play(kind, program_id, audio_slot='1', from_playlist='0'):
+@plugin.route('/play/<kind>/<program_id>/<mpaa>', name='play')
+@plugin.route('/play/<kind>/<program_id>/<mpaa>/<audio_slot>', name='play_specific')
+@plugin.route('/play/<kind>/<program_id>/<mpaa>/<audio_slot>/<from_playlist>', name='play_siblings')
+def play(kind, program_id, mpaa, audio_slot='1', from_playlist='0'):
     """Play content identified with program_id.
     :param str kind: an enum in TODO (e.g. TRAILER, COLLECTION, LINK, CLIP, ...)
     :param str audio_slot: a numeric to identify the audio stream to use e.g. 1 2
@@ -185,14 +184,19 @@ def play(kind, program_id, audio_slot='1', from_playlist='0'):
     sibling_playlist = None
     if from_playlist == '0':
         sibling_playlist = view.build_sibling_playlist(plugin, settings, program_id)
+    played_item = None
     if sibling_playlist is not None and len(sibling_playlist['collection']) > 1:
         # Empty playlist, otherwise requested video is present twice in the playlist
         xbmc.PlayList(xbmc.PLAYLIST_VIDEO).clear()
         # Start playing with the first playlist item
-        result = plugin.set_resolved_url(plugin.add_to_playlist(sibling_playlist['collection'])[0])
+        played_item = plugin.add_to_playlist(sibling_playlist['collection'])[0]
+        result = plugin.set_resolved_url()
     else:
-        item = view.build_stream_url(plugin, kind, program_id, int(audio_slot), settings)
-        result = plugin.set_resolved_url(item)
+        played_item = view.build_stream_url(plugin, kind, program_id, int(audio_slot), settings)
+    result = plugin.set_resolved_url(played_item)
+
+    utils.warn_if_age_restricted(plugin, mpaa)
+
     synch_during_playback(synched_player)
     del synched_player
     return result

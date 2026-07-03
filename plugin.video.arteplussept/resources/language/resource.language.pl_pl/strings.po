@@ -176,3 +176,7 @@ msgstr "Nie udało się wyczyścić ulubionych"
 msgctxt "#30043"
 msgid "Do you really want to purge Arte favorites ?"
 msgstr "Czy naprawdę chcesz wyczyścić ulubione Arte ?"
+
+msgctxt "#30055"
+msgid "{label} - This program contains scenes not suitable for young or sensitive audience"
+msgstr "{label} - Ten program zawiera sceny, które nie są odpowiednie dla młodych lub wrażliwych widzów"

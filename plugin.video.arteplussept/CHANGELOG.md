@@ -1,17 +1,10 @@
 Changelog also available in file ./addon.xml xpath /addon/extension/news following Kodi guidelines https://kodi.wiki/view/Add-on_structure#changelog.txt
 
-v1.4.4 (2025-11-24)
-- Fix home page display
-- Fix authentication by preventing persisting token
-- Fix category available through link i.e. API call to HBBTV
-
-v1.4.3 (2025-8-4)
-- Fix playing live stream (disabling HLS).
-
-v1.4.2 (2024-1-3)
-- Rename quality parameter.
-- Use https to get HBB TV Stream info.
-- Fix bug preventing to open series menu
+v1.4.5 (2026-07-01)
+- Fix home menu display related to Arte r-proxy changes.
+- Remove auth token remote persistence.
+- Add age restriction MPAA info to videos.
+- Warn during playback if MPAA is 'PG-13', 'R' or 'NC-17'.
 
 v1.4.1 (2023-10-10)
 - Fix playing videos with siblings.

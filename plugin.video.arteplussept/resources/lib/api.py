@@ -27,7 +27,6 @@ _HBBTV_ENDPOINTS = {
 
 # Arte TV API - Used on Arte TV website
 _ARTETV_URL = 'https://api.arte.tv/api'
-ARTETV_RPROXY_URL = 'https://arte.tv/api/rproxy'
 _ARTETV_AUTH_URL = 'https://auth.arte.tv/ssologin'
 ARTETV_ENDPOINTS = {
     # POST
@@ -54,12 +53,9 @@ ARTETV_ENDPOINTS = {
     'purge_last_viewed': '/sso/v3/lastvieweds/purge',
     # program_id can be 103520-000-A or LIVE
     'player': '/player/v2/config/{lang}/{program_id}',
-    # rproxy
     'program': '/emac/v4/{lang}/web/programs/{program_id}',
-    # rproxy
     # category=HOME, CIN, SER, SEARCH client=app, tv, web, orange, free
     'page': '/emac/v4/{lang}/{client}/pages/{category}/',
-    # rproxy
     # zone_id=167d478a-b668-42a3-b88a-f01a436c7394...
     # keep path and url in a snigle place for readibility
     # page_id=SEARCH, HOME...
@@ -68,7 +64,7 @@ ARTETV_ENDPOINTS = {
         'abv=A&authorizedCountry={lang}&page={page}&pageId={page_id}&' +
         'query={query}&zoneIndexInPage=0',
     # not yet impl.
-    # rproxy date=2023-01-17
+    # date=2023-01-17
     # 'guide_tv': '/emac/v3/{lang}/{client}/pages/TV_GUIDE/?day={DATE}',
     # auth api
     'custom_token': '/setCustomToken',
@@ -198,8 +194,8 @@ def player_video(lang, program_id):
 
 def program_video(lang, program_id):
     """Get the info of content program_id from Arte TV API."""
-    url = ARTETV_RPROXY_URL + ARTETV_ENDPOINTS['program'].format(lang=lang, program_id=program_id)
-    return _load_json_full_url('artetv_program', url, None).get('value', {})
+    url = _ARTETV_URL + ARTETV_ENDPOINTS['program'].format(lang=lang, program_id=program_id)
+    return _load_json_full_url('artetv_program', url, None)
 
 
 def get_parent_collection(lang, program_id):
@@ -275,9 +271,9 @@ def streams(kind, program_id, lang):
 
 def page_content(lang):
     """Get content to be display in a page. It can be a page for a category or the home page."""
-    url = ARTETV_RPROXY_URL + ARTETV_ENDPOINTS['page'].format(
+    url = _ARTETV_URL + ARTETV_ENDPOINTS['page'].format(
         lang=lang, category='HOME', client='tv')
-    return _load_json_full_url('artetv_home', url, ARTETV_HEADERS).get('value', [])
+    return _load_json_full_url('artetv_home', url, ARTETV_HEADERS)
 
 
 def init_search(lang, query):
@@ -285,29 +281,29 @@ def init_search(lang, query):
     Initialize a search for content in Arte TV API.
     Search will be identified by zone id then.
     """
-    url = ARTETV_RPROXY_URL + ARTETV_ENDPOINTS['page'].format(
+    url = _ARTETV_URL + ARTETV_ENDPOINTS['page'].format(
         lang=lang, category='SEARCH', client='tv')
     params = {'page': '1', 'query': query}
-    return _load_json_full_url('artetv_initsearch', url, ARTETV_HEADERS, params).get(
-        'value', []).get('zones', [None])[0]
+    return _load_json_full_url(
+        'artetv_initsearch', url, ARTETV_HEADERS, params).get('zones', [None])[0]
 
 
 def get_search_page(lang, zone_id, page_idx, query):
     """
     Navigate in pages of a search identified by zone_id.
     """
-    url = ARTETV_RPROXY_URL + ARTETV_ENDPOINTS['zone'].format(
+    url = _ARTETV_URL + ARTETV_ENDPOINTS['zone'].format(
         lang=lang, client='tv', zone_id=zone_id, page=page_idx, page_id='SEARCH', query=query)
-    return _load_json_full_url('artetv_getsearchpage', url, ARTETV_HEADERS).get('value', [])
+    return _load_json_full_url('artetv_getsearchpage', url, ARTETV_HEADERS)
 
 
 def get_zone_page(lang, zone_id, page_idx, page_id):
     """
     Navigate in pages of a zone identified by zone_id.
     """
-    url = ARTETV_RPROXY_URL + ARTETV_ENDPOINTS['zone'].format(
+    url = _ARTETV_URL + ARTETV_ENDPOINTS['zone'].format(
         lang=lang, client='tv', zone_id=zone_id, page=page_idx, page_id=page_id, query='null')
-    return _load_json_full_url('artetv_getsearchpage', url, ARTETV_HEADERS).get('value', [])
+    return _load_json_full_url('artetv_getsearchpage', url, ARTETV_HEADERS)
 
 
 def _load_json(request_scope, path, headers=None):
@@ -361,11 +357,6 @@ def get_and_persist_token_in_arte(plugin, username, password):
     # exit if authentication failed
     if not tokens:
         return None
-
-    # Disable failing persisting token due to new SSO v4
-    # try to persist token in arte to be allowed to reuse; otherwise token is one-shot
-    # if not persist_token_in_arte(plugin, tokens):
-    #    return None
 
     # return persisted or unpersisted token anyway
     return tokens

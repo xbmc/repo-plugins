@@ -1,3 +1,11 @@
+2.4.5 - 04 Jul 2026
+ - remove old requests module and use native urllib
+ - Fix playback issues
+
+2.4.4 - 02 Nov 2024
+ - Use videoinfotag instead of setinfo on Kodi 20+
+ - Fix playback issues
+
 2.4.3 [20211102] 
  - Fix search function prompting for keyboard input after playback
  - Fix live playback issues

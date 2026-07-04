@@ -21,9 +21,15 @@ import sys
 import re
 import json
 import datetime
-import tempfile
-import requests
-from six.moves import urllib_parse, html_parser
+from resources.lib import client
+from six.moves import urllib_parse, urllib_error
+# HTMLParser() deprecated in Python 3.4 and removed in Python 3.9
+if sys.version_info >= (3, 4, 0):
+    import html
+    _html_parser = html
+else:
+    from six.moves import html_parser
+    _html_parser = html_parser.HTMLParser()
 
 pluginhandle = int(sys.argv[1])
 addon = xbmcaddon.Addon()
@@ -56,7 +62,6 @@ if force_mode:
     video_mode = addon.getSetting("VideoMode")
 
 maxVideoQuality = addon.getSetting("maxVideoQuality")
-downloadDir = addon.getSetting("downloadDir")
 qual = ['240', '380', '480', '720', '1080', '1440', '2160']
 maxVideoQuality = qual[int(maxVideoQuality)]
 language = addon.getSetting("language")
@@ -72,27 +77,7 @@ urlMain = "https://api.dailymotion.com"
 _UA = 'Mozilla/5.0 (Linux; Android 7.1.1; Pixel Build/NMF26O) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 Mobile Safari/537.36'
 
 
-class MLStripper(html_parser.HTMLParser):
-    def __init__(self):
-        self.reset()
-        self.fed = []
-
-    def handle_data(self, d):
-        self.fed.append(d)
-
-    def get_data(self):
-        return ''.join(self.fed)
-
-
-def strip_tags(html):
-    parser = html_parser.HTMLParser()
-    html = parser.unescape(html)
-    s = MLStripper()
-    s.feed(html)
-    return s.get_data()
-
-
-def strip_tags2(text):
+def strip_tags(text):
     clean = re.compile('<.*?>')
     return re.sub(clean, '', text)
 
@@ -171,7 +156,6 @@ def personalMain():
 
 def listUserPlaylists(url):
     content = getUrl2(url)
-    content = json.loads(content)
     for item in content['list']:
         vid = item['id']
         title = item['name'].encode('utf-8') if six.PY2 else item['name']
@@ -206,7 +190,6 @@ def favouriteUsers():
 
 def listChannels():
     content = getUrl2("{0}/channels?family_filter={1}&localization={2}".format(urlMain, familyFilter, language))
-    content = json.loads(content)
     for item in content['list']:
         cid = item['id']
         title = item['name'].encode('utf-8') if six.PY2 else item['name']
@@ -264,12 +247,11 @@ def sortUsers2(url):
 def listVideos(url):
     xbmcplugin.setContent(pluginhandle, 'episodes')
     content = getUrl2(url)
-    content = json.loads(content)
     count = 1
     for item in content['list']:
         vid = item['id']
         title = item['title'].encode('utf-8') if six.PY2 else item['title']
-        desc = strip_tags(item['description']).encode('utf-8') if six.PY2 else strip_tags2(item['description'])
+        desc = strip_tags(item['description']).encode('utf-8') if six.PY2 else strip_tags(item['description'])
         duration = item['duration']
         user = item['owner.username']
         date = item['taken_time']
@@ -307,7 +289,6 @@ def listVideos(url):
 
 def listUsers(url):
     content = getUrl2(url)
-    content = json.loads(content)
     for item in content['list']:
         if item['username']:
             user = item['username'].encode('utf-8') if six.PY2 else item['username']
@@ -327,7 +308,6 @@ def listUsers(url):
 
 def listLive(url):
     content = getUrl2(url)
-    content = json.loads(content)
     for item in content['list']:
         title = item['title'].encode('utf-8') if six.PY2 else item['title']
         vid = item['id']
@@ -382,10 +362,9 @@ def getStreamUrl(vid, live=False):
                'Referer': 'https://www.dailymotion.com/'}
     cookie = {'lang': language,
               'ff': "on" if familyFilter == "1" else "off"}
-    r = requests.get("https://www.dailymotion.com/player/metadata/video/{0}".format(vid), headers=headers, cookies=cookie)
-    content = r.json()
+    content = client.request("https://www.dailymotion.com/player/metadata/video/{0}".format(vid), headers=headers, cookie=cookie)
     if content.get('error'):
-        Error = (content['error']['type'])
+        Error = (content['error']['message'])
         xbmcgui.Dialog().notification('Info:', Error, _icon, 5000, False)
         return
     else:
@@ -406,10 +385,8 @@ def getStreamUrl(vid, live=False):
                 if m_url:
                     if not live:
                         if source == "auto":
-                            mbtext = requests.get(m_url, headers=headers).text
-                            mb = re.findall('NAME="([^"]+)",PROGRESSIVE-URI="([^"]+)"', mbtext)
-                            if not mb or checkUrl(mb[-1][1].split('#cell')[0]) is False:
-                                mb = re.findall(r'NAME="([^"]+)".*\n([^\n]+)', mbtext)
+                            mbtext = client.request(m_url, headers=headers)
+                            mb = re.findall(r'NAME="(\d+)".*\n([^\n]+)', mbtext)
                             mb = sorted(mb, key=s, reverse=True)
                             for quality, strurl in mb:
                                 quality = quality.split("@")[0]
@@ -427,10 +404,11 @@ def getStreamUrl(vid, live=False):
                         if '.m3u8?sec' in m_url:
                             m_url1 = m_url.split('?sec=')
                             the_url = '{0}?redirect=0&sec={1}'.format(m_url1[0], urllib_parse.quote(m_url1[1]))
-                            rr = requests.get(the_url, cookies=r.cookies.get_dict(), headers=headers)
-                            if rr.status_code > 200:
-                                rr = requests.get(m_url, cookies=r.cookies.get_dict(), headers=headers)
-                            mb = re.findall('NAME="([^"]+)"\n(.+)', rr.text)
+                            try:
+                                rr = client.request(the_url, headers=headers)
+                            except urllib_error.HTTPError:
+                                rr = client.request(m_url, headers=headers)
+                            mb = re.findall('NAME="([^"]+)"\n(.+)', rr)
                             mb = sorted(mb, key=s, reverse=True)
                             for quality, strurl in mb:
                                 quality = quality.split("@")[0]
@@ -450,14 +428,12 @@ def getStreamUrl(vid, live=False):
                 xbmc.log("DAILYMOTION - other m_url = {0}".format(m_url), xbmc.LOGDEBUG)
                 m_url = m_url.replace('dvr=true&', '')
                 if '.m3u8?sec' in m_url:
-                    rr = requests.get(m_url, cookies=r.cookies.get_dict(), headers=headers)
-                    mburl = re.findall('(http.+)', rr.text)[0].split('#cell')[0]
-                    if rr.headers.get('set-cookie'):
-                        xbmc.log('DAILYMOTION - adding cookie to url', xbmc.LOGDEBUG)
-                        strurl = '{0}|Cookie={1}'.format(mburl, rr.headers['set-cookie'])
-                    else:
-                        mb = requests.get(mburl, headers=headers).text
-                        mb = re.findall('NAME="([^"]+)"\n(.+)', mb)
+                    rr = client.request(m_url, headers=headers)
+                    mburl = re.findall('(http.+)', rr)[0].split('#cell')[0]
+                    xbmc.log("DAILYMOTION - other mburl = {0}".format(mburl), xbmc.LOGDEBUG)
+                    mb = client.request(mburl, headers=headers)
+                    mb = re.findall('NAME="([^"]+)"\n(.+)', mb)
+                    if mb:
                         mb = sorted(mb, key=s, reverse=True)
                         for quality, strurl in mb:
                             quality = quality.split("@")[0]
@@ -466,6 +442,8 @@ def getStreamUrl(vid, live=False):
                                     strurl1 = re.findall('(.+/)', mburl)[0]
                                     strurl = strurl1 + strurl
                                 break
+                    else:
+                        strurl = mburl
 
                     xbmc.log("DAILYMOTION - Calculated url = {0}".format(strurl), xbmc.LOGDEBUG)
                     return strurl
@@ -475,47 +453,6 @@ def queueVideo(url, name):
     playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
     listitem = xbmcgui.ListItem(name)
     playlist.add(url, listitem)
-
-
-def downloadVideo(title, vid):
-    global downloadDir
-    if not downloadDir:
-        xbmcgui.Dialog().notification('Download:', translation(30110), _icon, 5000, False)
-        return
-    url, hstr = getStreamUrl(vid).split('|')
-    if six.PY2:
-        vidfile = xbmc.makeLegalFilename((downloadDir + title.decode('utf-8') + '.mp4').encode('utf-8'))
-    else:
-        vidfile = xbmcvfs.makeLegalFilename(downloadDir + title + '.mp4')
-    if not xbmcvfs.exists(vidfile):
-        tmp_file = tempfile.mktemp(dir=downloadDir, suffix='.mp4')
-        if six.PY2:
-            tmp_file = xbmc.makeLegalFilename(tmp_file)
-        else:
-            tmp_file = xbmcvfs.makeLegalFilename(tmp_file)
-        pDialog.create('Dailymotion', '{0}[CR]{1}'.format(translation(30044), title))
-        dfile = requests.get(url, headers=dict(urllib_parse.parse_qsl(hstr)), stream=True)
-        totalsize = float(dfile.headers['content-length'])
-        handle = open(tmp_file, "wb")
-        chunks = 0
-        for chunk in dfile.iter_content(chunk_size=2097152):
-            if chunk:  # filter out keep-alive new chunks
-                handle.write(chunk)
-                chunks += 1
-                percent = int(float(chunks * 209715200) / totalsize)
-                pDialog.update(percent)
-                if pDialog.iscanceled():
-                    handle.close()
-                    xbmcvfs.delete(tmp_file)
-                    break
-        handle.close()
-        try:
-            xbmcvfs.rename(tmp_file, vidfile)
-            return vidfile
-        except:
-            return tmp_file
-    else:
-        xbmcgui.Dialog().notification('Download:', translation(30109), _icon, 5000, False)
 
 
 def playArte(aid):
@@ -602,20 +539,8 @@ def getUrl2(url):
     headers = {'User-Agent': _UA}
     cookie = {'lang': language,
               'ff': "on" if familyFilter == "1" else "off"}
-    r = requests.get(url, headers=headers, cookies=cookie)
-    return r.text
-
-
-def checkUrl(url):
-    xbmc.log('DAILYMOTION - Check url is {0}'.format(url), xbmc.LOGDEBUG)
-    headers = {'User-Agent': _UA,
-               'Referer': 'https://www.dailymotion.com/',
-               'Origin': 'https://www.dailymotion.com'}
-    cookie = {'lang': language,
-              'ff': "on" if familyFilter == "1" else "off"}
-    r = requests.head(url, headers=headers, cookies=cookie)
-    status = r.status_code == 200
-    return status
+    r = client.request(url, headers=headers, cookie=cookie)
+    return r
 
 
 def parameters_string_to_dict(parameters):
@@ -639,7 +564,6 @@ def addLink(name, url, mode, iconimage, user, desc, duration, date, nr):
                 'fanart': _fanart})
     liz.setProperty('IsPlayable', 'true')
     entries = []
-    entries.append((translation(30044), 'RunPlugin(plugin://{0}/?mode=downloadVideo&name={1}&url={2})'.format(addonID, urllib_parse.quote_plus(name), urllib_parse.quote_plus(url)),))
     entries.append((translation(30043), 'RunPlugin(plugin://{0}/?mode=queueVideo&url={1}&name={2})'.format(addonID, urllib_parse.quote_plus(u), urllib_parse.quote_plus(name)),))
     if dmUser == "":
         playListInfos = "###MODE###=ADD###USER###={0}###THUMB###=DefaultVideo.png###END###".format(user)
@@ -841,8 +765,6 @@ elif mode == 'playArte':
     playArte(url)
 elif mode == "queueVideo":
     queueVideo(url, name)
-elif mode == "downloadVideo":
-    downloadVideo(name, url)
 elif mode == 'search':
     search(url)
 elif mode == 'livesearch':

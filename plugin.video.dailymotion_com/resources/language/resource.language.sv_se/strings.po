@@ -1,0 +1,267 @@
+# XBMC Media Center Swedish language file
+# Addon Name: DailyMotion.com
+# Addon id: plugin.video.dailymotion_com
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-11-03 00:21+0000\n"
+"PO-Revision-Date: 2025-05-30 08:45+0200\n"
+"Last-Translator: Daniel Nylander <github@danielnylander.se>\n"
+"Language-Team: sv\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.6\n"
+
+msgctxt "Addon Summary"
+msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
+msgstr "Filmer, TV, musik, användarklipp, 3D och direktsändningar"
+
+msgctxt "Addon Description"
+msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
+msgstr "Filmer, TV, musik, användarklipp, 3D och direktsändningar"
+
+msgctxt "Addon Disclaimer"
+msgid "Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing."
+msgstr "Vissa delar av det här tillägget kanske inte är lagliga i ditt hemland - kontrollera med lokala lagar innan du installerar."
+
+msgctxt "#30001"
+msgid "Next Page"
+msgstr "Nästa sida"
+
+msgctxt "#30002"
+msgid "Search"
+msgstr "Sök"
+
+msgctxt "#30003"
+msgid "Live"
+msgstr "Direktsänd"
+
+msgctxt "#30004"
+msgid "Movies"
+msgstr "Filmer"
+
+msgctxt "#30005"
+msgid "Popular"
+msgstr "Populära"
+
+msgctxt "#30006"
+msgid "Channels"
+msgstr "Kanaler"
+
+msgctxt "#30007"
+msgid "Users"
+msgstr "Användare"
+
+msgctxt "#30008"
+msgid "Most Recent"
+msgstr "Senaste"
+
+msgctxt "#30009"
+msgid "Most Viewed"
+msgstr "Mest visade"
+
+msgctxt "#30010"
+msgid "Hour"
+msgstr "Timme"
+
+msgctxt "#30011"
+msgid "Today"
+msgstr "Idag"
+
+msgctxt "#30012"
+msgid "Week"
+msgstr "Vecka"
+
+msgctxt "#30013"
+msgid "Month"
+msgstr "Månad"
+
+msgctxt "#30014"
+msgid "All Time"
+msgstr "Totalt"
+
+msgctxt "#30015"
+msgid "Trending"
+msgstr "Trendande"
+
+msgctxt "#30016"
+msgid "Featured"
+msgstr "Utvalda"
+
+msgctxt "#30017"
+msgid "Official"
+msgstr "Officiell"
+
+msgctxt "#30018"
+msgid "Creative"
+msgstr "Kreativ"
+
+msgctxt "#30019"
+msgid "Most Popular"
+msgstr "Mest populära"
+
+msgctxt "#30020"
+msgid "Most Commented"
+msgstr "Mest kommenterade"
+
+msgctxt "#30021"
+msgid "Top Rated"
+msgstr "Topprankade"
+
+msgctxt "#30022"
+msgid "Video not available"
+msgstr "Videon är inte tillgänglig"
+
+msgctxt "#30023"
+msgid "Added"
+msgstr "Tillagd"
+
+msgctxt "#30024"
+msgid "Favourites"
+msgstr "Favoriter"
+
+msgctxt "#30025"
+msgid "What to Watch"
+msgstr "Vad vill du titta på"
+
+# empty strings from id 30026 to 30027
+msgctxt "#30028"
+msgid "Add user to favourites"
+msgstr "Lägg till användare till favoriter"
+
+msgctxt "#30029"
+msgid "Remove from favourites"
+msgstr "Ta bort från favoriter"
+
+msgctxt "#30030"
+msgid "Added user to favourites"
+msgstr "Lade till användare till favoriter"
+
+msgctxt "#30031"
+msgid "Are you over 18 and would like to turn off the family filter?"
+msgstr "Är du över 18 år och vill stänga av familjefiltret?"
+
+msgctxt "#30032"
+msgid "Turn the family filter on?"
+msgstr "Slå på familjefiltret?"
+
+msgctxt "#30033"
+msgid "Add user"
+msgstr "Lägg till användare"
+
+msgctxt "#30034"
+msgid "My stuff"
+msgstr "Mina saker"
+
+msgctxt "#30035"
+msgid "Contacts"
+msgstr "Kontakter"
+
+msgctxt "#30036"
+msgid "Following"
+msgstr "Följer"
+
+msgctxt "#30037"
+msgid "Favourites"
+msgstr "Favoriter"
+
+msgctxt "#30038"
+msgid "Playlists"
+msgstr "Spellistor"
+
+msgctxt "#30039"
+msgid "3D"
+msgstr "3D"
+
+msgctxt "#30040"
+msgid "All"
+msgstr "Alla"
+
+msgctxt "#30041"
+msgid "Videos"
+msgstr "Videor"
+
+msgctxt "#30042"
+msgid "Groups"
+msgstr "Grupper"
+
+msgctxt "#30043"
+msgid "Add to queue"
+msgstr "Lägg till i kö"
+
+msgctxt "#30044"
+msgid "Download video"
+msgstr "Hämta ner video"
+
+# empty strings from id 30045 to 30100
+msgctxt "#30101"
+msgid "Country"
+msgstr "Land"
+
+msgctxt "#30102"
+msgid "Force View"
+msgstr "Tvinga visning"
+
+msgctxt "#30103"
+msgid "ViewID"
+msgstr "ViewID"
+
+msgctxt "#30104"
+msgid "Family Filter"
+msgstr "Familjefilter"
+
+msgctxt "#30105"
+msgid "Maximum resolution"
+msgstr "Maximal upplösning"
+
+msgctxt "#30106"
+msgid "Dailymotion Username"
+msgstr "Användarnamn för Dailymotion"
+
+msgctxt "#30107"
+msgid "Items per page"
+msgstr "Objekt per sida"
+
+msgctxt "#30108"
+msgid "Download directory"
+msgstr "Hämtningskatalog"
+
+msgctxt "#30109"
+msgid "File already exists"
+msgstr "Filen finns redan"
+
+msgctxt "#30110"
+msgid "Choose download directory in Settings"
+msgstr "Välj hämtningskatalog i Inställningar"
+
+msgctxt "#30111"
+msgid "General"
+msgstr "Allmänt"
+
+msgctxt "#30112"
+msgid "Download"
+msgstr "Hämta ner"
+
+msgctxt "#30113"
+msgid "Miscellaneous"
+msgstr "Diverse"
+
+msgctxt "#30114"
+msgid "Mature Content"
+msgstr "Vuxet innehåll"
+
+msgctxt "#30115"
+msgid "Search history"
+msgstr "Sökhistorik"
+
+msgctxt "#30116"
+msgid "Clear search history"
+msgstr "Töm sökhistorik"
+
+msgctxt "#30117"
+msgid "New Search term"
+msgstr "Ny sökterm"

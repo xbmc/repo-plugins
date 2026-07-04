@@ -6,9 +6,6 @@
 		<setting id="itemsPerPage" type="enum" label="30107" values="25|50|75|100" default="1"/>
 		<setting id="maxVideoQuality" type="enum" label="30105" values="240p|380p|SD|HD|FHD|QHD|UHD" default="2"/>
 	</category> 
-	<category label="30112">
-		<setting id="downloadDir" type="folder" label="30108" default=""/>
-	</category>
 	<category label="30102">
 		<setting id="forceViewMode" type="bool" label="30102" default="false"/>
 		<setting label="30111" type="lsep"/>

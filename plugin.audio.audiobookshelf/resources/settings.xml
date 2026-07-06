@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30000">
+        <setting id="ipaddress" type="text" label="30001" default="" />
+        <setting id="port" type="text" label="30002" default="13378" />
+        <setting id="username" type="text" label="30003" default="" />
+        <setting id="password" type="text" label="30004" option="hidden" default="" />
+    </category>
+    <category label="30005">
+        <setting id="show_progress_markers" type="bool" label="30006" default="true" />
+        <setting id="min_episodes_for_sort" type="number" label="30007" default="10" />
+    </category>
+    <category label="30008">
+        <setting id="enable_downloads" type="bool" label="30009" default="true" />
+        <setting id="download_path" type="folder" label="30010" default="" enable="eq(-1,true)" />
+
+        <setting id="delete_all_downloads" type="action" label="30011" action="RunPlugin(plugin://plugin.audio.audiobookshelf/?action=delete_all_downloads)" enable="eq(-3,true)" />
+        <setting id="podcast_download_mode" type="select" label="30012" default="0" lvalues="30013|30014|30015" />
+    </category>
+    <category label="30016">
+        <setting id="sync_audiobook_progress" type="bool" label="30017" default="true" />
+        <setting id="audiobook_sync_interval" type="select" label="30018" default="1" lvalues="30019|30020|30021|30022" enable="eq(-1,true)" />
+        <setting id="audiobook_sync_on_stop" type="bool" label="30023" default="true" />
+
+    </category>
+    <category label="30024">
+        <setting id="sync_podcast_progress" type="bool" label="30017" default="true" />
+        <setting id="podcast_sync_interval" type="select" label="30018" default="1" lvalues="30019|30020|30021|30022" enable="eq(-1,true)" />
+        <setting id="podcast_sync_on_stop" type="bool" label="30023" default="true" />
+
+        <setting id="mark_podcast_finished_threshold" type="select" label="30025" default="1" lvalues="30026|30027|30028|30029" />
+        <setting id="autoplay_next_episode" type="bool" label="30030" default="false" />
+    </category>
+    <category label="30031">
+
+        <setting id="offline_sync_on_connect" type="bool" label="30032" default="true" />
+    </category>
+</settings>

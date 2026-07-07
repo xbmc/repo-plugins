@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.audiobookshelf" name="Audiobookshelf" version="2026.7.8" provider-name="Breezyslasher">
+<addon id="plugin.audio.audiobookshelf" name="Audiobookshelf" version="2026.7.9" provider-name="Breezyslasher">
 	<requires>
-		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="xbmc.python" version="3.0.1"/>
 		<import addon="script.module.requests" version="2.31.0" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
@@ -30,78 +30,32 @@
 		</assets>
 		<news>
 v1.0.12 (2026-07-07) - Kodi repo compliance
-- Settings are now localized via strings.po (en_GB).
-- Icon flattened to remove transparency; LICENSE renamed to LICENSE.txt.
+- Settings localized via strings.po; icon flattened (no transparency);
+  LICENSE renamed to LICENSE.txt; fanart added.
 
 v1.0.11 (2026-07-06) - Chronological offline queues
-- Downloads now store the episode publish date, so offline auto-play
-  queues order episodes chronologically (matching the online queue)
-  instead of by download time.
+- Downloads store the episode publish date so offline auto-play queues
+  order chronologically, matching the online queue.
 
 v1.0.10 (2026-07-06) - Auto-play: mixed streamed/downloaded
-- NEW: Auto-play queues now mix streamed and downloaded episodes -
-  downloaded ones play from disk, the rest stream, in one queue.
-- NEW: Auto-play also works fully offline, using downloaded episodes.
-- FIXED: No resume dialog interrupts between downloaded episodes in a
-  queue (silent resume, matching streamed episodes).
+- Auto-play queues mix streamed and downloaded episodes; also works
+  fully offline. No resume dialog between episodes.
 
 v1.0.9 (2026-07-06) - Auto-play next podcast episode
-- NEW: "Auto-play next episode" setting (Podcast Sync, default off).
-  Plays a native Kodi playlist from the selected episode forward
-  (oldest to newest) so episodes advance automatically.
-- Progress is tracked per episode; the monitor stops cleanly at each
-  track boundary so positions are never cross-saved.
+- "Auto-play next episode" setting (default off) plays a native Kodi
+  playlist from the selected episode forward. Progress tracked per
+  episode.
 
 v1.0.8 (2026-07-06) - Progress sync fix
-- FIXED: Progress upload no longer loops forever. Audiobookshelf
-  returns an empty body on a successful progress save; the client
-  was mis-parsing that as an error and retrying endlessly.
-- FIXED: Empty/non-JSON 2xx responses now treated as success.
+- Progress upload no longer loops forever; empty/non-JSON 2xx responses
+  are treated as success.
 
 v1.0.7 (2026-05-28) - Now-playing cover art &amp; author
-- FIXED: Audiobook/podcast covers now show on the Kodi now-playing screen
-- NEW: Author shown on now-playing screen for audiobooks
-- NEW: Podcast creator (or show name) shown on now-playing screen for episodes
-- IMPROVED: Streaming uses cached cover when available, falls back to server URL
-- IMPROVED: Offline playback uses the downloaded cover file
+- Covers, author, and podcast creator show on the now-playing screen.
 
 v1.0.6 (2026-05-27) - New JWT Authentication
-- CHANGED: Use new Audiobookshelf JWT auth flow (requires server v2.26.0+)
-- NEW: Short-lived access tokens (1h) with automatic refresh
-- NEW: Refresh token stored locally; no more re-login on every cache miss
-- REMOVED: Legacy single-token login fallback
-
-v1.0.5 (2025-12-09) - Comprehensive Sync Overhaul
-- NEW: Bidirectional sync - pulls progress from server if ahead
-- NEW: Automatic sync when opening app (startup sync)
-- NEW: Automatic sync when reconnecting to WiFi after offline mode
-- NEW: Background sync periodically polls server for updates
-- NEW: Unified progress storage for both downloaded and streamed content
-- FIXED: Audiobook progress sync now works correctly
-- FIXED: Chapter/multi-file audiobooks now save correct overall position
-- FIXED: Clicking Chapter 2+ no longer resets progress to 0
-- FIXED: file_offset properly tracked for multi-file audiobooks
-- FIXED: Podcast progress sync improved
-- FIXED: Duration detection issues resolved
-- FIXED: Resume position now properly syncs both ways
-- IMPROVED: If local progress ahead, uploads to server
-- IMPROVED: If server progress ahead, downloads to local
-- IMPROVED: Migrates old progress data automatically
-
-v1.0.4 - Direct Episode Adding
-- NEW: Add episodes directly from RSS without server refresh endpoint
-- NEW: Click [NEW] episode to add it directly to server
-- NEW: [Add All X Episodes] adds all new episodes at once
-- NEW: Episodes cached locally for faster batch operations
-- REMOVED: Refresh Podcast from RSS (server endpoint not available)
-- FIXED: No more "Server RSS refresh not available" errors
-- FIXED: Progress sync now works for both audiobooks and podcasts
-- IMPROVED: Full RSS metadata captured (description, pubDate, etc.)
-
-v1.0.3 - Progress sync overhaul
-v1.0.2 - Kodi 21 DialogProgress fix
-v1.0.1 - Token caching, finished threshold fix
-v1.0.0 - Initial release
+- New Audiobookshelf JWT auth flow with automatic token refresh
+  (requires server v2.26.0+).
 		</news>
 	</extension>
 </addon>

@@ -1,0 +1,146 @@
+# Kodi Media Center language file
+# Addon Name: Audiobookshelf
+# Addon id: plugin.audio.audiobookshelf
+# Addon Provider: Breezyslasher
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.audio.audiobookshelf\n"
+"Report-Msgid-Bugs-To: https://github.com/Breezyslasher/Kodi-Addons\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+
+# --- Settings: categories ---
+msgctxt "#30000"
+msgid "Server"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Display"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Downloads"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Audiobook Sync"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Podcast Sync"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Offline"
+msgstr ""
+
+# --- Settings: labels ---
+msgctxt "#30001"
+msgid "Server IP Address"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Server Port"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Show progress markers ([X%], [Done])"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Min episodes to show sort option"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Enable Local Downloads"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Download Folder"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Delete All Downloads"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Podcast Download Mode"
+msgstr ""
+
+msgctxt "#30013"
+msgid "All Episodes"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Unwatched Only"
+msgstr ""
+
+msgctxt "#30015"
+msgid "New Only"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Sync progress to server"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Sync interval"
+msgstr ""
+
+msgctxt "#30019"
+msgid "10 seconds"
+msgstr ""
+
+msgctxt "#30020"
+msgid "15 seconds"
+msgstr ""
+
+msgctxt "#30021"
+msgid "30 seconds"
+msgstr ""
+
+msgctxt "#30022"
+msgid "60 seconds"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Sync when playback stops"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Mark finished when"
+msgstr ""
+
+msgctxt "#30026"
+msgid "90% complete"
+msgstr ""
+
+msgctxt "#30027"
+msgid "95% complete"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Last 30 seconds"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Last 60 seconds"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Auto-play next episode (oldest to newest)"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Sync when back online"
+msgstr ""

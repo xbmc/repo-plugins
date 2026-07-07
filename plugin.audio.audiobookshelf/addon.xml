@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.audiobookshelf" name="Audiobookshelf" version="2026.7.9" provider-name="Breezyslasher">
+	<requires>
+		<import addon="xbmc.python" version="3.0.1"/>
+		<import addon="script.module.requests" version="2.31.0" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en_GB">Audiobookshelf client for Kodi</summary>
+		<description lang="en_GB">Stream audiobooks and podcasts from your Audiobookshelf server. Features include:
+
+* Stream audiobooks (M4B, MP3, multi-file)
+* Stream podcasts with episode management
+* Progress sync with server
+* Download for offline playback
+* Chapter navigation
+* Resume playback
+* Search and add new podcasts
+* Find new episodes (from RSS)
+* API Key or Username/Password authentication</description>
+		<language></language>
+		<platform>all</platform>
+		<license>GPL-3.0-or-later</license>
+		<source>https://github.com/Breezyslasher/Kodi-Addons</source>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+		</assets>
+		<news>
+v1.0.12 (2026-07-07) - Kodi repo compliance
+- Settings localized via strings.po; icon flattened (no transparency);
+  LICENSE renamed to LICENSE.txt; fanart added.
+
+v1.0.11 (2026-07-06) - Chronological offline queues
+- Downloads store the episode publish date so offline auto-play queues
+  order chronologically, matching the online queue.
+
+v1.0.10 (2026-07-06) - Auto-play: mixed streamed/downloaded
+- Auto-play queues mix streamed and downloaded episodes; also works
+  fully offline. No resume dialog between episodes.
+
+v1.0.9 (2026-07-06) - Auto-play next podcast episode
+- "Auto-play next episode" setting (default off) plays a native Kodi
+  playlist from the selected episode forward. Progress tracked per
+  episode.
+
+v1.0.8 (2026-07-06) - Progress sync fix
+- Progress upload no longer loops forever; empty/non-JSON 2xx responses
+  are treated as success.
+
+v1.0.7 (2026-05-28) - Now-playing cover art &amp; author
+- Covers, author, and podcast creator show on the now-playing screen.
+
+v1.0.6 (2026-05-27) - New JWT Authentication
+- New Audiobookshelf JWT auth flow with automatic token refresh
+  (requires server v2.26.0+).
+		</news>
+	</extension>
+</addon>

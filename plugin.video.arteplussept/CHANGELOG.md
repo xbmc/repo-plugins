@@ -1,3 +1,11 @@
+## v1.4.6 (2026-7-15)
+
+Non functional improvements and bugfix adding to arte favorites
+
+- Fix error message when a program was added to arte favorites by adding language to API request.
+- NFR: Make addon.py slim by moving its content to plugin.py to fix Kodi addon checker warning.
+- NFR: Adding create-release.sh to accelerate and ensure quality of release creation in master branch by automating the steps on contributor's host. Document a troubleshooting of releasing CI with Kodi Add-on Submitter.
+
 Changelog also available in file ./addon.xml xpath /addon/extension/news following Kodi guidelines https://kodi.wiki/view/Add-on_structure#changelog.txt
 
 v1.4.5 (2026-07-01)

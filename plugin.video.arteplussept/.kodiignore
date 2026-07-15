@@ -1,0 +1,23 @@
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Test files
+tests/
+test_*.py
+pytest.ini
+
+# Development files
+.git/
+.gitignore
+.github/
+.vscode/
+*.code-workspace
+
+# Build files
+scripts/
+
+# Pytest
+.pytest_cache/

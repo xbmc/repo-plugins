@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.arteplussept" name="Arte +7" version="1.4.5" provider-name="bmf, thomas-ernest">
+<?xml version="1.4.6" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.arteplussept" name="Arte +7" version="1.4.6" provider-name="bmf, thomas-ernest">
     <!-- https://kodi.wiki/view/Addon.xml -->
     <requires>
-        <import addon="xbmc.python" version="3.0.0"/>
-        <import addon="script.module.xbmcswift2" version="19.0.4"/>
-        <import addon="script.module.requests" version="2.22.0"/>
-        <import addon="script.module.dateutil" version="2.8.1"/>
+        <import addon="xbmc.python" version="1.4.6"/>
+        <import addon="script.module.xbmcswift2" version="1.4.6"/>
+        <import addon="script.module.requests" version="1.4.6"/>
+        <import addon="script.module.dateutil" version="1.4.6"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
@@ -55,18 +55,12 @@ https://github.com/thomas-ernest/plugin.video.arteplussept
         <license>MIT</license>
         <website>https://www.arte.tv/fr/</website>
         <source>https://github.com/thomas-ernest/plugin.video.arteplussept</source>
-        <news>
-v1.4.5 (2026-07-01)
-- Fix home menu display related to Arte r-proxy changes.
-- Remove auth token remote persistence.
-- Add age restriction MPAA info to videos.
-- Warn during playback if MPAA is 'PG-13', 'R' or 'NC-17'.
-v1.4.1 (2023-10-10)
-- Fix playing videos with siblings.
-v1.4.0 (2023-8-14)
-- Add support for content over multiple pages.
-- Refactor most of the code in OO style
-        </news>
+<news>1.4.6 (2026-7-15)
+Non functional improvements and bugfix adding to arte favorites
+
+- Fix error message when a program was added to arte favorites by adding language to API request.
+- NFR: Make addon.py slim by moving its content to plugin.py to fix Kodi addon checker warning.
+- NFR: Adding create-release.sh to accelerate and ensure quality of release creation in master branch by automating the steps on contributor's host. Document a troubleshooting of releasing CI with Kodi Add-on Submitter.</news>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>

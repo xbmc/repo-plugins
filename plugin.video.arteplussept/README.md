@@ -101,16 +101,34 @@ If you are having issues with the add-on, you can open a issue and join your log
 
 ## Releasing
 
-- For minor version, create a new release branch `release/$MAJOR.$MINOR`. Don't mention bugfix version.
-- Add details of the news version in CHANGELOG.md. Do not touch changelog.txt. It is here for legacy purpose.
+### Releasing part on contributor's host
+
+Steps to be followed by a contributor to create a release.
+Preferablly you can use scripts/create-release.sh in a BASH to do the same.
+It has a parameter --no-push, if you want to check the results before applying changes remotely.
+
+- Releases are in master branch. Make sure HEAD in master reflects the content of the next release.
 - Set the version $MAJOR.$MINOR.$BUGFIX (without v) in addon.xml /addon/@version 
-- Optionally update highlight changes in addon.xml /addon/extension[@point="xbmc.addon.metadata"]/news. Ensure it counts less than 1500 chars.
+- Describe the changes of the news version in:
+    - CHANGELOG.md. Ignore changelog.txt remaining here for legacy purpose.
+    - addon.xml /addon/extension[@point="xbmc.addon.metadata"]/news. Ensure it counts less than 1500 chars.
 - Create a commit with version bump
     - git add addon.xml CHANGELOG.md && git commit -m "Bump version to $MAJOR.$MINOR.$BUGFIX"
-- Create and push tag "vMaj.Min.Bug" (with v) in git in order to create a GitHub release and submit [PR to official repo](https://github.com/xbmc/repo-plugins/pulls).
+- Create and push tag "vMaj.Min.Bug" (with v) to GitHub in order to create a GitHub release and submit a [PR to official XBMC repo](https://github.com/xbmc/repo-plugins/pulls) with the CI.
     - git tag -a v$MAJOR.$MINOR.$BUGFIX
+    - Fill the tag message with the description of the changes of the news version. It will be used as GitHub release notes.
     - git push origin --tags
-- Done automatically by CI : Create a release in GitHub with name $MAJOR.$MINOR.$BUGFIX (without v). Reuse CHANGELOG.md details as description. https://github.com/thomas-ernest/plugin.video.arteplussept/releases/new
-- Done automatically by CI : Submit new version to official Kodi repository
-    - One-commit change in matrix branch https://kodi.wiki/view/Submitting_Add-ons
-    - Open pull-request to official repo https://github.com/xbmc/repo-plugins/pulls
+
+### Releasing part in CI
+
+Steps run automatically by CI, with troubleshooting guide.
+
+- "Kodi Addon-Submitter" in CI is in charge of:
+    - creating a GitHub release with version $MAJOR.$MINOR.$BUGFIX in https://github.com/thomas-ernest/plugin.video.arteplussept/releases
+    - submitting a new version to official Kodi repository
+        - One-commit change in matrix branch https://kodi.wiki/view/Submitting_Add-ons
+        - Open pull-request to official repo https://github.com/xbmc/repo-plugins/pulls
+- if the action "Kodi Addon-Submitter" in CI  fails, refresh the token value in action secret.
+    - In https://github.com/settings/tokens/ generate a corsed-grained token KODI_SUBMITTER_TOKEN_CLASSIC and copy its value
+    - set the token value in action secret KODI_SUBMITTER_TOKEN https://github.com/thomas-ernest/plugin.video.arteplussept/settings/secrets/actions
+    - Re-run the failing job "Kodi Addon-Submitter"

@@ -96,14 +96,14 @@ def get_favorites(lang, tkn, page_idx, page_size=50):
     return _load_json_personal_content('artetv_getfavorites', url, tkn)
 
 
-def add_favorite(tkn, program_id):
+def add_favorite(tkn, program_id, language):
     """
     Add content program_id to user favorites.
     :return: HTTP status code.
     """
     url = _ARTETV_URL + ARTETV_ENDPOINTS['add_favorite']
     headers = _add_auth_token(tkn, ARTETV_HEADERS)
-    data = {'programId': program_id}
+    data = {'programId': program_id, 'language': language}
     reply = requests.put(url, data=data, headers=headers, timeout=10)
     logger.log_json(reply, 'artetv_addfavorite')
     return reply.status_code

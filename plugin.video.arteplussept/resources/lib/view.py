@@ -3,7 +3,7 @@
 from xbmcswift2 import xbmc
 
 from resources.lib.mapper.arteitem import ArteItem
-from resources.lib.mapper.live import ArteLiveItem
+from resources.lib.mapper.arteliveitem import ArteLiveItem
 from resources.lib.mapper.artesearch import ArteSearch
 from resources.lib import api
 from resources.lib import hof

@@ -3,6 +3,14 @@
 - age restrictions/MPAA mapping qnd warnings
 """
 import urllib.parse
+from enum import Enum
+
+
+class PlayFrom(Enum):
+    """Define from where the play request is initiated"""
+    ITM = 'item'
+    LST = 'playlist'
+    CTX = 'context_menu'
 
 
 def encode_string(string):

@@ -180,3 +180,7 @@ msgstr "Voulez vous vraiment purger les favoris Arte ?"
 msgctxt "#30055"
 msgid "{label} - This program contains scenes not suitable for young or sensitive audience"
 msgstr "{label} - Ce programme comporte des scènes déconseillées a un public jeune ou sensible"
+
+msgctxt "#30060"
+msgid "Play from the start"
+msgstr "Lire du début"

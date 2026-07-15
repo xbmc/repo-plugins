@@ -181,3 +181,7 @@ msgstr "Vuoi davvero eliminare i preferiti di Arte ?"
 msgctxt "#30055"
 msgid "{label} - This program contains scenes not suitable for young or sensitive audience"
 msgstr "{label} - Questo programma contiene scene sconsigliate ad un pubblico giovane o sensible"
+
+msgctxt "#30060"
+msgid "Play from the start"
+msgstr "Gioca dall'inizio"

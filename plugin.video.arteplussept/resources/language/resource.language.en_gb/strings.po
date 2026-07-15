@@ -179,3 +179,7 @@ msgstr ""
 msgctxt "#30055"
 msgid "{label} - This program contains scenes not suitable for young or sensitive audience"
 msgstr ""
+
+msgctxt "#30060"
+msgid "Play from the start"
+msgstr ""

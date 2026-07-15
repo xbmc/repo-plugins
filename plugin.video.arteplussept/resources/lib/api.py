@@ -4,12 +4,11 @@ from collections import OrderedDict
 import requests
 # pylint: disable=import-error
 from xbmcswift2 import xbmc
-from xbmcswift2.plugin import Plugin
 from resources.lib import hof
 from resources.lib import logger
 
-_PLUGIN_NAME = Plugin().name
-_PLUGIN_VERSION = Plugin().addon.getAddonInfo('version')
+_PLUGIN_NAME = "Arte +7"
+_PLUGIN_VERSION = "1.4.6"
 # Arte hbbtv - deprecated API since 2022 prefer Arte TV API
 _HBBTV_URL = 'https://www.arte.tv/hbbtvv2/services/web/index.php'
 _HBBTV_HEADERS = {
@@ -96,14 +95,14 @@ def get_favorites(lang, tkn, page_idx, page_size=50):
     return _load_json_personal_content('artetv_getfavorites', url, tkn)
 
 
-def add_favorite(tkn, program_id):
+def add_favorite(tkn, program_id, language):
     """
     Add content program_id to user favorites.
     :return: HTTP status code.
     """
     url = _ARTETV_URL + ARTETV_ENDPOINTS['add_favorite']
     headers = _add_auth_token(tkn, ARTETV_HEADERS)
-    data = {'programId': program_id}
+    data = {'programId': program_id, 'language': language}
     reply = requests.put(url, data=data, headers=headers, timeout=10)
     logger.log_json(reply, 'artetv_addfavorite')
     return reply.status_code

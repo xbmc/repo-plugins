@@ -31,7 +31,7 @@ class ArteFavorites(ArteCollection):
     def add_favorite(self, program_id, label):
         """Add content program_id to user favorites.
         Notify about completion success or failure with label."""
-        if 200 == api.add_favorite(self.auth_token, program_id):
+        if 200 == api.add_favorite(self.auth_token, program_id, self.settings.language):
             msg = self.plugin.addon.getLocalizedString(30025).format(label=label)
             self.plugin.notify(msg=msg, image='info')
         else:

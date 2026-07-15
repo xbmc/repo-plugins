@@ -4,10 +4,13 @@ for map_playable and match_hbbtv
 """
 
 import html
+# pylint: disable=import-error
+from xbmcswift2 import actions
 # the goal is to break/limit this dependency as much as possible
 from resources.lib.mapper import mapper
 from resources.lib.mapper.arteitem import ArteTvVideoItem
 from resources.lib import utils
+from resources.lib.utils import PlayFrom
 
 
 class ArteLiveItem(ArteTvVideoItem):
@@ -30,7 +33,6 @@ class ArteLiveItem(ArteTvVideoItem):
 
     def build_item_live(self, quality, audio_slot):
         """Return menu entry to watch live content from Arte TV API"""
-        # program_id = item.get('id')
         item = self.json_dict
         attr = item.get('attributes')
         meta = attr.get('metadata')
@@ -43,24 +45,12 @@ class ArteLiveItem(ArteTvVideoItem):
             # Remove query param type=TEXT to avoid title embeded in image
             fanart_url = meta.get('images')[0].get('url').replace('?type=TEXT', '')
             thumbnail_url = fanart_url
-            # Set same image for fanart and thumbnail to spare network bandwidth
-            # and business logic easier to maintain
-            # if item.get('images')[0].get('alternateResolutions'):
-            #    smallerImage = item.get('images')[0].get('alternateResolutions')[3]
-            #    if smallerImage and smallerImage.get('url'):
-            #        thumbnailUrl = smallerImage.get('url').replace('?type=TEXT', '')
-        stream_url = mapper.map_playable(
-            attr.get('streams'), quality, audio_slot, mapper.match_artetv).get('path')
+        mpaa = self._get_mpaa_age_restriction()
 
-        return {
+        live_item = {
             'label': self.format_title_and_subtitle(),
-            'path': self.plugin.url_for(
-                'play_live', stream_url=stream_url, mpaa=self._get_mpaa_age_restriction()),
-            # playing the stream from program id makes the live starts from the beginning
-            # while it starts the video like the live tv, with the above
-            #  'path': plugin.url_for('play', kind='SHOW', program_id=programId.replace('_fr', '')),
             'thumbnail': thumbnail_url,
-            'is_playable': True,  # not show_video_streams
+            'is_playable': True,
             'info_type': 'video',
             'info': {
                 'title': meta.get('title'),
@@ -73,6 +63,26 @@ class ArteLiveItem(ArteTvVideoItem):
                 'fanart_image': fanart_url,
             }
         }
+
+        # playing the stream from program id makes the live starts from the beginning
+        # while it starts the video like the live tv, with the above
+        live_stream_item = mapper.map_playable(
+            attr.get('streams'), quality, audio_slot, mapper.match_artetv)
+        if live_stream_item:
+            live_item['path'] = self.plugin.url_for(
+                'play_live', stream_url=live_stream_item.get('path'), mpaa=mpaa)
+            live_item['context_menu'] = [(
+                self.plugin.addon.getLocalizedString(30060),
+                actions.background(self.plugin.url_for(
+                    'play_from', kind='SHOW', program_id=meta.get('providerId'), mpaa=mpaa,
+                    play_from=PlayFrom.CTX.value))
+            )]
+        else:
+            live_item['path'] = self.plugin.url_for(
+                'play_from', kind='SHOW', program_id=meta.get('providerId'), mpaa=mpaa,
+                play_from=PlayFrom.ITM.value)
+
+        return live_item
 
     def _get_mpaa_age_restriction(self):
         item = self.json_dict

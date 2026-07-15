@@ -67,8 +67,8 @@ class ArteCollection:
         return {
             'label': item_label,
             'path': self.plugin.url_for(collection_type + '_default'),
-            'context_menu': [
-                (self.plugin.addon.getLocalizedString(purge_label_id),
-                    actions.background(self.plugin.url_for('purge_' + collection_type)))
-            ]
+            'context_menu': [(
+                self.plugin.addon.getLocalizedString(purge_label_id),
+                actions.background(self.plugin.url_for('purge_' + collection_type))
+            )]
         }

@@ -10,6 +10,7 @@ from resources.lib.mapper.arteitem import ArteCollectionItem
 from resources.lib.mapper.artezone import ArteZone
 from resources.lib.mapper.artefavorites import ArteFavorites
 from resources.lib.mapper.artehistory import ArteHistory
+from resources.lib.utils import PlayFrom
 
 
 def map_category_item(plugin, item, category_code):
@@ -89,8 +90,8 @@ def map_video_as_playlist_item(plugin, item):
         kind = kind.get('code')
 
     path = plugin.url_for(
-        'play_siblings', kind=kind, program_id=program_id,
-        mpaa="Unknown", audio_slot='1', from_playlist='1')
+        'play_from', kind=kind, program_id=program_id,
+        mpaa="Unknown", play_from=PlayFrom.LST.value)
     result = ArteVideoItem(plugin, item).build_item(path, True)
     return result
 
@@ -137,7 +138,7 @@ def map_streams(plugin, item, streams, quality):
         video_item['is_playable'] = True
         video_item['path'] = plugin.url_for(
             'play_specific', kind=kind, program_id=program_id,
-            mpaa='Unknown', audio_slot=str(audio_slot))
+            mpaa='Unknown', play_from=PlayFrom.ITM.value, audio_slot=str(audio_slot))
 
         return video_item
 
@@ -187,7 +188,7 @@ def map_api_categories_item(plugin, item):
 
 def map_playable(streams, quality, audio_slot, match):
     """Select the stream best matching quality and audio slot criteria in streams
-    and map to a menu entry"""
+    and map to a menu entry. Return None if no stream matches criteria."""
     stream = None
     for qlt in [quality] + [i for i in ['SQ', 'EQ', 'HQ', 'MQ'] if i is not quality]:
         # pylint: disable=cell-var-from-loop
@@ -196,7 +197,7 @@ def map_playable(streams, quality, audio_slot, match):
             break
 
     if stream is None:
-        raise RuntimeError('Could not resolve stream...')
+        return None
 
     return {
         'info_type': 'video',

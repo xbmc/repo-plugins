@@ -29,8 +29,23 @@ def _rpc(method, params):
     return json.loads(raw).get('result', {}) or {}
 
 
+def _ignore_the():
+    """Kodi's global 'Ignore articles when sorting' preference (Settings > Media). When
+    on, library sorts drop a leading article ('The Simpsons' files under S) so our title
+    lists match the rest of the Kodi UI."""
+    result = _rpc('Settings.GetSettingValue',
+                  {'setting': 'filelists.ignorethewhensorting'})
+    return bool(result.get('value', False))
+
+
+def _title_sort(ignore_article):
+    """A JSON-RPC title sort that honours the ignore-articles preference."""
+    return {'method': 'title', 'order': 'ascending', 'ignorearticle': ignore_article}
+
+
 def _episode_playable(episode):
-    """Normalise one GetEpisodes record into a queue playable."""
+    """Normalise one GetEpisodes record into a queue playable. `dbid`/`mediatype` let the
+    service restore watched-state when 'Don't change watched status' is on."""
     return {
         'file': episode['file'],
         'label': '{0} - S{1:02d}E{2:02d} - {3}'.format(
@@ -38,6 +53,8 @@ def _episode_playable(episode):
             episode.get('episode', 0), episode.get('title', '')),
         'art': episode.get('art', {}) or {},
         'plot': episode.get('plot', ''),
+        'dbid': episode.get('episodeid'),
+        'mediatype': 'episode',
     }
 
 
@@ -68,11 +85,13 @@ def _walk_videos(path, extensions, out):
 # Public API
 # ----------------------------------------------------------------------------
 
-def get_tvshows():
-    """All TV shows in the library, sorted by title."""
+def get_tvshows(ignore_article=None):
+    """All TV shows in the library, sorted by title (honouring ignore-articles)."""
+    if ignore_article is None:
+        ignore_article = _ignore_the()
     result = _rpc('VideoLibrary.GetTVShows', {
         'properties': ['title'],
-        'sort': {'method': 'title', 'order': 'ascending'},
+        'sort': _title_sort(ignore_article),
     })
     return [
         {'type': 'tvshow', 'dbid': show['tvshowid'], 'title': show['title']}
@@ -80,11 +99,13 @@ def get_tvshows():
     ]
 
 
-def get_movies():
-    """All movies in the library, sorted by title."""
+def get_movies(ignore_article=None):
+    """All movies in the library, sorted by title (honouring ignore-articles)."""
+    if ignore_article is None:
+        ignore_article = _ignore_the()
     result = _rpc('VideoLibrary.GetMovies', {
         'properties': ['title', 'year'],
-        'sort': {'method': 'title', 'order': 'ascending'},
+        'sort': _title_sort(ignore_article),
     })
     return [
         {'type': 'movie', 'dbid': movie['movieid'],
@@ -93,11 +114,13 @@ def get_movies():
     ]
 
 
-def get_moviesets():
+def get_moviesets(ignore_article=None):
     """All movie sets (collections like 'The Lord of the Rings'), sorted by title."""
+    if ignore_article is None:
+        ignore_article = _ignore_the()
     result = _rpc('VideoLibrary.GetMovieSets', {
         'properties': ['title'],
-        'sort': {'method': 'title', 'order': 'ascending'},
+        'sort': _title_sort(ignore_article),
     })
     return [
         {'type': 'movieset', 'dbid': s['setid'], 'title': s['title']}
@@ -106,8 +129,11 @@ def get_moviesets():
 
 
 def get_catalog():
-    """TV shows, then movie sets, then movies - the pool for building a channel."""
-    return get_tvshows() + get_moviesets() + get_movies()
+    """TV shows, then movie sets, then movies - the pool for building a channel. The
+    ignore-articles preference is read once and shared across the three queries."""
+    ignore_article = _ignore_the()
+    return (get_tvshows(ignore_article) + get_moviesets(ignore_article)
+            + get_movies(ignore_article))
 
 
 def get_episode_playables(tvshowid):
@@ -168,6 +194,8 @@ def get_movie_playables(movieid):
         'label': label,
         'art': movie.get('art', {}) or {},
         'plot': movie.get('plot', ''),
+        'dbid': movieid,
+        'mediatype': 'movie',
     }]
 
 
@@ -187,7 +215,8 @@ def get_movieset_playables(setid):
         if movie.get('year'):
             label = '{0} ({1})'.format(label, movie['year'])
         playables.append({'file': movie['file'], 'label': label,
-                          'art': movie.get('art', {}) or {}, 'plot': movie.get('plot', '')})
+                          'art': movie.get('art', {}) or {}, 'plot': movie.get('plot', ''),
+                          'dbid': movie.get('movieid'), 'mediatype': 'movie'})
     return playables
 
 

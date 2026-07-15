@@ -162,6 +162,31 @@ msgctxt "#32053"
 msgid "Pure random"
 msgstr ""
 
+# Per-show selection weight (Mode panel, right column)
+msgctxt "#32054"
+msgid "How often to play {0}?"
+msgstr ""
+
+msgctxt "#32055"
+msgid "Selection weight"
+msgstr ""
+
+msgctxt "#32056"
+msgid "Normal"
+msgstr ""
+
+msgctxt "#32057"
+msgid "{0}x"
+msgstr ""
+
+msgctxt "#32058"
+msgid "(select some titles first)"
+msgstr ""
+
+msgctxt "#32059"
+msgid "How many in a row?"
+msgstr ""
+
 # Back-to-back / artwork option labels
 msgctxt "#32060"
 msgid "Unlimited"
@@ -175,6 +200,15 @@ msgctxt "#32062"
 msgid "Random (changes each reload)"
 msgstr ""
 
+# Per-show back-to-back override (Back-to-back panel, right column)
+msgctxt "#32063"
+msgid "Default"
+msgstr ""
+
+msgctxt "#32064"
+msgid "Back-to-back for {0}"
+msgstr ""
+
 # Back-to-back mode toggle (Up to = cap / Always = fixed run)
 msgctxt "#32065"
 msgid "Up to"
@@ -182,6 +216,15 @@ msgstr ""
 
 msgctxt "#32066"
 msgid "Always"
+msgstr ""
+
+# Back-to-back two-column panel headers
+msgctxt "#32067"
+msgid "Channel default"
+msgstr ""
+
+msgctxt "#32068"
+msgid "Per-show"
 msgstr ""
 
 # Channel list and info panel
@@ -292,4 +335,100 @@ msgstr ""
 
 msgctxt "#32104"
 msgid "Remove channel \"{0}\"?"
+msgstr ""
+
+# Settings (settings.xml)
+msgctxt "#32200"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#32202"
+msgid "Don't change watched status"
+msgstr ""
+
+msgctxt "#32203"
+msgid "When on, playing a channel never marks episodes watched, changes play counts, or moves resume points. Your library play-state is left exactly as it was."
+msgstr ""
+
+msgctxt "#32204"
+msgid "Sleep timer"
+msgstr ""
+
+msgctxt "#32205"
+msgid "Automatically stop playback this many minutes after a channel starts. Set to 0 to disable."
+msgstr ""
+
+msgctxt "#32206"
+msgid "Sleep timer reached - playback stopped."
+msgstr ""
+
+# Sleep timer warning dialog
+msgctxt "#32207"
+msgid "Sleep timer"
+msgstr ""
+
+msgctxt "#32208"
+msgid "Playback stops in"
+msgstr ""
+
+msgctxt "#32209"
+msgid "Cancel timer"
+msgstr ""
+
+msgctxt "#32210"
+msgid "Restart timer"
+msgstr ""
+
+msgctxt "#32211"
+msgid "Warn before sleep (minutes, 0 = no warning)"
+msgstr ""
+
+msgctxt "#32212"
+msgid "Show an on-screen countdown with Cancel / Restart this many minutes before the sleep timer stops playback."
+msgstr ""
+
+# Value prompt (slider popup)
+msgctxt "#32213"
+msgid "OK"
+msgstr ""
+
+# Sleep timer duration options
+msgctxt "#32220"
+msgid "Off"
+msgstr ""
+
+msgctxt "#32221"
+msgid "5 minutes"
+msgstr ""
+
+msgctxt "#32222"
+msgid "7 minutes"
+msgstr ""
+
+msgctxt "#32223"
+msgid "10 minutes"
+msgstr ""
+
+msgctxt "#32224"
+msgid "15 minutes"
+msgstr ""
+
+msgctxt "#32225"
+msgid "30 minutes"
+msgstr ""
+
+msgctxt "#32226"
+msgid "45 minutes"
+msgstr ""
+
+msgctxt "#32227"
+msgid "60 minutes"
+msgstr ""
+
+msgctxt "#32228"
+msgid "90 minutes"
+msgstr ""
+
+msgctxt "#32229"
+msgid "120 minutes"
 msgstr ""

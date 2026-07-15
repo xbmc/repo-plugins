@@ -1,0 +1,28 @@
+v1.1.0
+- Per-show bias: give any title its own back-to-back run - a channel default (Up to N,
+  or Always N for a fixed run) plus a per-show override - so a dense show can run in
+  longer blocks among smaller ones.
+- Selection weight: bias how often each show is picked (1.0x - 3.0x) so a big library
+  shows up proportionally more without exhausting your smaller shows.
+- Sleep timer: optionally stop playback after a set time (5 / 7 / 10 / 15 / 30 / 45 /
+  60 / 90 / 120 minutes) with an on-screen countdown you can Cancel or Restart before
+  it fires.
+- Don't change watched status: optionally play channels without touching your library's
+  watched flags, play counts or resume points, even when stopping mid-episode (on by
+  default).
+- No-repeat shuffle: in pure random, an episode no longer repeats until the rest of that
+  show has played.
+- "The" sorting: editor title lists follow Kodi's own "ignore The when sorting" setting.
+- Editor: back-to-back and selection weight are now numeric sliders; added an add-on
+  settings screen for the sleep timer and watched-status options.
+
+v1.0.0
+- Maiden release. Build custom TV-style channels from your Kodi library - TV shows,
+  movie sets, movies and folders in any combination.
+- Two shuffle modes: serialized random (each show in episode order, random which show
+  next) and pure random. An endless background service keeps the queue topped up.
+- Per-title resume, skip-aware queue regeneration, back-to-back cap and starting-episode
+  selection.
+- Channel artwork (random or pinned) and last-played sorting.
+- Library context menu: Play Randomized and Add to Channel.
+- English localization, ready for community translations.

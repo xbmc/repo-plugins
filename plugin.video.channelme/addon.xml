@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.channelme"
        name="ChannelMe!"
-       version="1.0.0"
+       version="1.1.0"
        provider-name="GaianHelmers">
   <requires>
     <import addon="xbmc.python" version="3.0.1"/>
@@ -37,7 +37,7 @@
     <platform>all</platform>
     <license>GPL-3.0-or-later</license>
     <source>https://github.com/GaianHelmers/plugin.video.channelme</source>
-    <news>Maiden voyage of Channel Me! Create channels of any combination of movies and shows, randomized and serialized as desired. Enjoy granular control of playback settings, as well as control of channel resume points. English localization built in, ready for other language additions from volunteer translators.</news>
+    <news>v1.1.0: Per-show bias - give a title its own back-to-back run (Up to / Always) and a selection weight so a dense show scatters better among smaller ones. New sleep timer with an on-screen countdown you can cancel or restart. Option to play without changing your library's watched status, play counts or resume points. Smarter shuffle that will not repeat an episode until the rest have played. Title lists now honour Kodi's "ignore The when sorting" setting.</news>
     <assets>
       <icon>resources/icon.png</icon>
       <fanart>resources/ChannelMeFullscreenBackground.png</fanart>

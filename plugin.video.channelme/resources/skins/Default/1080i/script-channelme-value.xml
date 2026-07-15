@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ChannelMe! - value prompt (slider popup) for per-show back-to-back / selection weight.
+  The "slider" is a capsule: an outer frame (7010), an inset dark track with an accent fill
+  (progress 7008), a round handle (7009) Python repositions, and a transparent focusable
+  button (7002) capturing Left/Right. Focus shows a bright rim (7012). A compact number
+  (7003) sits inline to the right. Slider controls are POSITIONED from Python (setPosition)
+  so the layout is one row: [Up to] [bar + number] for consec, [bar + number] for weight.
+  Control IDs are referenced from resources/lib/valueprompt.py - keep them in sync.
+-->
+<window type="dialog">
+  <defaultcontrol always="true">7002</defaultcontrol>
+  <controls>
+
+    <control type="image">
+      <left>0</left><top>0</top><width>1920</width><height>1080</height>
+      <texture colordiffuse="CC000000">white.png</texture>
+    </control>
+
+    <!-- Panel -->
+    <control type="image">
+      <left>560</left><top>340</top><width>800</width><height>400</height>
+      <texture colordiffuse="FF2A3742">white.png</texture>
+    </control>
+    <control type="image">
+      <left>560</left><top>340</top><width>800</width><height>60</height>
+      <texture colordiffuse="FF202B36">white.png</texture>
+    </control>
+    <control type="label" id="7000">
+      <left>590</left><top>340</top><width>740</width><height>60</height>
+      <font>font14</font><textcolor>white</textcolor><aligny>center</aligny>
+      <label>Set value</label>
+    </control>
+
+    <!-- Up to / Always toggle (consec only; hidden for weight) -->
+    <control type="button" id="7001">
+      <left>600</left><top>470</top><width>220</width><height>48</height>
+      <texturefocus colordiffuse="button_focus">white.png</texturefocus>
+      <texturenofocus colordiffuse="FF181F29">white.png</texturenofocus>
+      <font>font13</font><align>center</align><aligny>center</aligny>
+      <textcolor>white</textcolor><focusedcolor>FF0E1A1F</focusedcolor>
+      <label>Up to</label>
+      <onleft>7001</onleft><onright>7002</onright><onup>7001</onup><ondown>7005</ondown>
+    </control>
+
+    <!-- Slider capsule (positioned from Python). Three colour-fixed frames gated by state
+         (setColorDiffuse is ignored on a 9-slice border texture, so we swap images instead):
+         idle grey (always) / hover steel / edit blue. Then the inset track+fill, and two
+         knobs (dull when hovered, white when editing). -->
+    <control type="image" id="7010">
+      <left>720</left><top>470</top><width>400</width><height>48</height>
+      <texture border="20" colordiffuse="FF8A9098">capsule.png</texture>
+    </control>
+    <control type="image" id="7012">
+      <visible>Control.HasFocus(7002) + String.IsEmpty(Window.Property(cm_edit))</visible>
+      <left>720</left><top>470</top><width>400</width><height>48</height>
+      <texture border="20" colordiffuse="FFFFFFFF">capsule.png</texture>
+    </control>
+    <control type="image" id="7013">
+      <visible>String.IsEqual(Window.Property(cm_edit),1)</visible>
+      <left>720</left><top>470</top><width>400</width><height>48</height>
+      <texture border="20" colordiffuse="FF2C9BE0">capsule.png</texture>
+    </control>
+    <control type="progress" id="7008">
+      <left>724</left><top>474</top><width>392</width><height>40</height>
+      <texturebg border="18" colordiffuse="FF11161D">capsule.png</texturebg>
+      <midtexture border="18" colordiffuse="FF0E597E">capsule.png</midtexture>
+    </control>
+    <control type="image" id="7009">
+      <visible>String.IsEmpty(Window.Property(cm_edit))</visible>
+      <left>724</left><top>476</top><width>36</width><height>36</height>
+      <texture colordiffuse="FF8A9098">handle.png</texture>
+    </control>
+    <control type="image" id="7014">
+      <visible>String.IsEqual(Window.Property(cm_edit),1)</visible>
+      <left>724</left><top>476</top><width>36</width><height>36</height>
+      <texture colordiffuse="FFFFFFFF">handle.png</texture>
+    </control>
+    <control type="button" id="7002">
+      <left>720</left><top>470</top><width>400</width><height>48</height>
+      <texturefocus>transparent.png</texturefocus>
+      <texturenofocus>transparent.png</texturenofocus>
+      <onleft>7002</onleft><onright>7002</onright><onup>7001</onup><ondown>7004</ondown>
+    </control>
+    <control type="label" id="7003">
+      <left>1130</left><top>470</top><width>70</width><height>48</height>
+      <font>font14</font><textcolor>white</textcolor><align>center</align><aligny>center</aligny>
+      <label>0</label>
+    </control>
+
+    <!-- Default / Cancel / OK -->
+    <control type="button" id="7005">
+      <left>600</left><top>632</top><width>220</width><height>64</height>
+      <texturefocus colordiffuse="button_focus">white.png</texturefocus>
+      <texturenofocus colordiffuse="FF181F29">white.png</texturenofocus>
+      <font>font13</font><align>center</align><aligny>center</aligny>
+      <textcolor>white</textcolor><focusedcolor>FF0E1A1F</focusedcolor>
+      <label>Default</label>
+      <onleft>7005</onleft><onright>7006</onright><onup>7002</onup><ondown>7005</ondown>
+    </control>
+    <control type="button" id="7006">
+      <left>840</left><top>632</top><width>220</width><height>64</height>
+      <texturefocus colordiffuse="FFA33A38">white.png</texturefocus>
+      <texturenofocus colordiffuse="FF181F29">white.png</texturenofocus>
+      <font>font13</font><align>center</align><aligny>center</aligny>
+      <textcolor>white</textcolor><focusedcolor>white</focusedcolor>
+      <label>Cancel</label>
+      <onleft>7005</onleft><onright>7004</onright><onup>7002</onup><ondown>7006</ondown>
+    </control>
+    <control type="button" id="7004">
+      <left>1080</left><top>632</top><width>220</width><height>64</height>
+      <texturefocus colordiffuse="button_focus">white.png</texturefocus>
+      <texturenofocus colordiffuse="FF181F29">white.png</texturenofocus>
+      <font>font13</font><align>center</align><aligny>center</aligny>
+      <textcolor>white</textcolor><focusedcolor>FF0E1A1F</focusedcolor>
+      <label>OK</label>
+      <onleft>7006</onleft><onright>7004</onright><onup>7002</onup><ondown>7004</ondown>
+    </control>
+
+  </controls>
+</window>

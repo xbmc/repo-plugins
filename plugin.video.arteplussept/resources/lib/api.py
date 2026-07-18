@@ -8,7 +8,7 @@ from resources.lib import hof
 from resources.lib import logger
 
 _PLUGIN_NAME = "Arte +7"
-_PLUGIN_VERSION = "1.5.2"
+_PLUGIN_VERSION = "1.5.3"
 # Arte hbbtv - deprecated API since 2022 prefer Arte TV API
 _HBBTV_URL = 'https://www.arte.tv/hbbtvv2/services/web/index.php'
 _HBBTV_HEADERS = {
@@ -304,6 +304,11 @@ def get_zone_page(lang, zone_id, page_idx):
     """
     Navigate in pages of a zone identified by zone_id.
     """
+    # fix "bug" in Arte TV API of doubled zone_id. Example of wrong value:
+    # a6f8c6d2-29d8-44e6-95f3-eec44d2fedaa_a6f8c6d2-29d8-44e6-95f3-eec44d2fedaa
+    parts = zone_id.split('_')
+    if len(parts) == 2 and parts[0] == parts[1]:
+        zone_id = parts[0]
     url = _ARTETV_URL + ARTETV_ENDPOINTS['zonepage'].format(
         lang=lang, client='tv', zone_id=zone_id, country=lang.upper(), page=page_idx)
     return _load_json_full_url('artetv_getzonepage', url, ARTETV_HEADERS)
@@ -381,7 +386,7 @@ def authenticate_in_arte(plugin, username='', password='', headers=None):
         'username': username,
         'password': password
     }
-    xbmc.log(f"Try authenticating \"{username}\" to Arte TV")
+    xbmc.log(f"Try authenticating \"{username}\" to Arte TV", level=xbmc.LOGDEBUG)
     error = None
     reply = None
     try:

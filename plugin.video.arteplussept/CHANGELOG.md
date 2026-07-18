@@ -1,3 +1,12 @@
+v1.5.3 (2026-7-18)
+
+Fix next page navigation and error messages for non authenticated users
+
+- Fix next page navigation, when zone_id was made of a duplicated uuid separated with a _.
+Made code compatible with unexpected value returned by Arte TV API.
+- Smarter warning notification instead of error and warning messages for non authenticated users.
+A single warning is displayed, when a user tries to do something requiering auth. Not at start-up and in unconsistent way.
+
 v1.5.2 (2026-7-16)
 
 Fix page navigation and keep version in api header user_agent aligned with addon version

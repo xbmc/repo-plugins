@@ -31,11 +31,12 @@ def login(plugin, settings):
         return False
 
     # ensure no user is not logged in
-    loggedin_usr = is_logged_in_as(plugin)
+    loggedin_usr = settings.user_email
     tkn_data = get_cached_token(plugin, usr, True)
     if len(loggedin_usr) > 0 and tkn_data:
         xbmc.log(
-            f"\"{loggedin_usr}\" already authenticated to Arte TV : {tkn_data['access_token']}")
+            f"\"{loggedin_usr}\" already authenticated to Arte TV : {tkn_data['access_token']}",
+            level=xbmc.LOGINFO)
         # notify user that current token might be replaced
         accept_to_replace = xbmcgui.Dialog().yesno(
             plugin.addon.getLocalizedString(30015),
@@ -99,30 +100,20 @@ def logout(plugin, settings):
     return True
 
 
-def update_settings_state(plugin, usr):
+def update_settings_state(plugin, email):
     """Update setting state to know who belong the token to"""
-    message = plugin.addon.getLocalizedString(30017).format(user=usr)
-    if usr is None or len(usr) <= 0:
+    message = plugin.addon.getLocalizedString(30017).format(user=email)
+    if email is None or len(email) <= 0:
         message = plugin.addon.getLocalizedString(30018)
-    return plugin.set_setting('login_acc', message)
-
-
-def is_logged_in_as(plugin):
-    """Extract the logged in user from settings state"""
-    login_acc = plugin.get_setting('login_acc')
-    usr = ''
-    if isinstance(login_acc, str) and len(login_acc) > 1:
-        # remove everything before opening double quote included
-        usr = login_acc[login_acc.find('"')+1:]
-        # remove everything after closing double quote included
-        usr = usr[:usr.rfind('"')]
-    return usr
+    return plugin.set_setting('user_email', email) and plugin.set_setting('login_acc', message)
 
 
 def get_cached_token(plugin, token_idx, silent=False):
     """
     Return cached token for identified user or None.
-    If user logged in and later changed the user email, it returns None
+    If no token is in cache and silent is not True, then it warns user
+    about the need to authenticate.
+    If user logged in and later changed the user email, it returns None.
     """
     cached_token = plugin.get_storage(_STORAGE_KEY, TTL=_TTL)
     if token_idx in cached_token and isinstance(cached_token[token_idx], dict):

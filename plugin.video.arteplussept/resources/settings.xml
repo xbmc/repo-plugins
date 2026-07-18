@@ -34,6 +34,11 @@
 			type="text"
 			label="30054" />
 		<setting
+			id="user_email"
+			type="text"
+			default=""
+			visible="false" />
+		<setting
 			type="action"
 			action="RunPlugin(plugin://plugin.video.arteplussept/user/login)"
 			label="30057" />

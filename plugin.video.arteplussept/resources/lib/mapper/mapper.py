@@ -159,7 +159,9 @@ def map_zone_to_item(plugin, settings, zone, cached_categories):
     elif zone.get('link'):
         menu_item = map_api_categories_item(plugin, zone)
     else:
-        xbmc.log(f"Zone \"{title}\" will be ignored. No link. No content. id unknown.")
+        xbmc.log(
+            f"Zone \"{title}\" will be ignored. No link. No content. id unknown.",
+            level=xbmc.LOGINFO)
 
     return menu_item
 

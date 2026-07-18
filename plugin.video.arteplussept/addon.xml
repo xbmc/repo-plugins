@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.arteplussept" name="Arte +7" version="1.5.2" provider-name="bmf, thomas-ernest">
+<addon id="plugin.video.arteplussept" name="Arte +7" version="1.5.3" provider-name="bmf, thomas-ernest">
     <!-- https://kodi.wiki/view/Addon.xml -->
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -55,8 +55,13 @@ https://github.com/thomas-ernest/plugin.video.arteplussept
         <license>MIT</license>
         <website>https://www.arte.tv/fr/</website>
         <source>https://github.com/thomas-ernest/plugin.video.arteplussept</source>
-<news>1.5.2 (2026-7-16)
-Fix page navigation and keep version in api header user_agent aligned with addon version</news>
+<news>1.5.3 (2026-7-18)
+Fix next page navigation and error messages for non authenticated users
+
+- Fix next page navigation, when zone_id was made of a duplicated uuid separated with a _.
+Made code compatible with unexpected value returned by Arte TV API.
+- Smarter warning notification instead of error and warning messages for non authenticated users.
+A single warning is displayed, when a user tries to do something requiering auth. Not at start-up and in unconsistent way.</news>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>

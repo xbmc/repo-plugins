@@ -16,10 +16,6 @@ class ArteHistory(ArteCollection):
     It is available with Arte TV APA "last viewed" only.
     """
 
-    def __init__(self, plugin, settings):
-        super().__init__(plugin, settings)
-        self.auth_token = user.get_cached_token(self.plugin, settings.username)
-
     def build_item(self, label):
         """
         Return menu item to access logged-in user's Arte history
@@ -30,19 +26,27 @@ class ArteHistory(ArteCollection):
         """
         Return current page of user's history
         """
-        return super()._build_menu(
-            api.get_last_viewed(self.settings.language, self.auth_token, page),
-            'last_viewed'
-        )
+        menu = None
+        auth_token = user.get_cached_token(self.plugin, self.settings.username)
+        if auth_token:
+            menu = super()._build_menu(
+                api.get_last_viewed(self.settings.language, auth_token, page),
+                'last_viewed'
+            )
+        return menu
 
     def purge(self):
         """Flush user history and notify about success or failure"""
-        purge_confirmed = xbmcgui.Dialog().yesno(
-            self.plugin.addon.getLocalizedString(30030),
-            self.plugin.addon.getLocalizedString(30033),
-            autoclose=10000)
-        if purge_confirmed:
-            if 200 == api.purge_last_viewed(self.auth_token):
-                self.plugin.notify(msg=self.plugin.addon.getLocalizedString(30031), image='info')
-            else:
-                self.plugin.notify(msg=self.plugin.addon.getLocalizedString(30032), image='error')
+        auth_token = user.get_cached_token(self.plugin, self.settings.username)
+        if auth_token:
+            purge_confirmed = xbmcgui.Dialog().yesno(
+                self.plugin.addon.getLocalizedString(30030),
+                self.plugin.addon.getLocalizedString(30033),
+                autoclose=10000)
+            if purge_confirmed:
+                if 200 == api.purge_last_viewed(auth_token):
+                    self.plugin.notify(
+                        msg=self.plugin.addon.getLocalizedString(30031), image='info')
+                else:
+                    self.plugin.notify(
+                        msg=self.plugin.addon.getLocalizedString(30032), image='error')

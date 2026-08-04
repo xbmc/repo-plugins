@@ -1,0 +1,20 @@
+# Motorsport Hub language file
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.motorsporthub\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Show video titles and thumbnails"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Off by default: titles and thumbnails that give away results stay hidden until you press play."
+msgstr ""

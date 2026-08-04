@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.motorsporthub"
+       name="Motorsport Hub"
+       version="1.0.2"
+       provider-name="Leander Bloot">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="plugin.video.youtube" version="7.0.0" optional="true"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="main.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Every free and legal motorsport stream in one place</summary>
+    <description lang="en_GB">Motorsport Hub brings together every free and legal motorsport stream: live races, full replays, classics and shows from 96 official sources — Formula 1 classics, MotoGP, WEC and Le Mans, IMSA, GT World Challenge, DTM, Super GT, NASCAR, IndyCar, Formula E, WRC rally, rallycross, MXGP, Supercross, karting, drag racing and hill climbs.
+
+Live Now shows every official channel streaming right now. This Weekend lists upcoming sessions in your own timezone. Spoiler-free by default: titles and thumbnails that give away results stay hidden until you press play.
+
+No ads, no login, no piracy — the add-on only links to streams the rights holders publish themselves (official YouTube channels, free FAST channels and public archives). Nothing is hosted or re-streamed. Sources are health-checked daily.
+
+YouTube playback requires the official YouTube add-on.</description>
+    <disclaimer lang="en_GB">This add-on does not host or provide any content. It links to streams published by the rights holders themselves on their own official channels.</disclaimer>
+    <platform>all</platform>
+    <license>AGPL-3.0-only</license>
+    <source>https://github.com/Leander86-sketch/motorsport-kodi</source>
+    <website>https://motorsport.prototipo.nl</website>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <news>v1.0.2 — thin entry point, AGPL-3.0 license file added.</news>
+  </extension>
+</addon>

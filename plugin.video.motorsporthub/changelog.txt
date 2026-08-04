@@ -1,0 +1,15 @@
+v1.0.2
+- Slim entry point: logic moved to resources/lib (Kodi review guideline)
+- Added the AGPL-3.0 license file
+
+v1.0.1
+- Artwork on every folder and category, so Kodi skins show tiles instead of plain folder icons
+- Fanart across the add-on
+
+v1.0.0
+- Initial release
+- Live Now: every official channel streaming right now
+- This Weekend: upcoming sessions in your own timezone
+- 96 official sources across 8 categories
+- Spoiler-free by default (toggle in settings)
+- FAST channels play in-app; YouTube playback via the official YouTube add-on

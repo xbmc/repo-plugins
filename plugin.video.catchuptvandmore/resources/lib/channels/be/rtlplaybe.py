@@ -7,12 +7,8 @@
 # This file is part of Catch-up TV & More
 
 from __future__ import unicode_literals
-
 import base64
 import json
-import random
-import re
-import sys
 from builtins import str
 import requests
 from datetime import datetime, timezone
@@ -46,6 +42,8 @@ URL_LICENCE_KEY = ('https://lic.drmtoday.com/license-proxy-widevine/cenc/'
 
 POPCORN_SDK = '8'
 REQUESTS_TIMEOUT = 8
+API_KEY = '2W7kCXUTyUgKf7HKlK9qcYJvFmiPFaBEFT90eC2b'
+GIGYA_COOKIES = {'gig_bootstrap_3_LGnnaXIFQ_VRXofTaFTGnc6q7pM923yFB0AXSWdxADsUT0y2dVdDKmPRyQMj7LMc': '_gigya_ver4', }
 
 LIVE_CHANNEL = {
     "rtl_tvi": "tvi",
@@ -74,13 +72,13 @@ GENERIC_HEADERS = {
 }
 
 RTLPLAY_HEADERS = {
-    'User-Agent': 'RTL_PLAY/23.251217 (com.tapptic.rtl.tvi; build:26234; Android 30)',
+    'User-Agent': 'RTL_PLAY/25.260415 (com.tapptic.rtl.tvi; build:30644; Android 30)',
     'Accept': '*/*',
     'Accept-Encoding': 'gzip',
     'Connection': 'Keep-Alive',
     'Content-Type': 'application/json; charset=UTF-8',
     'lfvp-device-segment': 'TV>Android',
-    'x-app-version': '23',
+    'x-app-version': '25',
 }
 
 
@@ -261,15 +259,15 @@ def is_valid_token():
         return None
 
     LOGIN_TOKEN = json.loads(token_)
-    if LOGIN_TOKEN.get('lfvp_access_token') is not None:
+    if LOGIN_TOKEN.get('lfvp_rtlplay_auth') is not None:
         # Verify our token to see if it's still valid.
-        bstr = LOGIN_TOKEN.get('lfvp_access_token').split(".")[1]
+        bstr = LOGIN_TOKEN.get('lfvp_rtlplay_auth').split(".")[1]
         b64str = base64.b64decode(bstr + '=' * (-len(bstr) % 4))
 
         # Check expiration time
         lfvp_access_token_b64 = json.loads(b64str)
         exp = round(datetime.fromtimestamp(lfvp_access_token_b64.get('exp'), tz=timezone.utc).timestamp())
-        now = round(datetime.utcnow().timestamp())
+        now = round(datetime.now(timezone.utc).timestamp())
 
         if exp > now:
             return LOGIN_TOKEN
@@ -301,89 +299,55 @@ def get_login_token(plugin, **kwargs):
         return None
 
     # RTLPLAY Device_Id
-    response = urlquick.get(BASE_URL, headers=GENERIC_HEADERS, max_age=-1)
-    cookies = response.cookies.get_dict()
-    lfvp_device_id = cookies['lfvp_device_id']
-    lfvp_disabled_storefronts = cookies['lfvp_disabled_storefronts']
-    ak_bmsc = cookies['ak_bmsc']
+    response = requests.get(BASE_URL, headers=GENERIC_HEADERS, timeout=REQUESTS_TIMEOUT)
+    lfvp_device_id = response.cookies.get_dict().get('lfvp_device_id')
 
     # SSO token
-    cnx_cookies = {
+    token_cookies = {
         'lfvp_device_id': lfvp_device_id,
-        'lfvp_disabled_storefronts': lfvp_disabled_storefronts,
-        'ak_bmsc': ak_bmsc,
         'lfvp_auth.redirect_uri': BASE_URL,
     }
-    response = urlquick.get(BASE_URL + '/connexion', cookies=cnx_cookies, headers=GENERIC_HEADERS, allow_redirects=True, timeout=REQUESTS_TIMEOUT, max_age=-1)
-    sso_url = []
-    if response.history:
-        for resp in response.history:
-            sso_url.append(resp.url)
-        sso_url.append(response.url)
+    response = requests.get(BASE_URL + '/connexion', cookies=token_cookies, headers=GENERIC_HEADERS, timeout=REQUESTS_TIMEOUT, allow_redirects=True)
+    cnx_redirecturl = response.history[1].url.replace('https://sso.rtl.be', '')
+    cnx_cookies = response.history[0].cookies.get_dict()
+    cnx_cookies.update({'lfvp_device_id': lfvp_device_id})
 
+    # SSO Login
     json_data = {
         'username': login,
         'password': password,
     }
-    response = urlquick.post(URL_SSO_LOGIN, headers=GENERIC_HEADERS, json=json_data, timeout=10, max_age=-1)
+    response = requests.post(URL_SSO_LOGIN, headers=GENERIC_HEADERS, cookies=GIGYA_COOKIES, json=json_data, timeout=REQUESTS_TIMEOUT)
     json_parser = response.json()
     if json_parser['httpStatusCode'] == 400:
         xbmcgui.Dialog().ok(
             plugin.localize(30600),
             plugin.localize(30604) % ('RTLPlay (BE)', ('%s' % PUBLIC_SITE)))
         return None
-
-    sso_token = json_parser['data']['userAccount']['session']['encryptedToken']
-    sso_cookies = response.cookies.get_dict()
+    sso_token = response.json()['data']['userAccount']['session']['encryptedToken']
 
     # SSO auth
     params = {
-        'redirectUrl': sso_url[1].replace('https://sso.rtl.be', ''),
+        'redirectUrl': cnx_redirecturl,
         'token': sso_token,
     }
-    response = urlquick.get(URL_SSO_AUTH, params=params, cookies=sso_cookies, headers=GENERIC_HEADERS, timeout=REQUESTS_TIMEOUT, max_age=-1)
-    sso_code = re.findall(r'name=\"code\" value=\"(.*)\"', response.content.decode())
-    sso_state = re.findall(r'name=\"state\" value=\"(.*)\"', response.content.decode())
+    response = requests.get(URL_SSO_AUTH, params=params, cookies=cnx_cookies, headers=GENERIC_HEADERS, timeout=REQUESTS_TIMEOUT, allow_redirects=True)
+    login_token = {'lfvp_device_id': lfvp_device_id}
 
-    # RTLPlay callback
-    cookies = {
-        'lfvp_device_id': lfvp_device_id,
-        'lfvp_disabled_storefronts': lfvp_disabled_storefronts,
-        'ak_bmsc': ak_bmsc,
-        'lfvp_auth.redirect_uri': BASE_URL,
-        'lfvp_auth.state': sso_state[0],
-    }
-    data = {
-        'code': sso_code[0],
-        'state': sso_state[0],
-        'iss': 'https://sso.rtl.be/oidc/',
-    }
-    response = requests.post(BASE_URL + '/login-callback', cookies=cookies, headers=GENERIC_HEADERS, data=data, allow_redirects=True, timeout=REQUESTS_TIMEOUT)
-    login_cookie = []
-    if response.history:
-        for resp in response.history:
-            login_cookie.append(resp.cookies.get_dict())
-    callback_cookie = response.cookies.get_dict()
+    i = 1
+    history = len(response.history)
+    while True:
+        login_token.update(response.history[i].cookies.get_dict())
+        i += 1
+        if i == history:
+            login_token.update(response.cookies.get_dict())
+            break
 
-    login_token = {
-        "ak_bmsc": ak_bmsc,
-        "bm_sv": callback_cookie['bm_sv'],
-        "lfvp_access_token": login_cookie[0]['lfvp_access_token'],
-        "lfvp_device_id": lfvp_device_id,
-        "lfvp_disabled_storefronts": "",
-        "lfvp_id_token": login_cookie[0]['lfvp_id_token'],
-        "lfvp_refresh_token": login_cookie[0]['lfvp_refresh_token'],
-    }
-    for profile_id in login_cookie:
-        if 'lfvp_auth.profile' in profile_id:
-            x_dpp_profile = re.match(r"^([a-f\d]{8}(-[a-f\d]{4}){3}-[a-f\d]{12})", profile_id.get('lfvp_auth.profile'), re.IGNORECASE).group(1)
-            login_token.update({"lfvp_auth.profile": x_dpp_profile, })
-        if 'lfvp_auth_token' in profile_id:
-            login_token.update({"lfvp_auth_token": profile_id.get('lfvp_auth_token'), })
-
-    save_token(login_token)
-
-    return login_token
+    if login_token.get('lfvp_rtlplay_auth'):
+        save_token(login_token)
+        return login_token
+    else:
+        return None
 
 
 @Resolver.register
@@ -409,45 +373,32 @@ def get_final_video_url(plugin, item_id, video_url):
         return False
 
     is_live = "/direct/" in video_url and "/player/" not in video_url
-    response = urlquick.get(video_url, headers=RTLPLAY_HEADERS, cookies=login_token, max_age=-1)
+    response = urlquick.get(video_url, headers=RTLPLAY_HEADERS, cookies=login_token, max_age=-1, raise_for_status=False)
     if response.status_code != 200:
         return None, None, None
 
-    response = response.content.decode()
-    pattern = re.search(r'apiKey: "([^"]*)"', response)
-    if pattern is not None:
-        api_key = pattern.group(1)
-    else:
-        api_key = None
-
-    pattern = re.search(r'token: "([^"]*)"', response)
-    if pattern is not None:
-        bearer_token = pattern.group(1)
-    else:
-        bearer_token = None
+    bearer_token = None
+    root = response.parse("script", attrs={"id": "__NEXT_DATA__"})
+    json_parser = json.loads(root.text)
+    bearer_token = json_parser['props']['pageProps'].get('authToken')
 
     if is_live:
-        for r1, r2 in [(r"playerData\s*=", "assetId"), (r"channel\s*:", "id")]:
-            pattern_r1 = re.search(r1 + "[^{}]+{([^{}]+)}", response)
-            if pattern_r1 is not None:
-                content_id = pattern_r1.group(1)
-                pattern_r2 = re.search(r2 + "[^\"']+[\"']([^\"']+)[\"']", content_id)
-                if pattern_r2 is not None:
-                    content_id = pattern_r2.group(1)
-                    assert len(content_id) > 0
-                    break
-                else:
-                    content_id = None
+        currentPath = json_parser['props']['pageProps'].get('currentPath')
+        for datas in json_parser['props']['pageProps']['channels']:
+            url = datas.get('url')
+            if url == currentPath:
+                content_id = datas.get('id')
+                break
             else:
                 content_id = None
     else:
-        content_id = re.search(r"/player/([^/?]*)", video_url).group(1)
+        content_id = json_parser['props']['pageProps'].get('id')
 
-    if bearer_token is None or api_key is None:
+    if bearer_token is None:
         return None, None, None
 
     headers_cfg = RTLPLAY_HEADERS.copy()
-    headers_cfg.update({'x-api-key': api_key, })
+    headers_cfg.update({'x-api-key': API_KEY, })
     headers_cfg.update({'popcorn-sdk-version': POPCORN_SDK, })
     headers_cfg.update({'authorization': 'Bearer ' + bearer_token, })
     params_cfg = {'startPosition': '0.0', 'autoPlay': 'true'}
@@ -458,8 +409,10 @@ def get_final_video_url(plugin, item_id, video_url):
                              headers=headers_cfg,
                              json=json_cfg,
                              timeout=REQUESTS_TIMEOUT,
-                             max_age=-1)
+                             max_age=-1,
+                             raise_for_status=False)
     if response.status_code == 403:
+        plugin.notify('ERROR', plugin.localize(30713))
         return None, None, None
 
     response = json.loads(response.content.decode())

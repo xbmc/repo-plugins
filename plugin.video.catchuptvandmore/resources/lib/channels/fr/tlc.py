@@ -66,4 +66,10 @@ def get_video_url(plugin, item_id, video_url, **kwargs):
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-    return resolver_proxy.get_stream_twitch(plugin, 'tlcredaction')
+    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
+    vimeo_page = resp.parse("iframe").get('src')
+
+    resp = urlquick.get(vimeo_page, headers=GENERIC_HEADERS, max_age=-1)
+    video_id = re.compile(r'video/(.*?)/fallback\?noscript').findall(resp.text)[0]
+
+    return resolver_proxy.get_stream_vimeo(plugin, video_id=video_id, referer=URL_ROOT)

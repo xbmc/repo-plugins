@@ -28,13 +28,13 @@ PRODUCTS_URL = API_CLIENT + '/v1/product'
 
 
 def get_token():
-    headers = {
+    tkn_headers = {
         'api-key': 'zq5pyPd0RTbNg3Fyj52PrkKL9c2Af38HHh4itgZTKDaCzjAyhd',
         'content-type': 'application/json',
         'tenant': TENANT
     }
 
-    token_response = requests.post(ANONYMOUS_TOKEN_URL, headers=headers, json={})
+    token_response = requests.post(ANONYMOUS_TOKEN_URL, headers=tkn_headers, json={})
 
     if token_response.status_code == 200:
         return token_response.json()
@@ -42,7 +42,11 @@ def get_token():
     return None
 
 
-HEADERS = {'session': get_token().get('id'), 'tenant': TENANT}
+def headers():
+    hdrs = getattr(headers, '_headers', None)
+    if hdrs is None:
+        headers._headers = hdrs = {'session': get_token().get('id'), 'tenant': TENANT}
+    return hdrs
 
 
 def get_products(product_ids):
@@ -51,14 +55,14 @@ def get_products(product_ids):
         'extend': 'label'
     }
 
-    product_json = json.loads(urlquick.get(PRODUCTS_URL, headers=HEADERS, params=params, max_age=-1).text)
+    product_json = json.loads(urlquick.get(PRODUCTS_URL, headers=headers(), params=params, max_age=-1).text)
     return product_json
 
 
 @Route.register(content_type='videos')
 def do_search(plugin, search_query):
     search_json = json.loads(
-        urlquick.get(PREDICTIVE_SEARCH_URL.format(search_query=quote(search_query)), headers=HEADERS, max_age=-1).text)
+        urlquick.get(PREDICTIVE_SEARCH_URL.format(search_query=quote(search_query)), headers=headers(), max_age=-1).text)
     if search_json:
         if 'data' in search_json:
             data = search_json.get('data', [])
@@ -103,7 +107,7 @@ def main_menu(plugin, **kwargs):
 
 @Resolver.register
 def get_video(plugin, product_id, **kwargs):
-    playout_json = json.loads(urlquick.get(VIDEO_URL.format(product_id=product_id), headers=HEADERS, max_age=-1).text)
+    playout_json = json.loads(urlquick.get(VIDEO_URL.format(product_id=product_id), headers=headers(), max_age=-1).text)
 
     brightcove = playout_json.get('brightcove', {})
     policy_key = brightcove.get('policyId')

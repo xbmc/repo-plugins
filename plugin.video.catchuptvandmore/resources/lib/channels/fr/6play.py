@@ -78,14 +78,7 @@ URL_COMPTE_LOGIN = 'https://login-gigya.m6.fr/accounts.login'
 # TODO get value Callback
 # callback: jsonp_3bbusffr388pem4
 
-URL_GET_JS_ID_API_KEY = 'https://www.6play.fr/connexion'
-
 # Id
-URL_API_KEY = 'https://www.6play.fr/main-%s.bundle.js'
-
-PATTERN_API_KEY = re.compile(r'\"eu1.gigya.com\",key:\"(.*?)\"')
-PATTERN_JS_ID = re.compile(r'main-(.*?)\.bundle\.js')
-
 API_KEY = "3_hH5KBv25qZTd_sURpixbQW6a4OsiIzIEF2Ei_2H7TXTGLJb_1Hr4THKZianCQhWK"
 
 URL_TOKEN_REPLAY = 'https://drm.6cloud.fr/v1/customers/m6web/platforms/m6group_web/services/m6replay/users/%s/videos/%s/upfront-token'
@@ -109,25 +102,8 @@ M6_HEADERS = {
 }
 
 
-def get_api_key():
-    resp_js_id = urlquick.get(URL_GET_JS_ID_API_KEY, headers=GENERIC_HEADERS, max_age=-1)
-    found_js_id = PATTERN_JS_ID.findall(resp_js_id.text)
-    if len(found_js_id) == 0:
-        return API_KEY
-    js_id = found_js_id[0]
-    resp = urlquick.get(URL_API_KEY % js_id, headers=GENERIC_HEADERS, max_age=-1)
-    # Hack to force encoding of the response
-    resp.encoding = 'utf-8'
-    found_items = PATTERN_API_KEY.findall(resp.text)
-    if len(found_items) == 0:
-        return API_KEY
-    return found_items[0]
-
-
 @Resolver.register
 def get_login_token(plugin, **kwargs):
-    api_key = get_api_key()
-
     if plugin.setting.get_string('6play.login') == '' or \
             plugin.setting.get_string('6play.password') == '':
         xbmcgui.Dialog().ok(
@@ -139,7 +115,7 @@ def get_login_token(plugin, **kwargs):
     payload = {
         "loginID": plugin.setting.get_string('6play.login'),
         "password": plugin.setting.get_string('6play.password'),
-        "apiKey": api_key,
+        "apiKey": API_KEY,
         "format": "jsonp",
         "callback": "jsonp_3bbusffr388pem4"
     }

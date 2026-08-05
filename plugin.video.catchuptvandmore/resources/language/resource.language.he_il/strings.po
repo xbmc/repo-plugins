@@ -119,7 +119,7 @@ msgid "Favourites"
 msgstr ""
 
 
-# Countries (from 30050 to 30079)
+# Countries (from 30050 to 30099)
 
 msgctxt "#30050"
 msgid "France"
@@ -241,85 +241,89 @@ msgctxt "#30079"
 msgid "Ireland"
 msgstr "אירלנד"
 
-# Channels (from 30080 to 30129)
-
 msgctxt "#30080"
+msgid "Romania"
+msgstr "רומניה"
+
+# Channels (from 30100 to 30129)
+
+msgctxt "#30100"
 msgid "French channels"
 msgstr "ערוצים צרפתיים"
 
-msgctxt "#30081"
+msgctxt "#30101"
 msgid "Belgian channels"
 msgstr "ערוצים בלגיים"
 
-msgctxt "#30082"
+msgctxt "#30102"
 msgid "Japanese channels"
 msgstr "ערוצים יפניים"
 
-msgctxt "#30083"
+msgctxt "#30103"
 msgid "Switzerland channels"
 msgstr ""
 
-msgctxt "#30084"
+msgctxt "#30104"
 msgid "United Kingdom channels"
 msgstr "ערוצים אנגליים"
 
-msgctxt "#30085"
+msgctxt "#30105"
 msgid "International channels"
 msgstr ""
 
-msgctxt "#30086"
+msgctxt "#30106"
 msgid "Canadian channels"
 msgstr ""
 
-msgctxt "#30087"
+msgctxt "#30107"
 msgid "United States channels"
 msgstr ""
 
-msgctxt "#30088"
+msgctxt "#30108"
 msgid "Polish channels"
 msgstr ""
 
-msgctxt "#30089"
+msgctxt "#30109"
 msgid "Spanish channels"
 msgstr ""
 
-msgctxt "#30090"
+msgctxt "#30110"
 msgid "Tunisia channels"
 msgstr ""
 
-msgctxt "#30091"
+msgctxt "#30111"
 msgid "Italian channels"
 msgstr ""
 
-msgctxt "#30092"
+msgctxt "#30112"
 msgid "Dutch channels"
 msgstr ""
 
-msgctxt "#30093"
+msgctxt "#30113"
 msgid "Chinese channels"
 msgstr ""
 
-msgctxt "#30094"
+msgctxt "#30114"
 msgid "Cameroon channels"
 msgstr ""
 
-msgctxt "#30095"
+msgctxt "#30115"
 msgid "Slovenian channels"
 msgstr ""
 
-msgctxt "#30096"
+msgctxt "#30116"
 msgid "Ethiopian channels"
 msgstr ""
 
-msgctxt "#30097"
+msgctxt "#30117"
 msgid "Moroccan channels"
 msgstr ""
 
-msgctxt "#30098"
+msgctxt "#30118"
 msgid "Peruvian channels"
 msgstr ""
 
-msgctxt "#30099"
+msgctxt "#30119"
 msgid "UK channels"
 msgstr ""
 
@@ -461,6 +465,9 @@ msgctxt "#30184"
 msgid "quality: "
 msgstr "אֵיכוּת: "
 
+msgctxt "#30185"
+msgid "Channel 4: Enable high quality (disable when geo blocked)"
+msgstr "Channel 4: הפעל איכות גבוהה (השבת כאשר יש חסימה גיאוגרפית)"
 
 msgctxt "#30192"
 msgid "BEST"
@@ -604,12 +611,20 @@ msgid "SFR TV password"
 msgstr ""
 
 msgctxt "#30264"
-msgid "Channel 4 Login"
-msgstr ""
+msgid "Log in to Channel 4"
+msgstr "התחבר ל-Channel4"
 
 msgctxt "#30265"
-msgid "Channel 4 Password"
-msgstr ""
+msgid "Log out of Channel 4"
+msgstr "התנתק מ-Channel4"
+
+msgctxt "#30266"
+msgid "Log in to 5"
+msgstr "התחבר ל-5"
+
+msgctxt "#30267"
+msgid "Log out of 5"
+msgstr "התנתק מ-5"
 
 # TV integration (from 30270 to 30289)
 
@@ -906,6 +921,26 @@ msgstr ""
 msgctxt "#30732"
 msgid "This content requires a payment. To buy or rent it, go to %s website at this URL : %s"
 msgstr ""
+
+msgctxt "#30733"
+msgid "Enter email"
+msgstr "הזן כתובת דוא\"ל"
+
+msgctxt "#30734"
+msgid "Enter password"
+msgstr "הזן סיסמה"
+
+msgctxt "#30735"
+msgid "Logged in successfully"
+msgstr "הכניסה בוצעה בהצלחה"
+
+msgctxt "#30736"
+msgid "Logged out successfully"
+msgstr "התנתק בהצלחה"
+
+msgctxt "#30737"
+msgid "You are already logged out."
+msgstr "כבר יצאת מהמערכת"
 
 
 # Favourites (from 30800 to 30859)

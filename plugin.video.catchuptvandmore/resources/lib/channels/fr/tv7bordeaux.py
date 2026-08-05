@@ -18,25 +18,16 @@ from resources.lib import resolver_proxy, web_utils
 
 URL_LIVE = "https://www.sudouest.fr/lachainetv7/"
 
-PATTERN_FILE = re.compile(r'live\":{\"src\":\"(.*?)\"')
+GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
     video_page = None
-    resp = urlquick.get(URL_LIVE, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
+    resp = urlquick.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
     for possibility in resp.parse().findall('.//iframe'):
         if possibility.get('allowfullscreen'):
-            video_page = 'https:' + possibility.get('src')
-
-    if video_page is None:
-        return False
-
-    # In a perfect world, digiteka extractor would not be broken in youtube-dl
-    resp2 = urlquick.get(video_page, headers={"User-Agent": web_utils.get_random_ua()}, max_age=-1)
-    found_files = PATTERN_FILE.findall(resp2.text)
-    if len(found_files) == 0:
-        return False
-
-    video_url = found_files[0].replace("\\", "")
-    return resolver_proxy.get_stream_with_quality(plugin, video_url, manifest_type="hls")
+            video_page = possibility.get('src')
+            resp = urlquick.get(video_page, headers=GENERIC_HEADERS, max_age=-1)
+            video_id = re.compile(r'video_id\":\"(.*?)\"').findall(resp.text)[0]
+            return resolver_proxy.get_stream_youtube(plugin, video_id)

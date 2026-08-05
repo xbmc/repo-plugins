@@ -3,23 +3,19 @@
 # (see LICENSE.txt or https://www.gnu.org/licenses/gpl-2.0.txt)
 # This file is part of Catch-up TV & More
 
-from __future__ import unicode_literals
-
 import re
 import json
 import base64
-import urlquick
 import time
+import urllib.parse
+from datetime import datetime, timedelta, timezone
 
 import xbmc
+import xbmcgui
 import xbmcplugin
 
+import urlquick
 from codequick import Listitem, Resolver, Route, Script, utils
-
-try:
-    import urllib.parse
-except ImportError:
-    import urllib
 
 try:
     from Crypto.Cipher import AES
@@ -31,7 +27,8 @@ except ImportError:
     from Cryptodome.Hash import HMAC, SHA256
 
 from resources.lib.menu_utils import item_post_treatment
-from resources.lib import web_utils, resolver_proxy
+from resources.lib.py_utils import datetime_strptime
+from resources.lib import web_utils, resolver_proxy, kodi_utils
 
 CORONA_URL = 'https://corona.channel5.com/'
 BASIS_URL = CORONA_URL + 'shows/%s/seasons'
@@ -61,6 +58,7 @@ REQ_TIMEOUT = (3.5, 7)
 DFLT_CACHE_TIME = 600
 DFLT_SORT_METHODS = (xbmcplugin.SORT_METHOD_UNSORTED, xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE)
 DFLT_PAGE_SIZE = 50
+SETTING_ID_KEYS_REVERSED = 'uk.my5.key_order_reversed'
 
 GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 feeds_api_params = {
@@ -90,21 +88,12 @@ lic_headers = {
 my_list_ids = None
 
 
-def getdata(ui, media):
+def getdata():
     resp = urlquick.get(KEYURL, headers=GENERIC_HEADERS, timeout=REQ_TIMEOUT, max_age=0)
     content = resp.content.decode("utf-8", "ignore")
     ss = re.compile(r';}}}\)\(\'(......)\'\)};').search(content).group(1)
     m = re.compile(r'\(\){return "(.{3000,})";\}').search(content).group(1)
-
-    timeStamp = str(int(time.time()))
-    CALL_URL = LICC_URL % (media, ui, timeStamp)
-
-    try:
-        h = urllib.parse.unquote(m)
-        hmac_update = bytes(CALL_URL, encoding="utf-8")
-    except Exception:
-        h = urllib.unquote(m.encode('utf-8')).decode('utf-8', 'ignore')
-        hmac_update = str(CALL_URL)
+    h = urllib.parse.unquote(m)
 
     z = [ord(c) for c in h]
     y = 0
@@ -117,20 +106,41 @@ def getdata(ui, media):
             sout = sout + chr(k)
         y = y + 1
 
-    m = re.compile(r'SSL_MA..(.{24})..(.{24})').findall(sout)[0]
-    h = HMAC.new(base64.urlsafe_b64decode(str(m[0])), digestmod=SHA256)
-    h.update(hmac_update)
-    auth = base64.urlsafe_b64encode(h.digest()).decode('utf-8')[:-1].replace("+", "-").replace("/", "_")
-
-    return CALL_URL, auth, m[1]
+    matches = re.compile(r'([A-Za-z0-9+/]{22}==).*?([A-Za-z0-9+/]{22}==)').findall(sout)
+    return matches[0]
 
 
-def ivdata(lic_full, auth):
-    params = {'auth': auth}
-    resp = urlquick.get(lic_full, headers=GENERIC_HEADERS, params=params,
-                        timeout=REQ_TIMEOUT, max_age=-1)
+def ivdata(item_id, media_type, keys):
+    timeStamp = str(int(time.time()))
+    lic_full = LICC_URL % (media_type, item_id, timeStamp)
+    hmac_update = bytes(lic_full, encoding="utf-8")
+    saved_swap = swap = Script.setting.get_boolean(SETTING_ID_KEYS_REVERSED)
+
+    # Calculate hmac and make the request. On 403 response, try one more time with swapped keys.
+    for tries in range(2):
+        if swap:
+            hmac_key, aes_key = keys
+        else:
+            aes_key, hmac_key = keys
+
+        h = HMAC.new(base64.urlsafe_b64decode(hmac_key), digestmod=SHA256)
+        h.update(hmac_update)
+        auth = base64.urlsafe_b64encode(h.digest()).decode('ascii')[:-1]
+
+        params = {'auth': auth}
+        try:
+            resp = urlquick.get(lic_full, headers=GENERIC_HEADERS, params=params,
+                                timeout=REQ_TIMEOUT, max_age=-1)
+            break
+        except urlquick.HTTPError as err:
+            if err.response.status_code != 403 or tries > 0:
+                raise
+        swap = not swap
+
+    if saved_swap != swap:
+        Script.setting[SETTING_ID_KEYS_REVERSED] = str(swap).lower()
     root = json.loads(resp.text)
-    return root['iv'], root['data']
+    return root['iv'], root['data'], aes_key
 
 
 def mangle(result):
@@ -182,10 +192,15 @@ def list_main_page(plugin, **kwargs):
 
 def list_hero_items(plugin):
     """List the hero items normally presented on the home page of the website."""
-    for li in list_collections(plugin, 'PLC_My5DesktopHeroRail'):
-        title = li.label
-        li.info['title'] = f'[B][COLOR orange]{title}[/COLOR][/B]'
-        yield li
+    try:
+        for li in list_corona_collection('PLC_My5DesktopFeaturedRail'):
+            if li:
+                title = li.label
+                li.info['title'] = f'[B][COLOR orange]{title}[/COLOR][/B]'
+            yield li
+    except Exception:
+        # Do not allow an error in hero items to crash the whole channel
+        pass
 
 
 @Route.register(autosort=False, content_type="videos")
@@ -317,10 +332,15 @@ def list_collections(plugin, browse_name, **kwargs):
                 item = Listitem()
                 item.label = collection['title']
                 if collection.get('live'):
-                    item.set_callback(get_live_url, item_id=collection['channel'])
+                    chan_id = collection['channel']
+                    item.art['thumb'] = BASE_IMG + f'/channel/{chan_id}/512x512.png'
+                    item.set_callback(get_live_url, item_id=chan_id)
+                    if chan_id.startswith('5-EVENTS-'):
+                        add_special_live_event_info(item, chan_id)
                 else:
                     browse_name = collection['id']
-                    if browse_name in ('PLC_My5DesktopHeroRail',
+                    if browse_name in ('PLC_My5DesktopFeaturedRail',
+                                       'PLC_My5DesktopHeroRail',
                                        'PLC_My5ContinueWatchingRail',
                                        'PLC_My5DesktopRecommendationsRail'):
                         continue
@@ -336,6 +356,30 @@ def list_collections(plugin, browse_name, **kwargs):
     else:
         yield False
         return
+
+
+def list_corona_collection(browse_name):
+    """List a collection obtained from the corona subdomain.
+
+    Unlike data from feed-api end points, responses from this domain already include all data.
+    Currently, only used by the hero rail, but expect more to follow in the future.
+    """
+    resp = urlquick.get(''.join((CORONA_URL, 'collections/', browse_name, '.json')),
+                        headers=GENERIC_HEADERS,
+                        params={'platform': 'my5desktop',
+                                'friendly': '1',
+                                'include_show': '1'},
+                        timeout=REQ_TIMEOUT,
+                        max_age=DFLT_CACHE_TIME)
+    data = json.loads(resp.content)
+    for item in data['content']:
+        item_type = item.get('type')
+        if item_type == 'Watchable':
+            yield parse_watchable(item)
+        elif item_type == 'Show':
+            yield parse_show(item)
+        else:
+            continue
 
 
 @Route.register(content_type="videos")
@@ -370,6 +414,46 @@ def search_shows(plugin, params, offset=0):
                                   offset=data['next_offset'])
         item.property['SpecialSort'] = 'bottom'
         yield item
+
+
+def add_special_live_event_info(listitem: Listitem, chan_id):
+    """Get additional info about a special events FAST channel.
+
+    Will be used to display more useful info in the collection 'live channel',
+    because this collection itself only provides rather cryptic channel names
+    like '5 event 01' for special events channels.
+
+    """
+    try:
+        strp_fmt = '%Y-%m-%dT%H:%M:%S.000Z'
+        now = datetime.now(timezone.utc)
+        resp = urlquick.get(url=CORONA_URL + f'channels/{chan_id}/epg.json?',
+                            headers=GENERIC_HEADERS,
+                            params={'start': now.strftime(strp_fmt),
+                                    'end': (now + timedelta(days=1)).strftime(strp_fmt),
+                                    'platform': 'my5desktop'},
+                            timeout=REQ_TIMEOUT,
+                            max_age=DFLT_CACHE_TIME)
+        shows_list = json.loads(resp.content)['transmissions']
+        listitem.label = shows_list[0]['channelName']
+        descriptions = [shows_list[0]['showTitle']]
+        local_tz = kodi_utils.get_local_zone()
+        web_dt_fmt = '%Y-%m-%dT%H:%M:%S%z'
+        local_dt_fmt = ''.join((
+            '[B]',
+            xbmc.getRegion('dateshort'),
+            ' ',
+            xbmc.getRegion('time').replace(':%S', '').replace('%I%I:', '%I:'),
+            '[/B]'
+        ))
+        for pgm in shows_list[:3]:
+            descriptions.append(' ')
+            start_t = datetime_strptime(pgm['start'], web_dt_fmt)
+            descriptions.append(start_t.astimezone(local_tz).strftime(local_dt_fmt))
+            descriptions.append(pgm['description'])
+        listitem.info['plot'] = '\n'.join(descriptions)
+    except (KeyError, IndexError, urlquick.RequestException, json.JSONDecodeError):
+        pass
 
 
 def parse_show(show_data):
@@ -468,7 +552,7 @@ def parse_watchable(watchable, from_episode_list=False):
     Parse item data for functions that retrieve watchables, like
     `search_watchables()` and `list_episodes()`.
 
-    Watchables can are various types of items, like episodes of series, or one-offs
+    Watchables can be various types of items, like episodes of series, or one-offs
     like documentaties, or films.
 
     Listitem label and description are handled differently depending on the origin of the
@@ -557,26 +641,22 @@ def request_user_collection(collection_name, show_login_msg=True):
     if not session_tkn:
         return []
 
-    try:
-        resp = urlquick.get('https://corona.channel5.com/collections/%s.json' % collection_name,
-                            headers={'User-Agent': web_utils.get_random_ua(),
-                                     'Authorization': 'Bearer ' + session_tkn,
-                                     'Pragma': 'no-cache',
-                                     'Cache-Control': 'no-cache'
-                                     },
-                            params={'platform': 'my5desktop', 'friendly': 'true',
-                                    'milkshake': 'include', 'limit': 256},
-                            timeout=REQ_TIMEOUT,
-                            max_age=-1)
-        data = json.loads(resp.content)
-        shows = data.get('content') or data['watchables']
-        return shows
-    except urlquick.HTTPError as err:
-        # Normal response when a list is empty.
-        if err.response.status_code == 404:
-            return []
-        else:
-            raise
+    resp = urlquick.get('https://corona.channel5.com/collections/%s.json' % collection_name,
+                        headers={'User-Agent': web_utils.get_random_ua(),
+                                 'Authorization': 'Bearer ' + session_tkn,
+                                 'Pragma': 'no-cache',
+                                 'Cache-Control': 'no-cache'
+                                 },
+                        params={'platform': 'my5desktop', 'friendly': 'true',
+                                'milkshake': 'include', 'limit': 256},
+                        timeout=REQ_TIMEOUT,
+                        max_age=-1)
+    data = json.loads(resp.content)
+    # Only 'continue watching' has its data in field 'watchables'.
+    shows = data.get('content')
+    if shows is None:
+        shows = data['watchables']
+    return shows
 
 
 # -----------------------------------------------------------------------------
@@ -645,9 +725,7 @@ def edit_mylist(plugin, operation, show_id, show_title=None):
         method = 'delete'
         body = None
     else:
-        msg = f"Parameter 'operation' must be either 'add' or 'remove', not '{operation}'."
-        plugin.log("[UK - Chan5] Error edit_my_list: " + msg, plugin.ERROR)
-        raise ValueError(msg)
+        raise ValueError(f"[UK - Chan5] Invalid MyList edit operation '{operation}'.")
 
     resp = urlquick.request(
         method=method,
@@ -676,8 +754,8 @@ def get_video_url(plugin, fname, season_f_name, show_id, standalone, **kwargs):
         root = json.loads(resp.text)
         show_id = root['id']
 
-    LICFULL_URL, auth, aesKey = getdata(show_id, 'media')
-    iv, data = ivdata(LICFULL_URL, auth)
+    keys = getdata()
+    iv, data, aesKey = ivdata(show_id, 'media', keys)
     sd_video_url, drm_url, sub_url = part2(iv, aesKey, data)
 
     # Attempt to expose FHD resolutions
@@ -686,8 +764,7 @@ def get_video_url(plugin, fname, season_f_name, show_id, standalone, **kwargs):
     for video_url in (fhd_video_url, sd_video_url):
         try:
             resp = urlquick.get(video_url, headers=GENERIC_HEADERS, timeout=REQ_TIMEOUT, max_age=-1)
-        except urlquick.HTTPError as err:
-            plugin.log("[UK - Chan5] Failed to get VOD manifest {}: {!r}".format(video_url, err), plugin.DEBUG)
+        except urlquick.HTTPError:
             if video_url == fhd_video_url:
                 continue
             else:
@@ -719,8 +796,8 @@ def get_video_url(plugin, fname, season_f_name, show_id, standalone, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    LICFULL_URL, auth, aesKey = getdata(item_id, 'live_media')
-    iv, data = ivdata(LICFULL_URL, auth)
+    keys = getdata()
+    iv, data, aesKey = ivdata(item_id, 'live_media', keys)
     video_url, drm_url, sub_url = part2(iv, aesKey, data)
     video_url = video_url.replace('subtitles=off', 'subtitles=on')
 
@@ -738,7 +815,7 @@ def availability(end_time):
     still available.
 
     Args:
-        end_time (float): Timestamp when availability ends.
+        end_time (float | None): Timestamp when availability ends.
     Returns:
         str
 
@@ -782,12 +859,10 @@ def get_session_token(msg_on_fail=True):
         return sess_token
     else:
         Script.log("[UK-Chan5] No session token in settings, user has to log in")
-        if not msg_on_fail:
-            return None
-        import xbmcgui
-        xbmcgui.Dialog().ok(
-            Script.localize(TXT_INFORMATION),
-            Script.localize(TXT_ACCOUNT_REQUIRED) % ('Channel5 (UK)', ('%s' % PUBLIC_SITE)))
+        if msg_on_fail:
+            xbmcgui.Dialog().ok(
+                Script.localize(TXT_INFORMATION),
+                Script.localize(TXT_ACCOUNT_REQUIRED) % ('5 (UK)', PUBLIC_SITE))
         return None
 
 
@@ -827,17 +902,10 @@ def aws_authenticate(req_data):
         data = json.loads(resp.content)
         return data['AuthenticationResult']
     except urlquick.HTTPError as e:
-        Script.log("[UK-Chan5] Failed to authenticate: %r - %s",
-                   (e, e.response.content), lvl=Script.ERROR)
-        try:
-            resp_data = e.response.json()
-            msg = resp_data.get('message') or resp_data['__type']
-            Script.log("[UK-Chan5] Authentication error msg '%s' from error data '%s'",
-                       (msg, resp_data), Script.ERROR)
-        except Exception as err:
-            Script.log("[UK-Chan5] Failed to parse error: %r",
-                       (err, ), Script.ERROR)
-            raise e
+        resp_data = e.response.json()
+        msg = resp_data.get('message') or resp_data['__type']
+        Script.log("[UK-Chan5] Authentication error msg '%s' from error data '%s'",
+                   (msg, resp_data), Script.ERROR)
         raise urlquick.HTTPError(msg)
 
 
@@ -867,7 +935,6 @@ def perform_signin_request(uname, passw):
     get a session token from channel5.
 
     """
-    Script.log("[UK-Chan5] Trying to sign in to account", lvl=Script.INFO)
     req_data = {
         "AuthFlow": "USER_PASSWORD_AUTH",
         "ClientId": "10ap8l6jp0vhreaac79c3qr1lq",
@@ -879,7 +946,6 @@ def perform_signin_request(uname, passw):
     sess_token = request_session_token(auth_result['IdToken'])
     # Store the session token for later use.
     Script.setting['uk.chan5.session-token'] = sess_token
-    Script.log("[UK-Chan5] Sign in successful.", lvl=Script.INFO)
     return True
 
 
@@ -892,9 +958,6 @@ def sign_in_account(addon):
     until log in succeeds, or the user cancels the keyboard.
 
     """
-    import xbmcgui
-    import xbmc
-
     uname = None
     passw = None
 
@@ -907,7 +970,7 @@ def sign_in_account(addon):
             perform_signin_request(uname, passw)
             global my_list_ids
             my_list_ids = None
-            xbmcgui.Dialog().ok('Channel5', Script.localize(TXT_LOGIN_SUCCESS))
+            xbmcgui.Dialog().ok('5', Script.localize(TXT_LOGIN_SUCCESS))
             xbmc.executebuiltin('Container.Refresh')
             return
         except urlquick.HTTPError as e:
@@ -917,12 +980,11 @@ def sign_in_account(addon):
 @Script.register
 def sign_out_account(_):
     """Entry point for the action 'Log out from channel5 account' in settings."""
-    import xbmcgui
-
     global my_list_ids
+
     my_list_ids = False
     Script.setting['uk.chan5.session-token'] = ''
-    xbmcgui.Dialog().ok('Channel5', Script.localize(TXT_LOGOUT_SUCCESS))
+    xbmcgui.Dialog().ok('5', Script.localize(TXT_LOGOUT_SUCCESS))
 
 
 def report_play_time(evt, show_id):

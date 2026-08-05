@@ -12,6 +12,13 @@ import numbers
 import time
 
 
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:
+    # python < 3.9
+    from backports.zoneinfo import ZoneInfo
+
+
 def old_div(a, b):
     """Python 2 and 3 Integer division cheat (https://python-future.org/compatible_idioms.html#division)
 

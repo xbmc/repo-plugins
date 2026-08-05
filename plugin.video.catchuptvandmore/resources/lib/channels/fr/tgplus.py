@@ -9,6 +9,9 @@ import re
 
 from codequick import Listitem, Resolver, Route
 import urlquick
+import urllib.request
+import http.cookiejar
+import json
 
 from resources.lib import resolver_proxy, web_utils
 from resources.lib.menu_utils import item_post_treatment
@@ -17,18 +20,20 @@ from resources.lib.menu_utils import item_post_treatment
 # TODO
 # Add Replay
 
-URL_ROOT = "https://www.telegrenoble.net"
+URL_ROOT = ":https://tgplus.fr"
 
 URL_LIVE = URL_ROOT + '/direct.html'
 
-URL_LIVE_PLAYER = URL_ROOT + '/player/direct'
+URL_ROOT_LIVE = 'https://tgplus.fr'
 
-URL_ACCECPT_COOKIES = URL_ROOT + '/scripts/acceptCookies.php'
+URL_LIVE_PLAYER = URL_ROOT_LIVE + '/direct'
 
 URL_REPLAY = URL_ROOT + '/replay.html'
 
 URL_VIDEOS = URL_ROOT + '/views/htmlFragments/replayDetail_pages.php?page=%s&elementsPerPage=10&idEmission=%s'
 # Page, Category_Id
+
+URL_KICK_INFO = 'https://kick.com/api/v2/channels/telegrenoble/info'
 
 GENERIC_HEADERS = {"User-Agent": web_utils.get_random_ua()}
 
@@ -93,16 +98,19 @@ def get_video_url(plugin, video_url, download_mode=False, **kwargs):
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
 
-    session = urlquick.session()
-    resp = session.get(URL_LIVE, headers=GENERIC_HEADERS, max_age=-1)
-    data = {
-        'cookiesAccepted': '1',
-    }
+    headers = [
+        ('User-Agent', web_utils.get_random_ua()),
+        ('Accept', 'application/json'),
+        ('Referer', 'https://player.kick.com/'),
+    ]
 
-    resp = session.post(URL_ACCECPT_COOKIES, headers=GENERIC_HEADERS, data=data, max_age=-1)
-    resp = session.post(URL_LIVE_PLAYER, headers=GENERIC_HEADERS, max_age=-1)
+    cj = http.cookiejar.CookieJar()
+    opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
+    opener.addheaders = headers
 
-    youtube_id = resp.parse("iframe").get('src')
-    video_id = re.compile(r'embed\/(.*?)\?').findall(youtube_id)[0]
+    with opener.open(URL_KICK_INFO) as resp:
+        json_parser = json.loads(resp.read().decode('utf-8'))
 
-    return resolver_proxy.get_stream_youtube(plugin, video_id, False)
+    video_url = json_parser['playback_url']
+
+    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url)

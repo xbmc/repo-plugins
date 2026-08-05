@@ -46,7 +46,7 @@
             <setting label="30169" type="bool" id="active_subtitle" default="false"/>
 
             <!-- International channels -->
-            <setting label="30085" type="lsep" subsetting="true" visible="eq(1,true)"/>
+            <setting label="30105" type="lsep" subsetting="true" visible="eq(1,true)"/>
             <!--<setting label="" type="bool" id="wo" default="true" visible="false"/>-->
 
                 <setting label="30153" type="labelenum" id="arte.language" values="FR|DE|EN|ES|PL|IT" default="FR"/>
@@ -61,7 +61,7 @@
                 <setting label="30173" type="labelenum" id="tv5mondeplus.language" values="fr|en|de|es-LA" default="fr"/>
 
             <!-- French channels -->
-            <setting label="30080" type="lsep" subsetting="true" visible="eq(1,true)"/>
+            <setting label="30100" type="lsep" subsetting="true" visible="eq(1,true)"/>
             <!--<setting label="" type="bool" id="fr" default="true" visible="false"/>-->
 
                 <setting label="30158" type="labelenum" id="france3regions.language" values="Alpes|Alsace|Aquitaine|Auvergne|Bourgogne|Bretagne|Centre-Val de Loire|Chapagne-Ardenne|Corse|Côte d'Azur|Franche-Comté|Languedoc-Roussillon|Limousin|Lorraine|Midi-Pyrénées|Nord-Pas-de-Calais|Basse-Normandie|Haute-Normandie|Paris Île-de-France|Pays de la Loire|Picardie|Poitou-Charentes|Provence-Alpes|Rhône-Alpes|Nouvelle-Aquitaine" default="Alpes"/>
@@ -70,27 +70,30 @@
                 <setting label="30175" type="labelenum" id="equidia-racing.language" values="1|2|3|4|5|6|7|8" default="1"/>
 
             <!-- Spain channels -->
-            <setting label="30089" type="lsep" subsetting="true" visible="eq(1,true)"/>
+            <setting label="30109" type="lsep" subsetting="true" visible="eq(1,true)"/>
             <!--<setting label="" type="bool" id="es" default="true" visible="false"/>-->
 
                 <setting label="30165" type="labelenum" id="realmadridtv.language" values="ES|EN" default="ES"/>
 
             <!-- Polish channels -->
-            <setting label="30088" type="lsep" subsetting="true" visible="eq(1,true)"/>
+            <setting label="30108" type="lsep" subsetting="true" visible="eq(1,true)"/>
             <!--<setting label="" type="bool" id="pl" default="true" visible="false"/>-->
 
                 <setting label="30167" type="labelenum" id="tvp3.language" values="Białystok|Bydgoszcz|Gdańsk|Gorzów Wielkopolski|Katowice|Kielce|Kraków|Lublin|Łódź|Olsztyn|Opole|Poznań|Rzeszów|Szczecin|Warszawa|Wrocław" default="Białystok"/>
 
             <!-- Canadian channels -->
-            <setting label="30086" type="lsep" subsetting="true" visible="eq(1,true)"/>
+            <setting label="30106" type="lsep" subsetting="true" visible="eq(1,true)"/>
             <!--<setting label="" type="bool" id="pl" default="true" visible="false"/>-->
 
                 <setting label="30164" type="labelenum" id="icitele.language" values="Vancouver|Regina|Toronto|Edmonton|Rimouski|Québec|Winnipeg|Moncton|Ottawa|Sherbrooke|Trois-Rivières|Montréal" default="Montréal"/>
                 <setting label="30170" type="labelenum" id="cbc.language" values="Ottawa|Montreal|Charlottetown|Fredericton|Halifax|Windsor|Yellowknife|Winnipeg|Regina|Calgary|Edmonton|Vancouver|Toronto|St. John\'s" default="Ottawa"/>
 
             <!-- UK channels -->
-            <setting label="30099" type="lsep" subsetting="true" visible="eq(1,true)"/>
+            <setting label="30119" type="lsep" subsetting="true" visible="eq(1,true)"/>
                 <setting label="30183" type="labelenum" id="uk.channel4.programmes.sort.by" values="popular|az|recently-added" default="popular"/>
+                <setting label="30185" type="bool" id="uk.channel4.high_quality" default="false" />
+                <!-- Hidden setting to store the order in which hmac and aes keys appear in data obtained from the web. -->
+                <setting label="" type="bool" id="uk.my5.key_order_reversed" default="false"  visible="false"/>
 
     </category>
     <!-- Quality and Content -->
@@ -115,7 +118,7 @@
     <!-- Accounts -->
     <category label="30004">
 
-        <setting label="30080" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <setting label="30100" type="lsep" subsetting="true" visible="eq(1,true)"/>
         <!--<setting label="" type="bool" id="fr" default="true" visible="false"/>-->
 
             <setting label="30260" type="text" id="tf1plus.login" default=""/>
@@ -130,7 +133,7 @@
             <setting label="30252" type="text" id="rmcbfmplay.login" default=""/>
             <setting label="30253" type="text" id="rmcbfmplay.password" option="hidden" default=""/>
 
-        <setting label="30081" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <setting label="30101" type="lsep" subsetting="true" visible="eq(1,true)"/>
         <!--<setting label="" type="bool" id="be" default="true" visible="false"/>-->
 
             <setting label="30242" type="text" id="vrt.login" default=""/>
@@ -142,11 +145,11 @@
             <setting label="30258" type="text" id="rtbf.login" default=""/>
             <setting label="30259" type="text" id="rtbf.password" option="hidden" default=""/>
 
-        <setting label="30084" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <setting label="30104" type="lsep" subsetting="true" visible="eq(1,true)"/>
         <!--<setting label="" type="bool" id="be" default="true" visible="false"/>-->
 
-            <setting label="30264" type="text" id="uk.channel4.login" default=""/>
-            <setting label="30265" type="text" id="uk.channel4.password" option="hidden" default=""/>
+            <setting label="30264" type="action" action="RunPlugin(plugin://$ID/resources/lib/channels/uk/channel4/sign_in_account)" option="close"/>
+            <setting label="30265" type="action" action="RunPlugin(plugin://$ID/resources/lib/channels/uk/channel4/sign_out_account)" option="close"/>
 
             <setting label="30266" type="action" action="RunPlugin(plugin://$ID/resources/lib/channels/uk/my5/sign_in_account)" option="close"/>
             <setting label="30267" type="action" action="RunPlugin(plugin://$ID/resources/lib/channels/uk/my5/sign_out_account)" option="close"/>
@@ -187,8 +190,6 @@
             <setting type="text" id="iptv.channels_uri" default="plugin://plugin.video.catchuptvandmore/resources/lib/iptvmanager/channels/" visible="false"/>
             <setting type="text" id="iptv.epg_uri" default="plugin://plugin.video.catchuptvandmore/resources/lib/iptvmanager/epg/" visible="false"/>
     </category>
-
-
 
 
     <!-- Advanced settings / Tools and other things to save -->

@@ -281,7 +281,5 @@ def get_live_url(plugin, item_id, **kwargs):
         if 'live' == collection['type']:
             items_partner = collection['items'][0].get('partner')
             if items_partner is not None and 'partner_path' in items_partner:
-                channel_path = items_partner.get("partner_path")
-                if channel_path == item_id:
-                    broadcast_id = items_partner.get("si_id")
-                    return resolver_proxy.get_francetv_live_stream(plugin, broadcast_id)
+                broadcast_id = items_partner.get("si_id")
+                return resolver_proxy.get_francetv_live_stream(plugin, broadcast_id)

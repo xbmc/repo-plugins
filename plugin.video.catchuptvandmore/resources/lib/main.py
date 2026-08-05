@@ -280,36 +280,10 @@ def error_handler(exception):
 
     # If it's an HTTPError
     if isinstance(exception, urlquick.HTTPError):
-        code = exception.code
-        msg = exception.msg
-        # hdrs = exception.hdrs
-        # url = exception.filename
-        Script.log('urlquick.get() failed with HTTPError code {} with message "{}"'.format(code, msg, lvl=Script.ERROR))
-
-        # Build dialog message
-        dialog_message = msg
-
-        http_code_msg = {
-            500: 30891,
-            401: 30892,
-            403: 30893,
-            402: 30894,
-            404: 30895
-        }
-
-        if code in http_code_msg:
-            dialog_message = Script.localize(http_code_msg[code])
-
-        # Build dialog title
-        dialog_title = Script.localize(30890) + ' ' + str(code)
-
-        # Show xbmc dialog
-        xbmcgui.Dialog().ok(dialog_title, dialog_message)
-
         # If error code is in avoid_log_uploader, then return
         # Else, let log_uploader run
         avoid_log_uploader = [403, 404]
-        if code in avoid_log_uploader:
+        if exception.response.status_code in avoid_log_uploader:
             return
 
     # If we come from fav menu we

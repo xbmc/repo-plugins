@@ -123,7 +123,7 @@ msgid "Internet service providers"
 msgstr "Internetproviders"
 
 
-# Countries (from 30050 to 30079)
+# Countries (from 30050 to 30099)
 
 msgctxt "#30050"
 msgid "France"
@@ -245,85 +245,89 @@ msgctxt "#30079"
 msgid "Ireland"
 msgstr "Irland"
 
-# Channels (from 30080 to 30129)
-
 msgctxt "#30080"
+msgid "Romania"
+msgstr "Roemenië"
+
+# Channels (from 30100 to 30129)
+
+msgctxt "#30100"
 msgid "French channels"
 msgstr "Franse kanalen"
 
-msgctxt "#30081"
+msgctxt "#30101"
 msgid "Belgian channels"
 msgstr "Belgische kanalen"
 
-msgctxt "#30082"
+msgctxt "#30102"
 msgid "Japanese channels"
 msgstr "Japanse kanalen"
 
-msgctxt "#30083"
+msgctxt "#30103"
 msgid "Switzerland channels"
 msgstr "Zwitserse Kanalen"
 
-msgctxt "#30084"
+msgctxt "#30104"
 msgid "United Kingdom channels"
 msgstr "Engelse kanalen"
 
-msgctxt "#30085"
+msgctxt "#30105"
 msgid "International channels"
 msgstr "Internationale kanalen"
 
-msgctxt "#30086"
+msgctxt "#30106"
 msgid "Canadian channels"
 msgstr "Canadese kanalen"
 
-msgctxt "#30087"
+msgctxt "#30107"
 msgid "United States channels"
 msgstr "Amerikaanse kanalen"
 
-msgctxt "#30088"
+msgctxt "#30108"
 msgid "Polish channels"
 msgstr "Poolse kanalen"
 
-msgctxt "#30089"
+msgctxt "#30109"
 msgid "Spanish channels"
 msgstr "Spaanse kanalen"
 
-msgctxt "#30090"
+msgctxt "#30110"
 msgid "Tunisia channels"
 msgstr "Tunesische kanalen"
 
-msgctxt "#30091"
+msgctxt "#30111"
 msgid "Italian channels"
 msgstr "Italiaanse kanalen"
 
-msgctxt "#30092"
+msgctxt "#30112"
 msgid "Dutch channels"
 msgstr "Nederlandse kanalen"
 
-msgctxt "#30093"
+msgctxt "#30113"
 msgid "Chinese channels"
 msgstr "Chinese kanalen"
 
-msgctxt "#30094"
+msgctxt "#30114"
 msgid "Cameroon channels"
 msgstr "Kameroense kanalen"
 
-msgctxt "#30095"
+msgctxt "#30115"
 msgid "Slovenian channels"
 msgstr "Sloveense kanalen"
 
-msgctxt "#30096"
+msgctxt "#30116"
 msgid "Ethiopian channels"
 msgstr "Ethiopische kanalen"
 
-msgctxt "#30097"
+msgctxt "#30117"
 msgid "Moroccan channels"
 msgstr "Marokkaans kanalen"
 
-msgctxt "#30098"
+msgctxt "#30118"
 msgid "Peruvian channels"
 msgstr "Peruaans kanalen"
 
-msgctxt "#30099"
+msgctxt "#30119"
 msgid "UK channels"
 msgstr "UK kanalen"
 
@@ -465,6 +469,10 @@ msgctxt "#30184"
 msgid "quality: "
 msgstr "kwaliteit: "
 
+msgctxt "#30185"
+msgid "Channel 4: Enable high quality (disable when geo blocked)"
+msgstr "Channel 4: Hoge kwaliteit inschakelen (zet uit bij geo-blocks)"
+
 msgctxt "#30192"
 msgid "BEST"
 msgstr ""
@@ -560,11 +568,11 @@ msgstr "UKTVPlay wachtwoord"
 
 msgctxt "#30252"
 msgid "RMCBFM Play Login"
-msgstr ""
+msgstr "RMCBFM Play gebruikersnaam"
 
 msgctxt "#30253"
 msgid "RMCBFM Play Password"
-msgstr ""
+msgstr "RMCBFM Play wachtwoord"
 
 msgctxt "#30254"
 msgid "TV guides"
@@ -572,11 +580,11 @@ msgstr ""
 
 msgctxt "#30255"
 msgid "Schedules Direct login"
-msgstr ""
+msgstr "Schedules Direct gebruikersnaam"
 
 msgctxt "#30256"
 msgid "Schedules Direct password"
-msgstr ""
+msgstr "Schedules Direct  wachtwoord"
 
 msgctxt "#30257"
 msgid "Schedules Direct lineup"
@@ -584,36 +592,43 @@ msgstr ""
 
 msgctxt "#30258"
 msgid "RTBF auvio Login"
-msgstr ""
+msgstr "RTBF auvio gebruikersnaam"
 
 msgctxt "#30259"
 msgid "RTBF auvio Password"
-msgstr ""
+msgstr "RTBF wachtwoord"
 
 msgctxt "#30260"
 msgid "TF1+ Login"
-msgstr ""
+msgstr "TF1+ gebruikersnaam"
 
 msgctxt "#30261"
 msgid "TF1+ Password"
-msgstr ""
+msgstr "TF1+ wachtwoord"
 
 msgctxt "#30262"
 msgid "SFR TV login"
-msgstr ""
+msgstr "SFR TV gebruikersnaam"
 
 msgctxt "#30263"
 msgid "SFR TV password"
-msgstr ""
+msgstr "SFR TV wachtwoord"
 
 msgctxt "#30264"
-msgid "Channel 4 Login"
-msgstr ""
+msgid "Log in to Channel 4"
+msgstr "Log in op Channel 4"
 
 msgctxt "#30265"
-msgid "Channel 4 Password"
-msgstr ""
+msgid "Log out of Channel 4"
+msgstr "Uitloggen bij Channel 4"
 
+msgctxt "#30266"
+msgid "Log in to 5"
+msgstr "Log in op 5"
+
+msgctxt "#30267"
+msgid "Log out of 5"
+msgstr "Uitloggen bij 5"
 
 # TV integration (from 30270 to 30289)
 
@@ -910,6 +925,26 @@ msgstr ""
 msgctxt "#30732"
 msgid "This content requires a payment. To buy or rent it, go to %s website at this URL : %s"
 msgstr ""
+
+msgctxt "#30733"
+msgid "Enter email"
+msgstr "Voor email in"
+
+msgctxt "#30734"
+msgid "Enter password"
+msgstr "Voer wachtwoord in"
+
+msgctxt "#30735"
+msgid "Logged in successfully"
+msgstr "Inloggen is gelukt"
+
+msgctxt "#30736"
+msgid "Logged out successfully"
+msgstr "Uitloggen is gelukt"
+
+msgctxt "#30737"
+msgid "You are already logged out."
+msgstr "Je bent al uitgelogd"
 
 
 # Favourites (from 30800 to 30859)

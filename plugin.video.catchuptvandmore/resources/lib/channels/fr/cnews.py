@@ -30,8 +30,7 @@ URL_VIDEOS_CNEWS = URL_ROOT_SITE + '/service/dm_loadmore/dm_emission_index_sujet
 
 GENERIC_HEADERS = {'User-Agent': web_utils.get_random_windows_ua()}
 
-URLLIB3_ADDON = xbmcaddon.Addon('script.module.urllib3')
-URLLIB3_VERSION = URLLIB3_ADDON.getAddonInfo('version')
+URLLIB3_VERSION = urlquick.requests.urllib3.__version__
 
 if URLLIB3_VERSION == "2.2.3":
     from urllib.request import urlopen, Request

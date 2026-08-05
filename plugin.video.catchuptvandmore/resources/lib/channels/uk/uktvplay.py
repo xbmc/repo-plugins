@@ -273,7 +273,7 @@ def get_live_url(plugin, item_id, **kwargs):
     }
     resp = session_requests.post(URL_COMPTE_LOGIN, data=payload, headers=headers, max_age=-1)
     if resp.status_code >= 400:
-        plugin.notify('ERROR', 'UKTVPlay : ' + plugin.localize(30711))
+        plugin.notify('ERROR', 'U : ' + plugin.localize(30711))
         return False
     json_parser_resplogin = json.loads(resp.content)
 

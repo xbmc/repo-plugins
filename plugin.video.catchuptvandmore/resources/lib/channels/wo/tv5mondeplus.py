@@ -26,7 +26,13 @@ from resources.lib.menu_utils import item_post_treatment
 from resources.lib.web_utils import urlencode, get_random_ua
 
 GENERIC_HEADERS = get_random_ua()
-COUNTRY = web_utils.geoip()
+
+
+def country():
+    cntry = getattr(country, '_country', None)
+    if cntry is None:
+        country._country = cntry = web_utils.geoip()
+    return cntry
 
 
 def generate_fake_id():
@@ -79,14 +85,14 @@ def list_categories(plugin, item_id, **kwargs):
 
     params = {
         "onlyPublished": "true",
-        "allowedCountry": COUNTRY
+        "allowedCountry": country()
     }
 
     resp = urlquick.get(SANDWICH_API, params=params)
     json_parser = resp.json()
     category_reference_id = json_parser["components"]["menu"][0]["referenceId"]
 
-    resp2 = urlquick.get(COMPONENT_API % (category_reference_id, COUNTRY))
+    resp2 = urlquick.get(COMPONENT_API % (category_reference_id, country()))
     json_parser2 = resp2.json()
 
     item = Listitem.search(list_videos_search, item_id=item_id, page='0')
@@ -128,7 +134,7 @@ def list_videos_search(plugin, search_query, item_id, page, **kwargs):
         "locale": language,
         "schemes": ["keyword", "subcategory", "category", "origin"],
         "client": "json",
-        "allowedCountry": COUNTRY,
+        "allowedCountry": country(),
         "onlyPublished": "true"
     }
     if search_query is None or len(search_query) == 0:
@@ -148,7 +154,7 @@ def list_menu_sub_categories(plugin, item_id, menu_category_reference_id, **kwar
     - Les feux de l'amour
     - ...
     """
-    resp = urlquick.get(COMPONENT_API % (menu_category_reference_id, COUNTRY))
+    resp = urlquick.get(COMPONENT_API % (menu_category_reference_id, country()))
     json_parser = resp.json()
 
     for menu_sub_category_data in json_parser["components"]["pageBody"]:
@@ -176,7 +182,7 @@ def list_programs(plugin, item_id, program_reference_id, **kwargs):
     - ...
     """
     language = Script.setting['tv5mondeplus.language']
-    resp = urlquick.get(COMPONENT_API % (program_reference_id, COUNTRY))
+    resp = urlquick.get(COMPONENT_API % (program_reference_id, country()))
     json_parser = resp.json()
 
     new_url = BASE_URL_API + json_parser["contentUrl"]["url"]

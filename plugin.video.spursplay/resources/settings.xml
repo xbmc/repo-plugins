@@ -31,6 +31,13 @@
                         <allowempty>true</allowempty>
                     </constraints>
                 </setting>
+                <setting id="refresh_token" type="string">
+                    <level>4</level>
+                    <default/>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                </setting>
             </group>
         </category>
     </section>

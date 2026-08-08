@@ -1,4 +1,7 @@
+import base64
+import hashlib
 import json
+import secrets
 from urllib.parse import urlparse, parse_qsl
 
 import requests
@@ -19,47 +22,153 @@ class Api:
 
     USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:133.0) Gecko/20100101 Firefox/133.0"
 
+    BROWSER_HEADERS = {
+        "User-Agent": USER_AGENT,
+        "Accept-Language": "en-GB,en;q=0.5",
+    }
+
+    # Auth0 bot detection expects the headers a browser sends when navigating to a page.
+    NAVIGATION_HEADERS = {
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Sec-Fetch-User": "?1",
+    }
+
     URL_ROOT = "https://dce-frontoffice.imggaming.com/api"
+
+    # SpursPlay moved its sign-in to Auth0 Universal Login, exchanging the resulting
+    # Auth0 tokens for an IMG Gaming (dce) authorisation token via an OpenID exchange.
+    AUTH0_DOMAIN = "auth.tottenhamhotspur.com"
+    AUTH0_CLIENT_ID = "WpCY8WImmTjFslafikdhn5AbVOiJSrKt"
+    AUTH0_AUDIENCE = "user-svc-api"
+    AUTH0_REDIRECT_URI = "https://www.tottenhamhotspur.com/callback"
+    AUTH0_SCOPE = "openid profile email offline_access"
+    SSO_PROVIDER = "spurs_auth0_sso"
 
     def __init__(self, token=None):
         self.session = requests.Session()
-        self.session.headers.update({"User-Agent": self.USER_AGENT})
+        self.session.headers.update(self.BROWSER_HEADERS)
+        self.refresh_token = None
 
         if token is None:
             self.token = self._auth_token()
         else:
             self.token = token
 
-    def login(self, user=None, password=None):
-        response = self.session.post(
-            "https://login.tottenhamhotspur.com/Identity/login",
-            params={
-                "response_type": "code",
-                "redirect_uri": "https://play.tottenhamhotspur.com",
-                "client_id": "EnKfF3qxkBD90uR",
-                "scope": "openid email",
-                "tenantId": "SPURS",
-                "email": user,
-            },
-            headers={
-                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-            },
-            data=f"email={user}&password={password}",
+    def login(self, user, password):
+        verifier = base64.urlsafe_b64encode(secrets.token_bytes(32)).rstrip(b"=").decode()
+        challenge = (
+            base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest())
+            .rstrip(b"=")
+            .decode()
         )
 
-        if response.status_code == 401:
-            raise LoginError(response.json()["message"])
+        authorize = self.session.get(
+            f"https://{self.AUTH0_DOMAIN}/authorize",
+            params={
+                "client_id": self.AUTH0_CLIENT_ID,
+                "redirect_uri": self.AUTH0_REDIRECT_URI,
+                "response_type": "code",
+                "scope": self.AUTH0_SCOPE,
+                "audience": self.AUTH0_AUDIENCE,
+                "code_challenge": challenge,
+                "code_challenge_method": "S256",
+                "state": secrets.token_urlsafe(16),
+                "nonce": secrets.token_urlsafe(16),
+            },
+            headers=self.NAVIGATION_HEADERS,
+        )
+        state = dict(parse_qsl(urlparse(authorize.url).query)).get("state")
+        if state is None:
+            raise LoginError("Unexpected sign-in page from SPURSPLAY")
 
-        url = response.json()["redirect"]
-        code = dict(parse_qsl(urlparse(url).query))["code"]
+        response = self.session.post(
+            f"https://{self.AUTH0_DOMAIN}/u/login",
+            params={"state": state},
+            data={"state": state, "username": user, "password": password},
+            headers=self.NAVIGATION_HEADERS
+            | {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Origin": f"https://{self.AUTH0_DOMAIN}",
+                "Referer": authorize.url,
+                "Sec-Fetch-Site": "same-origin",
+            },
+            allow_redirects=False,
+        )
 
-        self.token = self.session.post(
-            f"{self.URL_ROOT}/v2/openid/enactor_sso/token",
-            headers=self.HEADERS,
-            data=json.dumps({"authorisationCode": code}),
-        ).json()["authorisationToken"]
+        code = self._follow_to_code(response)
+        if code is None:
+            if "data-captcha-sitekey" in response.text:
+                raise LoginError("Sign-in blocked by a CAPTCHA. Try again later.")
+            raise LoginError("Incorrect email or password")
 
-        return self.token
+        tokens = self.session.post(
+            f"https://{self.AUTH0_DOMAIN}/oauth/token",
+            data={
+                "grant_type": "authorization_code",
+                "client_id": self.AUTH0_CLIENT_ID,
+                "code": code,
+                "code_verifier": verifier,
+                "redirect_uri": self.AUTH0_REDIRECT_URI,
+            },
+        ).json()
+
+        return self._exchange(tokens["id_token"], tokens["access_token"])
+
+    def _follow_to_code(self, response):
+        redirects = 0
+        while response.is_redirect and redirects < 10:
+            redirects += 1
+            location = response.headers["location"]
+            if location.startswith("/"):
+                location = f"https://{self.AUTH0_DOMAIN}{location}"
+            if location.startswith(self.AUTH0_REDIRECT_URI):
+                return dict(parse_qsl(urlparse(location).query)).get("code")
+            response = self.session.get(
+                location,
+                headers=self.NAVIGATION_HEADERS | {"Sec-Fetch-Site": "same-origin"},
+                allow_redirects=False,
+            )
+
+        return None
+
+    def _exchange(self, id_token, access_token):
+        subject_token = {
+            "idToken": id_token,
+            "accessToken": access_token,
+            "refreshToken": None,
+            "providerName": self.SSO_PROVIDER,
+        }
+        response = self.session.post(
+            f"{self.URL_ROOT}/v2/openid/{self.SSO_PROVIDER}/exchange",
+            headers=self.HEADERS | {"Content-Type": "application/x-www-form-urlencoded"},
+            data={
+                "grant_type": "urn:ietf:params:oauth:grant-type:token-exchange",
+                "subject_token": json.dumps(subject_token),
+                "subject_token_type": "idAccessRefresh",
+            },
+        ).json()
+
+        self.token = response["access_token"]
+        self.refresh_token = response["refresh_token"]
+        return self.token, self.refresh_token
+
+    def refresh(self, refresh_token):
+        response = self.session.post(
+            f"{self.URL_ROOT}/v1/token/refresh",
+            headers=self._headers(),
+            data=json.dumps({"refreshToken": refresh_token}),
+        )
+        if not response.ok:
+            raise LoginError("Session refresh failed")
+
+        data = response.json()
+        self.token = data["authorisationToken"]
+        self.refresh_token = data.get("refreshToken", refresh_token)
+        return self.token, self.refresh_token
 
     def buckets(self, section, num_pages=3):
         return self._categories(section=section, num_pages=num_pages)
@@ -115,7 +224,7 @@ class Api:
 
         response = self.session.get(player_url).json()
         if live:
-            return response["hlsUrl"]
+            return response.get("hlsUrl")
         return response["hls"][0]["url"]
 
     def _get_bucket_contents(self, bucket, last_seen):
@@ -156,7 +265,9 @@ class Api:
     def _headers(self):
         return {"Authorization": f"Bearer {self.token}"} | self.HEADERS
 
-    def _categories(self, types=("VOD_PLAYLIST", "VOD_VIDEO"), section="First Team", num_pages=3):
+    def _categories(
+        self, types=("VOD_PLAYLIST", "VOD_VIDEO", "PLAYLISTS"), section="First Team", num_pages=3
+    ):
         more_available = True
         last_seen = None
         page = 0

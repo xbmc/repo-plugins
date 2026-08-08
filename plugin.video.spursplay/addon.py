@@ -41,24 +41,59 @@ def build_url(**params):
 
 def token_expiry(jwt):
     payload_base64 = (jwt.split(".")[1] + "==").encode("ascii")
-    return datetime.fromtimestamp(json.loads(base64.b64decode(payload_base64))["exp"])
+    return datetime.fromtimestamp(json.loads(base64.urlsafe_b64decode(payload_base64))["exp"])
+
+
+def log(message, level=xbmc.LOGDEBUG):
+    xbmc.log(f"SPURSPLAY: {message}", level=level)
 
 
 def login():
-    settings = xbmcaddon.Addon().getSettings()
+    addon = xbmcaddon.Addon()
 
-    email, password = settings.getString(id="email"), settings.getString(id="password")
-    token = settings.getString(id="token")
+    email, password = addon.getSetting("email"), addon.getSetting("password")
+    token = addon.getSetting("token")
+    refresh_token = addon.getSetting("refresh_token")
 
-    if email and password and (not token or datetime.now() > token_expiry(token)):
-        xbmc.log("Logging in", level=xbmc.LOGDEBUG)
+    if not email or not password:
+        log("No credentials configured, browsing anonymously")
+        return
+
+    if token:
         try:
-            token = api.login(email, password)
-        except spursplay.LoginError as exc:
-            dialog = xbmcgui.Dialog()
-            dialog.notification("SPURSPLAY", str(exc), xbmcgui.NOTIFICATION_ERROR)
+            expiry = token_expiry(token)
+        except (ValueError, KeyError, IndexError) as exc:
+            log(f"Stored token is unparseable ({exc!r}), discarding it", level=xbmc.LOGWARNING)
         else:
-            settings.setString("token", token)
+            if datetime.now() <= expiry:
+                log(f"Reusing stored token (expires {expiry})")
+                api.token = token
+                return
+            log(f"Stored token expired at {expiry}")
+    else:
+        log("No stored token")
+
+    try:
+        if refresh_token:
+            log("Refreshing session with stored refresh token")
+            try:
+                token, refresh_token = api.refresh(refresh_token)
+            except spursplay.LoginError as exc:
+                log(f"Refresh failed ({exc}), logging in with credentials", level=xbmc.LOGWARNING)
+                token, refresh_token = api.login(email, password)
+        else:
+            log("No stored refresh token, logging in with credentials")
+            token, refresh_token = api.login(email, password)
+    except spursplay.LoginError as exc:
+        log(f"Login failed: {exc}", level=xbmc.LOGWARNING)
+        dialog = xbmcgui.Dialog()
+        dialog.notification("SPURSPLAY", str(exc), xbmcgui.NOTIFICATION_ERROR)
+    else:
+        log(f"Login succeeded, saving tokens (token expires {token_expiry(token)})")
+        addon.setSetting("token", token)
+        addon.setSetting("refresh_token", refresh_token)
+        if not xbmcaddon.Addon().getSetting("token"):
+            log("Token did not persist after setSetting", level=xbmc.LOGWARNING)
 
 
 def list_categories():
@@ -171,7 +206,15 @@ def play_video(video_id, live):
     url = api.get_video_url(video_id, live)
     play_item = xbmcgui.ListItem(path=url)
 
-    xbmcplugin.setResolvedUrl(plugin_handle, True, listitem=play_item)
+    if url and live and xbmc.getCondVisibility("System.HasAddon(inputstream.adaptive)"):
+        # Kodi's built-in demuxer treats live HLS as a non-seekable feed. Route it
+        # through inputstream.adaptive so pause and seek within the DVR window work.
+        play_item.setProperty("inputstream", "inputstream.adaptive")
+        play_item.setProperty("inputstream.adaptive.manifest_type", "hls")
+        play_item.setMimeType("application/vnd.apple.mpegurl")
+        play_item.setContentLookup(False)
+
+    xbmcplugin.setResolvedUrl(plugin_handle, succeeded=url is not None, listitem=play_item)
 
 
 if __name__ == "__main__":

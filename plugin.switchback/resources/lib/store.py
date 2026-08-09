@@ -4,7 +4,7 @@ import xbmcvfs
 
 from bossanova808.constants import HOME_WINDOW, PROFILE, ADDON
 from bossanova808.logger import Logger
-from bossanova808.utilities import get_kodi_setting, set_property, clear_property
+from bossanova808.utilities import set_property, clear_property
 from resources.lib.playback import PlaybackList
 
 
@@ -31,16 +31,12 @@ class Store:
     episode_force_browse = ADDON.getSettingBool('episode_force_browse')
     remove_watched_playbacks = ADDON.getSettingBool('remove_watched_playbacks')
 
-    # GUI Settings - to work out how to force browse to a show after a switchback initiated playback
-    flatten_tvshows = None
-
     def __init__(self):
         """
         Load in the addon settings and do basic initialisation stuff
         :return:
         """
         Store.load_config_from_settings()
-        Store.load_config_from_kodi_settings()
         Store.switchback = PlaybackList([], xbmcvfs.translatePath(os.path.join(PROFILE, "switchback.json")), Store.remove_watched_playbacks)
         Store.switchback.load_or_init()
         Store.update_switchback_context_menu()
@@ -63,12 +59,6 @@ class Store:
         Logger.info(f"Remove watched playbacks is: {Store.remove_watched_playbacks}")
         Store.episode_force_browse = ADDON.getSettingBool('episode_force_browse')
         Logger.info(f"Episode force browse is: {Store.episode_force_browse}")
-
-    @staticmethod
-    def load_config_from_kodi_settings():
-        # Note: this is an int, not a bool — 0 = Never, 1 = 'If only one season', 2 = Always
-        Store.flatten_tvshows = int(get_kodi_setting('videolibrary.flattentvshows'))
-        Logger.info(f"Flatten TV Shows is: {Store.flatten_tvshows}")
 
     @staticmethod
     def update_switchback_context_menu():

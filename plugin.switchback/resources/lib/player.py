@@ -2,6 +2,7 @@ import xbmc
 
 from bossanova808.constants import HOME_WINDOW
 from bossanova808.logger import Logger
+from bossanova808.utilities import get_kodi_setting
 from resources.lib.playback import Playback
 
 from resources.lib.store import Store
@@ -87,21 +88,30 @@ class KodiPlayer(xbmc.Player):
         if Store.episode_force_browse and switchback_playback:
             if Store.current_playback.type == "episode" and Store.current_playback.source == "kodi_library":
                 Logger.info("Force browsing to tvshow/season of just finished playback")
-                Logger.debug(f'flatten tvshows {Store.flatten_tvshows} totalseasons {Store.current_playback.totalseasons} dbid {Store.current_playback.dbid} tvshowdbid {Store.current_playback.tvshowdbid}')
+                # Fetched fresh here rather than cached, since it's a Kodi system setting the user
+                # can change at any time - there's no settings-changed notification we can hook for
+                # it (unlike our own addon settings), so a stale cached value could otherwise persist
+                # for the rest of the Kodi session. This only runs for episodes with force-browse
+                # enabled, so the extra JSON-RPC call here is rare and not worth caching.
+                flatten_tvshows = int(get_kodi_setting('videolibrary.flattentvshows'))
+                Logger.debug(f'flatten tvshows {flatten_tvshows} totalseasons {Store.current_playback.totalseasons} dbid {Store.current_playback.dbid} tvshowdbid {Store.current_playback.tvshowdbid}')
                 # Default: Browse to the show
                 window = f'videodb://tvshows/titles/{Store.current_playback.tvshowdbid}'
                 # 0 = Never flatten → browse to show root
                 # 1 = If only one season → browse to season only when there are multiple seasons
                 # 2 = Always flatten → browse to season
-                if Store.flatten_tvshows == 2:
+                if flatten_tvshows == 2:
                     window += f'/{Store.current_playback.season}'
-                elif Store.flatten_tvshows == 1 and (Store.current_playback.totalseasons or 0) > 1:
+                elif flatten_tvshows == 1 and (Store.current_playback.totalseasons or 0) > 1:
                     window += f'/{Store.current_playback.season}'
                 xbmc.executebuiltin(f'ActivateWindow(Videos,{window},return)')
 
         # This rather long-winded approach is used to keep ALL the details recorded from the original playback
         # (in case they don't make it through when the playback is Switchback initiated - as sometimes seems to be the case)
-        playback_to_remove = Store.switchback.find_playback_by_path(Store.current_playback.path)
+        # Matched by identity (not path) - the path/file Kodi reports for the same library item can
+        # differ between a direct play and a Switchback-triggered replay (see Playback.identity_key),
+        # and matching on path alone would otherwise create a duplicate entry for the same media.
+        playback_to_remove = Store.switchback.find_playback_by_identity(Store.current_playback)
         if playback_to_remove:
             Logger.debug("Updating Playback and list order")
             # Remove it from its current position

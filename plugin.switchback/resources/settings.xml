@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<settings version="1">
+    <section id="script.switchback">
+        <category help="" id="Switchback" label="32000">
+            <group id="1" label="32001">
+                <setting id="maximum_list_length" type="integer" label="32002" help="">
+                    <level>0</level>
+                    <default>5</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <maximum>20</maximum>
+                        <step>1</step>
+                    </constraints>
+                    <control type="spinner" format="integer"/>
+                </setting>
+                <setting id="save_across_sessions" type="boolean" label="32006" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="enable_context_menu" type="boolean" label="32009" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="remove_watched_playbacks" type="boolean" label="32010" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="episode_force_browse" type="boolean" label="32011" help="">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+        </category>
+    </section>
+</settings>
+

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.spursplay" name="SPURSPLAY" version="0.3.0" provider-name="LS80">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+        <import addon="script.module.requests" version="2.31.0"/>
+        <import addon="inputstream.adaptive" version="2.0.0" optional="true"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">Video content from https://play.tottenhamhotspur.com.</summary>
+        <description lang="en_GB">SPURSPLAY is the official streaming platform of Tottenham Hotspur Football Club, offering fans exclusive access to a wide range of content, including live and on-demand videos.</description>
+        <disclaimer lang="en_GB">This is an UNOFFICIAL plugin NOT endorsed by Tottenham Hotspur. Some content requires a SPURSPLAY subscription.</disclaimer>
+        <language>en</language>
+        <platform>all</platform>
+        <license>MIT</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=380119</forum>
+        <website>https://play.tottenhamhotspur.com</website>
+        <source>https://github.com/LS80/plugin.video.spursplay</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+        <news>Version 0.3.0:
+            - Fix broken login: SPURSPLAY moved sign-in to Auth0 Universal Login, so the
+              old direct login endpoint no longer worked. Also fixes a bug where the
+              login token failed to save, forcing a fresh login on every screen and
+              triggering CAPTCHA blocks.
+            - Make live content pausable via inputstream.adaptive, instead of Kodi's
+              built-in player treating live streams as non-seekable.
+            - Clean up the main menu: fix a crash on some entries, drop outdated or
+              stale ones, and add some new categories.
+            - Show each video's air date.
+            - Now requires Kodi Nexus (v20) or later.
+        </news>
+    </extension>
+</addon>

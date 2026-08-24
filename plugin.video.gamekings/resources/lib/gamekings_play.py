@@ -342,6 +342,9 @@ class Main(object):
 
             # https://muse.ai/embed/6EG5Wob?search=0&links=0&logo=0
             start_pos_video_url_embed = html_source.find("https://muse.ai/embed/")
+            if start_pos_video_url_embed < 0:
+                # https://skiv.com/embed/HdkHtS9?search=0&links=0&logo=0
+                start_pos_video_url_embed = html_source.find("https://skiv.com/embed/")
             if start_pos_video_url_embed >= 0:
                 end_pos_video_url_embed = html_source.find('"', start_pos_video_url_embed)
                 if end_pos_video_url_embed >= 0:
@@ -349,11 +352,17 @@ class Main(object):
 
                     # log("video_url_embed", video_url_embed)
 
+                    # Send the actual Gamekings article URL as the embed Referer.
+                    # This allows domain-restricted Skiv embeds to return the video data needed for DASH playback.
+                    referer = self.video_page_url.split('?', 1)[0]
+
+                    # log("referer", referer)
+
                     headers = {
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0',
                     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
                     'Accept-Language': 'en-US,en;q=0.5',
-                    'Referer': 'https://www.gamekings.tv/',
+                    'Referer': referer,
                     'DNT': '1',
                     'Connection': 'keep-alive',
                     'Upgrade-Insecure-Requests': '1',
@@ -362,7 +371,6 @@ class Main(object):
                     'Sec-Fetch-Site': 'cross-site'
                     }
 
-                    # response = session.get("https://muse.ai/embed/6EG5Wob?search=0&links=0&logo=0", headers=headers)
                     response = session.get(video_url_embed, headers=headers)
 
                     html_source = response.text
@@ -374,15 +382,21 @@ class Main(object):
                     video_url_start_pos = html_source.find(search_for_string)
                     if video_url_start_pos >= 0:
                         # url": "https://cdn.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/data", "views": 2401, "visibility": "hidden", "width": 1920},
+                        # or
+                        # url": "https://cdn.skiv.com/u/Czi97La/9311e6ecdc3604f092b78fe0472891083bd1f37c6dc27bed45c1154c024b5d9c/data"
                         video_url_start_pos = video_url_start_pos + len(search_for_string)
                         video_url_end_pos = html_source.find('"', video_url_start_pos)
                         if video_url_end_pos >= 0:
                             # https://cdn.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/data
+                            # or
+                            # https://cdn.skiv.com/u/Czi97La/9311e6ecdc3604f092b78fe0472891083bd1f37c6dc27bed45c1154c024b5d9c/data
                             video_url_data = html_source[video_url_start_pos:video_url_end_pos]
 
                             # log("video_url_data", video_url_data)
 
                             # https://cdn-eu.muse.ai/u/Czi97La/f4e5310bc42adcde16ff1b14fa7a56f7e61380b78befa674f666f1bca7ad8953/videos/dash.mpd
+                            # or
+                            # https://cdn.skiv.com/u/Czi97La/9311e6ecdc3604f092b78fe0472891083bd1f37c6dc27bed45c1154c024b5d9c/videos/dash.mpd
                             video_url_dash = video_url_data.replace("/data", "/videos/dash.mpd")
 
                             # log("video_url_dash", video_url_dash)

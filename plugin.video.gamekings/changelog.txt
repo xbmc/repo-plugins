@@ -1,3 +1,8 @@
+v1.2.24 (2026-08-24) (kudo's to SmashRocket)
+- Skiv premium playback fix
+- Show thumbnails for frontpage videos
+- Replace obsolete menu entries with categories
+
 v1.2.23 (2023-03-12)
 - improved constructing video urls
 

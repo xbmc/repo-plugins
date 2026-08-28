@@ -1,0 +1,226 @@
+# Kodi Kinopoisk Scraper - Russian translations
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+
+msgctxt "#32001"
+msgid "API-ключи"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Кинопоиск"
+msgstr ""
+
+msgctxt "#32011"
+msgid "API-ключ Кинопоиска"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Получите бесплатный ключ на kinopoiskapiunofficial.tech"
+msgstr ""
+
+msgctxt "#32100"
+msgid "Метаданные"
+msgstr ""
+
+msgctxt "#32110"
+msgid "Рейтинги"
+msgstr ""
+
+msgctxt "#32111"
+msgid "Предпочтительный рейтинг"
+msgstr ""
+
+msgctxt "#32112"
+msgid "Какой рейтинг показывать как основной"
+msgstr ""
+
+msgctxt "#32113"
+msgid "Кинопоиск"
+msgstr ""
+
+msgctxt "#32114"
+msgid "IMDB"
+msgstr ""
+
+msgctxt "#32120"
+msgid "Изображения"
+msgstr ""
+
+msgctxt "#32121"
+msgid "Загружать фото актёров"
+msgstr ""
+
+msgctxt "#32122"
+msgid "Загружать фотографии актёров из Кинопоиска"
+msgstr ""
+
+msgctxt "#32200"
+msgid "Расширенные"
+msgstr ""
+
+msgctxt "#32210"
+msgid "Логирование"
+msgstr ""
+
+msgctxt "#32211"
+msgid "Подробное логирование (debug)"
+msgstr ""
+
+msgctxt "#32212"
+msgid "Включить подробное логирование для диагностики проблем"
+msgstr ""
+
+msgctxt "#32013"
+msgid "API-ключ OMDb"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Для рейтингов IMDB и Rotten Tomatoes. Получите на omdbapi.com (опционально)"
+msgstr ""
+
+msgctxt "#32130"
+msgid "Показывать рейтинги в описании"
+msgstr ""
+
+msgctxt "#32131"
+msgid "Добавлять IMDB и Rotten Tomatoes рейтинги в описание фильма"
+msgstr ""
+
+msgctxt "#32140"
+msgid "Загружать описания серий из TVMaze"
+msgstr ""
+
+msgctxt "#32141"
+msgid "Получать описания эпизодов из TVMaze (на английском). Требуется VPN в некоторых регионах"
+msgstr ""
+
+msgctxt "#32150"
+msgid "Автовыбор при точном совпадении"
+msgstr ""
+
+msgctxt "#32151"
+msgid "Автоматически выбирать единственный результат, если название и год совпадают точно"
+msgstr ""
+
+msgctxt "#32170"
+msgid "Двойной поиск (рус + ориг)"
+msgstr ""
+
+msgctxt "#32171"
+msgid "Выполнять дополнительный поиск по альтернативному названию (русскому или оригинальному) для расширения результатов"
+msgstr ""
+
+msgctxt "#32180"
+msgid "Award tags (Oscar, Emmy, etc.)"
+msgstr "Теги наград (Оскар, Эмми и др.)"
+
+msgctxt "#32181"
+msgid "Add award tags to movie/TV show metadata for filtering in library"
+msgstr "Добавлять теги наград к фильмам/сериалам для фильтрации в библиотеке"
+
+msgctxt "#32190"
+msgid "Genre language"
+msgstr "Язык жанров"
+
+msgctxt "#32191"
+msgid "Language for genre names: Russian (original from Kinopoisk) or English (for Smart Playlists compatibility)"
+msgstr "Язык названий жанров: русский (оригинал с Кинопоиска) или английский (для совместимости со Smart Playlists)"
+
+msgctxt "#32192"
+msgid "Russian"
+msgstr "Русский"
+
+msgctxt "#32193"
+msgid "English"
+msgstr "English"
+
+msgctxt "#32220"
+msgid "Clear cache"
+msgstr "Очистить кэш"
+
+msgctxt "#32221"
+msgid "Clear all cached API responses on the next library scan"
+msgstr "Очистить все закэшированные ответы API при следующем сканировании библиотеки"
+
+msgctxt "#32230"
+msgid "Export NFO files"
+msgstr "Экспорт NFO-файлов"
+
+msgctxt "#32231"
+msgid "Automatically save .nfo files with metadata next to video files after scraping"
+msgstr "Автоматически сохранять .nfo-файлы с метаданными рядом с видеофайлами после скрапинга"
+
+msgctxt "#32232"
+msgid "Overwrite existing NFO"
+msgstr "Перезаписывать существующие NFO"
+
+msgctxt "#32233"
+msgid "Replace existing .nfo files with fresh data on each scrape"
+msgstr "Заменять существующие .nfo-файлы свежими данными при каждом скрапинге"
+
+msgctxt "#32240"
+msgid "Duplicate detection"
+msgstr "Обнаружение дубликатов"
+
+msgctxt "#32241"
+msgid "Warn when the same Kinopoisk ID is assigned to multiple files"
+msgstr "Предупреждать, когда один и тот же Kinopoisk ID привязан к нескольким файлам"
+
+msgctxt "#32250"
+msgid "Загружать трейлеры"
+msgstr ""
+
+msgctxt "#32251"
+msgid "Загружать ссылки на YouTube-трейлеры с Кинопоиска (1 дополнительный API-запрос на сериал)"
+msgstr ""
+
+msgctxt "#32160"
+msgid "Постеры и названия сезонов"
+msgstr ""
+
+msgctxt "#32161"
+msgid "Загружать постеры и названия сезонов из TVMaze (1 дополнительный API-запрос на сериал)"
+msgstr ""
+
+msgctxt "#32260"
+msgid "Person name language"
+msgstr "Язык имён (актёры, режиссёры)"
+
+msgctxt "#32261"
+msgid "Language for actor, director, and writer names. English improves compatibility with other scrapers (TMDb, TVDB)"
+msgstr "Язык отображения имён актёров, режиссёров и сценаристов. Английский улучшает совместимость с другими скраперами (TMDb, TVDB)"
+
+msgctxt "#32262"
+msgid "Russian"
+msgstr "Русский"
+
+msgctxt "#32263"
+msgid "English"
+msgstr "English"
+
+msgctxt "#32270"
+msgid "Wikidata fallback для IMDB ID"
+msgstr ""
+
+msgctxt "#32271"
+msgid "Получать IMDB ID из Wikidata, когда Кинопоиск не знает его. Без API-ключа"
+msgstr ""
+
+msgctxt "#32015"
+msgid "API-ключ FanArt.tv"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Получите бесплатный ключ на fanart.tv/get-an-api-key/ (опционально)"
+msgstr ""
+
+msgctxt "#32280"
+msgid "Артворк FanArt.tv"
+msgstr ""
+
+msgctxt "#32281"
+msgid "Загружать дополнительный артворк (clearlogo, banner и др.) с FanArt.tv"
+msgstr ""

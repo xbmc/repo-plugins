@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+  <section id="metadata.ums">
+    <category id="api_keys" label="32001" help="">
+      <group id="1">
+        <setting id="kinopoisk_api_key" type="string" label="32011" help="32012">
+          <level>0</level>
+          <default></default>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="edit" format="string">
+            <heading>32011</heading>
+          </control>
+        </setting>
+      </group>
+      <group id="1b">
+        <setting id="omdb_api_key" type="string" label="32013" help="32014">
+          <level>0</level>
+          <default></default>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="edit" format="string">
+            <heading>32013</heading>
+          </control>
+        </setting>
+      </group>
+      <group id="1c">
+        <setting id="fanart_api_key" type="string" label="32015" help="32016">
+          <level>0</level>
+          <default></default>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="edit" format="string">
+            <heading>32015</heading>
+          </control>
+        </setting>
+      </group>
+    </category>
+    <category id="metadata" label="32100" help="">
+      <group id="2">
+        <setting id="preferred_rating" type="integer" label="32111" help="32112">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="32113">0</option>
+              <option label="32114">1</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+      </group>
+      <group id="3">
+        <setting id="fetch_actor_photos" type="boolean" label="32121" help="32122">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="3b">
+        <setting id="show_ratings_in_plot" type="boolean" label="32130" help="32131">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="3c">
+        <setting id="auto_select_exact_match" type="boolean" label="32150" help="32151">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="3d">
+        <setting id="enable_collections" type="boolean" label="32160" help="32161">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="3e">
+        <setting id="enable_dual_search" type="boolean" label="32170" help="32171">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="3f">
+        <setting id="enable_award_tags" type="boolean" label="32180" help="32181">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="3g">
+        <setting id="genre_language" type="integer" label="32190" help="32191">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="32192">0</option>
+              <option label="32193">1</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+      </group>
+      <group id="3ga">
+        <setting id="actor_name_language" type="integer" label="32260" help="32261">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="32262">0</option>
+              <option label="32263">1</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+      </group>
+      <group id="3h">
+        <setting id="enable_nfo_export" type="boolean" label="32230" help="32231">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="3i">
+        <setting id="nfo_overwrite" type="boolean" label="32232" help="32233">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible" setting="enable_nfo_export">true</dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="3j">
+        <setting id="enable_duplicate_detection" type="boolean" label="32240" help="32241">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="3k">
+        <setting id="enable_trailers" type="boolean" label="32250" help="32251">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="3l">
+        <setting id="use_wikidata_fallback" type="boolean" label="32270" help="32271">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="3m">
+        <setting id="use_fanart" type="boolean" label="32280" help="32281">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+    </category>
+    <category id="advanced" label="32200" help="">
+      <group id="4">
+        <setting id="debug_logging" type="boolean" label="32211" help="32212">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="4b">
+        <setting id="clear_cache" type="boolean" label="32220" help="32221">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+    </category>
+  </section>
+</settings>

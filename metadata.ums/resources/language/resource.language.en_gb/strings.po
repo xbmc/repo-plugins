@@ -1,0 +1,218 @@
+# Kodi Kinopoisk Scraper - English translations
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+msgctxt "#32001"
+msgid "API Keys"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Kinopoisk"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Kinopoisk API Key"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Get a free key at kinopoiskapiunofficial.tech"
+msgstr ""
+
+msgctxt "#32100"
+msgid "Metadata"
+msgstr ""
+
+msgctxt "#32110"
+msgid "Ratings"
+msgstr ""
+
+msgctxt "#32111"
+msgid "Preferred rating"
+msgstr ""
+
+msgctxt "#32112"
+msgid "Which rating to show as default"
+msgstr ""
+
+msgctxt "#32113"
+msgid "Kinopoisk"
+msgstr ""
+
+msgctxt "#32114"
+msgid "IMDB"
+msgstr ""
+
+msgctxt "#32120"
+msgid "Artwork"
+msgstr ""
+
+msgctxt "#32121"
+msgid "Fetch actor photos"
+msgstr ""
+
+msgctxt "#32122"
+msgid "Download actor photos from Kinopoisk"
+msgstr ""
+
+msgctxt "#32200"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#32210"
+msgid "Logging"
+msgstr ""
+
+msgctxt "#32211"
+msgid "Debug logging"
+msgstr ""
+
+msgctxt "#32212"
+msgid "Enable verbose logging for troubleshooting"
+msgstr ""
+
+msgctxt "#32013"
+msgid "OMDb API Key"
+msgstr ""
+
+msgctxt "#32014"
+msgid "For IMDB and Rotten Tomatoes ratings. Get at omdbapi.com (optional)"
+msgstr ""
+
+msgctxt "#32130"
+msgid "Show ratings in description"
+msgstr ""
+
+msgctxt "#32131"
+msgid "Append IMDB and Rotten Tomatoes ratings to movie description"
+msgstr ""
+
+msgctxt "#32150"
+msgid "Auto-select on exact match"
+msgstr ""
+
+msgctxt "#32151"
+msgid "Automatically select the only result when title and year match exactly"
+msgstr ""
+
+msgctxt "#32160"
+msgid "Detect collections (franchises)"
+msgstr ""
+
+msgctxt "#32161"
+msgid "Automatically group franchise movies into Kodi movie sets"
+msgstr ""
+
+msgctxt "#32170"
+msgid "Dual search (rus + original)"
+msgstr ""
+
+msgctxt "#32171"
+msgid "Perform additional search by alternative title (Russian or original) to expand results"
+msgstr ""
+
+msgctxt "#32180"
+msgid "Award tags (Oscar, Emmy, etc.)"
+msgstr ""
+
+msgctxt "#32181"
+msgid "Add award tags to movie/TV show metadata for filtering in library"
+msgstr ""
+
+msgctxt "#32190"
+msgid "Genre language"
+msgstr ""
+
+msgctxt "#32191"
+msgid "Language for genre names: Russian (original from Kinopoisk) or English (for Smart Playlists compatibility)"
+msgstr ""
+
+msgctxt "#32192"
+msgid "Russian"
+msgstr ""
+
+msgctxt "#32193"
+msgid "English"
+msgstr ""
+
+msgctxt "#32220"
+msgid "Clear cache"
+msgstr ""
+
+msgctxt "#32221"
+msgid "Clear all cached API responses on the next library scan"
+msgstr ""
+
+msgctxt "#32230"
+msgid "Export NFO files"
+msgstr ""
+
+msgctxt "#32231"
+msgid "Automatically save .nfo files with metadata next to video files after scraping"
+msgstr ""
+
+msgctxt "#32232"
+msgid "Overwrite existing NFO"
+msgstr ""
+
+msgctxt "#32233"
+msgid "Replace existing .nfo files with fresh data on each scrape"
+msgstr ""
+
+msgctxt "#32240"
+msgid "Duplicate detection"
+msgstr ""
+
+msgctxt "#32241"
+msgid "Warn when the same Kinopoisk ID is assigned to multiple files"
+msgstr ""
+
+msgctxt "#32250"
+msgid "Download trailers"
+msgstr ""
+
+msgctxt "#32251"
+msgid "Fetch YouTube trailer links from Kinopoisk (uses 1 extra API request per movie)"
+msgstr ""
+
+msgctxt "#32260"
+msgid "Person name language"
+msgstr ""
+
+msgctxt "#32261"
+msgid "Language for actor, director, and writer names. English improves compatibility with other scrapers (TMDb, TVDB)"
+msgstr ""
+
+msgctxt "#32262"
+msgid "Russian"
+msgstr ""
+
+msgctxt "#32263"
+msgid "English"
+msgstr ""
+
+msgctxt "#32270"
+msgid "Wikidata fallback for IMDB ID"
+msgstr ""
+
+msgctxt "#32271"
+msgid "Fetch IMDB ID from Wikidata when Kinopoisk doesn't have it. No API key required"
+msgstr ""
+
+msgctxt "#32015"
+msgid "FanArt.tv API Key"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Get a free key at fanart.tv/get-an-api-key/ (optional)"
+msgstr ""
+
+msgctxt "#32280"
+msgid "FanArt.tv artwork"
+msgstr ""
+
+msgctxt "#32281"
+msgid "Fetch additional artwork (clearlogo, banner, etc.) from FanArt.tv"
+msgstr ""

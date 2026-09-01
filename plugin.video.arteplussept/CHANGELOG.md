@@ -1,0 +1,171 @@
+v2.0.0 (2026-8-30)
+
+- Replace xbmcswift2 routing and file-based cache with native shim; remove external dependency
+- Switch category, video and stream endpoints to Arte TV API; remove any call to HBB TV API
+- Add multi-language playback with subtitles (adaptive inputstream)
+- Remove cached categories; fix mis cache as with 1.6.2
+- Fix login state display in addon  settings
+- Tracking of played videos still failing. Cross device replay start from scratch.
+
+v1.6.2 (2026-8-30)
+
+Thank you jcosmao for fixing mis cache error when displaying category 60min after home page display.
+
+v1.6.1 (2026-8-22)
+
+Add support for external page items and fix frequency of update disclamer
+
+- external pages are list of zones - new item &quot;Categories et genre&quot; in main menu.
+- Fix disclamer with link for issues and donations on version update or every 30d.
+
+v1.6.0 (2026-7-30)
+
+Add easier auth for smart tv with device flow
+
+- New: Add auth with device flow to simplify auth for Smart TV users
+- New: Remind user where to donate or to report issues on new version of the extension
+- NFR: Add logging of API communication related to auth.
+- NFR: Clean-up code related to auth in api.py and user.py. Especially failing persistance mechanism.
+
+v1.5.4 (2026-7-29)
+
+Non functional changes only
+- Enable logging of data sent to Kodi/XBMC for display.
+- Add link to donation page
+- Harmonize names of routes and &quot;entry&quot; methods
+- Add 3 screenshots
+
+v1.5.3 (2026-7-18)
+
+Fix next page navigation and error messages for non authenticated users
+
+- Fix next page navigation, when zone_id was made of a duplicated uuid separated with a _.
+Made code compatible with unexpected value returned by Arte TV API.
+- Smarter warning notification instead of error and warning messages for non authenticated users.
+A single warning is displayed, when a user tries to do something requiering auth. Not at start-up and in unconsistent way.
+
+v1.5.2 (2026-7-16)
+
+Fix page navigation and keep version in api header user_agent aligned with addon version
+
+v1.5.1 (2026-7-15)
+
+
+Isolate plugin source from scripts and tests
+
+v1.5.0 (2026-7-15)
+
+- New: Play from the strat or play live content
+- NFR: Make create-release.sh more robust
+- NFR: First unit tests (for arte live stream)
+
+v1.4.6 (2026-7-15)
+
+Non functional improvements and bugfix adding to arte favorites
+
+- Fix error message when a program was added to arte favorites by adding language to API request.
+- NFR: Make addon.py slim by moving its content to plugin.py to fix Kodi addon checker warning.
+- NFR: Adding create-release.sh to accelerate and ensure quality of release creation in master branch by automating the steps on contributor's host. Document a troubleshooting of releasing CI with Kodi Add-on Submitter.
+
+v1.4.5 (2026-07-01)
+- Fix home menu display related to Arte r-proxy changes.
+- Remove auth token remote persistence.
+- Add age restriction MPAA info to videos.
+- Warn during playback if MPAA is 'PG-13', 'R' or 'NC-17'.
+
+v1.4.1 (2023-10-10)
+- Fix playing videos with siblings.
+
+v1.4.0 (2023-8-14)
+- Add support for content over multiple pages. Manage pagination for favorites, history, search and collections : when there are more items in the history or favorities than the page size (currently 50), it is now possible to navigate through pages.
+- Refactor most of the code in OO style. Factorize duplicated code.
+
+v1.3.1 (2023-8-12)
+- Add context menu to view collection as menu instead of playlist
+- Set resume point to 0 when video was fully watched. Avoid crash when playing seq of watched videos in playlist.
+
+v1.3.0 (2023-8-6)
+- Improve security with better password management
+  - Stop storing password on filesystem though addon settings
+- Make thomas-ernest fork official in addon.xml for visibility in wiki
+- Minor fix/clean-up in translation
+
+v1.2.1 (2023-8-12)
+- Add context menu to view collection as menu instead of playlist
+- Set resume point to 0 when video was fully watched. Avoid crash when playing seq of watched videos in playlist.
+
+v1.2.0 (2023-7-26)
+- Manage collections TV_SERIES and MAGAZINE as video playlist
+- Add a context menu item to purge favorites
+- Add a context menu item to mark as video as watched in Arte
+
+v1.1.10 (2023-5-28)
+- Bugfix to display favorites and last vieweds following id change in Arte
+
+v1.1.9 (2023-4-18)
+- Improve security and performance by caching token to limit authentication requests
+- Fallback on clip, when stream is not available anymore. Same feature as on Arte mobile. For favorite content.
+- Clean-up and lint code
+- Add CI with Pylint and Kodi addon submitter
+
+v1.1.8 (2023-2-17)
+- Improve synchronization of playback progress with Arte TV
+    - Synchronize progress every minute
+    - Fix missing synchronization when playback ends
+    - Enable Resume from beginning (on top of synchronized progress point)
+- Improve display of collection item in home page
+    - Before : rely on old sub category, creating additional menu with a dead entry
+    - After : rely on cached category, collection videos directly poulated from home page zone
+- Add label in notification when manipulating favorites
+- Fix plural for Polish
+- Non-functional code clean-up
+
+v1.1.7 (2023-2-14)
+- Add feature to purge my history thanks to action in context menu of my history
+- Move addon.py to root following Kodi recommendations
+- Move back change log fron addon.xml //news to CHANGELOG.md because news is limited to 1500 characters
+- Fix translation in English for Successfully removeD from favorite
+- Log message instead of notify user, when user or password are not confiugred, while using synched player
+
+v1.1.6 (2023-2-11)
+- Fixed playback progress / resume point retrieved from Arte TV
+- Added synchronisation of playback progress with Arte TV when video playback paused, stopped or crashed
+- Fixed error when live or viewed streams are not available
+- Optimize navigation when cancelling or doing empty search - Avoid display empty page
+- Fixed client from web to tv for more accurate content - web content contains more links not browsable in Kodi
+- Factorized changelog - Keep them only in addon.xml //news following Kodi's recommendations
+
+v1.1.5 (2023-1-30)
+- Populate root menu from Arte TV API instead of HBB TV. Still play video from HBB TV.
+- Manage favorites in Arte profile from context menu
+- Added Search in root menu
+
+v1.1.4 (2023-1-14)
+- Added Live stream in root menu
+- Got Magazines A-Z content from Arte TV instead of HBB TV API.
+- Fixed empty categories - discrepencies with Arte TV - Bug #79
+
+v1.1.3 (2022-12-29)
+- Added Polish translation
+- Added My list and My history content from Arte TV profile
+
+v1.1.2 (2021-06-27)
+- better date / locale handling and prevent crash when http error
+
+v1.1.1
+- minor python 3 fixes and code improvements (from Kodi Travis CI)
+
+v1.1.0
+- API fixes
+- Added add-on option to select video stream (language, subtitles...)
+
+v1.0.2
+- weekly browse
+- bugfix (settings parsing #54)
+
+v1.0.1
+- major bug hotfix
+
+v1.0.0
+- brand new version
+- support for new arte api

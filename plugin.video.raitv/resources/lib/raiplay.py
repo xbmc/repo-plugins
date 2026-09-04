@@ -21,14 +21,14 @@ class RaiPlay:
     #UserAgent = "Dalvik/1.6.0 (Linux; U; Android 4.2.2; GT-I9105P Build/JDQ39)"
     #MediapolisUserAgent = "Android 4.2.2 (smart) / RaiPlay 2.1.3 / WiFi"
     
-    UserAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"
-    MediapolisUserAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"
+    UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+    MediapolisUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
     
     noThumbUrl = "http://www.rai.it/dl/components/img/imgPlaceholder.png"
     
     # From http://www.raiplay.it/mobile/prod/config/RaiPlay_Config.json
     baseUrl = "https://www.raiplay.it/"
-    channelsUrl = "http://www.rai.it/dl/RaiPlay/2016/PublishingBlock-9a2ff311-fcf0-4539-8f8f-c4fee2a71d58.html?json"
+    channelsUrl = "https://www.raiplay.it/dirette.json"
     localizeUrl = "http://mediapolisgs.rai.it/relinker/relinkerServlet.htm?cont=201342"
     menuUrl = "http://www.rai.it/dl/RaiPlay/2016/menu/PublishingBlock-20b274b1-23ae-414f-b3bf-4bdc13b86af2.html?homejson"
     palinsestoUrl = "https://www.raiplay.it/palinsesto/app/old/[nomeCanale]/[dd-mm-yyyy].json"
@@ -60,8 +60,8 @@ class RaiPlay:
         
     def getChannels(self):
         response = json.loads(utils.checkStr(urllib2.urlopen(self.channelsUrl).read()))
-        return response["dirette"]
-    
+        return response["contents"]
+        
     def getOnAir(self):
         response = json.loads(utils.checkStr(urllib2.urlopen(self.onAirUrl).read()))
         return response["on_air"]
@@ -69,13 +69,19 @@ class RaiPlay:
     def getHomePage(self, defaultUrl):
         response = json.loads(utils.checkStr(urllib2.urlopen(self.baseUrl + defaultUrl).read()))
         return response["contents"]
-      
+
+    def getNewsCollection(self, defaultUrl="index.json"):
+        response = json.loads(utils.checkStr(urllib2.urlopen(self.baseUrl + defaultUrl).read()))
+        
+        for item in response["contents"]:
+            if item.get("name","") =="L'informazione Rai":
+                #trovata la collezione dei tg
+                return item["contents"]
+        
+        
     def getRaiSportLivePage(self):
         chList = []
 
-        chList.append({'title':'RaiSport Web 1', 'url': 'https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=22590', 'icon':''})
-        chList.append({'title':'RaiSport Web 2', 'url': 'https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=35259', 'icon':''})
-        
         return chList
     
     def fillRaiSportKeys(self):
@@ -122,7 +128,7 @@ class RaiPlay:
                   'Content-Type': 'application/json; charset=UTF-8',
                   'Origin': 'https://www.raisport.rai.it',
                   'Referer': 'https://www.raisport.rai.it/archivio.html',
-                  'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
                   'X-Requested-With': 'XMLHttpRequest',
                  }
         page = int(page)
@@ -311,7 +317,7 @@ class RaiPlay:
         return url
         
     def getThumbnailUrl(self, pathId):
-        if pathId == "":
+        if not pathId :
             url = self.noThumbUrl
         else:
             url = self.getUrl(pathId)
@@ -320,18 +326,22 @@ class RaiPlay:
  
     def getThumbnailUrl2(self, item):
         if "images" in item:
-            if "landscape" in item["images"]:
-                url = item["images"]["landscape"]
-                return self.getThumbnailUrl(url)
-            elif "landscape43" in item["images"]:
-                url = item["images"]["landscape43"]
-                return self.getThumbnailUrl(url)
-            elif "portrait" in item["images"]:
-                url = item["images"]["portrait"]
-                return self.getThumbnailUrl(url)
-            elif "portrait43" in item["images"]:
-                url = item["images"]["portrait43"]
-                return self.getThumbnailUrl(url)
-                
+            item2=item["images"]
+            url = item2.get("portrait","")
+            if url:
+                return self.getThumbnailUrl(url)                
+            else:
+                url = item2.get("portrait43","")
+                if url:
+                    return self.getThumbnailUrl(url)
+                else:
+                    url = item2.get("landscape","")
+                    if url:
+                        return self.getThumbnailUrl(url)
+                    else:
+                        url = item2.get("landascape43","")
+                        if url:
+                            return self.getThumbnailUrl(url)
+        
         return self.noThumbUrl
         

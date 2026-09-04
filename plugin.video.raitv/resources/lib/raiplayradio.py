@@ -3,6 +3,7 @@ import sys
 import json
 import unicodedata
 import resources.lib.utils as utils
+import xbmc
 
 PY3 = sys.version_info.major >= 3
 
@@ -23,7 +24,7 @@ class RaiPlayRadio:
     baseUrl = "http://www.raiplayradio.it/"
     channelsUrl = "http://www.raiplaysound.it/dirette.json"
     localizeUrl = "http://mediapolisgs.rai.it/relinker/relinkerServlet.htm?cont=201342"
-    palinsestoUrl = "http://www.raiplayradio.it/dl/palinsesti/Page-a47ba852-d24f-44c2-8abb-0c9f90187a3e-json.html?canale=[nomeCanale]&giorno=[dd-mm-yyyy]&mode=light"
+    palinsestoUrl ="https://www.raiplaysound.it/palinsesto/app/[nome-palinsesto]/giorni.json"
     AzTvShowPath = "/dl/RaiTV/RaiRadioMobile/Prod/Config/programmiAZ-elenco.json"
     
     def __init__(self):
@@ -44,13 +45,15 @@ class RaiPlayRadio:
         return response["contents"]
         
     def getProgrammes(self, channelName, epgDate):
-        channelTag = channelName.replace(" ", "")
-        channelTag = unicodedata.normalize('NFD', channelTag).encode('ascii', 'ignore')
         url = self.palinsestoUrl
-        url = url.replace("[nomeCanale]", channelTag)
-        url = url.replace("[dd-mm-yyyy]", epgDate)
+        url = url.replace("[nome-palinsesto]", channelName)
         response = json.loads(utils.checkStr(urllib2.urlopen(url).read()))
-        return response[channelName][0]["palinsesto"][0]["programmi"]
+        for day in response["epg"]:
+            if day["day"]== epgDate:
+                xbmc.log("Trovato il giorno giusto")
+                xbmc.log(str(day["events"]))
+                return day["events"]
+        return []
     
     def getAudioMetadata(self, pathId):
         url = self.getUrl(pathId)

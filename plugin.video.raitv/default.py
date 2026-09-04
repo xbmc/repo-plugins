@@ -12,7 +12,7 @@ PY3 = sys.version_info.major >= 3
 
 if PY3:
     import urllib.request as urllib2
-    import html.parser as HTMLParser
+    import html as HTMLParser
     import urllib.parse as urlparse
     from urllib.parse import urlencode
     

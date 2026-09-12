@@ -25,4 +25,4 @@ def get_live_url(plugin, item_id, **kwargs):
         urlquick.get(URL_API, headers=GENERIC_HEADERS, max_age=-1).text)
     for stream in streams:
         if stream.get('titre') == item_id:
-            return resolver_proxy.get_easybroadcast_stream(plugin, stream.get('link'))
+            return resolver_proxy.get_easybroadcast_event_stream(plugin, stream.get('link'))

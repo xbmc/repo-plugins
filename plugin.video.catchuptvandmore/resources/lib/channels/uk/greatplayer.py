@@ -49,9 +49,11 @@ def get_anonymous_token():
     return None
 
 
-COOKIES = {
-    'one-token': get_anonymous_token().get('token'),
-}
+def cookies():
+    cks = getattr(cookies, '_cookies', None)
+    if cks is None:
+        cookies._cookies = cks = {'one-token': get_anonymous_token().get('token')}
+    return cks
 
 
 @Route.register
@@ -124,14 +126,18 @@ def main_menu(plugin, **kwargs):
 
 @Resolver.register
 def get_video(plugin, url, **kwargs):
-    json_video = json.loads(urlquick.get(url, cookies=COOKIES, max_age=-1).text)
+    json_video = json.loads(urlquick.get(url, cookies=cookies(), max_age=-1).text)
     video_streams = json_video.get('playbackInfo', {}).get('videoStreams', [])
     for video_stream in video_streams:
-        if video_stream.get('streamType') == 'DASH':
+        if video_stream.get('label') == 'DASH-WIDEVINE':
             drms = video_stream.get('drms', [])
             for drm in drms:
                 if drm.get('type') == 'WIDEVINE':
                     video_url = video_stream.get('url')
                     license_url = drm.get('licenseUrl')
-                    return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url, license_url=license_url)
+                    custom_license_headers = {h.get("name"): h.get("value") for h in drm.get("licenseTokenHeaders", [])}
+                    return resolver_proxy.get_stream_with_quality(plugin,
+                                                                  video_url=video_url,
+                                                                  custom_license_headers=custom_license_headers,
+                                                                  license_url=license_url)
     return None

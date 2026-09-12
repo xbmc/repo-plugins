@@ -223,19 +223,19 @@ menu = {
         "enabled": True,
         "order": 25,
     },
-    "telegrenoble": {
-        "route": "/resources/lib/channels/fr/telegrenoble:list_categories",
-        "label": "TéléGrenoble",
-        "thumb": "channels/fr/telegrenoble.png",
-        "fanart": "channels/fr/telegrenoble_fanart.jpg",
-        "enabled": True,
-        "order": 26,
-    },
     "telenantes": {
         "route": "/resources/lib/channels/fr/telenantes:list_videos",
         "label": "TeleNantes",
         "thumb": "channels/fr/telenantes.png",
         "fanart": "channels/fr/telenantes_fanart.jpg",
+        "enabled": True,
+        "order": 26,
+    },
+    "tgplus": {
+        "route": "/resources/lib/channels/fr/tgplus:list_categories",
+        "label": "TG+",
+        "thumb": "channels/fr/tgplus.png",
+        "fanart": "channels/fr/tgplus_fanart.jpg",
         "enabled": True,
         "order": 27,
     },
@@ -303,21 +303,13 @@ menu = {
         "enabled": True,
         "order": 35,
     },
-    "weo": {
-        "route": "/resources/lib/channels/fr/weo:list_categories",
-        "label": "Wéo",
-        "thumb": "channels/fr/weo.png",
-        "fanart": "channels/fr/weo_fanart.jpg",
-        "enabled": True,
-        "order": 36,
-    },
     "lachainemeteo": {
         "route": "/resources/lib/channels/fr/lachainemeteo:list_programs",
         "label": "La Chaîne Météo",
         "thumb": "channels/fr/lachainemeteo.png",
         "fanart": "channels/fr/lachainemeteo_fanart.jpg",
         "enabled": True,
-        "order": 37,
+        "order": 36,
     },
     "equidia": {
         "route": "/resources/lib/channels/fr/equidia:list_categories",
@@ -325,7 +317,7 @@ menu = {
         "thumb": "channels/fr/equidia.png",
         "fanart": "channels/fr/equidia_fanart.jpg",
         "enabled": True,
-        "order": 38,
+        "order": 37,
     },
     "bsmart": {
         "route": "/resources/lib/channels/fr/bsmart:list_categories",
@@ -333,7 +325,7 @@ menu = {
         "thumb": "channels/fr/bsmart.png",
         "fanart": "channels/fr/bsmart_fanart.jpg",
         "enabled": True,
-        "order": 39,
+        "order": 38,
     },
     "jack": {
         "route": "/resources/lib/channels/fr/jack:list_programs",
@@ -341,7 +333,7 @@ menu = {
         "thumb": "channels/fr/jack.png",
         "fanart": "channels/fr/jack_fanart.jpg",
         "enabled": True,
-        "order": 40,
+        "order": 39,
     },
     "kto": {
         "route": "/resources/lib/channels/fr/kto:list_categories",
@@ -349,7 +341,7 @@ menu = {
         "thumb": "channels/fr/kto.png",
         "fanart": "channels/fr/kto_fanart.jpg",
         "enabled": True,
-        "order": 41,
+        "order": 40,
     },
     "luxetv": {
         "route": "/resources/lib/channels/fr/luxetv:list_categories",
@@ -357,7 +349,7 @@ menu = {
         "thumb": "channels/fr/luxetv.png",
         "fanart": "channels/fr/luxetv_fanart.jpg",
         "enabled": True,
-        "order": 42,
+        "order": 41,
     },
     "gong": {
         "route": "/resources/lib/channels/fr/gong:list_categories",
@@ -365,6 +357,6 @@ menu = {
         "thumb": "channels/fr/gong.png",
         "fanart": "channels/fr/gong_fanart.jpg",
         "enabled": True,
-        "order": 43,
+        "order": 42,
     },
 }

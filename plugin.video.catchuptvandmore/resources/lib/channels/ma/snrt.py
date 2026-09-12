@@ -12,16 +12,20 @@ from codequick import Resolver
 
 from resources.lib import resolver_proxy, web_utils
 
-URL_ROOT = 'https://snrtlive.ma/'
+SNRT_API = 'https://snrtlive.atlashoster.net/api/feeds-by-category'
 
 GENERIC_HEADERS = {'User-Agent': web_utils.get_random_windows_ua()}
 
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-
-    url_live = URL_ROOT + 'fr/' + item_id
-    resp = urlquick.get(url_live, headers=GENERIC_HEADERS, max_age=-1)
-    url_easy_brodcast = resp.parse('iframe').get('src')
-
-    return resolver_proxy.get_easybroadcast_stream(plugin, url=url_easy_brodcast)
+    params = {
+        "lang": "fr",
+        "category": 3,
+    }
+    json_data = urlquick.get(SNRT_API, params=params, headers=GENERIC_HEADERS, max_age=-1).json()
+    for item in json_data:
+        if item_id == str(item['id']):
+            m3u8_url = item['url']
+            return resolver_proxy.get_easybroadcast_m3u8_stream(plugin, m3u8_url, True)
+    return None

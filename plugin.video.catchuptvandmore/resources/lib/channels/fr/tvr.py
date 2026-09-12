@@ -138,4 +138,4 @@ def get_live_url(plugin, item_id, **kwargs):
 
     player_id = root.get('src')
 
-    return resolver_proxy.get_easybroadcast_stream(plugin, player_id)
+    return resolver_proxy.get_easybroadcast_event_stream(plugin, player_id)

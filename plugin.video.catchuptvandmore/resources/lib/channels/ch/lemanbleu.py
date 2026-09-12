@@ -6,44 +6,30 @@
 
 from __future__ import unicode_literals
 from builtins import str
-import json
 import re
 
 from codequick import Listitem, Resolver, Route, Script
 from kodi_six import xbmcgui
 import urlquick
 
-from resources.lib import download
+from resources.lib import download, resolver_proxy
 from resources.lib.addon_utils import Quality
 from resources.lib.menu_utils import item_post_treatment
 
 
-# TO DO
-# Add replay
+URL_ROOT = 'https://www.lemanbleu.ch'
 
-URL_ROOT = 'http://www.lemanbleu.ch'
+URL_LIVE_M3U8 = 'https://naxoo.vedge.infomaniak.com/livecast/ik:naxoo/manifest.m3u8'
 
-# Live
-URL_LIVE = URL_ROOT + '/fr/Live.html'
-
-URL_INFOMANIAK_LIVE = 'http://livevideo.infomaniak.com/iframe.php?stream=naxoo&name=test&player=%s'
-# Player
-
-URL_REPLAY = URL_ROOT + '/replay/video.html'
-
+URL_REPLAY = URL_ROOT + '/fr/Toutes-les-emissions.html'
 URL_VIDEOS = URL_ROOT + '/Scripts/Modules/CustomView/List.aspx?idn=9667&name=ReplaySearch&EmissionID=%s&pg=%s'
-# program_id
 
 QUALITIES_STREAM = ['sd', 'md', 'hq', 'hd']
 
 
 @Route.register
 def list_programs(plugin, item_id, **kwargs):
-    """
-    Build categories listing
-    - Les Programmes
-    - ...
-    """
+    # TODO: page structure may have changed
     resp = urlquick.get(URL_REPLAY)
     root = resp.parse("ul", attrs={"id": "itemFilters"})
 
@@ -101,7 +87,7 @@ def get_video_url(plugin,
                   **kwargs):
 
     resp = urlquick.get(video_url, max_age=-1)
-    stream_url = re.compile(r'og\:video\" content\=\"(.*?)\"').findall(
+    stream_url = re.compile(r'og:video" content="(.*?)"').findall(
         resp.text)[0]
 
     desired_quality = Script.setting.get_string('quality')
@@ -123,17 +109,14 @@ def get_video_url(plugin,
 
     url = ''
     if desired_quality == Quality['DIALOG']:
-        seleted_item = xbmcgui.Dialog().select(
+        selected_item = xbmcgui.Dialog().select(
             plugin.localize(30709),
             all_datas_videos_quality)
-        if seleted_item == -1:
-            url = ''
-        url = all_datas_videos_path[seleted_item]
+        if selected_item == -1:
+            return False
+        url = all_datas_videos_path[selected_item]
     elif desired_quality == Quality['BEST']:
-        url_best = ''
-        for data_video in all_datas_videos_path:
-            url_best = data_video
-        url = url_best
+        url = all_datas_videos_path[-1]
     else:
         url = all_datas_videos_path[0]
 
@@ -144,18 +127,8 @@ def get_video_url(plugin,
 
 @Resolver.register
 def get_live_url(plugin, item_id, **kwargs):
-
-    resp = urlquick.get(URL_LIVE)
-    player_id = re.compile(r'\&player\=(.*?)\"').findall(resp.text)[0]
-    session_urlquick = urlquick.Session(allow_redirects=False)
-    resp2 = session_urlquick.get(URL_INFOMANIAK_LIVE % player_id)
-    location_url = resp2.headers['Location']
-    resp3 = urlquick.get(location_url.replace(
-        'infomaniak.com/', 'infomaniak.com/playerConfig.php'),
-        max_age=-1)
-    json_parser = json.loads(resp3.text)
-    stream_url = ''
-    for stram_datas in json_parser['data']['integrations']:
-        if 'hls' in stram_datas['type']:
-            stream_url = stram_datas['url']
-    return stream_url
+    return resolver_proxy.get_stream_with_quality(
+        plugin,
+        video_url=URL_LIVE_M3U8,
+        manifest_type="hls"
+    )

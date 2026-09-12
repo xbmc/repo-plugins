@@ -6,6 +6,7 @@
 
 from __future__ import unicode_literals
 import binascii
+import importlib
 import json
 import pickle
 import sys
@@ -182,3 +183,26 @@ def get_proxy():
     else:
         return
     return proxy_address
+
+
+_local_timezone = None
+
+
+def get_local_zone():
+    """Return the local time zone from Kodi's settings as a ZoneInfo object.
+    Revert to the timezone provided by tzlocal on older Kodi versions, which
+    in turn reverts to UTC if the OS provides none.
+
+    """
+    global _local_timezone
+
+    if not _local_timezone:
+        from resources.lib.py_utils import ZoneInfo
+
+        try:
+            _local_timezone = ZoneInfo(get_setting('locale.timezone'))
+        except (TypeError, ValueError):
+            # To be Matrix compatible
+            tzlocal = importlib.import_module('tzlocal')
+            _local_timezone = tzlocal.get_localzone()
+    return _local_timezone

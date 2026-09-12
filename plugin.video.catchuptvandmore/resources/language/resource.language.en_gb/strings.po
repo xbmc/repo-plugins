@@ -123,7 +123,7 @@ msgid "Internet service providers"
 msgstr ""
 
 
-# Countries (from 30050 to 30079)
+# Countries (from 30050 to 30099)
 
 msgctxt "#30050"
 msgid "France"
@@ -245,85 +245,89 @@ msgctxt "#30079"
 msgid "Ireland"
 msgstr ""
 
-# Channels (from 30080 to 30129)
-
 msgctxt "#30080"
+msgid "Romania"
+msgstr ""
+
+# Channels (from 30100 to 30129)
+
+msgctxt "#30100"
 msgid "French channels"
 msgstr ""
 
-msgctxt "#30081"
+msgctxt "#30101"
 msgid "Belgian channels"
 msgstr ""
 
-msgctxt "#30082"
+msgctxt "#30102"
 msgid "Japanese channels"
 msgstr ""
 
-msgctxt "#30083"
+msgctxt "#30103"
 msgid "Switzerland channels"
 msgstr ""
 
-msgctxt "#30084"
+msgctxt "#30104"
 msgid "United Kingdom channels"
 msgstr ""
 
-msgctxt "#30085"
+msgctxt "#30105"
 msgid "International channels"
 msgstr ""
 
-msgctxt "#30086"
+msgctxt "#30106"
 msgid "Canadian channels"
 msgstr ""
 
-msgctxt "#30087"
+msgctxt "#30107"
 msgid "United States channels"
 msgstr ""
 
-msgctxt "#30088"
+msgctxt "#30108"
 msgid "Polish channels"
 msgstr ""
 
-msgctxt "#30089"
+msgctxt "#30109"
 msgid "Spanish channels"
 msgstr ""
 
-msgctxt "#30090"
+msgctxt "#30110"
 msgid "Tunisia channels"
 msgstr ""
 
-msgctxt "#30091"
+msgctxt "#30111"
 msgid "Italian channels"
 msgstr ""
 
-msgctxt "#30092"
+msgctxt "#30112"
 msgid "Dutch channels"
 msgstr ""
 
-msgctxt "#30093"
+msgctxt "#30113"
 msgid "Chinese channels"
 msgstr ""
 
-msgctxt "#30094"
+msgctxt "#30114"
 msgid "Cameroon channels"
 msgstr ""
 
-msgctxt "#30095"
+msgctxt "#30115"
 msgid "Slovenian channels"
 msgstr ""
 
-msgctxt "#30096"
+msgctxt "#30116"
 msgid "Ethiopian channels"
 msgstr ""
 
-msgctxt "#30097"
+msgctxt "#30117"
 msgid "Moroccan channels"
 msgstr ""
 
-msgctxt "#30098"
+msgctxt "#30118"
 msgid "Peruvian channels"
 msgstr ""
 
-msgctxt "#30099"
+msgctxt "#30119"
 msgid "UK channels"
 msgstr ""
 
@@ -463,6 +467,10 @@ msgstr ""
 
 msgctxt "#30184"
 msgid "quality: "
+msgstr ""
+
+msgctxt "#30185"
+msgid "Channel 4: Enable high quality (disable when geo blocked)"
 msgstr ""
 
 msgctxt "#30192"
@@ -607,19 +615,19 @@ msgid "SFR TV password"
 msgstr ""
 
 msgctxt "#30264"
-msgid "Channel 4 Login"
+msgid "Log in to Channel 4"
 msgstr ""
 
 msgctxt "#30265"
-msgid "Channel 4 Password"
+msgid "Log out of Channel 4"
 msgstr ""
 
 msgctxt "#30266"
-msgid "Log in to Channel5"
+msgid "Log in to 5"
 msgstr ""
 
 msgctxt "#30267"
-msgid "Log out of Channel5"
+msgid "Log out of 5"
 msgstr ""
 
 
@@ -933,6 +941,10 @@ msgstr ""
 
 msgctxt "#30736"
 msgid "Logged out successfully"
+msgstr ""
+
+msgctxt "#30737"
+msgid "You are already logged out."
 msgstr ""
 
 

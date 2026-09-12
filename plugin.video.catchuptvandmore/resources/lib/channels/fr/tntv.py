@@ -213,7 +213,5 @@ def get_live_url(plugin, item_id, **kwargs):
 
     datas = resp.json()
     data_video_id = datas['data']['stream']['url']
-    ad_config_id = datas['data']['stream']['playback_query_parameters'][0]['value']
-    params = {'ad_config_id': ad_config_id}
 
-    return resolver_proxy.get_brightcove_video_json(plugin, account_id, None, data_video_id, policy_key, params=params)
+    return resolver_proxy.get_brightcove_video_json(plugin, account_id, None, data_video_id, policy_key)

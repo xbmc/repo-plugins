@@ -9,12 +9,13 @@ from builtins import str
 import json
 import re
 
-from codequick import Listitem, Resolver, Route, utils
+from codequick import Listitem, Resolver, Route, Script, utils
 import urlquick
 from kodi_six import xbmcgui
 
 from resources.lib import download, resolver_proxy
 from resources.lib.menu_utils import item_post_treatment
+from resources.lib.addon_utils import Quality
 
 # TO DO
 # Fix Bonus
@@ -241,6 +242,7 @@ def get_video_url(plugin,
                   download_mode=False,
                   **kwargs):
     """Get video URL and start video player"""
+    value_jwplayer_id = None
     url_selected = ''
     all_datas_videos_quality = []
     all_datas_videos_path = []
@@ -263,7 +265,7 @@ def get_video_url(plugin,
             if value_jwplayer_id != '':
                 for stream in root.iterfind(".//div[@class='jwplayer']"):
                     if stream.get('id') == value_jwplayer_id:
-                        url = stream.get('data-source')
+                        url = stream.get('data-url')
             # Cas Yt
             else:
                 video_id = re.compile('youtube.com/embed/(.*?)\?').findall(
@@ -303,4 +305,39 @@ def get_video_url(plugin,
     if download_mode:
         return download.download_video(final_url)
 
-    return final_url
+    if value_jwplayer_id:
+        jwplayer_url = final_url.split("|")[0]
+        mbtext = urlquick.get(jwplayer_url, max_age=-1).text
+        mb = re.findall('NAME="([^"]+)",PROGRESSIVE-URI="([^"]+)"', mbtext)
+        if not mb:
+            mb = re.findall(r'RESOLUTION=([0-9x]+).*\n([^\n]+)', mbtext)
+
+        unique_streams = {}
+        for name, url in mb:
+            res = name.split("x")[0]
+            if res.isdigit():
+                res_val = res
+                if res_val not in unique_streams:
+                    unique_streams[res_val] = (name, url)
+        mb = sorted(unique_streams.items(), key=lambda x: int(x[0]), reverse=True)
+        if Quality['BEST'] == plugin.setting.get_string('quality'):
+            strurl = mb[0][1][1]
+            return strurl
+        elif Quality['WORST'] == plugin.setting.get_string('quality'):
+            strurl = mb[len(mb) - 1][1][1]
+            return strurl
+        elif Quality['DIALOG'] == plugin.setting.get_string('quality'):
+            stream = []
+            for quality, strurl in mb:
+                stream.append(plugin.localize(30184) + strurl[0])
+            choose_stream = xbmcgui.Dialog().select(Script.localize(30180), stream)
+            strurl = mb[choose_stream][1][1]
+            return strurl
+        else:  # DEFAULT
+            for quality, strurl in mb:
+                quality = strurl[0].split("x")[1]
+                if int(quality) <= 1080:
+                    return strurl[1]
+
+    else:
+        return final_url

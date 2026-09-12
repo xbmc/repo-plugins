@@ -17,7 +17,7 @@ from __future__ import unicode_literals
 root = 'live_tv'
 
 menu = {
-    'al-aoula': {
+    '57': {
         'resolver': '/resources/lib/channels/ma/snrt:get_live_url',
         'label': 'Al Aoula',
         'thumb': 'channels/ma/alaoula.png',
@@ -26,16 +26,16 @@ menu = {
         'enabled': True,
         'order': 1,
     },
-    'laayoune': {
+    '58': {
         'resolver': '/resources/lib/channels/ma/snrt:get_live_url',
-        'label': 'Al Aoula Laayoune',
+        'label': 'Al Aoula Laâyoune',
         'thumb': 'channels/ma/laayoune.png',
         'fanart': 'channels/ma/laayoune_live_fanart.jpg',
         'm3u_group': 'Maroc',
         'enabled': True,
         'order': 2,
     },
-    'arryadia': {
+    '59': {
         'resolver': '/resources/lib/channels/ma/snrt:get_live_url',
         'label': 'Arryadia',
         'thumb': 'channels/ma/arryadia.png',
@@ -44,41 +44,59 @@ menu = {
         'enabled': True,
         'order': 3,
     },
-    'athaqafia': {
+    '60': {
+        'resolver': '/resources/lib/channels/ma/snrt:get_live_url',
+        'label': 'Arryadia TNT',
+        'thumb': 'channels/ma/arryadia.png',
+        'fanart': 'channels/ma/arryadia_live_fanart.jpg',
+        'm3u_group': 'Maroc',
+        'enabled': True,
+        'order': 4,
+    },
+    '66': {
+        'resolver': '/resources/lib/channels/ma/snrt:get_live_url',
+        'label': 'Arryadia HD1',
+        'thumb': 'channels/ma/arryadia.png',
+        'fanart': 'channels/ma/arryadia_live_fanart.jpg',
+        'm3u_group': 'Maroc',
+        'enabled': True,
+        'order': 5,
+    },
+    '61': {
         'resolver': '/resources/lib/channels/ma/snrt:get_live_url',
         'label': 'Athaqafia',
         'thumb': 'channels/ma/athaqafia.png',
         'fanart': 'channels/ma/athaqafia_live_fanart.jpg',
         'm3u_group': 'Maroc',
         'enabled': True,
-        'order': 4,
+        'order': 6,
     },
-    'alMaghribia': {
+    '62': {
         'resolver': '/resources/lib/channels/ma/snrt:get_live_url',
         'label': 'Al Maghribia',
         'thumb': 'channels/ma/almaghribia.png',
         'fanart': 'channels/ma/almaghribia_live_fanart.jpg',
         'm3u_group': 'Maroc',
         'enabled': True,
-        'order': 5,
+        'order': 7,
     },
-    'assadissa': {
+    '63': {
         'resolver': '/resources/lib/channels/ma/snrt:get_live_url',
         'label': 'Assadissa',
         'thumb': 'channels/ma/assadissa.png',
         'fanart': 'channels/ma/assadissa_live_fanart.jpg',
         'm3u_group': 'Maroc',
         'enabled': True,
-        'order': 6,
+        'order': 8,
     },
-    'tamazight': {
+    '64': {
         'resolver': '/resources/lib/channels/ma/snrt:get_live_url',
         'label': 'Tamazight',
         'thumb': 'channels/ma/tamazight.png',
         'fanart': 'channels/ma/tamazight_live_fanart.jpg',
         'm3u_group': 'Maroc',
         'enabled': True,
-        'order': 7,
+        'order': 9,
     },
     'télémaroc': {
         'resolver': '/resources/lib/channels/ma/telemaroc:get_live_url',
@@ -86,7 +104,7 @@ menu = {
         'thumb': 'channels/ma/telemaroc.png',
         'fanart': 'channels/ma/telemaroc_fanart.jpg',
         'enabled': True,
-        'order': 8
+        'order': 10
     },
     'MEDI1TV Maghreb': {
         'resolver': '/resources/lib/channels/ma/medi1:get_live_url',
@@ -94,7 +112,7 @@ menu = {
         'thumb': 'channels/ma/medi1.png',
         'fanart': 'channels/ma/medi1maghreb_fanart.jpg',
         'enabled': True,
-        'order': 9
+        'order': 11
     },
     'MEDI1TV Arabic': {
         'resolver': '/resources/lib/channels/ma/medi1:get_live_url',
@@ -102,7 +120,7 @@ menu = {
         'thumb': 'channels/ma/medi1.png',
         'fanart': 'channels/ma/medi1arabic_fanart.jpg',
         'enabled': True,
-        'order': 10
+        'order': 12
     },
     'MEDI1TV Afrique': {
         'resolver': '/resources/lib/channels/ma/medi1:get_live_url',
@@ -110,7 +128,7 @@ menu = {
         'thumb': 'channels/ma/medi1afrique.png',
         'fanart': 'channels/ma/medi1afrique_fanart.jpg',
         'enabled': True,
-        'order': 11
+        'order': 13
     },
     'm24': {
         'resolver': '/resources/lib/channels/ma/m24:get_live_url',
@@ -118,6 +136,6 @@ menu = {
         'thumb': 'channels/ma/m24.png',
         'fanart': 'channels/ma/m24_fanart.jpg',
         'enabled': True,
-        'order': 12
+        'order': 14
     }
 }

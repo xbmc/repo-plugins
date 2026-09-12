@@ -203,6 +203,7 @@ def search(plugin, search_query, **kwargs):
 
 def handle_programs(program_items, category_id=None):
     is_item = False
+    is_category = False
     for program_datas in program_items:
         is_category = False
         for category_datas in program_datas['categories']:

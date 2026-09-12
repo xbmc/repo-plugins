@@ -30,12 +30,8 @@ from codequick import Script
 from kodi_six import xbmcvfs
 from resources.lib.py_utils import compute_md5, datetime_strptime
 from resources.lib.xmltv_utils.sd_json import SD_JSON
+from resources.lib.kodi_utils import get_local_zone
 
-try:
-    # Temp fix of #592
-    from tzlocal import get_localzone
-except Exception:
-    get_localzone = None
 try:
     from urllib.parse import urlparse
 except ImportError:
@@ -356,17 +352,10 @@ def programme_post_treatment(programme, timeformat):
             duration = duration * 3600
         programme['length'] = duration
 
-    # For start and stop we use a string in %Hh%m format in our local timezone
+    # For start and stop we use a string in our local timezone
 
     # Get local timezone
-    if get_localzone is None:
-        local_tz = pytz.timezone('Europe/Paris')
-    else:
-        try:
-            local_tz = get_localzone()
-        except Exception:
-            # Hotfix issue #102
-            local_tz = pytz.timezone('Europe/Paris')
+    local_tz = get_local_zone()
 
     for elt in ['start', 'stop']:
         if elt in programme:

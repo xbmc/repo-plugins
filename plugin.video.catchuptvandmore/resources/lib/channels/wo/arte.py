@@ -83,7 +83,7 @@ def list_categories(plugin, item_id, **kwargs):
 
 
 @Route.register
-def list_zone(plugin, url):
+def list_zone(plugin, url, **kwargs):
     response = urlquick.get(url, headers=ARTE_API_HEADERS, max_age=-1)
     json_parser = response.json()
 
@@ -186,7 +186,7 @@ def handle_programs(data):
 
 
 @Route.register
-def list_programs(plugin, url, zone_id):
+def list_programs(plugin, url, zone_id, **kwargs):
     response = urlquick.get(url, headers=ARTE_API_HEADERS, max_age=-1)
     json_parser = response.json()
 

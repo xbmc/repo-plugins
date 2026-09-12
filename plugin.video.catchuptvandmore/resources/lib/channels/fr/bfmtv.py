@@ -57,16 +57,6 @@ def get_token(item_id):
     return json_parser['session']['token']
 
 
-def BFM_brightcove(plugin, live_url):
-    resp = urlquick.get(live_url, headers=GENERIC_HEADERS, max_age=-1)
-    root = resp.parse()
-    live_datas = root.find(".//video-js")
-    account = live_datas.get('data-account')
-    video_id = live_datas.get('data-video-id')
-    player = live_datas.get('adjustplayer')
-    return resolver_proxy.get_brightcove_video_json(plugin, account, player, video_id)
-
-
 @Route.register
 def list_programs(plugin, item_id, **kwargs):
 
@@ -234,7 +224,11 @@ def get_live_url(plugin, item_id, **kwargs):
     }
 
     try:
-        return BFM_brightcove(plugin, URL_LIVE_BFM % (url_id[item_id][0], url_id[item_id][1]))
+        resp = urlquick.get(URL_LIVE_BFM % (url_id[item_id][0], url_id[item_id][1]), headers=GENERIC_HEADERS, max_age=-1)
+        live_datas = resp.parse("div", attrs={"class": "bitmovin-player-container"})
+        video_url = live_datas.get('data-video-url')
+
+        return resolver_proxy.get_stream_with_quality(plugin, video_url=video_url)
 
     except Exception:
         return

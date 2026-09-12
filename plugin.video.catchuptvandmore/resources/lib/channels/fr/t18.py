@@ -33,7 +33,11 @@ def list_categories(plugin, item_id, **kwargs):
     root = resp.parse()
 
     for categories_datas in root.iterfind(".//h2[@class='carousel__title']"):
-        category_title = categories_datas.find(".//a").text.strip()
+        try:
+            category_title = categories_datas.find(".//a").text.strip()
+        except Exception:
+            category_title = categories_datas.find(".//span[@class='link__text']").text
+
         category_url = categories_datas.find('.//a').get('href')
         if 'http' not in category_url:
             category_url = URL_ROOT + category_url

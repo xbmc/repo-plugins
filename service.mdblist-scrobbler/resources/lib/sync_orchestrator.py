@@ -11,6 +11,8 @@ from resources.lib.utils import JSONRPCError
 
 _lock = threading.Lock()
 
+CATEGORIES = ("watched", "ratings", "collection")
+
 # /sync/last_activities buckets that matter for our pull direction -- see
 # check_activity(). collected_at exists too but collection sync is push-only,
 # so there's nothing for us to pull in reaction to it changing.
@@ -64,6 +66,13 @@ def _notify(message, error=False):
     xbmcgui.Dialog().notification("MDBList Sync", message, icon, 4000)
 
 
+def _set_setting(setting_id, value):
+    try:
+        _addon().setSettingString(setting_id, value)
+    except Exception:
+        pass
+
+
 def _record_summary(summary):
     sync_state.set_last_sync_summary(summary)
     xbmc.log("MDBList Sync: run complete - {}".format(summary), level=xbmc.LOGDEBUG)
@@ -73,7 +82,7 @@ def _record_summary(summary):
         pass
 
 
-def run(notify=False):
+def run(notify=False, allow_remove=False):
     """Full run: watched and ratings push then pull, collection push-only.
     Rebuilds the local library snapshot unconditionally, so this is the
     expensive path -- covers pushing local changes (backstop for anything
@@ -87,7 +96,15 @@ def run(notify=False):
     need a real snapshot -- a scan/clean finishing needs it for push()
     regardless of remote state, and the 24h timer/manual action are meant to
     be an unconditional reconciliation backstop, not something to skip based
-    on a signal that might itself be stale."""
+    on a signal that might itself be stale.
+
+    allow_remove is forwarded to every category's push() -- see
+    sync_payload.diff_and_reconcile. Defaults to False so callers that don't
+    think about it stay safe; only main_monitor's 24h timer and manual "Sync
+    now" pass True. This exists because a diff-based push with no floor once
+    wiped a real user's entire remote collection when their local Kodi
+    library briefly (and wrongly) read back near-empty -- see the companion
+    guard just below build_snapshot()."""
     if not _lock.acquire(blocking=False):
         xbmc.log("MDBList Sync: run already in progress, skipping", level=xbmc.LOGDEBUG)
         return None
@@ -112,21 +129,54 @@ def run(notify=False):
             # library is empty" and push bulk removals.
             snapshot = library_snapshot.build_snapshot()
 
+            # Companion guard to the removal circuit-breaker in
+            # sync_payload.diff_and_reconcile: a successful-but-empty
+            # JSON-RPC response (library not yet loaded, video DB just
+            # reset) isn't a JSONRPCError, so it isn't caught by the except
+            # below -- but a totally empty library next to remembered
+            # known_items is never a real user action (a user who deletes
+            # everything does it through Kodi, which generates scan/clean
+            # events, and those never allow_remove anyway). Treat it the
+            # same as an RPC failure: abort the whole run rather than let
+            # any category (including pull(), which the circuit-breaker
+            # above doesn't cover) read it as authoritative.
+            has_local_media = any(True for _ in library_snapshot.iter_movies(snapshot)) or \
+                any(True for _ in library_snapshot.iter_episodes(snapshot))
+            if not has_local_media and any(
+                sync_state.get_known_items(category) for category in CATEGORIES
+            ):
+                xbmc.log(
+                    "MDBList Sync: run aborted - Kodi library snapshot is empty but remote state is not; "
+                    "treating as an unreliable read rather than a real removal", level=xbmc.LOGERROR
+                )
+                # Surfaced unconditionally, not gated on `notify` -- a run
+                # that silently did nothing at all is the one outcome the
+                # user must be able to notice even from a background timer
+                # run, same reasoning as the skipped-removal note in
+                # _summary_text below.
+                _set_setting(
+                    "sync_last_run",
+                    "sync skipped - local library looks empty ({})".format(xbmc.getInfoLabel("System.Time")),
+                )
+                if notify:
+                    _notify("Sync skipped: local library looks empty", error=True)
+                return None
+
             # A server-provided watermark rather than the device's own clock,
             # which can drift and under-cover the next incremental window.
             # Fetched once per run and reused for both pulls below.
             server_time = fetch_last_activities().get("server_time")
 
             if watched_enabled:
-                summary["watched_push"] = watched_sync.push(snapshot)
-                summary["watched_pull"] = watched_sync.pull(snapshot, server_time)
+                summary["watched_push"] = watched_sync.push(snapshot, allow_remove=allow_remove)
+                summary["watched_pull"] = watched_sync.pull(snapshot, server_time, trusted=allow_remove)
 
             if ratings_enabled:
-                summary["ratings_push"] = ratings_sync.push(snapshot)
+                summary["ratings_push"] = ratings_sync.push(snapshot, allow_remove=allow_remove)
                 summary["ratings_pull"] = ratings_sync.pull(snapshot, server_time)
 
             if collection_enabled:
-                summary["collection_push"] = collection_sync.push(snapshot)
+                summary["collection_push"] = collection_sync.push(snapshot, allow_remove=allow_remove)
         except (MDBListApiError, JSONRPCError) as exception:
             xbmc.log("MDBList Sync: run failed - {}".format(exception), level=xbmc.LOGERROR)
             if notify:
@@ -193,7 +243,11 @@ def check_activity(notify=False):
 
         try:
             if watched_changed:
-                summary["watched_pull"] = watched_sync.pull(snapshot, server_time)
+                # Explicit trusted=False: this is the frequent activity poll,
+                # not the deliberate reconciliation backstop -- per
+                # removal_safety_pattern.md's Trusted Runs section it must
+                # never remove, only apply adds/updates.
+                summary["watched_pull"] = watched_sync.pull(snapshot, server_time, trusted=False)
             if ratings_changed:
                 summary["ratings_pull"] = ratings_sync.pull(snapshot, server_time)
         except (MDBListApiError, JSONRPCError) as exception:
@@ -234,7 +288,10 @@ def check_ratings_local(notify=False):
 
         try:
             snapshot = library_snapshot.build_ratings_snapshot()
-            result = ratings_sync.push(snapshot)
+            # Explicit allow_remove=False: this is a 2-minute poll on a light
+            # snapshot, not the deliberate reconciliation backstop -- it must
+            # never remove, only push new/changed ratings.
+            result = ratings_sync.push(snapshot, allow_remove=False)
         except (MDBListApiError, JSONRPCError) as exception:
             xbmc.log("MDBList Sync: local ratings push failed - {}".format(exception), level=xbmc.LOGERROR)
             if notify:
@@ -257,18 +314,27 @@ def check_ratings_local(notify=False):
 def _summary_text(summary):
     import datetime
     parts = []
-    for category in ("watched", "ratings", "collection"):
+    for category in CATEGORIES:
         push = summary.get("{}_push".format(category))
-        if push and (push.get("pushed_add") or push.get("pushed_remove")):
-            parts.append("{} push +{}/-{}".format(category, push.get("pushed_add", 0), push.get("pushed_remove", 0)))
+        if push and (push.get("pushed_add") or push.get("pushed_remove") or push.get("skipped_remove")):
+            text = "{} push +{}/-{}".format(category, push.get("pushed_add", 0), push.get("pushed_remove", 0))
+            if push.get("skipped_remove"):
+                # .get with a default everywhere -- an old last_run blob
+                # persisted by a prior version of this add-on won't have
+                # this key at all.
+                text += " ({} skipped, see log)".format(push.get("skipped_remove", 0))
+            parts.append(text)
         pull = summary.get("{}_pull".format(category))
-        if pull and pull.get("pulled_applied"):
-            parts.append("{} pull {}".format(category, pull.get("pulled_applied", 0)))
+        if pull and (pull.get("pulled_applied") or pull.get("skipped_remove")):
+            text = "{} pull {}".format(category, pull.get("pulled_applied", 0))
+            if pull.get("skipped_remove"):
+                text += " ({} skipped, see log)".format(pull.get("skipped_remove", 0))
+            parts.append(text)
     return "{} ({})".format(", ".join(parts) or "no changes", datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
 
 
-def run_async(notify=False):
-    thread = threading.Thread(target=run, kwargs={"notify": notify})
+def run_async(notify=False, allow_remove=False):
+    thread = threading.Thread(target=run, kwargs={"notify": notify, "allow_remove": allow_remove})
     thread.daemon = True
     thread.start()
 

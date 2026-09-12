@@ -1,5 +1,7 @@
 import datetime
 
+import xbmc
+
 from resources.lib import library_snapshot, mdblist_api, sync_payload, sync_state
 from resources.lib.utils import jsonrpc_request
 
@@ -47,20 +49,23 @@ def _current_rated_items(snapshot):
 
 
 def _push_add(items):
-    sync_payload.push_items("/sync/ratings", "rating", items)
+    sync_payload.push_items(CATEGORY, "/sync/ratings", "rating", items)
 
 
 def _push_remove(items):
-    sync_payload.push_items_remove("/sync/ratings/remove", items)
+    sync_payload.push_items_remove(CATEGORY, "/sync/ratings/remove", items)
 
 
 def _rating_changed(known_item, item):
     return known_item.get("rating") != item.get("rating")
 
 
-def push(snapshot):
+def push(snapshot, allow_remove=False):
+    """allow_remove: see sync_payload.diff_and_reconcile."""
     current = _current_rated_items(snapshot)
-    return sync_payload.diff_and_reconcile(CATEGORY, current, _push_add, _push_remove, value_changed=_rating_changed)
+    return sync_payload.diff_and_reconcile(
+        CATEGORY, current, _push_add, _push_remove, value_changed=_rating_changed, allow_remove=allow_remove,
+    )
 
 
 def push_single(record):
@@ -88,13 +93,11 @@ def push_single(record):
         if known_item and known_item.get("rating") == rating:
             return {}
         _push_add([item])
-        sync_state.update_known_item(CATEGORY, key, item)
         return {"pushed_add": 1}
 
     if not known_item:
         return {}
     _push_remove([known_item])
-    sync_state.update_known_item(CATEGORY, key, None)
     return {"pushed_remove": 1}
 
 
@@ -123,8 +126,8 @@ def _apply_movie_rating(snapshot, ids, rating):
     return True
 
 
-def _apply_episode_rating(snapshot, show_ids, season, episode, rating):
-    match = library_snapshot.find_episode_match(snapshot, show_ids, season, episode)
+def _apply_episode_rating(snapshot, show_ids, season, episode, rating, episode_ids=None):
+    match = library_snapshot.find_episode_match(snapshot, show_ids, season, episode, episode_ids)
     if not match or match["userrating"] == rating:
         return False
     _set_rating(match, rating)
@@ -136,6 +139,13 @@ def _pull_full(snapshot, server_time):
     # only carries the episode's own tmdb id, not season/episode/show, so it
     # can't be matched against the Kodi library the way ids_only works for /sync/watched.
     data = mdblist_api.fetch_sync_items("/sync/ratings", extended=None)
+    xbmc.log(
+        "MDBList Sync: ratings full pull fetched {} movies, {} episodes from MDBList".format(
+            len(data.get("movies", [])), len(data.get("episodes", []))
+        ),
+        level=xbmc.LOGDEBUG,
+    )
+
     applied = 0
 
     for entry in data.get("movies", []):
@@ -147,7 +157,8 @@ def _pull_full(snapshot, server_time):
         episode = entry.get("episode") or {}
         show_ids = (episode.get("show") or {}).get("ids") or {}
         if show_ids and _apply_episode_rating(
-            snapshot, show_ids, episode.get("season"), episode.get("number"), entry.get("rating") or 0
+            snapshot, show_ids, episode.get("season"), episode.get("number"), entry.get("rating") or 0,
+            episode.get("ids"),
         ):
             applied += 1
 
@@ -157,6 +168,7 @@ def _pull_full(snapshot, server_time):
 
 def _pull_incremental(snapshot, entries, server_time):
     applied = 0
+    skipped_type = 0
     for entry in entries:
         if entry.get("category") != JOURNAL_CATEGORY:
             continue
@@ -168,8 +180,19 @@ def _pull_incremental(snapshot, entries, server_time):
             if _apply_movie_rating(snapshot, ids, rating):
                 applied += 1
         elif entry.get("item_type") == "episode":
-            if _apply_episode_rating(snapshot, ids, entry.get("season"), entry.get("episode"), rating):
+            episode_ids = library_snapshot.journal_episode_ids(entry)
+            if _apply_episode_rating(snapshot, ids, entry.get("season"), entry.get("episode"), rating, episode_ids):
                 applied += 1
+        else:
+            skipped_type += 1
+
+    if skipped_type:
+        xbmc.log(
+            "MDBList Sync: ratings incremental pull skipped {} journal entries with unhandled item type".format(
+                skipped_type
+            ),
+            level=xbmc.LOGDEBUG,
+        )
 
     sync_state.set_synced_at(CATEGORY, server_time or _now_iso())
     return {"pulled_applied": applied, "mode": "incremental"}
@@ -180,10 +203,22 @@ def pull(snapshot, server_time):
     not the client's own clock."""
     since = sync_state.get_synced_at(CATEGORY)
     if not since:
+        xbmc.log("MDBList Sync: ratings pull has no cursor - running full pull", level=xbmc.LOGDEBUG)
         return _pull_full(snapshot, server_time)
 
     journal = mdblist_api.fetch_journal(since=since)
     if journal.get("requires_full_sync"):
+        xbmc.log(
+            "MDBList Sync: ratings pull cursor {} is outside journal retention - running full pull".format(since),
+            level=xbmc.LOGDEBUG,
+        )
         return _pull_full(snapshot, server_time)
 
-    return _pull_incremental(snapshot, journal.get("entries", []), server_time)
+    entries = journal.get("entries", [])
+    xbmc.log(
+        "MDBList Sync: ratings pull cursor {} - running incremental pull ({} journal entries)".format(
+            since, len(entries)
+        ),
+        level=xbmc.LOGDEBUG,
+    )
+    return _pull_incremental(snapshot, entries, server_time)

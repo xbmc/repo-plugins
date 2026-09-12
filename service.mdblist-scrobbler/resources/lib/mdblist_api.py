@@ -1,3 +1,6 @@
+import threading
+import time
+
 import requests
 import urllib.parse
 import xbmc
@@ -9,9 +12,76 @@ from resources.lib import oauth
 REQUEST_TIMEOUT_SECONDS = 10
 DEFAULT_BASE_URL = "https://api.mdblist.com"
 
+# api.mdblist enforces a 5-minute sliding-window throttle (300 write / 1000
+# read requests) independent of and much tighter than the daily quota. A
+# bulk sync's chunked pushes used to fire back-to-back with nothing in
+# between, so a large first sync could blow through the write budget in
+# seconds. MAX_RATE_LIMIT_RETRIES/MAX_AUTO_RETRY_DELAY_SECONDS bound how a
+# 429 is retried; _WRITE_PACER/_READ_PACER proactively space every request
+# out so a bulk sync ideally never trips the throttle in the first place.
+MAX_RATE_LIMIT_RETRIES = 3
+# A 429's Retry-After is auto-retried only up to this wait -- enough to ride
+# out the ~300s short-window throttle, but not the daily quota's "retry
+# after midnight UTC" (which can be many hours).
+MAX_AUTO_RETRY_DELAY_SECONDS = 310
+# Fallback wait for a 429 that, unexpectedly, carries no Retry-After header.
+DEFAULT_RETRY_AFTER_SECONDS = 5
+
 
 class MDBListApiError(Exception):
-    pass
+    def __init__(self, message, status_code=None, retry_after=None):
+        super().__init__(message)
+        self.status_code = status_code
+        self.retry_after = retry_after
+
+    @property
+    def is_rate_limited(self):
+        return self.status_code == 429
+
+
+class _RequestPacer:
+    """Spaces out requests to a fixed minimum interval, sleeping (on
+    whatever thread calls it -- every caller of mdblist_api.request() here
+    already runs off a background thread, never Kodi's main/UI thread) when
+    a caller would otherwise send too soon. Shared across every thread in
+    the process, since api.mdblist's rate-limit budget is per-account, not
+    per-thread."""
+
+    def __init__(self, min_interval_seconds):
+        self._min_interval = min_interval_seconds
+        self._lock = threading.Lock()
+        self._next_slot = 0.0
+
+    def wait(self):
+        with self._lock:
+            now = time.monotonic()
+            slot = max(self._next_slot, now)
+            delay = slot - now
+            self._next_slot = slot + self._min_interval
+
+        if delay > 0:
+            time.sleep(delay)
+
+
+# api.mdblist's write bucket allows 300 requests / 300s -- exactly 1/s
+# sustained. Pacing writes a touch slower than that means a bulk push should
+# never trip the throttle on its own.
+_WRITE_PACER = _RequestPacer(1.1)
+# api.mdblist's read bucket allows 1000 requests / 300s (~3.3/s).
+_READ_PACER = _RequestPacer(0.32)
+
+
+def _parse_retry_after(response):
+    """api.mdblist always sends Retry-After as a plain integer second count
+    on a 429 (never an HTTP-date), so that's the only form parsed."""
+    value = response.headers.get("Retry-After")
+    if not value:
+        return None
+    try:
+        seconds = int(value)
+    except ValueError:
+        return None
+    return seconds if seconds >= 0 else None
 
 
 def _addon():
@@ -55,25 +125,59 @@ def request(method: str, endpoint: str, params=None, json_data=None):
     if query:
         url = "{}?{}".format(url, query)
 
-    try:
-        response = requests.request(
-            method,
-            url,
-            json=json_data,
-            headers=auth["headers"],
-            timeout=REQUEST_TIMEOUT_SECONDS,
-        )
-    except requests.exceptions.RequestException as exception:
-        raise MDBListApiError(str(exception))
+    # GET is the only read verb this module ever issues -- everything else
+    # (POST) draws from the write bucket, which api.mdblist polices far
+    # tighter (300 vs 1000 per 5-minute window).
+    pacer = _READ_PACER if method.upper() == "GET" else _WRITE_PACER
 
-    if response.status_code >= 400:
-        xbmc.log(
-            "MDBList Scrobbler: API error {} on {} response={}".format(
-                response.status_code, endpoint, response.text[:200]
-            ),
-            level=xbmc.LOGERROR,
-        )
-        raise MDBListApiError("API Error {}: {}".format(response.status_code, response.text[:80]))
+    attempt = 0
+    while True:
+        pacer.wait()
+
+        try:
+            response = requests.request(
+                method,
+                url,
+                json=json_data,
+                headers=auth["headers"],
+                timeout=REQUEST_TIMEOUT_SECONDS,
+            )
+        except requests.exceptions.RequestException as exception:
+            raise MDBListApiError(str(exception))
+
+        if response.status_code == 429:
+            retry_after = _parse_retry_after(response)
+            if retry_after is None:
+                retry_after = DEFAULT_RETRY_AFTER_SECONDS
+
+            if attempt < MAX_RATE_LIMIT_RETRIES and retry_after <= MAX_AUTO_RETRY_DELAY_SECONDS:
+                attempt += 1
+                time.sleep(retry_after)
+                continue
+
+            xbmc.log(
+                "MDBList Scrobbler: API error 429 on {} response={}".format(endpoint, response.text[:200]),
+                level=xbmc.LOGERROR,
+            )
+            raise MDBListApiError(
+                "API Error 429: {}".format(response.text[:80]),
+                status_code=429,
+                retry_after=retry_after,
+            )
+
+        if response.status_code >= 400:
+            xbmc.log(
+                "MDBList Scrobbler: API error {} on {} response={}".format(
+                    response.status_code, endpoint, response.text[:200]
+                ),
+                level=xbmc.LOGERROR,
+            )
+            raise MDBListApiError(
+                "API Error {}: {}".format(response.status_code, response.text[:80]),
+                status_code=response.status_code,
+            )
+
+        break
 
     try:
         return response.json()

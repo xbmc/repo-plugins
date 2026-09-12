@@ -4,7 +4,7 @@ from resources.lib.utils import fix_unique_ids, jsonrpc_request
 MOVIE_PROPERTIES = ["title", "year", "uniqueid", "playcount", "lastplayed", "userrating", "dateadded", "file"]
 TVSHOW_PROPERTIES = ["title", "uniqueid"]
 EPISODE_PROPERTIES = [
-    "title", "season", "episode", "tvshowid",
+    "title", "season", "episode", "tvshowid", "uniqueid",
     "playcount", "lastplayed", "userrating", "dateadded", "file",
 ]
 
@@ -12,6 +12,12 @@ EPISODE_PROPERTIES = [
 # canonical id -- mirrors the preference already used by find_library_match
 # in utils.py for the watchlist browser.
 PROVIDER_PRIORITY = ("tmdb", "imdb", "tvdb", "trakt", "mdblist")
+
+# MDBList only ever sends tmdb/tvdb for an episode's own id (nested "ids"
+# under /sync/watched's full-pull "episode" object, or flat
+# episode_tmdb_id/episode_tvdb_id in /sync/journal rows) -- no imdb/trakt/
+# mdblist episode id exists in either API shape.
+EPISODE_ID_PROVIDER_PRIORITY = ("tmdb", "tvdb")
 
 
 def _movies():
@@ -71,11 +77,17 @@ def build_snapshot():
             continue
         season = episode.get("season")
         episode_number = episode.get("episode")
+        # The episode's own id (if any) describes this one specific episode
+        # -- tried before falling back to show id + season/episode number,
+        # since it's immune to shows that renumber seasons/episodes
+        # differently across metadata scrapers (common for anime).
+        episode_ids = fix_unique_ids(episode.get("uniqueid", {}), "episode")
         record = {
             "dbtype": "episode",
             "dbid": episode.get("episodeid"),
             "title": episode.get("title"),
             "show_ids": show_ids,
+            "episode_ids": episode_ids,
             "season": season,
             "episode": episode_number,
             "playcount": episode.get("playcount") or 0,
@@ -87,6 +99,10 @@ def build_snapshot():
         for provider, value in show_ids.items():
             key = "{}:{}:{}:{}".format(provider, value, season, episode_number)
             snapshot["episode"][key] = record
+        for provider in EPISODE_ID_PROVIDER_PRIORITY:
+            value = episode_ids.get(provider)
+            if value not in (None, ""):
+                snapshot["episode"]["episode-id:{}:{}".format(provider, value)] = record
 
     return snapshot
 
@@ -144,6 +160,20 @@ def build_ratings_snapshot():
     return snapshot
 
 
+def journal_episode_ids(entry):
+    """Combines a /sync/journal episode row's flat episode_tmdb_id/
+    episode_tvdb_id fields into a dict find_episode_match can use -- that
+    API shape carries the episode's own id as separate top-level fields
+    rather than nested under "ids" (unlike the /sync/watched full-pull
+    shape's episode["ids"]), verified against a live call, not documented
+    anywhere. Returns None if the row carries neither."""
+    tmdb = entry.get("episode_tmdb_id")
+    tvdb = entry.get("episode_tvdb_id")
+    if tmdb is None and tvdb is None:
+        return None
+    return {"tmdb": tmdb, "tvdb": tvdb}
+
+
 def canonical_movie_key(ids):
     for provider in PROVIDER_PRIORITY:
         value = ids.get(provider)
@@ -172,8 +202,21 @@ def find_movie_match(snapshot, ids):
     return None
 
 
-def find_episode_match(snapshot, show_ids, season, episode):
+def find_episode_match(snapshot, show_ids, season, episode, episode_ids=None):
+    """Looks up an episode by its own id first (immune to shows that
+    renumber seasons/episodes differently across metadata scrapers),
+    falling back to show id + season/episode number."""
     bucket = snapshot.get("episode") or {}
+
+    if episode_ids:
+        for provider in EPISODE_ID_PROVIDER_PRIORITY:
+            value = episode_ids.get(provider)
+            if value in (None, ""):
+                continue
+            match = bucket.get("episode-id:{}:{}".format(provider, value))
+            if match:
+                return match
+
     if season in (None, "") or episode in (None, ""):
         return None
     for provider in PROVIDER_PRIORITY:

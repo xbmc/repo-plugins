@@ -37,17 +37,21 @@ def _current_collected_items(snapshot):
 
 
 def _push_add(items):
-    sync_payload.push_items("/sync/collection", "collected_at", items)
+    sync_payload.push_items(CATEGORY, "/sync/collection", "collected_at", items)
 
 
 def _push_remove(items):
-    sync_payload.push_items_remove("/sync/collection/remove", items)
+    sync_payload.push_items_remove(CATEGORY, "/sync/collection/remove", items)
 
 
-def push(snapshot):
+def push(snapshot, allow_remove=False):
     """Push + reconcile: anything newly present in the Kodi library is added,
     anything that dropped out (file removed/library item deleted) since the
     last run is removed from MDBList's collection -- the "clean collection"
-    step, mirroring script.trakt's collection sync."""
+    step, mirroring script.trakt's collection sync.
+
+    allow_remove: see sync_payload.diff_and_reconcile. Collection sync has no
+    pull direction (see the module note above), so a wrongly-pushed removal
+    here has no remote-to-local self-healing path at all."""
     current = _current_collected_items(snapshot)
-    return sync_payload.diff_and_reconcile(CATEGORY, current, _push_add, _push_remove)
+    return sync_payload.diff_and_reconcile(CATEGORY, current, _push_add, _push_remove, allow_remove=allow_remove)

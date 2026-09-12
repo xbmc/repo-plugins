@@ -11,6 +11,8 @@ import xbmcaddon
 import xbmcvfs
 import xbmcgui
 
+from resources.lib import sync_state
+
 MDBLIST_CLIENT_ID = "Jfx43IWpbKcEOoRdnjgZ00eBpcKCRM4mVHALZSc4"
 
 DEVICE_AUTH_URL = "https://api.mdblist.com/oauth/device-authorization/"
@@ -245,6 +247,13 @@ def run_disconnect():
         except Exception:
             pass
     clear_tokens()
+
+    # A reconnect (same or different MDBList account) must not resume
+    # against the previous account's cursors/known_items -- wipe sync
+    # bookkeeping so the next run is a clean full resync.
+    sync_state.reset_all()
+    xbmc.log("MDBList Scrobbler: cleared sync state on disconnect", level=xbmc.LOGINFO)
+
     xbmcgui.Dialog().notification(
         "MDBList Scrobbler", "Disconnected from MDBList", xbmcgui.NOTIFICATION_INFO, 3000
     )

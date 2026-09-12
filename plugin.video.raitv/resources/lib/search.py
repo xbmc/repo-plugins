@@ -25,9 +25,9 @@ class Search:
     baseUrl = "http://www.rai.it"
 
     suggestionUrl = "https://www.raiplay.it/atomatic/raiplay-search-service/api/v2/suggestion"
-    # effettuare POST con parametro {'text': stringa da cercare}
-    searchUrl = "https://www.raiplay.it/atomatic/raiplay-search-service/api/v3/search"
-    # effettuare POST con parametri {   "param": stringa da cercare,   "page": 0, "pageSize": 12 }
+    # nuova url per la ricerca
+    searchUrl = "https://www.raiplay.it/atomatic/raiplay-search-service/api/v1/msearch"
+    # effettuare POST con parametri {"templateIn":"6470a982e4e0301afe1f81f1","templateOut":"6516ac5d40da6c377b151642","params":{"param":"ricciardi","from":0,"sort":"relevance","size":40,"additionalSize":24,"onlyVideoQuery":False,"onlyProgramsQuery":False}}
 
     newsArchives = {
         "TG1": "NomeProgramma:TG1^Tematica:Edizioni integrali",
@@ -49,7 +49,9 @@ class Search:
         # Build the request and send to server
         req = urllib2.Request(self.searchUrl, method="POST")
         req.add_header('Content-Type', 'application/json')
-        post_data = { "param": string, "page": 0, "pageSize": 12 }
+        req.add_header('Referer', 'http://raiplay.it')
+        req.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36')
+        post_data = {"templateIn":"6470a982e4e0301afe1f81f1","templateOut":"6516ac5d40da6c377b151642","params":{"param": string,"from":0,"sort":"relevance","size":40,"additionalSize":24,"onlyVideoQuery":False,"onlyProgramsQuery":False}}
         post_data = json.dumps(post_data)
         post_data = post_data.encode()
         r = urllib2.urlopen(req, data=post_data)

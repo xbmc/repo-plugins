@@ -1,5 +1,7 @@
 import datetime
 
+import xbmc
+
 from resources.lib import library_snapshot, mdblist_api, sync_payload, sync_state
 from resources.lib.utils import jsonrpc_request, local_time_to_utc_iso, utc_iso_to_local_time
 
@@ -57,27 +59,35 @@ def _current_watched_items(snapshot):
 
 
 def _push_add(items):
-    sync_payload.push_items("/sync/watched", "watched_at", items)
+    sync_payload.push_items(CATEGORY, "/sync/watched", "watched_at", items)
 
 
 def _push_remove(items):
-    sync_payload.push_items_remove("/sync/watched/remove", items)
+    sync_payload.push_items_remove(CATEGORY, "/sync/watched/remove", items)
 
 
-def push(snapshot):
-    """Backfill/membership diff only -- a rewatch that updates lastplayed
-    without changing membership is already pushed live via the /scrobble/stop
-    event, so this doesn't need ratings_sync's extra "value changed" check."""
+def _watched_at_changed(known_item, item):
+    return known_item.get("watched_at") != item.get("watched_at")
+
+
+def push(snapshot, allow_remove=False):
+    """Membership diff, plus a value-changed check on watched_at so a rewatch
+    that only updates lastplayed (membership unchanged) is still re-pushed by
+    the full diff, not just by the live push from /scrobble/stop.
+
+    allow_remove: see sync_payload.diff_and_reconcile."""
     current = _current_watched_items(snapshot)
-    return sync_payload.diff_and_reconcile(CATEGORY, current, _push_add, _push_remove)
+    return sync_payload.diff_and_reconcile(
+        CATEGORY, current, _push_add, _push_remove, value_changed=_watched_at_changed, allow_remove=allow_remove,
+    )
 
 
 def push_single(record):
     """Immediate push for one item, triggered by a live VideoLibrary.OnUpdate
     notification (Kodi's native "mark as watched"/"mark as unwatched", not
-    just our own scrobble flow). Patches sync_state in place instead of
-    replacing it, since this only ever examines one item, not the full
-    library -- see sync_state.update_known_item.
+    just our own scrobble flow). _push_add/_push_remove persist sync_state
+    for this one item as part of pushing it -- see
+    sync_payload.push_items/push_items_remove.
 
     Returns False only when the item genuinely couldn't be pushed (no id this
     addon can map to a provider). Returns {} for "nothing to do, already in
@@ -95,13 +105,11 @@ def push_single(record):
         if known_item and known_item.get("watched_at") == item.get("watched_at"):
             return {}
         _push_add([item])
-        sync_state.update_known_item(CATEGORY, key, item)
         return {"pushed_add": 1}
 
     if not known_item:
         return {}
     _push_remove([known_item])
-    sync_state.update_known_item(CATEGORY, key, None)
     return {"pushed_remove": 1}
 
 
@@ -160,15 +168,23 @@ def _apply_movie_entry(snapshot, ids, status, remote_at):
     return _apply_watched(match, status, remote_at), library_snapshot.canonical_movie_key(match["ids"])
 
 
-def _apply_episode_entry(snapshot, show_ids, season, episode, status, remote_at):
-    match = library_snapshot.find_episode_match(snapshot, show_ids, season, episode)
+def _apply_episode_entry(snapshot, show_ids, season, episode, status, remote_at, episode_ids=None):
+    match = library_snapshot.find_episode_match(snapshot, show_ids, season, episode, episode_ids)
     if not match:
+        xbmc.log(
+            "MDBList Sync: watched pull found no local match for show tmdb={} imdb={} tvdb={} S{}E{} "
+            "episodeTmdb={} episodeTvdb={}".format(
+                show_ids.get("tmdb"), show_ids.get("imdb"), show_ids.get("tvdb"), season, episode,
+                (episode_ids or {}).get("tmdb"), (episode_ids or {}).get("tvdb"),
+            ),
+            level=xbmc.LOGDEBUG,
+        )
         return False, None
     key = library_snapshot.canonical_episode_key(match["show_ids"], match["season"], match["episode"])
     return _apply_watched(match, status, remote_at), key
 
 
-def _pull_full(snapshot, server_time):
+def _pull_full(snapshot, server_time, trusted=False):
     # extended=None (full, not ids_only): ids_only only exposes a movie's
     # tmdb id (and an episode's parent show's tmdb id). A local item
     # identified only by imdb/tvdb/trakt/mdblist couldn't be matched or ruled
@@ -176,6 +192,13 @@ def _pull_full(snapshot, server_time):
     # tell "not remotely watched" apart from "couldn't check" -- full mode
     # gives every provider id.
     data = mdblist_api.fetch_sync_items("/sync/watched", extended=None)
+    xbmc.log(
+        "MDBList Sync: watched full pull fetched {} movies, {} episodes from MDBList".format(
+            len(data.get("movies", [])), len(data.get("episodes", []))
+        ),
+        level=xbmc.LOGDEBUG,
+    )
+
     applied = 0
     matched_keys = set()
 
@@ -196,7 +219,7 @@ def _pull_full(snapshot, server_time):
             continue
         applied_ok, key = _apply_episode_entry(
             snapshot, show_ids, episode.get("season"), episode.get("number"),
-            "active", entry.get("last_watched_at"),
+            "active", entry.get("last_watched_at"), episode.get("ids"),
         )
         if key:
             matched_keys.add(key)
@@ -208,30 +231,97 @@ def _pull_full(snapshot, server_time):
     # journal's 30-day retention window has lapsed, so there's no incremental
     # removal feed to rely on instead.
     #
-    # The removal timestamp is the server-provided watermark, not "now": if
-    # the item was genuinely rewatched between when the server generated
-    # this snapshot and now, its local timestamp needs to be newer than
-    # server_time (not a later client-side "now") to correctly win the
-    # conflict-resolution check in _apply_watched.
-    removal_at = server_time or _now_iso()
+    # This is the same "known minus current-read = remove" shape
+    # diff_and_reconcile guards against on push, just mirrored to the
+    # opposite direction: a successful-but-degraded /sync/watched response
+    # would otherwise read as "everything was unwatched remotely" and wipe
+    # local state. Same three guards (trust, empty-vs-threshold, magnitude),
+    # same constants -- see removal_safety_pattern.md.
+    locally_watched = []
     for movie in library_snapshot.iter_movies(snapshot):
         if movie["playcount"] > 0:
             key = library_snapshot.canonical_movie_key(movie["ids"])
-            if key and key not in matched_keys and _apply_watched(movie, "removed", removal_at):
-                applied += 1
-
+            if key:
+                locally_watched.append((movie, key))
     for episode in library_snapshot.iter_episodes(snapshot):
         if episode["playcount"] > 0:
             key = library_snapshot.canonical_episode_key(episode["show_ids"], episode["season"], episode["episode"])
-            if key and key not in matched_keys and _apply_watched(episode, "removed", removal_at):
+            if key:
+                locally_watched.append((episode, key))
+
+    candidate_removals = [(record, key) for record, key in locally_watched if key not in matched_keys]
+    remote_count = len(data.get("movies", [])) + len(data.get("episodes", []))
+    hold_removals = bool(candidate_removals) and _should_hold_pull_removals(
+        remote_count, len(candidate_removals), len(locally_watched), trusted
+    )
+
+    if candidate_removals and not hold_removals:
+        # The removal timestamp is the server-provided watermark, not "now":
+        # if the item was genuinely rewatched between when the server
+        # generated this snapshot and now, its local timestamp needs to be
+        # newer than server_time (not a later client-side "now") to
+        # correctly win the conflict-resolution check in _apply_watched.
+        removal_at = server_time or _now_iso()
+        for record, _key in candidate_removals:
+            if _apply_watched(record, "removed", removal_at):
                 applied += 1
+
+    if hold_removals:
+        # Held, not dropped -- don't advance the watermark either, so the
+        # next pull retries a full reconcile from scratch (and, per pull(),
+        # keeps landing back here) instead of downgrading to the incremental
+        # journal path and never revisiting these items.
+        return {"pulled_applied": applied, "mode": "full", "skipped_remove": len(candidate_removals)}
 
     sync_state.set_synced_at(CATEGORY, server_time or _now_iso())
     return {"pulled_applied": applied, "mode": "full"}
 
 
+def _should_hold_pull_removals(remote_count, candidate_count, known_count, trusted):
+    """Same shape as sync_payload.diff_and_reconcile's removal guard, applied
+    to the pull-direction full reconcile: held when the trigger isn't trusted
+    for removals, when a totally-empty remote read sits next to a known-watched
+    baseline bigger than the threshold, or when the removal batch itself is
+    larger than max(REMOVAL_MIN_BATCH, known_count * REMOVAL_MAX_FRACTION).
+    The empty-read check is tied to the threshold rather than an absolute
+    veto, same reasoning as diff_and_reconcile -- a user whose whole watched
+    library is smaller than the threshold must still be able to clear it
+    completely on a trusted run."""
+    threshold = max(sync_payload.REMOVAL_MIN_BATCH, int(known_count * sync_payload.REMOVAL_MAX_FRACTION))
+
+    if not trusted:
+        xbmc.log(
+            "MDBList Sync: watched pull removal held ({} items) - this trigger doesn't allow removals".format(
+                candidate_count
+            ),
+            level=xbmc.LOGDEBUG,
+        )
+        return True
+
+    if remote_count == 0 and known_count > threshold:
+        xbmc.log(
+            "MDBList Sync: watched pull removal held - remote full list came back empty while {} items are "
+            "locally watched (threshold {}); treating as an unreliable read rather than a real removal".format(
+                known_count, threshold
+            ),
+            level=xbmc.LOGWARNING,
+        )
+        return True
+
+    if candidate_count > threshold:
+        xbmc.log(
+            "MDBList Sync: watched pull removal held - {} of {} locally watched items would be unwatched "
+            "(threshold {}); remote read may be incomplete".format(candidate_count, known_count, threshold),
+            level=xbmc.LOGWARNING,
+        )
+        return True
+
+    return False
+
+
 def _pull_incremental(snapshot, entries, server_time):
     applied = 0
+    skipped_type = 0
     for entry in entries:
         if entry.get("category") != "watched":
             continue
@@ -253,26 +343,59 @@ def _pull_incremental(snapshot, entries, server_time):
             if applied_ok:
                 applied += 1
         elif entry.get("item_type") == "episode":
-            applied_ok, _key = _apply_episode_entry(snapshot, ids, entry.get("season"), entry.get("episode"), status, remote_at)
+            episode_ids = library_snapshot.journal_episode_ids(entry)
+            applied_ok, _key = _apply_episode_entry(
+                snapshot, ids, entry.get("season"), entry.get("episode"), status, remote_at, episode_ids,
+            )
             if applied_ok:
                 applied += 1
-        # show/season-level rows have no directly writable Kodi field; skipped
+        else:
+            # show/season-level rows have no directly writable Kodi field; skipped
+            skipped_type += 1
+
+    if skipped_type:
+        xbmc.log(
+            "MDBList Sync: watched incremental pull skipped {} journal entries with unhandled item type".format(
+                skipped_type
+            ),
+            level=xbmc.LOGDEBUG,
+        )
 
     sync_state.set_synced_at(CATEGORY, server_time or _now_iso())
     return {"pulled_applied": applied, "mode": "incremental"}
 
 
-def pull(snapshot, server_time):
+def pull(snapshot, server_time, trusted=False):
     """server_time: /sync/last_activities' own server_time -- a
     safety-margined timestamp meant to be persisted as the next watermark,
     rather than the device's own clock, which can drift and under-cover the
-    next incremental window."""
+    next incremental window.
+
+    trusted: forwarded to _pull_full's removal reconcile -- see
+    _should_hold_pull_removals and removal_safety_pattern.md's Trusted Runs
+    section. Defaults to False so a call site that forgets to think about it
+    stays safe; only run()'s allow_remove (24h backstop, manual "Sync now")
+    should pass True. _pull_incremental doesn't need this: it applies
+    explicit per-item journal events, not a "known minus current-read"
+    diff, so it isn't the failure mode this pattern guards against."""
     since = sync_state.get_synced_at(CATEGORY)
     if not since:
-        return _pull_full(snapshot, server_time)
+        xbmc.log("MDBList Sync: watched pull has no cursor - running full pull", level=xbmc.LOGDEBUG)
+        return _pull_full(snapshot, server_time, trusted)
 
     journal = mdblist_api.fetch_journal(since=since)
     if journal.get("requires_full_sync"):
-        return _pull_full(snapshot, server_time)
+        xbmc.log(
+            "MDBList Sync: watched pull cursor {} is outside journal retention - running full pull".format(since),
+            level=xbmc.LOGDEBUG,
+        )
+        return _pull_full(snapshot, server_time, trusted)
 
-    return _pull_incremental(snapshot, journal.get("entries", []), server_time)
+    entries = journal.get("entries", [])
+    xbmc.log(
+        "MDBList Sync: watched pull cursor {} - running incremental pull ({} journal entries)".format(
+            since, len(entries)
+        ),
+        level=xbmc.LOGDEBUG,
+    )
+    return _pull_incremental(snapshot, entries, server_time)

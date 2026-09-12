@@ -1,0 +1,5 @@
+v1.3.4
+
+- Fixed watched/ratings sync missing episodes for shows where a different season/episode numbering is used than MDBList's own data (a common mismatch for anime, e.g. between TheTVDB and TMDb). Episodes are now matched by their own tmdb/tvdb id first, before falling back to season/episode number.
+- Disconnecting from MDBList now wipes local sync bookkeeping, so reconnecting (same or a different account) does a clean full resync instead of diffing against a stale or foreign baseline.
+- Added Debug-level logging of the full-vs-incremental pull decision, cursor value, and fetched/skipped item counts for watched and ratings pulls, to make sync behavior easier to diagnose.

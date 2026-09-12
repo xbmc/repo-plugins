@@ -9,6 +9,7 @@ def main():
     xbmc.log("Starting MDBList Scrobbler", level=xbmc.LOGINFO)
 
     monitor.waitForAbort()
+    monitor.shutdown()
 
     xbmc.log("Stopping MDBList Scrobbler", level=xbmc.LOGINFO)
 

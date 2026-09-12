@@ -55,6 +55,10 @@ msgctxt "#30006"
 msgid "Videos on Frontpage"
 msgstr ""
 
+msgctxt "#30007"
+msgid "Categories"
+msgstr ""
+
 msgctxt "#30100"
 msgid "Version"
 msgstr ""

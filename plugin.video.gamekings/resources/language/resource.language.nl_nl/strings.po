@@ -55,6 +55,10 @@ msgctxt "#30006"
 msgid "Videos on Frontpage"
 msgstr "Videos op Voorpagina"
 
+msgctxt "#30007"
+msgid "Categories"
+msgstr "Categorieën"
+
 msgctxt "#30100"
 msgid "Version"
 msgstr "Versie"

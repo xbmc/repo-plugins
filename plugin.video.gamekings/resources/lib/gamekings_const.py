@@ -34,8 +34,20 @@ HTTPSCOLONSLASHSLASH_ENCODED = "8647470737a3f2f27"
 END_TAG = "</"
 STREAM = "STREAM"
 STOPDECODINGNOW = "STOPDECODINGNOW"
-DATE = "2023-03-12"
-VERSION = "1.2.23"
+CATEGORY_ACTIVITY_DAYS = 365
+CATEGORY_SITEMAP_URL = BASE_URL_GAMEKINGS_TV + "category-sitemap.xml"
+CATEGORY_API_URL = BASE_URL_GAMEKINGS_TV + "wp-json/wp/v2/categories"
+# Categories that do not reliably contain playable videos.
+EXCLUDED_CATEGORY_SLUGS = {
+    "nieuws",
+    "overig",
+    "premium",
+    "redactie",
+    "uncategorized",
+    "videos",
+}
+DATE = "2026-08-24"
+VERSION = "1.2.24"
 
 
 if sys.version_info[0] > 2:

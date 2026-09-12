@@ -134,7 +134,8 @@ class Main(object):
 
                 log("video_page_url", video_page_url)
 
-                thumbnail_url = ""
+                parent = item.find_parent('section')
+                thumbnail_url = parent.get('data-image', '') if parent else ''
 
             else:
                 # if item contains 'postcontainer, skip the item

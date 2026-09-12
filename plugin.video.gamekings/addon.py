@@ -44,5 +44,10 @@ else:
     #
     elif action == 'search':
         import resources.lib.gamekings_search as plugin
+    #
+    # Categories
+    #
+    elif action == 'categories':
+        import resources.lib.gamekings_categories as plugin
 
 plugin.Main()

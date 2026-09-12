@@ -68,25 +68,11 @@ class Main(object):
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # Trailers
+        # Categories
         #
-        parameters = {"action": "list", "plugin_category": LANGUAGE(30003),
-                      "url": BASE_URL_GAMEKINGS_TV + "?s=trailer", "next_page_possible": "False"}
+        parameters = {"action": "categories"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30003))
-        list_item.setArt({'thumb': "DefaultFolder.png", 'icon': "DefaultFolder.png",
-                          'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        is_folder = True
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
-        # Afleveringen
-        #
-        parameters = {"action": "list", "plugin_category": LANGUAGE(30001),
-                      "url": BASE_URL_GAMEKINGS_TV + "page/001/?cat=3&s=gamekings+s", "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30001))
+        list_item = xbmcgui.ListItem(LANGUAGE(30007))
         list_item.setArt({'thumb': "DefaultFolder.png", 'icon': "DefaultFolder.png",
                           'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
         is_folder = True

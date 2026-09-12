@@ -177,10 +177,30 @@ class ArteTvVideoItem(ArteVideoItem):
         item = self.json_dict
         program_id = item.get('programId')
         kind = self._get_kind()
+
+        path = None
+        is_playable = None
+        additional_context_menu = []
+
         if kind == 'EXTERNAL':
+            deeplink = item.get('deeplink', '')
+            if deeplink is not None and deeplink.strip() != "":
+                category = deeplink.rsplit("/", 1)[-1]
+                path = self.plugin.url_for('raw_page', category=category)
+                is_playable = False
+                return {
+                    'label': item.get('title'),
+                    'path': path,
+                    'thumbnail': self._get_image_url('480x270', True),
+                    'is_playable': is_playable,
+                    'info_type': 'video',
+                    'properties': {
+                        'fanart_image': self._get_image_url('1920x1080', False)
+                    }
+                }
+            # else abort, unable to build an item for an external link
             return None
 
-        additional_context_menu = []
         if self.is_playlist():
             if kind in self.PREFERED_KINDS:
                 # content_type = Content.PLAYLIST

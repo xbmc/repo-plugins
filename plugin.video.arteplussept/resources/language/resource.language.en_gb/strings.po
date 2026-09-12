@@ -77,6 +77,10 @@ msgctxt "#30018"
 msgid "Logged out"
 msgstr ""
 
+msgctxt "#30013"
+msgid "Enter email please :"
+msgstr ""
+
 msgctxt "#30019"
 msgid "Enter password please :"
 msgstr ""

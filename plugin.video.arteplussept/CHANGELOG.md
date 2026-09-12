@@ -1,11 +1,22 @@
+v1.6.2 (2026-8-30)
+
+Thank you jcosmao for fixing mis cache error when displaying category 60min after home page display.
+
+v1.6.1 (2026-8-22)
+
+Add support for external page items and fix frequency of update disclamer
+
+- external pages are list of zones - new item &quot;Categories et genre&quot; in main menu.
+- Fix disclamer with link for issues and donations on version update or every 30d.
+
 v1.6.0 (2026-7-30)
 
 Add easier auth for smart tv with device flow
 
-New: Add auth with device flow to simplify auth for Smart TV users
-New: Remind user where to donate or to report issues on new version of the extension
-NFR: Add logging of API communication related to auth.
-NFR: Clean-up code related to auth in api.py and user.py. Especially failing persistance mechanism.
+- New: Add auth with device flow to simplify auth for Smart TV users
+- New: Remind user where to donate or to report issues on new version of the extension
+- NFR: Add logging of API communication related to auth.
+- NFR: Clean-up code related to auth in api.py and user.py. Especially failing persistance mechanism.
 
 v1.5.4 (2026-7-29)
 

@@ -88,7 +88,7 @@ def get_user_email(plugin):
     Return None if user didn't enter an email or close the UI.
     """
     user_email = ''
-    keyboard = xbmc.Keyboard(user_email, plugin.addon.getLocalizedString(30019), False)
+    keyboard = xbmc.Keyboard(user_email, plugin.addon.getLocalizedString(30013), False)
     keyboard.doModal()
     if keyboard.isConfirmed() is False:
         return None

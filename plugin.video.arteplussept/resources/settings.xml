@@ -25,6 +25,16 @@
 			label="30056"
 			values="DEFAULT|API|DISPLAY|API+DISPLAY"
 			default="0"/>
+		<setting
+			id="last_version_notified"
+			type="text"
+			default=""
+			visible="false" />
+		<setting
+			id="last_date_notified"
+			type="text"
+			default=""
+			visible="false" />
 	</category>
 	
 	<!-- Profile -->

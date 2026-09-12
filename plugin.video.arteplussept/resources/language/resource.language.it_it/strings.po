@@ -77,6 +77,10 @@ msgctxt "#30018"
 msgid "Logged out"
 msgstr "Disconnesso"
 
+msgctxt "#30013"
+msgid "Enter email please :"
+msgstr "Inserisci la email per favore:"
+
 msgctxt "#30019"
 msgid "Enter password please:"
 msgstr "Inserisci la password per favore:"
@@ -87,7 +91,7 @@ msgstr "Impossibile autenticare"
 
 msgctxt "#30021"
 msgid "Email missing"
-msgstr "E-Mail mancanti"
+msgstr "Email mancanti"
 
 msgctxt "#30022"
 msgid "Password missing"

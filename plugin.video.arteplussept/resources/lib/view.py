@@ -5,6 +5,7 @@ from xbmcswift2 import xbmc
 from resources.lib.mapper.arteitem import ArteItem
 from resources.lib.mapper.arteliveitem import ArteLiveItem
 from resources.lib.mapper.artesearch import ArteSearch
+from resources.lib.mapper.artezone import ArteZone
 from resources.lib import api
 from resources.lib import hof
 from resources.lib.mapper import mapper
@@ -44,6 +45,23 @@ def build_home_page(plugin, settings, cached_categories):
     return addon_menu
 
 
+def build_page(plugin, settings, category):
+    """
+    Build a page for a category like SER, CIN, DOR...
+    A page is a list of zones.
+    To be extended to HOME.
+    """
+    page = api.page_content(settings.language, category)
+    page_menu = []
+    for zone in page.get('zones', []):
+        page_item = ArteZone(
+            plugin, settings, plugin.get_storage('cached_categories', TTL=60)
+        ).build_item(zone)
+        if page_item:
+            page_menu.append(page_item)
+    return page_menu
+
+
 def build_api_category(plugin, category_code, settings):
     """Build the menu for a category that needs an api call"""
     category = [mapper.map_category_item(plugin, item, category_code) for item in
@@ -52,10 +70,11 @@ def build_api_category(plugin, category_code, settings):
     return category
 
 
-def get_cached_category(zone_id, cached_categories):
+def get_cached_category(plugin, settings, zone_id, cached_categories):
     """Return the menu for a category that is stored
-    in cache from previous api call like home page"""
-    return cached_categories[zone_id]
+    in cache from previous api call like home page.
+    The cache is refreshed with an API call, when the entry expired or was never cached."""
+    return ArteZone(plugin, settings, cached_categories).get_cached_item(zone_id)
 
 
 def mark_as_watched(plugin, usr, program_id, label):

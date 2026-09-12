@@ -3,6 +3,7 @@ Module for Arte Zone
 """
 
 # pylint: disable=import-error
+from xbmcswift2 import xbmc
 from resources.lib import api
 from resources.lib.mapper.artecollection import ArteCollection
 
@@ -32,6 +33,23 @@ class ArteZone(ArteCollection):
                 'path': self.plugin.url_for('cached_category', zone_id=zone_id)
             }
         return None
+
+    def get_cached_item(self, zone_id):
+        """
+        Return the content of the zone zone_id, that was cached while building a page.
+        The cache is only populated while building a page and its entries expire,
+        so refresh it with an API call, when the entry expired or was never cached.
+        """
+        try:
+            return self.cached_categories[zone_id]
+        except KeyError:
+            xbmc.log(
+                f"No cached content for zone {zone_id}. Refreshing the cache with an API call.",
+                level=xbmc.LOGINFO)
+            cached_category = self.build_menu(zone_id, 1, 'HOME')
+            if self._is_valid_menu(cached_category):
+                self.cached_categories[zone_id] = cached_category
+            return cached_category
 
     def _is_valid_menu(self, cached_category):
         """

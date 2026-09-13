@@ -1,0 +1,10 @@
+v1.3.0
+
+- Renamed from "MDBList Scrobbler" to "MDBList" -- the addon now does a lot more than scrobble.
+- Added two-way watched status sync between Kodi and MDBList.
+- Added two-way ratings sync between Kodi and MDBList.
+- Added library/collection sync: MDBList reflects exactly what's in your Kodi library, including when you remove something (Kodi to MDBList only).
+- Watched/rating changes made in Kodi (native "mark as watched", the rate dialog, another addon) now reach MDBList right away instead of waiting for the next scheduled sync.
+- Changes made on MDBList, or on another device, are checked for and pulled into Kodi in the background.
+- New Settings > Sync category: a toggle per feature (all off by default), a "Sync now" action, and a "Last sync" status field.
+- The rating prompt's "Save to MDBList" is now controlled by the Sync settings' ratings toggle instead of its own separate setting.

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="General">
+        <setting label="MDBList Authentication" type="lsep"/>
+        <setting label="Status" id="oauth_status" type="text" default="Not connected" enable="false"/>
+        <setting label="Connect with MDBList (OAuth)" type="action" action="RunScript(service.mdblist-scrobbler,connect)"/>
+        <setting label="Disconnect from MDBList" type="action" action="RunScript(service.mdblist-scrobbler,disconnect)"/>
+
+        <setting label="Watchlist" type="lsep"/>
+        <setting label="Enable MDBList watchlist" type="bool" id="watchlist.enabled" default="false"/>
+    </category>
+    <category label="Scrobbling">
+        <setting label="Scrobble at specific events" type="lsep"/>
+        <setting label="Start playback" type="bool" id="event.start" default="true"/>
+        <setting label="Pause playback" type="bool" id="event.pause" default="true"/>
+        <setting label="Resume playback after pausing it" type="bool" id="event.resume" default="true"/>
+        <setting label="Playback stopped (not finished)" type="bool" id="event.stop" default="true"/>
+        <setting label="Playback finished (not stopped before reaching the end)" type="bool" id="event.end" default="true"/>
+        <setting label="After seeking" type="bool" id="event.seek" default="true"/>
+        <setting label="Interval" type="bool" id="event.interval" default="true"/>
+
+        <setting label="Update interval" type="lsep"/>
+        <setting label="Interval (seconds)" type="number" id="interval" default="10"/>
+
+        <setting label="Scrobble types" type="lsep"/>
+        <setting label="Movies" type="bool" id="mediatype.movie" default="true"/>
+        <setting label="Episodes (TV shows)" type="bool" id="mediatype.episode" default="true"/>
+    </category>
+    <category label="Rating">
+        <setting label="Prompt for rating after playback" type="lsep"/>
+        <setting label="Enable rating prompt" type="bool" id="rating.prompt.enabled" default="false"/>
+        <setting label="Prompt when playback finishes normally" type="bool" id="rating.prompt.on_end" default="true"/>
+        <setting label="Prompt when playback is stopped near the end" type="bool" id="rating.prompt.on_stop" default="true"/>
+        <setting label="Prompt for movies" type="bool" id="rating.prompt.movie" default="true"/>
+        <setting label="Prompt for episodes" type="bool" id="rating.prompt.episode" default="true"/>
+        <setting label="Only prompt if item is not rated yet" type="bool" id="rating.prompt.unrated_only" default="true"/>
+        <setting label="Minimum watched progress (%)" type="number" id="rating.prompt.progress" default="90"/>
+
+        <setting label="Save rating to" type="lsep"/>
+        <setting label="Save to Kodi library" type="bool" id="rating.save.kodi" default="true"/>
+        <!-- Saving to MDBList is controlled by "Sync ratings" in the Sync category, not a separate toggle here. -->
+    </category>
+    <category label="Sync">
+        <setting label="Categories" type="lsep"/>
+        <setting label="Sync watched status (two-way)" type="bool" id="sync.watched.enabled" default="false"/>
+        <setting label="Sync ratings (two-way)" type="bool" id="sync.ratings.enabled" default="false"/>
+        <setting label="Sync library/collection status (Kodi to MDBList only)" type="bool" id="sync.collection.enabled" default="false"/>
+
+        <setting label="Triggers" type="lsep"/>
+        <setting label="Sync after library scan finishes" type="bool" id="sync.on_library_scan" default="true"/>
+
+        <setting label="Manual" type="lsep"/>
+        <setting label="Sync now" type="action" action="RunScript(service.mdblist-scrobbler,sync_now)"/>
+        <setting label="Last sync" id="sync_last_run" type="text" default="Never" enable="false"/>
+    </category>
+</settings>

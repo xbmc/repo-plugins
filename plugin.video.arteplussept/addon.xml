@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.arteplussept" name="Arte +7" version="2.0.0" provider-name="bmf, thomas-ernest">
+    <!-- https://kodi.wiki/view/Addon.xml -->
+    <requires>
+        <import addon="xbmc.python" version="3.0.2"/>
+        <import addon="script.module.requests" version="2.31.0"/>
+        <import addon="inputstream.adaptive" version="21.5.23"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata" 
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/xbmc/xbmc/master/addons/xbmc.addon/metadata.xsd">
+        <!-- https://github.com/xbmc/xbmc/blob/master/addons/xbmc.addon/metadata.xsd -->
+        <summary lang="en_GB">Arte +7</summary>
+        <description lang="de_DE">
+Geniesse Arte-Videos auf Kodi.
+Spenden: https://thomas-ernest.github.io/
+Fehlerberichte oder Anfragen: https://github.com/thomas-ernest/plugin.video.arteplussept/issues
+        </description>
+        <description lang="en_GB">
+Enjoy Arte videos on Kodi.
+Donations: https://thomas-ernest.github.io/
+Bugs or feature requests: https://github.com/thomas-ernest/plugin.video.arteplussept/issues
+        </description>
+        <description lang="es_ES">
+Disfruta de los vídeos de Arte en Kodi.
+Donaciones: https://thomas-ernest.github.io/
+Errores o solicitudes de funciones: https://github.com/thomas-ernest/plugin.video.arteplussept/issues
+        </description>
+        <description lang="fr_FR">
+Profitez des vidéos d&apos;Arte sur Kodi.
+Dons: https://thomas-ernest.github.io/
+Bugs ou demandes: https://github.com/thomas-ernest/plugin.video.arteplussept/issues
+        </description>
+        <description lang="it_IT">
+Goditi i video di Arte su Kodi.
+Donazioni: https://thomas-ernest.github.io/
+Segnalazioni di bug o richieste: https://github.com/thomas-ernest/plugin.video.arteplussept/issues
+        </description>
+        <description lang="pl_PL">
+Oglądaj filmy Arte w Kodi.
+Darowizny: https://thomas-ernest.github.io/
+Błędy lub prośby: https://github.com/thomas-ernest/plugin.video.arteplussept/issues
+        </description>
+        <description lang="ro_RO">
+Bucură-te de videoclipuri Arte pe Kodi.
+Donații: https://thomas-ernest.github.io/
+Erori sau solicitări: https://github.com/thomas-ernest/plugin.video.arteplussept/issues
+        </description>
+        <language>de en es fr it pl ro</language>
+        <platform>all</platform>
+        <license>GPLv2</license>
+        <website>https://thomas-ernest.github.io/</website>
+        <source>https://github.com/thomas-ernest/plugin.video.arteplussept</source>
+<news>2.0.0 (2026-8-30)
+- Replace xbmcswift2 routing and file-based cache with native shim; remove external dependency
+- Switch category, video and stream endpoints to Arte TV API; remove any call to HBB TV API
+- Add multi-language playback with subtitles (adaptive inputstream)
+- Remove cached categories; fix mis cache as with 1.6.2
+- Fix login state display in addon  settings
+- Tracking of played videos still failing. Cross device replay start from scratch.</news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/screenshot-1.png</screenshot>
+            <screenshot>resources/screenshot-2.png</screenshot>
+            <screenshot>resources/screenshot-3.png</screenshot>
+            <screenshot>resources/screenshot-4.png</screenshot>
+        </assets>
+    </extension>
+</addon>

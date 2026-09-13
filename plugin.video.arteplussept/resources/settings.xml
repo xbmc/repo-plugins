@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<!-- General -->
+	<category label="30044">
+		<setting
+			id="lang"
+			type="enum"
+			label="30050"
+			values="fr|de|en|es|pl|it|ro"
+			default="0"/>
+		<setting
+			id="loglevel"
+			type="enum"
+			label="30056"
+			values="DEFAULT|API|DISPLAY|API+DISPLAY"
+			default="0"/>
+		<setting
+			id="last_version_notified"
+			type="text"
+			default=""
+			visible="false" />
+		<setting
+			id="last_date_notified"
+			type="text"
+			default=""
+			visible="false" />
+	</category>
+	
+	<!-- Profile -->
+	<category label="30045">
+		<setting
+			id="username"
+			type="text"
+			default=""
+			visible="false" />
+		<setting
+			type="action"
+			action="RunPlugin(plugin://plugin.video.arteplussept/user/login)"
+			label="30057" />
+		<setting
+			id="login_acc"
+			type="text"
+			enable="false"
+			default=""
+			subsetting="true"
+			label="" />
+		<setting
+			type="action"
+			action="RunPlugin(plugin://plugin.video.arteplussept/user/logout)"
+			label="30058" />
+	</category>
+</settings>

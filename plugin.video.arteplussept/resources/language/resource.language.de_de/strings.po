@@ -1,0 +1,217 @@
+# Kodi Media Center language file
+# Addon Name: Arte +7
+# Addon id: plugin.video.arteplussept
+# Addon Provider: bmf, thomas-ernest
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30044"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30045"
+msgid "Profile"
+msgstr "Profil"
+
+msgctxt "#30050"
+msgid "Language (Videos)"
+msgstr "Sprache (Videos)"
+
+msgctxt "#30054"
+msgid "Email"
+msgstr "E-Mail-Adresse"
+
+msgctxt "#30056"
+msgid "Log level"
+msgstr "Log level"
+
+msgctxt "#30057"
+msgid "Log in"
+msgstr "Einloggen"
+
+msgctxt "#30058"
+msgid "Log out"
+msgstr "Austragen"
+
+
+msgctxt "#30011"
+msgid "View collection as menu"
+msgstr "Sammlung als Menü anzeigen"
+
+
+msgctxt "#30012"
+msgid "Search"
+msgstr "Suche"
+
+
+msgctxt "#30014"
+msgid "Authentication needed in addon settings"
+msgstr "Authentifizierung in den Add-on-Einstellungen erforderlich"
+
+msgctxt "#30015"
+msgid "User already logged in"
+msgstr "Benutzer bereits angemeldet"
+
+msgctxt "#30016"
+msgid "Do you want to log in as \"{new_user}\" instead of \"{old_user}\" ?"
+msgstr "Möchten Sie sich als \"{new_user}\" statt als \"{old_user}\" anmelden?"
+
+msgctxt "#30017"
+msgid "Logged in as \"{user}\""
+msgstr "Als \"{user}\" angemeldet"
+
+msgctxt "#30018"
+msgid "Logged out"
+msgstr "Abgemeldet"
+
+msgctxt "#30013"
+msgid "Enter email please :"
+msgstr "Bitte E-mail eingeben:"
+
+msgctxt "#30019"
+msgid "Enter password please:"
+msgstr "Bitte Passwort eingeben:"
+
+msgctxt "#30020"
+msgid "Unable to authenticate"
+msgstr "Authentifizierungsfehler"
+
+msgctxt "#30021"
+msgid "Email missing"
+msgstr "E-Mail fehlen"
+
+msgctxt "#30022"
+msgid "Password missing"
+msgstr "Passwort fehlen"
+
+msgctxt "#30046"
+msgid "Login with Smart TV code on another device"
+msgstr "Mit Smart-TV-Code auf einem anderen Gerät anmelden"
+
+msgctxt "#30047"
+msgid "Login with email & password"
+msgstr "Mit E-Mail-Adresse und Passwort anmelden"
+
+msgctxt "#30048"
+msgid "ARTE Smart TV Login"
+msgstr "ARTE Smart-TV-Anmeldung"
+
+msgctxt "#30049"
+msgid "Enter the code \"{user_code}\" at \"{verification_uri}\" on your mobile device or computer."
+msgstr "Geben Sie den Code \"{user_code}\" unter \"{verification_uri}\" auf Ihrem Mobilgerät oder Computer ein."
+
+
+msgctxt "#30023"
+msgid "Add to Arte favorites"
+msgstr "Zu Arte-Favoriten hinzufügen"
+
+msgctxt "#30024"
+msgid "Remove from Arte favorites"
+msgstr "Aus Arte-Favoriten entfernen"
+
+msgctxt "#30025"
+msgid "\"{label}\" successfully added to favorites"
+msgstr "\"{label}\" erfolgreich zu Favoriten hinzugefügt"
+
+msgctxt "#30026"
+msgid "Failed to add \"{label}\" to favorites"
+msgstr "Fehler beim Hinzufügen \"{label}\" zu den Favoriten"
+
+msgctxt "#30027"
+msgid "\"{label}\" successfully removed from favorites"
+msgstr "\"{label}\" erfolgreich aus Favoriten entfernen"
+
+msgctxt "#30028"
+msgid "Failed to remove \"{label}\" from favorites"
+msgstr "Entfernen \"{label}\" aus Favoriten fehlgeschlagen"
+
+msgctxt "#30029"
+msgid "Stream \"{strm}\" in \"{ln}\" is not available"
+msgstr "Stream \"{strm}\" in \"{ln}\" ist nicht verfügbar"
+
+msgctxt "#30034"
+msgid "Cannot play stream \"{strm}\" because of missing or misconfigured inputstream.adaptative"
+msgstr "Stream \"{strm}\" kann wegen fehlendem oder falsch konfiguriertem inputstream.adaptative nicht abgespielt werden"
+
+msgctxt "#30030"
+msgid "Purge my history"
+msgstr "Lösche mein Videoverlauf"
+
+msgctxt "#30031"
+msgid "Successfully purged history"
+msgstr "Videoverlauf erfolgreich gelöscht"
+
+msgctxt "#30032"
+msgid "Failed to purge my history"
+msgstr "Mein Videoerlauf konnte nicht gelöscht werden"
+
+msgctxt "#30033"
+msgid "Do you really want to purge your history ?"
+msgstr "Wollen Sie wirklich Ihr Videoverlauf löschen ?"
+
+
+msgctxt "#30035"
+msgid "Mark as watched in Arte"
+msgstr "Als geschaut in Arte markieren"
+
+msgctxt "#30036"
+msgid "\"{label}\" successfully marked as watched"
+msgstr "\"{label}\" erfolgreich als geschaut markiert"
+
+msgctxt "#30037"
+msgid "Failed to mark as watched \"{label}\""
+msgstr "\"{label}\" konnte nicht als geschaut markiert werden"
+
+
+msgctxt "#30038"
+msgid "Next page"
+msgstr "Nächste Seite"
+
+msgctxt "#30039"
+msgid "Previous page"
+msgstr "Vorherige Seite"
+
+
+msgctxt "#30040"
+msgid "Purge my Arte favorites"
+msgstr "Lösche meine Arte-Favoriten"
+
+msgctxt "#30041"
+msgid "Successfully purged favorites"
+msgstr "Favoriten erfolgreich gelöscht"
+
+msgctxt "#30042"
+msgid "Failed to purge favorites"
+msgstr "Meine Favoriten konnte nicht gelöscht werden"
+
+msgctxt "#30043"
+msgid "Do you really want to purge Arte favorites ?"
+msgstr "Wollen Sie wirklich Arte-Favoriten löschen ?"
+
+msgctxt "#30055"
+msgid "{label} - This program contains scenes not suitable for young or sensitive audience"
+msgstr "{label} - Dieses Program enthält Szenen, die für junge oder empfindsame Zuschauer*innen nicht geeignet sind"
+
+msgctxt "#30060"
+msgid "Play from the start"
+msgstr "Ab Anfang spielen"
+
+
+msgctxt "#30061"
+msgid "Version {version} installed successfully"
+msgstr "Version {version} erfolgreich installiert"
+
+msgctxt "#30062"
+msgid ""
+"Enjoy Arte videos on Kodi with Arte+7 {version}.\n"
+"Donations: https://thomas-ernest.github.io/\n"
+"Bugs or feature requests: https://github.com/thomas-ernest/plugin.video.arteplussept/issues"
+msgstr ""
+"Geniesse Arte-Videos auf Kodi mit Arte+7 {version}.\n"
+"Spenden: https://thomas-ernest.github.io/\n"
+"Fehlerberichte oder Anfragen: https://github.com/thomas-ernest/plugin.video.arteplussept/issues"

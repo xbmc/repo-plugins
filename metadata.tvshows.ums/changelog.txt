@@ -1,0 +1,23 @@
+v3.24.0 (2026-08-26)
+- Collection prefix stripping from filenames (MCU150-, SW03-, DC021-)
+- 917 tests (659 movie + 224 TV + 34 shared)
+
+v3.23.1 (2026-08-25)
+- Fix: clean_title() now strips release group names from scene-format filenames
+
+v3.23.0 (2026-07-28)
+- TV show status (setTvShowStatus) - 3-level resolve: TVMaze > KP > completed
+- Episode thumbnails from TVMaze (zero extra HTTP requests)
+
+v3.22.0 (2026-07-27)
+- FanArt.tv artwork for movies: clearlogo, clearart, banner, landscape, discart
+- FanArt.tv artwork for TV shows and seasons
+- New settings: use_fanart, fanart_api_key
+
+v3.21.3 (2026-07-27)
+- Fix: Wikidata fallback setting was not visible in Kodi UI
+
+v3.20.0 (2026-07-27)
+- Episode ratings from Kinopoisk API + IMDB votes from OMDb
+- Episode directors and writers from TVMaze
+- Original language detection (setOriginalLanguage)

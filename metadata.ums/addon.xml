@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="metadata.ums"
+       name="Ultimate Movie Scraper"
+       version="3.24.0"
+       provider-name="kodi_metadata_scraper">
+  <requires>
+    <import addon="xbmc.metadata" version="2.1.0"/>
+    <import addon="xbmc.python" version="3.0.1"/>
+  </requires>
+  <extension point="xbmc.metadata.scraper.movies"
+             library="python/scraper.py"/>
+  <extension point="xbmc.addon.metadata">
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+    <summary lang="ru">Универсальный скрапер метаданных фильмов и сериалов</summary>
+    <summary lang="en">Ultimate movie and TV show metadata scraper</summary>
+    <description lang="ru">Универсальный скрапер метаданных. Поддерживает фильмы и сериалы. Кинопоиск как источник русскоязычных данных, рейтинги Кинопоиска, IMDB, Rotten Tomatoes. Актёры с русскими именами, постеры и фанарт.</description>
+    <description lang="en">Ultimate metadata scraper. Supports movies and TV shows. Kinopoisk as the source for Russian-language data, Kinopoisk, IMDB, Rotten Tomatoes ratings. Cast with Russian names, posters and fanart.</description>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+    <platform>all</platform>
+    <license>MIT</license>
+    <source>https://github.com/afr13nd77/kodi_metadata_scraper</source>
+    <website>https://github.com/afr13nd77/kodi_metadata_scraper</website>
+    <forum>https://forum.kodi.tv/showthread.php?tid=388459</forum>
+    <news>v3.24.0: Collection prefix stripping from filenames (MCU150-, SW03-, DC021-). FanArt.tv artwork. Original language detection. Configurable cast name language (ru/en). TV show status, episode thumbnails, episode crew from TVMaze. Episode ratings from Kinopoisk + IMDB. 917 tests.</news>
+  </extension>
+</addon>

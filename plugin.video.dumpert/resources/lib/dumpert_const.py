@@ -14,13 +14,31 @@ ADDON = "plugin.video.dumpert"
 SETTINGS = xbmcaddon.Addon(id=ADDON)
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon(id=ADDON).getAddonInfo('path'), 'resources')
-LATEST_URL = "https://api-live.dumpert.nl/mobile_api/json/video/latest/0/"
-TOPPERS_URL = "https://api-live.dumpert.nl/mobile_api/json/video/toppers/0/"
-DUMPERT_TV_URL = "https://api.dumpert.nl/mobile_api/json/dumperttv/0/"
-SEARCH_URL = "https://api-live.dumpert.nl/mobile_api/json/search/"
-DAY_TOPPERS_URL = "https://api-live.dumpert.nl/mobile_api/json/video/top5/dag/"
-WEEK_TOPPERS_URL = "https://api-live.dumpert.nl/mobile_api/json/video/top5/week/"
-MONTH_TOPPERS_URL = "https://api-live.dumpert.nl/mobile_api/json/video/top5/maand/"
+INITIAL_PAGE_NUMBER = "0"
+# In between part 1 and 2 there will be a page number, the first one will be "0"
+LATEST_URL_PART_1 = "https://post.dumpert.nl/api/v1.0/latest/"
+LATEST_URL_PART_2 = "/?app=www.dumpert.nl"
+# In between part 1 and 2 there will be a page number, the first one will be "0"
+TOPPERS_URL_PART_1 = "https://post.dumpert.nl/api/v1.0/toppers/"
+TOPPERS_URL_PART_2 = "/?app=www.dumpert.nl"
+# In between part 1 and 2 there will be a page number, the first one will be "0"
+DUMPERT_TV_URL_PART_1 = "https://post.dumpert.nl/api/v1.0/dumperttv/"
+DUMPERT_TV_URL_PART_2 = "/?order=date&media_type=all&app=www.dumpert.nl"
+# "https://post.dumpert.nl/api/v1.0/search/<search-term>/<page-number>/?order=date&media_type=all&app=www.dumpert.nl"
+# In between part 1 and 2 there will be a search term
+# In between part 2 and 3 there will be a page number, the first one will be "0"
+SEARCH_URL_PART_1 = "https://post.dumpert.nl/api/v1.0/search/"
+SEARCH_URL_PART_2 = "/"
+SEARCH_URL_PART_3 = "/?order=date&media_type=all&app=www.dumpert.nl"
+# In between part 1 and 2 there will be a date (yyyy-mm-dd)
+DAY_TOPPERS_URL_PART_1 = "https://post.dumpert.nl/api/v1.0/top5/dag/"
+DAY_TOPPERS_URL_PART_2 = "/?app=www.dumpert.nl"
+# In between part 1 and 2 there will be a week (yyyyww)
+WEEK_TOPPERS_URL_PART_1 = "https://post.dumpert.nl/api/v1.0/top5/week/"
+WEEK_TOPPERS_URL_PART_2 = "/?app=www.dumpert.nl"
+# in between part 1 and 2 there will be a month (yyyymm)
+MONTH_TOPPERS_URL_PART_1 = "https://post.dumpert.nl/api/v1.0/top5/maand/"
+MONTH_TOPPERS_URL_PART_2 = "/?app=www.dumpert.nl"
 SFW_HEADERS = {'X-Dumpert-NSFW': '0'}
 NSFW_HEADERS = {'X-Dumpert-NSFW': '1'}
 DAY = "day"
@@ -29,8 +47,8 @@ MONTH = "month"
 VIDEO_QUALITY_MOBILE = "mobile"
 VIDEO_QUALITY_TABLET = "tablet"
 VIDEO_QUALITY_720P = "720p"
-DATE = "2024-10-20"
-VERSION = "1.1.13"
+DATE = "2026-09-15"
+VERSION = "1.1.14"
 
 if sys.version_info[0] > 2:
     unicode = str

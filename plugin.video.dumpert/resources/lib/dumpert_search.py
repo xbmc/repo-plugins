@@ -10,8 +10,10 @@ from builtins import str
 from builtins import object
 import sys
 import xbmc
+import urllib.parse
 
-from resources.lib.dumpert_const import LANGUAGE, log, convertToUnicodeString
+from resources.lib.dumpert_const import SEARCH_URL_PART_2, SEARCH_URL_PART_3, INITIAL_PAGE_NUMBER, LANGUAGE, \
+    log, convertToUnicodeString
 
 
 #
@@ -28,8 +30,6 @@ class Main(object):
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        log("ARGV", repr(sys.argv))
-
         # Get search term from user
         keyboard = xbmc.Keyboard('', LANGUAGE(30508))
         keyboard.doModal()
@@ -43,13 +43,25 @@ class Main(object):
             # If the user cancels the input box, we stop
             sys.exit(0)
 
-        sys.argv[2] = convertToUnicodeString(sys.argv[2])
+        #log("sys.argv[2]-1", sys.argv[2])
 
-        # Converting URL argument to proper query string like 'https://api-live.dumpert.nl/mobile_api/json/search/fiets/0/'
-        sys.argv[2] = sys.argv[2] + search_term + "/0/"
+        # Constructing last part of search url in the parameters, i.e. the part after the parameters in sys.argv[2]
+        # so after this: ?action=search&next_page_possible=True&plugin_category=Search&url=https%3a%2f%2fpost.dumpert.nl%2fapi%2fv1.0%2fsearch%2f
+        # an url decoded search url should look like this: 
+        # https://post.dumpert.nl/api/v1.0/search/<user entered search term>/0/?order=date&media_type=all&app=www.dumpert.nl"
+        urldecoded_last_part_search_url = search_term + SEARCH_URL_PART_2 + INITIAL_PAGE_NUMBER + SEARCH_URL_PART_3
+        
+        #log("urldecoded_last_part_search_url", urldecoded_last_part_search_url)
+        
+        # Url encode the url string
+        urlencoded_last_part_search_url = urllib.parse.quote(urldecoded_last_part_search_url, safe='')
 
-        log("sys.argv[2]", sys.argv[2])
+        #log("urlencoded_last_part_search_url", urlencoded_last_part_search_url)
+        
+        sys.argv[2] = sys.argv[2] + urlencoded_last_part_search_url
 
-        import dumpert_json as plugin
+        #log("sys.argv[2]-2", sys.argv[2])
+
+        import resources.lib.dumpert_json as plugin
 
         plugin.Main()

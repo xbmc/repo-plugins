@@ -13,7 +13,8 @@
       "channelcode": "playtv",
       "sortorder": 1,
       "language": "be",
-      "fanart": "playtvfanart.png"
+      "fanart": "playtvfanart.png",
+      "ignore": true
     },
     {
       "guid": "E108F736-8375-4B5D-B74A-7B70BF52043E",

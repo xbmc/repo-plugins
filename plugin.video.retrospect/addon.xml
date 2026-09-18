@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.36"
+        version="5.7.38"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -133,21 +133,22 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.36 - Changelog - 2026-07-14[/B]
-This minor update fixes a small number of channel-related bugs.
+        <news>[B]Retrospect v5.7.38 - Changelog - 2026-09-19[/B]
+Fixed NPO playback and De Schatkamer listing and removed play.tv.
 
 [B]Framework related[/B]
-* Updated: Python type hints.
+* Fixed: Don&#x27;t allow `zstd` as compression.
 
 [B]GUI/Settings/Language related[/B]
 _None_
 
 [B]Channel related[/B]
-* Updated: SVT fanart.
-* Updated: TV4.se artwork.
-* Updated: UR Play artwork.
-* Fixed: Use correct live stream urls for SVT (Fixes #1924).
-* Fixed: Type-ing issues and JSON fix in openregio.
+* Fixed: De Schatkamer listing of some series.
+* Fixed: NPO changed player DRM (Fixes #1989). Needs latest Widevine.
+* Fixed: NPO Radio playback.
+* Fixed: NPO EPG listings.
+* Fixed: De Schatkamer added Widevine DRM for HLS.
+* Changed: Disabled `play.tv`.
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

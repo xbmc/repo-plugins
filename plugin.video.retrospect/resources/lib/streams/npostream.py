@@ -84,14 +84,29 @@ class NpoStream(object):
             message = video_info.get_value("body")
             return message
 
-        drm_token = video_info.get_value("stream", "drmToken")
         stream_url = video_info.get_value("stream", "streamURL")
+        drm_info = video_info.get_value("stream", "drm", fallback=None)
+        if drm_info:
+            drm_token = video_info.get_value("stream", "drm", "drmToken")
+            drm_license_url = video_info.get_value("stream", "drm", "licenseUrl")
+        else:
+            drm_token = None
+            drm_license_url = None
 
         # Encryption?
         if drm_token:
+            Logger.info(f"Using encrypted Dash with Token for NPO")
             drm_url = f"https://npo-drm-gateway.samgcloud.nepworldwide.nl/authentication?custom_data={drm_token}"
             Logger.info("Using encrypted Dash for NPO")
             license_key = "{0}|{1}|R{{SSM}}|".format(drm_url, "")
+
+        elif drm_license_url:
+            Logger.info(f"Using encrypted Dash with License Key for NPO: {drm_license_url}")
+            license_key = Mpd.get_license_key(drm_license_url, key_type="R", key_headers={
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+                "origin": "https://npo.nl",
+                "referer": "https://npo.nl/",
+            })
         else:
             Logger.info("Using non-encrypted Dash for NPO")
             license_key = None

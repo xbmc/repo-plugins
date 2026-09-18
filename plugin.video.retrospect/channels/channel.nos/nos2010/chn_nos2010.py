@@ -3,6 +3,7 @@
 import datetime
 import time
 from typing import Optional, List, Tuple, Union, Dict
+from urllib.parse import urljoin
 
 import pytz
 
@@ -1216,12 +1217,21 @@ class Channel(chn_class.Channel):
     def update_live_radio(self, item: MediaItem) -> MediaItem:
         # First fetch the Javascript data file
         www_data = UriHandler.open(item.url)
-        js_data_url = Regexer.do_regex(r'(_next/static/chunks/pages/_app[^"]+.js)', www_data)[0]
-        js_data = UriHandler.open(f"{item.url}/{js_data_url}")
 
-        # Then fetch the slug
-        # slug = Regexer.do_regex(r'slug\W*:\W*"([^"]+)"', js_data)[0]
-        slug = Regexer.do_regex(r'var\W*r\W*=\W*"(npo[^"]+)"', js_data)[0]
+        # <script src="/_next/static/chunks/0q2z4y5fhnk-0.js"
+        scripts = Regexer.do_regex('<script src="([^"]+)', www_data)
+        slug = ""
+        base_url = urljoin(item.url, "/")
+        for script in scripts:
+            script_data = UriHandler.open(f"{base_url}{script}")
+            slug = Regexer.do_regex('slug:\W*"([^"]+)"', script_data)
+            if slug:
+                slug = slug[0]
+                break
+
+        if not slug:
+            Logger.error("No player slug found in javascript.")
+            return item
 
         # Get the channel info and media info.
         channel_json = JsonHelper(UriHandler.open(f"{item.url}/api/miniplayer/info?channel={slug}"))
@@ -1384,7 +1394,11 @@ class Channel(chn_class.Channel):
                 air_date = start + datetime.timedelta(i)
                 date = air_date.strftime("%d-%m-%Y")
                 guid = livestream["guid"]
-                guide_data = JsonHelper(UriHandler.open(f"https://npo.nl/start/api/domain/guide-channel?guid={guid}&date={date}"))
+                guide_content = UriHandler.open(f"https://npo.nl/start/api/domain/guide-channel?guid={guid}&date={date}")
+                if UriHandler.instance().status.error:
+                    continue
+
+                guide_data = JsonHelper(guide_content)
 
                 for item in guide_data.json:
                     item["channel"] = livestream["title"]

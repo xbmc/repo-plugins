@@ -18,7 +18,7 @@ import xbmcplugin
 import json
 
 from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, SETTINGS, convertToUnicodeString, log, SFW_HEADERS, NSFW_HEADERS, \
-    DAY, WEEK, MONTH, DAY_TOPPERS_URL, WEEK_TOPPERS_URL, MONTH_TOPPERS_URL, LATEST_URL
+    HEADERS, DAY, WEEK, MONTH, DAY_TOPPERS_URL, WEEK_TOPPERS_URL, MONTH_TOPPERS_URL, LATEST_URL
 
 #
 # Main class
@@ -182,13 +182,15 @@ class Main(object):
         # Init
         #
         listing = []
-
+        # Combining two dictionaries into one dictionary
         if SETTINGS.getSetting('nsfw') == 'true':
-            response = requests.get(self.foto_list_page_url, headers=NSFW_HEADERS)
+            response = requests.get(self.foto_list_page_url, headers={**NSFW_HEADERS, **HEADERS})
         else:
-            response = requests.get(self.foto_list_page_url, headers=SFW_HEADERS)
+            response = requests.get(self.foto_list_page_url, headers={**SFW_HEADERS, **HEADERS})
 
-        # response.status
+        # log("response.status", response.status)
+        # log("response.text", response.text)        
+
         json_source = response.text
         json_source = convertToUnicodeString(json_source)
         data = json.loads(json_source)

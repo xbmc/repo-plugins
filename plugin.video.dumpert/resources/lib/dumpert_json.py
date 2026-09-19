@@ -18,8 +18,10 @@ import xbmcgui
 import xbmcplugin
 import json
 
-from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, SETTINGS, convertToUnicodeString, log, SFW_HEADERS, \
-    NSFW_HEADERS, DAY, WEEK, MONTH, DAY_TOPPERS_URL, WEEK_TOPPERS_URL, MONTH_TOPPERS_URL, LATEST_URL, \
+from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, SETTINGS, convertToUnicodeString, log, \
+    SFW_HEADERS, NSFW_HEADERS, DAY, WEEK, MONTH, DAY_TOPPERS_URL_PART_1, DAY_TOPPERS_URL_PART_2, \
+    WEEK_TOPPERS_URL_PART_1, WEEK_TOPPERS_URL_PART_2, MONTH_TOPPERS_URL_PART_1, \
+    MONTH_TOPPERS_URL_PART_2, LATEST_URL_PART_1, LATEST_URL_PART_2, INITIAL_PAGE_NUMBER, \
     VIDEO_QUALITY_MOBILE, VIDEO_QUALITY_TABLET, VIDEO_QUALITY_720P
 
 
@@ -47,22 +49,27 @@ class Main(object):
         except KeyError:
             self.plugin_category = LANGUAGE(30001)
             self.next_page_possible = "True"
+
         try:
             self.period = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['period'][0]
         except KeyError:
             self.period = ""
+
         try:
             self.days_deducted_from_today = \
                 urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['days_deducted_from_today'][0]
         except KeyError:
             self.days_deducted_from_today = "0"
+
         try:
             self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
         except KeyError:
-            # If the only-show-new-videos-category switch is turned on, this will be empty the first time
+            # If the only-show-new-videos-category switch is turned on, this will be empty the first time.
+            # Therefor we construct the url here.
             if self.period == "":
-                self.video_list_page_url = LATEST_URL
-            # If period is filled in we will construct the url
+                self.video_list_page_url = LATEST_URL_PART_1 + INITIAL_PAGE_NUMBER + LATEST_URL_PART_2
+            # If period is filled, we will construct the url a bit further on.
+            # Let's initialize video_list_page_url here.
             else:
                 self.video_list_page_url = ""
 
@@ -70,7 +77,7 @@ class Main(object):
 
         self.next_url = ""
 
-        # Constuct the next url based on days_deducted_from_today
+        # Construct the next url based on days_deducted_from_today
         if self.period == DAY or self.period == WEEK or self.period == MONTH:
             # For some strange reason converting a string to a datetime object does NOT work here :(
             # Thus we have to do this silly stuff to be able to determine the next_url
@@ -85,60 +92,50 @@ class Main(object):
                 if self.video_list_page_url == "":
                     current_url_datetime_object = current_url_datetime_object - timedelta(
                         days=self.days_deducted_from_today)
-                    # https://api-live.dumpert.nl/mobile_api/json/video/top5/dag/2019-09-19/
-                    self.video_list_page_url = DAY_TOPPERS_URL + current_url_datetime_object.strftime('%Y-%m-%d')
+                    self.video_list_page_url = DAY_TOPPERS_URL_PART_1 + current_url_datetime_object.strftime('%Y-%m-%d') + DAY_TOPPERS_URL_PART_2
 
-                    # log("Generated self.video_list_page_url day", self.video_list_page_url)
+                    log("Generated self.video_list_page_url day", self.video_list_page_url)
 
+                # The next page should pertain to the day before the day of the current page
                 self.days_deducted_from_today = self.days_deducted_from_today + 1
-                # Let's deduct all the cumulated days
                 next_url_datetime_object = next_url_datetime_object - timedelta(days=self.days_deducted_from_today)
                 self.days_deducted_from_today = str(self.days_deducted_from_today)
-                # https://api-live.dumpert.nl/mobile_api/json/video/top5/dag/2019-09-18/
-                # This should be an url of the day before the date of the current video url
-                self.next_url = DAY_TOPPERS_URL + next_url_datetime_object.strftime('%Y-%m-%d')
+                self.next_url = DAY_TOPPERS_URL_PART_1 + next_url_datetime_object.strftime('%Y-%m-%d') + DAY_TOPPERS_URL_PART_2
 
             elif self.period == WEEK:
                 # If we don't have a current video list page url, lets construct it
                 if self.video_list_page_url == "":
                     current_url_datetime_object = current_url_datetime_object - timedelta(
                         days=self.days_deducted_from_today)
-                    # For some reason date.strftime('%Y%W') will now contain the weeknumber that is 1 below the weeknumber should be for the site
-                    # Let's add a week to fix that
-                    current_url_datetime_object = current_url_datetime_object + timedelta(days=7)
-                    # https://api-live.dumpert.nl/mobile_api/json/video/top5/week/201938/
-                    self.video_list_page_url = WEEK_TOPPERS_URL + current_url_datetime_object.strftime('%Y%W')
+                    self.video_list_page_url = WEEK_TOPPERS_URL_PART_1 + current_url_datetime_object.strftime('%Y%W') + WEEK_TOPPERS_URL_PART_2
 
-                    # log("Generated self.video_list_page_url week", self.video_list_page_url)
+                    log("Generated self.video_list_page_url week", self.video_list_page_url)
 
-                # For some reason date.strftime('%Y%W') will now contain the weeknumber that is 1 below the weeknumber should be for the site
-                # Let's add a week to fix that
-                next_url_datetime_object = next_url_datetime_object + timedelta(days=7)
-                # Let's deduct all the cumulated days
+                # The next page should pertain to the week before the week of the current page
                 self.days_deducted_from_today = self.days_deducted_from_today + 7
                 next_url_datetime_object = next_url_datetime_object - timedelta(days=self.days_deducted_from_today)
 
                 # Let's skip week "00"
                 if next_url_datetime_object.strftime('%W') == "00":
+
                     # log("skipping week 00", "skipping week 00")
 
                     self.days_deducted_from_today = self.days_deducted_from_today + 7
                     next_url_datetime_object = next_url_datetime_object - timedelta(days=7)
 
                 self.days_deducted_from_today = str(self.days_deducted_from_today)
-                # https://api-live.dumpert.nl/mobile_api/json/video/top5/week/201937/
-                self.next_url = WEEK_TOPPERS_URL + next_url_datetime_object.strftime('%Y%W')
+                self.next_url = WEEK_TOPPERS_URL_PART_1 + next_url_datetime_object.strftime('%Y%W') + WEEK_TOPPERS_URL_PART_2
 
             elif self.period == MONTH:
                 # If we don't have a current video list page url, lets construct it
                 if self.video_list_page_url == "":
                     current_url_datetime_object = current_url_datetime_object - timedelta(
                         days=self.days_deducted_from_today)
-                    # https://api-live.dumpert.nl/mobile_api/json/video/top5/maand/201909/
-                    self.video_list_page_url = MONTH_TOPPERS_URL + current_url_datetime_object.strftime('%Y%m')
+                    self.video_list_page_url = MONTH_TOPPERS_URL_PART_1 + current_url_datetime_object.strftime('%Y%m') + MONTH_TOPPERS_URL_PART_2
 
-                    # log("Generated self.video_list_page_url month", self.video_list_page_url)
+                    log("Generated self.video_list_page_url month", self.video_list_page_url)
 
+                # The next page should pertain to the month before the month of the current page
                 current_url_datetime_object = current_url_datetime_object - timedelta(
                     days=self.days_deducted_from_today)
 
@@ -155,24 +152,27 @@ class Main(object):
                     next_url_datetime_object = next_url_datetime_object - timedelta(days=5)
 
                 self.days_deducted_from_today = str(self.days_deducted_from_today)
-                # https://api-live.dumpert.nl/mobile_api/json/video/top5/maand/201908/
-                self.next_url = MONTH_TOPPERS_URL + next_url_datetime_object.strftime('%Y%m')
+                self.next_url = MONTH_TOPPERS_URL_PART_1 + next_url_datetime_object.strftime('%Y%m') + MONTH_TOPPERS_URL_PART_2
 
-            # log("self.next_url", self.next_url)
+            log("self.next_url", self.next_url)
 
-        # "https://api-live.dumpert.nl/mobile_api/json/video/latest/0/"
+        # "https://post.dumpert.nl/api/v1.0/latest/<page-number>/?app=www.dumpert.nl"
+        # "https://post.dumpert.nl/api/v1.0/toppers/<page-number>/?app=www.dumpert.nl"
+        # "https://post.dumpert.nl/api/v1.0/dumperttv/<page-number>/?order=date&media_type=all&app=www.dumpert.nl"
+        # "https://post.dumpert.nl/api/v1.0/search/<search-term>/<page-number>/?order=date&media_type=all&app=www.dumpert.nl"
         else:
-            # Determine current page number and base_url
+            # Determine current base_url, current page number and last part
             # find last slash
             pos_of_last_slash = self.video_list_page_url.rfind('/')
-            # remove last slash
+            self.last_part = self.video_list_page_url[pos_of_last_slash:]
+            # remove last part
             self.video_list_page_url = self.video_list_page_url[0: pos_of_last_slash]
             pos_of_last_slash = self.video_list_page_url.rfind('/')
             self.base_url = self.video_list_page_url[0: pos_of_last_slash + 1]
-            self.current_page = self.video_list_page_url[pos_of_last_slash + 1:]
-            self.current_page = int(self.current_page)
-            # add last slash
-            self.video_list_page_url = str(self.video_list_page_url) + "/"
+            self.current_page_number = self.video_list_page_url[pos_of_last_slash + 1:]
+            self.current_page_number = int(self.current_page_number)
+            # add last part
+            self.video_list_page_url = str(self.video_list_page_url) + str(self.last_part)
 
             log("self.video_list_page_url", self.video_list_page_url)
 
@@ -194,6 +194,8 @@ class Main(object):
             response = requests.get(self.video_list_page_url, headers=NSFW_HEADERS)
         else:
             response = requests.get(self.video_list_page_url, headers=SFW_HEADERS)
+
+        log("response", response)
 
         # response.status
         json_source = response.text
@@ -293,11 +295,11 @@ class Main(object):
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'false')
-            # If the next url is still empty, we have to make one
-            # "https://api-live.dumpert.nl/mobile_api/json/video/latest/1/"
+            # If we haven't filled next url yet, we have do that now
             if self.next_url == "":
-                next_page = self.current_page + 1
-                self.next_url = str(self.base_url) + str(next_page) + '/'
+                next_page = self.current_page_number + 1
+                self.next_url = str(self.base_url) + str(next_page) + str(self.last_part)
+
             parameters = {"action": "json",
                           "plugin_category": self.plugin_category,
                           "url": self.next_url,

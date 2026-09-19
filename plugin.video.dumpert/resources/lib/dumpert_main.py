@@ -14,7 +14,9 @@ import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
 
-from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, DAY, WEEK, MONTH, LATEST_URL, TOPPERS_URL, DUMPERT_TV_URL, SEARCH_URL
+from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, DAY, WEEK, MONTH, INITIAL_PAGE_NUMBER, \
+    LATEST_URL_PART_1, LATEST_URL_PART_2, TOPPERS_URL_PART_1, TOPPERS_URL_PART_2, \
+    DUMPERT_TV_URL_PART_1, DUMPERT_TV_URL_PART_2, SEARCH_URL_PART_1, log
 
 #
 # Main class
@@ -33,17 +35,17 @@ class Main(object):
         title = LANGUAGE(30001)
         parameters = {"action": "json",
                       "plugin_category": title,
-                      "url": LATEST_URL,
+                      "url": LATEST_URL_PART_1 + INITIAL_PAGE_NUMBER + LATEST_URL_PART_2,
                       "next_page_possible": "True"}
         self.add_dir(parameters, title)
 
         #
-        # Dumpert TV
+        # Toppers Nu
         #
-        title = LANGUAGE(30007)
+        title = LANGUAGE(30011)
         parameters = {"action": "json",
                       "plugin_category": title,
-                      "url": DUMPERT_TV_URL,
+                      "url": TOPPERS_URL_PART_1 + INITIAL_PAGE_NUMBER + TOPPERS_URL_PART_2,
                       "next_page_possible": "True"}
         self.add_dir(parameters, title)
 
@@ -88,14 +90,24 @@ class Main(object):
                       "plugin_category": title,
                       "next_page_possible": "True"}
         self.add_dir(parameters, title)
-
+        
+        #
+        # Dumpert TV
+        #
+        title = LANGUAGE(30007)
+        parameters = {"action": "json",
+                      "plugin_category": title,
+                      "url": DUMPERT_TV_URL_PART_1 + INITIAL_PAGE_NUMBER + DUMPERT_TV_URL_PART_2,
+                      "next_page_possible": "True"}
+        self.add_dir(parameters, title)
+        
         #
         # Search
         #
         title = LANGUAGE(30004)
         parameters = {"action": "search",
                       "plugin_category": title,
-                      "url": SEARCH_URL,
+                      "url": SEARCH_URL_PART_1,
                       "next_page_possible": "True"}
         self.add_dir(parameters, title)
 

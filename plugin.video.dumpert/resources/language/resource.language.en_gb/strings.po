@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Dumpert
 # Addon id: plugin.video.dumpert
 msgid ""
@@ -24,7 +24,7 @@ msgid "Watch funny videos from Dumpert.nl (dutch)"
 msgstr ""
 
 msgctxt "Addon Disclaimer"
-msgid "For bugs, requests or general questions visit the Dumpert.nl thread on the XBMC forum."
+msgid "For bugs, requests or general questions visit the Dumpert.nl thread on the Kodi forum."
 msgstr ""
 
 msgctxt "#30000"
@@ -40,7 +40,7 @@ msgid "Search"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Top Time machine (daily/weekly/montly Toppers)"
+msgid "Top Time machine (daily/weekly/monthly Top)"
 msgstr ""
 
 msgctxt "#30007"
@@ -57,6 +57,10 @@ msgstr ""
 
 msgctxt "#30010"
 msgid "Monthly Top"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Top Now"
 msgstr ""
 
 msgctxt "#30100"
@@ -140,15 +144,15 @@ msgid "Pick a date"
 msgstr ""
 
 msgctxt "#30510"
-msgid "Day top for day %s"
+msgid "Daily top for day %s"
 msgstr ""
 
 msgctxt "#30511"
-msgid "Week top for week %s %s"
+msgid "Weekly top for week %s %s"
 msgstr ""
 
 msgctxt "#30512"
-msgid "Month top for month %s"
+msgid "Monthly top for month %s"
 msgstr ""
 
 msgctxt "#30600"

@@ -16,8 +16,9 @@ import xbmcplugin
 from datetime import datetime, timedelta
 import time
 
-from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, log, DAY, WEEK, MONTH, DAY_TOPPERS_URL, WEEK_TOPPERS_URL, \
-    MONTH_TOPPERS_URL
+from resources.lib.dumpert_const import LANGUAGE, IMAGES_PATH, log, DAY, WEEK, MONTH, \
+    DAY_TOPPERS_URL_PART_1, DAY_TOPPERS_URL_PART_2, WEEK_TOPPERS_URL_PART_1, \
+    WEEK_TOPPERS_URL_PART_2, MONTH_TOPPERS_URL_PART_1, MONTH_TOPPERS_URL_PART_2
 
 
 #
@@ -57,12 +58,10 @@ class Main(object):
         if date > datetime.now() or date < datetime(2006, 1, 1):
             date = datetime.now()
 
-        date_now = datetime.now()
-
         # days
-        # https://api-live.dumpert.nl/mobile_api/json/video/top5/dag/2019-09-18/
-        daily_toppers_url = DAY_TOPPERS_URL + date.strftime('%Y-%m-%d')
-
+        daily_toppers_url = DAY_TOPPERS_URL_PART_1 + date.strftime('%Y-%m-%d') + DAY_TOPPERS_URL_PART_2
+        
+        date_now = datetime.now()
         delta = date_now - date
         days_deducted_from_today = delta.days
 
@@ -79,13 +78,8 @@ class Main(object):
         self.add_folder(parameters, title)
 
         # weeks.
-        # Here we do something a bit odd.
-        # For some reason date.strftime('%Y%W') will now contain the weeknumber of last (!) week and not this week
-        # Let's add a week to fix that for the url and the title
-        date_plus_a_week = date + timedelta(days=7)
-        # https://api-live.dumpert.nl/mobile_api/json/video/top5/week/201938/
-        weekly_toppers_url = WEEK_TOPPERS_URL + date_plus_a_week.strftime('%Y%W')
-        title = LANGUAGE(30511) % (date_plus_a_week.strftime('%W'), date_plus_a_week.strftime('%Y'))
+        weekly_toppers_url = WEEK_TOPPERS_URL_PART_1 + date.strftime('%Y%W') + WEEK_TOPPERS_URL_PART_2
+        title = LANGUAGE(30511) % (date.strftime('%W'), date.strftime('%Y'))
 
         delta = date_now - date
         days_deducted_from_today = delta.days
@@ -102,8 +96,7 @@ class Main(object):
         self.add_folder(parameters, title)
 
         # months
-        # https://api-live.dumpert.nl/mobile_api/json/video/top5/maand/201909/
-        monthly_toppers_url = MONTH_TOPPERS_URL +  date.strftime('%Y%m')
+        monthly_toppers_url = MONTH_TOPPERS_URL_PART_1 +  date.strftime('%Y%m') + MONTH_TOPPERS_URL_PART_2
 
         delta = date_now - date
         days_deducted_from_today = delta.days

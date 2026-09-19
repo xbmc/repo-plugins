@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Dumpert
 # Addon id: plugin.video.dumpert
 msgid ""
@@ -24,8 +24,8 @@ msgid "Watch funny videos from Dumpert.nl (dutch)"
 msgstr "Bekijk grappige filmpjes van Dumpert.nl (dutch)"
 
 msgctxt "Addon Disclaimer"
-msgid "For bugs, requests or general questions visit the Dumpert.nl thread on the XBMC forum."
-msgstr "Bugs of andere feedback op deze plugin kan geplaatst worden in de Dumpert.nl thread op het XBMC forum."
+msgid "For bugs, requests or general questions visit the Dumpert.nl thread on the Kodi forum."
+msgstr "Bugs of andere feedback op deze plugin kan geplaatst worden in de Dumpert.nl thread op het Kodi forum."
 
 msgctxt "#30000"
 msgid "Top"
@@ -33,15 +33,15 @@ msgstr "Toppers"
 
 msgctxt "#30001"
 msgid "New"
-msgstr "Filmpjes"
+msgstr "Nieuw"
 
 msgctxt "#30004"
 msgid "Search"
 msgstr "Zoeken"
 
 msgctxt "#30005"
-msgid "Top Time machine (daily/weekly/montly Toppers)"
-msgstr "Toppers Tijdmachine: Toppers per dag/week/maand"
+msgid "Top Time machine (daily/weekly/monthly Top)"
+msgstr "Toppers Tijdmasjien: Toppers per dag/week/maand"
 
 msgctxt "#30007"
 msgid "Dumpert TV"
@@ -58,6 +58,10 @@ msgstr "Wekelijkse Toppers"
 msgctxt "#30010"
 msgid "Monthly Top"
 msgstr "Maandelijkse Toppers"
+
+msgctxt "#30011"
+msgid "Top Now"
+msgstr "Toppers Nu"
 
 msgctxt "#30100"
 msgid "Version"
@@ -144,16 +148,16 @@ msgid "Pick a date"
 msgstr "Kies een datum"
 
 msgctxt "#30510"
-msgid "Day top for day %s"
-msgstr "Dagtop voor dag %s"
+msgid "Daily top for day %s"
+msgstr "Toppers voor dag %s"
 
 msgctxt "#30511"
-msgid "Week top for week %s %s"
-msgstr "Weektop voor week %s %s"
+msgid "Weekly top for week %s %s"
+msgstr "Toppers voor week %s %s"
 
 msgctxt "#30512"
-msgid "Month top for month %s"
-msgstr "Maandtop voor maand %s"
+msgid "Monthly top for month %s"
+msgstr "Toppers voor maand %s"
 
 msgctxt "#30600"
 msgid "Show NSFW content"

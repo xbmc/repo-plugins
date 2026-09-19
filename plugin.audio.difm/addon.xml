@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.difm" name="DI.FM" version="1.0.0" provider-name="Édouard Duliège">
+  <requires>
+    <import addon="xbmc.python" version="3.0.1"/>
+    <import addon="script.module.requests" version="2.22.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py"><provides>audio</provides></extension>
+  <extension point="xbmc.service" library="service.py"/>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Unofficial DI.FM client for Kodi</summary>
+    <summary lang="fr_FR">Client DI.FM non officiel pour Kodi</summary>
+    <description lang="en_GB">Listen to DI.FM with your AudioAddict account. Browse all channels, styles, popular and new channels, synchronize favorites, select Premium audio quality, and use Kodi's native player controls.</description>
+    <description lang="fr_FR">Écoutez DI.FM avec votre compte AudioAddict. Parcourez toutes les chaînes, les styles, les chaînes populaires et nouvelles, synchronisez vos favoris, choisissez la qualité audio Premium et utilisez les contrôles natifs de Kodi.</description>
+    <disclaimer lang="en_GB">Unofficial community add-on. Requires a valid AudioAddict/DI.FM account. Not affiliated with, endorsed by, or supported by DI.FM or AudioAddict.</disclaimer>
+    <disclaimer lang="fr_FR">Extension communautaire non officielle. Nécessite un compte AudioAddict/DI.FM valide. Sans affiliation avec DI.FM ou AudioAddict, et non approuvée ni prise en charge par eux.</disclaimer>
+    <platform>all</platform>
+    <license>GPL-3.0-or-later</license>
+    <source>https://github.com/edouardduliege/kodi-addon-difm</source>    
+    <website>https://www.di.fm/</website>
+    <news>v1.0.0 (2026-09-17) - Initial public release. Linear DI.FM playback, favorites, Premium quality selection, dynamic Now Playing metadata, session reuse and English/French localisation.</news>
+    <assets><icon>resources/icon.png</icon><fanart>resources/fanart.jpg</fanart></assets>
+  </extension>
+</addon>

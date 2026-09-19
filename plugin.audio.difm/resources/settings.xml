@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings version="1">
+  <section id="plugin.audio.difm">
+    <category id="account" label="32000">
+      <group id="credentials">
+        <setting id="email" type="string" label="32001">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="edit" format="string">
+            <heading>32001</heading>
+          </control>
+        </setting>
+
+        <setting id="password" type="string" label="32002">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="edit" format="string">
+            <heading>32002</heading>
+            <hidden>true</hidden>
+          </control>
+        </setting>
+      </group>
+
+      <group id="playback">
+        <setting id="quality" type="string" label="32003">
+          <level>0</level>
+          <default>Ultra</default>
+          <constraints>
+            <options>
+              <option label="32004">Medium</option>
+              <option label="32005">High</option>
+              <option label="32006">Ultra</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+      </group>
+    </category>
+  </section>
+</settings>

@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Dumpert
 # Addon id: plugin.image.dumpert
 msgid ""
@@ -17,11 +17,11 @@ msgstr ""
 
 msgctxt "Addon Summary"
 msgid "Watch funny images from Dumpert.nl (dutch)"
-msgstr "Bekijk grappige plaatjes van Dumpert.nl (dutch)"
+msgstr "Bekijk grappige afbeeldingen van Dumpert.nl (dutch)"
 
 msgctxt "Addon Description"
 msgid "Watch funny photos from Dumpert.nl (dutch)"
-msgstr "Bekijk grappige plaatjes van Dumpert.nl (dutch)"
+msgstr "Bekijk grappige afbeeldingen van Dumpert.nl (dutch)"
 
 msgctxt "Addon Disclaimer"
 msgid "For bugs, requests or general questions visit the Dumpert.nl thread on the Kodi forum."
@@ -33,15 +33,15 @@ msgstr "Toppers"
 
 msgctxt "#30001"
 msgid "New"
-msgstr "Images"
+msgstr "Nieuw"
 
 msgctxt "#30004"
 msgid "Search"
 msgstr "Zoeken"
 
 msgctxt "#30005"
-msgid "Top Time machine (daily/weekly/montly Toppers)"
-msgstr "Toppers Tijdmachine: Toppers per dag/week/maand"
+msgid "Top Time machine (daily/weekly/monthly Toppers)"
+msgstr "Toppers Tijdmasjien: Toppers per dag/week/maand"
 
 msgctxt "#30007"
 msgid "Dumpert TV"
@@ -89,7 +89,7 @@ msgstr "MPlayer"
 
 msgctxt "#30300"
 msgid "Image quality"
-msgstr "Plaatjes kwaliteit"
+msgstr "Afbeelding kwaliteit"
 
 msgctxt "#30301"
 msgid "Low"
@@ -121,15 +121,15 @@ msgstr "Volgende pagina"
 
 msgctxt "#30504"
 msgid "Getting image location..."
-msgstr "Plaatje wordt opgehaald..."
+msgstr "Afbeelding wordt opgehaald..."
 
 msgctxt "#30505"
 msgid "No image found."
-msgstr "Plaatje niet gevonden."
+msgstr "Afbeelding niet gevonden."
 
 msgctxt "#30506"
 msgid "Error showing image file."
-msgstr "Fout bij het laten zien van het plaatje."
+msgstr "Fout bij het laten zien van de afbeelding."
 
 msgctxt "#30507"
 msgid "Error getting page: %s"
@@ -144,24 +144,24 @@ msgid "Pick a date"
 msgstr "Kies een datum"
 
 msgctxt "#30510"
-msgid "Day top for day %s"
-msgstr "Dagtop voor dag %s"
+msgid "Daily top for day %s"
+msgstr "Dagelijkse Toppers voor dag %s"
 
 msgctxt "#30511"
-msgid "Week top for week %s %s"
-msgstr "Weektop voor week %s %s"
+msgid "Weekly top for week %s %s"
+msgstr "Wekelijkse Toppers voor week %s %s"
 
 msgctxt "#30512"
-msgid "Month top for month %s"
-msgstr "Maandtop voor maand %s"
+msgid "Monthly top for month %s"
+msgstr "Maandelijkse Toppers voor maand %s"
 
 msgctxt "#30600"
 msgid "Show NSFW content"
-msgstr "Toon NSFW filmpjes"
+msgstr "Toon NSFW afbeeldingen"
 
 msgctxt "#30610"
-msgid "Only show New image category"
-msgstr "Toon alleen Nieuw plaatje categorie"
+msgid "Only show New category"
+msgstr "Toon alleen Nieuw categorie"
 
 msgctxt "#30620"
 msgid "Refresh page"

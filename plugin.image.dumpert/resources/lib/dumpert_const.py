@@ -16,17 +16,24 @@ LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon(id=ADDON).getAddonInfo('path'), 'resources')
 LATEST_URL = "https://api-live.dumpert.nl/mobile_api/json/foto/latest/0/"
 TOPPERS_URL = "https://api-live.dumpert.nl/mobile_api/json/foto/toppers/0/"
-SEARCH_URL = "https://api-live.dumpert.nl/mobile_api/json/search/"
+INITIAL_PAGE_NUMBER = "0"
+# "https://api-live.dumpert.nl/mobile_api/json/search/<search-term>/<page-number>/"
+# In between part 1 and 2 there will be a search term
+# In between part 2 and 3 there will be a page number, the first one will be "0"
+SEARCH_URL_PART_1 = "https://api-live.dumpert.nl/mobile_api/json/search/"
+SEARCH_URL_PART_2 = "/"
+SEARCH_URL_PART_3 = "/"
 DAY_TOPPERS_URL = "https://api-live.dumpert.nl/mobile_api/json/foto/top5/dag/"
 WEEK_TOPPERS_URL = "https://api-live.dumpert.nl/mobile_api/json/foto/top5/week/"
 MONTH_TOPPERS_URL = "https://api-live.dumpert.nl/mobile_api/json/foto/top5/maand/"
 SFW_HEADERS = {'X-Dumpert-NSFW': '0'}
 NSFW_HEADERS = {'X-Dumpert-NSFW': '1'}
+HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 DAY = "day"
 WEEK = "week"
 MONTH = "month"
-DATE = "2019-09-21"
-VERSION = "1.0.4"
+DATE = "2026-09-16"
+VERSION = "1.0.5"
 
 
 if sys.version_info[0] > 2:

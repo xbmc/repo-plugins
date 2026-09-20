@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.retrospect"
-        version="5.7.38"
+        version="5.7.39"
         name="Retrospect"
         provider-name="Bas Rieter">
 
@@ -133,8 +133,8 @@
         <platform>all</platform>
         <license>GPL-3.0-or-later</license>
         <language>en nl de sv no lt lv fi</language>
-        <news>[B]Retrospect v5.7.38 - Changelog - 2026-09-19[/B]
-Fixed NPO playback and De Schatkamer listing and removed play.tv.
+        <news>[B]Retrospect v5.7.39 - Changelog - 2026-09-20[/B]
+This is a quick patch for some minor NPO related issues.
 
 [B]Framework related[/B]
 * Fixed: Don&#x27;t allow `zstd` as compression.
@@ -143,12 +143,14 @@ Fixed NPO playback and De Schatkamer listing and removed play.tv.
 _None_
 
 [B]Channel related[/B]
+* Fixed: NPO changed player DRM (Fixes #1989 and Fixes #1993). Needs latest Widevine.
+* Fixed: NPO profiles.
 * Fixed: De Schatkamer listing of some series.
-* Fixed: NPO changed player DRM (Fixes #1989). Needs latest Widevine.
 * Fixed: NPO Radio playback.
 * Fixed: NPO EPG listings.
 * Fixed: De Schatkamer added Widevine DRM for HLS.
 * Changed: Disabled `play.tv`.
+
         </news>
         <assets>
             <icon>resources/media/icon.png</icon>

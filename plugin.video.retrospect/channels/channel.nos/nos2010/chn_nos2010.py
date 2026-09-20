@@ -534,13 +534,14 @@ class Channel(chn_class.Channel):
         #     layoutId=home&partyId=1%3Ambsf8b0g%3A15625624970147ebb696ae0a9768d49
         #     profileGuid=0dba0d55-640e-4e70-9b00-1449816f13cf&
         #     subscriptionType=free
+
         profile_content_url = (
             f"https://npo.nl/start/api/domain/recommendation-layout?"
             f"partyId=1&"
             f"layoutId=home&"
             f"partyId=1&"
             f"profileGuid={profile_id}&"
-            # f"subscriptionType=free"
+            f"subscriptionType={'premium' if self.__has_premium() else 'free'}&"
             f"layoutType=RECOMMENDATION"
         )
 
@@ -566,7 +567,7 @@ class Channel(chn_class.Channel):
             f"collectionId={folder_key}&"
             # f"partyId=1%3Alp08hirt%3A2c8e90d7048a467babf108e0146ad52d&"
             f"profileGuid={profile_id}&"
-            # f"subscriptionType=free"
+            f"subscriptionType={'premium' if self.__has_premium() else 'free'}&"
             f"layoutType=RECOMMENDATION"
         )
         title_key = folder_key.rsplit("-", 2)[0]

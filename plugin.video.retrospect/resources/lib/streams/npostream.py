@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 from typing import Optional
 
+from resources.lib.helpers.encodinghelper import EncodingHelper
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.streams.m3u8 import M3u8
 from resources.lib.streams.mpd import Mpd
@@ -53,19 +54,21 @@ class NpoStream(object):
         """
 
         if url:
-            Logger.info("Determining MPD streams for url: %s", url)
+            Logger.info("NPO-Stream: Determining MPD streams for url: %s", url)
             episode_id = url.split("/")[-1]
         elif episode_id:
-            Logger.info("Determining MPD streams for VideoId: %s", episode_id)
+            Logger.info("NPO-Stream: Determining MPD streams for VideoId: %s", episode_id)
         else:
-            Logger.error("No url or streamId specified!")
+            Logger.error("NPO-Stream: No url or streamId specified!")
             return None
 
         if use_post:
             token_data = {"productId": episode_id}
-            token = UriHandler.open("https://npo.nl/start/api/domain/player-token", json=token_data)
+            token = UriHandler.open(
+                "https://npo.nl/start/api/domain/player-token", json=token_data, no_cache=True)
         else:
-            token = UriHandler.open(f"https://npo.nl/start/api/domain/player-token?productId={episode_id}", no_cache=True)
+            token = UriHandler.open(
+                f"https://npo.nl/start/api/domain/player-token?productId={episode_id}", no_cache=True)
 
         token_json = JsonHelper(token)
         token_value = token_json.get_value("jwt")
@@ -76,7 +79,8 @@ class NpoStream(object):
             "drmType": "widevine",
             "referrerUrl": "https://npo.nl/"
         }
-        data = UriHandler.open("https://prod.npoplayer.nl/stream-link", json=video_data, additional_headers=video_headers)
+        data = UriHandler.open(
+            "https://prod.npoplayer.nl/stream-link", json=video_data, additional_headers=video_headers, no_cache=True)
         video_info = JsonHelper(data)
 
         status = video_info.get_value("status", fallback=0)
@@ -86,29 +90,42 @@ class NpoStream(object):
 
         stream_url = video_info.get_value("stream", "streamURL")
         drm_info = video_info.get_value("stream", "drm", fallback=None)
+        drm_token = None
+        drm_license_url = None
+        drm_certificate = None
+        drm_headers = {}
+
         if drm_info:
-            drm_token = video_info.get_value("stream", "drm", "drmToken")
-            drm_license_url = video_info.get_value("stream", "drm", "licenseUrl")
-        else:
-            drm_token = None
-            drm_license_url = None
+            drm_token = drm_info.get("drmToken", None)
+            drm_license_url = drm_info.get("licenseUrl", None)
+            drm_certificate = drm_info.get("certificateUrl", None)
+            drm_headers = drm_info.get("httpHeaders", {})
 
         # Encryption?
         if drm_token:
-            Logger.info(f"Using encrypted Dash with Token for NPO")
+            Logger.info(f"NPO-Stream: Using encrypted Dash with Token for NPO")
             drm_url = f"https://npo-drm-gateway.samgcloud.nepworldwide.nl/authentication?custom_data={drm_token}"
-            Logger.info("Using encrypted Dash for NPO")
+            Logger.info("NPO-Stream: Using encrypted Dash for NPO")
             license_key = "{0}|{1}|R{{SSM}}|".format(drm_url, "")
 
         elif drm_license_url:
-            Logger.info(f"Using encrypted Dash with License Key for NPO: {drm_license_url}")
-            license_key = Mpd.get_license_key(drm_license_url, key_type="R", key_headers={
+            Logger.info(f"NPO-Stream: Using encrypted Dash with License Key for NPO: {drm_license_url}")
+            key_headers = {
                 "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
                 "origin": "https://npo.nl",
                 "referer": "https://npo.nl/",
-            })
+            }
+            if drm_headers:
+                Logger.info(f"NPO-Stream: Adding custom headers: {','.join(drm_headers.keys())}")
+                key_headers.update(drm_headers)
+            license_key = Mpd.get_license_key(drm_license_url, key_type="R", key_headers=key_headers)
+
+            if drm_certificate:
+                Logger.info(f"NPO-Stream: Received DRM Server Certificate {drm_certificate}.")
+                cert_data = UriHandler.open(drm_certificate)
+                drm_certificate = EncodingHelper.encode_base64(cert_data).decode('ascii')
         else:
-            Logger.info("Using non-encrypted Dash for NPO")
+            Logger.info("NPO-Stream: Using non-encrypted Dash for NPO")
             license_key = None
 
         # Actually set the stream
@@ -116,6 +133,7 @@ class NpoStream(object):
         Mpd.set_input_stream_addon_input(stream,
                                          headers,
                                          license_key=license_key,
+                                         service_certificate=drm_certificate,
                                          manifest_update_params=None if not live else "full")
         return None
 
@@ -137,12 +155,12 @@ class NpoStream(object):
         """
 
         if url:
-            Logger.info("Determining streams for url: %s", url)
+            Logger.info("NPO-Stream: Determining streams for url: %s", url)
             episode_id = url.split("/")[-1]
         elif episode_id:
-            Logger.info("Determining streams for VideoId: %s", episode_id)
+            Logger.info("NPO-Stream: Determining streams for VideoId: %s", episode_id)
         else:
-            Logger.error("No url or streamId specified!")
+            Logger.error("NPO-Stream: No url or streamId specified!")
             return []
 
         # we need an hash code
@@ -161,13 +179,13 @@ class NpoStream(object):
         Logger.trace(stream_infos)
         streams = []
         for stream_info in stream_infos:
-            Logger.debug("Found stream info: %s", stream_info)
+            Logger.debug("NPO-Stream: Found stream info: %s", stream_info)
             if stream_info["format"] == "mp3":
                 streams.append((stream_info["url"], 0))
                 continue
 
             elif stream_info["contentType"] == "live":
-                Logger.debug("Found live stream")
+                Logger.debug("NPO-Stream: Found live stream")
                 url = stream_info["url"]
                 url = url.replace("jsonp", "json")
                 live_url_data = UriHandler.open(url, additional_headers=headers)

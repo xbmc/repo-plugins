@@ -1,0 +1,7 @@
+v1.0.0
+- First release.
+- Browse by speaker (A-Z and search) and by book and chapter of the Bible.
+- Random sermon.
+- Audio and video, with subtitles where they exist.
+- Streams from the Internet Archive by default; SermonIndex CDN is a setting,
+  and is used automatically for the ~2,700 sermons the Archive does not hold.

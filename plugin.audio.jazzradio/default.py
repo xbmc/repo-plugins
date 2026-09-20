@@ -302,10 +302,7 @@ def run():
         client = AudioAddictClient()
 
         if action == "root":
-            if (
-                not client.has_credentials()
-                and not client.has_cached_session()
-            ):
+            if not client.has_credentials():
                 xbmcgui.Dialog().ok(
                     "JazzRadio",
                     t(32030),

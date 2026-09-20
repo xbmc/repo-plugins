@@ -11,6 +11,7 @@ import xbmc
 import xbmcaddon
 import xbmcvfs
 import tempfile
+import uuid
 from contextlib import contextmanager
 
 ADDON_ID = "plugin.audio.jazzradio"
@@ -23,18 +24,122 @@ def _state_path():
     os.makedirs(profile, exist_ok=True)
     return Path(profile) / "playback_state.json"
 
+_LOCK_STALE_AFTER = 30.0
+
+
+def _pid_is_running(pid):
+    """Return False only when the recorded lock owner is known to be gone."""
+    if not isinstance(pid, int) or pid <= 0:
+        return False
+    if pid == os.getpid():
+        return True
+
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    except OSError:
+        # On platforms where probing another PID is not reliable, avoid
+        # deleting a potentially live lock solely on that basis.
+        return True
+    return True
+
+
+def _lock_owner(lock_path):
+    """Read lock-owner metadata, returning an empty dict if unavailable."""
+    try:
+        data = json.loads(
+            (lock_path / "owner.json").read_text(encoding="utf-8")
+        )
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def _lock_is_stale(lock_path):
+    """Whether an abandoned playback-state lock can safely be recovered."""
+    owner = _lock_owner(lock_path)
+
+    try:
+        pid = int(owner.get("pid", 0))
+    except (TypeError, ValueError):
+        pid = 0
+
+    if pid and not _pid_is_running(pid):
+        return True
+
+    try:
+        created_at = float(owner.get("created_at", 0))
+    except (TypeError, ValueError):
+        created_at = 0
+
+    try:
+        reference_time = created_at or lock_path.stat().st_mtime
+    except OSError:
+        return False
+
+    return time.time() - reference_time > _LOCK_STALE_AFTER
+
+
+def _remove_lock(lock_path, token=None):
+    """Remove a lock, optionally only when it is still owned by token."""
+    if token is not None:
+        owner = _lock_owner(lock_path)
+        if owner.get("token") != token:
+            return False
+
+    try:
+        (lock_path / "owner.json").unlink()
+    except FileNotFoundError:
+        pass
+
+    try:
+        lock_path.rmdir()
+        return True
+    except FileNotFoundError:
+        return True
+    except OSError:
+        return False
+
+
 @contextmanager
 def _state_lock(timeout=1.0):
-    """Serialize state writers across Kodi plugin/service processes."""
+    """Serialize state writers and recover locks left by terminated owners."""
     path = _state_path()
     lock_path = path.with_suffix(".lock")
     deadline = time.monotonic() + timeout
+    token = uuid.uuid4().hex
 
     while True:
         try:
             lock_path.mkdir()
+            try:
+                (lock_path / "owner.json").write_text(
+                    json.dumps(
+                        {
+                            "pid": os.getpid(),
+                            "created_at": time.time(),
+                            "token": token,
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+            except Exception:
+                _remove_lock(lock_path)
+                raise
             break
         except FileExistsError:
+            if _lock_is_stale(lock_path):
+                if _remove_lock(lock_path):
+                    xbmc.log(
+                        "[plugin.audio.jazzradio] recovered stale "
+                        "playback-state lock",
+                        xbmc.LOGWARNING,
+                    )
+                    continue
+
             if time.monotonic() >= deadline:
                 raise TimeoutError("Timed out waiting for playback-state lock")
             time.sleep(0.02)
@@ -42,10 +147,7 @@ def _state_lock(timeout=1.0):
     try:
         yield
     finally:
-        try:
-            lock_path.rmdir()
-        except Exception:
-            pass
+        _remove_lock(lock_path, token=token)
 
 def load_state():
     """Load playback state, returning an empty dict if unavailable."""

@@ -456,21 +456,35 @@ class AudioAddictClient:
         """Return a reachable linear stream URL, with server fallback."""
         servers = self._playlist_servers(channel_key)
 
+        # Probe with a streamed GET rather than HEAD. Some AudioAddict stream
+        # nodes reject HEAD even though they are perfectly playable. With
+        # stream=True, requests only needs the response headers here; it does
+        # not download the audio body before we close the probe response.
         for server in servers:
+            response = None
             try:
-                response = self.http.head(
+                response = self.http.get(
                     server,
                     headers={"Icy-MetaData": "1"},
                     allow_redirects=True,
-                    timeout=6,
+                    stream=True,
+                    timeout=(6, 6),
                 )
                 if 200 <= response.status_code < 400:
                     return server, len(servers)
-            except requests.RequestException:
-                continue
 
-        # Some streaming nodes refuse HEAD although Kodi can play them.
+                self._log(
+                    f"Stream probe rejected {server} "
+                    f"(HTTP {response.status_code})"
+                )
+            except requests.RequestException as exc:
+                self._log(f"Stream probe failed for {server}: {exc}")
+            finally:
+                if response is not None:
+                    response.close()
+
         self._log(
-            "No stream server answered HEAD; using first playlist URL"
+            "No streaming server from the playlist was reachable",
+            xbmc.LOGWARNING,
         )
-        return servers[0], len(servers)
+        raise AudioAddictError(self._t(32110))

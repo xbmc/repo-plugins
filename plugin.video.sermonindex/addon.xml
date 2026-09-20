@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.sermonindex"
+       name="SermonIndex"
+       version="1.0.0"
+       provider-name="SermonIndex.net">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="main.py">
+    <provides>video audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Sermons and revival preaching from SermonIndex.net</summary>
+    <description lang="en_GB">Browse and listen to more than 36,000 sermons from over 2,100 preachers, drawn from the SermonIndex.net archive.
+
+Browse by speaker or by book of the Bible, or let it pick something at random. Audio and video are both included, with subtitles where they exist.
+
+Media streams from the Internet Archive by default, so the addon costs the SermonIndex project nothing to run. A setting lets you switch to the SermonIndex CDN if the Archive is slow where you are.
+
+SermonIndex.net is a non-profit work whose assignment is to honour and preserve the past preaching of God's Word, and to promote revival to this generation. Free to use, no account, no advertising.</description>
+    <license>GPL-3.0-or-later</license>
+    <platform>all</platform>
+    <language>en</language>
+    <website>https://www.sermonindex.net/</website>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+      <screenshot>resources/screenshot-01.jpg</screenshot>
+      <screenshot>resources/screenshot-02.jpg</screenshot>
+      <screenshot>resources/screenshot-03.jpg</screenshot>
+    </assets>
+    <news>v1.0.0 — first release. Browse by speaker and by scripture, random sermon, audio and video, subtitles where available.</news>
+  </extension>
+</addon>

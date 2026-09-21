@@ -5,7 +5,7 @@
 import urllib.parse
 
 _PLUGIN_NAME = "kodi.plugin.video.arteplussept"
-_PLUGIN_VERSION = "2.0.0"
+_PLUGIN_VERSION = "2.0.1"
 ADDON_USERAGENT = f"{_PLUGIN_NAME}%2F{_PLUGIN_VERSION}"
 
 

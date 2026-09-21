@@ -1,3 +1,7 @@
+v2.0.1 (2026-9-21)
+
+Fix compatibility with lower environment libraries.
+
 v2.0.0 (2026-8-30)
 
 - Replace xbmcswift2 routing and file-based cache with native shim; remove external dependency

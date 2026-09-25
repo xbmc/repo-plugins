@@ -15,7 +15,7 @@
     <description lang="fr_FR">Écoutez RadioTunes avec votre compte AudioAddict. Parcourez toutes les chaînes, les styles, les chaînes populaires et nouvelles, synchronisez vos favoris, choisissez la qualité audio Premium et utilisez les contrôles natifs de Kodi.</description>
     <disclaimer lang="en_GB">Unofficial community add-on. Requires a valid AudioAddict/RadioTunes account. Not affiliated with, endorsed by, or supported by RadioTunes or AudioAddict.</disclaimer>
     <disclaimer lang="fr_FR">Extension communautaire non officielle. Nécessite un compte AudioAddict/RadioTunes valide. Sans affiliation avec RadioTunes ou AudioAddict, et non approuvée ni prise en charge par eux.</disclaimer>
-    <platform>all</platform>
+    <platform>linux</platform>
     <license>GPL-3.0-or-later</license>
     <source>https://github.com/edouardduliege/kodi-addon-radiotunes</source>
     <website>https://www.radiotunes.com/</website>

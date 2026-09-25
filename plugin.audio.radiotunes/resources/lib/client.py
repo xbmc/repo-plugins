@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import os
+import tempfile
 import time
 from pathlib import Path
 from urllib.parse import quote
@@ -100,24 +101,37 @@ class AudioAddictClient:
         return None
 
     def _save_session(self, data):
-        """Persist a successful login when possible."""
+        """Persist a successful login atomically with private permissions."""
+        temp_path = None
         try:
-            self.session_path.write_text(
-                json.dumps(data, indent=2),
-                encoding="utf-8",
+            fd, name = tempfile.mkstemp(
+                dir=self.session_path.parent,
+                prefix=f".{self.session_path.name}.",
+                suffix=".tmp",
             )
-            try:
-                os.chmod(self.session_path, 0o600)
-            except Exception as exc:
-                self._log(
-                    f"Unable to restrict session cache permissions: {exc}",
-                    xbmc.LOGWARNING,
-                )
+            temp_path = Path(name)
+
+            # mkstemp() creates the file with mode 0600 on POSIX, so the
+            # session/listen keys are never briefly exposed before chmod.
+            with os.fdopen(fd, "w", encoding="utf-8") as handle:
+                json.dump(data, handle, indent=2)
+                handle.flush()
+                os.fsync(handle.fileno())
+
+            os.replace(temp_path, self.session_path)
+            temp_path = None
+
         except Exception as exc:
             self._log(
                 f"Unable to save session cache: {exc}",
                 xbmc.LOGWARNING,
             )
+        finally:
+            if temp_path is not None and temp_path.exists():
+                try:
+                    temp_path.unlink()
+                except Exception:
+                    pass
 
         self._session = data
 

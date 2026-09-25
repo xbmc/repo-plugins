@@ -236,7 +236,11 @@ def play_linear(
     channel_fanart="",
 ):
     stream_url, count = client.resolve_stream(channel)
-    current = client.current_track(channel)
+
+    # Start playback immediately once the stream is resolved. Track metadata
+    # is optional and is populated asynchronously by the background service,
+    # so a slow/unavailable metadata endpoint cannot delay audio startup.
+    current = None
 
     name = channel_name or channel
     li = music_listitem(

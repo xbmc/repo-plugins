@@ -187,7 +187,7 @@ def list_style(client, filter_id):
 def list_favorites(client):
     channels = client.favorite_channels()
     favs = {
-        c.get("id")
+        str(c.get("id"))
         for c in channels
         if c.get("id") is not None
     }

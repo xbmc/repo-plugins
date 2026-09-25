@@ -13,11 +13,11 @@
     <description lang="fr_FR">Écoutez JazzRadio avec votre compte AudioAddict. Parcourez toutes les chaînes, les styles, les chaînes populaires et nouvelles, synchronisez vos favoris, choisissez la qualité audio Premium et utilisez les contrôles natifs de Kodi.</description>
     <disclaimer lang="en_GB">Unofficial community add-on. Requires a valid AudioAddict/JazzRadio account. Not affiliated with, endorsed by, or supported by JazzRadio or AudioAddict.</disclaimer>
     <disclaimer lang="fr_FR">Extension communautaire non officielle. Nécessite un compte AudioAddict/JazzRadio valide. Sans affiliation avec JazzRadio ou AudioAddict, et non approuvée ni prise en charge par eux.</disclaimer>
-    <platform>all</platform>
+    <platform>linux</platform>
     <license>GPL-3.0-or-later</license>
     <source>https://github.com/edouardduliege/kodi-addon-jazzradio</source>
     <website>https://www.jazzradio.com/</website>
-    <news>v1.0.0 (2026-09-18) - Initial public release. Linear JazzRadio playback, favorites, Premium quality selection, dynamic Now Playing metadata, session reuse and English/French localisation.</news>
+    <news>v1.0.0 (2026-09-18) - Initial public release. Linear JazzRadio playback, favorites, Premium quality selection, dynamic Now Playing metadata, session reuse, safe concurrent playback-state handling and English/French localisation.</news>
     <assets><icon>resources/icon.png</icon><fanart>resources/fanart.jpg</fanart></assets>
   </extension>
 </addon>

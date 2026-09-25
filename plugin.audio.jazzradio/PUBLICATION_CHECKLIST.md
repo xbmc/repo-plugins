@@ -19,6 +19,15 @@
 - [x] no forced skin view
 - [x] session re-login logic on HTTP 401/403
 - [x] dynamic Now Playing tested in Kodi, web UI and Kore
+- [x] Linux platform target declared explicitly
+- [x] kernel-managed playback-state locking with `fcntl.flock()`
+- [x] session cache written atomically with restrictive permissions
+- [x] stream fallback validates PLS candidates with lightweight streamed GET probes
+- [x] playback starts without waiting for optional initial Now Playing metadata
+- [x] explicit missing-channel validation
+- [x] debug logging for swallowed metadata API errors in `current_track()`
+- [x] strict stream guard retained with debug diagnostics
+- [x] metadata polling interval set to 15 seconds
 
 ## Before the V1 public submission
 

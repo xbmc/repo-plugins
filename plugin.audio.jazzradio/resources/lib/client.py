@@ -349,7 +349,7 @@ class AudioAddictClient:
                 continue
             channel_id = item.get("channel_id", item.get("id"))
             if channel_id is not None:
-                ids.add(channel_id)
+                ids.add(str(channel_id))
 
         return ids
 
@@ -358,9 +358,9 @@ class AudioAddictClient:
         ids = self.favorite_channel_ids()
         channels = self._get("/channels", authenticated=False)
         by_id = {
-            channel.get("id"): channel
+            str(channel.get("id")): channel
             for channel in channels
-            if isinstance(channel, dict)
+            if isinstance(channel, dict) and channel.get("id") is not None
         }
         return [
             by_id[channel_id]

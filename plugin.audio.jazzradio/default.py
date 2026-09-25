@@ -55,7 +55,7 @@ def add_action(label, action, **kwargs):
 
 def add_channel(channel, favorite_ids=None):
     key = channel.get("key")
-    cid = channel.get("id")
+    cid = str(channel.get("id")) if channel.get("id") is not None else ""
     name = channel.get("name") or key
     if not key:
         return
@@ -76,13 +76,13 @@ def add_channel(channel, favorite_ids=None):
     li.setProperty("IsPlayable", "true")
 
     if cid is not None and favorite_ids is not None:
-        isfav = cid in favorite_ids
+        isfav = str(cid) in favorite_ids
         favlabel = t(32042) if isfav else t(32041)
         favaction = "favorite_remove" if isfav else "favorite_add"
         li.addContextMenuItems([
             (
                 favlabel,
-                f'RunPlugin({url_for(favaction, channel_id=str(cid), channel=key)})'
+                f'RunPlugin({url_for(favaction, channel_id=str(cid))})'
             )
         ])
 
@@ -91,7 +91,6 @@ def add_channel(channel, favorite_ids=None):
         url_for(
             "play",
             channel=key,
-            channel_id=str(cid or ""),
             channel_name=name,
             channel_art=art or "",
             channel_fanart=fanart or art or "",
@@ -109,7 +108,7 @@ def finish(content=None):
     )
 
 
-def root(client):
+def root():
     add_folder(t(32010), "all")
     add_folder(t(32011), "styles")
     add_folder(t(32012), "favorites")
@@ -230,50 +229,35 @@ def change_favorite(client, channel_id, add):
 def play_linear(
     client,
     channel,
-    channel_id,
     channel_name="",
     channel_art="",
     channel_fanart="",
 ):
-    stream_url, count = client.resolve_stream(channel)
-    current = client.current_track(channel)
+    if not channel:
+        raise AudioAddictError(t(32037))
 
+    stream_url, count = client.resolve_stream(channel)
+
+    # Start playback immediately once the stream is resolved. Track metadata
+    # is optional and is populated asynchronously by the background service.
     name = channel_name or channel
     li = music_listitem(
         channel_name=name,
-        current=current,
         stream_url=stream_url,
         channel_art=channel_art,
         channel_fanart=channel_fanart,
     )
     li.setProperty("IsPlayable", "true")
 
-    state = {
+    save_state({
         "mode": "linear",
         "channel_key": channel,
         "channel_name": name,
-        "channel_id": int(channel_id) if channel_id else None,
         "stream_url": stream_url,
         "channel_art": channel_art or "",
         "channel_fanart": channel_fanart or channel_art or "",
-        "track_id": (
-            current.get("id")
-            if isinstance(current, dict)
-            else None
-        ),
-        "title": (
-            current.get("display_title")
-            or current.get("title")
-            if isinstance(current, dict)
-            else None
-        ),
-        "artist": (
-            current.get("display_artist")
-            if isinstance(current, dict)
-            else None
-        ),
-    }
-    save_state(state)
+        "track_id": None,
+    })
 
     log(f"Resolved channel using one of {count} server(s)")
     xbmcplugin.setResolvedUrl(HANDLE, True, li)
@@ -312,7 +296,7 @@ def run():
                     HANDLE, succeeded=True, cacheToDisc=False
                 )
                 return
-            root(client)
+            root()
 
         elif action == "all":
             list_filter(client, "default")
@@ -336,7 +320,6 @@ def run():
             play_linear(
                 client,
                 params.get("channel", ""),
-                params.get("channel_id", ""),
                 params.get("channel_name", ""),
                 params.get("channel_art", ""),
                 params.get("channel_fanart", ""),

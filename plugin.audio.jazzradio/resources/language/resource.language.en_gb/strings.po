@@ -1,11 +1,11 @@
 # Kodi Media Center language file
 msgid ""
 msgstr ""
-"Project-Id-Version: plugin.audio.jazzradio 1.0.0\\n"
-"Language: en_GB\\n"
-"MIME-Version: 1.0\\n"
-"Content-Type: text/plain; charset=UTF-8\\n"
-"Content-Transfer-Encoding: 8bit\\n"
+"Project-Id-Version: plugin.audio.jazzradio 1.0.0\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 msgctxt "#32000"
 msgid "Account and playback"
@@ -59,9 +59,6 @@ msgctxt "#32015"
 msgid "New"
 msgstr "New"
 
-msgctxt "#32020"
-msgid "Connecting…"
-msgstr "Connecting…"
 
 msgctxt "#32030"
 msgid "Configure your AudioAddict email and password in the add-on settings first."

@@ -14,7 +14,7 @@ import json
 import os
 import tempfile
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit, urlunsplit
 
 import requests
 import xbmc
@@ -68,6 +68,16 @@ class AudioAddictClient:
     @staticmethod
     def _log(message, level=xbmc.LOGDEBUG):
         xbmc.log(f"[plugin.audio.radiotunes] {message}", level)
+
+
+    @staticmethod
+    def _safe_url_for_log(url):
+        """Return a URL representation without query parameters or fragments."""
+        try:
+            parts = urlsplit(str(url))
+            return urlunsplit((parts.scheme, parts.netloc, parts.path, "", ""))
+        except Exception:
+            return "<unparseable-url>"
 
     def has_credentials(self):
         """Whether account credentials are configured in Kodi settings."""
@@ -470,38 +480,74 @@ class AudioAddictClient:
         return servers
 
     def resolve_stream(self, channel_key):
-        """Return a reachable linear stream URL, with server fallback."""
+        """Return a playable linear stream URL, with bounded probing."""
         servers = self._playlist_servers(channel_key)
 
-        # Probe with a streamed GET rather than HEAD. Some AudioAddict stream
-        # nodes reject HEAD even though they are perfectly playable. With
-        # stream=True, requests only needs the response headers here; it does
-        # not download the audio body before we close the probe response.
-        for server in servers:
+        # Keep startup responsive: probe at most the first two playlist
+        # candidates with short streamed GET requests. A network error or
+        # timeout is inconclusive, so Kodi is still allowed to try that URL.
+        # An explicit HTTP rejection is treated as a negative result.
+        probe_limit = min(len(servers), 2)
+        inconclusive = []
+
+        for server in servers[:probe_limit]:
             response = None
+            safe_server = self._safe_url_for_log(server)
+
             try:
                 response = self.http.get(
                     server,
                     headers={"Icy-MetaData": "1"},
                     allow_redirects=True,
                     stream=True,
-                    timeout=(6, 6),
+                    timeout=(2, 2),
                 )
+
                 if 200 <= response.status_code < 400:
                     return server, len(servers)
 
                 self._log(
-                    f"Stream probe rejected {server} "
+                    f"Stream probe rejected {safe_server} "
                     f"(HTTP {response.status_code})"
                 )
+
             except requests.RequestException as exc:
-                self._log(f"Stream probe failed for {server}: {exc}")
+                inconclusive.append(server)
+                self._log(
+                    f"Stream probe inconclusive for {safe_server}: "
+                    f"{type(exc).__name__}"
+                )
+
             finally:
                 if response is not None:
                     response.close()
 
+        # A timeout or connection failure does not prove that Kodi cannot play
+        # the stream. Let Kodi try the first inconclusive candidate directly.
+        if inconclusive:
+            fallback = inconclusive[0]
+            self._log(
+                "Using an inconclusive stream candidate after bounded probing: "
+                f"{self._safe_url_for_log(fallback)}",
+                xbmc.LOGDEBUG,
+            )
+            return fallback, len(servers)
+
+        # If the probed candidates were explicitly rejected but further
+        # playlist servers exist, avoid probing the whole list serially and
+        # let Kodi try the next unprobed candidate directly.
+        if len(servers) > probe_limit:
+            fallback = servers[probe_limit]
+            self._log(
+                "Using an unprobed stream candidate after bounded probing: "
+                f"{self._safe_url_for_log(fallback)}",
+                xbmc.LOGDEBUG,
+            )
+            return fallback, len(servers)
+
         self._log(
-            "No streaming server from the playlist was reachable",
+            "All probed streaming servers were explicitly rejected",
             xbmc.LOGWARNING,
         )
         raise AudioAddictError(self._t(32110))
+

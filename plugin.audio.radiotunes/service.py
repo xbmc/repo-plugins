@@ -4,10 +4,20 @@ from __future__ import annotations
 
 import xbmc
 import xbmcgui
+from urllib.parse import urlsplit, urlunsplit
 
 from resources.lib.client import AudioAddictClient, AudioAddictError
 from resources.lib.helpers import image_url
 from resources.lib.state import load_state, update_state_if_current
+
+
+def safe_url_for_log(url):
+    """Return a URL representation without query parameters or fragments."""
+    try:
+        parts = urlsplit(str(url))
+        return urlunsplit((parts.scheme, parts.netloc, parts.path, "", ""))
+    except Exception:
+        return "<unparseable-url>"
 
 def update_linear_metadata(client, player, state):
     channel = state.get("channel_key")
@@ -28,7 +38,15 @@ def update_linear_metadata(client, player, state):
         return
 
     try:
-        if player.getPlayingFile() != state.get("stream_url"):
+        playing_file = player.getPlayingFile()
+        expected_stream = state.get("stream_url")
+        if playing_file != expected_stream:
+            xbmc.log(
+                "[plugin.audio.radiotunes] playing stream mismatch: "
+                f"getPlayingFile={safe_url_for_log(playing_file)!r}, "
+                f"state_stream_url={safe_url_for_log(expected_stream)!r}",
+                xbmc.LOGDEBUG,
+            )
             return
     except Exception:
         return
@@ -96,7 +114,15 @@ def update_linear_metadata(client, player, state):
         item.setArt(art)
 
     try:
-        if player.getPlayingFile() != state.get("stream_url"):
+        playing_file = player.getPlayingFile()
+        expected_stream = state.get("stream_url")
+        if playing_file != expected_stream:
+            xbmc.log(
+                "[plugin.audio.radiotunes] playing stream mismatch before metadata update: "
+                f"getPlayingFile={safe_url_for_log(playing_file)!r}, "
+                f"state_stream_url={safe_url_for_log(expected_stream)!r}",
+                xbmc.LOGDEBUG,
+            )
             return
     except Exception:
         return
@@ -110,9 +136,6 @@ def update_linear_metadata(client, player, state):
         channel,
         {
             "track_id": current.get("id"),
-            "title": title,
-            "artist": artist,
-            "track_art": thumb or "",
         },
     )
 
@@ -132,7 +155,7 @@ def main():
     client = None
 
     while not monitor.abortRequested():
-        if monitor.waitForAbort(10):
+        if monitor.waitForAbort(15):
             break
 
         try:
@@ -157,6 +180,12 @@ def main():
                 continue
 
             if playing_file != expected_stream:
+                xbmc.log(
+                    "[plugin.audio.radiotunes] playing stream mismatch in service loop: "
+                    f"getPlayingFile={safe_url_for_log(playing_file)!r}, "
+                f"state_stream_url={safe_url_for_log(expected_stream)!r}",
+                    xbmc.LOGDEBUG,
+                )
                 continue
 
             if client is None:

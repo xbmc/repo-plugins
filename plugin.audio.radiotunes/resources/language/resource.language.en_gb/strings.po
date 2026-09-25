@@ -59,9 +59,6 @@ msgctxt "#32015"
 msgid "New"
 msgstr "New"
 
-msgctxt "#32020"
-msgid "Connecting…"
-msgstr "Connecting…"
 
 msgctxt "#32030"
 msgid "Configure your AudioAddict email and password in the add-on settings first."

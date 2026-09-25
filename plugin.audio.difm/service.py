@@ -28,7 +28,14 @@ def update_linear_metadata(client, player, state):
         return
 
     try:
-        if player.getPlayingFile() != state.get("stream_url"):
+        playing_file = player.getPlayingFile()
+        expected_stream = state.get("stream_url")
+        if playing_file != expected_stream:
+            xbmc.log(
+                "[plugin.audio.difm] playing stream mismatch: "
+                f"getPlayingFile={playing_file!r}, state_stream_url={expected_stream!r}",
+                xbmc.LOGDEBUG,
+            )
             return
     except Exception:
         return
@@ -96,7 +103,14 @@ def update_linear_metadata(client, player, state):
         item.setArt(art)
 
     try:
-        if player.getPlayingFile() != state.get("stream_url"):
+        playing_file = player.getPlayingFile()
+        expected_stream = state.get("stream_url")
+        if playing_file != expected_stream:
+            xbmc.log(
+                "[plugin.audio.difm] playing stream mismatch before metadata update: "
+                f"getPlayingFile={playing_file!r}, state_stream_url={expected_stream!r}",
+                xbmc.LOGDEBUG,
+            )
             return
     except Exception:
         return
@@ -110,9 +124,6 @@ def update_linear_metadata(client, player, state):
         channel,
         {
             "track_id": current.get("id"),
-            "title": title,
-            "artist": artist,
-            "track_art": thumb or "",
         },
     )
 
@@ -132,7 +143,7 @@ def main():
     client = None
 
     while not monitor.abortRequested():
-        if monitor.waitForAbort(10):
+        if monitor.waitForAbort(15):
             break
 
         try:
@@ -157,6 +168,11 @@ def main():
                 continue
 
             if playing_file != expected_stream:
+                xbmc.log(
+                    "[plugin.audio.difm] playing stream mismatch in service loop: "
+                    f"getPlayingFile={playing_file!r}, state_stream_url={expected_stream!r}",
+                    xbmc.LOGDEBUG,
+                )
                 continue
 
             if client is None:

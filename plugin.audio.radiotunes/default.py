@@ -55,7 +55,7 @@ def add_action(label, action, **kwargs):
 
 def add_channel(channel, favorite_ids=None):
     key = channel.get("key")
-    cid = channel.get("id")
+    cid = str(channel.get("id")) if channel.get("id") is not None else ""
     name = channel.get("name") or key
     if not key:
         return
@@ -76,7 +76,7 @@ def add_channel(channel, favorite_ids=None):
     li.setProperty("IsPlayable", "true")
 
     if cid is not None and favorite_ids is not None:
-        isfav = cid in favorite_ids
+        isfav = str(cid) in favorite_ids
         favlabel = t(32042) if isfav else t(32041)
         favaction = "favorite_remove" if isfav else "favorite_add"
         li.addContextMenuItems([

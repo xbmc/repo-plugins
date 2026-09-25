@@ -5,6 +5,7 @@ from __future__ import annotations
 import fcntl
 import json
 import os
+import shutil
 import tempfile
 import time
 from contextlib import contextmanager
@@ -35,6 +36,25 @@ def _state_lock(timeout=1.0):
     """
     path = _state_path()
     lock_path = path.with_suffix(".lock")
+
+    # Older releases used a directory as the lock. A crash could leave that
+    # directory behind permanently. Remove it once before switching to the
+    # kernel-managed flock file used by current releases.
+    if lock_path.is_dir():
+        try:
+            shutil.rmtree(lock_path)
+            xbmc.log(
+                "[plugin.audio.difm] removed legacy playback-state lock directory",
+                xbmc.LOGDEBUG,
+            )
+        except FileNotFoundError:
+            pass
+        except OSError as exc:
+            if lock_path.is_dir():
+                raise OSError(
+                    f"Unable to remove legacy playback-state lock directory: {exc}"
+                )
+
     deadline = time.monotonic() + timeout
 
     with open(lock_path, "a+", encoding="utf-8") as handle:

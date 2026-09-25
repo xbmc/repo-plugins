@@ -13,7 +13,6 @@ from __future__ import annotations
 import json
 import os
 import tempfile
-import time
 from pathlib import Path
 from urllib.parse import quote
 
@@ -83,9 +82,6 @@ class AudioAddictClient:
         value = f"{email}\0{password}".encode("utf-8")
         return hashlib.sha256(value).hexdigest()
 
-    def has_cached_session(self):
-        """Whether a reusable AudioAddict session is available locally."""
-        return bool(self._session and self._session.get("session_key"))
 
     def _load_session(self):
         """Load the cached API session from the add-on profile."""
@@ -197,7 +193,6 @@ class AudioAddictClient:
             "user_id": body.get("member_id"),
             "session_key": body.get("key"),
             "listen_key": member.get("listen_key"),
-            "saved_at": int(time.time()),
         }
 
         if not all(
@@ -392,7 +387,11 @@ class AudioAddictClient:
         """
         try:
             now_playing = self._get("/currently_playing")
-        except AudioAddictError:
+        except AudioAddictError as exc:
+            self._log(
+                f"Unable to retrieve currently playing metadata: {exc}",
+                xbmc.LOGDEBUG,
+            )
             return None
 
         if not isinstance(now_playing, list):
@@ -418,10 +417,14 @@ class AudioAddictClient:
                     details = self._get(f"/tracks/{track_id}")
                     if isinstance(details, dict):
                         result.update(details)
-                except AudioAddictError:
+                except AudioAddictError as exc:
                     # Basic Now Playing metadata is still useful if the
                     # secondary rich-track lookup fails.
-                    pass
+                    self._log(
+                        f"Unable to retrieve detailed metadata for track "
+                        f"{track_id}: {exc}",
+                        xbmc.LOGDEBUG,
+                    )
 
             return result
 

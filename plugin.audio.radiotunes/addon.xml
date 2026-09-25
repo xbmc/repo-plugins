@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.radiotunes" name="RadioTunes" version="1.0.0" provider-name="Édouard Duliège">
+<addon id="plugin.audio.radiotunes" name="RadioTunes" version="0.9.0" provider-name="Édouard Duliège">
   <requires>
     <import addon="xbmc.python" version="3.0.1"/>
     <import addon="script.module.requests" version="2.22.0"/>
@@ -15,11 +15,11 @@
     <description lang="fr_FR">Écoutez RadioTunes avec votre compte AudioAddict. Parcourez toutes les chaînes, les styles, les chaînes populaires et nouvelles, synchronisez vos favoris, choisissez la qualité audio Premium et utilisez les contrôles natifs de Kodi.</description>
     <disclaimer lang="en_GB">Unofficial community add-on. Requires a valid AudioAddict/RadioTunes account. Not affiliated with, endorsed by, or supported by RadioTunes or AudioAddict.</disclaimer>
     <disclaimer lang="fr_FR">Extension communautaire non officielle. Nécessite un compte AudioAddict/RadioTunes valide. Sans affiliation avec RadioTunes ou AudioAddict, et non approuvée ni prise en charge par eux.</disclaimer>
-    <platform>linux</platform>
+    <platform>all</platform>
     <license>GPL-3.0-or-later</license>
     <source>https://github.com/edouardduliege/kodi-addon-radiotunes</source>
     <website>https://www.radiotunes.com/</website>
-    <news>v1.0.0 - Initial public release. Linear RadioTunes playback, favourites, Premium quality selection, dynamic Now Playing metadata, session reuse, robust stream fallback, stale-lock recovery and English/French localisation.</news>
+    <news>v0.9.0 - Pre-release test build. Linear RadioTunes playback, favourites, Premium quality selection, dynamic Now Playing metadata, session reuse, robust stream fallback and English/French localisation.</news>
     <assets>
       <icon>resources/icon.png</icon>
       <fanart>resources/fanart.jpg</fanart>

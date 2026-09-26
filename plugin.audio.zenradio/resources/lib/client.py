@@ -256,6 +256,7 @@ class AudioAddictClient:
                 url,
                 headers=headers,
                 timeout=timeout,
+                allow_redirects=False,
             )
         except requests.RequestException:
             raise AudioAddictError(self._t(32107))
@@ -269,6 +270,7 @@ class AudioAddictClient:
                     url,
                     headers=headers,
                     timeout=timeout,
+                    allow_redirects=False,
                 )
             except requests.RequestException:
                 raise AudioAddictError(self._t(32107))
@@ -296,6 +298,7 @@ class AudioAddictClient:
                 headers=headers,
                 json=payload,
                 timeout=20,
+                allow_redirects=False,
             )
         except requests.RequestException:
             raise AudioAddictError(self._t(32107))
@@ -311,6 +314,7 @@ class AudioAddictClient:
                     headers=headers,
                     json=payload,
                     timeout=20,
+                    allow_redirects=False,
                 )
             except requests.RequestException:
                 raise AudioAddictError(self._t(32107))

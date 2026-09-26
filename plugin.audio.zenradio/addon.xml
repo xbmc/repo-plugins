@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.zenradio" name="ZenRadio" version="1.0.0" provider-name="Édouard Duliège">
+  <requires>
+    <import addon="xbmc.python" version="3.0.1"/>
+    <import addon="script.module.requests" version="2.22.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.service" library="service.py"/>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Unofficial ZenRadio client for Kodi</summary>
+    <summary lang="fr_FR">Client ZenRadio non officiel pour Kodi</summary>
+    <description lang="en_GB">Listen to ZenRadio with your AudioAddict account. Browse all channels, styles, popular and new channels, synchronise favourites, select Premium audio quality, and use Kodi's native player controls.</description>
+    <description lang="fr_FR">Écoutez ZenRadio avec votre compte AudioAddict. Parcourez toutes les chaînes, les styles, les chaînes populaires et nouvelles, synchronisez vos favoris, choisissez la qualité audio Premium et utilisez les contrôles natifs de Kodi.</description>
+    <disclaimer lang="en_GB">Unofficial community add-on. Requires a valid AudioAddict/ZenRadio account. Not affiliated with, endorsed by, or supported by ZenRadio or AudioAddict.</disclaimer>
+    <disclaimer lang="fr_FR">Extension communautaire non officielle. Nécessite un compte AudioAddict/ZenRadio valide. Sans affiliation avec ZenRadio ou AudioAddict, et non approuvée ni prise en charge par eux.</disclaimer>
+    <platform>linux</platform>
+    <license>GPL-3.0-or-later</license>
+    <source>https://github.com/edouardduliege/kodi-addon-zenradio</source>
+    <website>https://www.zenradio.com/</website>
+    <news>v1.0.0 - Initial public release. ZenRadio playback, favourites, Premium quality selection, dynamic Now Playing metadata, secure session reuse, bounded stream fallback and English/French localisation.</news>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

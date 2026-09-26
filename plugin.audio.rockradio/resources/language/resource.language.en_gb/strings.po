@@ -1,0 +1,161 @@
+# Kodi Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.audio.rockradio 1.0.0\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "#32000"
+msgid "Account and playback"
+msgstr "Account and playback"
+
+msgctxt "#32001"
+msgid "AudioAddict email"
+msgstr "AudioAddict email"
+
+msgctxt "#32002"
+msgid "AudioAddict password"
+msgstr "AudioAddict password"
+
+msgctxt "#32003"
+msgid "Audio quality"
+msgstr "Audio quality"
+
+msgctxt "#32004"
+msgid "Medium — AAC-HE 64 kb/s"
+msgstr "Medium — AAC-HE 64 kb/s"
+
+msgctxt "#32005"
+msgid "High — AAC 128 kb/s"
+msgstr "High — AAC 128 kb/s"
+
+msgctxt "#32006"
+msgid "Ultra — MP3 320 kb/s"
+msgstr "Ultra — MP3 320 kb/s"
+
+msgctxt "#32010"
+msgid "All channels"
+msgstr "All channels"
+
+msgctxt "#32011"
+msgid "Styles"
+msgstr "Styles"
+
+msgctxt "#32012"
+msgid "Favorites"
+msgstr "Favorites"
+
+msgctxt "#32013"
+msgid "Settings"
+msgstr "Settings"
+
+msgctxt "#32014"
+msgid "Popular"
+msgstr "Popular"
+
+msgctxt "#32015"
+msgid "New"
+msgstr "New"
+
+
+msgctxt "#32030"
+msgid "Configure your AudioAddict email and password in the add-on settings first."
+msgstr "Configure your AudioAddict email and password in the add-on settings first."
+
+msgctxt "#32031"
+msgid "Unexpected error. Check kodi.log."
+msgstr "Unexpected error. Check kodi.log."
+
+msgctxt "#32034"
+msgid "Style not found."
+msgstr "Style not found."
+
+msgctxt "#32035"
+msgid "Section not found."
+msgstr "Section not found."
+
+msgctxt "#32036"
+msgid "Missing channel identifier."
+msgstr "Missing channel identifier."
+
+msgctxt "#32037"
+msgid "Missing channel key."
+msgstr "Missing channel key."
+
+msgctxt "#32038"
+msgid "Unknown action."
+msgstr "Unknown action."
+
+msgctxt "#32041"
+msgid "Add to favorites"
+msgstr "Add to favorites"
+
+msgctxt "#32042"
+msgid "Remove from favorites"
+msgstr "Remove from favorites"
+
+msgctxt "#32043"
+msgid "No favorite channels yet."
+msgstr "No favorite channels yet."
+
+msgctxt "#32044"
+msgid "Added to favorites."
+msgstr "Added to favorites."
+
+msgctxt "#32045"
+msgid "Removed from favorites."
+msgstr "Removed from favorites."
+
+msgctxt "#32100"
+msgid "RockRadio account not configured. Open add-on settings and enter your AudioAddict email/password."
+msgstr "RockRadio account not configured. Open add-on settings and enter your AudioAddict email/password."
+
+msgctxt "#32101"
+msgid "Unable to contact AudioAddict while signing in."
+msgstr "Unable to contact AudioAddict while signing in."
+
+msgctxt "#32102"
+msgid "AudioAddict temporarily rate-limited new sign-ins."
+msgstr "AudioAddict temporarily rate-limited new sign-ins."
+
+msgctxt "#32103"
+msgid "Try again in {retry} seconds."
+msgstr "Try again in {retry} seconds."
+
+msgctxt "#32104"
+msgid "AudioAddict sign-in failed (HTTP {code})."
+msgstr "AudioAddict sign-in failed (HTTP {code})."
+
+msgctxt "#32105"
+msgid "AudioAddict returned an invalid sign-in response."
+msgstr "AudioAddict returned an invalid sign-in response."
+
+msgctxt "#32106"
+msgid "AudioAddict sign-in response is missing session information."
+msgstr "AudioAddict sign-in response is missing session information."
+
+msgctxt "#32107"
+msgid "Unable to contact AudioAddict. Check your network connection."
+msgstr "Unable to contact AudioAddict. Check your network connection."
+
+msgctxt "#32108"
+msgid "AudioAddict API error (HTTP {code})."
+msgstr "AudioAddict API error (HTTP {code})."
+
+msgctxt "#32109"
+msgid "AudioAddict returned invalid data."
+msgstr "AudioAddict returned invalid data."
+
+msgctxt "#32110"
+msgid "Unable to retrieve the RockRadio stream playlist."
+msgstr "Unable to retrieve the RockRadio stream playlist."
+
+msgctxt "#32111"
+msgid "RockRadio stream playlist error (HTTP {code})."
+msgstr "RockRadio stream playlist error (HTTP {code})."
+
+msgctxt "#32112"
+msgid "RockRadio did not return any streaming server."
+msgstr "RockRadio did not return any streaming server."

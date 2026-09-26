@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.arteplussept" name="Arte +7" version="2.0.0" provider-name="bmf, thomas-ernest">
+<addon id="plugin.video.arteplussept" name="Arte +7" version="2.0.1" provider-name="bmf, thomas-ernest">
     <!-- https://kodi.wiki/view/Addon.xml -->
     <requires>
-        <import addon="xbmc.python" version="3.0.2"/>
+        <import addon="xbmc.python" version="3.0.1"/>
         <import addon="script.module.requests" version="2.31.0"/>
-        <import addon="inputstream.adaptive" version="21.5.23"/>
+        <import addon="inputstream.adaptive" version="21.5.18"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
@@ -54,13 +54,8 @@ Erori sau solicitări: https://github.com/thomas-ernest/plugin.video.arteplussep
         <license>GPL-2.0-only</license>
         <website>https://thomas-ernest.github.io/</website>
         <source>https://github.com/thomas-ernest/plugin.video.arteplussept</source>
-<news>2.0.0 (2026-8-30)
-- Replace xbmcswift2 routing and file-based cache with native shim; remove external dependency
-- Switch category, video and stream endpoints to Arte TV API; remove any call to HBB TV API
-- Add multi-language playback with subtitles (adaptive inputstream)
-- Remove cached categories; fix mis cache as with 1.6.2
-- Fix login state display in addon  settings
-- Tracking of played videos still failing. Cross device replay start from scratch.</news>
+<news>2.0.1 (2026-9-21)
+Fix compatibility with lower environment libraries.</news>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>

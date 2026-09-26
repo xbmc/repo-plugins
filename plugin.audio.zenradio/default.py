@@ -75,7 +75,7 @@ def add_channel(channel, favorite_ids=None):
     tag.setArtist("ZenRadio")
     li.setProperty("IsPlayable", "true")
 
-    if cid is not None and favorite_ids is not None:
+    if cid and favorite_ids is not None:
         isfav = cid in favorite_ids
         favlabel = t(32042) if isfav else t(32041)
         favaction = "favorite_remove" if isfav else "favorite_add"

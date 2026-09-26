@@ -173,6 +173,7 @@ class AudioAddictClient:
                 },
                 auth=(self.BASIC_USER, self.BASIC_PASSWORD),
                 timeout=20,
+                allow_redirects=False,
             )
         except requests.RequestException:
             raise AudioAddictError(self._t(32101))

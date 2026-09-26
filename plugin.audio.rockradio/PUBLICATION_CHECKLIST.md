@@ -32,18 +32,18 @@
 ## Before public submission
 
 - [x] copy `LICENSE.txt` into `plugin.audio.rockradio/`
-- [ ] keep the same `LICENSE.txt` at repository root
-- [ ] validate the v0.9.0 build on Kodi
-- [ ] test several stations and dynamic Now Playing updates
-- [ ] test add/remove favourites, including from the Favorites view
-- [ ] test behaviour after stopping and restarting playback
-- [ ] inspect `kodi.log` for unexpected errors
+- [x] keep the same `LICENSE.txt` at repository root
+- [x] validate the v0.9.0 build on Kodi
+- [x] test several stations and dynamic Now Playing updates
+- [x] test add/remove favourites, including from the Favorites view
+- [x] test behaviour after stopping and restarting playback
+- [x] inspect `kodi.log` for unexpected errors
 - [ ] bump version to 1.0.0 for submission
-- [ ] update `strings.po` Project-Id-Version to 1.0.0
-- [ ] update `<news>` for the 1.0.0 public release
-- [ ] run the official Kodi addon-checker against the final source tree
-- [ ] perform one final clean-install test from the release ZIP
-- [ ] submit to the appropriate official Kodi repository branch
+- [x] update `strings.po` Project-Id-Version to 1.0.0
+- [x] update `<news>` for the 1.0.0 public release
+- [x] run the official Kodi addon-checker against the final source tree
+- [x] perform one final clean-install test from the release ZIP
+- [x] submit to the appropriate official Kodi repository branch
 
 ## Deferred robustness work
 

@@ -64,6 +64,21 @@ def set_synced_at(category: str, timestamp: str):
     _update(mutate)
 
 
+def get_full_reconcile_pending(category: str):
+    with _lock:
+        return bool(_load().get(category, {}).get("full_reconcile_pending"))
+
+
+def set_full_reconcile_pending(category: str, pending: bool):
+    def mutate(data):
+        bucket = data.setdefault(category, {})
+        if pending:
+            bucket["full_reconcile_pending"] = True
+        else:
+            bucket.pop("full_reconcile_pending", None)
+    _update(mutate)
+
+
 def get_known_items(category: str):
     """Returns {key: identity_dict} for the last-pushed state of a category.
     Storing the identity (not just the key) means a removal payload can still

@@ -41,6 +41,15 @@ def build_shows_payload(episode_entries):
     ]
 
 
+def _episode_extra(item, extra):
+    """Adds the episode's own ids (TVDB/TMDb episode id), when known, so MDBList
+    resolves the exact episode by id even when the library numbers it
+    differently from TMDb (TVDB-ordered anime); numbers stay as fallback."""
+    if item.get("episode_ids"):
+        extra = dict(extra, ids=item["episode_ids"])
+    return extra
+
+
 def chunked(items, size=100):
     for i in range(0, len(items), size):
         yield items[i:i + size]
@@ -84,7 +93,7 @@ def push_items(category, endpoint, field_name, items):
 
     episode_items = [item for item in items if item["type"] == "episode"]
     for batch in chunked(episode_items, BATCH_SIZE):
-        entries = [(item["show_ids"], item["season"], item["episode"], {field_name: item[field_name]}) for item in batch]
+        entries = [(item["show_ids"], item["season"], item["episode"], _episode_extra(item, {field_name: item[field_name]})) for item in batch]
         mdblist_api.push_sync_items(endpoint, {"shows": build_shows_payload(entries)})
         _persist_pushed_chunk(category, batch)
 
@@ -101,7 +110,7 @@ def push_items_remove(category, endpoint, items):
 
     episode_items = [item for item in items if item["type"] == "episode"]
     for batch in chunked(episode_items, BATCH_SIZE):
-        entries = [(item["show_ids"], item["season"], item["episode"], {}) for item in batch]
+        entries = [(item["show_ids"], item["season"], item["episode"], _episode_extra(item, {})) for item in batch]
         mdblist_api.push_sync_items(endpoint, {"shows": build_shows_payload(entries)})
         _persist_removed_chunk(category, batch)
 

@@ -38,7 +38,7 @@
 
         <setting label="Save rating to" type="lsep"/>
         <setting label="Save to Kodi library" type="bool" id="rating.save.kodi" default="true"/>
-        <!-- Saving to MDBList is controlled by "Sync ratings" in the Sync category, not a separate toggle here. -->
+        <setting label="Save to MDBList" type="bool" id="rating.save.mdblist" default="true"/>
     </category>
     <category label="Sync">
         <setting label="Categories" type="lsep"/>

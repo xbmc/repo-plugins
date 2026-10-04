@@ -1,0 +1,194 @@
+# Kodi Media Center language file
+# Addon Name: TVS Player
+# Addon id: plugin.video.tvsplayer
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.tvsplayer\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "#30000"
+msgid "TV"
+msgstr "TV"
+
+msgctxt "#30001"
+msgid "Radio"
+msgstr "Radio"
+
+msgctxt "#30002"
+msgid "Favourites"
+msgstr "Preferiti"
+
+msgctxt "#30003"
+msgid "Playlists"
+msgstr "Playlist"
+
+msgctxt "#30004"
+msgid "Search"
+msgstr "Cerca"
+
+msgctxt "#30005"
+msgid "All"
+msgstr "Tutti"
+
+msgctxt "#30006"
+msgid "Add M3U playlist (web address)"
+msgstr "Aggiungi playlist M3U (indirizzo web)"
+
+msgctxt "#30007"
+msgid "Add M3U playlist (file)"
+msgstr "Aggiungi playlist M3U (file)"
+
+msgctxt "#30008"
+msgid "Add free radio stations by country"
+msgstr "Aggiungi radio gratuite per paese"
+
+msgctxt "#30009"
+msgid "Playlist address (http://… .m3u)"
+msgstr "Indirizzo della playlist (http://… .m3u)"
+
+msgctxt "#30010"
+msgid "Name of the playlist"
+msgstr "Nome della playlist"
+
+msgctxt "#30011"
+msgid "Content of this playlist"
+msgstr "Contenuto di questa playlist"
+
+msgctxt "#30012"
+msgid "Automatic (TV and radio)"
+msgstr "Automatico (TV e radio)"
+
+msgctxt "#30013"
+msgid "TV only"
+msgstr "Solo TV"
+
+msgctxt "#30014"
+msgid "Radio only"
+msgstr "Solo radio"
+
+msgctxt "#30015"
+msgid "Loading…"
+msgstr "Caricamento…"
+
+msgctxt "#30016"
+msgid "{1}: {0} channels"
+msgstr "{1}: {0} canali"
+
+msgctxt "#30017"
+msgid "Could not load the playlist"
+msgstr "Impossibile caricare la playlist"
+
+msgctxt "#30018"
+msgid "Refresh"
+msgstr "Aggiorna"
+
+msgctxt "#30019"
+msgid "Delete"
+msgstr "Elimina"
+
+msgctxt "#30020"
+msgid "Delete \"{0}\"? Its channels are removed. Favourites stay."
+msgstr "Eliminare \"{0}\"? I suoi canali vengono rimossi. I preferiti restano."
+
+msgctxt "#30021"
+msgid "Add to favourites"
+msgstr "Aggiungi ai preferiti"
+
+msgctxt "#30022"
+msgid "Remove from favourites"
+msgstr "Rimuovi dai preferiti"
+
+msgctxt "#30023"
+msgid "Choose link"
+msgstr "Scegli link"
+
+msgctxt "#30024"
+msgid "Link {0}"
+msgstr "Link {0}"
+
+msgctxt "#30025"
+msgid "Channel not available (no working link)"
+msgstr "Canale non disponibile (nessun link funzionante)"
+
+msgctxt "#30026"
+msgid "No channels yet: add your M3U playlist in Playlists"
+msgstr "Nessun canale: aggiungi la tua playlist M3U in Playlist"
+
+msgctxt "#30027"
+msgid "Radio stations of…"
+msgstr "Radio di…"
+
+msgctxt "#30028"
+msgid "Load free radio stations now? (Radio Browser, an open directory)"
+msgstr "Caricare ora le radio gratuite? (Radio Browser, una directory aperta)"
+
+msgctxt "#30029"
+msgid "TVS Player does not provide any TV channels. Add only playlists you have the right to use."
+msgstr "TVS Player non fornisce canali TV. Aggiungi solo playlist che hai il diritto di usare."
+
+msgctxt "#30030"
+msgid "{0} channels · updated {1}"
+msgstr "{0} canali · aggiornata {1}"
+
+msgctxt "#30031"
+msgid "Added to favourites"
+msgstr "Aggiunto ai preferiti"
+
+msgctxt "#30032"
+msgid "Move up"
+msgstr "Sposta su"
+
+msgctxt "#30033"
+msgid "Move down"
+msgstr "Sposta giù"
+
+msgctxt "#30034"
+msgid "Search channels and radio"
+msgstr "Cerca canali e radio"
+
+msgctxt "#30035"
+msgid "never"
+msgstr "mai"
+
+msgctxt "#30036"
+msgid "Which link?"
+msgstr "Quale link?"
+
+msgctxt "#30038"
+msgid "{0} links"
+msgstr "{0} link"
+
+msgctxt "#30039"
+msgid "No channels found: is this an M3U playlist?"
+msgstr "Nessun canale trovato: è una playlist M3U?"
+
+msgctxt "#30040"
+msgid "The address must start with http:// or https://"
+msgstr "L'indirizzo deve iniziare con http:// o https://"
+
+msgctxt "#30041"
+msgid "Radio stations – {0}"
+msgstr "Radio – {0}"
+
+msgctxt "#30100"
+msgid "General"
+msgstr "Generale"
+
+msgctxt "#30101"
+msgid "Check links before playing (skip dead links)"
+msgstr "Controlla i link prima di riprodurre (salta quelli non funzionanti)"
+
+msgctxt "#30102"
+msgid "Link check timeout (seconds)"
+msgstr "Tempo massimo del controllo link (secondi)"
+
+msgctxt "#30103"
+msgid "Radio stations to load per country"
+msgstr "Radio da caricare per paese"
+
+msgctxt "#30104"
+msgid "First start done"
+msgstr "Primo avvio eseguito"

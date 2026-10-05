@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.onedrive" name="OneDrive" version="2.3.0" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.onedrive" name="OneDrive" version="2.4.1" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.clouddrive.common" version="1.4.0"/>
+		<import addon="script.module.clouddrive.common" version="1.5.1"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="entrypoint.py">
 		<provides>image audio video</provides>
@@ -39,6 +39,13 @@ Play all your media from OneDrive including Videos, Music and Pictures.
 			<fanart>fanart.jpg</fanart>
 		</assets>
 		<news>
+v2.4.1 released Oct 5, 2026:
+- Requires clouddrive.common 1.5.1 (review fixes: safer redirects, account migration, removed accounts)
+- Unused strings removed
+
+v2.4.0 released Oct 4, 2026:
+- Security: tokens and pre-authenticated download links are no longer written to the Kodi log; error reporting removed
+
 v2.3.0 released Jan 21, 2023:
 - Kodi 20 fix
 		</news>

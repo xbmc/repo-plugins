@@ -47,8 +47,6 @@ class GoogleDriveAddon(CloudDriveAddon):
         self._provider.configure(self._account_manager, driveid)
         if not self._provider._is_shared_drive:
             drive_folders.append({'name' : self._common_addon.getLocalizedString(32058), 'path' : 'sharedWithMe'})
-        if self._content_type == 'image':
-            drive_folders.append({'name' : self._addon.getLocalizedString(32007), 'path' : 'photos'})
         drive_folders.append({'name' : self._addon.getLocalizedString(32014), 'path' : 'starred'})
         return drive_folders
 
@@ -77,25 +75,18 @@ class GoogleDriveAddon(CloudDriveAddon):
                 page_token = Utils.get_safe_value(response, 'nextPageToken')
         return change_token
     
-    def _get_url_original(self, driveid, item_driveid=None, item_id=None):
-        self._provider.configure(self._account_manager, driveid)
-        item = self._provider.get_item(item_driveid=item_driveid, item_id=item_id, include_download_info = True)
-        url = item['download_info']['url']
-        url += "|Authorization=%s" % urllib.parse.quote("Bearer %s" % self._provider.get_access_tokens()['access_token'])
-        return url
-    
     def _get_item_play_url(self, file_name, driveid, item_driveid=None, item_id=None, is_subtitle=False):
         url = None
         if self._content_type == 'video' and not is_subtitle:
             if KodiUtils.get_addon_setting('ask_stream_format') == 'false' and not self.choose_stream_format:
-                if KodiUtils.get_addon_setting('default_stream_quality') == 'Original':
-                    url = self._get_url_original(driveid, item_driveid, item_id)
-                else:
+                if KodiUtils.get_addon_setting('default_stream_quality') != 'Original':
                     url = self._select_stream_format(driveid, item_driveid, item_id, True)
             else:
                 url = self._select_stream_format(driveid, item_driveid, item_id, False)
         if not url:
-            url = self._get_url_original(driveid, item_driveid, item_id)
+            # The original file, streamed through the local download service, which adds the authorization
+            # header. Putting the token in the URL ("|Authorization=...") wrote it to the Kodi log.
+            url = super(GoogleDriveAddon, self)._get_item_play_url(file_name, driveid, item_driveid, item_id, is_subtitle)
         return url
     
     def _select_stream_format(self, driveid, item_driveid=None, item_id=None, auto=False):

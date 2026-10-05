@@ -25,7 +25,4 @@
         <setting label="32035" type="action" option="close" action="RunPlugin(plugin://plugin.googledrive/?action=_clear_cache)"/>
         <setting label="32012" type="action" option="close" action="RunPlugin(plugin://plugin.googledrive/?action=_open_common_settings)"/>
     </category>
-    <category label="32030">
-        <setting label="32031" type="bool" id="report_error" default="false"/>
-    </category>
 </settings>

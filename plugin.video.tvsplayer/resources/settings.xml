@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+    <section id="plugin.video.tvsplayer">
+        <category id="general" label="30100">
+            <group id="1">
+                <setting id="probe_links" type="boolean" label="30101">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="probe_timeout" type="integer" label="30102">
+                    <level>0</level>
+                    <default>4</default>
+                    <constraints>
+                        <minimum>1</minimum>
+                        <step>1</step>
+                        <maximum>15</maximum>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="enable" setting="probe_links">true</dependency>
+                    </dependencies>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="radio_limit" type="integer" label="30103">
+                    <level>0</level>
+                    <default>500</default>
+                    <constraints>
+                        <minimum>50</minimum>
+                        <step>50</step>
+                        <maximum>2000</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <!-- internal: radio stations were already offered once -->
+                <setting id="first_run_done" type="boolean" label="30104">
+                    <level>4</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+        </category>
+    </section>
+</settings>

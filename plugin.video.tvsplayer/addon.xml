@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.tvsplayer" name="TVS Player" version="1.0.1" provider-name="TVS Player">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Your own M3U playlists and free radio</summary>
+        <summary lang="it_IT">Le tue playlist M3U e radio gratuite</summary>
+        <description lang="en_GB">TVS Player plays your own M3U / M3U8 playlists (from a web address or a file) and thousands of free radio stations from the open Radio Browser directory, by country and genre.
+
+Channels are sorted by category with logos and search. Channels with several streams skip dead links automatically. Favourites you can reorder.</description>
+        <description lang="it_IT">TVS Player riproduce le tue playlist M3U / M3U8 (da un indirizzo web o da un file) e migliaia di radio gratuite dalla directory aperta Radio Browser, per paese e genere.
+
+Canali ordinati per categoria con loghi e ricerca. I canali con più flussi saltano da soli i link non funzionanti. Preferiti riordinabili.</description>
+        <disclaimer lang="en_GB">TVS Player is only a player and does not provide any TV channels or playlists. Add only content you have the right to use. Radio station data: radio-browser.info.</disclaimer>
+        <disclaimer lang="it_IT">TVS Player è solo un lettore e non fornisce canali TV o playlist. Aggiungi solo contenuti che hai il diritto di usare. Dati delle radio: radio-browser.info.</disclaimer>
+        <platform>all</platform>
+        <license>GPL-2.0-or-later</license>
+        <source>https://github.com/gnardelli/tvsplayer-kodi</source>
+        <news>1.0.1 - Safer saving of playlists and favourites; slow streams are still tried; stream headers with "&amp;" (e.g. Referer) kept intact; accented names in local Latin-1 playlists.
+1.0.0 - First release: M3U playlists (web address or file), free radio by country, link fallback, favourites, search.</news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

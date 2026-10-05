@@ -1,0 +1,195 @@
+# Kodi Media Center language file
+# Addon Name: TVS Player
+# Addon id: plugin.video.tvsplayer
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.tvsplayer\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "#30000"
+msgid "TV"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Radio"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Favourites"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Playlists"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30005"
+msgid "All"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Add M3U playlist (web address)"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Add M3U playlist (file)"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Add free radio stations by country"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Playlist address (http://… .m3u)"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Name of the playlist"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Content of this playlist"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Automatic (TV and radio)"
+msgstr ""
+
+msgctxt "#30013"
+msgid "TV only"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Radio only"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Loading…"
+msgstr ""
+
+msgctxt "#30016"
+msgid "{1}: {0} channels"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Could not load the playlist"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Refresh"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Delete"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Delete \"{0}\"? Its channels are removed. Favourites stay."
+msgstr ""
+
+msgctxt "#30021"
+msgid "Add to favourites"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Remove from favourites"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Choose link"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Link {0}"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Channel not available (no working link)"
+msgstr ""
+
+msgctxt "#30026"
+msgid "No channels yet: add your M3U playlist in Playlists"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Radio stations of…"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Load free radio stations now? (Radio Browser, an open directory)"
+msgstr ""
+
+msgctxt "#30029"
+msgid "TVS Player does not provide any TV channels. Add only playlists you have the right to use."
+msgstr ""
+
+msgctxt "#30030"
+msgid "{0} channels · updated {1}"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Added to favourites"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Move up"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Move down"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Search channels and radio"
+msgstr ""
+
+msgctxt "#30035"
+msgid "never"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Which link?"
+msgstr ""
+
+msgctxt "#30038"
+msgid "{0} links"
+msgstr ""
+
+msgctxt "#30039"
+msgid "No channels found: is this an M3U playlist?"
+msgstr ""
+
+msgctxt "#30040"
+msgid "The address must start with http:// or https://"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Radio stations – {0}"
+msgstr ""
+
+# Settings
+msgctxt "#30100"
+msgid "General"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Check links before playing (skip dead links)"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Link check timeout (seconds)"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Radio stations to load per country"
+msgstr ""
+
+msgctxt "#30104"
+msgid "First start done"
+msgstr ""

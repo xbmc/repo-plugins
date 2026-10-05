@@ -1,0 +1,3 @@
+v1.3.7
+
+- Scrobbles and watched sync now send each episode's own tvdb/tmdb id, so MDBList records the exact episode even when the library numbers it differently from TMDb (common for anime with TheTVDB metadata). Season/episode numbers remain the fallback.

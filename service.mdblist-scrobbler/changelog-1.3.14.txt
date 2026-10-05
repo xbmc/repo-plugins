@@ -1,0 +1,3 @@
+v1.3.14
+
+- Fixed the background sync failing every 10 minutes after the addon's settings or Sync now had been used, which kept retrying the same changes from MDBList.

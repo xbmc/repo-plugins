@@ -3,7 +3,7 @@ import datetime
 import xbmc
 
 from resources.lib import library_snapshot, mdblist_api, sync_payload, sync_state
-from resources.lib.utils import jsonrpc_request, local_time_to_utc_iso, utc_iso_to_local_time
+from resources.lib.utils import jsonrpc_request, local_time_to_utc_iso, parse_datetime, utc_iso_to_local_time
 
 CATEGORY = "watched"
 
@@ -32,9 +32,16 @@ def _movie_item(movie):
 def _episode_item(episode):
     return {
         "type": "episode", "show_ids": episode["show_ids"],
+        "episode_ids": episode.get("episode_ids") or {},
         "season": episode["season"], "episode": episode["episode"],
         "watched_at": _to_api_datetime(episode["lastplayed"]),
     }
+
+
+def _describe(record):
+    if record["dbtype"] == "movie":
+        return "movie '{}' ({})".format(record.get("title"), _canonical_key(record))
+    return "episode '{}' ({})".format(record.get("title"), _canonical_key(record))
 
 
 def _canonical_key(record):
@@ -66,8 +73,22 @@ def _push_remove(items):
     sync_payload.push_items_remove(CATEGORY, "/sync/watched/remove", items)
 
 
+# A rewatch moves lastplayed by far more than this. Smaller differences are
+# drift, not a new watch -- e.g. up to 1.3.10 a pulled date could be written
+# back a second early, and <1.3.8 didn't record it, so the saved state of an
+# upgraded install still differs from Kodi by a few seconds per item.
+WATCHED_AT_TOLERANCE_SECONDS = 60
+
+
 def _watched_at_changed(known_item, item):
-    return known_item.get("watched_at") != item.get("watched_at")
+    known, current = known_item.get("watched_at"), item.get("watched_at")
+    if known == current:
+        return False
+    try:
+        delta = parse_datetime(known[:19], "%Y-%m-%dT%H:%M:%S") - parse_datetime(current[:19], "%Y-%m-%dT%H:%M:%S")
+    except (TypeError, ValueError):
+        return True
+    return abs(delta.total_seconds()) > WATCHED_AT_TOLERANCE_SECONDS
 
 
 def push(snapshot, allow_remove=False):
@@ -102,14 +123,16 @@ def push_single(record):
 
     if is_watched:
         item = _movie_item(record) if record["dbtype"] == "movie" else _episode_item(record)
-        if known_item and known_item.get("watched_at") == item.get("watched_at"):
+        if known_item and not _watched_at_changed(known_item, item):
             return {}
         _push_add([item])
+        xbmc.log("MDBList Sync: live push marked {} watched".format(_describe(record)), level=xbmc.LOGDEBUG)
         return {"pushed_add": 1}
 
     if not known_item:
         return {}
     _push_remove([known_item])
+    xbmc.log("MDBList Sync: live push marked {} unwatched".format(_describe(record)), level=xbmc.LOGDEBUG)
     return {"pushed_remove": 1}
 
 
@@ -128,7 +151,42 @@ def _set_watched(record, playcount, lastplayed=None):
         jsonrpc_request("VideoLibrary.SetEpisodeDetails", dict(params, episodeid=record["dbid"]))
 
 
-def _apply_watched(record, status, remote_at):
+def _new_pull_changes():
+    """Known-items changes from one pull run: what it made watched (upserts)
+    and unwatched (removed) in Kodi -- see _record_pulled."""
+    return {"upserts": {}, "removed": set()}
+
+
+def _record_pulled(changes, record, watched, lastplayed=None):
+    """Records what an applied pull change makes MDBList and Kodi agree on, in
+    the known-items state. Without it the next push diffs a pulled watch as a
+    new local one and pushes it back -- undoing a later remote unwatch."""
+    if changes is None:
+        return
+    key = _canonical_key(record)
+    if not key:
+        return
+    if watched:
+        # Built the way the next push reads the library, so it sees nothing new
+        updated = dict(record, lastplayed=lastplayed)
+        changes["upserts"][key] = _movie_item(updated) if record["dbtype"] == "movie" else _episode_item(updated)
+        changes["removed"].discard(key)
+    else:
+        changes["removed"].add(key)
+        changes["upserts"].pop(key, None)
+
+
+def _persist_pull_changes(changes):
+    """Saves and clears the collected changes -- called before the watermark
+    advances, and again (a no-op then) from a finally, so an error on a later
+    item doesn't lose what earlier items already changed in Kodi."""
+    if changes["upserts"] or changes["removed"]:
+        sync_state.merge_known_items(CATEGORY, changes["upserts"], list(changes["removed"]))
+        changes["upserts"].clear()
+        changes["removed"].clear()
+
+
+def _apply_watched(record, status, remote_at, changes=None):
     """Last-write-wins using Kodi's lastplayed vs the remote timestamp -- the
     one sync category where Kodi actually tracks a comparable local
     timestamp, so real conflict resolution (not just remote-wins) applies.
@@ -144,31 +202,46 @@ def _apply_watched(record, status, remote_at):
 
     if status == "removed":
         if record["playcount"] <= 0:
+            # Already unwatched here (e.g. applied by an earlier, interrupted
+            # pull): still record it as synced
+            _record_pulled(changes, record, watched=False)
             return False
         if local_ts and remote_ts and local_ts > remote_ts:
             return False
         _set_watched(record, playcount=0)
+        # Keep the snapshot current, so a later entry for this item in the
+        # same batch (watched, then unwatched) compares against this state
+        record["playcount"] = 0
+        _record_pulled(changes, record, watched=False)
         return True
 
     if record["playcount"] > 0 and local_ts and remote_ts and local_ts > remote_ts:
         return False
 
     new_lastplayed = utc_iso_to_local_time(remote_at) or record.get("lastplayed")
+    if record["playcount"] > 0 and (record.get("lastplayed") or "")[:19] == new_lastplayed:
+        # Already exactly this in Kodi: skip the write, or every full pull
+        # rewrites the whole library (thousands of rows in a shared MySQL DB)
+        _record_pulled(changes, record, watched=True, lastplayed=new_lastplayed)
+        return False
     _set_watched(record, playcount=max(record["playcount"], 1), lastplayed=new_lastplayed)
+    record["playcount"] = max(record["playcount"], 1)
+    record["lastplayed"] = new_lastplayed
+    _record_pulled(changes, record, watched=True, lastplayed=new_lastplayed)
     return True
 
 
-def _apply_movie_entry(snapshot, ids, status, remote_at):
+def _apply_movie_entry(snapshot, ids, status, remote_at, changes=None):
     """Returns (applied, canonical_key) -- the key (None if no local match)
     lets _pull_full track which locally-watched items the remote list
     actually mentioned, to reconcile removals for the rest."""
     match = library_snapshot.find_movie_match(snapshot, ids)
     if not match:
         return False, None
-    return _apply_watched(match, status, remote_at), library_snapshot.canonical_movie_key(match["ids"])
+    return _apply_watched(match, status, remote_at, changes), library_snapshot.canonical_movie_key(match["ids"])
 
 
-def _apply_episode_entry(snapshot, show_ids, season, episode, status, remote_at, episode_ids=None):
+def _apply_episode_entry(snapshot, show_ids, season, episode, status, remote_at, episode_ids=None, changes=None):
     match = library_snapshot.find_episode_match(snapshot, show_ids, season, episode, episode_ids)
     if not match:
         xbmc.log(
@@ -181,10 +254,18 @@ def _apply_episode_entry(snapshot, show_ids, season, episode, status, remote_at,
         )
         return False, None
     key = library_snapshot.canonical_episode_key(match["show_ids"], match["season"], match["episode"])
-    return _apply_watched(match, status, remote_at), key
+    return _apply_watched(match, status, remote_at, changes), key
 
 
-def _pull_full(snapshot, server_time, trusted=False):
+def _pull_full(snapshot, server_time, trusted=False, seed=False):
+    changes = _new_pull_changes()
+    try:
+        return _pull_full_apply(snapshot, server_time, trusted, seed, changes)
+    finally:
+        _persist_pull_changes(changes)
+
+
+def _pull_full_apply(snapshot, server_time, trusted, seed, changes):
     # extended=None (full, not ids_only): ids_only only exposes a movie's
     # tmdb id (and an episode's parent show's tmdb id). A local item
     # identified only by imdb/tvdb/trakt/mdblist couldn't be matched or ruled
@@ -206,7 +287,7 @@ def _pull_full(snapshot, server_time, trusted=False):
         ids = (entry.get("movie") or {}).get("ids") or {}
         if not ids:
             continue
-        applied_ok, key = _apply_movie_entry(snapshot, ids, "active", entry.get("last_watched_at"))
+        applied_ok, key = _apply_movie_entry(snapshot, ids, "active", entry.get("last_watched_at"), changes)
         if key:
             matched_keys.add(key)
         if applied_ok:
@@ -219,7 +300,7 @@ def _pull_full(snapshot, server_time, trusted=False):
             continue
         applied_ok, key = _apply_episode_entry(
             snapshot, show_ids, episode.get("season"), episode.get("number"),
-            "active", entry.get("last_watched_at"), episode.get("ids"),
+            "active", entry.get("last_watched_at"), episode.get("ids"), changes,
         )
         if key:
             matched_keys.add(key)
@@ -249,11 +330,36 @@ def _pull_full(snapshot, server_time, trusted=False):
             if key:
                 locally_watched.append((episode, key))
 
-    candidate_removals = [(record, key) for record, key in locally_watched if key not in matched_keys]
+    # A seed pull runs before this device's first push, so anything watched
+    # only locally simply hasn't been pushed yet -- not unwatched remotely.
+    if seed:
+        locally_watched = []
+    # A multi-episode file (e.g. "S10E17-18") is often one episode on TMDB, or
+    # numbered differently there, so its Kodi episodes may never come back as
+    # watched. Kodi keeps the playcount per file, so unwatching one would also
+    # unwatch the rest -- leave them out. A real remote unwatch of them still
+    # arrives through the incremental journal.
+    episodes_per_file = {}
+    for episode in library_snapshot.iter_episodes(snapshot):
+        if episode.get("file"):
+            episodes_per_file[episode["file"]] = episodes_per_file.get(episode["file"], 0) + 1
+    candidate_removals = [
+        (record, key) for record, key in locally_watched
+        if key not in matched_keys and episodes_per_file.get(record.get("file"), 0) <= 1
+    ]
     remote_count = len(data.get("movies", [])) + len(data.get("episodes", []))
     hold_removals = bool(candidate_removals) and _should_hold_pull_removals(
         remote_count, len(candidate_removals), len(locally_watched), trusted
     )
+
+    if hold_removals:
+        for record, _key in candidate_removals:
+            xbmc.log(
+                "MDBList Sync: watched pull held removal of {} - watched in Kodi, not on MDBList".format(
+                    _describe(record)
+                ),
+                level=xbmc.LOGDEBUG,
+            )
 
     if candidate_removals and not hold_removals:
         # The removal timestamp is the server-provided watermark, not "now":
@@ -263,17 +369,22 @@ def _pull_full(snapshot, server_time, trusted=False):
         # correctly win the conflict-resolution check in _apply_watched.
         removal_at = server_time or _now_iso()
         for record, _key in candidate_removals:
-            if _apply_watched(record, "removed", removal_at):
+            if _apply_watched(record, "removed", removal_at, changes):
                 applied += 1
 
-    if hold_removals:
-        # Held, not dropped -- don't advance the watermark either, so the
-        # next pull retries a full reconcile from scratch (and, per pull(),
-        # keeps landing back here) instead of downgrading to the incremental
-        # journal path and never revisiting these items.
-        return {"pulled_applied": applied, "mode": "full", "skipped_remove": len(candidate_removals)}
+    _persist_pull_changes(changes)
 
+    # The watermark advances even when removals are held: the adds above are
+    # applied, and later untrusted runs can follow the journal incrementally.
+    # Leaving it unset made every activity poll re-run this full pull (and
+    # hold again) until a trusted run came along. The held removals aren't
+    # dropped -- the pending flag makes the next trusted run (see pull())
+    # redo this full reconcile.
     sync_state.set_synced_at(CATEGORY, server_time or _now_iso())
+    sync_state.set_full_reconcile_pending(CATEGORY, hold_removals)
+
+    if hold_removals:
+        return {"pulled_applied": applied, "mode": "full", "skipped_remove": len(candidate_removals)}
     return {"pulled_applied": applied, "mode": "full"}
 
 
@@ -320,6 +431,14 @@ def _should_hold_pull_removals(remote_count, candidate_count, known_count, trust
 
 
 def _pull_incremental(snapshot, entries, server_time):
+    changes = _new_pull_changes()
+    try:
+        return _pull_incremental_apply(snapshot, entries, server_time, changes)
+    finally:
+        _persist_pull_changes(changes)
+
+
+def _pull_incremental_apply(snapshot, entries, server_time, changes):
     applied = 0
     skipped_type = 0
     for entry in entries:
@@ -339,13 +458,13 @@ def _pull_incremental(snapshot, entries, server_time):
         remote_at = entry.get("value_at") or entry.get("action_at")
 
         if entry.get("item_type") == "movie":
-            applied_ok, _key = _apply_movie_entry(snapshot, ids, status, remote_at)
+            applied_ok, _key = _apply_movie_entry(snapshot, ids, status, remote_at, changes)
             if applied_ok:
                 applied += 1
         elif entry.get("item_type") == "episode":
             episode_ids = library_snapshot.journal_episode_ids(entry)
             applied_ok, _key = _apply_episode_entry(
-                snapshot, ids, entry.get("season"), entry.get("episode"), status, remote_at, episode_ids,
+                snapshot, ids, entry.get("season"), entry.get("episode"), status, remote_at, episode_ids, changes,
             )
             if applied_ok:
                 applied += 1
@@ -361,11 +480,12 @@ def _pull_incremental(snapshot, entries, server_time):
             level=xbmc.LOGDEBUG,
         )
 
+    _persist_pull_changes(changes)
     sync_state.set_synced_at(CATEGORY, server_time or _now_iso())
     return {"pulled_applied": applied, "mode": "incremental"}
 
 
-def pull(snapshot, server_time, trusted=False):
+def pull(snapshot, server_time, trusted=False, seed=False):
     """server_time: /sync/last_activities' own server_time -- a
     safety-margined timestamp meant to be persisted as the next watermark,
     rather than the device's own clock, which can drift and under-cover the
@@ -377,10 +497,29 @@ def pull(snapshot, server_time, trusted=False):
     stays safe; only run()'s allow_remove (24h backstop, manual "Sync now")
     should pass True. _pull_incremental doesn't need this: it applies
     explicit per-item journal events, not a "known minus current-read"
-    diff, so it isn't the failure mode this pattern guards against."""
+    diff, so it isn't the failure mode this pattern guards against.
+
+    seed: first sync on this device (no cursor yet) -- always a full
+    pull, with no removal reconcile, run before push() so it records what
+    MDBList already has. Without it the first push re-sends the whole local
+    history, and every Kodi lastplayed that differs from MDBList's stored
+    timestamp rewrites it as a fresh watch (which e.g. un-drops shows)."""
+    if seed:
+        xbmc.log("MDBList Sync: watched pull seeding first sync - running full pull", level=xbmc.LOGDEBUG)
+        return _pull_full(snapshot, server_time, seed=True)
+
     since = sync_state.get_synced_at(CATEGORY)
     if not since:
+        # Never synced: anything watched only locally just hasn't been pushed
+        # yet, so this is a seed pull too -- no removal reconcile.
         xbmc.log("MDBList Sync: watched pull has no cursor - running full pull", level=xbmc.LOGDEBUG)
+        return _pull_full(snapshot, server_time, seed=True)
+
+    if trusted and sync_state.get_full_reconcile_pending(CATEGORY):
+        xbmc.log(
+            "MDBList Sync: watched pull has held removals from an earlier run - running full pull",
+            level=xbmc.LOGDEBUG,
+        )
         return _pull_full(snapshot, server_time, trusted)
 
     journal = mdblist_api.fetch_journal(since=since)

@@ -1,5 +1,6 @@
 import datetime
 import json
+import time
 
 import xbmc
 
@@ -113,8 +114,21 @@ def fix_unique_ids(unique_ids: dict, media_type: str):
     return filtered
 
 
+def parse_datetime(value, fmt):
+    """datetime.datetime.strptime, but safe in Kodi: the datetime C module
+    caches _strptime once per process, and Kodi runs each addon invocation
+    (script.py, the service) in its own sub-interpreter -- once the one that
+    cached it exits, every later datetime.strptime fails with "'NoneType'
+    object is not callable". time.strptime looks _strptime up per call."""
+    return datetime.datetime(*time.strptime(value, fmt)[:6])
+
+
 def _local_utc_offset():
-    return datetime.datetime.now() - datetime.datetime.utcnow()
+    # The two clock reads land microseconds apart, which (truncated by
+    # strftime) put a converted timestamp a second early; real UTC offsets
+    # are whole minutes
+    offset = datetime.datetime.now() - datetime.datetime.utcnow()
+    return datetime.timedelta(minutes=round(offset.total_seconds() / 60))
 
 
 def local_time_to_utc_iso(value):
@@ -133,7 +147,7 @@ def local_time_to_utc_iso(value):
     if not value:
         return None
     try:
-        local_dt = datetime.datetime.strptime(value[:19], "%Y-%m-%d %H:%M:%S")
+        local_dt = parse_datetime(value[:19], "%Y-%m-%d %H:%M:%S")
     except ValueError:
         return None
     return (local_dt - _local_utc_offset()).strftime("%Y-%m-%dT%H:%M:%S")
@@ -147,7 +161,7 @@ def utc_iso_to_local_time(value):
         return None
     cleaned = value.replace("Z", "").replace("T", " ")[:19]
     try:
-        utc_dt = datetime.datetime.strptime(cleaned, "%Y-%m-%d %H:%M:%S")
+        utc_dt = parse_datetime(cleaned, "%Y-%m-%d %H:%M:%S")
     except ValueError:
         return None
     return (utc_dt + _local_utc_offset()).strftime("%Y-%m-%d %H:%M:%S")

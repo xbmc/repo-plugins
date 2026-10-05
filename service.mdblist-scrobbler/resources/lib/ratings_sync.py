@@ -118,23 +118,74 @@ def _set_rating(record, rating):
         jsonrpc_request("VideoLibrary.SetEpisodeDetails", dict(params, episodeid=record["dbid"]))
 
 
-def _apply_movie_rating(snapshot, ids, rating):
-    match = library_snapshot.find_movie_match(snapshot, ids)
-    if not match or match["userrating"] == rating:
+def _new_pull_changes():
+    """Known-items changes from one pull run: what it rated (upserts) and
+    unrated (removed) in Kodi -- see _record_pulled."""
+    return {"upserts": {}, "removed": set()}
+
+
+def _record_pulled(changes, record, rating):
+    """Records what an applied pull change makes MDBList and Kodi agree on, in
+    the known-items state. Without it the next push diffs a pulled rating as a
+    new local one and pushes it back -- undoing a later remote change."""
+    if changes is None:
+        return
+    key = _canonical_key(record)
+    if not key:
+        return
+    if rating > 0:
+        updated = dict(record, userrating=rating)
+        changes["upserts"][key] = _movie_item(updated) if record["dbtype"] == "movie" else _episode_item(updated)
+        changes["removed"].discard(key)
+    else:
+        changes["removed"].add(key)
+        changes["upserts"].pop(key, None)
+
+
+def _persist_pull_changes(changes):
+    """Saves and clears the collected changes -- called before the watermark
+    advances, and again (a no-op then) from a finally, so an error on a later
+    item doesn't lose what earlier items already changed in Kodi."""
+    if changes["upserts"] or changes["removed"]:
+        sync_state.merge_known_items(CATEGORY, changes["upserts"], list(changes["removed"]))
+        changes["upserts"].clear()
+        changes["removed"].clear()
+
+
+def _apply_rating(match, rating, changes):
+    if not match:
+        return False
+    if match["userrating"] == rating:
+        # Already matches (e.g. applied by an earlier, interrupted pull): still
+        # record it as synced
+        _record_pulled(changes, match, rating)
         return False
     _set_rating(match, rating)
+    # Keep the snapshot current, so a later entry for this item in the same
+    # batch (rated, then un-rated) compares against this state
+    match["userrating"] = rating
+    _record_pulled(changes, match, rating)
     return True
 
 
-def _apply_episode_rating(snapshot, show_ids, season, episode, rating, episode_ids=None):
+def _apply_movie_rating(snapshot, ids, rating, changes=None):
+    return _apply_rating(library_snapshot.find_movie_match(snapshot, ids), rating, changes)
+
+
+def _apply_episode_rating(snapshot, show_ids, season, episode, rating, episode_ids=None, changes=None):
     match = library_snapshot.find_episode_match(snapshot, show_ids, season, episode, episode_ids)
-    if not match or match["userrating"] == rating:
-        return False
-    _set_rating(match, rating)
-    return True
+    return _apply_rating(match, rating, changes)
 
 
 def _pull_full(snapshot, server_time):
+    changes = _new_pull_changes()
+    try:
+        return _pull_full_apply(snapshot, server_time, changes)
+    finally:
+        _persist_pull_changes(changes)
+
+
+def _pull_full_apply(snapshot, server_time, changes):
     # extended=None (full, not ids_only) -- MDBList's ids_only ratings response
     # only carries the episode's own tmdb id, not season/episode/show, so it
     # can't be matched against the Kodi library the way ids_only works for /sync/watched.
@@ -150,7 +201,7 @@ def _pull_full(snapshot, server_time):
 
     for entry in data.get("movies", []):
         ids = (entry.get("movie") or {}).get("ids") or {}
-        if ids and _apply_movie_rating(snapshot, ids, entry.get("rating") or 0):
+        if ids and _apply_movie_rating(snapshot, ids, entry.get("rating") or 0, changes):
             applied += 1
 
     for entry in data.get("episodes", []):
@@ -158,15 +209,24 @@ def _pull_full(snapshot, server_time):
         show_ids = (episode.get("show") or {}).get("ids") or {}
         if show_ids and _apply_episode_rating(
             snapshot, show_ids, episode.get("season"), episode.get("number"), entry.get("rating") or 0,
-            episode.get("ids"),
+            episode.get("ids"), changes,
         ):
             applied += 1
 
+    _persist_pull_changes(changes)
     sync_state.set_synced_at(CATEGORY, server_time or _now_iso())
     return {"pulled_applied": applied, "mode": "full"}
 
 
 def _pull_incremental(snapshot, entries, server_time):
+    changes = _new_pull_changes()
+    try:
+        return _pull_incremental_apply(snapshot, entries, server_time, changes)
+    finally:
+        _persist_pull_changes(changes)
+
+
+def _pull_incremental_apply(snapshot, entries, server_time, changes):
     applied = 0
     skipped_type = 0
     for entry in entries:
@@ -177,11 +237,11 @@ def _pull_incremental(snapshot, entries, server_time):
         rating = entry.get("rating") or 0 if entry.get("status") != "removed" else 0
 
         if entry.get("item_type") == "movie":
-            if _apply_movie_rating(snapshot, ids, rating):
+            if _apply_movie_rating(snapshot, ids, rating, changes):
                 applied += 1
         elif entry.get("item_type") == "episode":
             episode_ids = library_snapshot.journal_episode_ids(entry)
-            if _apply_episode_rating(snapshot, ids, entry.get("season"), entry.get("episode"), rating, episode_ids):
+            if _apply_episode_rating(snapshot, ids, entry.get("season"), entry.get("episode"), rating, episode_ids, changes):
                 applied += 1
         else:
             skipped_type += 1
@@ -194,6 +254,7 @@ def _pull_incremental(snapshot, entries, server_time):
             level=xbmc.LOGDEBUG,
         )
 
+    _persist_pull_changes(changes)
     sync_state.set_synced_at(CATEGORY, server_time or _now_iso())
     return {"pulled_applied": applied, "mode": "incremental"}
 

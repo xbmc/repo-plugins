@@ -168,8 +168,18 @@ def run(notify=False, allow_remove=False):
             server_time = fetch_last_activities().get("server_time")
 
             if watched_enabled:
-                summary["watched_push"] = watched_sync.push(snapshot, allow_remove=allow_remove)
-                summary["watched_pull"] = watched_sync.pull(snapshot, server_time, trusted=allow_remove)
+                if not sync_state.get_synced_at(watched_sync.CATEGORY):
+                    # First sync: pull first so push() only sends what MDBList
+                    # doesn't already have -- see watched_sync.pull's seed. Keyed
+                    # on the cursor alone, not known items: a live push before
+                    # the first sync already adds a known item, and skipping the
+                    # seed then would push the whole local history. The seed
+                    # pull sets the cursor, so it only runs once.
+                    summary["watched_pull"] = watched_sync.pull(snapshot, server_time, seed=True)
+                    summary["watched_push"] = watched_sync.push(snapshot, allow_remove=allow_remove)
+                else:
+                    summary["watched_push"] = watched_sync.push(snapshot, allow_remove=allow_remove)
+                    summary["watched_pull"] = watched_sync.pull(snapshot, server_time, trusted=allow_remove)
 
             if ratings_enabled:
                 summary["ratings_push"] = ratings_sync.push(snapshot, allow_remove=allow_remove)

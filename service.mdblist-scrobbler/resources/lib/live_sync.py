@@ -16,7 +16,7 @@ def _bool_setting(setting_id, default=False):
 def _movie_record(dbid):
     details = jsonrpc_request(
         "VideoLibrary.GetMovieDetails",
-        {"movieid": dbid, "properties": ["uniqueid", "playcount", "lastplayed", "userrating"]},
+        {"movieid": dbid, "properties": ["title", "uniqueid", "playcount", "lastplayed", "userrating"]},
     ).get("moviedetails")
     if not details:
         return None
@@ -26,7 +26,7 @@ def _movie_record(dbid):
         return None
 
     return {
-        "dbtype": "movie", "ids": ids,
+        "dbtype": "movie", "title": details.get("title"), "ids": ids,
         "playcount": details.get("playcount") or 0,
         "lastplayed": details.get("lastplayed") or None,
         "userrating": details.get("userrating") or 0,
@@ -36,7 +36,7 @@ def _movie_record(dbid):
 def _episode_record(dbid):
     details = jsonrpc_request(
         "VideoLibrary.GetEpisodeDetails",
-        {"episodeid": dbid, "properties": ["season", "episode", "tvshowid", "playcount", "lastplayed", "userrating"]},
+        {"episodeid": dbid, "properties": ["title", "season", "episode", "tvshowid", "uniqueid", "playcount", "lastplayed", "userrating"]},
     ).get("episodedetails")
     if not details or not details.get("tvshowid"):
         return None
@@ -50,7 +50,8 @@ def _episode_record(dbid):
         return None
 
     return {
-        "dbtype": "episode", "show_ids": show_ids,
+        "dbtype": "episode", "title": details.get("title"), "show_ids": show_ids,
+        "episode_ids": fix_unique_ids(details.get("uniqueid", {}), "episode"),
         "season": details.get("season"), "episode": details.get("episode"),
         "playcount": details.get("playcount") or 0,
         "lastplayed": details.get("lastplayed") or None,

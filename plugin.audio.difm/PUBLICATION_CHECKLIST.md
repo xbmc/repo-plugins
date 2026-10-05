@@ -1,41 +1,48 @@
 # Kodi publication checklist
 
-## Already addressed
+## DI.FM v1.0.1 maintenance release
 
 - [x] Python 3 add-on
-- [x] V1 feature scope frozen around linear playback
-- [x] interactive prototype code removed from V1 client
 - [x] native Kodi player UI only
-- [x] `LICENSE.txt` included
-- [x] icon and fanart declared in `addon.xml`
 - [x] English and French localisation
-- [x] API/network errors presented to users are localised
-- [x] add-on state stored in its own Kodi profile directory
-- [x] XML validation
-- [x] Python syntax compilation
-- [x] no compiled Python files included
+- [x] `LICENSE.txt` included inside `plugin.audio.difm/`
+- [x] platform explicitly restricted to Linux
+- [x] root menu requires configured credentials
+- [x] cached session tied to the configured credentials
+- [x] session re-login logic on HTTP 401/403
+- [x] session cache written atomically with private permissions
+- [x] stream fallback uses lightweight streamed `GET` probes
+- [x] no blind fallback to the first PLS server
+- [x] playback-state writes are atomic
+- [x] kernel-managed playback-state locking with Linux `fcntl.flock()`
+- [x] playback starts without waiting for optional initial Now Playing metadata
+- [x] PO translation headers use valid newline escapes
 - [x] no analytics
 - [x] no direct Kodi database access
 - [x] no forced skin view
-- [x] session re-login logic on HTTP 401/403
-- [x] dynamic Now Playing tested in Kodi, web UI and Kore
 
-## Before the V1 public submission
+- [x] dead startup metadata plumbing removed
+- [x] unused cached-session helper and session timestamp removed
+- [x] explicit missing-channel validation
+- [x] metadata polling interval set to 15 seconds
 
-- [x] choose the public maintainer/provider name for `addon.xml`
-- [x] create the public source repository and add its URL to `<source>`
-- [x] decide on public maintainer contact: GitHub Issues only
-- [x] confirm branding/logo/API expectations with DI.FM
-- [x] replace official DI.FM logo/fanart with original community add-on artwork
-- [x] run the official Kodi addon-checker against the final source tree
-- [x] perform one final clean-install test from the release ZIP
-- [ ] submit to the appropriate official Kodi repository branch
+## Before publishing v1.0.1
 
-## Deferred to V2
+- [ ] test several DI.FM stations
+- [ ] verify dynamic Now Playing updates after track changes
+- [ ] test add/remove favourites
+- [ ] stop/restart playback
+- [ ] restart Kodi and verify normal operation
+- [ ] inspect `kodi.log`
+- [ ] run `kodi-addon-checker` against the final source tree
+- [ ] verify no `__pycache__`, `.pyc` or ZIP files are included
+- [ ] perform one final clean-install/update test
 
-- [ ] per-track progress bar
-- [ ] live application of a changed stream-quality setting
-- [ ] optional interactive controls, only if justified by actual user demand
-- [ ] sleep timer
-- [ ] graceful recovery testing after temporary network loss
-- [ ] simplify Kodi entry points by moving most logic from `default.py` and `service.py` into `resources/lib/`
+## Deferred robustness work
+
+- [ ] explicitly test stream redirects against `Kodi.Player().getPlayingFile()`
+- [ ] reduce worst-case stream-probe latency during CDN/network outages
+- [x] add useful debug logging for swallowed `current_track()` API errors
+- [ ] normalise favourite/channel IDs defensively
+- [ ] test graceful recovery after temporary network loss
+- [ ] simplify Kodi entry points by moving more logic into `resources/lib/`

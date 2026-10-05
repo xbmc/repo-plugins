@@ -12,9 +12,9 @@ from __future__ import annotations
 
 import json
 import os
-import time
+import tempfile
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit, urlunsplit
 
 import requests
 import xbmc
@@ -69,6 +69,16 @@ class AudioAddictClient:
     def _log(message, level=xbmc.LOGDEBUG):
         xbmc.log(f"[plugin.audio.difm] {message}", level)
 
+
+    @staticmethod
+    def _safe_url_for_log(url):
+        """Return a URL representation without query parameters or fragments."""
+        try:
+            parts = urlsplit(str(url))
+            return urlunsplit((parts.scheme, parts.netloc, parts.path, "", ""))
+        except Exception:
+            return "<unparseable-url>"
+
     def has_credentials(self):
         """Whether account credentials are configured in Kodi settings."""
         return bool(
@@ -82,9 +92,6 @@ class AudioAddictClient:
         value = f"{email}\0{password}".encode("utf-8")
         return hashlib.sha256(value).hexdigest()
 
-    def has_cached_session(self):
-        """Whether a reusable AudioAddict session is available locally."""
-        return bool(self._session and self._session.get("session_key"))
 
     def _load_session(self):
         """Load the cached API session from the add-on profile."""
@@ -100,24 +107,37 @@ class AudioAddictClient:
         return None
 
     def _save_session(self, data):
-        """Persist a successful login when possible."""
+        """Persist a successful login atomically with private permissions."""
+        temp_path = None
         try:
-            self.session_path.write_text(
-                json.dumps(data, indent=2),
-                encoding="utf-8",
+            fd, name = tempfile.mkstemp(
+                dir=self.session_path.parent,
+                prefix=f".{self.session_path.name}.",
+                suffix=".tmp",
             )
-            try:
-                os.chmod(self.session_path, 0o600)
-            except Exception as exc:
-                self._log(
-                    f"Unable to restrict session cache permissions: {exc}",
-                    xbmc.LOGWARNING,
-                )
+            temp_path = Path(name)
+
+            # mkstemp() creates the file with mode 0600 on POSIX, so the
+            # session/listen keys are never briefly exposed before chmod.
+            with os.fdopen(fd, "w", encoding="utf-8") as handle:
+                json.dump(data, handle, indent=2)
+                handle.flush()
+                os.fsync(handle.fileno())
+
+            os.replace(temp_path, self.session_path)
+            temp_path = None
+
         except Exception as exc:
             self._log(
                 f"Unable to save session cache: {exc}",
                 xbmc.LOGWARNING,
             )
+        finally:
+            if temp_path is not None and temp_path.exists():
+                try:
+                    temp_path.unlink()
+                except Exception:
+                    pass
 
         self._session = data
 
@@ -183,7 +203,6 @@ class AudioAddictClient:
             "user_id": body.get("member_id"),
             "session_key": body.get("key"),
             "listen_key": member.get("listen_key"),
-            "saved_at": int(time.time()),
         }
 
         if not all(
@@ -326,7 +345,7 @@ class AudioAddictClient:
                 continue
             channel_id = item.get("channel_id", item.get("id"))
             if channel_id is not None:
-                ids.add(channel_id)
+                ids.add(str(channel_id))
 
         return ids
 
@@ -335,9 +354,9 @@ class AudioAddictClient:
         ids = self.favorite_channel_ids()
         channels = self._get("/channels", authenticated=False)
         by_id = {
-            channel.get("id"): channel
+            str(channel.get("id")): channel
             for channel in channels
-            if isinstance(channel, dict)
+            if isinstance(channel, dict) and channel.get("id") is not None
         }
         return [
             by_id[channel_id]
@@ -378,7 +397,11 @@ class AudioAddictClient:
         """
         try:
             now_playing = self._get("/currently_playing")
-        except AudioAddictError:
+        except AudioAddictError as exc:
+            self._log(
+                f"Unable to retrieve currently playing metadata: {exc}",
+                xbmc.LOGDEBUG,
+            )
             return None
 
         if not isinstance(now_playing, list):
@@ -404,10 +427,14 @@ class AudioAddictClient:
                     details = self._get(f"/tracks/{track_id}")
                     if isinstance(details, dict):
                         result.update(details)
-                except AudioAddictError:
+                except AudioAddictError as exc:
                     # Basic Now Playing metadata is still useful if the
                     # secondary rich-track lookup fails.
-                    pass
+                    self._log(
+                        f"Unable to retrieve detailed metadata for track "
+                        f"{track_id}: {exc}",
+                        xbmc.LOGDEBUG,
+                    )
 
             return result
 
@@ -453,24 +480,74 @@ class AudioAddictClient:
         return servers
 
     def resolve_stream(self, channel_key):
-        """Return a reachable linear stream URL, with server fallback."""
+        """Return a playable linear stream URL, with bounded probing."""
         servers = self._playlist_servers(channel_key)
 
-        for server in servers:
+        # Keep startup responsive: probe at most the first two playlist
+        # candidates with short streamed GET requests. A network error or
+        # timeout is inconclusive, so Kodi is still allowed to try that URL.
+        # An explicit HTTP rejection is treated as a negative result.
+        probe_limit = min(len(servers), 2)
+        inconclusive = []
+
+        for server in servers[:probe_limit]:
+            response = None
+            safe_server = self._safe_url_for_log(server)
+
             try:
-                response = self.http.head(
+                response = self.http.get(
                     server,
                     headers={"Icy-MetaData": "1"},
                     allow_redirects=True,
-                    timeout=6,
+                    stream=True,
+                    timeout=(2, 2),
                 )
+
                 if 200 <= response.status_code < 400:
                     return server, len(servers)
-            except requests.RequestException:
-                continue
 
-        # Some streaming nodes refuse HEAD although Kodi can play them.
+                self._log(
+                    f"Stream probe rejected {safe_server} "
+                    f"(HTTP {response.status_code})"
+                )
+
+            except requests.RequestException as exc:
+                inconclusive.append(server)
+                self._log(
+                    f"Stream probe inconclusive for {safe_server}: "
+                    f"{type(exc).__name__}"
+                )
+
+            finally:
+                if response is not None:
+                    response.close()
+
+        # A timeout/connection failure does not prove Kodi cannot play the
+        # stream. Let Kodi try the first inconclusive candidate.
+        if inconclusive:
+            fallback = inconclusive[0]
+            self._log(
+                "Using an inconclusive stream candidate after bounded probing: "
+                f"{self._safe_url_for_log(fallback)}",
+                xbmc.LOGDEBUG,
+            )
+            return fallback, len(servers)
+
+        # If the probed candidates were explicitly rejected but further
+        # playlist servers exist, avoid probing the whole list serially and
+        # let Kodi try the next unprobed candidate directly.
+        if len(servers) > probe_limit:
+            fallback = servers[probe_limit]
+            self._log(
+                "Using an unprobed stream candidate after bounded probing: "
+                f"{self._safe_url_for_log(fallback)}",
+                xbmc.LOGDEBUG,
+            )
+            return fallback, len(servers)
+
         self._log(
-            "No stream server answered HEAD; using first playlist URL"
+            "All probed streaming servers were explicitly rejected",
+            xbmc.LOGWARNING,
         )
-        return servers[0], len(servers)
+        raise AudioAddictError(self._t(32110))
+

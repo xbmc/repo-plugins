@@ -49,43 +49,22 @@ def channel_images(channel):
 
 def music_listitem(
     channel_name,
-    current,
     stream_url,
     channel_art="",
     channel_fanart="",
 ):
     """Build the initial Kodi ListItem for a linear DI.FM stream."""
     item = xbmcgui.ListItem(path=stream_url)
-    title = channel_name
-    artist = "DI.FM"
-    thumb = ""
-
-    if isinstance(current, dict):
-        title = (
-            current.get("display_title")
-            or current.get("title")
-            or title
-        )
-        artist = current.get("display_artist") or artist
-        images = current.get("images")
-        thumb = image_url(
-            current.get("asset_url")
-            or (
-                images.get("default")
-                if isinstance(images, dict)
-                else ""
-            )
-        )
 
     tag = item.getMusicInfoTag()
-    tag.setTitle(str(title))
-    tag.setArtist(str(artist))
+    tag.setTitle(str(channel_name))
+    tag.setArtist("DI.FM")
     tag.setAlbum(f"DI.FM — {channel_name}")
 
     art = {}
-    if thumb or channel_art:
-        art["thumb"] = thumb or channel_art
-        art["icon"] = thumb or channel_art
+    if channel_art:
+        art["thumb"] = channel_art
+        art["icon"] = channel_art
 
     if channel_fanart or channel_art:
         art["fanart"] = channel_fanart or channel_art

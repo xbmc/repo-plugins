@@ -2,16 +2,18 @@
 """Small persistent state shared by the plugin and metadata service."""
 from __future__ import annotations
 
+import fcntl
 import json
 import os
+import shutil
+import tempfile
 import time
+from contextlib import contextmanager
 from pathlib import Path
 
 import xbmc
 import xbmcaddon
 import xbmcvfs
-import tempfile
-from contextlib import contextmanager
 
 ADDON_ID = "plugin.audio.difm"
 
@@ -23,29 +25,55 @@ def _state_path():
     os.makedirs(profile, exist_ok=True)
     return Path(profile) / "playback_state.json"
 
+
 @contextmanager
 def _state_lock(timeout=1.0):
-    """Serialize state writers across Kodi plugin/service processes."""
+    """Serialize state writers using a kernel-managed POSIX file lock.
+
+    The lock file may remain on disk, but the kernel releases the lock
+    automatically when its process exits, including after an unexpected Kodi
+    termination. This avoids stale-owner recovery races entirely.
+    """
     path = _state_path()
     lock_path = path.with_suffix(".lock")
+
+    # Older releases used a directory as the lock. A crash could leave that
+    # directory behind permanently. Remove it once before switching to the
+    # kernel-managed flock file used by current releases.
+    if lock_path.is_dir():
+        try:
+            shutil.rmtree(lock_path)
+            xbmc.log(
+                "[plugin.audio.difm] removed legacy playback-state lock directory",
+                xbmc.LOGDEBUG,
+            )
+        except FileNotFoundError:
+            pass
+        except OSError as exc:
+            if lock_path.is_dir():
+                raise OSError(
+                    f"Unable to remove legacy playback-state lock directory: {exc}"
+                )
+
     deadline = time.monotonic() + timeout
 
-    while True:
-        try:
-            lock_path.mkdir()
-            break
-        except FileExistsError:
-            if time.monotonic() >= deadline:
-                raise TimeoutError("Timed out waiting for playback-state lock")
-            time.sleep(0.02)
+    with open(lock_path, "a+", encoding="utf-8") as handle:
+        while True:
+            try:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                break
+            except BlockingIOError:
+                if time.monotonic() >= deadline:
+                    raise TimeoutError(
+                        "Timed out waiting for playback-state lock"
+                    )
+                time.sleep(0.02)
 
-    try:
-        yield
-    finally:
         try:
-            lock_path.rmdir()
-        except Exception:
-            pass
+            yield
+        finally:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
 
 def load_state():
     """Load playback state, returning an empty dict if unavailable."""
@@ -83,13 +111,15 @@ def clear_state():
     """Remove stale playback state."""
     try:
         path = _state_path()
-        if path.exists():
-            path.unlink()
+        with _state_lock():
+            if path.exists():
+                path.unlink()
     except Exception as exc:
         xbmc.log(
             f"[plugin.audio.difm] unable to clear playback state: {exc!r}",
             xbmc.LOGWARNING,
         )
+
 
 def update_state_if_current(stream_url, channel_key, updates):
     """Update state only if it still belongs to the expected playback."""
@@ -124,6 +154,7 @@ def update_state_if_current(stream_url, channel_key, updates):
             xbmc.LOGWARNING,
         )
         return False
+
 
 def _write_state_atomic(path, data):
     """Atomically replace the playback state file."""

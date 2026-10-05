@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.googledrive" name="Google Drive" version="1.5.0" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.googledrive" name="Google Drive" version="1.6.1" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.clouddrive.common" version="1.4.0"/>
+		<import addon="script.module.clouddrive.common" version="1.5.1"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="entrypoint.py">
 		<provides>image audio video</provides>
@@ -12,10 +12,9 @@
 		<platform>all</platform>
 		<summary lang="en_GB">Google Drive for KODI</summary>
 		<description lang="en_GB">
-Play all your media from Google Drive including Videos, Music and Pictures (including Google Photos).
+Play all your media from Google Drive including Videos, Music and Pictures.
  - Unlimited number of accounts.
  - Team Drives support
- - Google Photos support
  - Search over your drive.
  - Auto-Refreshed slideshow.
  - Export your videos to your library (.strm files)
@@ -40,6 +39,16 @@ Play all your media from Google Drive including Videos, Music and Pictures (incl
 			<fanart>fanart.jpg</fanart>
 		</assets>
 		<news>
+v1.6.1 released Oct 5, 2026:
+- Requires clouddrive.common 1.5.1 (review fixes: safer redirects, account migration, removed accounts)
+- Unused strings removed
+
+v1.6.0 released Oct 4, 2026:
+- Google Photos browsing removed: Google no longer allows apps to read your Photos library
+- Sign-in only asks for read-only access to your Drive files
+- Security: tokens are no longer written to the Kodi log; error reporting removed
+- Videos at original quality, music and pictures play through the add-on's local service, so long videos keep playing after the access token expires
+
 v1.5.0 released Jan 21, 2023:
 - Kodi 20 fix
 		</news>

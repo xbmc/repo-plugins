@@ -202,6 +202,18 @@ msgctxt "#30060"
 msgid "Play from the start"
 msgstr "Gioca dall'inizio"
 
+msgctxt "#30064"
+msgid "Enable playback tracking"
+msgstr "Abilita il monitoraggio della riproduzione"
+
+msgctxt "#30065"
+msgid "Play from the start or resume ?"
+msgstr "Riprodurre dall'inizio o riprendere?"
+
+msgctxt "#30066"
+msgid "Do you want to resume {item_label} from {start_offset} ?"
+msgstr "Vuoi riprendere {item_label} da {start_offset}?"
+
 
 msgctxt "#30061"
 msgid "Version {version} installed successfully"

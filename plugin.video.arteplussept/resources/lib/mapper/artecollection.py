@@ -3,6 +3,7 @@ Arte Collection is a set of videos or collections like in favorites or history.
 """
 import xbmcgui
 from resources.lib import actions
+from resources.lib.extended_program_data import ExtendedProgramData, enrich_program_data
 from resources.lib.mapper.arteitem import ArteTvVideoItem
 
 
@@ -30,8 +31,17 @@ class ArteCollection:
         # pylint: disable=assignment-from-none
         meta = self._get_page_meta(json_dict)
         items = []
+        extended_programs = {}
+        if any(not (page_item.get('lastviewed') or {}).get('is') for page_item in pages):
+            extended_programs = ExtendedProgramData(
+                self.plugin, self.settings
+            ).get_all()
         for page_item in pages:
-            menu_item = ArteTvVideoItem(self.plugin, page_item).map_artetv_item()
+            program_id = page_item.get('programId')
+            item_data = enrich_program_data(
+                page_item, extended_programs.get(program_id, {})
+            )
+            menu_item = ArteTvVideoItem(self.plugin, item_data).map_artetv_item()
             if menu_item is not None:
                 items.append(menu_item)
         if meta and meta.get('pages', False):

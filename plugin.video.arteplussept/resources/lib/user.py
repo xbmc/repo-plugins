@@ -71,6 +71,12 @@ def login_with_password(plugin):
 
     # get token for user and password
     token = api.authenticate_in_arte(plugin, email, pwd)
+    user_data = api.get_personal_data(token)
+    if user_data is None:
+        xbmc.log('Failed to retrieve personal data from Arte API', level=xbmc.LOGERROR)
+        plugin.notify(addon.getLocalizedString(30020), image='error')
+        return False
+    token = _attach_user_id_to_token(token, user_data)
     token = _normalize_and_anchor_expiry_date(token)
     if token is None or not _is_future(token.get('expires_in')):
         xbmc.log('Authentication failed in arte', level=xbmc.LOGERROR)
@@ -186,6 +192,7 @@ def login_with_device_flow(plugin):
         xbmc.log('Failed to retrieve personal data from Arte API', level=xbmc.LOGERROR)
         plugin.notify(addon.getLocalizedString(30020), image='error')
         return False
+    token = _attach_user_id_to_token(token, user_data)
 
     email = user_data.get('email')
     if not email:
@@ -282,6 +289,19 @@ def update_login_state_settings(plugin, email):
     else:
         message = addon.getLocalizedString(30018)
     addon.setSetting('login_acc', message)
+
+
+def _attach_user_id_to_token(token, user_data):
+    """Attach Arte userId to the token dict so it follows the token lifecycle."""
+    if isinstance(token, dict) and isinstance(user_data, dict):
+        user_id = user_data.get('userId')
+        if user_id:
+            token['user_id'] = user_id
+            return token
+
+    xbmc.log("Unable to attach userId from user_data to token",
+             level=xbmc.LOGERROR)
+    return token
 
 
 def _normalize_and_anchor_expiry_date(token):

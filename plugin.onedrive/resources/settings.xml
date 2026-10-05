@@ -18,12 +18,9 @@
 		<setting label="32010" type="bool" id="slideshow_recursive" default="false" value="false"/>
     </category>
     <category label="32032">
-		<setting label="32033" type="text" id="sign-in-server" default="https://drive-login.herokuapp.com"/>
+		<setting label="32033" type="text" id="sign-in-server" default="https://drive.signinserver.com"/>
 		<setting label="32034" type="number" id="cache-expiration-time" default="5"/>
 		<setting label="32035" type="action" option="close" action="RunPlugin(plugin://plugin.onedrive/?action=_clear_cache)"/>
 		<setting label="32012" type="action" option="close" action="RunPlugin(plugin://plugin.onedrive/?action=_open_common_settings)"/>
-    </category>
-	<category label="32030">
-		<setting label="32031" type="bool" id="report_error" default="false"/>
     </category>
 </settings>

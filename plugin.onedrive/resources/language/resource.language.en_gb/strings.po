@@ -84,14 +84,6 @@ msgctxt "#32020"
 msgid "Hide exporting progress dialog"
 msgstr ""
 
-msgctxt "#32030"
-msgid "Collaboration"
-msgstr ""
-
-msgctxt "#32031"
-msgid "Report errors automatically to help resolve them quickly"
-msgstr ""
-
 msgctxt "#32032"
 msgid "Advanced"
 msgstr ""

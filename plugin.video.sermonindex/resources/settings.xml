@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+  <section id="plugin.video.sermonindex">
+    <category id="playback" label="30100">
+      <group id="1">
+        <setting id="source" type="string" label="30101" help="30102">
+          <level>0</level>
+          <default>archive</default>
+          <constraints>
+            <options>
+              <option label="30103">archive</option>
+              <option label="30104">cdn</option>
+            </options>
+          </constraints>
+          <control type="list" format="string">
+            <heading>30101</heading>
+          </control>
+        </setting>
+        <setting id="prefer_video" type="boolean" label="30105" help="30106">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="subtitles" type="boolean" label="30107" help="30108">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+    </category>
+    <category id="browsing" label="30200">
+      <group id="1">
+        <setting id="page_size" type="integer" label="30201" help="30202">
+          <level>0</level>
+          <default>50</default>
+          <constraints>
+            <minimum>20</minimum>
+            <step>10</step>
+            <maximum>200</maximum>
+          </constraints>
+          <control type="slider" format="integer"/>
+        </setting>
+      </group>
+    </category>
+  </section>
+</settings>

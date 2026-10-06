@@ -1,0 +1,105 @@
+# Kodi Media Center language file
+# Addon Name: SermonIndex
+# Addon id: plugin.video.sermonindex
+# Addon Provider: SermonIndex.net
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://www.sermonindex.net/\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Speakers"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Scripture"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Random sermon"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Search speakers"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Old Testament"
+msgstr ""
+
+msgctxt "#30006"
+msgid "New Testament"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Next page"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Chapter {}"
+msgstr ""
+
+msgctxt "#30009"
+msgid "No sermons found"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Could not reach SermonIndex"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Nothing playable in this sermon"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Stream from"
+msgstr ""
+
+msgctxt "#30102"
+msgid "The Internet Archive hosts this audio free of charge, so it costs the SermonIndex project nothing. Switch to the SermonIndex CDN if the Archive is slow where you are."
+msgstr ""
+
+msgctxt "#30103"
+msgid "Internet Archive"
+msgstr ""
+
+msgctxt "#30104"
+msgid "SermonIndex CDN"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Play video when a sermon has both"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Some sermons exist as both video and audio. Turn this off to always take the smaller audio file."
+msgstr ""
+
+msgctxt "#30107"
+msgid "Load subtitles when available"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Around 36,000 sermons carry subtitles."
+msgstr ""
+
+msgctxt "#30200"
+msgid "Browsing"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Items per page"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Fewer items load faster on a small box such as a Raspberry Pi."
+msgstr ""

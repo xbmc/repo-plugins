@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.drnu" version="7.1.0" name="DR TV" provider-name="TermeHansen">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+        <import addon="script.module.dateutil" version="2.8.2" />
+        <import addon="script.module.requests" version="2.31.0" />
+        <import addon="script.module.requests-cache" version="0.5.2+matrix.2"/>
+        <import addon="inputstream.adaptive" version="21.0.0" optional="true"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py"/>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Watch live and archived TV from DR (Danish Broadcasting Corporation)</summary>
+        <summary lang="da_DK">Se live og arkiveret TV fra DR</summary>
+        <description lang="en_GB">All DR's live TV channels and archived programs as seen on dr.dk/tv.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the KODI official forums</description>
+        <description lang="da_DK">Alle DR's live TV kanaler samt alle de programmer du finder på dr.dk/tv.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på KODI forummet</description>
+        <disclaimer lang="en_GB">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
+        <disclaimer lang="da_DK">Nogle dele af denne addon er muligvis ikke lovlig i dit land - kontroller venligst dine lokale love.</disclaimer>
+        <license>GPL-2.0-only</license>
+        <platform>all</platform>
+        <language>da</language>
+        <email>termopeten@gmail.com</email>
+        <website>https://www.dr.dk/</website>
+        <source>https://github.com/xbmc-danish-addons/plugin.video.drnu</source>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+            <screenshot>resources/media/Screenshot1.jpg</screenshot>
+            <screenshot>resources/media/Screenshot2.jpg</screenshot>
+            <screenshot>resources/media/Screenshot3.jpg</screenshot>
+            <screenshot>resources/media/Screenshot4.jpg</screenshot>
+       </assets>
+       <news>[B]Version 7.1.0 - 2026-10-04[/B]
+        - Fix "Continue watching" crash.
+        - Background service: request cache db is expired and vacuumed automatically
+        - Scheduled re-cache runs from the service at a set time of day (default 03:00), only while Kodi is idle
+        - service.cronxbmc dependency removed; old cron jobs are cleaned up on upgrade
+       </news>
+       <news>[B]Version 7.0.0 - 2026-09-27[/B]
+        - Major internal rewrite: API client split into auth, subtitles, constants and menu modules
+        - Addon state created lazily; playback start wait interruptible by Kodi shutdown
+        - Fixes: search busy spinner, subtitle download crash, resume positions after DR API change
+        - Test suite runs against recorded API fixtures; ruff linting in CI
+       </news>
+       <news>[B]Version 6.7.0 - 2025-10-05[/B]
+        - Add option to show minisjang and ramasjang with normal menu items
+        - Add new icons for base menu entries
+       </news>
+       <news>[B]Version 6.6.1 - 2025-06-15[/B]
+        - Fix crash in refresh of anonymous tokens
+       </news>
+       <news>[B]Version 6.6.0 - 2025-05-09[/B]
+        - Fix change in drtv login flow
+        - Use oidc auth flow
+        - Add new setting for subtitles on livetv
+       </news>
+       <news>[B]Version 6.5.0 - 2024-01-22[/B]
+        - Fix "IOException error" and HTTP timeouts.
+        - Better output during re-caching.
+        - Fix re-caching to also cache full description urls.
+       </news>
+       <news>[B]Version 6.4.6 - 2024-11-01[/B]
+        - Fix "unsupported_subCode" issue.
+        - Fix time offset in live tv EPG.
+        - More general fix for the 'sub' header issue
+       </news>
+       <news>[B]Version 6.4.5 - 2024-09-29[/B]
+        - Fix issue of dr returning 404 on some streams with 'sub' header, again..
+        - remove inputstreamhelper from addon
+       </news>
+       <news>[B]Version 6.4.4 - 2024-09-08[/B]
+        - Fix issue of dr returning 404 on some streams with 'sub' header
+       </news>
+       <news>[B]Version 6.4.3 - 2024-08-20[/B]
+        - Fix issue of distutils being removed in python 3.12
+       </news>
+       <news>[B]Version 6.4.2 - 2024-05-06[/B]
+        - Fix not unfolding my-list
+       </news>
+       <news>[B]Version 6.4.1 - 2024-03-29[/B]
+        - Fix live channels not working from EU
+       </news>
+       <news>[B]Version 6.4.0 - 2024-03-19[/B]
+        - add the new Gensyn area
+        - change Ultra area to not be kids area
+        - fix link item issue
+       </news>
+       <news>[B]Version 6.3.1 - 2024-03-05[/B]
+        - fix refresh token bug
+        - fix watchlist missing resume time bug
+       </news>
+       <news>[B]Version 6.3.0 - 2024-02-25[/B]
+        - Added login
+        - changed videoinfo to nexus api
+        - removed favourites and recent to use locale files
+       </news>
+       <news>[B]Version 6.2.0 - 2023-04-03[/B]
+        - Complete retwrite of settings api
+        - fix for categories api change from dr.dk
+       </news>
+       <news>[B]Version 6.1.1 - 2023-03-01[/B]
+        - fix bug in token json writing
+        - added cron job
+       </news>
+       <news>[B]Version 6.1.0 - 2023-01-18[/B]
+        - IPTV Manager integration (CodingBullywug)
+        - fix for missing subtitles
+        - fix for missing item descriptions
+       </news>
+       <news>[B]Version 6.0.2 - 2022-10-12[/B]
+        - fix bug when fetching paged lists
+        - fix bug for documentaries category
+        - added top spinner item to home screen
+        - added use of local subtitle files
+       </news>
+       <news>[B]Version 6.0.1 - 2022-09-19[/B]
+       - fix bug for live streams in menu items     
+       - added simple area menu option
+       - added getting schedules for up to 7 days 
+       </news>
+       <news>[B]Version 6.0.0 - 2022-09-01[/B]
+       - Major code re-factor for new API from dr.dk
+       </news>
+       <news>[B]Version 5.1.2 - 2022-06-01[/B]
+       - catch failure in recache cleanup
+       - add setting for inputstream api
+       </news>
+       <news>[B]Version 5.1.1 - 2022-04-20[/B]
+       - hot-fix to use hls inputstreams</news>
+       <news>[B]Version 5.1.0 - 2022-04-01[/B]
+       - re-factor for python 3 only
+       - remove exception handling for pastebin
+       - add Minisjang area and update ui elements</news>
+    </extension>
+</addon>

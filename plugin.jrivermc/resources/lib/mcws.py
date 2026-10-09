@@ -34,7 +34,8 @@ FILE_CONTENT_URL = "/File/GetFile?File={key}&Playback=2&Token={token}{conversion
 FILE_INFO_URL = "/File/GetInfo?File={key}&Action=json&Token={token}"
 LOOKUP_URL = "https://webplay.jriver.com/libraryserver/lookup?id={access}"
 LIBRARIES_URL = "/Library/List?Token={token}"
-FIELDS = "&Fields=" + quote_plus("Key,Name,Album,Artist,Duration,Media Type,Media Sub Type,File Type,Date,Description,Genre,Series,Season,Episode,Bookmark")
+FIELDS = "&Fields=" + quote_plus("Key,Name,Album,Artist,Duration,Media Type,Media Sub Type,File Type,Date,Description,Genre,Series,Season,Episode,Bookmark,Rating")
+TIMEOUT = 8
 
 def reset():
    xbmcgui.Window(10000).setProperty("JRMC_TOKEN", None)
@@ -63,7 +64,7 @@ def connect(showUI=False):
    # Check if server is running/responding
    try:
       url = getBaseURL() + ALIVE_URL
-      with urllib.request.urlopen(url) as response:
+      with urllib.request.urlopen(url, timeout=TIMEOUT) as response:
          data = response.read().decode("utf-8")
      
       if not "Status=\"OK\"" in data:
@@ -90,7 +91,7 @@ def connect(showUI=False):
       headers = {"Authorization": f"Basic {base64_credentials}"}
       req = urllib.request.Request(url, headers=headers)
 
-      with urllib.request.urlopen(req) as response:
+      with urllib.request.urlopen(req, timeout=TIMEOUT) as response:
          data = response.read().decode("utf-8")
          
       if not "Status=\"OK\"" in data:
@@ -124,7 +125,7 @@ def setBaseAddress():
       try:
          url = LOOKUP_URL.format(access=address)
         
-         with urllib.request.urlopen(url) as response:
+         with urllib.request.urlopen(url, timeout=TIMEOUT) as response:
             data = response.read().decode("utf-8")
       except Exception as e:
          xbmc.log("JRIVER: " + getDisplayString(30203), xbmc.LOGINFO)
@@ -169,7 +170,7 @@ def getLibChildren(parentId):
 
    try:
       url = getBaseURL() + BROWSE_CHILDREN_URL.format(id=parentId, token=getToken())
-      with urllib.request.urlopen(url) as response:
+      with urllib.request.urlopen(url, timeout=TIMEOUT) as response:
          data = response.read().decode("utf-8")
            
       if not "Status=\"OK\"" in data:
@@ -199,7 +200,7 @@ def getLibFiles(parentId):
    token = xbmcgui.Window(10000).getProperty("JRMC_TOKEN")
    try:
       url = getBaseURL() + BROWSE_FILES_URL.format(id=parentId, token=token) + FIELDS
-      with urllib.request.urlopen(url) as response:
+      with urllib.request.urlopen(url, timeout=TIMEOUT) as response:
          data = response.read().decode("utf-8")
          
       files = json.loads(data)
@@ -216,7 +217,7 @@ def getFileInfo(fileKey):
    token = xbmcgui.Window(10000).getProperty("JRMC_TOKEN")
    try:
       url = getBaseURL() + FILE_INFO_URL.format(key=fileKey, token=token)
-      with urllib.request.urlopen(url) as response:
+      with urllib.request.urlopen(url, timeout=TIMEOUT) as response:
          data = response.read().decode("utf-8")
          
       info = json.loads(data)
@@ -243,7 +244,7 @@ def setLoadedLibrary(serverName):
    library_id = "Library0"
    try:
       url = getBaseURL() + LIBRARIES_URL.format(token=getToken())
-      with urllib.request.urlopen(url) as response:
+      with urllib.request.urlopen(url, timeout=TIMEOUT) as response:
          data = response.read().decode("utf-8")
 
       root = ET.fromstring(data) 

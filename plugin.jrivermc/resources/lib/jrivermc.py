@@ -239,7 +239,9 @@ def getListItem(file, content_type):
     return list_item
 
 def playVideo(key):
-
+    if not MCWS.connect():
+        return
+    
     play_item = xbmcgui.ListItem(offscreen=True)
     convert = getVideoConversion(xbmcaddon.Addon().getSettingInt("video_convert"))
     path = MCWS.getFileContentURL(key, convert)
@@ -247,7 +249,9 @@ def playVideo(key):
     xbmcplugin.setResolvedUrl(HANDLE, True, play_item)
 
 def playAudio(key):
-
+    if not MCWS.connect():
+        return
+    
     play_item = xbmcgui.ListItem(offscreen=True)
     convert = getAudioConversion(xbmcaddon.Addon().getSettingInt("audio_convert"))
     path = MCWS.getFileContentURL(key, convert)
@@ -272,12 +276,14 @@ def playFiles(parent_id, index, replace):
     if not files:
         return
     
-    playlist = queueFiles(files, replace, index)
+    result = queueFiles(files, replace, index)
+    playlist = result["playlist"]
+    start_index = result["startIndex"]
     if playlist:
-        if index == -1:
+        if start_index == -1:
             playlist.shuffle()
         if replace:
-            xbmc.Player().play(playlist, startpos=index)
+            xbmc.Player().play(playlist, startpos=start_index)
 
 def queueFiles(files, replace, index=0):
     if not files:
@@ -298,6 +304,8 @@ def queueFiles(files, replace, index=0):
 
     for file in files:
         if file["Media Type"] != mtype:
+            if index > 0:
+                index = index - 1
             continue
 
         if isVideo:
@@ -309,7 +317,7 @@ def queueFiles(files, replace, index=0):
       
         playlist.add(url=url, listitem=list_item)
 
-    return playlist
+    return { "playlist" : playlist, "startIndex" : index }
 
 def getAudioConversion(index):
     AudioQualities = {
@@ -350,7 +358,7 @@ def router(paramstring):
     params = dict(parse_qsl(paramstring))
     
     # Check the parameters passed to the plugin
-    if not params:   # root
+    if not params or not params.get("action", ""):   # root
         listChildren(-1, "")
     elif params["action"] == "browse_lib":
         listChildren(int(params["id"]), params["name"])
@@ -361,7 +369,7 @@ def router(paramstring):
     elif params["action"] == "play_video":
         playVideo(int(params["key"]))
     elif params["action"] == "play_audio":
-            playAudio(int(params["key"]))
+        playAudio(int(params["key"]))
     elif params["action"] == "show_settings":
         xbmc.executebuiltin("Addon.OpenSettings(plugin.jrivermc)")
     elif params["action"] == "connect":

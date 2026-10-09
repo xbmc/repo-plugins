@@ -7,16 +7,13 @@ provider-name="JRiver">
   <import addon="xbmc.python" version="3.0.1"/>
 </requires>
 <extension point="xbmc.python.pluginsource" library="default.py">
-  <!-- <provides>executable</provides> -->
-  <provides>video</provides>
-  <provides>audio</provides>
-  <!-- <provides>image</provides> -->
+  <provides>video audio</provides>
 </extension>
 <extension point="xbmc.addon.metadata">
   <summary lang="en_GB">JRiver Media Center Plugin</summary>
   <description lang="en_GB">Allows you to browse and play from a JRiver MC library.</description>
   <disclaimer lang="en_GB"></disclaimer>
-  <license>GPL-3.0-only	</license>
+  <license>GPL-3.0-or-later</license>
   <assets>
     <icon>resources/images/icon.png</icon>
     <screenshot>resources/images/screenshot-1.jpg</screenshot>

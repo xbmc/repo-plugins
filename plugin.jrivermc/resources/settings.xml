@@ -4,8 +4,8 @@
         <setting label="30010" type="text" id="library" default=""/>
         <setting label="30011" type="text" id="username" default=""/>
         <setting label="30012" type="text" id="password" option="hidden" default=""/>
-        <setting label="30013" type="bool" id="secure" default="False"/>
         <setting label="30014" type="bool" id="local_ip" default="False"/>
+        <setting label="30013" type="bool" id="secure" default="False"/>
         <setting type="sep"/>
         <setting label="30015" type="action" action="RunPlugin(plugin://plugin.jrivermc/?action=connect)" option="close"/>
     </category>

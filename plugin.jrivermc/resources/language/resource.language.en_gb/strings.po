@@ -32,7 +32,7 @@ msgstr ""
 
 #: Settings
 msgctxt "#30013"
-msgid "Use https"
+msgid "Use https\n*Recommended for a remote server"
 msgstr ""
 
 #: Settings

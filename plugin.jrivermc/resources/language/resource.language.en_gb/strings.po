@@ -1,0 +1,167 @@
+# plugin.jrivermc language file
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+#: Settings Heading
+msgctxt "#30000"
+msgid "Library"
+msgstr ""
+
+#: Settings Heading
+msgctxt "#30001"
+msgid "Playback"
+msgstr ""
+
+#: Settings
+msgctxt "#30010"
+msgid "Access Key or IPAdress:port"
+msgstr ""
+
+#: Settings
+msgctxt "#30011"
+msgid "Username"
+msgstr ""
+
+#: Settings
+msgctxt "#30012"
+msgid "Password"
+msgstr ""
+
+#: Settings
+msgctxt "#30013"
+msgid "Use https"
+msgstr ""
+
+#: Settings
+msgctxt "#30014"
+msgid "Use local IP address for Access Key"
+msgstr ""
+
+#: Settings
+msgctxt "#30015"
+msgid "Save and Connect"
+msgstr ""
+
+#: Settings
+msgctxt "#30030"
+msgid "Video Conversion"
+msgstr ""
+
+#: Settings
+msgctxt "#30031"
+msgid "None"
+msgstr ""
+
+#: Settings
+msgctxt "#30032"
+msgid "High"
+msgstr ""
+
+#: Settings
+msgctxt "#30033"
+msgid "Medium"
+msgstr ""
+
+#: Settings
+msgctxt "#30034"
+msgid "Low"
+msgstr ""
+
+#: Settings
+msgctxt "#30040"
+msgid "Audio Conversion"
+msgstr ""
+
+#: Settings
+msgctxt "#30041"
+msgid "WAV"
+msgstr ""
+
+#: Settings
+msgctxt "#30042"
+msgid "MP3 High"
+msgstr ""
+
+#: Settings
+msgctxt "#30043"
+msgid "MP3 Medium"
+msgstr ""
+
+#: Settings
+msgctxt "#30044"
+msgid "MP3 Low"
+msgstr ""
+
+#: Info
+msgctxt "#30100"
+msgid "Status"
+msgstr ""
+
+#: Info
+msgctxt "#30101"
+msgid "Connecting to library server..."
+msgstr ""
+
+#: Info
+msgctxt "#30102"
+msgid "Connection successfull!"
+msgstr ""
+
+#: Info
+msgctxt "#30103"
+msgid "Failure"
+msgstr ""
+
+#: Context Menu
+msgctxt "#30175"
+msgid "Play (MC)"
+msgstr ""
+
+#: Context Menu
+msgctxt "#30176"
+msgid "Shuffle + Play (MC)"
+msgstr ""
+
+#: Context Menu
+msgctxt "#30177"
+msgid "Add (MC)"
+msgstr ""
+
+#: Context Menu
+msgctxt "#30178"
+msgid "Play Single (MC)"
+msgstr ""
+
+#: Context Menu
+msgctxt "#30179"
+msgid "Add Single (MC)"
+msgstr ""
+
+#: Error
+msgctxt "#30200"
+msgid "Could not connect to the MC server. Check the Access Key or address and port in the add-on settings and make sure the server is running."
+msgstr ""
+
+#: Error
+msgctxt "#30201"
+msgid "Could not authenticate on the MC server. Check the username and password in the add-on settings."
+msgstr ""
+
+#: Error
+msgctxt "#30202"
+msgid "Not connected to a library server. Select to check/edit the add-on settings..."
+msgstr ""
+
+#: Error
+msgctxt "#30203"
+msgid "Access Key server not available. Please try again later."
+msgstr ""
+
+#: Error
+msgctxt "#30204"
+msgid "Access Key not found on server (it is case sensitive). Please edit and try again."
+msgstr ""
+

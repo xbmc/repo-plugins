@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30000">
+        <setting label="30010" type="text" id="library" default=""/>
+        <setting label="30011" type="text" id="username" default=""/>
+        <setting label="30012" type="text" id="password" option="hidden" default=""/>
+        <setting label="30013" type="bool" id="secure" default="False"/>
+        <setting label="30014" type="bool" id="local_ip" default="False"/>
+        <setting type="sep"/>
+        <setting label="30015" type="action" action="RunPlugin(plugin://plugin.jrivermc/?action=connect)" option="close"/>
+    </category>
+    <category label="30001">
+        <setting label="30030" type="select" id="video_convert" lvalues="30031|30032|30033|30034" default="0"/>
+        <setting label="30040" type="select" id="audio_convert" lvalues="30031|30041|30042|30043|30044" default="0"/>
+    </category>
+</settings>

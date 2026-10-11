@@ -1,0 +1,161 @@
+# Kodi Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.audio.radiotunes 1.0.0\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "#32000"
+msgid "Account and playback"
+msgstr "Compte et lecture"
+
+msgctxt "#32001"
+msgid "AudioAddict email"
+msgstr "E-mail AudioAddict"
+
+msgctxt "#32002"
+msgid "AudioAddict password"
+msgstr "Mot de passe AudioAddict"
+
+msgctxt "#32003"
+msgid "Audio quality"
+msgstr "Qualité audio"
+
+msgctxt "#32004"
+msgid "Medium — AAC-HE 64 kb/s"
+msgstr "Moyenne — AAC-HE 64 kb/s"
+
+msgctxt "#32005"
+msgid "High — AAC 128 kb/s"
+msgstr "Haute — AAC 128 kb/s"
+
+msgctxt "#32006"
+msgid "Ultra — MP3 320 kb/s"
+msgstr "Ultra — MP3 320 kb/s"
+
+msgctxt "#32010"
+msgid "All channels"
+msgstr "Toutes les chaînes"
+
+msgctxt "#32011"
+msgid "Styles"
+msgstr "Styles"
+
+msgctxt "#32012"
+msgid "Favorites"
+msgstr "Favoris"
+
+msgctxt "#32013"
+msgid "Settings"
+msgstr "Réglages"
+
+msgctxt "#32014"
+msgid "Popular"
+msgstr "Populaires"
+
+msgctxt "#32015"
+msgid "New"
+msgstr "Nouveautés"
+
+
+msgctxt "#32030"
+msgid "Configure your AudioAddict email and password in the add-on settings first."
+msgstr "Configure d’abord ton e-mail et ton mot de passe AudioAddict dans les réglages de l’extension."
+
+msgctxt "#32031"
+msgid "Unexpected error. Check kodi.log."
+msgstr "Erreur inattendue. Consulte kodi.log."
+
+msgctxt "#32034"
+msgid "Style not found."
+msgstr "Style introuvable."
+
+msgctxt "#32035"
+msgid "Section not found."
+msgstr "Section introuvable."
+
+msgctxt "#32036"
+msgid "Missing channel identifier."
+msgstr "Identifiant de chaîne manquant."
+
+msgctxt "#32037"
+msgid "Missing channel key."
+msgstr "Clé de chaîne manquante."
+
+msgctxt "#32038"
+msgid "Unknown action."
+msgstr "Action inconnue."
+
+msgctxt "#32041"
+msgid "Add to favorites"
+msgstr "Ajouter aux favoris"
+
+msgctxt "#32042"
+msgid "Remove from favorites"
+msgstr "Retirer des favoris"
+
+msgctxt "#32043"
+msgid "No favorite channels yet."
+msgstr "Aucune chaîne favorite pour le moment."
+
+msgctxt "#32044"
+msgid "Added to favorites."
+msgstr "Ajouté aux favoris."
+
+msgctxt "#32045"
+msgid "Removed from favorites."
+msgstr "Retiré des favoris."
+
+msgctxt "#32100"
+msgid "RadioTunes account not configured. Open add-on settings and enter your AudioAddict email/password."
+msgstr "Compte RadioTunes non configuré. Ouvrez les paramètres de l’extension et saisissez votre e-mail et votre mot de passe AudioAddict."
+
+msgctxt "#32101"
+msgid "Unable to contact AudioAddict while signing in."
+msgstr "Impossible de contacter AudioAddict lors de la connexion."
+
+msgctxt "#32102"
+msgid "AudioAddict temporarily rate-limited new sign-ins."
+msgstr "AudioAddict limite temporairement les nouvelles connexions."
+
+msgctxt "#32103"
+msgid "Try again in {retry} seconds."
+msgstr "Réessayez dans {retry} secondes."
+
+msgctxt "#32104"
+msgid "AudioAddict sign-in failed (HTTP {code})."
+msgstr "Échec de la connexion AudioAddict (HTTP {code})."
+
+msgctxt "#32105"
+msgid "AudioAddict returned an invalid sign-in response."
+msgstr "AudioAddict a renvoyé une réponse de connexion invalide."
+
+msgctxt "#32106"
+msgid "AudioAddict sign-in response is missing session information."
+msgstr "La réponse de connexion AudioAddict ne contient pas toutes les informations de session."
+
+msgctxt "#32107"
+msgid "Unable to contact AudioAddict. Check your network connection."
+msgstr "Impossible de contacter AudioAddict. Vérifiez votre connexion réseau."
+
+msgctxt "#32108"
+msgid "AudioAddict API error (HTTP {code})."
+msgstr "Erreur de l’API AudioAddict (HTTP {code})."
+
+msgctxt "#32109"
+msgid "AudioAddict returned invalid data."
+msgstr "AudioAddict a renvoyé des données invalides."
+
+msgctxt "#32110"
+msgid "Unable to retrieve the RadioTunes stream playlist."
+msgstr "Impossible de récupérer la playlist de diffusion RadioTunes."
+
+msgctxt "#32111"
+msgid "RadioTunes stream playlist error (HTTP {code})."
+msgstr "Erreur de la playlist de diffusion RadioTunes (HTTP {code})."
+
+msgctxt "#32112"
+msgid "RadioTunes did not return any streaming server."
+msgstr "RadioTunes n’a renvoyé aucun serveur de diffusion."

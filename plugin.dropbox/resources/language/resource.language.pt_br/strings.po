@@ -1,0 +1,81 @@
+# Kodi Media Center language file
+# Addon Name: Dropbox
+# Addon id: plugin.dropbox
+# Addon Provider: Carlos Guzman (cguZZman)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Portuguese (Brazil)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Player Service"
+msgstr "Serviço de reprodução"
+
+msgctxt "#32001"
+msgid "Export Service"
+msgstr "Serviço de exportação"
+
+msgctxt "#32002"
+msgid "Source Service"
+msgstr "Serviço de fonte"
+
+msgctxt "#32003"
+msgid "Before export to library, remove previous files and folders"
+msgstr "Antes de exportar para a biblioteca, remover os arquivos e pastas anteriores"
+
+msgctxt "#32004"
+msgid "Automatically set subtitles from Dropbox"
+msgstr "Usar automaticamente as legendas do Dropbox"
+
+msgctxt "#32012"
+msgid "Open Cloud Drive Common Settings..."
+msgstr "Abrir as configurações comuns do Cloud Drive..."
+
+msgctxt "#32017"
+msgid "Ask to resume if resume point exists in library"
+msgstr "Perguntar se deve retomar quando houver um ponto de retomada na biblioteca"
+
+msgctxt "#32019"
+msgid "Do not include filename extension in a .strm"
+msgstr "Não incluir a extensão do arquivo em um .strm"
+
+msgctxt "#32020"
+msgid "Hide exporting progress dialog"
+msgstr "Ocultar o progresso da exportação"
+
+msgctxt "#32032"
+msgid "Advanced"
+msgstr "Avançado"
+
+msgctxt "#32033"
+msgid "Sign-in Server"
+msgstr "Servidor de login"
+
+msgctxt "#32034"
+msgid "Cache expiration time (in minutes)"
+msgstr "Tempo de expiração do cache (em minutos)"
+
+msgctxt "#32035"
+msgid "Clear cache now"
+msgstr "Limpar o cache agora"
+
+msgctxt "#32067"
+msgid "Services"
+msgstr "Serviços"
+
+msgctxt "#32068"
+msgid "Allow using Dropbox as a source"
+msgstr "Permitir usar o Dropbox como fonte"
+
+msgctxt "#32069"
+msgid "     Source server port  -  http://localhost:<port>/source"
+msgstr "     Porta do servidor de fonte  -  http://localhost:<porta>/source"

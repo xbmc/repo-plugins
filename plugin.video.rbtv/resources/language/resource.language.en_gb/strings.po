@@ -1,0 +1,94 @@
+# Kodi Media Center language file
+# Addon Name: Rocket Beans TV
+# Addon id: plugin.video.rbtv
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.rbtv\n"
+"Report-Msgid-Bugs-To: https://codeberg.org/randomDuderus/plugin.video.rbtv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Show list"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Only shows with episodes from the last N years"
+msgstr ""
+
+msgctxt "#30003"
+msgid "0 shows every show. Any other value hides shows whose newest episode is older than N calendar years. Search and favourites are never filtered."
+msgstr ""
+
+msgctxt "#30004"
+msgid "Sort shows by"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Alphabetically"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Newest episode first"
+msgstr ""
+
+# Menu and dialogs
+
+msgctxt "#30100"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Refresh list"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Manage favourites"
+msgstr ""
+
+msgctxt "#30103"
+msgid "All shows"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Add RBTV favourite"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Remove RBTV favourite"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Next page"
+msgstr ""
+
+msgctxt "#30107"
+msgid "{0} episode"
+msgstr ""
+
+msgctxt "#30108"
+msgid "{0} episodes"
+msgstr ""
+
+msgctxt "#30109"
+msgid "Search show"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Choose favourites"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Loading shows"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Reloading shows"
+msgstr ""

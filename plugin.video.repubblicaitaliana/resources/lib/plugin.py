@@ -105,12 +105,12 @@ def programmi_tv():
         ),
         (
             'RaiNews24',
-            'https://8e7439fdb1694c8da3a0fd63e4dda518.msvdn.net/rainews1/hls/playlist_mo.m3u8',
+            'https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=1&output=16',
             'https://www.rainews.it/dl/components/img/svg/RaiNewsBarra-logo.png'
         ),
         (
             'TgCom24',
-            'https://live03-col.msf.cdn.mediaset.net/live/ch-kf/kf-clr.isml/manifest.mpd|User-Agent=HbbTV/1.6.1',
+            'https://d3k8wzt41aflvx.cloudfront.net/TGCOM24/Live.m3u8',
             'https://www.mimesi.com/wp-content/uploads/2017/11/tgcom24.jpg'
         ),
         (

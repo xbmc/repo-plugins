@@ -5,6 +5,10 @@ Italian politics - TV and Radio channels
 - You can install this plugin via the official Kodi repository
 
 ### Changelog
+2.3.1 (13 Oct 2026)
+- Fix RaiNews24
+- Fix TgCom24
+
 2.3.0 (07 Ott 2026)
 - Code refactoring
 - Added new channels

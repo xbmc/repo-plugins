@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+  <section id="plugin.game.manuals.regvault">
+    <category id="general" label="32100">
+      <group id="1" label="32102">
+        <setting id="rom_size_limit" type="integer" label="32120" help="32121">
+          <level>0</level>
+          <default>512</default>
+          <constraints>
+            <minimum>16</minimum>
+            <step>16</step>
+            <maximum>8192</maximum>
+          </constraints>
+          <control type="slider" format="integer">
+            <popup>false</popup>
+            <formatlabel>32122</formatlabel>
+          </control>
+        </setting>
+      </group>
+    </category>
+  </section>
+</settings>

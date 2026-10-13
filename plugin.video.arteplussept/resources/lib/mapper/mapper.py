@@ -1,6 +1,7 @@
 """Map JSON API outputs into playable content and menus for Kodi"""
 import xbmc
 from resources.lib import api
+from resources.lib.extended_program_data import ExtendedProgramData, enrich_program_data
 from resources.lib.mapper.arteitem import ArteTvVideoItem
 from resources.lib.mapper.artezone import ArteZone
 from resources.lib.mapper.artefavorites import ArteFavorites
@@ -22,7 +23,13 @@ def build_video_from_program(plugin, settings, prgm_id, col_id=None):
             path = build_path_for_playlist(full_prgm)
     if path:
         prgm_attr = full_prgm.get('attributes', {}).get('metadata', {})
-        return ArteTvVideoItem(plugin, prgm_attr).build_item(path, True)
+        prgm_attr = enrich_program_data(
+            prgm_attr, ExtendedProgramData(plugin, settings).get(prgm_id)
+        )
+        builder = ArteTvVideoItem(plugin, prgm_attr)
+        li = builder.build_item(path, True)
+        builder.set_tracking_properties(li, full_prgm.get('attributes', {}).get('stat', {}))
+        return li
     return None
 
 
@@ -122,11 +129,15 @@ def build_menu_from_collection(plugin, settings, collection_id):
     """
     playlist = api.playlist_collection(settings.language, collection_id)
     menu = []
+    extended_programs = ExtendedProgramData(plugin, settings).get_all()
     for pl_prgm in playlist.get('attributes', {}).get('items', {}):
         prgm_id = pl_prgm.get('providerId', None)
         if prgm_id:
             path = plugin.url_for('play', program_id=prgm_id, mpaa='Unknown')
-            li = ArteTvVideoItem(plugin, pl_prgm).build_item(path, True)
+            item_data = enrich_program_data(
+                pl_prgm, extended_programs.get(prgm_id, {})
+            )
+            li = ArteTvVideoItem(plugin, item_data).build_item(path, True)
             if li:
                 menu.append(li)
     return menu
@@ -158,6 +169,60 @@ def build_playlist_from_collection(plugin, settings, collection_id, menu=False):
             'prgm_id_to_pos': prgm_id_to_pos,
             'pos_to_prgm_id': pos_to_prgm_id
             }
+
+
+def get_collection_resume_position(
+        items, program_id_to_pos, program_id=None, collection_id=None):
+    """Choose explicit episode first, otherwise resume the collection history."""
+    default_completed_threshold = 0.95
+    default_start_position = -1
+    if program_id:
+        if program_id in program_id_to_pos:
+            position = program_id_to_pos[program_id]
+            xbmc.log(
+                f"Starting collection {collection_id} at requested program "
+                f"{program_id}, playlist position {position}.",
+                xbmc.LOGDEBUG,
+            )
+            return position
+        xbmc.log(
+            f"Unable to find program {program_id} in collection {collection_id}. "
+            "Falling back to automatic resume.",
+            xbmc.LOGERROR,
+        )
+
+    items_progress = []
+    for item in items:
+        start_offset = item.getProperty('arte_start_offset')
+        try:
+            progress = float(start_offset) / float(item.getVideoInfoTag().getDuration()) \
+                if start_offset else None
+        except (TypeError, ValueError, OverflowError):
+            progress = None
+        # normalize progress, to keep the same number and
+        # order between progress_values and items
+        if progress is not None:
+            progress = max(0.0, min(progress, 1.0))
+        else:
+            progress = 0.0
+        items_progress.append(progress)
+
+    for position, progress in enumerate(items_progress):
+        if 0.0 <= progress < default_completed_threshold:
+            xbmc.log(
+                f"Automatically resuming collection {collection_id} at playlist "
+                f"position {position} ({progress * 100:.1f}%).",
+                xbmc.LOGDEBUG,
+            )
+            return position
+
+    xbmc.log(
+        f"No program id forced and all items in collection {collection_id} exceed "
+        f"{default_completed_threshold * 100:.1f}%; "
+        f"keeping default start position {default_start_position}.",
+        xbmc.LOGDEBUG,
+    )
+    return default_start_position
 
 
 def build_playable_playlist(playlist):

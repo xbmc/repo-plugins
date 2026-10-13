@@ -201,6 +201,18 @@ msgctxt "#30060"
 msgid "Play from the start"
 msgstr "Joacă de la început"
 
+msgctxt "#30064"
+msgid "Enable playback tracking"
+msgstr "Activează urmărirea redării"
+
+msgctxt "#30065"
+msgid "Play from the start or resume ?"
+msgstr "Reda de la început sau reia?"
+
+msgctxt "#30066"
+msgid "Do you want to resume {item_label} from {start_offset} ?"
+msgstr "Doriți să reluați {item_label} de la {start_offset}?"
+
 
 msgctxt "#30061"
 msgid "Version {version} installed successfully"

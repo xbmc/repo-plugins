@@ -5,6 +5,10 @@ Italian politics - TV and Radio channels
 - You can install this plugin via the official Kodi repository
 
 ### Changelog
+2.4.0 (15 Oct 2026)
+- Senato channels now use direct streams (no more YouTube)
+- YouTube is still required for the Camera channels
+
 2.3.1 (13 Oct 2026)
 - Fix RaiNews24
 - Fix TgCom24

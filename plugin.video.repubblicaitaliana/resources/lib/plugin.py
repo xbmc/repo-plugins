@@ -60,22 +60,11 @@ def programmi_camera():
 def programmi_senato():
 
     thumb = 'https://yt3.googleusercontent.com/ytc/AIdro_kuWqJTQYB5earQtR1bMmun99HvofpjYQKNYbZdS4hNaA=s160-c-k-c0x00ffffff-no-rj'
-    
-    canali = [
-        ('Senato - Canale 1', 'sPbVV3E737E'),
-        ('Senato - Canale 2', 'WyQMW1oJpOo'),
-        ('Senato - Canale 3', 'PjPRSf2oN4w'),
-        ('Senato - Canale 4', 'KQPgwlDN-1E'),
-        ('Senato - Canale 5', 'eIyBRC6dHoQ'),
-        ('Senato - Canale 6', 'loiN1npW2MM'),
-        ('Senato - Canale 7', 'c0hzsRTIbQk'),
-        ('Senato - Canale 8', 'vOR7zAjorO8'),
-    ]
 
     items = []
-    for titolo, video_id in canali:
-        link = f'plugin://plugin.video.youtube/play/?video_id={video_id}'
-        li = xbmcgui.ListItem(titolo, offscreen=True)
+    for n in range(1, 9):
+        link = f'https://senato-live.morescreens.com/SENATO_1_{n:03d}/playlist.m3u8'
+        li = xbmcgui.ListItem(f'Senato - Canale {n}', offscreen=True)
         li.setArt({'thumb': thumb, 'fanart': G.FANART_PATH})
         li.setInfo('video', {})
         li.setProperty('isPlayable', 'true')
@@ -83,6 +72,7 @@ def programmi_senato():
 
     xbmcplugin.addDirectoryItems(handle=G.PLUGIN_HANDLE, items=items, totalItems=len(items))
     xbmcplugin.endOfDirectory(handle=G.PLUGIN_HANDLE, succeeded=True)
+
 
 
 def programmi_tv():

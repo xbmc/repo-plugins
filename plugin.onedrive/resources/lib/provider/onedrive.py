@@ -79,6 +79,17 @@ class OneDrive(Provider):
             return ' SharePoint Document Library'
         return drive_type
     
+    @staticmethod
+    def _path_address(path):
+        # An item by path in a Graph URL: root, or root:/folder/name: with the names percent-encoded.
+        if path == '/':
+            return 'root'
+        parts = path.split('/')
+        if len(parts) > 1 and not parts[0]:
+            # Decoded paths come from clouddrive.common 1.5.7 on, encoded ones before: decode, then encode.
+            return 'root:' + urllib.parse.quote(urllib.parse.unquote(Utils.str(path)), safe='/') + ':'
+        return path
+
     def get_folder_items(self, item_driveid=None, item_id=None, path=None, on_items_page_completed=None, include_download_info=False, on_before_add_item=None):
         item_driveid = Utils.default(item_driveid, self._driveid)
         if item_id:
@@ -86,13 +97,7 @@ class OneDrive(Provider):
         elif path == 'sharedWithMe' or path == 'recent':
             files = self.get('/drives/'+self._driveid+'/' + path)
         else:
-            if path == '/':
-                path = 'root'
-            else:
-                parts = path.split('/')
-                if len(parts) > 1 and not parts[0]:
-                    path = 'root:'+path+':'
-            files = self.get('/drives/'+self._driveid+'/' + path + '/children', parameters = self._extra_parameters)
+            files = self.get('/drives/'+self._driveid+'/' + self._path_address(path) + '/children', parameters = self._extra_parameters)
         if self.cancel_operation():
             return
         return self.process_files(files, on_items_page_completed, include_download_info, on_before_add_item=on_before_add_item)
@@ -177,8 +182,9 @@ class OneDrive(Provider):
         else:
             url += self._driveid
         url += '/search(q=\''+urllib.parse.quote(Utils.str(query))+'\')'
-        self._extra_parameters['filter'] = 'file ne null'
-        files = self.get(url, parameters = self._extra_parameters)
+        # A copy: _extra_parameters is shared by every listing, which must not get the filter.
+        parameters = dict(self._extra_parameters, filter='file ne null')
+        files = self.get(url, parameters = parameters)
         if self.cancel_operation():
             return
         return self.process_files(files, on_items_page_completed)
@@ -201,13 +207,7 @@ class OneDrive(Provider):
         elif path == 'sharedWithMe' or path == 'recent':
             return
         else:
-            if path == '/':
-                path = 'root'
-            else:
-                parts = path.split('/')
-                if len(parts) > 1 and not parts[0]:
-                    path = 'root:'+path+':'
-            f = self.get('/drives/'+self._driveid+'/' + path, parameters = self._extra_parameters)
+            f = self.get('/drives/'+self._driveid+'/' + self._path_address(path), parameters = self._extra_parameters)
         
         item = self._extract_item(f, include_download_info)
         if find_subtitles:

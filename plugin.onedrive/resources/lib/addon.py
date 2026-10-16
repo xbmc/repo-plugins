@@ -24,10 +24,10 @@ from clouddrive.common.utils import Utils
 from resources.lib.provider.onedrive import OneDrive
 
 class OneDriveAddon(CloudDriveAddon):
-    _provider = OneDrive()
     _action = None
     
     def __init__(self):
+        self._provider = OneDrive()
         super(OneDriveAddon, self).__init__()
         
     def get_provider(self):

@@ -60,20 +60,12 @@ msgctxt "#32010"
 msgid "Recursive auto-refreshed slideshow"
 msgstr ""
 
-msgctxt "#32011"
-msgid "Resume playing when resume point exists in library"
-msgstr ""
-
 msgctxt "#32012"
 msgid "Open Cloud Drive Common Settings..."
 msgstr ""
 
 msgctxt "#32017"
 msgid "Ask to resume if resume point exists in library"
-msgstr ""
-
-msgctxt "#32018"
-msgid "Save resume points and watched status in library"
 msgstr ""
 
 msgctxt "#32019"

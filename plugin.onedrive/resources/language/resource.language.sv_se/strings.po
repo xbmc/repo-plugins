@@ -1,0 +1,106 @@
+# Kodi Media Center language file
+# Addon Name: OneDrive
+# Addon id: plugin.onedrive
+# Addon Provider: Carlos Guzman (cguZZman)
+# Based on the Swedish translation by Daniel Nylander.
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Swedish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Player Service"
+msgstr "Uppspelningstjänst"
+
+msgctxt "#32001"
+msgid "Export Service"
+msgstr "Exporttjänst"
+
+msgctxt "#32002"
+msgid "Source Service"
+msgstr "Källtjänst"
+
+msgctxt "#32003"
+msgid "Before export to library, remove previous files and folders"
+msgstr "Ta bort tidigare filer och mappar innan export till biblioteket"
+
+msgctxt "#32004"
+msgid "Automatically set subtitles from cloud drive"
+msgstr "Ställ automatiskt in undertexter från molnlagringen"
+
+msgctxt "#32005"
+msgid "Auto-Refreshed slideshow"
+msgstr "Automatiskt uppdaterat bildspel"
+
+msgctxt "#32006"
+msgid "Refresh interval in minutes"
+msgstr "Uppdateringsintervall i minuter"
+
+msgctxt "#32007"
+msgid "Special: Photos"
+msgstr "Special: Bilder"
+
+msgctxt "#32008"
+msgid "Special: Camera Roll"
+msgstr "Special: Kamerarulle"
+
+msgctxt "#32009"
+msgid "Special: Music"
+msgstr "Special: Musik"
+
+msgctxt "#32010"
+msgid "Recursive auto-refreshed slideshow"
+msgstr "Rekursivt bildspel med automatisk uppdatering"
+
+msgctxt "#32012"
+msgid "Open Cloud Drive Common Settings..."
+msgstr "Öppna gemensamma inställningar för Cloud Drive..."
+
+msgctxt "#32017"
+msgid "Ask to resume if resume point exists in library"
+msgstr "Fråga om återupptagning om det finns en återupptagningspunkt i biblioteket"
+
+msgctxt "#32019"
+msgid "Do not include filename extension in a .strm"
+msgstr "Inkludera inte filändelsen i en .strm-fil"
+
+msgctxt "#32020"
+msgid "Hide exporting progress dialog"
+msgstr "Dölj dialogrutan för exportförlopp"
+
+msgctxt "#32032"
+msgid "Advanced"
+msgstr "Avancerat"
+
+msgctxt "#32033"
+msgid "Sign-in Server"
+msgstr "Inloggningsserver"
+
+msgctxt "#32034"
+msgid "Cache expiration time (in minutes)"
+msgstr "Utgångstid för cachen (i minuter)"
+
+msgctxt "#32035"
+msgid "Clear cache now"
+msgstr "Töm cachen nu"
+
+msgctxt "#32067"
+msgid "Services"
+msgstr "Tjänster"
+
+msgctxt "#32068"
+msgid "Allow using OneDrive as a source"
+msgstr "Tillåt användning av OneDrive som källa"
+
+msgctxt "#32069"
+msgid "     Source server port  -  http://localhost:<port>/source"
+msgstr "     Port för källservern  -  http://localhost:<port>/source"

@@ -106,12 +106,20 @@ class GoogleDrive(Provider):
             parameters['driveId'] = self._driveid
         return parameters
     
+    @staticmethod
+    def _quote(value):
+        # A value inside single quotes in a Drive query: backslashes and quotes are escaped.
+        return Utils.str(value).replace('\\', '\\\\').replace("'", "\\'")
+
     def _get_field_parameters(self):
         file_fileds = 'id,name,modifiedTime,size,mimeType'
         if not self.source_mode:
             file_fileds = file_fileds + ',description,hasThumbnail,thumbnailLink,owners(permissionId),parents,trashed,imageMediaMetadata(width),videoMediaMetadata,shortcutDetails'
         return file_fileds
         
+    # Parent folders per query when listing a tree for library exports (list_subtree).
+    _SUBTREE_BATCH = 100
+
     def get_folder_items(self, item_driveid=None, item_id=None, path=None, on_items_page_completed=None, include_download_info=False, on_before_add_item=None):
         item_driveid = Utils.default(item_driveid, self._driveid)
         parameters = self.prepare_parameters()
@@ -139,11 +147,39 @@ class GoogleDrive(Provider):
         items.extend(self.process_files(files, parameters, on_items_page_completed, include_download_info, on_before_add_item=on_before_add_item))
         return items
     
+    def list_subtree(self, item_driveid, item_id):
+        # The tree breadth-first, with many parent folders per query: about one request per level instead of one per
+        # folder. Based on plugin.googledrive#320 by 0o120 (28 requests instead of 2,317 for 2,292 movies).
+        base_parameters = self.prepare_parameters()
+        base_parameters['fields'] = 'files(%s),kind,nextPageToken' % self._get_field_parameters()
+        base_parameters['pageSize'] = 1000
+        self.configure(self._account_manager, self._driveid)
+        tree = {item_id: []}
+        pending = [item_id]
+        while pending:
+            batch, pending = pending[:self._SUBTREE_BATCH], pending[self._SUBTREE_BATCH:]
+            parameters = copy.deepcopy(base_parameters)
+            parameters['q'] = '(%s) and not trashed' % ' or '.join('\'%s\' in parents' % self._quote(folder_id) for folder_id in batch)
+            files = self.get('/files', parameters = parameters)
+            if self.cancel_operation():
+                return None
+            items = self.process_files(files, parameters, include_download_info=True)
+            if items is None:
+                return None
+            for item in items:
+                if item['parent'] in tree:
+                    tree[item['parent']].append(item)
+                # A folder seen before (a shortcut back to an ancestor) is not listed again.
+                if 'folder' in item and item['id'] not in tree:
+                    tree[item['id']] = []
+                    pending.append(item['id'])
+        return tree
+
     def search(self, query, item_driveid=None, item_id=None, on_items_page_completed=None):
         item_driveid = Utils.default(item_driveid, self._driveid)
         parameters = self.prepare_parameters()
         parameters['fields'] = 'files(%s),kind,nextPageToken' % self._get_field_parameters()
-        query = 'fullText contains \'%s\'' % Utils.str(query)
+        query = 'fullText contains \'%s\'' % self._quote(query)
         if item_id:
             query += ' and \'%s\' in parents' % item_id
         parameters['q'] = query + ' and not trashed'
@@ -261,14 +297,15 @@ class GoogleDrive(Provider):
         if not item:
             parameters['fields'] = 'files(%s)' % self._get_field_parameters()
             index = path.rfind('/')
+            # Decoded paths come from clouddrive.common 1.5.7 on, encoded ones before: decoding again works for both.
             filename = urllib.parse.unquote(path[index+1:])
             parent = path[0:index]
             if not parent:
-                parent = 'root'
+                parent = self._driveid if self._is_shared_drive else 'root'
             else:
                 parent = self.get_item_by_path(parent, include_download_info)['id']
             item = None
-            parameters['q'] = '\'%s\' in parents and name = \'%s\'' % (Utils.str(parent), Utils.str(filename).replace("'","\\'"))
+            parameters['q'] = '\'%s\' in parents and name = \'%s\' and not trashed' % (self._quote(parent), self._quote(filename))
             parameters['pageSize'] = 1000
             files = self.get('/files', parameters = parameters)
             if (len(files['files']) > 0):
@@ -289,7 +326,10 @@ class GoogleDrive(Provider):
         item_driveid = Utils.default(item_driveid, self._driveid)
         subtitles = []
         parameters['fields'] = 'files(' + self._get_field_parameters() + ')'
-        parameters['q'] = 'name contains \'%s\'' % Utils.str(Utils.remove_extension(name)).replace("'","\\'")
+        # Subtitles stored next to the video, named after it.
+        parameters['q'] = 'name contains \'%s\'' % self._quote(Utils.remove_extension(name))
+        if parent:
+            parameters['q'] += ' and \'%s\' in parents' % self._quote(parent)
         parameters['pageSize'] = 1000
         files = self.get('/files', parameters = parameters)
         for f in files['files']:

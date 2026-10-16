@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.googledrive" name="Google Drive" version="1.6.2" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.googledrive" name="Google Drive" version="1.6.7" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.clouddrive.common" version="1.5.2"/>
+		<import addon="script.module.clouddrive.common" version="1.5.7"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="entrypoint.py">
 		<provides>image audio video</provides>
@@ -18,7 +18,7 @@ Play all your media from Google Drive including Videos, Music and Pictures.
  - Search over your drive.
  - Auto-Refreshed slideshow.
  - Export your videos to your library (.strm files)
- - Use Google Drive as a source. **(Not currently working due to changes in the Google Drive API)
+ - Use Google Drive as a source in Kodi's file manager.
  - This program is not affiliated with or sponsored by Google.
 		</description>
 		<summary lang="he_IL">כונן Google Drive של מיקרוסופט עבור קודי</summary>
@@ -30,32 +30,52 @@ Play all your media from Google Drive including Videos, Music and Pictures.
   - ייצוא קטעי הווידאו לספרייה שלך (קבצי .strm)
   - תוכנית זו אינה קשורה או ממומנת על ידי Google.
 		</description>
+		<summary lang="sv_SE">Google Drive för KODI</summary>
+		<description lang="sv_SE">
+Spela upp alla dina medier från Google Drive, inklusive videor, musik och bilder.
+ - Obegränsat antal konton.
+ - Stöd för Team Drives
+ - Sök i din Drive.
+ - Automatiskt uppdaterat bildspel.
+ - Exportera dina videor till biblioteket (.strm-filer)
+ - Använd Google Drive som källa i Kodis filhanterare.
+ - Detta program är inte anslutet till eller sponsrat av Google.
+		</description>
 		<license>GPL-3.0-or-later</license>
 		<source>https://github.com/cguZZman/plugin.googledrive</source>
 		<forum>https://github.com/cguZZman/plugin.googledrive/issues</forum>
-		<website>https://addons.kodi.tv/show/plugin.googledrive</website>
 		<assets>
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>
+		<news>v1.6.7 released Oct 16, 2026:
+- Use Google Drive as a source in Kodi's file manager works again
+- Requires clouddrive.common 1.5.7
+
+v1.6.6 released Oct 16, 2026:
+- Faster exports now come from clouddrive.common 1.5.6 (required)
+
+v1.6.5 released Oct 15, 2026:
+- Much faster exports to the library: a folder tree is listed in a few requests instead of one per folder (thanks to 0o120)
+- Swedish translation (thanks to Daniel Nylander)
+
+v1.6.4 released Oct 15, 2026:
+- New icon and fanart
+
+v1.6.3 released Oct 12, 2026:
+- Stream format selection removed: it relied on an undocumented Google service that no longer works
+- "Check for Google ban" is now "Check download quota"
+- Search works with quotes in the text, and subtitles are taken only from the video's folder
+- Auto-refreshed slideshow fixed
+- Requires clouddrive.common 1.5.4
+
 v1.6.2 released Oct 11, 2026:
 - New sign-in server address: https://drive.signinserver.com (the old one keeps working for older versions)
 - Sign-in works when Kodi or the phone uses IPv6 (requires clouddrive.common 1.5.2)
 
 v1.6.1 released Oct 5, 2026:
 - Requires clouddrive.common 1.5.1 (review fixes: safer redirects, account migration, removed accounts)
-- Unused strings removed
-
-v1.6.0 released Oct 4, 2026:
-- Google Photos browsing removed: Google no longer allows apps to read your Photos library
-- Sign-in only asks for read-only access to your Drive files
-- Security: tokens are no longer written to the Kodi log; error reporting removed
-- Videos at original quality, music and pictures play through the add-on's local service, so long videos keep playing after the access token expires
-
-v1.5.0 released Jan 21, 2023:
-- Kodi 20 fix
-		</news>
+- Unused strings removed</news>
 		<disclaimer lang="en_GB">
 This cloud drive addon uses a third-party authentication mechanism commonly known as OAuth 2.0.
 If you want to know more about OAuth 2.0 you can visit the following pages:

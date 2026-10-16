@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.onedrive" name="OneDrive" version="2.4.2" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.onedrive" name="OneDrive" version="2.4.6" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.clouddrive.common" version="1.5.2"/>
+		<import addon="script.module.clouddrive.common" version="1.5.7"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="entrypoint.py">
 		<provides>image audio video</provides>
@@ -30,15 +30,38 @@ Play all your media from OneDrive including Videos, Music and Pictures.
   - שימוש ב-OneDrive כמקור
   - תוכנית זו אינה מזוהה עם או בחסות מיקרוסופט.
 		</description>		
+		<summary lang="sv_SE">Microsoft OneDrive för KODI</summary>
+		<description lang="sv_SE">
+Spela upp alla dina medier från OneDrive, inklusive videor, musik och bilder.
+ - Obegränsat antal personliga konton eller företagskonton.
+ - Sök i din OneDrive.
+ - Automatiskt uppdaterat bildspel.
+ - Exportera dina videor till biblioteket (.strm-filer)
+ - Använd OneDrive som källa
+ - Detta program är inte anslutet till eller sponsrat av Microsoft.
+		</description>
 		<license>GPL-3.0-or-later</license>
 		<source>https://github.com/cguZZman/plugin.onedrive</source>
 		<forum>https://github.com/cguZZman/plugin.onedrive/issues</forum>
-		<website>https://addons.kodi.tv/show/plugin.onedrive</website>
 		<assets>
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>
+		<news>v2.4.6 released Oct 16, 2026:
+- Use as a source: folders with spaces or special characters in their names open, and files no longer put download links in the Kodi log
+- Requires clouddrive.common 1.5.7
+
+v2.4.5 released Oct 15, 2026:
+- Swedish translation (thanks to Daniel Nylander)
+
+v2.4.4 released Oct 15, 2026:
+- New icon and fanart
+
+v2.4.3 released Oct 12, 2026:
+- A search no longer affects the folder listings that follow it
+- Kodi 17 (Krypton) settings removed
+- Requires clouddrive.common 1.5.4
+
 v2.4.2 released Oct 11, 2026:
 - New sign-in server address: https://drive.signinserver.com (the old one keeps working for older versions)
 - Sign-in works when Kodi or the phone uses IPv6 (requires clouddrive.common 1.5.2)
@@ -51,8 +74,7 @@ v2.4.0 released Oct 4, 2026:
 - Security: tokens and pre-authenticated download links are no longer written to the Kodi log; error reporting removed
 
 v2.3.0 released Jan 21, 2023:
-- Kodi 20 fix
-		</news>
+- Kodi 20 fix</news>
 		<disclaimer lang="en_GB">
 This cloud drive addon uses a third-party authentication mechanism commonly known as OAuth 2.0.
 If you want to know more about OAuth 2.0 you can visit the following pages:

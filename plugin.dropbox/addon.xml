@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.dropbox" name="Dropbox" version="1.0.0" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.dropbox" name="Dropbox" version="1.0.5" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
-		<import addon="script.module.clouddrive.common" version="1.5.2"/>
+		<import addon="script.module.clouddrive.common" version="1.5.7"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="entrypoint.py">
 		<provides>image audio video</provides>
@@ -40,6 +40,16 @@ Inicia sesión desde tu teléfono o computadora con un código corto que muestra
 - Somente leitura: o add-on nunca altera nem exclui seus arquivos
 Entre na conta pelo celular ou computador com um código curto mostrado no Kodi.</description>
 		<disclaimer lang="pt_BR">Este add-on não é afiliado ao Dropbox nem endossado por ele.</disclaimer>
+		<summary lang="sv_SE">Spela upp dina videor, din musik och dina bilder från Dropbox</summary>
+		<description lang="sv_SE">Bläddra i din Dropbox i Kodi och spela upp dina videor, din musik och dina bilder.
+- Valfritt antal Dropbox-konton
+- Sök i din Dropbox
+- Undertexter som sparats bredvid dina videor läses in automatiskt
+- Exportera videor och musik till Kodi-biblioteket (.strm-filer)
+- Använd Dropbox som källa
+- Endast läsning: tillägget ändrar eller tar aldrig bort dina filer
+Logga in från din telefon eller dator med en kort kod som visas i Kodi.</description>
+		<disclaimer lang="sv_SE">Det här tillägget är inte anslutet till eller godkänt av Dropbox.</disclaimer>
 		<license>GPL-3.0-or-later</license>
 		<source>https://github.com/cguZZman/plugin.dropbox</source>
 		<forum>https://github.com/cguZZman/plugin.dropbox/issues</forum>
@@ -47,7 +57,25 @@ Entre na conta pelo celular ou computador com um código curto mostrado no Kodi.
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>v1.0.0 released Oct 11, 2026:
+		<news>v1.0.5 released Oct 16, 2026:
+- Use Dropbox as a source in Kodi's file manager works: files play, and the source server moved to port 8588 so it can run next to Google Drive's
+- Requires clouddrive.common 1.5.7
+
+v1.0.4 released Oct 16, 2026:
+- Much faster exports to the library: a folder tree is listed in one request
+- Requires clouddrive.common 1.5.6
+
+v1.0.3 released Oct 15, 2026:
+- Swedish translation (thanks to Daniel Nylander)
+
+v1.0.2 released Oct 15, 2026:
+- New icon and fanart
+
+v1.0.1 released Oct 12, 2026:
+- Only subtitles named after the video are loaded
+- Requires clouddrive.common 1.5.4 (storage and stability fixes)
+
+v1.0.0 released Oct 11, 2026:
 - First release</news>
 	</extension>
 </addon>

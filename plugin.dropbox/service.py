@@ -22,9 +22,13 @@ from clouddrive.common.service.export import ExportService
 from clouddrive.common.service.player import PlayerService
 from clouddrive.common.service.source import SourceService
 from clouddrive.common.service.utils import ServiceUtil
+from clouddrive.common.ui.utils import KodiUtils
 from resources.lib.provider.dropbox import Dropbox
 
 
 if __name__ == '__main__':
+    # Dropbox 1.0.0 to 1.0.3 used Google Drive's source port by mistake: with both add-ons, one source server couldn't start.
+    if KodiUtils.get_addon_setting('port_directory_listing') == '8587':
+        KodiUtils.set_addon_setting('port_directory_listing', '8588')
     ServiceUtil.run([DownloadService(Dropbox), SourceService(Dropbox),
                      ExportService(Dropbox), PlayerService(Dropbox)])

@@ -94,7 +94,15 @@ class DrDkTvAddon:
         self.search_path = self.cache_path / 'search6.pickle'
         self.fanart_image = str(resources_path() / 'media' / 'fanart.jpg')
 
-        self.api = tvapi.Api(self.cache_path, tr, get_setting, log)
+        self._startup_error = None
+        try:
+            self.api = tvapi.Api(self.cache_path, tr, get_setting, log)
+        except tvapi.ApiException as ex:
+            # a failed login must not crash before route() can report it: keep
+            # the exception and show the dialog from route() instead, so the
+            # user sees why the addon is empty (see issue 132)
+            self.api = None
+            self._startup_error = ex
 
         self.menuItems = []
         runScript = "RunAddon(plugin.video.drnu,?show=areaselector)"
@@ -396,6 +404,12 @@ class DrDkTvAddon:
         xbmc.executebuiltin(f'Container.Update({self._plugin_url + params})')
 
     def login(self):
+        if self.api is None:
+            # startup login failed; rebuild the API without the automatic token
+            # refresh so request_tokens() below can report the failure in the
+            # login dialog instead of raising again
+            self.api = tvapi.Api(self.cache_path, tr, get_setting, log, refresh=False)
+            self._startup_error = None
         self.api._refresh_settings()
         err = self.api.request_tokens()
         if self.api.user:
@@ -415,6 +429,21 @@ class DrDkTvAddon:
         heading = 'API error'
         xbmcgui.Dialog().ok(heading, '\n'.join([tr(30900), tr(30901), message]))
 
+    def displayStartupError(self, ex):
+        """Report a login failure that stopped the API from being built.
+
+        A configured username means the most likely cause is bad credentials,
+        so the login dialog is shown (with the underlying error appended, in
+        case it was a transport failure instead); otherwise the generic API
+        error dialog applies. Either way the user gets a dialog instead of the
+        raw traceback Kodi used to show (issue 132).
+        """
+        log(['startup exception', str(ex)], level=1)
+        if get_setting('drtv_username'):
+            xbmcgui.Dialog().ok(tr(30306), '\n\n'.join([tr(30307), str(ex)]))
+        else:
+            self.displayError(str(ex))
+
     def displayIOError(self, message='n/a'):
         heading = 'I/O error'
         xbmcgui.Dialog().ok(heading, '\n'.join([tr(30902), tr(30903), message]))
@@ -422,6 +451,14 @@ class DrDkTvAddon:
     def route(self, query):
         try:
             PARAMS = dict(urlparse.parse_qsl(query[1:]))
+            if self._startup_error is not None and 'loginnow' not in PARAMS:
+                # the API could not be built (a failed login); report it and
+                # show an empty directory instead of a raw traceback. The
+                # login route stays reachable so the user can fix the
+                # credentials and retry (see issue 132).
+                self.displayStartupError(self._startup_error)
+                xbmcplugin.endOfDirectory(self._plugin_handle, succeeded=False)
+                return
             routes = {
                 'show': self._route_show,
                 'iptv': self._route_iptv,

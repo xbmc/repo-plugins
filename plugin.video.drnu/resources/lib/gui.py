@@ -24,6 +24,8 @@ The functions construct (url, ListItem, isFolder) tuples from API data and
 addon state passed in as arguments, which makes menu output testable without
 instantiating DrDkTvAddon.
 """
+from __future__ import annotations
+
 from typing import Any, Optional
 
 import xbmcgui

@@ -28,6 +28,8 @@ enabled. Deliberately free of Kodi imports: the progress dialog, idle
 check and Api construction are injected, which keeps the logic unit-
 testable without the Kodi stub modules.
 """
+from __future__ import annotations
+
 from contextlib import suppress
 from datetime import datetime, time, timedelta
 from pathlib import Path

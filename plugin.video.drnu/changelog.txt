@@ -1,3 +1,24 @@
+[B]Version 7.1.1 - 2026-10-16[/B]
+- Fix the addon failing to load on the Windows and Xbox builds of Kodi 20/21,
+  which bundle Python 3.8: the type annotations added in 7.1.0 (list[dict],
+  dict[str, str]) are only valid from Python 3.9 and were evaluated at import
+  time, so both the plugin and the service crashed with "'type' object is not
+  subscriptable" before showing anything
+- Fix a crash when a login or token refresh fails: a failed token request
+  whose response body was empty reported an empty error, which the caller
+  read as success, leaving the token unset and crashing with "can only
+  concatenate str (not NoneType) to str" instead of reporting the login
+  failure
+- Report a failed startup login in a dialog instead of a raw traceback: when
+  the stored credentials are wrong, building the API raised before the addon
+  could show anything, so Kodi logged "Error getting plugin://..." and the
+  user saw no explanation; the failure is now shown with the login dialog and
+  the login action stays reachable so the credentials can be corrected
+- Ruff now targets Python 3.8 so it stops suggesting syntax newer than the
+  Python Kodi 20/21 ship on Windows and Xbox can run
+- Correct the README Kodi version badge, which still said 19.x although the
+  addon has required Kodi 20 (xbmc.python 3.0.1) since 6.4.2
+
 [B]Version 7.1.0 - 2026-10-04[/B]
 - Add Kodi background service that periodically expires old responses and
   VACUUMs the request cache database, so the cache file no longer only

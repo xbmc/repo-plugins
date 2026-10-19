@@ -25,6 +25,8 @@ shared constants in constants. The names are re-exported here so existing
 imports of tvapi keep working.
 """
 
+from __future__ import annotations
+
 import os
 import pickle
 import time
@@ -83,7 +85,7 @@ def fix_query(url: str, remove: Optional[dict[str, str]] = None, add: Optional[d
 
 
 class Api:
-    def __init__(self, cachePath: Path, getLocalizedString: Callable[[int], str], get_setting: Callable[[str], str], log_func: Optional[Callable] = None) -> None:
+    def __init__(self, cachePath: Path, getLocalizedString: Callable[[int], str], get_setting: Callable[[str], str], log_func: Optional[Callable] = None, refresh: bool = True) -> None:
         self.cachePath = cachePath
         self.tr = getLocalizedString
         self.log = log_func
@@ -101,7 +103,10 @@ class Api:
         self._user_token = None
         self.get_setting = get_setting
         self._refresh_settings()
-        self.refresh_tokens()
+        if refresh:
+            # the login route rebuilds the Api with refresh=False so it can
+            # report a failed login itself instead of raising here
+            self.refresh_tokens()
 
     def _refresh_settings(self) -> None:
         self.user = self.get_setting('drtv_username')
@@ -178,7 +183,9 @@ class Api:
             access_tokens = full_login(self.user, self.password, self.log)
             if 'error' in access_tokens:
                 err = access_tokens['error']
-                return err
+                # a falsy error would read as success further up, leaving the
+                # token None and crashing on 'Bearer ' + None
+                return err or 'login failed'
             self.access_tokens = access_tokens
             tokens = exchange_token(access_tokens)
         else:
@@ -187,7 +194,7 @@ class Api:
         # the token endpoints report failures as {'error': ...} instead of a
         # token list; reading them would raise KeyError, so surface the error
         if isinstance(tokens, dict) and 'error' in tokens:
-            return tokens['error']
+            return tokens['error'] or 'login failed'
         self.read_tokens(tokens)
         self.write_tokens(tokens)
         return None
@@ -206,7 +213,7 @@ class Api:
 
         if self._user_token is None:
             err = self.request_tokens()
-            if err:
+            if err is not None:
                 raise ApiException(f'Login failed with: "{err}"')
             return
 
@@ -216,7 +223,7 @@ class Api:
             if self.user and 'refresh_token' in self.access_tokens:
                 # oidc flow
                 access_tokens = refresh_token(self.access_tokens['refresh_token'])
-                if 'error' in access_tokens:
+                if access_tokens.get('error') is not None:
                     failed_refresh = True
                     self.access_tokens = {}
                 else:
@@ -234,13 +241,15 @@ class Api:
 
             if failed_refresh:
                 err = self.request_tokens()
-                if err:
+                if err is not None:
                     raise ApiException(f'Login failed with: "{err}"')
             else:
                 self.read_tokens(tokens)
                 self.write_tokens(tokens)
 
     def user_token(self) -> Optional[str]:
+        # refresh_tokens either sets the token or raises; it never returns
+        # leaving it None, which is what 'Bearer ' + token relies on
         self.refresh_tokens()
         return self._user_token
 

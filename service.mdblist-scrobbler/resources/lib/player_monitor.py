@@ -7,7 +7,7 @@ import xbmcaddon
 import xbmcgui
 
 from resources.lib import oauth, ratings_sync, sync_orchestrator
-from resources.lib.mdblist_api import MDBListApiError
+from resources.lib.mdblist_api import MDBListApiError, parse_retry_after
 from resources.lib.timer import Timer
 from resources.lib.utils import jsonrpc_request, fix_unique_ids
 
@@ -16,6 +16,10 @@ REQUEST_TIMEOUT_SECONDS = 5
 REQUEST_RETRY_ATTEMPTS = 2
 REQUEST_RETRY_BACKOFF_SECONDS = 1
 RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
+# How long interval scrobbles pause after a 429 that carries no Retry-After
+INTERVAL_RATE_LIMIT_PAUSE_SECONDS = 600
+# Floor for the user's interval setting
+MIN_INTERVAL_SECONDS = 10
 DEFAULT_BASE_URL = "https://api.mdblist.com"
 
 
@@ -25,6 +29,8 @@ class PlayerMonitor(xbmc.Player):
 
         self.settings = None
         self.interval_timer = None
+        self.interval_paused_until = 0.0
+        self.interval_skip_title = False
 
         self.total_time = None
         self.current_time = None
@@ -177,6 +183,11 @@ class PlayerMonitor(xbmc.Player):
             xbmc.log("MDBList Scrobbler: Event '{}' disabled in settings, skipping".format(event), level=xbmc.LOGDEBUG)
             return
 
+        if event == "interval" and (self.interval_skip_title or time.monotonic() < self.interval_paused_until):
+            xbmc.log("MDBList Scrobbler: Interval scrobbles paused, skipping", level=xbmc.LOGDEBUG)
+            return
+
+        video_info = self.video_info
         json_data = self.build_payload(event, use_cached_time=use_cached_time)
         if not json_data:
             return
@@ -205,6 +216,19 @@ class PlayerMonitor(xbmc.Player):
             return
 
         if response.status_code >= 400:
+            if response.status_code == 429:
+                # Daily quota or short-window throttle: every further tick
+                # would only spend more of it
+                retry_after = parse_retry_after(response)
+                self.interval_paused_until = time.monotonic() + (
+                    retry_after if retry_after is not None else INTERVAL_RATE_LIMIT_PAUSE_SECONDS
+                )
+            elif response.status_code == 404 and endpoint == "/scrobble/start" and self.video_info is video_info:
+                # MDBList doesn't know this title; re-sending it every tick
+                # won't change that before the playback ends (unless a newer
+                # playback started while this request was in flight)
+                self.interval_skip_title = True
+
             response_snippet = response.text[:200]
             xbmc.log(
                 "MDBList Scrobbler: API error {} on {} payload={} response={}".format(
@@ -245,7 +269,10 @@ class PlayerMonitor(xbmc.Player):
                 )
                 return None
 
-            if response.status_code in RETRYABLE_STATUS_CODES and attempt < REQUEST_RETRY_ATTEMPTS:
+            # Only a stop is worth retrying a 429 for (it can be what marks
+            # the title watched); anything else would land stale
+            rate_limited = response.status_code == 429 and event not in ("stop", "end")
+            if response.status_code in RETRYABLE_STATUS_CODES and not rate_limited and attempt < REQUEST_RETRY_ATTEMPTS:
                 xbmc.log(
                     "MDBList Scrobbler: Retryable API error {} on {} attempt {}/{}".format(
                         response.status_code, endpoint, attempt, REQUEST_RETRY_ATTEMPTS
@@ -414,14 +441,22 @@ class PlayerMonitor(xbmc.Player):
                     self.video_info["tvshow"] = {}
 
     def start_interval_timer(self):
-        self.interval_timer = Timer(self.get_int_setting("interval", 10), self.onInterval)
-        self.interval_timer.start()
+        # Stop the one already held first: overwriting it left an orphaned
+        # thread that kept scrobbling every tick until Kodi restarted
+        self.stop_interval_timer()
+        # The setting is a free number: 0 would make the timer's wait return
+        # at once and scrobble in a tight loop
+        interval = max(self.get_int_setting("interval", 10), MIN_INTERVAL_SECONDS)
+        timer = Timer(interval, lambda: self.onInterval(timer))
+        self.interval_timer = timer
+        timer.start()
 
     def stop_interval_timer(self):
-        if not self.interval_timer or not self.interval_timer.is_alive():
+        if not self.interval_timer:
             return
 
         self.interval_timer.stop()
+        self.interval_timer = None
 
     def update_time(self):
         if self.isPlaying():
@@ -432,6 +467,7 @@ class PlayerMonitor(xbmc.Player):
         self.total_time = None
         self.current_time = None
         self.video_info = {}
+        self.interval_skip_title = False
         self.rating_prompt_shown = False
         self.rating_save_error = None
 
@@ -447,10 +483,10 @@ class PlayerMonitor(xbmc.Player):
         return round((current_time / int(self.total_time)) * 100, 2)
 
     def finalize_previous_playback_on_transition(self):
+        self.stop_interval_timer()
         if not self.video_info:
             return
 
-        self.stop_interval_timer()
         progress_percent = self.get_progress_percent()
         if progress_percent is None or progress_percent <= 0:
             xbmc.log(
@@ -676,12 +712,13 @@ class PlayerMonitor(xbmc.Player):
         self.start_interval_timer()
 
     def onPlayBackPaused(self):
+        # Stopped first, so a tick during the pause request can't send a start after it
+        self.stop_interval_timer()
         if not self.video_info:
             return
 
         self.update_time()
         self.send_request("pause")
-        self.stop_interval_timer()
 
     def onPlayBackResumed(self):
         if not self.video_info:
@@ -692,23 +729,23 @@ class PlayerMonitor(xbmc.Player):
 
     def onPlayBackStopped(self):
         xbmc.log("MDBList Scrobbler: onPlayBackStopped (video_info present={})".format(bool(self.video_info)), level=xbmc.LOGDEBUG)
+        self.stop_interval_timer()
         if not self.video_info:
             return
 
         self.update_time()
         self.send_request("stop")
-        self.stop_interval_timer()
         self.prompt_for_rating("stop")
         self.video_info = {}
 
     def onPlayBackEnded(self):
         xbmc.log("MDBList Scrobbler: onPlayBackEnded (video_info present={})".format(bool(self.video_info)), level=xbmc.LOGDEBUG)
+        self.stop_interval_timer()
         if not self.video_info:
             return
 
         self.update_time()
         self.send_request("end")
-        self.stop_interval_timer()
         self.prompt_for_rating("end")
         self.video_info = {}
 
@@ -726,7 +763,12 @@ class PlayerMonitor(xbmc.Player):
         self.update_time()
         self.send_request("seek")
 
-    def onInterval(self):
+    def onInterval(self, timer=None):
+        if timer is not None and timer is not self.interval_timer:
+            # A timer that's no longer the current one ends itself
+            timer.stop()
+            return
+
         if not self.video_info:
             return
 

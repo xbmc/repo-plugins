@@ -176,9 +176,9 @@ def search(params):
 
         title = described.get("title_en") or game.get("title_en") or systems.stem(path)
 
-        # Keyed on the ROM's own hash: that is the lookup the service documents,
-        # and it follows manual_rom_hash itself to find the document
-        url = "%s/game/%s/%s/manual" % (regvault.BASE_URL, system, rom_hash)
+        # Keyed on the entry the manual belongs to, because the service doesn't
+        # always follow manual_rom_hash from the ROM's own entry
+        url = "%s/game/%s/%s/manual" % (regvault.BASE_URL, system, manual_hash or rom_hash)
 
         try:
             size = client.size_of(url)

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.game.manuals.regvault"
        name="Game Manuals (REG-Vault)"
-       version="0.5.0"
+       version="0.5.1"
        provider-name="Chris">
   <requires>
     <import addon="xbmc.python" version="3.0.1"/>
   </requires>
-  <!-- Game Manuals knows a manual provider by the plugin.game.manuals. id -->
-  <extension point="xbmc.python.pluginsource" library="addon.py">
-    <provides>game</provides>
-  </extension>
+  <!-- Game Manuals knows a manual provider by the plugin.game.manuals. id. It
+       provides no content, so Kodi doesn't offer it to open on its own. -->
+  <extension point="xbmc.python.pluginsource" library="addon.py"/>
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">Finds game manuals in the REG-Vault catalogue</summary>
     <description lang="en_GB">Answers Kodi when it goes looking for a manual for a game that has none, using the REG-Vault catalogue.
@@ -22,7 +21,7 @@ Manuals remain the copyright of their publishers. REG-Vault catalogues them as a
     <platform>all</platform>
     <license>GPL-2.0-or-later</license>
     <source>https://github.com/sunlollyking/plugin.game.manuals.regvault</source>
-    <news>v0.5.0 (2026-10-13)[CR]- Renamed from service.manuals.regvault, as Game Manuals now knows its providers by their id.</news>
+    <news>v0.5.1 (2026-10-22)[CR]- Manuals the catalogue keeps under another entry for the game, such as Ocarina of Time (USA), download instead of failing.[CR]- No longer listed among game add-ons as one to open on its own.[CR][CR]v0.5.0 (2026-10-13)[CR]- Renamed from service.manuals.regvault, as Game Manuals now knows its providers by their id.</news>
     <assets>
       <icon>resources/icon.png</icon>
     </assets>

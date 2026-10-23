@@ -1,3 +1,6 @@
+import xbmc
+
+from resources.lib import media_info
 from resources.lib.utils import fix_unique_ids, jsonrpc_request
 
 
@@ -7,6 +10,11 @@ EPISODE_PROPERTIES = [
     "title", "season", "episode", "tvshowid", "uniqueid",
     "playcount", "lastplayed", "userrating", "dateadded", "file",
 ]
+# The collection push's media info (see media_info.py) comes from a separate,
+# paged streamdetails query: stream lists make every row much bigger, and a
+# failure there must only leave media info unknown, never fail the snapshot
+# that watched/ratings sync share.
+MEDIA_PAGE_SIZE = 500
 
 # Order in which a match is attempted when an item carries more than one
 # canonical id -- mirrors the preference already used by find_library_match
@@ -24,6 +32,33 @@ def _movies():
     return jsonrpc_request("VideoLibrary.GetMovies", {"properties": MOVIE_PROPERTIES}).get("movies") or []
 
 
+def _media_by_dbid(method, result_key, id_key):
+    """{dbid: media fields} from paged streamdetails queries. Media info is a
+    bonus: what was read is kept even if the library changed while paging, and
+    a failed page just leaves the rest unknown."""
+    media, start, first_total = {}, 0, None
+    try:
+        while True:
+            result = jsonrpc_request(method, {
+                "properties": ["streamdetails"],
+                "limits": {"start": start, "end": start + MEDIA_PAGE_SIZE},
+            })
+            rows = result.get(result_key) or []
+            for row in rows:
+                media[row.get(id_key)] = media_info.from_streamdetails(row.get("streamdetails"))
+            start += MEDIA_PAGE_SIZE
+            total = (result.get("limits") or {}).get("total", 0)
+            first_total = total if first_total is None else first_total
+            if not rows or start >= total:
+                if total != first_total or len(media) != total:
+                    xbmc.log("MDBList Sync: library changed while reading media info, some of it may be missing",
+                             level=xbmc.LOGINFO)
+                return media
+    except Exception as e:
+        xbmc.log("MDBList Sync: media info query failed, leaving the rest unknown - {}".format(e), level=xbmc.LOGWARNING)
+        return media
+
+
 def _tvshow_ids_by_dbid():
     shows = jsonrpc_request("VideoLibrary.GetTVShows", {"properties": TVSHOW_PROPERTIES}).get("tvshows") or []
     result = {}
@@ -38,7 +73,7 @@ def _episodes():
     return jsonrpc_request("VideoLibrary.GetEpisodes", {"properties": EPISODE_PROPERTIES}).get("episodes") or []
 
 
-def build_snapshot():
+def build_snapshot(include_media=False):
     """Full local library snapshot used to match remote sync state against
     Kodi library rows: movies and episodes, each indexed by every canonical
     external id they carry (movies) or their parent show carries (episodes),
@@ -49,8 +84,12 @@ def build_snapshot():
     what's derived from its episodes, so watched/ratings/collection sync all
     operate at movie+episode granularity, same as live scrobbling already does.
     """
-    snapshot = {"movie": {}, "episode": {}}
+    # The id indexes keep one record per id; "movie_records"/"episode_records"
+    # keep every library entry, so two files of the same title (e.g. a 4K and
+    # a 1080p version) both reach the collection push as copies.
+    snapshot = {"movie": {}, "episode": {}, "movie_records": [], "episode_records": []}
 
+    movie_media = _media_by_dbid("VideoLibrary.GetMovies", "movies", "movieid") if include_media else {}
     for movie in _movies():
         ids = fix_unique_ids(movie.get("uniqueid", {}), "movie")
         if not ids:
@@ -65,12 +104,15 @@ def build_snapshot():
             "userrating": movie.get("userrating") or 0,
             "dateadded": movie.get("dateadded") or None,
             "file": movie.get("file") or None,
+            "media": movie_media.get(movie.get("movieid")) or {},
         }
+        snapshot["movie_records"].append(record)
         for provider, value in ids.items():
             snapshot["movie"]["{}:{}".format(provider, value)] = record
 
     show_ids_by_dbid = _tvshow_ids_by_dbid()
 
+    episode_media = _media_by_dbid("VideoLibrary.GetEpisodes", "episodes", "episodeid") if include_media else {}
     for episode in _episodes():
         show_ids = show_ids_by_dbid.get(episode.get("tvshowid"))
         if not show_ids:
@@ -95,7 +137,9 @@ def build_snapshot():
             "userrating": episode.get("userrating") or 0,
             "dateadded": episode.get("dateadded") or None,
             "file": episode.get("file") or None,
+            "media": episode_media.get(episode.get("episodeid")) or {},
         }
+        snapshot["episode_records"].append(record)
         for provider, value in show_ids.items():
             key = "{}:{}:{}:{}".format(provider, value, season, episode_number)
             snapshot["episode"][key] = record
@@ -236,6 +280,17 @@ def iter_movies(snapshot):
             continue
         seen.add(record["dbid"])
         yield record
+
+
+def iter_all_movies(snapshot):
+    """Every movie library entry, including several entries of the same title
+    (iter_movies yields one per id-indexed record)."""
+    return iter(snapshot["movie_records"])
+
+
+def iter_all_episodes(snapshot):
+    """Every episode library entry; see iter_all_movies."""
+    return iter(snapshot["episode_records"])
 
 
 def iter_episodes(snapshot):

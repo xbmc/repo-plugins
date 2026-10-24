@@ -19,6 +19,24 @@ Files are streamed directly between Dropbox and your Kodi device; they never pas
 
 Kodi 19 (Matrix) or later, and the Cloud Drive Common Module (`script.module.clouddrive.common`), installed automatically.
 
+## Installation
+
+* From the **Kodi Add-on repository** (Add-ons → Install from repository → Kodi Add-on repository → Video add-ons).
+* From **[my repository](https://github.com/cguZZman/repository.plugins)**, which gets new versions first.
+* Manually, from a zip of the source code. Install the latest **[common module](https://github.com/cguZZman/script.module.clouddrive.common)** first.
+
+### Getting updates from my repository
+
+New versions reach [my repository](https://github.com/cguZZman/repository.plugins) first, and the official Kodi repository after Team Kodi's review. Kodi 19 and later only updates add-ons that are also in the official repository from there. To get my repository's versions as soon as they're out, set **Settings → System → Add-ons → Update official add-ons from → Any repositories**.
+
+## Help and feedback
+
+Questions and discussion: the add-on's [Kodi forum thread](https://forum.kodi.tv/showthread.php?tid=389080). Problems: open an issue on [GitHub](https://github.com/cguZZman/plugin.dropbox/issues) and include your [debug log](https://kodi.wiki/view/Log_file/Easy).
+
+## Support this project
+
+The add-ons and the sign-in service are free and open source, and run by one developer for everyone using Google Drive, OneDrive and Dropbox in Kodi. Keeping the service online, and the add-ons working as the services change, takes time and money. If you find them useful, you can support the project on **[Ko-fi](https://ko-fi.com/cguzzman)**.
+
 ## License
 
 GPL-3.0-or-later. This add-on is not affiliated with or endorsed by Dropbox.

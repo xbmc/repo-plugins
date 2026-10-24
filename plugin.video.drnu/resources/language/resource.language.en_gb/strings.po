@@ -229,6 +229,10 @@ msgctxt "#30307"
 msgid "Wrong username or password, please try again!"
 msgstr ""
 
+msgctxt "#30350"
+msgid "Show duration in titles"
+msgstr ""
+
 
 # IPTV
 msgctxt "#30550"

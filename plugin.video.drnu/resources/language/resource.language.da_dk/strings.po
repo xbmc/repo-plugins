@@ -228,6 +228,10 @@ msgctxt "#30307"
 msgid "Wrong username or password, please try again!"
 msgstr "Forkert brugernavn eller kodeord, forsøg igen!"
 
+msgctxt "#30350"
+msgid "Show duration in titles"
+msgstr "Vis varighed i titler"
+
 
 # IPTV
 msgctxt "#30550"

@@ -39,6 +39,18 @@ from resources.lib.constants import CLIENT_ID, GET_TIMEOUT, URL
 TRANSACTION_FRAGMENT = "fragment useTransactionTransactionFragment on Transaction { ... on AuthenticatedAuthenticationTransaction { id email registration href __typename } ... on UnauthenticatedAuthenticationTransaction { id email __typename } ... on UnverifiedAuthenticationTransaction { id email name __typename } ... on UnrecognizedAuthenticationTransaction { id email statisticsConsentDefinition { id type version locale permissions headline summary body __typename } preferencesConsentDefinition { id type version locale permissions headline summary body __typename } newsletterConsentDefinition { id type version locale permissions headline summary body __typename } __typename } ... on UnidentifiedAuthenticationTransaction { id __typename } ... on CompletedEmailVerificationTransaction { id emailVerificationVariant: variant email __typename } ... on PendingEmailVerificationTransaction { id emailVerificationVariant: variant email __typename } ... on CompletedPasswordChangeTransaction { id passwordChangeVariant: variant __typename } ... on PendingPasswordChangeTransaction { id passwordChangeVariant: variant __typename } ... on PendingDeletionConfirmationTransaction { id __typename } ... on CompletedDeletionConfirmationTransaction { id __typename } ... on SettingsTransaction { id identity { id email name roles __typename } statisticsConsentDefinition { id type version locale permissions headline summary body __typename } preferencesConsentDefinition { id type version locale permissions headline summary body __typename } newsletterConsentDefinition { id type version locale permissions headline summary body __typename } statisticsConsentRevision { id status definition createdAt __typename } preferencesConsentRevision { id status definition createdAt __typename } newsletterConsentRevision { id status definition createdAt __typename } referBackUri referBackName sessionState expiresAt __typename } ... on PendingEUPTransaction { id href __typename } ... on CompletedEUPTransaction { id __typename } __typename }"  # noqa: E501
 
 
+def _http_error(res: requests.Response, what: str) -> dict:
+    """Build the {'error': ...} dict for a failed token request.
+
+    The message must never be empty: callers test the error for truthiness
+    (`if err:` in refresh_tokens), and an empty message would read as success,
+    leaving the token as None and crashing later on 'Bearer ' + None. res.text
+    is empty for some failures (a 502 from a proxy, for example), so fall back
+    to a message naming the status code.
+    """
+    return {'status_code': res.status_code, 'error': res.text.strip() or f'{what} failed with HTTP {res.status_code}'}
+
+
 def generate_code_verifier(length: int = 64) -> str:
     # Generate a secure random string (length between 43 and 128 chars)
     return secrets.token_urlsafe(length)[:length]
@@ -68,7 +80,7 @@ def full_login(user: str, password: str, log_func: Optional[Callable] = None) ->
     }
     res = ses.get('https://login.dr.dk/oidc/authorize', params=params, timeout=GET_TIMEOUT)
     if res.status_code != 200:
-        return {'status_code': res.status_code, 'error': res.text}
+        return _http_error(res, 'Login')
 
     trans = urlparse(res.url).path.split('/')[-1]
     headers = {'content-type': 'application/json'}
@@ -105,12 +117,15 @@ def full_login(user: str, password: str, log_func: Optional[Callable] = None) ->
 
     authenticate = u3.json().get('data', {}).get('authenticate') or {}
     if 'href' not in authenticate:
-        # the mutation returns an Error (code/message) for a rejected login
-        return {'status_code': u3.status_code, 'error': authenticate.get('message', authenticate.get('code', 'login failed'))}
+        # the mutation returns an Error (code/message) for a rejected login;
+        # 'or' rather than a get() default, so an empty message still falls
+        # through to the code and never yields an empty (falsy) error
+        reason = authenticate.get('message') or authenticate.get('code') or 'login failed'
+        return {'status_code': u3.status_code, 'error': reason}
 
     res2 = ses.get(authenticate['href'], timeout=GET_TIMEOUT)
     if res2.status_code != 200:
-        return {'status_code': res2.status_code, 'error': res2.text}
+        return _http_error(res2, 'Login')
     code = parse_qs(urlparse(res2.url).query)['code'][0]
 
     data = {
@@ -126,7 +141,7 @@ def oidc_token(data: dict) -> dict:
     headers = {"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json"}
     res = requests.post('https://login.dr.dk/oidc/token', data=data, headers=headers, timeout=GET_TIMEOUT)
     if res.status_code != 200:
-        return {'status_code': res.status_code, 'error': res.text}
+        return _http_error(res, 'Token request')
     return res.json()
 
 
@@ -144,7 +159,7 @@ def exchange_token(tokens: dict) -> dict:
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
     res = requests.post(URL + '/authorization/exchange', json=data, headers=headers, timeout=GET_TIMEOUT)
     if res.status_code != 200:
-        return {'status_code': res.status_code, 'error': res.text}
+        return _http_error(res, 'Token exchange')
     return res.json()
 
 
@@ -161,6 +176,6 @@ def anonymous_tokens() -> dict:
     url = URL + '/authorization/anonymous-sso?'
     u = requests.post(url, json=data, params=params, timeout=GET_TIMEOUT)
     if u.status_code != 200:
-        return {'status_code': u.status_code, 'error': u.text}
+        return _http_error(u, 'Anonymous token request')
     tokens = json.loads(u.content)
     return tokens

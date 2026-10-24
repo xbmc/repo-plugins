@@ -20,6 +20,8 @@
 #
 """WebVTT to SRT subtitle conversion and subtitle file handling."""
 
+from __future__ import annotations
+
 import re
 from pathlib import Path
 from typing import Any, Callable, Optional, Union

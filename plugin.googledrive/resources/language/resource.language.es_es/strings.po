@@ -48,21 +48,9 @@ msgctxt "#32007"
 msgid "Google Photos"
 msgstr "Google Photos"
 
-msgctxt "#32008"
-msgid "Always ask for the stream format before play"
-msgstr "Preguntar siempre por el formato de la reproducción"
-
-msgctxt "#32009"
-msgid "Loading stream formats..."
-msgstr "Cargando formatos de reproducción"
-
 msgctxt "#32010"
 msgid "Recursive auto-refreshed slideshow"
 msgstr "Auto-Actualizar recursivamente las diapositivas"
-
-msgctxt "#32011"
-msgid "Common Settings"
-msgstr "Ajustes"
 
 msgctxt "#32012"
 msgid "Open Cloud Drive Common Settings..."
@@ -75,11 +63,3 @@ msgstr "Mi Disco"
 msgctxt "#32014"
 msgid "Starred"
 msgstr "Seleccionados"
-
-msgctxt "#32015"
-msgid "Original format"
-msgstr "Formato original"
-
-msgctxt "#32016"
-msgid "Select the stream format"
-msgstr "Seleccionar formato de la reproducción"

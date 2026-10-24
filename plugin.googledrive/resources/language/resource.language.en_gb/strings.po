@@ -48,20 +48,8 @@ msgctxt "#32007"
 msgid "Google Photos"
 msgstr ""
 
-msgctxt "#32008"
-msgid "Always ask for the stream format before play"
-msgstr ""
-
-msgctxt "#32009"
-msgid "Loading stream formats..."
-msgstr ""
-
 msgctxt "#32010"
 msgid "Recursive auto-refreshed slideshow"
-msgstr ""
-
-msgctxt "#32011"
-msgid "Resume playing when resume point exists in library"
 msgstr ""
 
 msgctxt "#32012"
@@ -76,20 +64,8 @@ msgctxt "#32014"
 msgid "Starred"
 msgstr ""
 
-msgctxt "#32015"
-msgid "Original format"
-msgstr ""
-
-msgctxt "#32016"
-msgid "Select the stream format"
-msgstr ""
-
 msgctxt "#32017"
 msgid "Ask to resume if resume point exists in library"
-msgstr ""
-
-msgctxt "#32018"
-msgid "Save resume points and watched status in library"
 msgstr ""
 
 msgctxt "#32019"
@@ -128,16 +104,12 @@ msgctxt "#32069"
 msgid "     Source server port  -  http://localhost:<port>/source"
 msgstr ""
 
-msgctxt "#32070"
-msgid "Default stream quality"
-msgstr ""
-
 msgctxt "#32071"
-msgid "Check for Google ban"
+msgid "Check download quota"
 msgstr ""
 
 msgctxt "#32072"
-msgid "Banned: %s"
+msgid "Download quota exceeded: %s"
 msgstr ""
 
 msgctxt "#32073"
@@ -150,8 +122,4 @@ msgstr ""
 
 msgctxt "#32075"
 msgid "Skip unmodified files"
-msgstr ""
-
-msgctxt "#32076"
-msgid "Play choosing stream format"
 msgstr ""

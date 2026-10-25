@@ -1,4 +1,4 @@
-<addon id="plugin.audio.radio_de" name="Radio" provider-name="Tristan Fischer, enen92" version="3.0.9+matrix.2">
+<addon id="plugin.audio.radio_de" name="Radio" provider-name="Tristan Fischer, enen92" version="4.0.0+matrix.1">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.xbmcswift2" version="19.0.6" />
@@ -8,13 +8,17 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <website>https://www.radio.de</website>
+        <website>https://www.radio-browser.info/</website>
         <source>https://github.com/XBMC-Addons/plugin.audio.radio_de</source>
         <forum>https://forum.kodi.tv/showthread.php?tid=119362</forum>
         <license>GPL-2.0-only</license>
-        <broken>The plugin isn't compatible with the current API of radio.de</broken>
-        <news>v3.0.9+matrix.1 (31/12/2021)
-            [new] Sync translations
+        <news>v4.0.0+matrix.1 (25/10/2026)
+            [new] Station data now comes from the Radio Browser API, the radio.de API no longer exists
+            [new] Retry failed requests on several Radio Browser servers
+            [new] Remember played stations and play them from the local cache if the lookup fails
+            [new] Station IDs are now Radio Browser UUIDs, radio.de station IDs saved in favourites no longer work
+            [fix] Play .aac streams with the audio player
+            [fix] Log the reason of a network error
         </news>
         <assets>
             <icon>resources/art/icon.png</icon>

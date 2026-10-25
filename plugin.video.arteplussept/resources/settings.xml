@@ -7,13 +7,18 @@
 			type="enum"
 			label="30050"
 			values="fr|de|en|es|pl|it|ro"
-			default="0"/>
+			default="0" />
 		<setting
 			id="loglevel"
 			type="enum"
 			label="30056"
 			values="DEFAULT|API|DISPLAY|API+DISPLAY"
-			default="0"/>
+			default="0" />
+		<setting
+			id="consent_tracking"
+			type="bool"
+			label="30064"
+			default="false" />
 		<setting
 			id="last_version_notified"
 			type="text"

@@ -1,3 +1,8 @@
+v2.1.0 (2026-10-3)
+
+Track playback progress in Arte TV user profile to allow resuming playing content cross devices.
+Enable resuming videos. Enable resuming collection from the last partially seen episode.
+
 v2.0.1 (2026-9-21)
 
 Fix compatibility with lower environment libraries.

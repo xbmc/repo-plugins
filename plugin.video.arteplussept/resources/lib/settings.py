@@ -21,6 +21,7 @@ class Settings:
         # Enable additional logs managed by plugin: API and display object traces
         loglevel_key_idx = plugin.addon.getSettingInt('loglevel') or 0
         self.loglevel = loglevel[list(loglevel.keys())[loglevel_key_idx]]
+        self.consent_tracking = plugin.addon.getSettingBool('consent_tracking')
 
     def should_log(self, log_type):
         """Return True when the configured loglevel includes the requested log type."""

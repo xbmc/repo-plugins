@@ -4,6 +4,7 @@ Module for Arte History also known as last viewed
 
 import xbmcgui
 from resources.lib import api
+from resources.lib.extended_program_data import ExtendedProgramData
 from resources.lib import user
 from resources.lib.mapper.artecollection import ArteCollection
 
@@ -44,6 +45,9 @@ class ArteHistory(ArteCollection):
                 autoclose=10000)
             if purge_confirmed:
                 if 200 == api.purge_last_viewed(auth_token):
+                    ExtendedProgramData(
+                        self.plugin, self.settings, auth_token
+                    ).clear()
                     self.plugin.notify(
                         msg=self.plugin.addon.getLocalizedString(30031), image='info')
                 else:
@@ -64,6 +68,9 @@ class ArteHistory(ArteCollection):
         if auth_token:
             status = api.sync_last_viewed(auth_token, program_id, total_time)
             if 200 == status:
+                ExtendedProgramData(
+                    self.plugin, self.settings, auth_token
+                ).update_program(program_id, total_time, total_time)
                 msg = self.plugin.addon.getLocalizedString(30036).format(label=label)
                 self.plugin.notify(msg=msg, image='info')
             else:

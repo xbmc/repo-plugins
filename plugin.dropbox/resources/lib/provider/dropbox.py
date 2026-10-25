@@ -44,6 +44,17 @@ class Dropbox(Provider):
         # No default Content-Type: the download endpoint rejects a JSON one. The API calls set it in _rpc.
         return None
 
+    revoke_supported = True
+    signin_company = 'Dropbox'
+    # Revoking ends only this device's sign-in: other devices have their own refresh tokens.
+    revoke_ends_all_sign_ins = False
+
+    def revoke_access(self):
+        # Disables the access token, the refresh token it came from, and every access token issued with it.
+        request = self.prepare_request('post', '/auth/token/revoke', {}, None, None, {'content-type': 'application/json'})
+        request.data = b'null'
+        request.request()
+
     def _rpc(self, path, args=None, request_params=None, access_tokens=None):
         # Dropbox's API calls are POSTs with a JSON body; calls without arguments take "null".
         request = self.prepare_request('post', path, Utils.default(args, {}), request_params, access_tokens, {'content-type': 'application/json'})
@@ -123,6 +134,34 @@ class Dropbox(Provider):
                 'url': self._CONTENT_URL + '/files/download?' + urllib.parse.urlencode({'arg': json.dumps({'path': entry['id']}, separators=(',', ':'))})
             }
         return item
+
+    def list_subtree(self, item_driveid, item_id):
+        # One recursive, paged listing for a whole tree (library exports), mapped back to folder ids by path.
+        api_path = self._api_path(item_id)
+        entries = []
+        response = self._rpc('/files/list_folder', {'path': api_path, 'recursive': True, 'limit': 2000})
+        while response:
+            if self.cancel_operation():
+                return None
+            entries.extend(e for e in Utils.get_safe_value(response, 'entries', []) if Utils.get_safe_value(e, '.tag') in ('file', 'folder'))
+            response = self._rpc('/files/list_folder/continue', {'cursor': response['cursor']}) if Utils.get_safe_value(response, 'has_more') else None
+        # The listing includes the folder itself; the root of the Dropbox has the empty path.
+        root_path = next((e['path_lower'] for e in entries if e['id'] == item_id), None)
+        if root_path is None:
+            root_path = Utils.get_safe_value(self._rpc('/files/get_metadata', {'path': api_path}), 'path_lower', '') if api_path else ''
+        folder_ids = {root_path: item_id}
+        for e in entries:
+            if e['.tag'] == 'folder':
+                folder_ids.setdefault(e['path_lower'], e['id'])
+        tree = {folder_id: [] for folder_id in folder_ids.values()}
+        for e in entries:
+            if e['path_lower'] == root_path:
+                continue
+            parent_path = posixpath.dirname(e['path_lower'])
+            parent = folder_ids.get('' if parent_path == '/' else parent_path)
+            if parent is not None:
+                tree[parent].append(self._extract_item(e, True, parent))
+        return tree
 
     def search(self, query, item_driveid=None, item_id=None, on_items_page_completed=None):
         options = {'file_status': 'active', 'max_results': 1000}

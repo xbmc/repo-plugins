@@ -77,23 +77,31 @@ def _persist_removed_chunk(category, chunk):
         sync_state.merge_known_items(category, {}, removed_keys)
 
 
-def push_items(category, endpoint, field_name, items):
+def push_items(category, endpoint, field_name, items, extra_fields=None):
     """Shared push body for watched_sync/ratings_sync/collection_sync's
     _push_add: split by type, set `field_name` (watched_at/rating/
     collected_at) on each, chunk, POST to `endpoint`. The three call sites
     were previously identical modulo that field name and endpoint string.
+    `extra_fields(item)` -- optional -- returns more fields for an item's
+    entry (collection_sync's media info).
     Persists each chunk's known-items state immediately after it pushes
     successfully, so a later chunk's failure (e.g. hitting the write rate
     limit) doesn't undo already-pushed progress."""
+    def fields(item):
+        entry = {field_name: item[field_name]}
+        if extra_fields:
+            entry.update(extra_fields(item))
+        return entry
+
     movie_items = [item for item in items if item["type"] == "movie"]
     for batch in chunked(movie_items, BATCH_SIZE):
-        payload = [{"ids": item["ids"], field_name: item[field_name]} for item in batch]
+        payload = [dict({"ids": item["ids"]}, **fields(item)) for item in batch]
         mdblist_api.push_sync_items(endpoint, {"movies": payload})
         _persist_pushed_chunk(category, batch)
 
     episode_items = [item for item in items if item["type"] == "episode"]
     for batch in chunked(episode_items, BATCH_SIZE):
-        entries = [(item["show_ids"], item["season"], item["episode"], _episode_extra(item, {field_name: item[field_name]})) for item in batch]
+        entries = [(item["show_ids"], item["season"], item["episode"], _episode_extra(item, fields(item))) for item in batch]
         mdblist_api.push_sync_items(endpoint, {"shows": build_shows_payload(entries)})
         _persist_pushed_chunk(category, batch)
 
@@ -122,10 +130,11 @@ def diff_and_reconcile(category, current_items, push_add, push_remove, value_cha
     push_remove(items) for the deltas, and return a summary dict.
 
     `value_changed(known_item, item)` -- optional -- adds an item to to_add
-    even when its key is already known, if the value differs. Only
-    ratings_sync needs this: a rating can change without membership changing,
-    unlike watched/collection, which are membership-only (a rewatch/re-add
-    with the same value doesn't need a fresh push).
+    even when its key is already known, if the value differs. ratings_sync
+    uses it because a rating can change without membership changing, and
+    collection_sync because a file's media info can (an upgrade in place);
+    watched is membership-only (a rewatch with the same value doesn't need a
+    fresh push).
 
     `allow_remove` gates whether this call may push removals at all --
     defaults to False so a call site that forgets to think about it stays

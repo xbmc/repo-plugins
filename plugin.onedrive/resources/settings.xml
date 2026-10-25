@@ -3,9 +3,7 @@
     <category label="32067">
     	<setting label="32000" type="lsep"/>
     	<setting label="32004" type="bool" id="set_subtitle" default="true" value="true"/>
-    	<setting label="32011" type="bool" id="resume_playing" default="true" visible="!String.IsEmpty(window(home).property(iskrypton))" />
-    	<setting label="32018" type="bool" id="save_resume_watched" default="true" visible="!String.IsEmpty(window(home).property(iskrypton))" />
-    	<setting label="32017" type="bool" id="ask_resume" default="true" visible="String.IsEmpty(window(home).property(iskrypton))" />
+    	<setting label="32017" type="bool" id="ask_resume" default="true" />
     	<setting label="32001" type="lsep"/>
     	<setting label="32003" type="bool" id="clean_folder" default="true" value="true"/>
     	<setting label="32019" type="bool" id="no_extension_strm" default="false" value="false"/>

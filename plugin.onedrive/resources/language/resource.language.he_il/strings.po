@@ -60,10 +60,6 @@ msgctxt "#32010"
 msgid "Recursive auto-refreshed slideshow"
 msgstr "רענן מצגת באופן רקורסיבי ואוטומטי"
 
-msgctxt "#32011"
-msgid "Common Settings"
-msgstr "הגדרות נפוצות"
-
 msgctxt "#32012"
 msgid "Open Cloud Drive Common Settings..."
 msgstr "פתח הגדרות נפוצות של כונן ענן ..."

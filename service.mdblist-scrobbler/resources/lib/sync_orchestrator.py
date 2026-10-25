@@ -127,7 +127,11 @@ def run(notify=False, allow_remove=False):
             # library query must abort the whole run rather than let
             # diff-based reconciliation treat an incomplete snapshot as "the
             # library is empty" and push bulk removals.
-            snapshot = library_snapshot.build_snapshot()
+            # Reading every file's streamdetails is slow on a big library (and
+            # holds _lock meanwhile), so media info is opt-in
+            snapshot = library_snapshot.build_snapshot(
+                include_media=collection_enabled and _bool_setting("sync.collection.media")
+            )
 
             # Companion guard to the removal circuit-breaker in
             # sync_payload.diff_and_reconcile: a successful-but-empty

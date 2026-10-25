@@ -45,6 +45,7 @@
         <setting label="Sync watched status (two-way)" type="bool" id="sync.watched.enabled" default="false"/>
         <setting label="Sync ratings (two-way)" type="bool" id="sync.ratings.enabled" default="false"/>
         <setting label="Sync library/collection status (Kodi to MDBList only)" type="bool" id="sync.collection.enabled" default="false"/>
+        <setting label="Also send media info (resolution, HDR, audio) - slower sync on big libraries" type="bool" id="sync.collection.media" default="false" enable="eq(-1,true)"/>
 
         <setting label="Triggers" type="lsep"/>
         <setting label="Sync after library scan finishes" type="bool" id="sync.on_library_scan" default="true"/>

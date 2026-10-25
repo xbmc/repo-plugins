@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.bbcsounds" name="BBC Sounds" version="1.0.0" provider-name="Dimitri Kroon">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+        <import addon="inputstream.adaptive" version="21.5.17"/>
+        <import addon="script.module.requests" version="2.31.0"/>
+        <import addon="script.module.backports.zoneinfo" version="0.2.1"/>
+        <import addon="script.module.tzlocal" version="5.0.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Music, Radio and Podcasts from the BBC Sounds website</summary>
+        <description lang="en_GB">Play live radio, previous radio programmes and podcasts from the BBC with full BBC Account integration. This Kodi add-on is NOT created by the BBC and in no way affiliated with or endorsed by the BBC</description>
+        <platform>all</platform>
+        <license>GPL-3.0-or-later</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=388288</forum>
+        <source>https://github.com/dimkroon/plugin.audio.bbcsounds</source>
+        <disclaimer lang="en_GB">
+            This addon is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        </disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+        <news>
+1.0.0
+- First full release
+        </news>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+    </extension>
+</addon>

@@ -1,24 +1,35 @@
-# Google Drive KODI Addon
+# Google Drive for Kodi
 
-Play all your media from Google Drive including Videos, Music and Pictures (including Google Photos). 
-* Unlimited accounts
-* Team Drives support
-* Google Photos support
-* Playback your music and videos. Listing of videos with thumbnails.
-* ~~Use Google Drive as a source.~~ (Not currently working due to changes in the Google Drive API)
-* Subtitles can be assigned automatically if a .str file exists with the same name as the video. 
-* Export your videos to your library (.strm files). You can export your music too, but kodi won't support it yet. It's a Kodi issue for now.
-* Show your photos individually or run a slideshow of them. Listing of pictures with thumbnails.
-* Auto-Refreshed slideshow.
-* Use of OAuth 2 login. You don't have to write your user/password within the add-on. Use the login process in your browser.
-* Extremely fast. Using the Google Drive API
+Play the videos, music and pictures in your Google Drive on Kodi.
+* Any number of accounts
+* My Drive, shared drives, Shared with me and Starred
+* Search your Drive
+* Video and music playback with seeking, and video listings with thumbnails
+* Subtitles stored next to a video, with the same name (for example `movie.mkv` and `movie.srt`), are loaded automatically
+* Pictures full screen, as a slideshow, or as an auto-refreshed slideshow that picks up new pictures
+* Export videos and music to the Kodi library (.strm files)
+* Use Google Drive as a source in Kodi's file manager (add `http://localhost:8587/source/` as a source)
+* Read-only: the add-on never changes or deletes your files
+* Sign in from your phone or computer with a short code shown in Kodi: your password is only entered on Google's pages
 
 This program is not affiliated with or sponsored by Google.
 
+## Video quality
 
-### Installation
+Videos play in their original quality: Google's API only gives access to the original file, not the lower-quality versions the Drive website plays. If a video stutters on a slow connection:
+* Give Kodi a larger buffer: raise **Memory size** in **Settings → Services → Caching** (Kodi 21 or later, Advanced settings level). On Kodi 19 and 20 the same settings go in advancedsettings.xml. See [Kodi's caching settings](https://kodi.wiki/view/Settings/Services/Caching).
+* Or store a lower-bitrate copy of the video in your Drive, made with a converter such as [HandBrake](https://handbrake.fr).
 
-* From the **Kodi Add-on repository**
-* From **[my repository](https://github.com/cguZZman/repository.plugins)** if for any reason the latest version is still not in the Kodi Add-on repository.
-* Manual, by downloading the source code and creating your zip. 
-If your installation is manual, you **must install first** the latest version of the **[common module](https://github.com/cguZZman/script.module.clouddrive.common)**.
+## Installation
+
+* From the **Kodi Add-on repository** (Add-ons → Install from repository → Kodi Add-on repository → Video add-ons).
+* From **[my repository](https://github.com/cguZZman/repository.plugins)**, which gets new versions first.
+* Manually, from a zip of the source code. Install the latest **[common module](https://github.com/cguZZman/script.module.clouddrive.common)** first.
+
+### Getting updates from my repository
+
+New versions reach [my repository](https://github.com/cguZZman/repository.plugins) first, and the official Kodi repository after Team Kodi's review. Kodi 19 and later only updates add-ons that are also in the official repository from there. To get my repository's versions as soon as they're out, set **Settings → System → Add-ons → Update official add-ons from → Any repositories**.
+
+## Support this project
+
+The add-ons and the sign-in service are free and open source, and run by one developer for everyone using Google Drive, OneDrive and Dropbox in Kodi. Keeping the service online, and the add-ons working as the services change, takes time and money. If you find them useful, you can support the project on **[Ko-fi](https://ko-fi.com/cguzzman)**.

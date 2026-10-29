@@ -24,7 +24,9 @@ we can load. A slim topics index (slug, name, sermonCount — no descriptions)
 would be roughly 1 MB and would unlock topic browsing immediately.
 """
 
+import hashlib
 import json
+import os
 import time
 import urllib.error
 import urllib.parse
@@ -34,30 +36,102 @@ BASE = "https://api.sermonindex.net/v2"
 TIMEOUT = 20
 UA = "Kodi plugin.video.sermonindex/1.0.0 (+https://www.sermonindex.net/)"
 
-# A small in-process cache. Kodi starts a fresh Python interpreter per navigation
-# step, so this only helps within one directory build — which is exactly where it
-# matters (the speaker index is read once per page of the A-Z).
+# Responses are cached on disk as well as in memory. Kodi starts a fresh Python
+# interpreter for each navigation step, so an in-memory cache alone is thrown away
+# between one screen and the next; the 1.6 MB speaker index would be downloaded
+# and parsed again for every letter page and every search. The disk cache lives
+# in the add-on's profile folder (see set_cache_dir) and is optional: if it
+# cannot be written, every request simply goes to the network.
 _CACHE = {}
-_CACHE_TTL = 300
+_CACHE_DIR = None
+_PRUNE_AFTER = 86400           # cache files older than a day are deleted
+TTL_DEFAULT = 3600             # per-speaker and per-chapter files
+TTL_INDEX = 6 * 3600           # the speaker index and the scripture index
+TTL_NEVER = 0                  # /random must be different every time
 
 
 class ApiError(Exception):
     pass
 
 
+def set_cache_dir(path):
+    """Turn on the disk cache. Safe to call with a path that cannot be created."""
+    global _CACHE_DIR
+    try:
+        os.makedirs(path, exist_ok=True)
+        cutoff = time.time() - _PRUNE_AFTER
+        for name in os.listdir(path):
+            full = os.path.join(path, name)
+            if name.endswith(".json") and os.path.getmtime(full) < cutoff:
+                os.remove(full)
+    except OSError:
+        if not (path and os.path.isdir(path)):
+            _CACHE_DIR = None
+            return
+    _CACHE_DIR = path
+
+
+def _ttl_for(url):
+    rest = url[len(BASE):].strip("/") if url.startswith(BASE) else ""
+    if rest == "random":
+        return TTL_NEVER
+    if rest in ("speakers", "scripture"):
+        return TTL_INDEX
+    return TTL_DEFAULT
+
+
+def _cache_file(url):
+    return os.path.join(_CACHE_DIR, hashlib.sha1(url.encode("utf-8")).hexdigest() + ".json")
+
+
+def _disk_read(url, ttl):
+    if not _CACHE_DIR:
+        return None
+    full = _cache_file(url)
+    try:
+        if time.time() - os.path.getmtime(full) >= ttl:
+            return None
+        with open(full, "r", encoding="utf-8") as fh:
+            return json.loads(fh.read())
+    except (OSError, ValueError):
+        return None
+
+
+def _disk_write(url, raw):
+    if not _CACHE_DIR:
+        return
+    full = _cache_file(url)
+    try:
+        tmp = full + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as fh:
+            fh.write(raw)
+        os.replace(tmp, full)
+    except OSError:
+        pass
+
+
 def _get(path):
     """GET a path under /v2 and parse it as JSON."""
     url = path if path.startswith("http") else "{}/{}".format(BASE, path.lstrip("/"))
-    hit = _CACHE.get(url)
-    if hit and (time.time() - hit[0]) < _CACHE_TTL:
-        return hit[1]
+    ttl = _ttl_for(url)
+    if ttl > 0:
+        hit = _CACHE.get(url)
+        if hit and (time.time() - hit[0]) < ttl:
+            return hit[1]
+        data = _disk_read(url, ttl)
+        if data is not None:
+            _CACHE[url] = (time.time(), data)
+            return data
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-            data = json.loads(r.read().decode("utf-8"))
+            raw = r.read().decode("utf-8")
+        data = json.loads(raw)
     except (urllib.error.URLError, ValueError, OSError) as exc:
         raise ApiError(str(exc))
-    _CACHE[url] = (time.time(), data)
+    if ttl > 0:
+        _CACHE[url] = (time.time(), data)
+        _disk_write(url, raw)
     return data
 
 
@@ -71,6 +145,11 @@ def speakers():
 def speaker(slug):
     """One speaker, including the full sermon records for everything they have."""
     return _get("speakers/{}".format(urllib.parse.quote(slug)))
+
+
+def sermon(sermon_id):
+    """One sermon record, with its media URLs."""
+    return _get("sermons/{}".format(urllib.parse.quote(str(sermon_id))))
 
 
 def books():

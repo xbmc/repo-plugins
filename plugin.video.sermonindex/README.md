@@ -39,25 +39,17 @@ Two small additions to the API would unlock both:
 
 ## Development
 
-Kept locally rather than in its own repository — the add-on's public home is
-the Kodi add-on repository once merged, and a second repo carrying one commit
-was overhead without a purpose. `<source>` is optional in addon.xml and is
-omitted for that reason; add it back in a version bump if that ever changes.
-
 No third-party dependencies: standard library only, so there is nothing for
-Kodi to resolve at install time.
+Kodi to resolve at install time. API responses are cached for a few hours in
+the add-on's profile folder, because Kodi starts a new Python process for every
+screen.
 
 ```
-addon.xml            manifest
-main.py              router — one navigation step per invocation
-resources/lib/api.py API client, media selection, filtering
+addon.xml               manifest
+main.py                 entry point, calls the router
+resources/lib/router.py screens and routing, one navigation step per invocation
+resources/lib/api.py    API client, media selection, filtering, disk cache
 resources/settings.xml
-```
-
-Run the logic tests (no Kodi required) from `kodi-addon/`:
-
-```bash
-python3 test_logic.py
 ```
 
 ## Licence

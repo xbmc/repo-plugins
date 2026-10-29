@@ -56,6 +56,10 @@ msgctxt "#30011"
 msgid "Nothing playable in this sermon"
 msgstr ""
 
+msgctxt "#30012"
+msgid "0-9 and other"
+msgstr ""
+
 msgctxt "#30100"
 msgid "Playback"
 msgstr ""

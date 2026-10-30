@@ -1,0 +1,3 @@
+v1.3.17
+
+- Fixed watch times being off by an hour for anything watched on the other side of a daylight-saving change, which made every such watch be sent to MDBList again after each switch.

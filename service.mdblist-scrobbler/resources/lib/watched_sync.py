@@ -79,6 +79,11 @@ def _push_remove(items):
 # upgraded install still differs from Kodi by a few seconds per item.
 WATCHED_AT_TOLERANCE_SECONDS = 60
 
+# Up to 1.3.16 lastplayed was converted to UTC with today's offset, so a
+# watch from the other side of DST was saved an hour off what it converts
+# to now. A difference of exactly an hour is that, not a rewatch.
+DST_SHIFT_SECONDS = 3600
+
 
 def _watched_at_changed(known_item, item):
     known, current = known_item.get("watched_at"), item.get("watched_at")
@@ -88,7 +93,8 @@ def _watched_at_changed(known_item, item):
         delta = parse_datetime(known[:19], "%Y-%m-%dT%H:%M:%S") - parse_datetime(current[:19], "%Y-%m-%dT%H:%M:%S")
     except (TypeError, ValueError):
         return True
-    return abs(delta.total_seconds()) > WATCHED_AT_TOLERANCE_SECONDS
+    seconds = abs(delta.total_seconds())
+    return seconds > WATCHED_AT_TOLERANCE_SECONDS and abs(seconds - DST_SHIFT_SECONDS) > WATCHED_AT_TOLERANCE_SECONDS
 
 
 def push(snapshot, allow_remove=False):

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.googledrive" name="Google Drive" version="1.6.8" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.googledrive" name="Google Drive" version="1.6.12" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.clouddrive.common" version="1.5.10"/>
+		<import addon="script.module.clouddrive.common" version="1.5.18"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="entrypoint.py">
 		<provides>image audio video</provides>
@@ -48,7 +48,23 @@ Spela upp alla dina medier från Google Drive, inklusive videor, musik och bilde
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>v1.6.8 released Oct 24, 2026:
+		<news>v1.6.12 released Oct 31, 2026:
+- Videos show the plot, cast and artwork of the Kodi .nfo files and pictures next to them (it can be turned off in the settings) (#301)
+- Requires clouddrive.common 1.5.18
+
+v1.6.11 released Oct 30, 2026:
+- Subtitles are found by listing the video's folder: Google's name search missed some names, like ones with "•"
+
+v1.6.10 released Oct 30, 2026:
+- Big folders open a page at a time: Items per page in the Advanced settings (500 by default, 0 for the whole folder)
+- Going back to a folder, after viewing a picture for example, doesn't load it again for a few minutes (Cache expiration time)
+- Subtitles: another video's (Movie 2.srt for Movie.mkv) and trashed ones are no longer loaded; .vtt subtitles are
+- Requires clouddrive.common 1.5.13
+
+v1.6.9 released Oct 30, 2026:
+- Shortcuts to folders in shared drives show their files, also in Use as a source and in library exports
+
+v1.6.8 released Oct 24, 2026:
 - Removing an account can also revoke the add-on's access to your Google account
 - Requires clouddrive.common 1.5.10
 
@@ -61,25 +77,7 @@ v1.6.6 released Oct 16, 2026:
 
 v1.6.5 released Oct 15, 2026:
 - Much faster exports to the library: a folder tree is listed in a few requests instead of one per folder (thanks to 0o120)
-- Swedish translation (thanks to Daniel Nylander)
-
-v1.6.4 released Oct 15, 2026:
-- New icon and fanart
-
-v1.6.3 released Oct 12, 2026:
-- Stream format selection removed: it relied on an undocumented Google service that no longer works
-- "Check for Google ban" is now "Check download quota"
-- Search works with quotes in the text, and subtitles are taken only from the video's folder
-- Auto-refreshed slideshow fixed
-- Requires clouddrive.common 1.5.4
-
-v1.6.2 released Oct 11, 2026:
-- New sign-in server address: https://drive.signinserver.com (the old one keeps working for older versions)
-- Sign-in works when Kodi or the phone uses IPv6 (requires clouddrive.common 1.5.2)
-
-v1.6.1 released Oct 5, 2026:
-- Requires clouddrive.common 1.5.1 (review fixes: safer redirects, account migration, removed accounts)
-- Unused strings removed</news>
+- Swedish translation (thanks to Daniel Nylander)</news>
 		<disclaimer lang="en_GB">
 This cloud drive addon uses a third-party authentication mechanism commonly known as OAuth 2.0.
 If you want to know more about OAuth 2.0 you can visit the following pages:

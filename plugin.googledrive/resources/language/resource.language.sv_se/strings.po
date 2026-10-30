@@ -124,3 +124,11 @@ msgstr "Ladda ner metadatafiler (.nfo, .strm)"
 msgctxt "#32075"
 msgid "Skip unmodified files"
 msgstr "Hoppa över oförändrade filer"
+
+msgctxt "#32076"
+msgid "Items per page (0 = the whole folder)"
+msgstr "Objekt per sida (0 = hela mappen)"
+
+msgctxt "#32077"
+msgid "Show the plot, cast and artwork from .nfo files and pictures next to the videos"
+msgstr "Visa handling, rollista och bilder från .nfo-filer och bilder bredvid videorna"

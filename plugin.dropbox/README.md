@@ -4,7 +4,9 @@ Browse your Dropbox in Kodi and play your videos, music and pictures.
 
 - Any number of Dropbox accounts
 - Search your Dropbox
+- Shared with me: folders and files others share with you, even those you haven't added to your Dropbox
 - Subtitles stored next to your videos are loaded automatically (same name, e.g. `movie.mkv` and `movie.srt` or `movie.en.srt`)
+- The plot, cast and artwork of Kodi .nfo files and pictures stored next to your videos (`movie.nfo`, `movie-poster.jpg`, `fanart.jpg`) are shown while browsing
 - Export videos and music to the Kodi library (.strm files)
 - Use Dropbox as a source
 - Read-only: the add-on never changes or deletes your files
@@ -35,7 +37,7 @@ Questions and discussion: the add-on's [Kodi forum thread](https://forum.kodi.tv
 
 ## Support this project
 
-The add-ons and the sign-in service are free and open source, and run by one developer for everyone using Google Drive, OneDrive and Dropbox in Kodi. Keeping the service online, and the add-ons working as the services change, takes time and money. If you find them useful, you can support the project on **[Ko-fi](https://ko-fi.com/cguzzman)**.
+The add-ons and the sign-in service are free and open source, and run by one developer for everyone using Google Drive, OneDrive and Dropbox in Kodi. Keeping the service online, and the add-ons working as the services change, takes time and money. This year's goal is **$840**: the security review Google requires every year so the Google Drive add-on can keep signing in ($675), plus domains, hosting, payment fees and taxes. If you find them useful, you can support the project on **[GitHub Sponsors](https://github.com/sponsors/cguZZman)**, monthly or once.
 
 ## License
 

@@ -79,3 +79,23 @@ msgstr "Permitir usar o Dropbox como fonte"
 msgctxt "#32069"
 msgid "     Source server port  -  http://localhost:<port>/source"
 msgstr "     Porta do servidor de fonte  -  http://localhost:<porta>/source"
+
+msgctxt "#32070"
+msgid "Items per page (0 = the whole folder)"
+msgstr "Itens por página (0 = a pasta inteira)"
+
+msgctxt "#32005"
+msgid "Auto-Refreshed slideshow"
+msgstr "Slideshow atualizado automaticamente"
+
+msgctxt "#32006"
+msgid "Refresh interval in minutes"
+msgstr "Tempo de atualização em minutos"
+
+msgctxt "#32010"
+msgid "Recursive auto-refreshed slideshow"
+msgstr "Slideshow atualizado automaticamente de forma recursiva"
+
+msgctxt "#32071"
+msgid "Show the plot, cast and artwork from .nfo files and pictures next to the videos"
+msgstr "Mostrar a sinopse, o elenco e as imagens dos arquivos .nfo e das imagens ao lado dos vídeos"

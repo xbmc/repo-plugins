@@ -57,13 +57,13 @@ class Channel(chn_class.Channel):
         self._add_data_parser("https://urplay.se/bladdra/alla-program", json=True,
                               name="Main TV Show parser",
                               preprocessor=NextJsParser(
-                                  key="className", value="AlphabeticProductList-module__-k7Sma__wrapper"),
+                                  key="data-sentry-component", value="AlphabeticProductList", return_parent=True),
                               parser=["children", -1], creator=self.create_alphabet_items)
 
         self._add_data_parser("https://urplay.se/bladdra/alla-kategorier", json=True,
                               name="Category parser",
                               preprocessor=NextJsParser(
-                                  key="className", value="AllCategoriesList-module__dZ8mUW__wrapper"),
+                                  key="className", value="dZ8mUW_wrapper", return_parent=True),
                               parser=["children"], creator=self.create_category_items)
 
         self._add_data_parser("https://urplay.se/bladdra/", json=True,
@@ -104,9 +104,9 @@ class Channel(chn_class.Channel):
             # LanguageHelper.Popular: "https://urplay.se/api/v1/search?product_type=program&query=&rows={}&start=0&view=most_viewed".format(max_items_per_page),
             # LanguageHelper.MostRecentEpisodes: "https://urplay.se/api/v1/search?product_type=program&rows={}&start=0&view=published".format(max_items_per_page),
             # LanguageHelper.LastChance: "https://urplay.se/api/v1/search?product_type=program&rows={}&start=0&view=last_chance".format(max_items_per_page),
-            LanguageHelper.Categories: "https://urplay.se/bladdra/alla-kategorier",
+            LanguageHelper.Categories: "https://urplay.se/bladdra/alla-kategorier?_rsc",
             # LanguageHelper.Search: self.search_url,
-            LanguageHelper.TvShows: "https://urplay.se/bladdra/alla-program"
+            LanguageHelper.TvShows: "https://urplay.se/bladdra/alla-program?_rsc"
         }
 
         for cat in categories:
@@ -153,7 +153,7 @@ class Channel(chn_class.Channel):
             return None
 
         def create_category_list_item(input_entry: Dict, category_group: List[str]) -> FolderItem:
-            url = f"https://urplay.se{input_entry['href']}"
+            url = f"https://urplay.se{input_entry['href']}?_rsc"
             name = input_entry["children"]
             if isinstance(name, list):
                 name = name[-1]
@@ -209,23 +209,21 @@ class Channel(chn_class.Channel):
         if not season_url:
             return data, items
 
-        season_data = UriHandler.open(season_url, additional_headers={"rsc": "0"})
-        next_info = Regexer.do_regex(r"(\{\\\"shouldNotBeInitiallyOpen[^>]+})[^>]+\)</script></body></html>", season_data)
-        if not next_info:
+        season_data = UriHandler.open(f"{season_url}?rsc", additional_headers={"rsc": "1"})
+        season_json = RSCHelper(season_data).convert_to_json()
+        season_info = JsonHelper.find_dict_by_key_from(season_json, "superSeriesSeasons")
+        if not season_info:
             return data, items
 
-        next_json = next_info[0].replace('\\"', '"')
-        try:
-            json_data =  JsonHelper(next_json)
-            for season_result in json_data.get_value("superSeriesSeasons"):
-                item = self.create_season_item(season_result)
-                if item:
-                    items.append(item)
-        finally:
-            return data, items
+        for season_result in season_info:
+            item = self.create_season_item(season_result)
+            if item:
+                items.append(item)
 
-    def check_for_single_video(self, data: JsonHelper, items: List[MediaItem]) -> List[MediaItem]:
-        # Do we have items ore not.
+        return data, items
+
+    def check_for_single_video(self, _: JsonHelper, items: List[MediaItem]) -> List[MediaItem]:
+        # Do we have items or not?
         if len(items) > 0 or not self.parentItem:
             season_count = [s for s in items if s.is_folder]
             if len(season_count) > 1:
@@ -338,12 +336,12 @@ class Channel(chn_class.Channel):
 
         if show_title and include_show_title:
             if bool(episode) and not bool(season):
-                title = "{} - {} {:02d} - {}".format(show_title, self.__episode_text, episode, title)
+                title = f"{show_title} - {self.__episode_text} {episode:02d} - {title}"
             else:
                 title = "{} - {}".format(show_title, title)
 
         elif bool(episode) and not bool(season):
-            title = "{} {:02d} - {}".format(self.__episode_text, episode, title)
+            title = f"{self.__episode_text} {episode:02d} - {title}"
 
         # slug = result_set['slug']
         # url = "%s/program/%s" % (self.baseUrl, slug)

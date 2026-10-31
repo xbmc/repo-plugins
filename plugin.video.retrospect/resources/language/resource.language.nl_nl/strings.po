@@ -786,6 +786,14 @@ msgctxt "#30378"
 msgid "Remove Item"
 msgstr "Verwijder"
 
+msgctxt "#30379"
+msgid "Series"
+msgstr ""
+
+msgctxt "#30380"
+msgid "Afgelopen dagen"
+msgstr ""
+
 # empty strings from id 30379 to 30400
 msgctxt "#30401"
 msgid "Dutch"

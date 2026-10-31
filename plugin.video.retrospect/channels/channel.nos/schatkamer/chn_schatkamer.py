@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+from resources.lib.logger import Logger
 from typing import Dict, Union, List
 from typing import Optional
 from urllib.parse import parse_qs
@@ -9,11 +10,11 @@ from resources.lib import mediatype
 from resources.lib.channelinfo import ChannelInfo
 from resources.lib.chn_class import PreProcessorResult
 from resources.lib.helpers.datehelper import DateHelper
+from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.helpers.languagehelper import LanguageHelper
 from resources.lib.helpers.reactrsc import NextJsParser
+from resources.lib.helpers.reactrsc import RSCHelper
 from resources.lib.mediaitem import MediaItem, FolderItem
-from resources.lib.regexer import Regexer
-from resources.lib.streams.m3u8 import M3u8
 from resources.lib.streams.mpd import Mpd
 from resources.lib.urihandler import UriHandler
 
@@ -38,7 +39,7 @@ class Channel(chn_class.Channel):
         # ============== Actual channel setup STARTS here and should be overwritten from derived classes ===============
         self.noImage = "de-schatkamer-image.jpg"
 
-        self.mainListUri = "https://schatkamer.beeldengeluid.nl/"
+        self.mainListUri = "https://schatkamer.beeldengeluid.nl/?_rsc"
         self.baseUrl = "https://schatkamer.beeldengeluid.nl/"
 
         # We need React Server Components
@@ -115,7 +116,7 @@ class Channel(chn_class.Channel):
 
     def create_serie_item(self, result_set: Dict) -> Union[MediaItem, None]:
         title = result_set["title"].title()
-        url = result_set["url"]
+        url = f"{result_set['url']}?_rsc"
 
         item = FolderItem(title, url, content_type=contenttype.EPISODES)
 
@@ -134,7 +135,7 @@ class Channel(chn_class.Channel):
             title = f"{tvshow} - {title}"
         else:
             title = title.title()
-        url = result_set["url"]
+        url = f"{result_set['url']}?_rsc"
 
         item = MediaItem(title, url, tv_show_title=tvshow, media_type=mediatype.EPISODE)
         item.HttpHeaders["rsc"] = "1"
@@ -174,12 +175,19 @@ class Channel(chn_class.Channel):
         if not needle:
             raise ValueError("No needle present")
 
-        url = f"https://schatkamer.beeldengeluid.nl/zoeken?q=%s&_rsc=1"
+        url = f"https://schatkamer.beeldengeluid.nl/zoeken?q=%s&_rsc"
         return chn_class.Channel.search_site(self, url, needle)
 
     def update_video_item(self, item: MediaItem) -> MediaItem:
         data = UriHandler.open(item.url, additional_headers=item.HttpHeaders, no_cache=True)
-        url = Regexer.do_regex(r"https:\/\/[^,]+\.(?:m3u8[^:]+\d{2}:|mp4)", data)[0]
+        rsp = RSCHelper(data)
+        json_data = JsonHelper(rsp.convert_to_json())
+        stream_info = json_data.find_dict_by_key("streams")
+        if not stream_info:
+            Logger.error("No stream info found in Schatkamer metadata.")
+            return item
+
+        url = stream_info[0]["url"]
 
         if url and url.endswith(".mp4"):
             item.add_stream(url, 0)

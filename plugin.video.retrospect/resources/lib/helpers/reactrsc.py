@@ -1,11 +1,10 @@
-from resources.lib.chn_class import PreProcessorResult
 import json
+import re
 from typing import Any, Dict, Optional, Set, List, Union
-from typing import Tuple
 
+from resources.lib.chn_class import PreProcessorResult
 from resources.lib.helpers.jsonhelper import JsonHelper
 from resources.lib.logger import Logger
-from resources.lib.mediaitem import MediaItem
 
 
 class RSCHelper:
@@ -26,13 +25,57 @@ class RSCHelper:
         self._records.clear()
         self._root = None
 
-        for line in self._content.splitlines():
-            self._parse_line(line.strip())
+        self._parse_stream()
 
         if self._root is None:
             raise ValueError("No root record (0:) found in RSC content")
 
         return self._resolve(self._root)
+
+    def _parse_stream(self) -> None:
+        # Flight records normally end at a newline. However, T records contain
+        # raw UTF-8 text whose length is specified in bytes, not characters.
+        # That text may contain newlines and may be followed immediately by
+        # another record, so splitting the entire response into lines is unsafe.
+        stream = self._content.encode("utf-8").replace(b"\r\n", b"\n")
+        position = 0
+
+        while position < len(stream):
+            # Skip CR/LF separators between records. Byte 10 is '\n' and
+            # byte 13 is '\r'. Newlines inside T payloads are never skipped,
+            # because those payloads are consumed using their explicit length.
+            while position < len(stream) and stream[position] in (10, 13):
+                position += 1
+            if position >= len(stream):
+                break
+
+            # Detect a length-prefixed text record, e.g. "4c:T458,...".
+            # Both the record ID and the byte length are hexadecimal.
+            match = re.match(rb"([0-9a-fA-F]+):T([0-9a-fA-F]+),", stream[position:])
+            if match:
+                key = match.group(1).decode("ascii")
+                length = int(match.group(2), 16)
+
+                # The content begins just after "<id>:T<length>,". Read
+                # exactly 'length' bytes, even if they contain line breaks.
+                start = position + match.end()
+                end = start + length
+                if end > len(stream):
+                    raise ValueError(f"Incomplete Flight text record {key}")
+                self._records[key] = stream[start:end].decode("utf-8")
+
+                # Resume at the very next byte, which may be the beginning of
+                # another record without any newline in between.
+                position = end
+                continue
+
+            # Other record types are newline-delimited JSON or import/control
+            # records; let _parse_line() interpret their contents.
+            end = stream.find(b"\n", position)
+            if end < 0:
+                end = len(stream)
+            self._parse_line(stream[position:end].decode("utf-8").strip())
+            position = end + 1
 
     def _parse_line(self, line: str) -> None:
         if not line or ":" not in line:
@@ -53,10 +96,16 @@ class RSCHelper:
                 # string with length
                 hex_length, raw = raw[1:].split(",", 1)
                 length = int(hex_length, 16)
-                text_value = raw[0:length]
-                remainder = raw[length:]
+
+                raw_bytes = raw.encode("utf-8")
+                text_value = raw_bytes[:length].decode("utf-8")
+                remainder = raw_bytes[length:].decode("utf-8")
+
                 self._records[key] = text_value
-                return self._parse_line(remainder)
+
+                if remainder:
+                    self._parse_line(remainder)
+                return
 
             parsed = json.loads(raw)
             self._records[key] = parsed
@@ -68,39 +117,65 @@ class RSCHelper:
             # Ignore non-JSON lines
             pass
 
-    def _normalize(self, value: Any) -> Any:
-        if value == "$undefined":
-            return None
-
-        if isinstance(value, str) and value.startswith("$S"):
-            return {"__symbol__": value[2:]}
-
-        return value
-
     def _resolve(self, value: Any, seen: Optional[Set[str]] = None) -> Any:
         if seen is None:
             seen = set()
 
         if isinstance(value, str):
-            if value.startswith("$L"):
+            if value == "$":
+                return "$"
+
+            if value == "$undefined":
+                return None
+
+            if value.startswith("$S"):
+                return {"__symbol__": value[2:]}
+
+            if value.startswith("$Q"):
                 key = value[2:]
                 if key in seen:
                     return "[Circular]"
-                seen.add(key)
-                return self._resolve(self._records.get(key), seen)
-
-            if value.startswith("$@"):
                 return {
-                    "__promise__": self._resolve(value[2:], seen)
+                    "__map__": self._resolve(
+                        self._records.get(key),
+                        seen | {key}
+                    )
                 }
 
-            return self._normalize(value)
+            if value.startswith("$@"):
+                key = value[2:]
+                if key in seen:
+                    return "[Circular]"
+                return {
+                    "__promise__": self._resolve(
+                        self._records.get(key),
+                        seen | {key}
+                    )
+                }
+
+            if value.startswith("$L"):
+                key = value[2:]
+            elif value.startswith("$"):
+                key = value[1:]
+            else:
+                return value
+
+            if key in seen:
+                return "[Circular]"
+
+            return self._resolve(
+                self._records.get(key),
+                seen | {key}
+            )
 
         if isinstance(value, list):
             return [self._resolve(v, seen.copy()) for v in value]
 
         if isinstance(value, dict):
-            return {k: self._resolve(v, seen.copy()) for k, v in value.items()}
+            return {
+                k: self._resolve(v, seen.copy())
+                for k, v in value.items()
+            }
 
         return value
 

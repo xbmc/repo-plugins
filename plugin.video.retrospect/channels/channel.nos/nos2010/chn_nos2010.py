@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from resources.lib.chn_class import PreProcessorResult
 import datetime
 import time
 from typing import Optional, List, Tuple, Union, Dict
@@ -13,7 +14,6 @@ from resources.lib import mediatype
 from resources.lib.channelinfo import ChannelInfo
 from resources.lib.helpers.htmlentityhelper import HtmlEntityHelper
 from resources.lib.logger import Logger
-from resources.lib.parserdata import ParserData
 from resources.lib.regexer import Regexer
 from resources.lib.helpers import subtitlehelper
 from resources.lib.helpers.jsonhelper import JsonHelper
@@ -58,7 +58,8 @@ class Channel(chn_class.Channel):
             raise NotImplementedError("Code %s is not implemented" % (self.channelCode,))
 
         # mainlist stuff
-        self._add_data_parser("#mainlist", preprocessor=self.get_initial_folder_items)
+        self._add_data_parser("#mainlist", preprocessor=self.get_initial_folder_items,
+                              parser=[], creator=self.create_api_program_item)
 
         # live stuff
         self.baseUrlLive = "https://www.npostart.nl"
@@ -94,6 +95,7 @@ class Channel(chn_class.Channel):
             requires_logon=bool(self.__user_name),
             parser=["items"],
             creator=self.create_api_program_item)
+
         # Use the new `label` options for the collections
         self._add_data_parser(
             "https://npo.nl/start/api/domain/recommendation-collection?partyId=1&collectionId=", name="Collection with series",
@@ -161,7 +163,7 @@ class Channel(chn_class.Channel):
 
         # Favourites (not yet implemented in the site).
         self._add_data_parser("https://npo.nl/start/api/domain/user-profiles",
-                              match_type=ParserData.MatchExact, json=True,
+                              match_type="Exact", json=True,
                               requires_logon=True,
                               name="Profile selection",
                               parser=[], creator=self.create_profile_item)
@@ -170,10 +172,6 @@ class Channel(chn_class.Channel):
                               preprocessor=self.switch_profile,
                               parser=["collections"], creator=self.create_profile_content_item,
                               requires_logon=True)
-
-        self._add_data_parser("https://npo.nl/start/_next/data", name="NextJS data", json=True,
-                              preprocessor=self.extract_nextjs_data,
-                              parser=[], creator=self.create_next_js_item)
 
         # OLD but still working?
         # live radio, the folders and items
@@ -219,7 +217,7 @@ class Channel(chn_class.Channel):
             "because-you-watched": LanguageHelper.RecommendedTvShows,
             "recent": LanguageHelper.Recent,
             "public-value": None,
-            "series": LanguageHelper.TvShows,
+            "series": LanguageHelper.Series,
             "crime": None,
             "documentaries": None,
             "continue": LanguageHelper.ContinueWatching,
@@ -233,56 +231,11 @@ class Channel(chn_class.Channel):
         # ====================================== Actual channel setup STOPS here =======================================
         return
 
-    @property
-    def build_version(self) -> str:
-        if not self.__build_version:
-            data = UriHandler.open("https://npo.nl/start")
-            try:
-                build_version = Regexer.do_regex(r"<script src=\"[^\"]+/([^/]+)/_buildManifest.js\"", data)[0]
-            except:
-                Logger.error(data)
-                raise
-            Logger.info(f"Found build version: {build_version}")
-            self.__build_version = build_version
-
-        return self.__build_version
-
     def log_on(self) -> bool:
         if self.loggedOn:
             return True
 
         return self.__log_on(False)
-
-    def create_next_js_item(self, result_set: dict) -> Optional[Union[MediaItem, List[MediaItem]]]:
-        next_js_type = result_set["next_js_type"]
-        if next_js_type == "SERIES":
-            return self.create_api_program_item(result_set)
-        elif next_js_type == "PROGRAM":
-            return self.create_api_episode_item_with_data(result_set)
-        else:
-            Logger.error(f"Missing NextJS Type: {next_js_type}")
-        return None
-
-    def extract_nextjs_data(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
-        data = JsonHelper(data)
-        result_data = []
-
-        pages = data.get_value("pageProps", "dehydratedState", "queries")
-        for page in pages:
-            if "items" in page.get("state", {}).get("data", {}):
-                items = page["state"]["data"]["items"]
-
-                # Update the items with the NextJS type.
-                next_js_type = page["state"]["data"]["type"]
-                _ = [i.update({"next_js_type": next_js_type}) for i in items]
-
-                # Append the result.
-                result_data += items
-            pass
-
-        result = JsonHelper("[]")
-        result.json = result_data
-        return result, []
 
     def __log_on(self, force_log_off: bool = False) -> bool:
         """ Makes sure that we are logged on. """
@@ -337,6 +290,7 @@ class Channel(chn_class.Channel):
         login_form = UriHandler.open("https://npo.nl/start/api/auth/signin/npo-id",
                                      json=sign_in_data)
 
+        # pyrefly: ignore [missing-attribute]
         if UriHandler.instance().status.url == session_info_url:
             # Already logged in so the login_form redirected to session info
             profile = JsonHelper(login_form)
@@ -382,7 +336,7 @@ class Channel(chn_class.Channel):
             return False
         return bool(JsonHelper(profile).json)
 
-    def get_initial_folder_items(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
+    def get_initial_folder_items(self, data: Union[str, JsonHelper]) -> PreProcessorResult:
         """ Creates the initial folder items for this channel.
 
         :param str data: The retrieve data that was loaded for the current item and URL.
@@ -394,7 +348,41 @@ class Channel(chn_class.Channel):
 
         items = []
 
-        def add_item(language_id: int, url: str, content_type: str,
+        # Collection from the main landing page.
+        home_data: str = UriHandler.open("https://npo.nl/start/api/domain/recommendation-layout?partyId=1&layoutId=home&layoutType=RECOMMENDATION")
+        json_data = JsonHelper(home_data)
+        collections = json_data.get_value("collections")
+        for collection in collections:
+            collection_id = collection["collectionId"]
+            collection_type = collection["type"].lower()
+
+            url = (
+                f"https://npo.nl/start/api/domain/recommendation-collection?"
+                f"partyId=1&"
+                f"collectionId={collection_id}&"
+                f"layoutType=RECOMMENDATION"
+            )
+
+            title_key = collection_id.rsplit("-", 2)[0]
+            title_id = self.__collection_names.get(title_key, None)
+            if not title_id:
+                continue
+
+            title = LanguageHelper.get_localized_string(title_id)
+
+            result = None
+            if collection_type == "program":
+                result = FolderItem(title, url, content_type=contenttype.VIDEOS, media_type=mediatype.FOLDER)
+                result.metaData["retrospect:parser"] = "collection-with-videos"
+            elif collection_type == "series":
+                result = FolderItem(title, url, content_type=contenttype.TVSHOWS)
+                result.metaData["retrospect:parser"] = "collection-with-series"
+
+            if result:
+                items.append(result)
+
+        # Special items
+        def add_item(language_id: int, url: str, content_type: Union[str, None],
                      description: str = "", headers: Optional[dict] = None, parser: str = "") -> FolderItem:
             item = FolderItem(
                 LanguageHelper.get_localized_string(language_id), url, content_type=content_type)
@@ -417,22 +405,6 @@ class Channel(chn_class.Channel):
                      contenttype.NONE,
                      description="Profile van de  npostart.nl website.")
 
-        add_item(LanguageHelper.Trending,
-                 "https://npo.nl/start/api/domain/recommendation-collection?partyId=1&collectionId=trending-anonymous-v0&layoutType=RECOMMENDATION",
-                 content_type=contenttype.TVSHOWS, parser="collection-with-series")
-
-        add_item(LanguageHelper.LatestNews,
-                 f"https://npo.nl/start/_next/data/{self.build_version}/collectie/nieuws-en-achtergronden.json?slug=nieuws-en-achtergronden",
-                 content_type=contenttype.TVSHOWS)
-
-        add_item(LanguageHelper.Popular,
-                 f"https://npo.nl/start/_next/data/{self.build_version}/collectie/nieuw-en-populair.json?slug=nieuw-en-populair",
-                 content_type=contenttype.TVSHOWS)
-
-        # add_item(LanguageHelper.Categories,
-        #     "https://npo.nl/start/api/domain/page-collection?collectionId=2670b702-d621-44be-b411-7aae3c3820eb",
-        #         content_type=contenttype.TVSHOWS)
-
         add_item(LanguageHelper.TvShows,
                  "https://npo.nl/start/api/domain/page-layout?layoutId=programmas&layoutType=PAGE&includePremiumContent={}&partyId=1".format(
                      'false' if AddonSettings.hide_premium_items() else 'true'),
@@ -448,32 +420,8 @@ class Channel(chn_class.Channel):
             content_type=contenttype.VIDEOS)
         live_tv.isLive = True
 
-        extra = FolderItem(
-            "{} ({})".format(
-                LanguageHelper.get_localized_string(LanguageHelper.TvShows),
-                LanguageHelper.get_localized_string(LanguageHelper.FullList)
-            ),
-            f"https://start-api.npo.nl/media/series?pageSize={50}&dateFrom=2014-01-01",
-            # "https://start-api.npo.nl/page/catalogue?pageSize={}".format(self.__pageSize),
-            content_type=contenttype.TVSHOWS
-        )
-        extra.complete = True
-        extra.dontGroup = True
-        extra.description = "Volledige programma lijst van NPO Start."
-        extra.HttpHeaders = self.__jsonApiKeyHeader
-        # API Key from here: https://packagist.org/packages/kro-ncrv/npoplayer?q=&p=0&hFR%5Btype%5D%5B0%5D=concrete5-package
-        # items.append(extra)
-
-        # extra = FolderItem(
-        #     LanguageHelper.get_localized_string(LanguageHelper.Genres),
-        #     "https://www.npostart.nl/programmas",
-        #     content_type=contenttype.VIDEOS)
-        # extra.complete = True
-        # extra.dontGroup = True
-        # items.append(extra)
-
         recent = FolderItem(
-            LanguageHelper.get_localized_string(LanguageHelper.Recent), "https://npo.nl/start/api/domain/guide-channels",
+            LanguageHelper.get_localized_string(LanguageHelper.PastDays), "https://npo.nl/start/api/domain/guide-channels",
             content_type=contenttype.VIDEOS)
         recent.complete = True
         recent.dontGroup = True
@@ -483,7 +431,7 @@ class Channel(chn_class.Channel):
 
         return data, items
 
-    def create_profile_item(self, result_set: dict) -> Optional[MediaItem]:
+    def create_profile_item(self, result_set: Dict[str, str]) -> Optional[MediaItem]:
         """ Creates a new MediaItem for a the profiles in NPO Start.
 
         This method creates a new MediaItem from the Regular Expression or Json
@@ -499,7 +447,7 @@ class Channel(chn_class.Channel):
 
         profile_name = result_set.get("name")
         item = FolderItem(profile_name, "#list_profile", mediatype.FOLDER, contenttype.NONE)
-        item.thumb = result_set.get("thumburl", None)
+        item.thumb = result_set.get("thumburl", None) or ""
         item.description = result_set.get("description", "")
         item.complete = True
         item.metaData["id"] = result_set["guid"]
@@ -516,6 +464,9 @@ class Channel(chn_class.Channel):
         """
 
         items = []
+        if not self.parentItem:
+            return data, items
+
         profile_id = self.parentItem.metaData.get("id", None)
         if not profile_id:
             return data, items
@@ -554,6 +505,9 @@ class Channel(chn_class.Channel):
         return data, items
 
     def create_profile_content_item(self, result_set: Dict[str, str]) -> Union[MediaItem, List[MediaItem], None]:
+        if not self.parentItem:
+            return None
+
         profile_id = self.parentItem.metaData["id"]
 
         if "key" in result_set:
@@ -591,6 +545,9 @@ class Channel(chn_class.Channel):
 
     # noinspection PyUnusedLocal
     def check_for_single_season(self, data: JsonHelper, items: List[MediaItem]) -> List[MediaItem]:
+        if not self.parentItem:
+            return []
+
         if len(items) == 1:
             # Retry with just this url.
             self.parentItem.url = items[0].url
@@ -645,7 +602,8 @@ class Channel(chn_class.Channel):
         title = result_set["title"]
         slug = result_set["slug"]
 
-        url = f"https://npo.nl/start/_next/data/{self.build_version}/collectie/{slug}.json?slug={slug}"
+        show_premium = 'false' if AddonSettings.hide_premium_items() else 'true'
+        url = f"https://npo.nl/start/api/domain/page-layout?layoutId={slug}&layoutType=PAGE&includePremiumContent={show_premium}&partyId=1"
         item = FolderItem(title, url, content_type=contenttype.TVSHOWS)
 
         if "images" in result_set and result_set["images"]:
@@ -655,6 +613,9 @@ class Channel(chn_class.Channel):
         return item
 
     def create_api_page_layout(self, result_set: dict) -> Optional[MediaItem]:
+        if not self.parentItem:
+            return None
+
         if "guid" in result_set:
             guid = result_set["guid"]
         else:
@@ -691,7 +652,7 @@ class Channel(chn_class.Channel):
         url = f"https://npo.nl/start/api/domain/programs-by-season?guid={guid}"
         item = FolderItem(title, url, content_type=contenttype.EPISODES,
                           media_type=mediatype.FOLDER)
-        item.description = result_set.get("synopsis")
+        item.description = result_set.get("synopsis") or ""
         item.metaData["seasonKey"] = result_set["seasonKey"]
 
         if "images" in result_set and result_set["images"]:
@@ -706,8 +667,7 @@ class Channel(chn_class.Channel):
 
         return self.create_api_episode_item(result_set, True)
 
-    def create_api_episode_item(self, result_set: dict, show_info: bool = False) -> (
-            Optional)[MediaItem]:
+    def create_api_episode_item(self, result_set: dict, show_info: bool = False) -> Optional[MediaItem]:
         title = result_set["title"]
         poms = result_set["productId"]
         serie_info = result_set.get("series") or {}
@@ -723,7 +683,7 @@ class Channel(chn_class.Channel):
             image_data = result_set["images"][0]
             item.set_artwork(thumb=image_data["url"])
 
-        item.description = (result_set.get("synopsis") or {}).get("long")
+        item.description = (result_set.get("synopsis") or {}).get("long") or ""
         item.set_info_label(MediaItem.LabelDuration, result_set.get("durationInSeconds", 0))
 
         # 'firstBroadcastDate'
@@ -763,7 +723,7 @@ class Channel(chn_class.Channel):
         episode_number = result_set.get("programKey")
         season_number = (result_set.get("season") or {}).get("seasonKey")
         show_type = serie_info.get("type")
-        if episode_number and season_number and show_type.endswith("series"):
+        if episode_number and season_number and show_type and show_type.endswith("series"):
             item.set_season_info(season_number, episode_number)
 
         return item
@@ -805,11 +765,11 @@ class Channel(chn_class.Channel):
         item.isLive = True
         return item
 
-    def create_epg_days(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
+    def create_epg_days(self, data: str) -> Tuple[Union[str, JsonHelper], List[FolderItem]]:
         items = []
-        data = JsonHelper(data)
+        json_data = JsonHelper(data)
         channels = {}
-        for channel in data.get_value():
+        for channel in json_data.get_value():
             title = channel["title"]
             guid = channel["guid"]
             if title not in ["NPO1", "NPO2", "NPO3"]:
@@ -840,10 +800,13 @@ class Channel(chn_class.Channel):
             extra.set_date(air_date.year, air_date.month, air_date.day, text="")
             items.append(extra)
 
-        return data, items
+        return json_data, items
 
     # noinspection PyUnusedLocal
     def load_all_epg_channels(self, data: Union[str, JsonHelper]) -> Tuple[Union[str, JsonHelper], List[MediaItem]]:
+        if not self.parentItem:
+            return data, []
+
         channels = self.parentItem.metaData["channels"]
         date = self.parentItem.metaData["date"]
 
@@ -856,8 +819,10 @@ class Channel(chn_class.Channel):
             if not epg_data:
                 epg_data = data
             else:
+                # pyrefly: ignore [unsupported-operation]
                 epg_data.json += data.json
 
+        # pyrefly: ignore [bad-return]
         return epg_data, []
 
     def create_api_epg_item(self, result_set: dict) -> Optional[MediaItem]:
@@ -944,14 +909,8 @@ class Channel(chn_class.Channel):
 
     def update_nextjs_video(self, item: MediaItem) -> MediaItem:
         data = UriHandler.open(item.url)
-        next_js_data = Regexer.do_regex(r"__NEXT_DATA__[^>]+>(.+?)</script>", data)[0]
-        next_js_json = JsonHelper(next_js_data)
-        data = next_js_json.get_value("props", "pageProps", "dehydratedState", "queries", -1, "state", "data")
-        if isinstance(data, list):
-            p = [p for p in data if p["guid"] == item.metaData["program_guid"]][0]
-        else:
-            p = data
-        return self.__update_video_item(item, p["productId"])
+        product_id = Regexer.do_regex(r'productId\\":\\"([^"]+)\\"', data)[0]
+        return self.__update_video_item(item, product_id)
 
     # noinspection PyUnusedLocal
     def search_site(self, url: Optional[str] = None, needle: Optional[str] = None) -> List[MediaItem]:
@@ -1343,11 +1302,17 @@ class Channel(chn_class.Channel):
         iptv_streams = []
 
         logo_sources = {
+            # pyrefly: ignore [missing-attribute]
             "NPO1": TextureHandler.instance().get_texture_uri(self, "npo1.png"),
+            # pyrefly: ignore [missing-attribute]
             "NPO2": TextureHandler.instance().get_texture_uri(self, "npo2.png"),
+            # pyrefly: ignore [missing-attribute]
             "NPO3": TextureHandler.instance().get_texture_uri(self, "npo3.png"),
+            # pyrefly: ignore [missing-attribute]
             "NPO1 Extra": TextureHandler.instance().get_texture_uri(self, "npo1extra.png"),
+            # pyrefly: ignore [missing-attribute]
             "NPO2 Extra": TextureHandler.instance().get_texture_uri(self, "npo2extra.png"),
+            # pyrefly: ignore [missing-attribute]
             "NPO Politiek en Nieuws": TextureHandler.instance().get_texture_uri(self, "npopolitiekennieuws.png")
         }
 
@@ -1396,6 +1361,7 @@ class Channel(chn_class.Channel):
                 date = air_date.strftime("%d-%m-%Y")
                 guid = livestream["guid"]
                 guide_content = UriHandler.open(f"https://npo.nl/start/api/domain/guide-channel?guid={guid}&date={date}")
+                # pyrefly: ignore [missing-attribute]
                 if UriHandler.instance().status.error:
                     continue
 

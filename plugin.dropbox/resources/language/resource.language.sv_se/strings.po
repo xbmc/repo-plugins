@@ -80,3 +80,23 @@ msgstr "Tillåt användning av Dropbox som källa"
 msgctxt "#32069"
 msgid "     Source server port  -  http://localhost:<port>/source"
 msgstr "     Port för källservern  -  http://localhost:<port>/source"
+
+msgctxt "#32070"
+msgid "Items per page (0 = the whole folder)"
+msgstr "Objekt per sida (0 = hela mappen)"
+
+msgctxt "#32005"
+msgid "Auto-Refreshed slideshow"
+msgstr "Automatiskt uppdaterat bildspel"
+
+msgctxt "#32006"
+msgid "Refresh interval in minutes"
+msgstr "Uppdateringsintervall i minuter"
+
+msgctxt "#32010"
+msgid "Recursive auto-refreshed slideshow"
+msgstr "Rekursivt bildspel med automatisk uppdatering"
+
+msgctxt "#32071"
+msgid "Show the plot, cast and artwork from .nfo files and pictures next to the videos"
+msgstr "Visa handling, rollista och bilder från .nfo-filer och bilder bredvid videorna"

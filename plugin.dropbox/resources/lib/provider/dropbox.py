@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
+import base64
 import json
 import posixpath
 import urllib
@@ -27,10 +28,16 @@ from clouddrive.common.utils import Utils
 
 
 class Dropbox(Provider):
+    folder_paging_supported = True
     _CONTENT_URL = 'https://content.dropboxapi.com/2'
     _SUBTITLE_EXTENSIONS = ('srt', 'idx', 'sub', 'sbv', 'ass', 'ssa', 'smi', 'vtt')
     # Search results are paged; stop after this many pages.
     _MAX_SEARCH_PAGES = 5
+    _MAX_LINK_SEARCH_FOLDERS = 100
+    SHARED_WITH_ME = 'sharedWithMe'
+    # What's shared with the user and not in their Dropbox is reached through its shared link: these items' ids are
+    # the link and the path inside it. Ids go in download URL paths, so they are encoded without '/'.
+    _LINK_ID = 'link:'
 
     def __init__(self, source_mode=False):
         super(Dropbox, self).__init__('dropbox', source_mode)
@@ -71,6 +78,24 @@ class Dropbox(Provider):
             return ''
         return path if path.startswith('/') or path.startswith('id:') else '/' + path
 
+    @staticmethod
+    def _link_id(url, path=''):
+        return Dropbox._LINK_ID + base64.urlsafe_b64encode(json.dumps([url, path]).encode('utf-8')).decode('ascii')
+
+    @staticmethod
+    def _parse_link_id(item_id):
+        # (url, path inside the link), or None for any other id.
+        if not item_id or not item_id.startswith(Dropbox._LINK_ID):
+            return None
+        url, path = json.loads(base64.urlsafe_b64decode(item_id[len(Dropbox._LINK_ID):].encode('ascii')).decode('utf-8'))
+        return url, path
+
+    def _list_args(self, item_id=None, path=None):
+        link = self._parse_link_id(item_id)
+        if link:
+            return {'path': link[1], 'shared_link': {'url': link[0]}}
+        return {'path': self._api_path(item_id, path)}
+
     def get_account(self, request_params=None, access_tokens=None):
         me = self._rpc('/users/get_current_account', request_params=request_params, access_tokens=access_tokens)
         if not me:
@@ -91,21 +116,16 @@ class Dropbox(Provider):
         return Utils.get_safe_value({'basic': 'Dropbox Basic', 'pro': 'Dropbox', 'business': 'Dropbox Business'}, drive_type, drive_type)
 
     def get_folder_items(self, item_driveid=None, item_id=None, path=None, on_items_page_completed=None, include_download_info=False, on_before_add_item=None):
+        if path == self.SHARED_WITH_ME:
+            return self._shared_with_me(on_items_page_completed, include_download_info, on_before_add_item)
         # When the folder is known by id, its children get it as parent: library exports link items by parent id.
-        return self._list_folder(self._api_path(item_id, path), item_id, on_items_page_completed, include_download_info, on_before_add_item)
+        return self._list_folder(self._list_args(item_id, path), item_id, on_items_page_completed, include_download_info, on_before_add_item)
 
-    def _list_folder(self, api_path, parent=None, on_items_page_completed=None, include_download_info=False, on_before_add_item=None):
+    def _list_folder(self, args, parent=None, on_items_page_completed=None, include_download_info=False, on_before_add_item=None):
         items = []
-        response = self._rpc('/files/list_folder', {'path': api_path, 'limit': 2000})
+        response = self._rpc('/files/list_folder', dict(args, limit=2000))
         while response:
-            page = []
-            for entry in Utils.get_safe_value(response, 'entries', []):
-                if Utils.get_safe_value(entry, '.tag') not in ('file', 'folder'):
-                    continue
-                item = self._extract_item(entry, include_download_info, parent)
-                if on_before_add_item:
-                    on_before_add_item(item)
-                page.append(item)
+            page = self._page_items(response, parent, include_download_info, on_before_add_item, args)
             if self.cancel_operation():
                 return
             if on_items_page_completed:
@@ -113,6 +133,39 @@ class Dropbox(Provider):
             items.extend(page)
             response = self._rpc('/files/list_folder/continue', {'cursor': response['cursor']}) if Utils.get_safe_value(response, 'has_more') else None
         return items
+
+    def _page_items(self, response, parent=None, include_download_info=False, on_before_add_item=None, args=None):
+        page = []
+        link = Utils.get_safe_value(args or {}, 'shared_link')
+        for entry in Utils.get_safe_value(response, 'entries', []):
+            if Utils.get_safe_value(entry, '.tag') not in ('file', 'folder'):
+                continue
+            if link:
+                entry = dict(entry, id=self._link_id(link['url'], args['path'] + '/' + Utils.get_safe_value(entry, 'name', '')))
+            item = self._extract_item(entry, include_download_info, parent)
+            if on_before_add_item:
+                on_before_add_item(item)
+            page.append(item)
+        return page
+
+    def get_folder_page(self, item_driveid=None, item_id=None, path=None, page_size=500, page_token=None, on_items_page_completed=None):
+        # Dropbox can't sort a listing: pages come in its order, each one sorted by Kodi.
+        if path == self.SHARED_WITH_ME:
+            # Not paged: what's shared is listed whole.
+            items = self._shared_with_me(on_items_page_completed)
+            return None if items is None else (items, None)
+        args = self._list_args(item_id, path)
+        if page_token:
+            response = self._rpc('/files/list_folder/continue', {'cursor': page_token})
+        else:
+            response = self._rpc('/files/list_folder', dict(args, limit=page_size))
+        # A link's cursor goes on listing that link: its items are named the same way.
+        page = self._page_items(response, item_id, args=args)
+        if self.cancel_operation():
+            return
+        if on_items_page_completed:
+            on_items_page_completed(page)
+        return page, response['cursor'] if Utils.get_safe_value(response, 'has_more') else None
 
     def _extract_item(self, entry, include_download_info=False, parent=None):
         name = Utils.get_safe_value(entry, 'name', '')
@@ -130,13 +183,53 @@ class Dropbox(Provider):
         if entry['.tag'] == 'folder':
             item['folder'] = {'child_count': 0}
         elif include_download_info:
+            link = self._parse_link_id(entry['id'])
+            if link:
+                route, arg = '/sharing/get_shared_link_file', {'url': link[0], 'path': link[1]} if link[1] else {'url': link[0]}
+            else:
+                route, arg = '/files/download', {'path': entry['id']}
             item['download_info'] = {
-                'url': self._CONTENT_URL + '/files/download?' + urllib.parse.urlencode({'arg': json.dumps({'path': entry['id']}, separators=(',', ':'))})
+                'url': self._CONTENT_URL + route + '?' + urllib.parse.urlencode({'arg': json.dumps(arg, separators=(',', ':'))})
             }
         return item
 
+    def _shared_with_me(self, on_items_page_completed=None, include_download_info=False, on_before_add_item=None):
+        # The folders and files others share with the user. Those added to the user's Dropbox are reached by their
+        # path or id, the rest through their shared link.
+        items = []
+        for route, arg in (('/sharing/list_folders', {'limit': 1000}), ('/sharing/list_received_files', {'limit': 300})):
+            response = self._rpc(route, arg)
+            while response:
+                page = []
+                for entry in Utils.get_safe_value(response, 'entries', []):
+                    folder = route == '/sharing/list_folders'
+                    if folder and Utils.get_safe_value(entry, 'access_type', {}).get('.tag') == 'owner':
+                        # Shared by the user.
+                        continue
+                    path = Utils.get_safe_value(entry, 'path_lower')
+                    if path:
+                        item_id = path if folder else entry['id']
+                    else:
+                        item_id = self._link_id(entry['preview_url'])
+                    item = self._extract_item({'.tag': 'folder' if folder else 'file', 'id': item_id, 'name': entry['name'], 'path_lower': path,
+                                               'server_modified': Utils.get_safe_value(entry, 'time_invited')}, include_download_info)
+                    if on_before_add_item:
+                        on_before_add_item(item)
+                    page.append(item)
+                if self.cancel_operation():
+                    return
+                if on_items_page_completed:
+                    on_items_page_completed(page)
+                items.extend(page)
+                cursor = Utils.get_safe_value(response, 'cursor')
+                response = self._rpc(route + '/continue', {'cursor': cursor}) if cursor else None
+        return items
+
     def list_subtree(self, item_driveid, item_id):
         # One recursive, paged listing for a whole tree (library exports), mapped back to folder ids by path.
+        if self._parse_link_id(item_id):
+            # Dropbox lists shared links one folder at a time.
+            return None
         api_path = self._api_path(item_id)
         entries = []
         response = self._rpc('/files/list_folder', {'path': api_path, 'recursive': True, 'limit': 2000})
@@ -164,6 +257,8 @@ class Dropbox(Provider):
         return tree
 
     def search(self, query, item_driveid=None, item_id=None, on_items_page_completed=None):
+        if self._parse_link_id(item_id):
+            return self._search_link(query, item_id, on_items_page_completed)
         options = {'file_status': 'active', 'max_results': 1000}
         if item_id:
             options['path'] = item_id
@@ -190,6 +285,24 @@ class Dropbox(Provider):
             response = self._rpc('/files/search/continue_v2', {'cursor': response['cursor']}) if more else None
         return items
 
+    def _search_link(self, query, item_id, on_items_page_completed=None):
+        # Dropbox doesn't search shared links: their folders are walked, up to _MAX_LINK_SEARCH_FOLDERS.
+        query = Utils.str(query).lower()
+        items = []
+        folders = [item_id]
+        for _ in range(self._MAX_LINK_SEARCH_FOLDERS):
+            if not folders:
+                break
+            children = self.get_folder_items(item_id=folders.pop(0))
+            if children is None:
+                return
+            page = [child for child in children if query in child['name'].lower()]
+            folders.extend(child['id'] for child in children if 'folder' in child)
+            if on_items_page_completed:
+                on_items_page_completed(page)
+            items.extend(page)
+        return items
+
     def get_subtitles(self, parent, name, item_driveid=None, include_download_info=False):
         # Subtitle files in the same folder named after the video, e.g. "movie.srt" or "movie.en.srt" (not "movie2.srt").
         if parent is None:
@@ -197,13 +310,25 @@ class Dropbox(Provider):
         prefix = Utils.remove_extension(name).lower() + '.'
         subtitles = []
         # None when the operation was cancelled.
-        items = self._list_folder(self._api_path(None, parent), None, include_download_info=include_download_info) or []
+        items = self._list_folder(self._list_args(parent, None) if self._parse_link_id(parent) else {'path': self._api_path(None, parent)}, None,
+                                  include_download_info=include_download_info) or []
         for item in items:
             if 'folder' not in item and item['name'].lower().startswith(prefix) and Utils.default(item['name_extension'], '').lower() in self._SUBTITLE_EXTENSIONS:
                 subtitles.append(item)
         return subtitles
 
     def get_item(self, item_driveid=None, item_id=None, path=None, find_subtitles=False, include_download_info=False):
+        link = self._parse_link_id(item_id)
+        if link:
+            entry = self._rpc('/sharing/get_shared_link_metadata', {'url': link[0], 'path': link[1]} if link[1] else {'url': link[0]})
+            item = self._extract_item(dict(entry, id=item_id), include_download_info)
+            if link[1]:
+                item['parent'] = self._link_id(link[0], posixpath.dirname(link[1]).rstrip('/'))
+            if find_subtitles and 'folder' not in item and link[1]:
+                subtitles = self.get_subtitles(item['parent'], item['name'], item_driveid, include_download_info)
+                if subtitles:
+                    item['subtitles'] = subtitles
+            return item
         api_path = self._api_path(item_id, path)
         if not api_path:
             # The root folder has no metadata.

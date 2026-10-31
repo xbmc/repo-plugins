@@ -34,6 +34,7 @@ except ImportError:
     from urllib2 import HTTPError
 
 class GoogleDrive(Provider):
+    folder_paging_supported = True
     revoke_supported = True
     signin_company = 'Google'
     _REVOKE_URL = 'https://oauth2.googleapis.com/revoke'
@@ -126,6 +127,19 @@ class GoogleDrive(Provider):
         # A value inside single quotes in a Drive query: backslashes and quotes are escaped.
         return Utils.str(value).replace('\\', '\\\\').replace("'", "\\'")
 
+    def _use_folder_drive(self, folder_id, parameters):
+        # A shared drive's folder reached from My Drive through a shortcut lists nothing with My Drive's parameters.
+        # Called when a listing came back empty: if the folder is in a shared drive, its drive's parameters are set.
+        if self._is_shared_drive or folder_id == 'root':
+            return False
+        f = self.get('/files/%s' % folder_id, parameters = {'fields': 'driveId', 'supportsAllDrives': 'true'})
+        drive_id = Utils.get_safe_value(f, 'driveId')
+        if not drive_id:
+            return False
+        parameters.update(self._shared_drive_parameters)
+        parameters['driveId'] = drive_id
+        return True
+
     def _get_field_parameters(self):
         file_fileds = 'id,name,modifiedTime,size,mimeType'
         if not self.source_mode:
@@ -135,33 +149,71 @@ class GoogleDrive(Provider):
     # Parent folders per query when listing a tree for library exports (list_subtree).
     _SUBTREE_BATCH = 100
 
-    def get_folder_items(self, item_driveid=None, item_id=None, path=None, on_items_page_completed=None, include_download_info=False, on_before_add_item=None):
-        item_driveid = Utils.default(item_driveid, self._driveid)
+    def _folder_query(self, item_id, path, include_download_info=False):
+        # The parameters that list a folder, and the folder's id (None for the root and the special views).
         parameters = self.prepare_parameters()
+        folder_id = None
         if item_id:
-            parameters['q'] = '\'%s\' in parents' % item_id
+            folder_id = item_id
         elif path == 'sharedWithMe' or path == 'starred':
             parameters['q'] = path
         elif path == '/':
             parent = self._driveid if self._is_shared_drive else 'root'
             parameters['q'] = '\'%s\' in parents' % parent
         else:
-            item = self.get_item_by_path(path, include_download_info)
-            parameters['q'] = '\'%s\' in parents' % item['id']
+            folder_id = self.get_item_by_path(path, include_download_info)['id']
+        if folder_id:
+            parameters['q'] = '\'%s\' in parents' % folder_id
                 
         parameters['fields'] = 'files(%s),kind,nextPageToken' % self._get_field_parameters()
         if 'q' in parameters:
             parameters['q'] += ' and not trashed'
         
         self.configure(self._account_manager, self._driveid)
+        return parameters, folder_id
+
+    def get_folder_items(self, item_driveid=None, item_id=None, path=None, on_items_page_completed=None, include_download_info=False, on_before_add_item=None):
+        parameters, folder_id = self._folder_query(item_id, path, include_download_info)
         parameters['pageSize'] = 1000
         files = self.get('/files', parameters = parameters)
+        if folder_id and not Utils.get_safe_value(files, 'files') and self._use_folder_drive(folder_id, parameters):
+            files = self.get('/files', parameters = parameters)
         if self.cancel_operation():
             return
         items = []
         items.extend(self.process_files(files, parameters, on_items_page_completed, include_download_info, on_before_add_item=on_before_add_item))
         return items
     
+    # Next page tokens of a shared drive's folder reached through a shortcut carry the drive: "drive:<id>:<token>".
+    _DRIVE_PAGE_TOKEN = 'drive:'
+
+    def get_folder_page(self, item_driveid=None, item_id=None, path=None, page_size=500, page_token=None, on_items_page_completed=None):
+        if path == 'sharedWithMe' or path == 'starred':
+            # Not paged: listed whole, as before.
+            items = self.get_folder_items(item_driveid, item_id, path, on_items_page_completed)
+            return None if items is None else (items, None)
+        parameters, folder_id = self._folder_query(item_id, path)
+        parameters['pageSize'] = page_size
+        # Folders first, then by name: each page follows the one before.
+        parameters['orderBy'] = 'folder,name'
+        folder_drive = None
+        if page_token and page_token.startswith(self._DRIVE_PAGE_TOKEN):
+            folder_drive, page_token = page_token[len(self._DRIVE_PAGE_TOKEN):].split(':', 1)
+            parameters.update(self._shared_drive_parameters)
+            parameters['driveId'] = folder_drive
+        if page_token:
+            parameters['pageToken'] = page_token
+        files = self.get('/files', parameters = parameters)
+        if not page_token and folder_id and not Utils.get_safe_value(files, 'files') and self._use_folder_drive(folder_id, parameters):
+            folder_drive = parameters['driveId']
+            files = self.get('/files', parameters = parameters)
+        if self.cancel_operation():
+            return
+        next_page_token = files.pop('nextPageToken', None)
+        if next_page_token and folder_drive:
+            next_page_token = '%s%s:%s' % (self._DRIVE_PAGE_TOKEN, folder_drive, next_page_token)
+        return self.process_files(files, parameters, on_items_page_completed), next_page_token
+
     def list_subtree(self, item_driveid, item_id):
         # The tree breadth-first, with many parent folders per query: about one request per level instead of one per
         # folder. Based on plugin.googledrive#320 by 0o120 (28 requests instead of 2,317 for 2,292 movies).
@@ -171,6 +223,7 @@ class GoogleDrive(Provider):
         self.configure(self._account_manager, self._driveid)
         tree = {item_id: []}
         pending = [item_id]
+        checked_drive = False
         while pending:
             batch, pending = pending[:self._SUBTREE_BATCH], pending[self._SUBTREE_BATCH:]
             parameters = copy.deepcopy(base_parameters)
@@ -181,6 +234,12 @@ class GoogleDrive(Provider):
             items = self.process_files(files, parameters, include_download_info=True)
             if items is None:
                 return None
+            if not items and batch == [item_id] and not checked_drive:
+                # The tree may be in a shared drive (exported through a shortcut): listed again with its drive's parameters.
+                checked_drive = True
+                if self._use_folder_drive(item_id, base_parameters):
+                    pending = [item_id]
+                    continue
             for item in items:
                 if item['parent'] in tree:
                     tree[item['parent']].append(item)
@@ -323,6 +382,8 @@ class GoogleDrive(Provider):
             parameters['q'] = '\'%s\' in parents and name = \'%s\' and not trashed' % (self._quote(parent), self._quote(filename))
             parameters['pageSize'] = 1000
             files = self.get('/files', parameters = parameters)
+            if not files['files'] and self._use_folder_drive(parent, parameters):
+                files = self.get('/files', parameters = parameters)
             if (len(files['files']) > 0):
                 for f in files['files']:
                     item = self._extract_item(f, include_download_info)
@@ -337,19 +398,21 @@ class GoogleDrive(Provider):
         return item
     
     def get_subtitles(self, parent, name, item_driveid=None, include_download_info=False):
-        parameters = self.prepare_parameters()
-        item_driveid = Utils.default(item_driveid, self._driveid)
-        subtitles = []
-        parameters['fields'] = 'files(' + self._get_field_parameters() + ')'
-        # Subtitles stored next to the video, named after it.
-        parameters['q'] = 'name contains \'%s\'' % self._quote(Utils.remove_extension(name))
+        # Subtitles stored next to the video, named after it: Movie.srt, Movie.en.srt (not Movie 2.srt). From the
+        # folder's listing: Drive's "name contains" found nothing for some names, like "a (1234) [h264 • DD 5.1]" (#251).
+        stem = Utils.str(Utils.remove_extension(name))
         if parent:
-            parameters['q'] += ' and \'%s\' in parents' % self._quote(parent)
-        parameters['pageSize'] = 1000
-        files = self.get('/files', parameters = parameters)
-        for f in files['files']:
-            subtitle = self._extract_item(f, include_download_info)
-            if subtitle['name_extension'].lower() in ('srt','idx','sub','sbv','ass','ssa','smi'):
+            items = self.get_folder_items(item_driveid, parent, include_download_info=include_download_info) or []
+        else:
+            parameters = self.prepare_parameters()
+            parameters['fields'] = 'files(' + self._get_field_parameters() + ')'
+            parameters['q'] = 'name contains \'%s\' and not trashed' % self._quote(stem)
+            parameters['pageSize'] = 1000
+            files = self.get('/files', parameters = parameters)
+            items = [self._extract_item(f, include_download_info) for f in files['files']]
+        subtitles = []
+        for subtitle in items:
+            if 'folder' not in subtitle and Utils.default(subtitle['name_extension'], '').lower() in ('srt','idx','sub','sbv','ass','ssa','smi','vtt') and Utils.str(subtitle['name']).lower().startswith(stem.lower() + '.'):
                 subtitles.append(subtitle)
         return subtitles
     

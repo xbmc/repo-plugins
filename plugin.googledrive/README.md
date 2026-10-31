@@ -1,11 +1,16 @@
 # Google Drive for Kodi
 
+> **The old sign-in server closes on October 30, 2026.** `drive-login.herokuapp.com` stops working that day; the add-ons now sign in at **https://drive.signinserver.com**.
+> * **Kodi 19 or later:** if the add-on stops working, update it (Add-ons > My add-ons > Video add-ons > Google Drive > Update). Your accounts keep working; you won't need to sign in again.
+> * **Kodi 17 or 18:** no longer supported. Please update Kodi to version 19 or later.
+
 Play the videos, music and pictures in your Google Drive on Kodi.
 * Any number of accounts
 * My Drive, shared drives, Shared with me and Starred
 * Search your Drive
 * Video and music playback with seeking, and video listings with thumbnails
 * Subtitles stored next to a video, with the same name (for example `movie.mkv` and `movie.srt`), are loaded automatically
+* The plot, cast and artwork of Kodi .nfo files and pictures stored next to a video (`movie.nfo`, `movie-poster.jpg`, `fanart.jpg`) are shown while browsing
 * Pictures full screen, as a slideshow, or as an auto-refreshed slideshow that picks up new pictures
 * Export videos and music to the Kodi library (.strm files)
 * Use Google Drive as a source in Kodi's file manager (add `http://localhost:8587/source/` as a source)
@@ -32,4 +37,4 @@ New versions reach [my repository](https://github.com/cguZZman/repository.plugin
 
 ## Support this project
 
-The add-ons and the sign-in service are free and open source, and run by one developer for everyone using Google Drive, OneDrive and Dropbox in Kodi. Keeping the service online, and the add-ons working as the services change, takes time and money. If you find them useful, you can support the project on **[Ko-fi](https://ko-fi.com/cguzzman)**.
+The add-ons and the sign-in service are free and open source, and run by one developer for everyone using Google Drive, OneDrive and Dropbox in Kodi. Keeping the service online, and the add-ons working as the services change, takes time and money. This year's goal is **$840**: the security review Google requires every year so the Google Drive add-on can keep signing in ($675), plus domains, hosting, payment fees and taxes. If you find them useful, you can support the project on **[GitHub Sponsors](https://github.com/sponsors/cguZZman)**, monthly or once.

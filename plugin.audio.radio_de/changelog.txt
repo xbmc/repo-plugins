@@ -1,3 +1,11 @@
+v4.0.0+matrix.1 (25/10/2026)
+    - [new] Station data now comes from the Radio Browser API, the radio.de API no longer exists
+    - [new] Retry failed requests on several Radio Browser servers
+    - [new] Remember played stations and play them from the local cache if the lookup fails
+    - [new] Station IDs are now Radio Browser UUIDs, radio.de station IDs saved in favourites no longer work
+    - [fix] Play .aac streams with the audio player
+    - [fix] Log the reason of a network error
+
 v3.0.9+matrix.1 (31/12/2021)
     - [new] Sync translations
 

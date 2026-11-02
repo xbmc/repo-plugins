@@ -1,0 +1,597 @@
+# Kodi Media Center language file
+# Addon Name: Simple GO
+# Addon id: plugin.video.simplego
+msgid ""
+msgstr ""
+"Language: hu_HU\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgctxt "#30001"
+msgid "Live channels"
+msgstr "Élő csatornák"
+
+msgctxt "#30002"
+msgid "Log in"
+msgstr "Bejelentkezés"
+
+msgctxt "#30003"
+msgid "Log out"
+msgstr "Kijelentkezés"
+
+msgctxt "#30010"
+msgid "The login has expired or was used elsewhere. Log in again from the main menu."
+msgstr "A bejelentkezés lejárt, vagy máshol már felhasználták. Jelentkezz be újra a főmenüből."
+
+msgctxt "#30011"
+msgid "Playback is blocked outside Hungary. Turn off VPN / proxy on this device."
+msgstr "A lejátszás Magyarországon kívülről (VPN, adatközponti IP) le van tiltva. Kapcsold ki a VPN-t / proxyt ezen az eszközön."
+
+msgctxt "#30012"
+msgid "The licence server does not trust this device's Widevine module (3099). On Windows/macOS Kodi this service cannot play; use Kodi on Android TV / Google TV."
+msgstr "A licencszerver nem fogadja el ennek az eszköznek a Widevine modulját (3099). Windowsos/macOS-es Kodin ez a szolgáltatás nem játszható le; Android TV-s / Google TV-s Kodival működik."
+
+msgctxt "#30013"
+msgid "The licence server refused playback (code %s)."
+msgstr "A licencszerver megtagadta a lejátszást (kód: %s)."
+
+msgctxt "#30022"
+msgid "Logged in"
+msgstr "Sikeres bejelentkezés"
+
+msgctxt "#30023"
+msgid "Log out? This device is also removed from the account's devices, freeing its slot."
+msgstr "Kijelentkezel? Ez az eszköz a fiók eszközei közül is törlődik, így felszabadul a helye."
+
+msgctxt "#30030"
+msgid "Show in the TV menu"
+msgstr "Megjelenítés a TV menüben"
+
+msgctxt "#30031"
+msgid "IPTV Simple Client could not be installed."
+msgstr "Az IPTV Simple Client nem telepíthető."
+
+msgctxt "#30032"
+msgid "Downloading channel list and guide..."
+msgstr "Csatornalista és műsorújság letöltése..."
+
+msgctxt "#30033"
+msgid "The “Simple GO” source shows in the TV menu after Kodi restarts (%d channels, %d programmes exported)."
+msgstr "A „Simple GO” forrás a Kodi újraindítása után jelenik meg a TV menüben (%d csatorna, %d műsor exportálva)."
+
+msgctxt "#30027"
+msgid "Log in from a phone (QR code)"
+msgstr "Bejelentkezés telefonról (QR-kód)"
+
+msgctxt "#30028"
+msgid "Scan the QR code with your phone's camera (the phone on the same Wi-Fi as the TV). On the page that opens, log in with your Telekom TV GO e-mail address and password, then copy the address of the page you land on from the address bar, paste it and send it. This window closes by itself. Back = cancel."
+msgstr "Olvasd be a QR-kódot a telefonod kamerájával (a telefon a TV-vel azonos Wi-Fi-n legyen). A megnyíló oldalon lépj be a Telekom TV GO e-mail-címeddel és jelszavaddal, majd a belépés után megjelenő oldal címét másold ki a címsorból, illeszd be, és küldd el. Az ablak magától bezárul. Vissza = mégsem."
+
+msgctxt "#30034"
+msgid "My devices"
+msgstr "Saját eszközök"
+
+msgctxt "#30035"
+msgid "%s - This device"
+msgstr "%s - Ez az eszköz"
+
+msgctxt "#30036"
+msgid "Removing the device automatically logs you out on that device."
+msgstr "Az eszköz eltávolításával automatikusan kijelentkezel az adott eszközön."
+
+msgctxt "#30037"
+msgid "Device removed"
+msgstr "Eszköz eltávolítva"
+
+msgctxt "#30043"
+msgid "You are logged in on these devices"
+msgstr "A következő eszközökön vagy bejelentkezve"
+
+msgctxt "#30046"
+msgid "Remove"
+msgstr "Eltávolítás"
+
+msgctxt "#30047"
+msgid "Back"
+msgstr "Vissza"
+
+msgctxt "#30103"
+msgid "Kodi TV set up"
+msgstr "Kodi TV beállítva"
+
+msgctxt "#30107"
+msgid "Favourites"
+msgstr "Kedvencek"
+
+msgctxt "#30120"
+msgid "Refresh"
+msgstr "Frissítés"
+
+msgctxt "#30121"
+msgid "3 hours"
+msgstr "3 óránként"
+
+msgctxt "#30122"
+msgid "6 hours"
+msgstr "6 óránként"
+
+msgctxt "#30123"
+msgid "12 hours"
+msgstr "12 óránként"
+
+msgctxt "#30124"
+msgid "24 hours"
+msgstr "naponta"
+
+msgctxt "#30125"
+msgid "Last fetch"
+msgstr "Legutóbbi lekérés"
+
+msgctxt "#30126"
+msgid "%s · %d channels, %d programmes"
+msgstr "%s · %d csatorna, %d műsor"
+
+msgctxt "#30127"
+msgid "public guide, log in"
+msgstr "nyilvános műsorújság, jelentkezz be"
+
+msgctxt "#30128"
+msgid "Off"
+msgstr "Kikapcsolva"
+
+msgctxt "#30129"
+msgid "Movies"
+msgstr "Filmek"
+
+msgctxt "#30130"
+msgid "Series"
+msgstr "Sorozatok"
+
+msgctxt "#30131"
+msgid "Other programmes"
+msgstr "Egyéb műsorok"
+
+msgctxt "#30132"
+msgid "Days"
+msgstr "Napok"
+
+msgctxt "#30133"
+msgid "as Kodi's guide shows: %d back, %d ahead"
+msgstr "a Kodi műsorújság-beállítása szerint: %d vissza, %d előre"
+
+msgctxt "#30134"
+msgid "Waiting for the running export..."
+msgstr "Várakozás a futó exportra..."
+
+msgctxt "#30135"
+msgid "Channel list..."
+msgstr "Csatornalista..."
+
+msgctxt "#30136"
+msgid "Guide: %s (-%d/+%d days)"
+msgstr "Műsorújság: %s (-%d/+%d nap)"
+
+msgctxt "#30137"
+msgid "Cast: %d of %d"
+msgstr "Stáblisták: %d / %d"
+
+msgctxt "#30138"
+msgid "Saving..."
+msgstr "Mentés..."
+
+msgctxt "#30139"
+msgid "A subscription is needed to watch this content!"
+msgstr "A tartalom megtekintéséhez előfizetés szükséges!"
+
+msgctxt "#30141"
+msgid "Restart is not available for this content."
+msgstr "Az újrakezdés nem elérhető erre a tartalomra."
+
+msgctxt "#30142"
+msgid "This programme is not available in the archive."
+msgstr "Archív tartalom nem elérhető."
+
+msgctxt "#30144"
+msgid "%d channels, %d programmes exported. IPTV Simple takes them at its next read of the \"Simple GO\" source (hourly unless set otherwise there), or when Kodi restarts."
+msgstr "%d csatorna, %d műsor exportálva. Az IPTV Simple a „Simple GO” forrás következő beolvasásakor veszi át (alapból óránként, ha ott nem állítottad másképp), vagy a Kodi újraindításakor."
+
+msgctxt "#30148"
+msgid "Parental lock"
+msgstr "Gyerekzár"
+
+msgctxt "#30149"
+msgid "Age ratings"
+msgstr "Korhatárok"
+
+msgctxt "#30151"
+msgid "6+"
+msgstr "6+"
+
+msgctxt "#30152"
+msgid "12+"
+msgstr "12+"
+
+msgctxt "#30153"
+msgid "16+"
+msgstr "16+"
+
+msgctxt "#30154"
+msgid "18"
+msgstr "18"
+
+msgctxt "#30155"
+msgid "18+"
+msgstr "18+"
+
+msgctxt "#30156"
+msgid "Lock unrated content"
+msgstr "Nem besorolt tartalmak zárolása"
+
+msgctxt "#30157"
+msgid "Show adult content"
+msgstr "Felnőtt tartalom megjelenítése"
+
+msgctxt "#30158"
+msgid "Change parental lock..."
+msgstr "Gyerekzár módosítása..."
+
+msgctxt "#30159"
+msgid "Enter the four-digit PIN"
+msgstr "Add meg a négyjegyű PIN-kódot"
+
+msgctxt "#30160"
+msgid "Wrong PIN. If you have forgotten it, call Telekom on 1414."
+msgstr "Hibás PIN-kód. Elfelejtett PIN esetén hívd a Telekom 1414-es számát."
+
+msgctxt "#30162"
+msgid "Lock unrated content (without an age rating)?"
+msgstr "Legyenek zárolva a nem besorolt (korhatár nélküli) tartalmak?"
+
+msgctxt "#30163"
+msgid "Show adult channels?"
+msgstr "Megjelenjenek a felnőtt csatornák?"
+
+msgctxt "#30164"
+msgid "Yes"
+msgstr "Igen"
+
+msgctxt "#30165"
+msgid "No"
+msgstr "Nem"
+
+msgctxt "#30166"
+msgid "To protect your children, lock content that is not suitable for them. Locking an age rating locks the content rated above it too. This is the Telekom account's parental lock, with the account's PIN; not Kodi's own channel lock."
+msgstr "Gyermekeid védelme érdekében zárold a nem megfelelő tartalmakat. Ha zárolsz egy korhatárt, akkor az a feletti besorolású tartalmak is zárolva lesznek. Ez a Telekom-fiók gyerekzára, a fiók PIN-kódjával; nem azonos a Kodi saját csatornazárával."
+
+msgctxt "#30167"
+msgid "The parental lock needs a PIN. To protect your children, lock content that is not suitable for them. Locking an age rating locks the content rated above it too. This is the Telekom account's parental lock, with the account's PIN; not Kodi's own channel lock."
+msgstr "A Gyerekzár használatához PIN-kód szükséges. Gyermekeid védelme érdekében zárold a nem megfelelő tartalmakat. Ha zárolsz egy korhatárt, akkor az a feletti besorolású tartalmak is zárolva lesznek. Ez a Telekom-fiók gyerekzára, a fiók PIN-kódjával; nem azonos a Kodi saját csatornazárával."
+
+msgctxt "#30168"
+msgid "Favourite programmes"
+msgstr "Kedvenc tartalmak"
+
+msgctxt "#30171"
+msgid "Add to favourite programmes"
+msgstr "Hozzáadás a kedvenc tartalmakhoz"
+
+msgctxt "#30172"
+msgid "Added to favourite programmes"
+msgstr "Hozzáadva a kedvenc tartalmakhoz"
+
+msgctxt "#30173"
+msgid "Removed from favourite programmes"
+msgstr "Eltávolítva a kedvenc tartalmak közül"
+
+msgctxt "#30175"
+msgid "My channels"
+msgstr "Csatornáim"
+
+msgctxt "#30176"
+msgid "Move..."
+msgstr "Áthelyezés..."
+
+msgctxt "#30177"
+msgid "Reset channel order"
+msgstr "Csatornasorrend visszaállítása"
+
+msgctxt "#30178"
+msgid "To the end of the list"
+msgstr "A lista végére"
+
+msgctxt "#30179"
+msgid "Move %s before:"
+msgstr "%s áthelyezése ez elé:"
+
+msgctxt "#30180"
+msgid "Resetting deletes the channel order you set. Are you sure?"
+msgstr "A visszaállítással törlődik az általad beállított csatornasorrend. Biztosan ezt szeretnéd?"
+
+msgctxt "#30183"
+msgid "Added to my favourite channels"
+msgstr "Hozzáadva a kedvenc csatornáimhoz"
+
+msgctxt "#30184"
+msgid "Removed from my favourite channels"
+msgstr "Eltávolítva a kedvenc csatornáim közül"
+
+msgctxt "#30186"
+msgid "Resume from %s"
+msgstr "Folytatás innen: %s"
+
+msgctxt "#30187"
+msgid "Play from the beginning"
+msgstr "Lejátszás az elejéről"
+
+msgctxt "#30188"
+msgid "Continue watching"
+msgstr "Lejátszás folytatása"
+
+msgctxt "#30189"
+msgid "Kodi TV updated: %d channels, %d programmes"
+msgstr "Kodi TV frissítve: %d csatorna, %d műsor"
+
+msgctxt "#30190"
+msgid "Now"
+msgstr "Most"
+
+msgctxt "#30191"
+msgid "Account"
+msgstr "Fiók"
+
+msgctxt "#30192"
+msgid "Login"
+msgstr "Belépés"
+
+msgctxt "#30193"
+msgid "valid until %s"
+msgstr "érvényes eddig: %s"
+
+msgctxt "#30195"
+msgid "Subscription"
+msgstr "Előfizetés"
+
+msgctxt "#30196"
+msgid "Catch-up"
+msgstr "Visszanézés"
+
+msgctxt "#30197"
+msgid "Timeshift"
+msgstr "Időcsúsztatás"
+
+msgctxt "#30198"
+msgid "Recording"
+msgstr "Felvétel"
+
+msgctxt "#30201"
+msgid "Your login runs out on %s: log in again before then."
+msgstr "A belépésed lejár: %s. Addig lépj be újra."
+
+msgctxt "#30203"
+msgid "General"
+msgstr "Általános"
+
+msgctxt "#30204"
+msgid "TV menu"
+msgstr "TV menü"
+
+msgctxt "#30205"
+msgid "Cast"
+msgstr "Stáblista"
+
+msgctxt "#30206"
+msgid "Show in the TV menu – switch on…"
+msgstr "Megjelenítés a TV menüben – bekapcsolás…"
+
+msgctxt "#30207"
+msgid "Show in the TV menu – switch off…"
+msgstr "Megjelenítés a TV menüben – kikapcsolás…"
+
+msgctxt "#30208"
+msgid "The channels and the guide appear in Kodi's TV menu. For this IPTV Simple is installed, a Simple GO source is added to its settings (switching off removes it), and the guide is downloaded. Continue?"
+msgstr "A csatornák és a műsorújság megjelennek a Kodi TV menüjében. Ehhez telepíti az IPTV Simple-t, a beállításaiba felvesz egy Simple GO forrást (kikapcsoláskor törli), és letölti a műsorújságot. Folytatod?"
+
+msgctxt "#30209"
+msgid "The Simple GO source leaves Kodi's TV menu, with its playlist and guide files. IPTV Simple itself and your other sources stay. Continue?"
+msgstr "A Simple GO forrás kikerül a Kodi TV menüjéből, a lejátszási listájával és műsorújság-fájljaival együtt. Maga az IPTV Simple és a többi forrásod megmarad. Folytatod?"
+
+msgctxt "#30210"
+msgid "The “Simple GO” source leaves the TV menu after Kodi restarts."
+msgstr "A „Simple GO” forrás a Kodi újraindítása után kerül ki a TV menüből."
+
+msgctxt "#30211"
+msgid "Taking the Simple GO source out of the TV menu…"
+msgstr "A Simple GO forrás kivétele a TV menüből…"
+
+msgctxt "#30212"
+msgid "Building: %d of %d blocks"
+msgstr "Összeállítás: %d / %d blokk"
+
+msgctxt "#30213"
+msgid "Refresh now…"
+msgstr "Frissítés most…"
+
+msgctxt "#30214"
+msgid "Audio description"
+msgstr "Hangalámondás"
+
+msgctxt "#30215"
+msgid "Sign language"
+msgstr "Jelnyelv"
+
+msgctxt "#30216"
+msgid "Display"
+msgstr "Megjelenés"
+
+msgctxt "#30217"
+msgid "Category colours"
+msgstr "Kategóriaszínek"
+
+msgctxt "#30218"
+msgid "The guide's category colours in the channel list and in Kodi's TV guide."
+msgstr "A műsorújság kategóriaszínei a csatornalistában és a Kodi TV műsorújságában."
+
+msgctxt "#30219"
+msgid "The cast on the information page, in the lists and in the TV menu's guide."
+msgstr "A stáblista az információs ablakban, a listákban és a TV menü műsorújságában."
+
+
+
+msgctxt "#30223"
+msgid "No airing known"
+msgstr "Nincs ismert adás"
+
+msgctxt "#30224"
+msgid "Show in the TV menu"
+msgstr "Megjelenítés a TV menüben"
+
+msgctxt "#30225"
+msgid "On"
+msgstr "Be"
+
+msgctxt "#30226"
+msgid "Off"
+msgstr "Ki"
+
+msgctxt "#30227"
+msgid "The channels and the guide in Kodi's TV menu, as a separate IPTV Simple source."
+msgstr "A csatornák és a műsorújság a Kodi TV menüjében, külön IPTV Simple forrásként."
+
+msgctxt "#30228"
+msgid "Not on yet"
+msgstr "Még nem kezdődött el"
+
+msgctxt "#30222"
+msgid "Further airings"
+msgstr "További időpontok"
+
+msgctxt "#30229"
+msgid "%d episodes"
+msgstr "%d rész"
+
+msgctxt "#30230"
+msgid "Deactivate"
+msgstr "Deaktiválás"
+
+msgctxt "#30231"
+msgid "Activate"
+msgstr "Aktiválás"
+
+msgctxt "#30232"
+msgid "This channel is deactivated. You can activate it again under My channels."
+msgstr "A csatorna deaktivált. A Csatornáim menüben újra aktiválhatod."
+
+msgctxt "#30233"
+msgid "Channel deactivated"
+msgstr "Csatorna deaktiválva"
+
+msgctxt "#30234"
+msgid "Channel activated"
+msgstr "Csatorna aktiválva"
+
+msgctxt "#30236"
+msgid "Deactivated"
+msgstr "Deaktivált"
+
+msgctxt "#30237"
+msgid "Favourite"
+msgstr "Kedvenc"
+
+msgctxt "#30239"
+msgid "%d subscribed channels"
+msgstr "%d előfizetett csatorna"
+
+msgctxt "#30241"
+msgid "Channel not in your subscription. Available in: %s (%s Ft/month)"
+msgstr "Nem előfizetett csatorna. Elérhető ebben: %s (%s Ft/hó)"
+
+msgctxt "#30242"
+msgid "Other"
+msgstr "Egyéb"
+
+msgctxt "#30243"
+msgid "Kodi's TV menu shows the change after Kodi restarts."
+msgstr "A Kodi TV menüje a Kodi újraindítása után mutatja a változást."
+
+msgctxt "#30244"
+msgid "Simple GO – login"
+msgstr "Simple GO – bejelentkezés"
+
+msgctxt "#30245"
+msgid "Log in with your Telekom account"
+msgstr "Belépés Telekom fiókkal"
+
+msgctxt "#30246"
+msgid "The button opens the usual telekom.hu login in a new tab."
+msgstr "A gomb új lapon nyitja meg a szokásos telekom.hu belépést."
+
+msgctxt "#30247"
+msgid "After logging in, a page of odd English text appears (“User-agent: …”). Copy not the text but the page's web address from the browser's address bar: the long address starting with"
+msgstr "Belépés után egy furcsa, angol szöveges oldal jelenik meg („User-agent: …”). Nem a szöveget kell kimásolni, hanem a lap webcímét a böngésző címsorából: az ezzel kezdődő hosszú címet"
+
+msgctxt "#30248"
+msgid "Tap the address bar → Copy, or ⋮ → Share → Copy."
+msgstr "Koppints a címsorra → Másolás, vagy ⋮ → Megosztás → Másolás."
+
+msgctxt "#30249"
+msgid "Come back to this page, paste the address and send it:"
+msgstr "Gyere vissza erre a lapra, illeszd be a címet, és küldd el:"
+
+msgctxt "#30250"
+msgid "Send to the TV"
+msgstr "Küldés a TV-nek"
+
+msgctxt "#30251"
+msgid "Done! The TV is logging in."
+msgstr "Kész! A TV bejelentkezik."
+
+msgctxt "#30252"
+msgid "You can close this page and the Telekom page."
+msgstr "Ezt a lapot és a Telekom lapot bezárhatod."
+
+msgctxt "#30253"
+msgid "Wrong or expired code. Start the login again on the TV."
+msgstr "Hibás vagy lejárt kód. Indítsd újra a bejelentkezést a TV-n."
+
+msgctxt "#30254"
+msgid "Wrong code."
+msgstr "Hibás kód."
+
+msgctxt "#30255"
+msgid "This is the page's text. Copy the web address in the browser's address bar instead (the one starting with https://player.telekomtvgo.hu/robots.txt?…)."
+msgstr "Ez az oldal szövege. A böngésző címsorában lévő webcímet másold ki (a https://player.telekomtvgo.hu/robots.txt?… kezdetűt)."
+
+msgctxt "#30256"
+msgid "This holds no login data. Copy the web address of the page shown after logging in, from the address bar."
+msgstr "Ebben nincs bejelentkezési adat. A belépés után megjelenő oldal webcímét másold ki a címsorból."
+
+msgctxt "#30257"
+msgid "Quit now? Then start Kodi again."
+msgstr "Kilépsz most? Utána indítsd el újra a Kodit."
+
+msgctxt "#30258"
+msgid "Restart now?"
+msgstr "Újraindítod most?"
+
+msgctxt "#30259"
+msgid "This programme can no longer be watched back: its catch-up time is over."
+msgstr "Ez az adás már nem nézhető vissza: lejárt a visszanézési ideje."
+
+msgctxt "#30260"
+msgid "Next on: %s. Add %s to your favourite programmes?"
+msgstr "Legközelebb: %s. Felvegyük a Kedvenc tartalmak közé: %s?"
+
+msgctxt "#30261"
+msgid "The provider did not add it to the favourite programmes."
+msgstr "A Telekom nem vette fel a kedvenc tartalmak közé."
+
+msgctxt "#30262"
+msgid "The provider did not remove it from the favourite programmes."
+msgstr "A Telekom nem vette le a kedvenc tartalmak közül."
+
+msgctxt "#30263"
+msgid "Remove from the list"
+msgstr "Eltávolítás a listáról"
+
+msgctxt "#30264"
+msgid "Remove it from Continue watching?"
+msgstr "Eltávolítsuk a Lejátszás folytatása listáról?"

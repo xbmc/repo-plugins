@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.simplego" name="Simple GO" version="0.8.143" provider-name="lmipsum">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+        <import addon="script.module.certifi" version="2019.9.11"/>
+        <import addon="script.module.inputstreamhelper" version="0.6.0"/>
+        <import addon="script.module.pyqrcode" version="1.2.1"/>
+        <import addon="inputstream.adaptive" version="20.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py"/>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Magyar Telekom TV GO live TV in Kodi, with your own subscription</summary>
+        <summary lang="hu_HU">Telekom TV GO élő adás a Kodiban, a saját előfizetéseddel</summary>
+        <description lang="en_GB">Simple GO brings live TV and radio from Magyar Telekom's TV GO service to Kodi, with watching back, on your own subscription. Login from a phone by QR code. Needs a Hungarian internet address and a Widevine-capable device.</description>
+        <description lang="hu_HU">A Simple GO a Magyar Telekom TV GO élő TV- és rádióadásait és visszanézését hozza el a Kodiba, a saját előfizetéseddel. Bejelentkezés telefonról QR-kóddal. Magyar internetcím és Widevine-képes eszköz kell hozzá.</description>
+        <disclaimer lang="en_GB">Unofficial add-on, not affiliated with or endorsed by Magyar Telekom Nyrt. A valid Telekom TV GO subscription is required. Telekom and TV GO are trademarks of their respective owners.</disclaimer>
+        <disclaimer lang="hu_HU">Nem hivatalos kiegészítő, a Magyar Telekom Nyrt.-hez nem kapcsolódik, és az nem támogatja. Érvényes Telekom TV GO előfizetés szükséges. A Telekom és a TV GO a jogtulajdonosok védjegyei.</disclaimer>
+        <language>hu</language>
+        <platform>android linux</platform>
+        <license>GPL-3.0-or-later</license>
+        <source>https://github.com/lmipsum/plugin.video.simplego</source>
+        <website>https://github.com/lmipsum/plugin.video.simplego</website>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/screenshots/screenshot-list.jpg</screenshot>
+            <screenshot>resources/screenshots/screenshot-continue.jpg</screenshot>
+            <screenshot>resources/screenshots/screenshot-guide.jpg</screenshot>
+        </assets>
+        <news>v0.8.143 (2026-11-02)
+- No longer trust root certificates that certifi dropped as compromised
+- List the repository zip in Kodi's file manager
+
+v0.8.142 (2026-11-02)
+- First version: live TV and radio, watching back, favourites, Kodi TV guide</news>
+    </extension>
+</addon>

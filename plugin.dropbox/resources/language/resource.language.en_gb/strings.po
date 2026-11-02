@@ -79,3 +79,23 @@ msgstr ""
 msgctxt "#32069"
 msgid "     Source server port  -  http://localhost:<port>/source"
 msgstr ""
+
+msgctxt "#32070"
+msgid "Items per page (0 = the whole folder)"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Auto-Refreshed slideshow"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Refresh interval in minutes"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Recursive auto-refreshed slideshow"
+msgstr ""
+
+msgctxt "#32071"
+msgid "Show the plot, cast and artwork from .nfo files and pictures next to the videos"
+msgstr ""

@@ -22,9 +22,8 @@ from resources.lib.provider.dropbox import Dropbox
 
 
 class DropboxAddon(CloudDriveAddon):
-    # Dropbox doesn't report how many items a folder has: no item count while loading, no auto-refreshed slideshow.
+    # Dropbox doesn't report how many items a folder has: no item count while loading.
     _child_count_supported = False
-    _auto_refreshed_slideshow_supported = False
 
     def __init__(self):
         self._provider = Dropbox()
@@ -34,7 +33,7 @@ class DropboxAddon(CloudDriveAddon):
         return self._provider
 
     def get_custom_drive_folders(self, driveid):
-        return []
+        return [{'name': self._common_addon.getLocalizedString(32058), 'path': Dropbox.SHARED_WITH_ME}]
 
 
 if __name__ == '__main__':

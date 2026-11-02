@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+    <section id="plugin.video.simplego">
+        <category id="general" label="30203">
+            <group id="1" label="30216">
+                <setting id="colours" type="boolean" label="30217" help="30218">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+            <group id="2" label="30205">
+                <setting id="info_movie" type="boolean" help="30219" label="30129">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="info_series" type="boolean" help="30219" label="30130">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="info_other" type="boolean" help="30219" label="30131">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+            <group id="3" label="30191">
+                <setting id="devices" type="string" label="30034">
+                    <level>1</level>
+                    <default></default>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="visible" setting="logged_in">true</dependency>
+                    </dependencies>
+                    <control type="button" format="action">
+                        <data>RunPlugin(plugin://plugin.video.simplego/?action=devices)</data>
+                    </control>
+                </setting>
+                <setting id="account_login" type="string" label="30192">
+                    <level>0</level>
+                    <default></default>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <enable>false</enable>
+                    <dependencies>
+                        <dependency type="visible" setting="logged_in">true</dependency>
+                    </dependencies>
+                    <control type="edit" format="string"/>
+                </setting>
+                <setting id="account_subscription" type="string" label="30195">
+                    <level>3</level>
+                    <default></default>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <enable>false</enable>
+                    <dependencies>
+                        <dependency type="visible" setting="logged_in">true</dependency>
+                    </dependencies>
+                    <control type="edit" format="string"/>
+                </setting>
+                <setting id="account_catchup" type="boolean" label="30196">
+                    <level>3</level>
+                    <default>false</default>
+                    <enable>false</enable>
+                    <dependencies>
+                        <dependency type="visible" setting="logged_in">true</dependency>
+                    </dependencies>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="account_timeshift" type="boolean" label="30197">
+                    <level>3</level>
+                    <default>false</default>
+                    <enable>false</enable>
+                    <dependencies>
+                        <dependency type="visible" setting="logged_in">true</dependency>
+                    </dependencies>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="account_recording" type="boolean" label="30198">
+                    <level>3</level>
+                    <default>false</default>
+                    <enable>false</enable>
+                    <dependencies>
+                        <dependency type="visible" setting="logged_in">true</dependency>
+                    </dependencies>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+        </category>
+        <category id="guide" label="30204">
+            <group id="1">
+                <setting id="tv_menu" type="string" label="30224" help="30227">
+                    <level>0</level>
+                    <default></default>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control type="button" format="action">
+                        <data>RunPlugin(plugin://plugin.video.simplego/?action=tv_toggle)</data>
+                    </control>
+                </setting>
+                <setting id="pvr_enabled" type="boolean" label="30103">
+                    <level>0</level>
+                    <default>false</default>
+                    <visible>false</visible>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="pvr_last_at" type="string" label="30103">
+                    <level>0</level>
+                    <default></default>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <visible>false</visible>
+                    <control type="edit" format="string"/>
+                </setting>
+                <setting id="logged_in" type="boolean" label="30103">
+                    <level>0</level>
+                    <default>false</default>
+                    <visible>false</visible>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="tv_refresh" type="action" label="30213">
+                    <level>2</level>
+                    <data>RunPlugin(plugin://plugin.video.simplego/?action=tv_refresh)</data>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="visible" setting="pvr_enabled">true</dependency>
+                    </dependencies>
+                    <control type="button" format="action"/>
+                </setting>
+                <setting id="pvr_interval" type="integer" label="30120">
+                    <level>0</level>
+                    <default>24</default>
+                    <constraints>
+                        <options>
+                            <option label="30128">0</option>
+                            <option label="30121">3</option>
+                            <option label="30122">6</option>
+                            <option label="30123">12</option>
+                            <option label="30124">24</option>
+                        </options>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="visible" setting="pvr_enabled">true</dependency>
+                    </dependencies>
+                    <control type="list" format="string"/>
+                </setting>
+                <setting id="epg_days_info" type="string" label="30132">
+                    <level>0</level>
+                    <default></default>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <enable>false</enable>
+                    <dependencies>
+                        <dependency type="visible" setting="pvr_enabled">true</dependency>
+                    </dependencies>
+                    <control type="edit" format="string"/>
+                </setting>
+                <setting id="pvr_last" type="string" label="30125">
+                    <level>0</level>
+                    <default></default>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <enable>false</enable>
+                    <dependencies>
+                        <dependency type="visible" setting="pvr_enabled">true</dependency>
+                    </dependencies>
+                    <control type="edit" format="string"/>
+                </setting>
+            </group>
+        </category>
+        <category id="parental" label="30148">
+            <group id="1">
+                <setting id="parental_edit" type="action" label="30158" help="30167">
+                    <level>2</level>
+                    <dependencies>
+                        <dependency type="visible">
+                            <and>
+                                <condition setting="logged_in">true</condition>
+                                <condition setting="parental_enabled">true</condition>
+                            </and>
+                        </dependency>
+                    </dependencies>
+                    <data>RunPlugin(plugin://plugin.video.simplego/?action=parental)</data>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <control type="button" format="action"/>
+                </setting>
+                <setting id="parental_age" type="integer" label="30149" help="30166">
+                    <level>2</level>
+                    <default>0</default>
+                    <dependencies>
+                        <dependency type="visible">
+                            <and>
+                                <condition setting="logged_in">true</condition>
+                                <condition setting="parental_enabled">true</condition>
+                            </and>
+                        </dependency>
+                    </dependencies>
+                    <constraints>
+                        <options>
+                            <option label="30128">0</option>
+                            <option label="30151">6</option>
+                            <option label="30152">12</option>
+                            <option label="30153">16</option>
+                            <option label="30154">18</option>
+                            <option label="30155">19</option>
+                        </options>
+                    </constraints>
+                    <enable>false</enable>
+                    <control type="list" format="string"/>
+                </setting>
+                <setting id="parental_unrated" type="boolean" label="30156">
+                    <level>2</level>
+                    <default>true</default>
+                    <dependencies>
+                        <dependency type="visible">
+                            <and>
+                                <condition setting="logged_in">true</condition>
+                                <condition setting="parental_enabled">true</condition>
+                            </and>
+                        </dependency>
+                    </dependencies>
+                    <enable>false</enable>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="parental_adult" type="boolean" label="30157">
+                    <level>2</level>
+                    <default>false</default>
+                    <dependencies>
+                        <dependency type="visible">
+                            <and>
+                                <condition setting="logged_in">true</condition>
+                                <condition setting="parental_enabled">true</condition>
+                            </and>
+                        </dependency>
+                    </dependencies>
+                    <enable>false</enable>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="parental_enabled" type="boolean" label="30103">
+                    <level>2</level>
+                    <default>false</default>
+                    <visible>false</visible>
+                    <control type="toggle"/>
+                </setting>
+            </group>
+        </category>
+    </section>
+</settings>

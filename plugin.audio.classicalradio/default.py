@@ -2,6 +2,8 @@
 """Kodi directory/plugin entry point for the ClassicalRadio add-on."""
 from __future__ import annotations
 
+import uuid
+
 import sys
 from urllib.parse import urlencode, parse_qsl
 
@@ -75,7 +77,7 @@ def add_channel(channel, favorite_ids=None):
     tag.setArtist("ClassicalRadio")
     li.setProperty("IsPlayable", "true")
 
-    if cid is not None and favorite_ids is not None:
+    if cid and favorite_ids is not None:
         isfav = str(cid) in favorite_ids
         favlabel = t(32042) if isfav else t(32041)
         favaction = "favorite_remove" if isfav else "favorite_add"
@@ -250,6 +252,9 @@ def play_linear(
     li.setProperty("IsPlayable", "true")
 
     save_state({
+        "playback_instance_id": uuid.uuid4().hex,
+        "track_details_loaded": False,
+        "track_details_retry_at": 0,
         "mode": "linear",
         "channel_key": channel,
         "channel_name": name,

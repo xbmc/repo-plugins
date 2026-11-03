@@ -3,6 +3,7 @@
     <category label="32067">
     	<setting label="32000" type="lsep"/>
     	<setting label="32004" type="bool" id="set_subtitle" default="true" value="true"/>
+    	<setting label="32071" type="bool" id="nfo_info" default="true"/>
     	<setting label="32017" type="bool" id="ask_resume" default="true" />
     	<setting label="32001" type="lsep"/>
     	<setting label="32003" type="bool" id="clean_folder" default="true" value="true"/>
@@ -17,6 +18,7 @@
     </category>
     <category label="32032">
 		<setting label="32033" type="text" id="sign-in-server" default="https://drive.signinserver.com"/>
+		<setting label="32070" type="number" id="page_size" default="500"/>
 		<setting label="32034" type="number" id="cache-expiration-time" default="5"/>
 		<setting label="32035" type="action" option="close" action="RunPlugin(plugin://plugin.onedrive/?action=_clear_cache)"/>
 		<setting label="32012" type="action" option="close" action="RunPlugin(plugin://plugin.onedrive/?action=_open_common_settings)"/>

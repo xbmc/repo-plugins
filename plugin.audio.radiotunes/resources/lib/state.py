@@ -133,7 +133,7 @@ def clear_state():
         )
 
 
-def update_state_if_current(stream_url, channel_key, updates):
+def update_state_if_current(stream_url, channel_key, updates, playback_instance_id):
     """Update state only if it still belongs to the expected playback."""
     try:
         path = _state_path()
@@ -151,6 +151,7 @@ def update_state_if_current(stream_url, channel_key, updates):
                 data.get("mode") != "linear"
                 or data.get("stream_url") != stream_url
                 or data.get("channel_key") != channel_key
+                or data.get("playback_instance_id") != playback_instance_id
             ):
                 return False
 

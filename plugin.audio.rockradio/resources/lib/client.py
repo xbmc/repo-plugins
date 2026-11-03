@@ -14,13 +14,15 @@ import json
 import os
 import tempfile
 from pathlib import Path
-from urllib.parse import quote, urlsplit, urlunsplit
+from urllib.parse import quote, urlsplit, urlunsplit, urljoin
 
 import requests
 import xbmc
 import xbmcaddon
 import xbmcvfs
 import hashlib
+import socket
+import ipaddress
 
 ADDON_ID = "plugin.audio.rockradio"
 
@@ -78,6 +80,68 @@ class AudioAddictClient:
             return urlunsplit((parts.scheme, parts.netloc, parts.path, "", ""))
         except Exception:
             return "<unparseable-url>"
+
+
+    @staticmethod
+    def _is_public_stream_url(url):
+        """Reject local, private or malformed playlist destinations.
+
+        All resolved DNS addresses must be globally routable. DNS can change
+        between this check and playback, so this is defense in depth rather
+        than a guarantee against DNS rebinding.
+        """
+        try:
+            parsed = urlsplit(url)
+            if parsed.scheme.lower() not in ("http", "https"):
+                return False
+            if not parsed.hostname or parsed.username or parsed.password:
+                return False
+            hostname = parsed.hostname.rstrip(".").lower()
+            try:
+                address = ipaddress.ip_address(hostname)
+            except ValueError:
+                address = None
+            if address is not None:
+                return address.is_global
+            if hostname in ("localhost",) or hostname.endswith(
+                (".localhost", ".local", ".internal", ".test", ".invalid")
+            ):
+                return False
+            port = parsed.port  # Also rejects malformed ports.
+            if port is None:
+                port = 443 if parsed.scheme.lower() == "https" else 80
+            results = socket.getaddrinfo(hostname, port, type=socket.SOCK_STREAM)
+            if not results:
+                return False
+            return all(
+                ipaddress.ip_address(result[4][0]).is_global
+                for result in results
+            )
+        except (ValueError, OSError, TypeError):
+            return False
+
+    def _probe_stream_with_redirects(self, url):
+        """Probe a stream, validating every HTTP redirect before following."""
+        current = url
+        for _ in range(4):
+            if not self._is_public_stream_url(current):
+                raise ValueError("Untrusted stream destination")
+            response = self.http.get(
+                current,
+                headers={"Icy-MetaData": "1"},
+                allow_redirects=False,
+                stream=True,
+                timeout=(2, 2),
+            )
+            if response.status_code in (301, 302, 303, 307, 308):
+                location = response.headers.get("Location")
+                response.close()
+                if not location:
+                    raise ValueError("Stream redirect without destination")
+                current = urljoin(current, location)
+                continue
+            return response, current
+        raise ValueError("Too many stream redirects")
 
     def has_credentials(self):
         """Whether account credentials are configured in Kodi settings."""
@@ -427,11 +491,13 @@ class AudioAddictClient:
             result["channel_id"] = item.get("channel_id")
 
             track_id = track.get("id")
+            result["_details_loaded"] = bool(track_id and track_id == known_track_id)
             if track_id and track_id != known_track_id:
                 try:
                     details = self._get(f"/tracks/{track_id}")
                     if isinstance(details, dict):
                         result.update(details)
+                        result["_details_loaded"] = True
                 except AudioAddictError as exc:
                     # Basic Now Playing metadata is still useful if the
                     # secondary rich-track lookup fails.
@@ -449,6 +515,30 @@ class AudioAddictClient:
         quality = self.addon.getSetting("quality") or "Ultra"
         return self.QUALITY_MAP.get(quality, "premium_high")
 
+    def _fetch_playlist(self, url):
+        """Fetch a PLS playlist, allowing only same-origin HTTPS redirects.
+
+        The PLS URL contains a listen key. Never forward that URL to a
+        different origin via an automatic HTTP redirect.
+        """
+        initial = urlsplit(url)
+        current = url
+        for _ in range(4):
+            response = self.http.get(current, timeout=15, allow_redirects=False)
+            if response.status_code not in (301, 302, 303, 307, 308):
+                return response
+            location = response.headers.get("Location")
+            response.close()
+            if not location:
+                raise ValueError("Playlist redirect without destination")
+            candidate = urljoin(current, location)
+            parsed = urlsplit(candidate)
+            if (parsed.scheme != "https" or parsed.netloc != initial.netloc
+                    or parsed.username or parsed.password):
+                raise ValueError("Unsafe playlist redirect")
+            current = candidate
+        raise ValueError("Too many playlist redirects")
+
     def _playlist_servers(self, channel_key):
         """Resolve the PLS playlist for the selected Premium quality."""
         session = self._ensure_session()
@@ -462,8 +552,8 @@ class AudioAddictClient:
         )
 
         try:
-            response = self.http.get(url, timeout=15)
-        except requests.RequestException:
+            response = self._fetch_playlist(url)
+        except (requests.RequestException, ValueError):
             raise AudioAddictError(self._t(32110))
 
         if response.status_code != 200:
@@ -476,8 +566,10 @@ class AudioAddictClient:
             line = raw_line.strip()
             if line.lower().startswith("file") and "=" in line:
                 candidate = line.split("=", 1)[1].strip()
-                if candidate.startswith("http"):
+                if self._is_public_stream_url(candidate):
                     servers.append(candidate)
+                else:
+                    self._log("Rejected unsafe or unresolvable playlist URL")
 
         if not servers:
             raise AudioAddictError(self._t(32112))
@@ -500,21 +592,18 @@ class AudioAddictClient:
             safe_server = self._safe_url_for_log(server)
 
             try:
-                response = self.http.get(
-                    server,
-                    headers={"Icy-MetaData": "1"},
-                    allow_redirects=True,
-                    stream=True,
-                    timeout=(2, 2),
-                )
+                response, resolved_server = self._probe_stream_with_redirects(server)
 
-                if 200 <= response.status_code < 400:
-                    return server, len(servers)
+                if 200 <= response.status_code < 300:
+                    return resolved_server, len(servers)
 
                 self._log(
                     f"Stream probe rejected {safe_server} "
                     f"(HTTP {response.status_code})"
                 )
+
+            except ValueError as exc:
+                self._log(f"Rejected unsafe stream redirect: {exc}", xbmc.LOGWARNING)
 
             except requests.RequestException as exc:
                 inconclusive.append(server)

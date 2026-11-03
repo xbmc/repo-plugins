@@ -2,6 +2,8 @@
 """Kodi directory/plugin entry point for the RockRadio add-on."""
 from __future__ import annotations
 
+import uuid
+
 import sys
 from urllib.parse import urlencode, parse_qsl
 
@@ -250,6 +252,9 @@ def play_linear(
     li.setProperty("IsPlayable", "true")
 
     save_state({
+        "playback_instance_id": uuid.uuid4().hex,
+        "track_details_loaded": False,
+        "track_details_retry_at": 0,
         "mode": "linear",
         "channel_key": channel,
         "channel_name": name,

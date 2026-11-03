@@ -1,0 +1,3 @@
+v1.3.16
+
+- Interval scrobbles are now sent every 15 minutes by default instead of every 10 seconds, which used up the daily API limit for some users. The interval is now set in minutes (5 to 60), and existing settings are reset to the new default.

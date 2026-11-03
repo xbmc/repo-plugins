@@ -1,3 +1,4 @@
+import calendar
 import datetime
 import json
 import time
@@ -124,6 +125,9 @@ def parse_datetime(value, fmt):
 
 
 def _local_utc_offset():
+    # Only the fallback for a time the platform's clock functions can't
+    # convert (e.g. before 1970 on Windows): it's today's offset, off by an
+    # hour for a time under the other side of DST.
     # The two clock reads land microseconds apart, which (truncated by
     # strftime) put a converted timestamp a second early; real UTC offsets
     # are whole minutes
@@ -138,11 +142,11 @@ def local_time_to_utc_iso(value):
     already UTC is wrong by the device's UTC offset -- confirmed as the
     cause of a real bug: on a UTC+3 (EEST) system, a local lastplayed could
     look "newer" than a UTC removal timestamp that actually happened later,
-    silently blocking a real remote unwatch from applying. Offset is
-    computed from the current moment, so a value from months ago under a
-    different DST offset can be off by up to an hour -- acceptable for sync
-    conflict-resolution purposes, unlike being off by a fixed multi-hour
-    offset on every single comparison.
+    silently blocking a real remote unwatch from applying. The offset is
+    the one in effect at that time, not today's: a summer watch converted
+    in winter would otherwise come out an hour off, and every watch from the
+    other side of DST would read as changed and be pushed again after each
+    switch.
     """
     if not value:
         return None
@@ -150,7 +154,12 @@ def local_time_to_utc_iso(value):
         local_dt = parse_datetime(value[:19], "%Y-%m-%d %H:%M:%S")
     except ValueError:
         return None
-    return (local_dt - _local_utc_offset()).strftime("%Y-%m-%dT%H:%M:%S")
+    try:
+        # tm_isdst -1: the platform works out whether DST applied then
+        utc = time.gmtime(time.mktime(local_dt.timetuple()))
+    except (OverflowError, OSError, ValueError):
+        return (local_dt - _local_utc_offset()).strftime("%Y-%m-%dT%H:%M:%S")
+    return time.strftime("%Y-%m-%dT%H:%M:%S", utc)
 
 
 def utc_iso_to_local_time(value):
@@ -164,4 +173,8 @@ def utc_iso_to_local_time(value):
         utc_dt = parse_datetime(cleaned, "%Y-%m-%d %H:%M:%S")
     except ValueError:
         return None
-    return (utc_dt + _local_utc_offset()).strftime("%Y-%m-%d %H:%M:%S")
+    try:
+        local = time.localtime(calendar.timegm(utc_dt.timetuple()))
+    except (OverflowError, OSError, ValueError):
+        return (utc_dt + _local_utc_offset()).strftime("%Y-%m-%d %H:%M:%S")
+    return time.strftime("%Y-%m-%d %H:%M:%S", local)

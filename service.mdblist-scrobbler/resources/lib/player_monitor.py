@@ -18,8 +18,11 @@ REQUEST_RETRY_BACKOFF_SECONDS = 1
 RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
 # How long interval scrobbles pause after a 429 that carries no Retry-After
 INTERVAL_RATE_LIMIT_PAUSE_SECONDS = 600
-# Floor for the user's interval setting
-MIN_INTERVAL_SECONDS = 10
+# Default and floor for the user's interval setting. A start already carries
+# the progress and the server runs the session on from it, so ticks only
+# matter when Kodi dies without sending a stop
+DEFAULT_INTERVAL_MINUTES = 15
+MIN_INTERVAL_MINUTES = 5
 DEFAULT_BASE_URL = "https://api.mdblist.com"
 
 
@@ -444,10 +447,10 @@ class PlayerMonitor(xbmc.Player):
         # Stop the one already held first: overwriting it left an orphaned
         # thread that kept scrobbling every tick until Kodi restarted
         self.stop_interval_timer()
-        # The setting is a free number: 0 would make the timer's wait return
-        # at once and scrobble in a tight loop
-        interval = max(self.get_int_setting("interval", 10), MIN_INTERVAL_SECONDS)
-        timer = Timer(interval, lambda: self.onInterval(timer))
+        # Floored in case the setting is edited by hand: 0 would make the
+        # timer's wait return at once and scrobble in a tight loop
+        interval_minutes = max(self.get_int_setting("interval_minutes", DEFAULT_INTERVAL_MINUTES), MIN_INTERVAL_MINUTES)
+        timer = Timer(interval_minutes * 60, lambda: self.onInterval(timer))
         self.interval_timer = timer
         timer.start()
 

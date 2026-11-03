@@ -20,7 +20,7 @@
         <setting label="Interval" type="bool" id="event.interval" default="true"/>
 
         <setting label="Update interval" type="lsep"/>
-        <setting label="Interval (seconds)" type="number" id="interval" default="10"/>
+        <setting label="Interval (minutes)" type="slider" id="interval_minutes" default="15" range="5,1,60" option="int"/>
 
         <setting label="Scrobble types" type="lsep"/>
         <setting label="Movies" type="bool" id="mediatype.movie" default="true"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.difm" name="DI.FM" version="1.0.1" provider-name="Édouard Duliège">
+<addon id="plugin.audio.difm" name="DI.FM" version="1.0.2" provider-name="Édouard Duliège">
   <requires>
     <import addon="xbmc.python" version="3.0.1"/>
     <import addon="script.module.requests" version="2.22.0"/>
@@ -13,11 +13,18 @@
     <description lang="fr_FR">Écoutez DI.FM avec votre compte AudioAddict. Parcourez toutes les chaînes, les styles, les chaînes populaires et nouvelles, synchronisez vos favoris, choisissez la qualité audio Premium et utilisez les contrôles natifs de Kodi.</description>
     <disclaimer lang="en_GB">Unofficial community add-on. Requires a valid AudioAddict/DI.FM account. Not affiliated with, endorsed by, or supported by DI.FM or AudioAddict.</disclaimer>
     <disclaimer lang="fr_FR">Extension communautaire non officielle. Nécessite un compte AudioAddict/DI.FM valide. Sans affiliation avec DI.FM ou AudioAddict, et non approuvée ni prise en charge par eux.</disclaimer>
-    <platform>linux</platform>
+    <platform>all</platform>
     <license>GPL-3.0-or-later</license>
     <source>https://github.com/edouardduliege/kodi-addon-difm</source>    
     <website>https://www.di.fm/</website>
-    <news>v1.0.1 - Maintenance update improving stream fallback, safe concurrent playback-state handling, session-cache handling, credential validation and startup responsiveness.</news>
+    <news>Version 1.0.2
+- Added portable playback-state locking for Windows and Unix-like systems.
+- Improved protection against stale Now Playing metadata.
+- Hardened authentication and HTTP redirect handling.
+- Improved playlist URL validation and stream fallback robustness.
+- Added controlled retries for transient track metadata failures.
+- Normalized favorite channel IDs.
+- Improved error logging and general stability.</news>
     <assets><icon>resources/icon.png</icon><fanart>resources/fanart.jpg</fanart></assets>
   </extension>
 </addon>

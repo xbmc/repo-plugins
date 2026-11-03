@@ -2,6 +2,8 @@
 """Background service that refreshes linear-stream Now Playing metadata."""
 from __future__ import annotations
 
+import time
+
 import xbmc
 import xbmcgui
 from urllib.parse import urlsplit, urlunsplit
@@ -24,8 +26,14 @@ def update_linear_metadata(client, player, state):
     if not channel or state.get("mode") != "linear":
         return
 
+    # Retry rich metadata after a transient failure, but at most once per minute.
+    needs_details = (
+        not state.get("track_details_loaded", False)
+        and time.time() >= state.get("track_details_retry_at", 0)
+    )
+    known_track_id = None if needs_details else state.get("track_id")
     current = client.current_track(
-        channel, known_track_id=state.get("track_id")
+        channel, known_track_id=known_track_id
     )
 
     latest_state = load_state()
@@ -34,6 +42,7 @@ def update_linear_metadata(client, player, state):
         latest_state.get("mode") != "linear"
         or latest_state.get("channel_key") != channel
         or latest_state.get("stream_url") != state.get("stream_url")
+        or latest_state.get("playback_instance_id") != state.get("playback_instance_id")
     ):
         return
 
@@ -56,7 +65,10 @@ def update_linear_metadata(client, player, state):
     if not isinstance(current, dict) or not current.get("id"):
         return
 
-    if current.get("id") == state.get("track_id"):
+    if (
+        current.get("id") == state.get("track_id")
+        and (state.get("track_details_loaded", False) or not needs_details)
+    ):
         return
 
     title = (
@@ -129,14 +141,20 @@ def update_linear_metadata(client, player, state):
 
     # updateInfoTag pushes the modified playing item back to Kodi's
     # Now Playing state after mutating title/artist/artwork above.
+    if load_state().get("playback_instance_id") != state.get("playback_instance_id"):
+        return
     player.updateInfoTag(item)
 
+    details_loaded = bool(current.get("_details_loaded", False))
     updated = update_state_if_current(
         state.get("stream_url"),
         channel,
         {
             "track_id": current.get("id"),
+            "track_details_loaded": details_loaded,
+            "track_details_retry_at": 0 if details_loaded else time.time() + 60,
         },
+        playback_instance_id=state.get("playback_instance_id"),
     )
 
     if not updated:

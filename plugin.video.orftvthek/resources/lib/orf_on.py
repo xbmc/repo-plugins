@@ -468,7 +468,7 @@ class OrfOn:
                 self.log("No video available yet.")
                 return []
             video = self.build_video(data, source['src'])
-            if self.kodi_worker.use_timeshift and '_embedded' in data and 'channel' in data['_embedded'] and data['timeshift_available_livestream']:
+            if self.kodi_worker.use_timeshift and '_embedded' in data and 'channel' in data['_embedded'] and data.get('timeshift_available_livestream'):
                 source = self.get_timeshift_stream_url(video)
                 start_time = video.get_start_time_iso()
                 ts_url = "%s&begin=%s" % (source['src'], start_time)
@@ -651,11 +651,11 @@ class OrfOn:
 
         # Try to get the segements if available and activated for the api.
         if self.use_segments:
-            if 'segments_complete' in item and 'video_type' in item and item['video_type'] == 'episode' and '/segments' not in link and 'episode' in link:
+            if 'segments_complete' in item and 'video_type' in item and item['video_type'] == 'episode' and '/segments' not in link and link.startswith('/episode/'):
                 self.log("Found video with segments.")
                 link = self.clean_url(link + "/segments")
         else:
-            if 'episode' in link and link.endswith('/segments'):
+            if link.startswith('/episode/') and link.endswith('/segments'):
                 link = link.replace('/segments', '')
 
         if 'description' in item and item['description'] is not None and item['description'] != "":

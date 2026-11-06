@@ -1,12 +1,17 @@
+import base64
 import json
 import os
 import re
+import struct
 import sys
 import time
-from urllib.parse import unquote
+from urllib.error import URLError
+from urllib.parse import quote, unquote, urljoin
+from urllib.request import Request, urlopen
+from xml.etree import ElementTree
 
 import xbmcaddon
-from xbmc import PlayList, PLAYLIST_VIDEO, Player, Keyboard, executebuiltin, log, LOGDEBUG
+from xbmc import PlayList, PLAYLIST_VIDEO, Player, Keyboard, executebuiltin, getCondVisibility, getInfoLabel, log, LOGDEBUG
 from xbmcgui import ListItem, Dialog, DialogProgress
 from xbmcaddon import Addon
 from xbmcplugin import addDirectoryItem, endOfDirectory, setContent, setResolvedUrl, addSortMethod, SORT_METHOD_VIDEO_TITLE, SORT_METHOD_DATE
@@ -21,11 +26,14 @@ class Kodi:
     addon_id = re.search(version_regex, sys.argv[0]).groups()[0]
     addon = Addon()
     data_folder = xbmcvfs.translatePath("special://profile/addon_data/%s" % addon_id)
+    kodi_major_version = int(getInfoLabel('System.BuildVersion').split('.')[0])
 
     input_stream_protocol = 'mpd'
     input_stream_drm_version = 'com.widevine.alpha'
     input_stream_mime = 'application/dash+xml'
     input_stream_license_contenttype = 'application/octet-stream'
+    widevine_system_id = 'edef8ba979d64acea3c827dcd51d21ed'
+    timeshift_resolution_limit = '1024x576'
 
     geo_lock = False
     max_cache_age = 60 * 60 * 24
@@ -105,7 +113,7 @@ class Kodi:
 
     def restart(self, video):
         self.log("Running Restart Play Action")
-        play_item = self.render_video(video)
+        play_item = self.render_video(video, playback=True)
         play_item.setProperty('inputstream.adaptive.play_timeshift_buffer', 'true')
         streaming_url = video.get_stream().get('url')
         Player().play(streaming_url, play_item)
@@ -132,15 +140,30 @@ class Kodi:
                 for track in tracks:
                     self.render(track)
             else:
+                items = []
                 for track in tracks:
-                    play_item = self.render_video(track)
+                    play_item = self.render_video(track, playback=True)
                     play_stream = self.build_stream_url(unquote(track.get_stream().get('url')))
-                    playlist.add(play_stream, play_item)
-                self.log("Playing Playlist %s from position %d" % (playlist.size(), playlist.getposition()))
+                    play_item.setPath(play_stream)
+                    items.append((play_stream, play_item))
+                plugin_url = sys.argv[0] + sys.argv[2]
+                position = playlist.getposition()
+                if 0 <= position < playlist.size() and playlist[position].getPath() == plugin_url:
+                    self.log("Resolving Playlist item %d with %d segments" % (position, len(items)))
+                    for index, (play_stream, play_item) in enumerate(items[1:], start=position + 1):
+                        playlist.add(play_stream, play_item, index)
+                    setResolvedUrl(self.plugin.handle, True, items[0][1])
+                else:
+                    self.log("Starting new Playlist with %d segments" % len(items))
+                    playlist.clear()
+                    for play_stream, play_item in items:
+                        playlist.add(play_stream, play_item)
+                    setResolvedUrl(self.plugin.handle, False, ListItem(offscreen=True))
+                    Player().play(playlist)
         else:
             self.log("Playing Single Video")
             for track in tracks:
-                play_item = self.render_video(track)
+                play_item = self.render_video(track, playback=True)
                 setResolvedUrl(self.plugin.handle, True, play_item)
                 break
 
@@ -160,12 +183,13 @@ class Kodi:
         list_item.setArt(item_art)
         return list_item
 
-    def render_video(self, teaser) -> ListItem:
+    def render_video(self, teaser, playback=False) -> ListItem:
         title = teaser.label()
         title2 = teaser.label2()
         stream_url = self.build_stream_url(unquote(teaser.url()))
 
-        headers = "User-Agent=%s&Content-Type=%s" % (self.useragent, self.input_stream_license_contenttype)
+        headers = "User-Agent=%s" % quote(self.useragent)
+        license_headers = "%s&Content-Type=%s" % (headers, quote(self.input_stream_license_contenttype))
         is_helper = inputstreamhelper.Helper(self.input_stream_protocol, drm=self.input_stream_drm_version)
         if is_helper.check_inputstream():
             list_item = ListItem(path=stream_url, offscreen=True)
@@ -175,9 +199,11 @@ class Kodi:
                 self.log("Found Stream for Video %s" % teaser.label())
                 self.log("Stream: (%s)" % teaser.url())
                 stream_data = teaser.get_stream()
-                list_item.setProperty('inputstream', 'inputstream.adaptive')
+                list_item.setProperty('inputstream', is_helper.inputstream_addon)
+                list_item.setProperty('inputstream.adaptive.manifest_headers', headers)
                 list_item.setProperty('inputstream.adaptive.stream_headers', headers)
-                list_item.setProperty('inputstream.adaptive.manifest_type', self.input_stream_protocol)
+                if self.kodi_major_version < 21:
+                    list_item.setProperty('inputstream.adaptive.manifest_type', self.input_stream_protocol)
 
                 if self.use_subtitles and stream_data.get('subtitle') and stream_data.get('subtitle') is not None:
                     list_item.setSubtitles([stream_data.get('subtitle')])
@@ -186,13 +212,23 @@ class Kodi:
                 if stream_data['drm']:
                     self.log("Video %s is DRM protected. Adding DRM relevant parameters" % teaser.label())
                     list_item.setMimeType(self.input_stream_mime)
-                    list_item.setProperty('inputstream', 'inputstream.adaptive')
-                    list_item.setProperty('inputstream.adaptive.stream_headers', headers)
-                    list_item.setProperty('inputstream', is_helper.inputstream_addon)
-                    list_item.setProperty('inputstream.adaptive.manifest_type', self.input_stream_protocol)
                     license_url = "%s?BrandGuid=%s&userToken=%s" % (stream_data.get('drm_widewine_url'), stream_data.get('drm_widewine_brand'), stream_data.get('drm_token'))
-                    list_item.setProperty('inputstream.adaptive.license_type', self.input_stream_drm_version)
-                    list_item.setProperty('inputstream.adaptive.license_key', license_url + '|' + headers + '|R{SSM}|')
+                    init_data = self.get_widevine_init_data(unquote(stream_data.get('url') or teaser.url())) if playback else None
+                    if init_data and self.kodi_major_version >= 22:
+                        drm_config = {self.input_stream_drm_version: {'init_data': init_data, 'license': {'server_url': license_url, 'req_headers': license_headers}}}
+                        list_item.setProperty('inputstream.adaptive.drm', json.dumps(drm_config))
+                    elif self.kodi_major_version >= 21 and not init_data:
+                        list_item.setProperty('inputstream.adaptive.drm_legacy', '%s|%s|%s' % (self.input_stream_drm_version, license_url, license_headers))
+                    else:
+                        list_item.setProperty('inputstream.adaptive.license_type', self.input_stream_drm_version)
+                        list_item.setProperty('inputstream.adaptive.license_key', license_url + '|' + license_headers + '|R{SSM}|')
+                        if init_data and self.kodi_major_version == 21:
+                            list_item.setProperty('inputstream.adaptive.license_data', init_data)
+                    if init_data and not getCondVisibility('System.Platform.Android'):
+                        if self.kodi_major_version >= 22:
+                            list_item.setProperty('inputstream.adaptive.config', json.dumps({'resolution_limit': self.timeshift_resolution_limit}))
+                        else:
+                            list_item.setProperty('inputstream.adaptive.chooser_resolution_max', '640p')
             else:
                 self.log("No Stream for Video %s (%s)" % (teaser.label(), teaser.url()), 'error')
 
@@ -220,6 +256,75 @@ class Kodi:
             Dialog().notification('No Stream available', 'Unable to find a stream for %s' % title, xbmcaddon.Addon().getAddonInfo('icon'))
         elif not is_helper.check_inputstream():
             Dialog().notification('Inputstream Adaptive not available', 'Install Inputstream Adaptive and Inputstream Helper', xbmcaddon.Addon().getAddonInfo('icon'))
+
+    def get_widevine_init_data(self, manifest_url):
+        pssh_boxes = []
+        try:
+            mpd = ElementTree.fromstring(self.http_get(manifest_url))
+            for period in self.xml_children(mpd, 'Period'):
+                for adaptation_set in self.xml_children(period, 'AdaptationSet'):
+                    protections = [cp for cp in self.xml_children(adaptation_set, 'ContentProtection')
+                                   if self.widevine_system_id in cp.get('schemeIdUri', '').replace('-', '').lower()]
+                    if not protections:
+                        continue
+                    if any(self.xml_children(cp, 'pssh') for cp in protections):
+                        return None
+                    for representation in self.xml_children(adaptation_set, 'Representation'):
+                        init_url = self.get_init_url(manifest_url, (mpd, period, adaptation_set, representation))
+                        pssh = self.find_widevine_pssh(self.http_get(init_url)) if init_url else None
+                        if pssh:
+                            pssh_boxes.append(pssh)
+        except (URLError, ElementTree.ParseError, ValueError) as error:
+            self.log("Unable to read Widevine PSSH: %s" % error, 'error')
+            return None
+        return self.merge_widevine_pssh(pssh_boxes)
+
+    def merge_widevine_pssh(self, pssh_boxes):
+        payloads = [box[32:] for box in pssh_boxes if box[8] == 0]
+        key_ids = []
+        for payload in payloads:
+            for key_id in re.findall(rb'\x12\x10(.{16})', payload, re.DOTALL):
+                if key_id not in key_ids:
+                    key_ids.append(key_id)
+        if not key_ids:
+            return None
+        payload = payloads[0].replace(b'\x12\x10' + key_ids[0], b''.join(b'\x12\x10' + key_id for key_id in key_ids), 1)
+        box = b'pssh' + bytes(4) + bytes.fromhex(self.widevine_system_id) + struct.pack('>I', len(payload)) + payload
+        self.log("Using Widevine PSSH with %d key ids from init segments" % len(key_ids))
+        return base64.b64encode(struct.pack('>I', len(box) + 4) + box).decode('ascii')
+
+    def get_init_url(self, manifest_url, elements):
+        representation = elements[-1]
+        templates = self.xml_children(representation, 'SegmentTemplate') or self.xml_children(elements[-2], 'SegmentTemplate')
+        if not templates or not templates[0].get('initialization'):
+            return None
+        init_path = templates[0].get('initialization').replace('$RepresentationID$', representation.get('id', ''))
+        init_path = init_path.replace('$Bandwidth$', representation.get('bandwidth', ''))
+        base_url = manifest_url
+        for element in elements:
+            base_urls = self.xml_children(element, 'BaseURL')
+            if base_urls and base_urls[0].text:
+                base_url = urljoin(base_url, base_urls[0].text.strip())
+        return urljoin(base_url, init_path)
+
+    def http_get(self, url):
+        with urlopen(Request(url, headers={'User-Agent': self.useragent}), timeout=10) as response:
+            return response.read()
+
+    @staticmethod
+    def xml_children(element, name):
+        return [child for child in element if child.tag.split('}')[-1] == name]
+
+    def find_widevine_pssh(self, data):
+        system_id = bytes.fromhex(self.widevine_system_id)
+        index = data.find(b'pssh')
+        while index >= 4:
+            size = struct.unpack('>I', data[index - 4:index])[0]
+            box = data[index - 4:index - 4 + size]
+            if box[12:28] == system_id:
+                return box
+            index = data.find(b'pssh', index + 4)
+        return None
 
     def build_info(self, item) -> dict:
         desc_prefix = self.build_meta_description(item)

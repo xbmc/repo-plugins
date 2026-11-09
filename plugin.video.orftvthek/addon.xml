@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.orftvthek" name="ORF ON" version="1.0.3" provider-name="s0fak1ng">
+<addon id="plugin.video.orftvthek" name="ORF ON" version="1.0.4" provider-name="s0fak1ng">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.routing" version="0.2.3"/>
@@ -25,10 +25,11 @@
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
         </assets>
-        <news>v1.0.3
-            - fix Container Update Bug (latest Omega)
-            - fix error on Addon start cause by OrfOn Api Change
-            - remove duplicate livestream item from frontpage
+        <news>v1.0.4
+            - fix timeshift drm issues
+            - fix api change 'timeshift_available_livestream'
+            - fix multi-segment playback for GUI
+            - up livestream timeshift limit to 720p
         </news>
     </extension>
 </addon>

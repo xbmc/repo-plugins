@@ -1,3 +1,9 @@
+v1.0.4 (2026-11-06)
+- fix timeshift drm issues
+- fix api change 'timeshift_available_livestream'
+- fix multi-segment playback for GUI
+- up livestream timeshift limit to 720p
+
 v1.0.3 (2025-12-14)
 - fix Container Update Bug (latest Omega)
 - fix error on Addon start cause by OrfOn Api Change

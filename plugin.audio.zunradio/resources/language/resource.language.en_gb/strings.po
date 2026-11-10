@@ -1,0 +1,99 @@
+# Kodi Media Center language file
+# Addon Name: ZUN rádio
+# Addon id: plugin.audio.zunradio
+# Addon Provider: Underground Media Management s.r.o.
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.audio.zunradio\n"
+"Report-Msgid-Bugs-To: https://github.com/xbmc/repo-plugins\n"
+"POT-Creation-Date: 2026-11-08 12:00+0000\n"
+"PO-Revision-Date: 2026-11-08 12:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: English (United Kingdom)\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "ZUN radio"
+msgstr ""
+
+msgctxt "#30001"
+msgid "ZUN radio · AAC 128 kbps (recommended)"
+msgstr ""
+
+msgctxt "#30002"
+msgid "ZUN radio · HE-AAC 64 kbps (saves data)"
+msgstr ""
+
+msgctxt "#30003"
+msgid "ZUN radio · MP3 192 kbps (for older devices)"
+msgstr ""
+
+#. {artist} and {title} are replaced with the track on air, keep them unchanged
+msgctxt "#30010"
+msgid "Now playing: {artist}, {title}"
+msgstr ""
+
+#. {show} is replaced with the name of the show on air, keep it unchanged
+msgctxt "#30011"
+msgid "Show: {show}"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Live stream, 24 hours a day. You've got taste!"
+msgstr ""
+
+msgctxt "#30004"
+msgid "ZUN radio · Full screen scene"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Dots and rings to the beat, the cover, the artist and the title over the whole screen. Any key returns."
+msgstr ""
+
+msgctxt "#30020"
+msgid "Now playing"
+msgstr ""
+
+msgctxt "#30021"
+msgid "You've got taste!"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Full screen scene"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Show the ZUN scene in full screen"
+msgstr ""
+
+msgctxt "#30102"
+msgid "While ZUN radio plays, the full screen view (and the screensaver of music) shows the ZUN scene instead of the standard visualisation."
+msgstr ""
+
+msgctxt "#30103"
+msgid "Dots and rings to the beat in the scene"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Needs the visualisation \"ZUN rádio scéna\" (visualization.zunradio). The scene selects it while it is open and then puts back your visualisation."
+msgstr ""
+
+msgctxt "#30105"
+msgid "Install the visualisation \"ZUN rádio scéna\""
+msgstr ""
+
+msgctxt "#30106"
+msgid "Dots and rings to the beat need the visualisation ZUN rádio scéna."
+msgstr ""
+
+msgctxt "#30107"
+msgid "The visualisation \"ZUN rádio scéna\" is not available for this device yet. The scene works without it, with still dots."
+msgstr ""
+
+msgctxt "#30108"
+msgid "The visualisation \"ZUN rádio scéna\" is already installed."
+msgstr ""

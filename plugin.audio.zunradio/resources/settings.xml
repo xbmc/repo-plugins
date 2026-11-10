@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+    <section id="plugin.audio.zunradio">
+        <category id="scena" label="30100" help="">
+            <group id="1">
+                <setting id="scena_na_celou" type="boolean" label="30101" help="30102">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="scena_vizualizace" type="boolean" label="30103" help="30104">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="instalovat_vizualizaci" type="action" label="30105" help="30104">
+                    <level>0</level>
+                    <data>RunPlugin(plugin://plugin.audio.zunradio/?action=vizualizace)</data>
+                    <constraints>
+                        <allowempty>true</allowempty>
+                    </constraints>
+                    <dependencies>
+                        <dependency type="visible">
+                            <condition on="property" name="InfoBool">!System.HasAddon(visualization.zunradio)</condition>
+                        </dependency>
+                    </dependencies>
+                    <control type="button" format="action"/>
+                </setting>
+            </group>
+        </category>
+    </section>
+</settings>

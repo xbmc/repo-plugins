@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ZUN radio scene over the whole screen (resources/lib/scena.py), as the full screen player
+  on zunradio.cz. Layout in the 1920 x 1080 space shared with visualization.zunradio
+  (src/Scena.h): card 514 x 514 centred at 960, 496 with a 22 px red frame.
+  Window properties set by scena.py: vis, cover, artist, title, label, labellogo, heading, show,
+  small_artist, small_title.
+  The pulse of the basses comes from the visualisation as its active preset (Visualisation.Preset,
+  visualization.zunradio/src/Scena.h): "zun" calm, l/p = tilt left or right, then the digits of
+  the reached levels 1 to 8 ("l123"). One animation per level adds a quarter of the motion of the
+  web (scena.js): card up to 3 % bigger, fields up to 21 px up, 18 % bigger and 3 degrees tilted,
+  the second field 66 ms and the third 132 ms later (as in video.py); the levels fall one by one, so the motion pumps.
+  The flash of the card on every 8th beat is Visualisation.Locked.
+-->
+<window>
+    <defaultcontrol always="true">900</defaultcontrol>
+    <animation effect="fade" time="400">WindowOpen</animation>
+    <animation effect="fade" time="300">WindowClose</animation>
+    <controls>
+        <!-- black background (pure black, logos of record labels are white on black) -->
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="FF000000">zun-bila.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture>scena-pozadi.jpg</texture>
+            <visible>!String.IsEqual(Window.Property(vis),zun)</visible>
+        </control>
+        <!-- logo of the record label bottom centre, level with "Now playing": the only thing behind
+             the dots and rings, "on the wall" as in the video Pecka dne -->
+        <control type="image">
+            <left>831</left>
+            <top>955</top>
+            <width>258</width>
+            <height>70</height>
+            <aspectratio align="center" aligny="center">keep</aspectratio>
+            <fadetime>600</fadetime>
+            <texture background="true">$INFO[Window.Property(labellogo)]</texture>
+            <visible>!String.IsEmpty(Window.Property(labellogo))</visible>
+        </control>
+
+        <!-- dots, rings and waves to the beat (visualization.zunradio) -->
+        <control type="visualisation" id="100">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <visible>String.IsEqual(Window.Property(vis),zun)</visible>
+        </control>
+
+        <!-- card: red frame, black under the cover, cover, raster flash; grows on the beat -->
+        <control type="group">
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,1)">
+                <effect type="zoom" start="100" end="100.370" center="960,496" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,2)">
+                <effect type="zoom" start="100" end="100.370" center="960,496" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,3)">
+                <effect type="zoom" start="100" end="100.370" center="960,496" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,4)">
+                <effect type="zoom" start="100" end="100.370" center="960,496" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,5)">
+                <effect type="zoom" start="100" end="100.370" center="960,496" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,6)">
+                <effect type="zoom" start="100" end="100.370" center="960,496" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,7)">
+                <effect type="zoom" start="100" end="100.370" center="960,496" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,8)">
+                <effect type="zoom" start="100" end="100.370" center="960,496" time="60" tween="sine" easing="inout"/>
+            </animation>
+        <control type="image">
+            <left>703</left>
+            <top>239</top>
+            <width>514</width>
+            <height>514</height>
+            <texture colordiffuse="FFE52322">zun-bila.png</texture>
+        </control>
+        <control type="image">
+            <left>725</left>
+            <top>261</top>
+            <width>470</width>
+            <height>470</height>
+            <texture colordiffuse="FF000000">zun-bila.png</texture>
+        </control>
+        <control type="image">
+            <left>725</left>
+            <top>261</top>
+            <width>470</width>
+            <height>470</height>
+            <aspectratio>scale</aspectratio>
+            <fadetime>600</fadetime>
+            <texture background="true">$INFO[Window.Property(cover)]</texture>
+        </control>
+        <control type="image">
+            <left>725</left>
+            <top>261</top>
+            <width>470</width>
+            <height>470</height>
+            <texture>zun-rastr.png</texture>
+            <visible>Visualisation.Locked</visible>
+        </control>
+        </control>
+
+        <!-- artist, title and label in fields over the lower edge of the card -->
+        <control type="grouplist">
+            <left>96</left>
+            <top>702</top>
+            <width>1728</width>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,1)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout"/>
+                <effect type="zoom" start="100" end="102.090" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,1)">
+                <effect type="rotate" start="0" end="0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,1)">
+                <effect type="rotate" start="0" end="-0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,2)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout"/>
+                <effect type="zoom" start="100" end="102.090" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,2)">
+                <effect type="rotate" start="0" end="0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,2)">
+                <effect type="rotate" start="0" end="-0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,3)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout"/>
+                <effect type="zoom" start="100" end="102.090" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,3)">
+                <effect type="rotate" start="0" end="0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,3)">
+                <effect type="rotate" start="0" end="-0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,4)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout"/>
+                <effect type="zoom" start="100" end="102.090" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,4)">
+                <effect type="rotate" start="0" end="0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,4)">
+                <effect type="rotate" start="0" end="-0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,5)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout"/>
+                <effect type="zoom" start="100" end="102.090" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,5)">
+                <effect type="rotate" start="0" end="0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,5)">
+                <effect type="rotate" start="0" end="-0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,6)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout"/>
+                <effect type="zoom" start="100" end="102.090" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,6)">
+                <effect type="rotate" start="0" end="0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,6)">
+                <effect type="rotate" start="0" end="-0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,7)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout"/>
+                <effect type="zoom" start="100" end="102.090" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,7)">
+                <effect type="rotate" start="0" end="0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,7)">
+                <effect type="rotate" start="0" end="-0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,8)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout"/>
+                <effect type="zoom" start="100" end="102.090" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,8)">
+                <effect type="rotate" start="0" end="0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,8)">
+                <effect type="rotate" start="0" end="-0.375" center="960,774" time="60" tween="sine" easing="inout"/>
+            </animation>
+            <height>72</height>
+            <orientation>horizontal</orientation>
+            <align>center</align>
+            <itemgap>0</itemgap>
+            <control type="button" id="201">
+                <width min="40" max="1728">auto</width>
+                <height>72</height>
+                <font>font45_title</font>
+                <label>$INFO[Window.Property(artist)]</label>
+                <textcolor>FFFFFFFF</textcolor>
+                <disabledcolor>FFFFFFFF</disabledcolor>
+                <textoffsetx>14</textoffsetx>
+                <aligny>center</aligny>
+                <texturenofocus border="4" colordiffuse="FFE52322">zun-pole.png</texturenofocus>
+                <texturefocus border="4" colordiffuse="FFE52322">zun-pole.png</texturefocus>
+                <enable>false</enable>
+                <visible>!String.IsEmpty(Window.Property(artist)) + String.IsEmpty(Window.Property(small_artist))</visible>
+            </control>
+            <control type="button" id="202">
+                <width min="40" max="1728">auto</width>
+                <height>72</height>
+                <font>font36_title</font>
+                <label>$INFO[Window.Property(artist)]</label>
+                <textcolor>FFFFFFFF</textcolor>
+                <disabledcolor>FFFFFFFF</disabledcolor>
+                <textoffsetx>14</textoffsetx>
+                <aligny>center</aligny>
+                <texturenofocus border="4" colordiffuse="FFE52322">zun-pole.png</texturenofocus>
+                <texturefocus border="4" colordiffuse="FFE52322">zun-pole.png</texturefocus>
+                <enable>false</enable>
+                <visible>!String.IsEmpty(Window.Property(artist)) + !String.IsEmpty(Window.Property(small_artist))</visible>
+            </control>
+        </control>
+        <control type="grouplist">
+            <left>96</left>
+            <top>772</top>
+            <width>1728</width>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,1)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="66"/>
+                <effect type="zoom" start="100" end="102.090" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,1)">
+                <effect type="rotate" start="0" end="0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,1)">
+                <effect type="rotate" start="0" end="-0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,2)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="66"/>
+                <effect type="zoom" start="100" end="102.090" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,2)">
+                <effect type="rotate" start="0" end="0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,2)">
+                <effect type="rotate" start="0" end="-0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,3)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="66"/>
+                <effect type="zoom" start="100" end="102.090" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,3)">
+                <effect type="rotate" start="0" end="0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,3)">
+                <effect type="rotate" start="0" end="-0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,4)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="66"/>
+                <effect type="zoom" start="100" end="102.090" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,4)">
+                <effect type="rotate" start="0" end="0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,4)">
+                <effect type="rotate" start="0" end="-0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,5)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="66"/>
+                <effect type="zoom" start="100" end="102.090" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,5)">
+                <effect type="rotate" start="0" end="0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,5)">
+                <effect type="rotate" start="0" end="-0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,6)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="66"/>
+                <effect type="zoom" start="100" end="102.090" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,6)">
+                <effect type="rotate" start="0" end="0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,6)">
+                <effect type="rotate" start="0" end="-0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,7)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="66"/>
+                <effect type="zoom" start="100" end="102.090" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,7)">
+                <effect type="rotate" start="0" end="0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,7)">
+                <effect type="rotate" start="0" end="-0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,8)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="66"/>
+                <effect type="zoom" start="100" end="102.090" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,8)">
+                <effect type="rotate" start="0" end="0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,8)">
+                <effect type="rotate" start="0" end="-0.375" center="960,844" time="60" tween="sine" easing="inout" delay="66"/>
+            </animation>
+            <height>72</height>
+            <orientation>horizontal</orientation>
+            <align>center</align>
+            <itemgap>0</itemgap>
+            <control type="button" id="211">
+                <width min="40" max="1728">auto</width>
+                <height>72</height>
+                <font>font45_title</font>
+                <label>$INFO[Window.Property(title)]</label>
+                <textcolor>FFFFFFFF</textcolor>
+                <disabledcolor>FFFFFFFF</disabledcolor>
+                <textoffsetx>14</textoffsetx>
+                <aligny>center</aligny>
+                <texturenofocus border="4" colordiffuse="FFE52322">zun-pole.png</texturenofocus>
+                <texturefocus border="4" colordiffuse="FFE52322">zun-pole.png</texturefocus>
+                <enable>false</enable>
+                <visible>!String.IsEmpty(Window.Property(title)) + String.IsEmpty(Window.Property(small_title))</visible>
+            </control>
+            <control type="button" id="212">
+                <width min="40" max="1728">auto</width>
+                <height>72</height>
+                <font>font36_title</font>
+                <label>$INFO[Window.Property(title)]</label>
+                <textcolor>FFFFFFFF</textcolor>
+                <disabledcolor>FFFFFFFF</disabledcolor>
+                <textoffsetx>14</textoffsetx>
+                <aligny>center</aligny>
+                <texturenofocus border="4" colordiffuse="FFE52322">zun-pole.png</texturenofocus>
+                <texturefocus border="4" colordiffuse="FFE52322">zun-pole.png</texturefocus>
+                <enable>false</enable>
+                <visible>!String.IsEmpty(Window.Property(title)) + !String.IsEmpty(Window.Property(small_title))</visible>
+            </control>
+        </control>
+        <control type="grouplist">
+            <left>96</left>
+            <top>842</top>
+            <width>1728</width>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,1)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="132"/>
+                <effect type="zoom" start="100" end="102.090" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,1)">
+                <effect type="rotate" start="0" end="0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,1)">
+                <effect type="rotate" start="0" end="-0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,2)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="132"/>
+                <effect type="zoom" start="100" end="102.090" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,2)">
+                <effect type="rotate" start="0" end="0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,2)">
+                <effect type="rotate" start="0" end="-0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,3)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="132"/>
+                <effect type="zoom" start="100" end="102.090" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,3)">
+                <effect type="rotate" start="0" end="0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,3)">
+                <effect type="rotate" start="0" end="-0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,4)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="132"/>
+                <effect type="zoom" start="100" end="102.090" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,4)">
+                <effect type="rotate" start="0" end="0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,4)">
+                <effect type="rotate" start="0" end="-0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,5)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="132"/>
+                <effect type="zoom" start="100" end="102.090" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,5)">
+                <effect type="rotate" start="0" end="0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,5)">
+                <effect type="rotate" start="0" end="-0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,6)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="132"/>
+                <effect type="zoom" start="100" end="102.090" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,6)">
+                <effect type="rotate" start="0" end="0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,6)">
+                <effect type="rotate" start="0" end="-0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,7)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="132"/>
+                <effect type="zoom" start="100" end="102.090" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,7)">
+                <effect type="rotate" start="0" end="0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,7)">
+                <effect type="rotate" start="0" end="-0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.Contains(Visualisation.Preset,8)">
+                <effect type="slide" start="0,0" end="0,-2.625" time="60" tween="sine" easing="inout" delay="132"/>
+                <effect type="zoom" start="100" end="102.090" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,l) + String.Contains(Visualisation.Preset,8)">
+                <effect type="rotate" start="0" end="0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <animation type="Conditional" condition="String.StartsWith(Visualisation.Preset,p) + String.Contains(Visualisation.Preset,8)">
+                <effect type="rotate" start="0" end="-0.375" center="960,892" time="60" tween="sine" easing="inout" delay="132"/>
+            </animation>
+            <height>50</height>
+            <orientation>horizontal</orientation>
+            <align>center</align>
+            <itemgap>0</itemgap>
+            <control type="button" id="221">
+                <width min="40" max="1728">auto</width>
+                <height>50</height>
+                <font>font30_title</font>
+                <label>$INFO[Window.Property(label)]</label>
+                <textcolor>FFFFFFFF</textcolor>
+                <disabledcolor>FFFFFFFF</disabledcolor>
+                <textoffsetx>12</textoffsetx>
+                <aligny>center</aligny>
+                <texturenofocus border="4">zun-pole-label.png</texturenofocus>
+                <texturefocus border="4">zun-pole-label.png</texturefocus>
+                <enable>false</enable>
+                <visible>!String.IsEmpty(Window.Property(label))</visible>
+            </control>
+        </control>
+
+        <!-- station logo top right as on TV -->
+        <control type="image">
+            <left>1748</left>
+            <top>54</top>
+            <width>118</width>
+            <height>68</height>
+            <aspectratio>keep</aspectratio>
+            <texture colordiffuse="E6FFFFFF">zun-logo.png</texture>
+        </control>
+
+        <!-- "Now playing" with the show bottom left -->
+        <control type="label">
+            <left>54</left>
+            <top>952</top>
+            <width>1100</width>
+            <height>36</height>
+            <font>font30_title</font>
+            <textcolor>FF969696</textcolor>
+            <label>$INFO[Window.Property(heading)]</label>
+        </control>
+        <control type="label">
+            <left>54</left>
+            <top>992</top>
+            <width>1100</width>
+            <height>36</height>
+            <font>font27</font>
+            <textcolor>FFFFFFFF</textcolor>
+            <label>$INFO[Window.Property(show)]</label>
+        </control>
+
+        <!-- invisible focus target, so that every key reaches the window -->
+        <control type="button" id="900">
+            <left>-100</left>
+            <top>-100</top>
+            <width>1</width>
+            <height>1</height>
+            <texturenofocus>-</texturenofocus>
+            <texturefocus>-</texturefocus>
+            <label></label>
+        </control>
+    </controls>
+</window>

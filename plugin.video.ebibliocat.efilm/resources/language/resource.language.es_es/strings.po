@@ -1,0 +1,239 @@
+# eBiblioCat eFilm · GPL-2.0-or-later
+msgid ""
+msgstr ""
+"Project-Id-Version: eBiblioCat eFilm 0.2.0\n"
+"Report-Msgid-Bugs-To: https://github.com/nritsche/plugin.video.ebibliocat.efilm/issues\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: es_es\n"
+
+msgctxt "#30001"
+msgid "All movies (A–Z)"
+msgstr "Todas las películas (A–Z)"
+
+msgctxt "#30002"
+msgid "Movies by genre"
+msgstr "Películas por género"
+
+msgctxt "#30003"
+msgid "Lists"
+msgstr "Listas"
+
+msgctxt "#30004"
+msgid "Series"
+msgstr "Series"
+
+msgctxt "#30005"
+msgid "Search movies"
+msgstr "Buscar películas"
+
+msgctxt "#30006"
+msgid "Browse A–Z"
+msgstr "Explorar A–Z"
+
+msgctxt "#30007"
+msgid "Refresh catalog"
+msgstr "Actualizar catálogo"
+
+msgctxt "#30008"
+msgid "Clear catalog cache"
+msgstr "Borrar caché del catálogo"
+
+msgctxt "#30009"
+msgid "Sign in to eFilm"
+msgstr "Iniciar sesión en eFilm"
+
+msgctxt "#30010"
+msgid "Sign out of eFilm"
+msgstr "Cerrar sesión en eFilm"
+
+msgctxt "#30014"
+msgid "eFilm library username"
+msgstr "Usuario de la biblioteca eFilm"
+
+msgctxt "#30015"
+msgid "eFilm password"
+msgstr "Contraseña de eFilm"
+
+msgctxt "#30016"
+msgid "Signed in to eFilm."
+msgstr "Sesión iniciada en eFilm."
+
+msgctxt "#30017"
+msgid "Signed out of eFilm."
+msgstr "Sesión cerrada en eFilm."
+
+msgctxt "#30018"
+msgid "Choose audio and subtitles"
+msgstr "Elegir audio y subtítulos"
+
+msgctxt "#30019"
+msgid "Borrow from eFilm"
+msgstr "Solicitar préstamo en eFilm"
+
+msgctxt "#30020"
+msgid "Borrow {title}? This may use one of your available eFilm loans."
+msgstr "¿Solicitar {title}? Puede consumir uno de tus préstamos de eFilm."
+
+msgctxt "#30021"
+msgid "Resume eFilm loan"
+msgstr "Reanudar préstamo de eFilm"
+
+msgctxt "#30022"
+msgid "Resume your existing loan for {title}?"
+msgstr "¿Reanudar el préstamo de {title}?"
+
+msgctxt "#30023"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "#30024"
+msgid "Borrow"
+msgstr "Solicitar"
+
+msgctxt "#30025"
+msgid "Resume"
+msgstr "Reanudar"
+
+msgctxt "#30026"
+msgid "Next page"
+msgstr "Página siguiente"
+
+msgctxt "#30027"
+msgid "Previous page"
+msgstr "Página anterior"
+
+msgctxt "#30028"
+msgid "Season {number}"
+msgstr "Temporada {number}"
+
+msgctxt "#30029"
+msgid "Page {current} of {total} · {count} titles"
+msgstr "Página {current} de {total} · {count} títulos"
+
+msgctxt "#30030"
+msgid "Loading catalog…"
+msgstr "Cargando catálogo…"
+
+msgctxt "#30031"
+msgid "Loading page {current} of {total}"
+msgstr "Cargando página {current} de {total}"
+
+msgctxt "#30032"
+msgid "eFilm is unavailable. Showing the saved catalog."
+msgstr "eFilm no está disponible. Mostrando el catálogo guardado."
+
+msgctxt "#30033"
+msgid "Catalog cache cleared."
+msgstr "Caché del catálogo borrada."
+
+msgctxt "#30034"
+msgid "Catalog refreshed."
+msgstr "Catálogo actualizado."
+
+msgctxt "#30035"
+msgid "No matching titles."
+msgstr "No hay títulos coincidentes."
+
+msgctxt "#30036"
+msgid "Popular movies"
+msgstr "Películas populares"
+
+msgctxt "#30037"
+msgid "Don’t miss"
+msgstr "No te lo pierdas"
+
+msgctxt "#30038"
+msgid "Numbers and symbols"
+msgstr "Números y símbolos"
+
+msgctxt "#30039"
+msgid "This link is no longer supported. Open the add-on home menu."
+msgstr "Este enlace ya no es compatible. Abre el menú principal."
+
+msgctxt "#30040"
+msgid "Sign in to eFilm again."
+msgstr "Vuelve a iniciar sesión en eFilm."
+
+msgctxt "#30041"
+msgid "Sign-in failed. Check your library username and password."
+msgstr "No se pudo iniciar sesión. Comprueba el usuario y la contraseña."
+
+msgctxt "#30042"
+msgid "Could not connect to eFilm. Try again later."
+msgstr "No se pudo conectar con eFilm. Inténtalo más tarde."
+
+msgctxt "#30043"
+msgid "eFilm could not complete the request. Try again later."
+msgstr "eFilm no pudo completar la solicitud. Inténtalo más tarde."
+
+msgctxt "#30044"
+msgid "eFilm denied access. Check your account, region, and loan limits."
+msgstr "eFilm denegó el acceso. Comprueba la cuenta, la región y los límites de préstamo."
+
+msgctxt "#30045"
+msgid "This title or loan is no longer available."
+msgstr "Este título o préstamo ya no está disponible."
+
+msgctxt "#30046"
+msgid "Check your existing loans before borrowing again."
+msgstr "Comprueba tus préstamos antes de volver a solicitar."
+
+msgctxt "#30047"
+msgid "eFilm is receiving too many requests. Try again later."
+msgstr "eFilm recibe demasiadas solicitudes. Inténtalo más tarde."
+
+msgctxt "#30048"
+msgid "eFilm returned an unexpected response. Please report the add-on version."
+msgstr "eFilm devolvió una respuesta inesperada. Indica la versión del complemento."
+
+msgctxt "#30049"
+msgid "Could not save or remove local data. Check storage space and permissions."
+msgstr "No se pudieron guardar o eliminar datos locales. Comprueba el espacio y los permisos."
+
+msgctxt "#30050"
+msgid "Another add-on operation is still running. Try again shortly."
+msgstr "Hay otra operación en curso. Inténtalo de nuevo en breve."
+
+msgctxt "#30051"
+msgid "Cancelled."
+msgstr "Cancelado."
+
+msgctxt "#30052"
+msgid "The loan request could not be confirmed. Check your loans on eFilm before trying again."
+msgstr "No se pudo confirmar el préstamo. Comprueba tus préstamos en eFilm antes de volver a intentarlo."
+
+msgctxt "#30053"
+msgid "eFilm rejected the loan. Check your remaining credits, account eligibility, and content availability."
+msgstr "eFilm rechazó el préstamo. Comprueba los créditos, la cuenta y la disponibilidad."
+
+msgctxt "#30054"
+msgid "No compatible audio/subtitle tracks are available for this title."
+msgstr "No hay pistas de audio o subtítulos compatibles."
+
+msgctxt "#30055"
+msgid "This provider did not supply a supported stream. The loan may already have started."
+msgstr "El proveedor no facilitó un flujo compatible. El préstamo puede haber comenzado."
+
+msgctxt "#30056"
+msgid "This DRM format is not supported on this device."
+msgstr "Este formato DRM no es compatible con este dispositivo."
+
+msgctxt "#30057"
+msgid "Enable InputStream Adaptive under My add-ons → VideoPlayer InputStream, then try again."
+msgstr "Activa InputStream Adaptive en Mis complementos → VideoPlayer InputStream."
+
+msgctxt "#30058"
+msgid "Install InputStream Helper from the Kodi repository, then try again."
+msgstr "Instala InputStream Helper desde el repositorio de Kodi."
+
+msgctxt "#30059"
+msgid "DRM playback prerequisites are unavailable or setup was cancelled."
+msgstr "Los requisitos DRM no están disponibles o se canceló la configuración."
+
+msgctxt "#30060"
+msgid "The old loan is no longer active. Confirm a new loan to continue."
+msgstr "El préstamo anterior ya no está activo. Confirma uno nuevo para continuar."
+
+msgctxt "#30061"
+msgid "No eFilm loans remaining. Check your eFilm account for the renewal date."
+msgstr "No te quedan préstamos de eFilm. Consulta tu cuenta de eFilm para saber cuándo se renuevan."

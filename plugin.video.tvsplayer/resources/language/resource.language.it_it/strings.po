@@ -173,6 +173,26 @@ msgctxt "#30041"
 msgid "Radio stations – {0}"
 msgstr "Radio – {0}"
 
+msgctxt "#30042"
+msgid "Poor internet connection: the channel may not start"
+msgstr "Connessione internet debole: il canale potrebbe non partire"
+
+msgctxt "#30043"
+msgid "TV channels of this playlist"
+msgstr "Canali TV di questa playlist"
+
+msgctxt "#30044"
+msgid "Radio stations of this playlist"
+msgstr "Radio di questa playlist"
+
+msgctxt "#30045"
+msgid "TVS Player in the browser and on Android"
+msgstr "TVS Player nel browser e su Android"
+
+msgctxt "#30046"
+msgid "Your playlists and radio also in any web browser, nothing to install: https://tvsplayer.app\nOn Android phones and tablets: TVS Player (free) and TVS Player Pro (TV guide, rewind, recordings) on Google Play."
+msgstr "Le tue playlist e la radio anche in qualsiasi browser, senza installare niente: https://tvsplayer.app\nSu telefoni e tablet Android: TVS Player (gratis) e TVS Player Pro (guida TV, replay, registrazioni) su Google Play."
+
 msgctxt "#30100"
 msgid "General"
 msgstr "Generale"

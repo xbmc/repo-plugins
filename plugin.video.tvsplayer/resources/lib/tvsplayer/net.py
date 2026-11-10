@@ -7,7 +7,13 @@ except ImportError:  # pragma: no cover
     from urllib import quote, unquote
     from urllib2 import Request, urlopen
 
-USER_AGENT = "TVSPlayer-Kodi/1.0"
+import time
+
+USER_AGENT = "TVSPlayer-Kodi/1.1"
+
+# ~80 KB that do not compress, from tvsplayer.app; Google as a second opinion (same rule as the apps)
+SPEED_FILE = "https://tvsplayer.app/wp-content/plugins/tvs-player-core/seed/tvs-player-pro-feature.png"
+PING = "https://connectivitycheck.gstatic.com/generate_204"
 
 
 def _split_kodi_url(url):
@@ -67,3 +73,35 @@ def is_reachable(url, timeout=4):
         return ok
     except Exception:
         return False
+
+
+def is_poor_connection():
+    """True when this device's internet is missing or too slow to judge a channel: the 80 KB need
+    more than 1.5 s after the first byte (under ~0.4 Mbit/s) or more than 4 s in all. When the site
+    does not answer, Google is asked. Same rule as the Android apps and tvsplayer.app."""
+    t0 = time.time()
+    try:
+        response = urlopen(Request(SPEED_FILE + "?ping=%d" % int(t0 * 1000),
+                                   headers={"User-Agent": USER_AGENT, "Accept-Encoding": "identity"}), timeout=3)
+    except Exception:
+        try:
+            urlopen(Request(PING, headers={"User-Agent": USER_AGENT}), timeout=3).close()
+            return False   # the site is down, the internet is not
+        except Exception:
+            return True
+    try:
+        first = None
+        while True:
+            chunk = response.read(16384)
+            if not chunk:
+                break
+            if first is None:
+                first = time.time()
+            if time.time() - t0 > 4:
+                return True
+        end = time.time()
+        return end - t0 > 4 or (first is not None and end - first > 1.5)
+    except Exception:
+        return True   # it started answering, then stalled: slow
+    finally:
+        response.close()

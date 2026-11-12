@@ -80,29 +80,11 @@ def create_index(params):
     action = 'main_list'
 
     # All Videos entry
-    url   = 'http://www.esa.int/ESA_Multimedia/Search/(sortBy)/%s?result_type=videos&SearchText=' % sort_method
+    url   = 'https://www.esa.int/api/search?category=multimedia&contentType=video&pageSize=15&page=1'
     title = translation(30107)
     genre = 'All the Videos'
     lutil.log('esa.create_index action=["%s"] title=["All the Videos"] url=["%s"]' % (action, url))
     lutil.addDir(action=action, title=title, url=url, genre=genre)
-
-    # Euronews
-    url   = 'http://www.esa.int/ESA_Multimedia/Sets/ESA_Euronews/(sortBy)/%s/(result_type)/videos' % sort_method
-    title = 'Euronews'
-    lutil.log('esa.create_index action=["%s"] title=["%s"] url=["%s"]' % (action, title, url))
-    lutil.addDir(action=action, title=title, url=url, genre=title)
-
-    # Earth from Space
-    url   = 'http://www.esa.int/ESA_Multimedia/Sets/Earth_from_Space_programme/(sortBy)/%s/(result_type)/videos' % sort_method
-    title = 'Earth from Space'
-    lutil.log('esa.create_index action=["%s"] title=["%s"] url=["%s"]' % (action, title, url))
-    lutil.addDir(action=action, title=title, url=url, genre=title)
-
-    # Science@ESA
-    url   = 'http://www.esa.int/ESA_Multimedia/Keywords/People/Rebecca_Barnes/(sortBy)/%s/(result_type)/videos' % sort_method
-    title = 'Science@ESA'
-    lutil.log('esa.create_index action=["%s"] title=["%s"] url=["%s"]' % (action, title, url))
-    lutil.addDir(action=action, title=title, url=url, genre=title)
 
     # Search
     action = 'search'
@@ -124,47 +106,56 @@ def main_list(params):
     reset_cache = params.get("reset_cache")
     genre = params.get("genre")
 
-    buffer_web = lutil.carga_web(page_url)
+    buffer_web = lutil.carga_web_json(page_url)
+    if buffer_web:
+        buffer_web = buffer_web.get('hits').get('videos', False)
+    if not buffer_web:
+        return
 
-    # Extract video items from the html content
-    video_entry_sep     = '<div class="grid-item video"'
-    pattern_videolink   = ' href="([^"]*?)"'
-    pattern_thumbnail   = '<img class="image-bg" src="([^"]*?)"'
-    pattern_title       = '<h3 class="heading">([^<]+)</h3>'
-    pattern_duration    = '<span class="duration">([^<]+)</span>'
-    pattern_date        = '<span>([^<]*?)</span>'
+    # Extract video items from the json content.
     pattern_year        = '([0-9]{4})'
-    pattern_currentpage = '<a class="active">([^<]*?)</a>'
-    pattern_page_url    = '<a href="([^"]*?)">%s</a>'
-    pattern_page_nums   = '<a href="[^"]*?">([0-9]+)</a>'
-    pattern_page_block  = '<div class="paging">(.*?)</div>'
-
+    page_str            = 'page=%s'
     lutil.set_content_list(pluginhandle, 'tvshows')
     lutil.set_plugin_category(pluginhandle, genre)
 
-    page_block          = lutil.find_first(buffer_web, pattern_page_block)
-    page_current        = int(lutil.find_first(page_block, pattern_currentpage) or '1')
-    page_nums           = lutil.find_multiple(page_block, pattern_page_nums)
-    last_page           = int(page_nums[-1]) if len(page_nums) > 0 else 1
+    page_block          = buffer_web.get('pagination')
+    page_current        = int(page_block.get('currentPage', '1'))
+    last_page           = int(page_block.get('totalPages', '1'))
 
     # We must setup the previous page entry from the second page onwards.
     if page_current != 1:
         prev_page     = page_current - 1
-        prev_page_url = root_url + lutil.find_first(page_block, pattern_page_url % prev_page).replace('&amp;', '&').replace('&quot;', '"').replace(' ', '+')
+        prev_page_url = page_url.replace(page_str % page_current, page_str % prev_page)
         reset_cache   = "yes"
         lutil.addDir(action="main_list", title="<< %s (%s)" % (translation(30106), prev_page), url=prev_page_url, reset_cache=reset_cache, genre=genre)
 
     # This is to force ".." option to go back to main index instead of previous page list.
     updateListing = reset_cache == "yes"
+    video_entries = buffer_web.get('results') or {}
 
-    for video_entry in buffer_web.split(video_entry_sep)[1:]:
+    for video_entry in video_entries:
+        if video_entry.get('contentType', 'novideo') != 'video':
+            continue
         video_info             = {}
-        video_link             = lutil.find_first(video_entry, pattern_videolink)
-        thumbnail_link         = lutil.find_first(video_entry, pattern_thumbnail)
-        title                  = lutil.find_first(video_entry, pattern_title)
-        title                  = title.replace('&quot;', '"').replace('&#039;', '´').replace('&#8230;', '...').replace('&amp;', '&').strip()  # Cleanup the title.
-        date                   = lutil.find_first(video_entry, pattern_date).strip()
-        duration_text          = lutil.find_first(video_entry, pattern_duration).strip() or '00:00'
+        title                  = video_entry.get('title')
+        date                   = video_entry.get('date')
+        plot                   = video_entry.get('description', False)
+        plot                   = lutil.clean_html_text(plot) if plot else title
+        url                    = ''
+        if video_entry.get('cta', False):
+            for video_url in video_entry.get('cta'):
+                if 'download' in video_url.get('icon', 'nolink'):
+                    url        = video_url.get('url')
+                    if url.endswith('?dl'):
+                        url    = url[:-3]
+                    break
+        if url == '':
+            continue
+        if video_entry.get('thumbnail', False) and video_entry.get('thumbnail').get('single', False):
+            thumbnail          = video_entry.get('thumbnail').get('single').get('url', '')
+        else:
+            thumbnail          = ''
+        duration_text          = video_entry.get('length', '00:00')
         duration               = duration_text.strip().split(":")
         if len(duration) == 2:
             seconds = str(int(duration[0]) * 60 + int(duration[1]))
@@ -173,11 +164,9 @@ def main_list(params):
         if date:
             video_info['Year'] = lutil.find_first(date, pattern_year)
             title              = '%s (%s)' % (title, date)
-        url                    = '%s%s' % (root_url, video_link)
-        thumbnail              = '%s%s' % (root_url, thumbnail_link)
         video_info['Duration'] = seconds
         video_info['Genre']    = genre
-        video_info['Plot']     = title # The description only appears when we load the link.
+        video_info['Plot']     = plot
         lutil.log('esa.main_list Videolist: URL: "%s" Title: "%s" Thumbnail: "%s"' % (url, title, thumbnail))
 
         # Appends a new item to the xbmc item list
@@ -186,7 +175,7 @@ def main_list(params):
     # Here we get the next page URL to add it at the end of the current video list page.
     if page_current < last_page:
         next_page     = page_current + 1
-        next_page_url = root_url + lutil.find_first(page_block, pattern_page_url % next_page).replace('&amp;', '&').replace('&quot;', '"').replace(' ', '+')
+        next_page_url = page_url.replace(page_str % page_current, page_str % next_page)
         lutil.addDir(action="main_list", title=">> %s (%s/%s)" % (translation(30010), next_page, last_page), url=next_page_url, reset_cache=reset_cache, genre=genre)
 
     lutil.close_dir(pluginhandle, updateListing=updateListing)
@@ -196,38 +185,27 @@ def main_list(params):
 def search(params):
     search_string = lutil.get_keyboard_text(translation(30105))
     if search_string:
-        params['url'] = 'http://www.esa.int/ESA_Multimedia/Search/(sortBy)/%s?result_type=videos&SearchText="%s"' % (sort_method, lutil.get_url_encoded(search_string))
+        params['url'] = 'https://www.esa.int/api/search?q=%s&category=multimedia&contentType=video&pageSize=15&page=1' % lutil.get_url_encoded(search_string)
         lutil.log("esa.search Value of search url: %s" % params['url'])
         return main_list(params)
 
     return lutil.close_dir(pluginhandle)
 
 
-# This funtion search into the URL link to get the video link from the different sources.
+# This funtion plays the video URL.
 def play_video(params):
     lutil.log("esa.play "+repr(params))
 
-    buffer_link = lutil.carga_web(params.get("url"))
-    if language != 'en':
-        pattern_lang = ' href="([^\(]*?\(lang\)/%s)"' % language
-        video_link = lutil.find_first(buffer_link, pattern_lang)
-        if video_link:
-            lang_url = '%s%s' % (root_url, video_link)
-            lutil.log("esa.play: We have found this alt video URL for '%s' language: '%s'" % (language, lang_url))
-            buffer_link = lutil.carga_web(lang_url)
+    video_url = params.get("url", False)
+    if video_url:
+        try:
+            lutil.log("esa.play: We have found this video: '%s' and let's going to play it!" % video_url)
+            return lutil.play_resolved_url(pluginhandle = pluginhandle, url = video_url)
+        except:
+            lutil.log('esa.play ERROR: we cannot reproduce this video URL: "%s"' % video_url)
+            return lutil.showWarning(translation(30012))
 
-    video_patterns = ( ' href="(http[^"]*?)" download', "file[']?: '(http[^']*?)'" )
-    for pattern_video in video_patterns:
-        video_url = lutil.find_first(buffer_link, pattern_video)
-        if video_url:
-            try:
-                lutil.log("esa.play: We have found this video: '%s' and let's going to play it!" % video_url)
-                return lutil.play_resolved_url(pluginhandle = pluginhandle, url = video_url)
-            except:
-                lutil.log('esa.play ERROR: we cannot reproduce this video URL: "%s"' % video_url)
-                return lutil.showWarning(translation(30012))
-
-    lutil.log('esa.play ERROR: we cannot play the video from this source yet: "%s"' % params.get("url"))
+    lutil.log('esa.play ERROR: we cannot play the video from this source yet.')
     return lutil.showWarning(translation(30011))
 
 

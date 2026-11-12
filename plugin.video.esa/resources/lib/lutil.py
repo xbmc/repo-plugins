@@ -12,7 +12,7 @@
 '''
 
 # First of all We must import all the libraries used for plugin development.
-import sys, re, os
+import sys, re, os, json
 from urllib.parse import urlencode, quote_plus, unquote_plus
 from urllib.request import urlopen, Request
 import xbmcplugin, xbmcaddon, xbmcgui, xbmcaddon, xbmc
@@ -88,6 +88,12 @@ def get_url_encoded(url):
     return quote_plus(url)
 
 
+# This function cleans the HTML tags from th video description.
+def clean_html_text(html):
+    clean_text = re.sub(r'<[^>]+>', '', re.sub(r'([.?!")])<', r'\1 <', html)).strip()
+    return clean_text.replace('&quot;', '"').replace('&#39;', '´').replace('&#8230;', '...').replace('&amp;', '&')
+
+
 # This function sets the video contents for the video list.
 def set_content_list(pluginhandle, contents="episodes"):
     _log("set_content_list contents: " + contents)
@@ -125,6 +131,17 @@ def carga_web(url):
     MiConex.close() # We close the HTTP connection as we have all the info required.
 
     return MiHTML
+
+
+# This function loads the html code from a webserver and returns it as json.
+def carga_web_json(url):
+    _log("carga_web_json " + url)
+
+    resp = carga_web(url)
+    if len(resp):
+        return json.loads(resp)
+    else:
+        return False
 
 
 # This function allows us to find multiples matches from a regexp into a string.

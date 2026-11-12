@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.esa" name="ESA Videos" version="1.3.0+matrix.1" provider-name="Jose Antonio Montes (jamontes)">
+<addon id="plugin.video.esa" name="ESA Videos" version="1.4.0+matrix.1" provider-name="Jose Antonio Montes (jamontes)">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
     </requires>
@@ -30,8 +30,8 @@
         <source>https://github.com/jamontes/plugin.video.esa</source>
         <website>http://www.esa.int/ESA_Multimedia/Videos</website>
         <news>
-            Version 1.3.0+matrix.1
-              * Code updated for matrix onwards.
+            Version 1.4.0+matrix.1
+              * Code updated due website changes.
         </news>
         <assets>
             <icon>icon.png</icon>

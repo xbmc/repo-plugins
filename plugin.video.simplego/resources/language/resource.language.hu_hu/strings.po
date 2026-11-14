@@ -23,12 +23,12 @@ msgid "The login has expired or was used elsewhere. Log in again from the main m
 msgstr "A bejelentkezés lejárt, vagy máshol már felhasználták. Jelentkezz be újra a főmenüből."
 
 msgctxt "#30011"
-msgid "Playback is blocked outside Hungary. Turn off VPN / proxy on this device."
-msgstr "A lejátszás Magyarországon kívülről (VPN, adatközponti IP) le van tiltva. Kapcsold ki a VPN-t / proxyt ezen az eszközön."
+msgid "Playback is refused from this internet address. Try without VPN / proxy, or another exit."
+msgstr "A szolgáltató erről az internetcímről nem engedi a lejátszást. Próbáld VPN / proxy nélkül, vagy másik kilépőponttal."
 
 msgctxt "#30012"
-msgid "The licence server does not trust this device's Widevine module (3099). On Windows/macOS Kodi this service cannot play; use Kodi on Android TV / Google TV."
-msgstr "A licencszerver nem fogadja el ennek az eszköznek a Widevine modulját (3099). Windowsos/macOS-es Kodin ez a szolgáltatás nem játszható le; Android TV-s / Google TV-s Kodival működik."
+msgid "The licence server does not accept this device's Widevine module: only Kodi on Android plays this service (Android TV, phones, tablets)."
+msgstr "A licencszerver nem fogadja el ennek az eszköznek a Widevine modulját: ezt a szolgáltatást csak androidos Kodi játssza le (Android TV, telefon, tablet)."
 
 msgctxt "#30013"
 msgid "The licence server refused playback (code %s)."
@@ -41,10 +41,6 @@ msgstr "Sikeres bejelentkezés"
 msgctxt "#30023"
 msgid "Log out? This device is also removed from the account's devices, freeing its slot."
 msgstr "Kijelentkezel? Ez az eszköz a fiók eszközei közül is törlődik, így felszabadul a helye."
-
-msgctxt "#30030"
-msgid "Show in the TV menu"
-msgstr "Megjelenítés a TV menüben"
 
 msgctxt "#30031"
 msgid "IPTV Simple Client could not be installed."
@@ -63,8 +59,8 @@ msgid "Log in from a phone (QR code)"
 msgstr "Bejelentkezés telefonról (QR-kód)"
 
 msgctxt "#30028"
-msgid "Scan the QR code with your phone's camera (the phone on the same Wi-Fi as the TV). On the page that opens, log in with your Telekom TV GO e-mail address and password, then copy the address of the page you land on from the address bar, paste it and send it. This window closes by itself. Back = cancel."
-msgstr "Olvasd be a QR-kódot a telefonod kamerájával (a telefon a TV-vel azonos Wi-Fi-n legyen). A megnyíló oldalon lépj be a Telekom TV GO e-mail-címeddel és jelszavaddal, majd a belépés után megjelenő oldal címét másold ki a címsorból, illeszd be, és küldd el. Az ablak magától bezárul. Vissza = mégsem."
+msgid "Scan the QR code with your phone's camera (the phone on the same Wi-Fi as Kodi). On the page that opens, log in with your Telekom TV GO e-mail address and password, then copy the address of the page you land on from the address bar, paste it and send it. This window closes by itself. Back = cancel."
+msgstr "Olvasd be a QR-kódot a telefonod kamerájával (a telefon a Kodival azonos Wi-Fi-n legyen). A megnyíló oldalon lépj be a Telekom TV GO e-mail-címeddel és jelszavaddal, majd a belépés után megjelenő oldal címét másold ki a címsorból, illeszd be, és küldd el. Az ablak magától bezárul. Vissza = mégsem."
 
 msgctxt "#30034"
 msgid "My devices"
@@ -537,20 +533,20 @@ msgid "Come back to this page, paste the address and send it:"
 msgstr "Gyere vissza erre a lapra, illeszd be a címet, és küldd el:"
 
 msgctxt "#30250"
-msgid "Send to the TV"
-msgstr "Küldés a TV-nek"
+msgid "Send to Kodi"
+msgstr "Küldés a Kodinak"
 
 msgctxt "#30251"
-msgid "Done! The TV is logging in."
-msgstr "Kész! A TV bejelentkezik."
+msgid "Done! Kodi is logging in."
+msgstr "Kész! A Kodi bejelentkezik."
 
 msgctxt "#30252"
 msgid "You can close this page and the Telekom page."
 msgstr "Ezt a lapot és a Telekom lapot bezárhatod."
 
 msgctxt "#30253"
-msgid "Wrong or expired code. Start the login again on the TV."
-msgstr "Hibás vagy lejárt kód. Indítsd újra a bejelentkezést a TV-n."
+msgid "Wrong or expired code. Start the login again in Kodi."
+msgstr "Hibás vagy lejárt kód. Indítsd újra a bejelentkezést a Kodiban."
 
 msgctxt "#30254"
 msgid "Wrong code."
@@ -595,3 +591,19 @@ msgstr "Eltávolítás a listáról"
 msgctxt "#30264"
 msgid "Remove it from Continue watching?"
 msgstr "Eltávolítsuk a Lejátszás folytatása listáról?"
+
+msgctxt "#30265"
+msgid "Picture quality"
+msgstr "Képminőség"
+
+msgctxt "#30266"
+msgid "Full HD (1080p)"
+msgstr "Full HD (1080p)"
+
+msgctxt "#30267"
+msgid "Where the service offers it. Off: 720p."
+msgstr "Ahol a szolgáltatás kínálja. Kikapcsolva: 720p."
+
+msgctxt "#30268"
+msgid "Tap the address to log in on this device, or scan the QR code with another phone on the same Wi-Fi. On the page that opens, log in with your Telekom TV GO e-mail address and password, then copy the address of the page you land on from the address bar, paste it and send it. This window closes by itself. Back = cancel."
+msgstr "Koppints a címre a belépéshez ezen az eszközön, vagy olvasd be a QR-kódot egy másik, azonos Wi-Fi-n lévő telefonnal. A megnyíló oldalon lépj be a Telekom TV GO e-mail-címeddel és jelszavaddal, majd a belépés után megjelenő oldal címét másold ki a címsorból, illeszd be, és küldd el. Az ablak magától bezárul. Vissza = mégsem."

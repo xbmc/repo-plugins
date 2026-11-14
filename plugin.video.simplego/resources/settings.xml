@@ -92,6 +92,13 @@
                     <control type="toggle"/>
                 </setting>
             </group>
+            <group id="4" label="30265">
+                <setting id="full_hd" type="boolean" label="30266" help="30267">
+                    <level>3</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+            </group>
         </category>
         <category id="guide" label="30204">
             <group id="1">

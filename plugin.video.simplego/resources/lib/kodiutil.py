@@ -2,15 +2,12 @@
 
 import json
 import os
-import re
-import time
 
 import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcvfs
 
-from resources.lib.util import isotime
 from resources.lib.util import kodienv
 
 _addon = xbmcaddon.Addon()
@@ -20,6 +17,7 @@ ADDON_PATH = xbmcvfs.translatePath(_addon.getAddonInfo("path"))
 
 # The platform checks live with the fast path's (see kodienv).
 android = kodienv.android
+phone_or_tablet = kodienv.phone_or_tablet
 untrusted_widevine = kodienv.untrusted_widevine
 isa_ready = kodienv.isa_ready
 
@@ -33,6 +31,14 @@ EXPORT_REQUEST = "%s.export_request" % ADDON_ID
 def addon():
     """Return the add-on, with its settings as reload_settings last read them."""
     return _addon
+
+
+def open_in_browser(url):
+    """Open the address in the device's default browser (Android).
+
+    No package: Kodi then passes a null one, so Android picks the default app for the address.
+    """
+    xbmc.executebuiltin('StartAndroidActivity("","android.intent.action.VIEW","","%s")' % url)
 
 
 def set_setting(setting_id, value):
@@ -86,7 +92,7 @@ def coloured(colour, text):
 
 def home():
     """Return Kodi's Home window: its properties are shared by all of the add-on's processes."""
-    return xbmcgui.Window(10000)
+    return xbmcgui.Window(kodienv.HOME_WINDOW)
 
 
 def cast_kinds():
@@ -127,16 +133,6 @@ def kodi_major():
     return int(xbmc.getInfoLabel("System.BuildVersion").split(".")[0])
 
 
-_REGION = {}  # Kodi's region formats, asked once per call of the add-on (see region)
-
-
-def region(what):
-    """Return one of Kodi's region formats (xbmc.getRegion), asked once: a list's rows ask it again and again."""
-    if what not in _REGION:
-        _REGION[what] = xbmc.getRegion(what)
-    return _REGION[what]
-
-
 _KODI_STRINGS = {}  # Kodi's own strings, asked once per call of the add-on (see kodi_string)
 
 
@@ -145,52 +141,6 @@ def kodi_string(string_id):
     if string_id not in _KODI_STRINGS:
         _KODI_STRINGS[string_id] = xbmc.getLocalizedString(string_id)
     return _KODI_STRINGS[string_id]
-
-
-def local_date(stamp):
-    """Format a timestamp's local date as Kodi's region setting's short date says.
-
-    Day and month names are Kodi's (in its language): strftime's would be the C locale's English ones.
-    """
-    moment = time.localtime(stamp)
-    names = {
-        "%A": kodi_string(11 + moment.tm_wday),
-        "%a": kodi_string(41 + moment.tm_wday),
-        "%B": kodi_string(20 + moment.tm_mon),
-        "%b": kodi_string(50 + moment.tm_mon),
-    }
-    form = region("dateshort")
-    for code, name in names.items():
-        form = form.replace(code, name.replace("%", "%%"))
-    return _strftime(form, moment)
-
-
-def local_clock(stamp):
-    """Format a timestamp's local time of day as Kodi's region setting says, without seconds."""
-    return _strftime(region("time").replace(":%S", ""), time.localtime(stamp))
-
-
-# Kodi writes a number without its leading zero as "%-d" ("%#d" on Windows), which Android's
-# strftime prints as it is ("október -d."): such numbers are filled in before it formats.
-_CODE = re.compile(r"%(%|[-#][dmHIMSjy]|.)")
-
-
-def _strftime(form, moment):
-    """Return time.strftime(form, moment) with Kodi's unpadded numbers ("%-d", "%#d") filled in."""
-
-    def unpadded(m):
-        code = m.group(1)
-        if len(code) == 2:
-            return str(int(time.strftime("%" + code[1], moment)))
-        return m.group(0)
-
-    return time.strftime(_CODE.sub(unpadded, form), moment)
-
-
-def local_time(iso, date=True):
-    """Format an ISO UTC time ("2026-10-26T22:00:00Z") as Kodi's short date and time (or the time only), in local time."""
-    stamp = isotime.stamp(iso)
-    return "%s %s" % (local_date(stamp), local_clock(stamp)) if date else local_clock(stamp)
 
 
 def clock(seconds):

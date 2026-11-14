@@ -7,6 +7,7 @@ import xbmcgui
 import xbmcplugin
 
 from resources.lib import kodiutil
+from resources.lib import provider
 from resources.lib.data import channellist
 from resources.lib.views import listing
 from resources.lib.views import rows
@@ -15,7 +16,7 @@ _s = kodiutil.string
 
 
 class MyChannelsViews:
-    """My channels (see plugin.ROUTES).
+    """My channels (see views.routes).
 
     :param call: the plugin call (see views.call.Call)
     """
@@ -35,7 +36,7 @@ class MyChannelsViews:
                 "number": c["number"],
                 "fav": int(c["id"] in favourites),
                 "sub": int(subscribed is None or c["id"] in subscribed),
-                "off": int(str(c["id"]) in off),
+                "off": int(channellist.is_deactivated(c["id"], off)),
                 "ordered": int(view["ordered"]),
             }
             li = self._managed_item(c, state, position)
@@ -67,7 +68,7 @@ class MyChannelsViews:
 
     def do_move(self):
         """Move a channel in the account's own order: pick the channel it goes before."""
-        channels = sorted(self._call.client.channel_list(scope="all"), key=lambda c: c["number"] or 9999)
+        channels = sorted(self._call.client.channel_list(scope="all"), key=provider.channels.sort_key)
         order = self._call.client.channel_order() or [c["id"] for c in channels]
         names = {c["id"]: "%s. %s" % (c["number"], c["name"]) for c in channels}
         # Channels the order does not have yet (new ones) go at its end, as the lists show them.

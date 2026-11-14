@@ -1,5 +1,7 @@
 """Favourite programmes: the list, a series' seasons, and the picker of an item's airings."""
 
+import collections
+
 import xbmc
 import xbmcgui
 import xbmcplugin
@@ -8,15 +10,18 @@ from resources.lib import kodiutil
 from resources.lib.data import channellist
 from resources.lib.data import guidedata
 from resources.lib.util import isotime
+from resources.lib.util import localtime
 from resources.lib.views import listing
 from resources.lib.views import rows
 
 _s = kodiutil.string
 _log = kodiutil.log
+# One of a favourite's airings in the picker (see pick_rows).
+PickRow = collections.namedtuple("PickRow", "airing channel on_now can_play")
 
 
 class ProgrammeViews:
-    """The favourite programmes (see plugin.ROUTES).
+    """The favourite programmes (see views.routes).
 
     :param call: the plugin call (see views.call.Call)
     """
@@ -35,11 +40,11 @@ class ProgrammeViews:
         # The provider's list has no plots (its "description" is empty): the info pages have them,
         # fetched in one go with the cast if a cast setting wants it.
         cast_kinds = kodiutil.cast_kinds()
-        keys = [(kind, item["id"]) for kind, item in zip(kinds, items) if cast_kinds or not item.get("description")]
+        keys = [(kind, item["id"]) for kind, item in zip(kinds, items, strict=True) if cast_kinds or not item.get("description")]
         pages = listing.pages(self._call, keys, full=bool(cast_kinds))
         plots = {key: page.get("plot") or "" for key, page in pages.items()}
         cast = rows.cast_of(pages, cast_kinds)
-        for kind, item in zip(kinds, items):
+        for kind, item in zip(kinds, items, strict=True):
             year = guidedata.year(item)
             li = xbmcgui.ListItem(rows.film_title(item.get("name") or "?", year if kind == "program" else None))
             picture = item.get("image_url") or ""
@@ -74,8 +79,8 @@ class ProgrammeViews:
                 li.addContextMenuItems([unwatch])
                 xbmcplugin.addDirectoryItem(self._call.handle, pick, li, isFolder=False)
         # No content type: Estuary's wide list then shows each row's icon (with "videos", a status icon only).
-        # The rows' own labels, nothing on the right: when it is on, the airings picked from say.
-        xbmcplugin.addSortMethod(self._call.handle, xbmcplugin.SORT_METHOD_NONE, labelMask="%L", label2Mask=" ")
+        # Nothing on the right: when it is on, the airings picked from say.
+        rows.hide_right_labels(self._call.handle)
         xbmcplugin.endOfDirectory(self._call.handle)
 
     def do_watch(self):
@@ -128,7 +133,7 @@ class ProgrammeViews:
             pick = self._call.url(action="pick", id=self._call.params["id"], kind="series", season=season["id"], number=number)
             xbmcplugin.addDirectoryItem(self._call.handle, pick, li, isFolder=False)
         # No content type: Estuary's wide list then shows each row's icon (with "seasons", a status icon only).
-        xbmcplugin.addSortMethod(self._call.handle, xbmcplugin.SORT_METHOD_NONE, labelMask="%L", label2Mask=" ")
+        rows.hide_right_labels(self._call.handle)
         xbmcplugin.endOfDirectory(self._call.handle)
 
     def _season_airings(self):
@@ -160,19 +165,16 @@ class ProgrammeViews:
                 return None
         elif self._call.params.get("action") == "pick":
             return self._play_at_once()
-        rows, numbers = self._airings_to_pick()
-        index = self._picked(rows, numbers)
+        picks, numbers = self._airings_to_pick()
+        index = self._picked(picks, numbers)
         if index is None:
             return None
-        airing, channel, on_now, can_play = rows[index]
-        if not can_play:
+        picked = picks[index]
+        if not picked.can_play:
             xbmcgui.Dialog().notification(kodiutil.name(), _s(30228))
             return None
         # Through PlayMedia, so the play service handles it as any click (see default).
-        params = airing_play(airing, channel, on_now)
-        if "programme" in params:
-            params["programme"] = guidedata.continued(params["programme"])
-        xbmc.executebuiltin("PlayMedia(%s)" % self._call.url(**params))
+        xbmc.executebuiltin("PlayMedia(%s)" % self._call.url(**continued_play(picked)))
         return None
 
     def _play_at_once(self):
@@ -181,24 +183,20 @@ class ProgrammeViews:
         Kodi waits for the stream: a picker would keep it waiting, and one closed after Kodi's playlist
         timeout (20 s) made it say "Playback failed". Nothing to play: why, at once, and no stream.
         """
-        rows, _ = self._airings_to_pick()
-        playable = [row for row in rows if row[3]]
+        picks, _ = self._airings_to_pick()
+        playable = [pick for pick in picks if pick.can_play]
         if not playable:
-            coming = next(iter(rows), None)
+            coming = next(iter(picks), None)
             text = _s(30223)
             if coming:
-                text = "%s: %s" % (_s(30222), kodiutil.local_time(coming[0]["start_utc"]))
-                text += " · %s" % coming[1]["name"] if coming[1].get("name") else ""
+                text = "%s: %s" % (_s(30222), localtime.local_time(coming.airing["start_utc"]))
+                text += " · %s" % coming.channel["name"] if coming.channel.get("name") else ""
             xbmcgui.Dialog().notification(kodiutil.name(), text)
             xbmcplugin.setResolvedUrl(self._call.handle, False, xbmcgui.ListItem())
             return None
-        airing, channel, on_now, _ = playable[-1]
-        params = airing_play(airing, channel, on_now)
-        if "programme" in params:
-            params["programme"] = guidedata.continued(params["programme"])
         from resources.lib.views import play
 
-        play.resolve(self._call, params)
+        play.resolve(self._call, continued_play(playable[-1]))
         return None
 
     def _airings_to_pick(self):
@@ -213,42 +211,50 @@ class ProgrammeViews:
             back, coming = self._call.client.airings(self._call.params["id"], kind)
         channels = channellist.by_station(self._call.client)
         now = isotime.iso()
-        rows = pick_rows(back, coming, channels, now)
-        if kind == "series" and rows and not numbers:  # the airings have no episode numbers; their info pages have
-            ids = [row[0].get("program_id") for row in rows]
+        picks = pick_rows(back, coming, channels, now)
+        if kind == "series" and picks and not numbers:  # the airings have no episode numbers; their info pages have
+            ids = [pick.airing.get("program_id") for pick in picks]
             numbers = infopages.episode_numbers(lambda: self._call.client, ids, kodiutil.PROFILE)
         self._call.laps("airings")
-        if not rows and self._call.params.get("start", "") > now:
+        if not picks and self._call.params.get("start", "") > now:
             # Some series have no airings of their own (on the web either), but the favourites list knows the next one.
             next_one = {"start_utc": self._call.params["start"], "end_utc": self._call.params["end"]}
-            rows = [(next_one, {"name": ""}, False, False)]
-        return rows, numbers
+            picks = [PickRow(next_one, {"name": ""}, False, False)]
+        return picks, numbers
 
-    def _picked(self, rows, numbers):
+    def _picked(self, picks, numbers):
         """Return the index of the row picked to play; None if cancelled or nothing can play.
 
         With nothing playable, the coming ones are shown read-only (the web's "További időpontok").
         """
-        if not rows:
+        if not picks:
             xbmcgui.Dialog().notification(kodiutil.name(), _s(30223))
             return None
-        items = [pick_row(*row, numbers=numbers.get(row[0].get("program_id"))) for row in rows]
-        playable = [i for i, row in enumerate(rows) if row[3]]
+        items = [pick_row(*pick, numbers=numbers.get(pick.airing.get("program_id"))) for pick in picks]
+        playable = [i for i, pick in enumerate(picks) if pick.can_play]
         if not playable:
             if xbmcgui.Dialog().select(_s(30222), items, useDetails=True) >= 0:
                 xbmcgui.Dialog().notification(kodiutil.name(), _s(30228))  # as a coming one picked below
             return None
-        if len(rows) == 1:
+        if len(picks) == 1:
             return 0
         index = xbmcgui.Dialog().select(kodiutil.kodi_string(208), items, preselect=playable[-1], useDetails=True)
         return index if index >= 0 else None
+
+
+def continued_play(pick):
+    """Return the play URL's parameters of a picked airing (see PickRow), resuming without asking where it was left off."""
+    params = airing_play(pick.airing, pick.channel, pick.on_now)
+    if "programme" in params:
+        params["programme"] = guidedata.continued(params["programme"])
+    return params
 
 
 def airing_play(airing, channel, on_now=False):
     """Return the play URL's parameters of a favourite's airing: from its beginning, else live."""
     params = {"action": "play", "id": channel["id"], "media": channel["media_id"]}
     flags = airing.get("entitlements") or []
-    if not (on_now and "rn" in flags):  # on now without a restart: live
+    if not (on_now and guidedata.NO_RESTART_FLAG in flags):  # on now without a restart: live
         programme = {
             "start_time": airing["start_utc"],
             "end_time": airing["end_utc"],
@@ -260,25 +266,25 @@ def airing_play(airing, channel, on_now=False):
 
 
 def pick_rows(back, coming, channels, now):
-    """Return a favourite's airings for the picker: (airing, channel, on now, can play), oldest first.
+    """Return a favourite's airings for the picker as PickRows, oldest first.
 
     Each once, on subscribed channels only: the provider lists some twice, and one on both a
     channel's HD and SD versions is kept as the HD one's.
     """
-    rows, at = [], {}
+    picks, at = [], {}
     for airing in sorted(back + coming, key=lambda a: a.get("start_utc", "")):
         channel = channels.get(str(airing.get("station_id")))
         if not channel or not airing.get("start_utc") or not airing.get("end_utc"):
             continue
         mark = (airing.get("program_id") or airing.get("station_id"), airing["start_utc"])
         on_now = airing["start_utc"] <= now < airing["end_utc"]
-        row = (airing, channel, on_now, airing in back or on_now)
+        pick = PickRow(airing, channel, on_now, airing in back or on_now)
         if mark not in at:
-            at[mark] = len(rows)
-            rows.append(row)
-        elif _is_hd(channel) and not _is_hd(rows[at[mark]][1]):
-            rows[at[mark]] = row
-    return rows
+            at[mark] = len(picks)
+            picks.append(pick)
+        elif _is_hd(channel) and not _is_hd(picks[at[mark]].channel):
+            picks[at[mark]] = pick
+    return picks
 
 
 def _is_hd(channel):
@@ -294,7 +300,7 @@ def pick_row(airing, channel, on_now, can_play=True, numbers=None):
     episode = {"episode_name": airing.get("episode_name")}
     if numbers:
         episode.update(season_number=numbers[0], episode_number=numbers[1])
-    when = _s(30190) if on_now else kodiutil.local_time(airing["start_utc"])
+    when = _s(30190) if on_now else localtime.local_time(airing["start_utc"])
     lines = [channel["name"], rows.with_episode(when, episode)] if channel.get("name") else [rows.with_episode(when, episode), ""]
     li = xbmcgui.ListItem(lines[0] if can_play else rows.greyed(lines[0]))
     li.setLabel2(lines[1])

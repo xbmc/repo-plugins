@@ -50,7 +50,7 @@ def encrypt(spki_b64, message):
         raise ValueError("message too long")
     block = label_hash + b"\x00" * (size - len(message) - 2 * hlen - 2) + b"\x01" + message
     seed = os.urandom(hlen)
-    masked_block = bytes(a ^ b for a, b in zip(block, _mgf1(seed, size - hlen - 1)))
-    masked_seed = bytes(a ^ b for a, b in zip(seed, _mgf1(masked_block, hlen)))
+    masked_block = bytes(a ^ b for a, b in zip(block, _mgf1(seed, size - hlen - 1), strict=True))
+    masked_seed = bytes(a ^ b for a, b in zip(seed, _mgf1(masked_block, hlen), strict=True))
     encoded = int.from_bytes(b"\x00" + masked_seed + masked_block, "big")
     return base64.b64encode(pow(encoded, exponent, modulus).to_bytes(size, "big")).decode()

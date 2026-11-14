@@ -12,6 +12,11 @@ from resources.lib.provider import rsaoaep
 AIRING_FIELDS = ("program_id", "start_utc", "end_utc", "station_id", "channel_number", "entitlements", "ratings")
 # What the web sends of each position it removes (see delete_bookmarks).
 DELETE_FIELDS = ("id", "runtime_seconds", "program_id", "bookmark_type", "subject_id")
+# Kept answers older than every ttl they are kept with are dropped at the next fetch.
+KEPT_MAX_AGE = max(core.LIST_TTL, core.POSITIONS_TTL)
+# The kept positions lists' keys: this prefix and the list's type, "" for all positions with details.
+BOOKMARKS_PREFIX = "bookmarks:"
+ALL_BOOKMARKS = ""
 
 
 def _slim(actions):
@@ -60,7 +65,7 @@ class Personal:
             path = "/setting/passcode/verify/v2"
             data = self._auth.call(path, "SETTINGS", "PASSCODE_VERIFY", method="POST", body={"passcode": passcode})
         except errors.ApiError as e:
-            if getattr(e, "status", None) in (400, 403, 422):
+            if e.status in (400, 403, 422):
                 return False
             raise
         return bool(data.get("status"))
@@ -93,8 +98,7 @@ class Personal:
             return entry["data"]
         data = fetch()
         now = time.time()
-        # An hour is more than any ttl.
-        self._state["kept"] = {k: v for k, v in kept.items() if v["at"] + 3600 > now}
+        self._state["kept"] = {k: v for k, v in kept.items() if v["at"] + KEPT_MAX_AGE > now}
         self._state["kept"][key] = {"at": now, "data": data}
         self._state.save()
         return data
@@ -109,7 +113,7 @@ class Personal:
     def channel_order(self):
         """Return the account's own channel order as channel ids; empty if not set."""
         st = self._state
-        if st.get("channel_order_at", 0) + core.CHANNELS_TTL < time.time():
+        if st.get("channel_order_at", 0) + core.FAVOURITES_TTL < time.time():
             data = self._auth.call("/epg/channel/order", "MY_CHANNELS", "GET_CHANNEL_ORDER")
             st["channel_order"] = [str(i) for i in data.get("channel_order") or []]
             st["channel_order_at"] = time.time()
@@ -131,14 +135,14 @@ class Personal:
 
         :param details: also title, thumbnail and bookmark_type
         """
-        params = {"type": "" if details else "CATCHUP"}
+        params = {"type": ALL_BOOKMARKS if details else "CATCHUP"}
         step = "BOOKMARK_ALL" if details else "BOOKMARK_CATCHUP"
-        listed = (self._state.get("kept") or {}).get("bookmarks:")
+        listed = (self._state.get("kept") or {}).get(BOOKMARKS_PREFIX + ALL_BOOKMARKS)
         if not details and listed and listed["at"] + core.POSITIONS_TTL > time.time():
             # The "Continue watching" list just shown has them.
             return [b for b in listed["data"] if b.get("bookmark_type", "Catchup") == "Catchup"]
         return self._kept(
-            "bookmarks:%s" % params["type"],
+            BOOKMARKS_PREFIX + params["type"],
             core.POSITIONS_TTL,
             lambda: self._auth.call("/details/bookmarks/v3", "START_UP", step, params=params).get("bookmarks") or [],
         )
@@ -151,7 +155,7 @@ class Personal:
         """
         body = dict(info, time_seconds=round(seconds, 3), runtime_seconds=int(runtime))
         answer = self._auth.call("/details/bookmarks/CATCHUP/v3", "PLAYER", "SET_BOOKMARK", method="PUT", body=body)
-        self._forget("bookmarks:")
+        self._forget(BOOKMARKS_PREFIX)
         return answer
 
     def delete_bookmarks(self, bookmarks):
@@ -164,7 +168,7 @@ class Personal:
         """
         body = {"bookmarks": [{k: b.get(k) for k in DELETE_FIELDS} for b in bookmarks]}
         answer = self._auth.call("/delete/bookmarks/v2", "START_UP", "DELETE_BOOKMARKS", method="POST", body=body)
-        self._forget("bookmarks:")
+        self._forget(BOOKMARKS_PREFIX)
         return answer
 
     def set_watchlist(self, item_id, on, kind="series"):

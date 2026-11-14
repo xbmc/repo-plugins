@@ -12,7 +12,11 @@ from resources.lib.login import loginstate
 from resources.lib.service import playservice
 from resources.lib.tv import exportprogress
 from resources.lib.tv import kodipvr
+from resources.lib.util import pluginbusy
 
+HOUR = 3600
+# The first scheduled export and the first look ahead wait this long after the service starts: not
+# while Kodi itself is starting, which they would slow down.
 FIRST_DELAY = 60
 # Changes made outside the settings dialog (the channel list's context menu) settle this
 # long; inside the dialog they count when it closes.
@@ -20,16 +24,20 @@ SETTINGS_DEBOUNCE = 2
 # Kodi's own guide day settings raise no event for us: they are looked at this often.
 KODI_CHECK_EVERY = 30
 # The account's rows (devices change elsewhere too) and the login's expiry: checked this often.
-ACCOUNT_CHECK_EVERY = 24 * 3600
+ACCOUNT_CHECK_EVERY = 24 * HOUR
 # What a channel start would wait for once due (see provider.playback.Playback.get_ready): looked at this often,
 # and done this long before it is due.
 READY_EVERY = 15 * 60
-READY_AHEAD = 3600
+READY_AHEAD = HOUR
+# A look ahead taking longer than this (seconds) found something due, and is logged; one that found nothing takes no time.
+READY_LOGGED_AFTER = 0.2
+# Without an export interval in the settings, the last export counts as at most this many hours ago (see ExportSchedule).
+DEFAULT_REFRESH_HOURS = 24
 
 
 class _Monitor(xbmc.Monitor):
     changed_at = 0
-    on_power = None  # on_power(method) for Kodi going to sleep and waking up (see playservice)
+    on_power = None  # on_power(method) for Kodi going to sleep and waking up (see wakeresume)
 
     def onSettingsChanged(self):
         kodiutil.reload_settings()
@@ -43,18 +51,20 @@ class _Monitor(xbmc.Monitor):
 def _export(progress):
     """Run one Kodi TV refresh, in its own thread so the playing streams are kept meanwhile.
 
+    Before each guide block and info page it waits for a plugin call on its way (see pluginbusy).
+
     :param progress: an exportprogress.BackgroundProgress (shown for a user's change), or a silent exportprogress.Progress
     """
     result = None
     try:
         client = clientfactory.make_client()
         try:
-            result = kodipvr.export(client, progress=progress)
+            result = kodipvr.export(client, progress=progress, pause=pluginbusy.wait_while_busy)
         except provider.AuthError as e:
             # A refused login: the public guide still keeps Kodi TV going.
             kodiutil.log("login refused (%s), exporting the public guide" % e, xbmc.LOGWARNING)
             client.guest = True
-            result = kodipvr.export(client, progress=progress)
+            result = kodipvr.export(client, progress=progress, pause=pluginbusy.wait_while_busy)
         kodiutil.log("Kodi TV files refreshed: %d channels, %d programmes" % result)
     except Exception as e:  # noqa: BLE001 - keep the service alive; the next round retries
         kodiutil.log("Kodi TV refresh failed: %s" % e, xbmc.LOGWARNING)
@@ -69,7 +79,7 @@ def _get_ready():
     except Exception as e:  # noqa: BLE001 - the next look, or the channel start itself, tries again
         kodiutil.log("getting ready ahead failed: %s" % e, xbmc.LOGWARNING)
         return
-    if time.time() - started > 0.2:  # a look that found nothing due takes no time
+    if time.time() - started > READY_LOGGED_AFTER:
         kodiutil.log("got ready ahead in %.2fs" % (time.time() - started))
 
 
@@ -94,7 +104,7 @@ class ExportSchedule:
             last = float(kodiutil.addon().getSetting("pvr_last_at"))
         except ValueError:
             last = 0
-        self.last = max(last, time.time() - (kodipvr.refresh_hours() or 24) * 3600 + FIRST_DELAY)
+        self.last = max(last, time.time() - (kodipvr.refresh_hours() or DEFAULT_REFRESH_HOURS) * HOUR + FIRST_DELAY)
         days = kodipvr.guide_days()
         self.fingerprint = kodipvr.settings_fingerprint(days)
         kodipvr.show_guide_days(days)
@@ -122,7 +132,7 @@ class ExportSchedule:
             kodipvr.show_guide_days(days)
             self.asked = self.asked or self._changed(kodipvr.settings_fingerprint(days))
         hours = kodipvr.refresh_hours()
-        self.due = self.due or (hours > 0 and time.time() - self.last >= hours * 3600)
+        self.due = self.due or (hours > 0 and time.time() - self.last >= hours * HOUR)
         # Logged in or out: the guide switches between the public and the subscriber's.
         if home.getProperty(kodiutil.LOGIN_CHANGED):
             home.clearProperty(kodiutil.LOGIN_CHANGED)
@@ -153,7 +163,7 @@ class ExportSchedule:
 class RoundTimes:
     """What the service's once-a-second rounds cost, logged (debug) once an hour: with and without a stream."""
 
-    EVERY = 3600
+    EVERY = HOUR
 
     def __init__(self, now=None):
         self.since = now or time.time()

@@ -40,6 +40,8 @@ GENRE_MAP = "genres.xml"
 # Without mappings, for the "colours" setting off: a separate file, so switching changes
 # genresPath and IPTV Simple restarts to read it.
 GENRE_MAP_PLAIN = "genres-plain.xml"
+# The files IPTV Simple reads.
+OUTPUT_FILES = (GUIDE, PLAYLIST, GENRE_MAP, GENRE_MAP_PLAIN)
 
 
 # Too broad to colour by when a programme has a more telling category; listed last.
@@ -85,7 +87,17 @@ def _catchup(channel, plugin_url):
 
 
 def export(
-    client, channels, profile_dir, plugin_url, past_days=1, days_ahead=7, info_types=(), block_dir=None, progress=None, stats=None
+    client,
+    channels,
+    profile_dir,
+    plugin_url,
+    past_days=1,
+    days_ahead=7,
+    info_types=(),
+    block_dir=None,
+    progress=None,
+    stats=None,
+    pause=None,
 ):
     """Write the playlist and guide.
 
@@ -95,33 +107,35 @@ def export(
     :param progress: progress(stage, done, total), stage "guide", "info", "build" or "compress";
         raising (Cancelled) stops the export before any file is written
     :param stats: a dict filled with each stage's duration and fetch counts
+    :param pause: pause() is called before each block and info page, from any of the export's threads;
+        it may wait (see util.pluginbusy)
     :return: (channel count, programme count)
     """
     out = os.path.join(profile_dir, OUT_DIR)
-    if not os.path.isdir(out):
-        os.makedirs(out)
+    os.makedirs(out, exist_ok=True)
     stats = {} if stats is None else stats
     report = progress or (lambda stage, done=0, total=0: None)
 
     # Monotonic: stands still while the device sleeps (wall clock once logged 11 h "writing").
     started = time.monotonic()
     by_station = {c["station_id"]: c for c in channels}
-    fetched = client.epg_blocks(
+    fetched, block_counts = client.epg_blocks(
         past_days=past_days,
         days_ahead=days_ahead,
         stations=set(by_station),
         cache_dir=block_dir,
         progress=lambda done, total: report("guide", done, total),
+        pause=pause,
     )
     # (date, offset, whether the first, GuideBlock)
     blocks = [(date, offset, i == 0, block) for i, (date, offset, block) in enumerate(fetched)]
-    stats.update(client.epg_stats, guide=time.monotonic() - started)
+    stats.update(block_counts, guide=time.monotonic() - started)
     started = time.monotonic()
     pages, block_keys = {}, None
     if info_types:
         block_keys = _block_keys(blocks, by_station, info_types, out, stats)
         wanted = {_key(k) for _, own in block_keys for k in own}
-        pages = infopages.info_for(client, wanted, out, lambda done, total: report("info", done, total), stats)
+        pages = infopages.info_for(client, wanted, out, lambda done, total: report("info", done, total), stats, pause)
     stats["info"] = time.monotonic() - started
 
     report("build", 0, len(blocks))
@@ -131,8 +145,7 @@ def export(
     # Unchanged input: no rewrite, so IPTV Simple has nothing new to read.
     key = _digest([channels, keys, plugin_url(action="play", id="", media="")])
     last = _read_state(out)
-    files = (GUIDE, PLAYLIST, GENRE_MAP, GENRE_MAP_PLAIN)
-    if last.get("key") == key and all(os.path.exists(os.path.join(out, name)) for name in files):
+    if last.get("key") == key and all(os.path.exists(os.path.join(out, name)) for name in OUTPUT_FILES):
         stats.update(write=time.monotonic() - started, unchanged=True)
         return len(channels), last["programmes"]
     count = 0
@@ -140,7 +153,9 @@ def export(
     with atomicfile.writer(os.path.join(out, GUIDE)) as add:
         head = ['<?xml version="1.0" encoding="UTF-8"?>', '<tv generator-info-name="plugin.video.simplego">']
         add("\n".join(head + [_channel_xml(c) for c in channels]) + "\n")
-        for done, (block, block_key) in enumerate(zip(blocks, keys), 1):
+        for done, (block, block_key) in enumerate(zip(blocks, keys, strict=True), 1):
+            if pause:
+                pause()
             part = guide.xml(block, block_key)
             if part:
                 add(part + "\n")
@@ -332,7 +347,7 @@ def _programme(channel_id, p, channel_genre=None, info=None, catchup=False):
     image = guidedata.image(p)
     if image:
         parts.append("<icon src=%s/>" % quoteattr(image))
-    # The number the rating says ("18+" is 18 here; the lock counts it as 19, see guidedata.rating_age).
+    # The number the rating says ("18+" is 18 here; the lock counts it as guidedata.ADULT_AGE).
     rating = guidedata.rating_number(p.get("ratings"))
     if rating is not None:
         parts.append("<rating><value>%d</value></rating>" % rating)

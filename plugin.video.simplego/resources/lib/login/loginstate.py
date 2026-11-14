@@ -5,19 +5,22 @@ import time
 import xbmc
 import xbmcgui
 
-from resources.lib import clientfactory
 from resources.lib import kodiutil
 from resources.lib import parental
 from resources.lib import provider
+from resources.lib.util import localtime
 
 # The login runs out a year after it was made; warned this long before.
 LOGIN_NOTICE = 14 * 24 * 3600
 
 
-def login_changed():
-    """Make the service export again and the settings follow, after a login or logout."""
+def login_changed(client):
+    """Make the service export again and the settings follow, after a login or logout.
+
+    :param client: the client that logged in or out
+    """
     kodiutil.home().setProperty(kodiutil.LOGIN_CHANGED, "1")
-    show_login_state(clientfactory.make_client())
+    show_login_state(client)
 
 
 def show_login_state(client):
@@ -59,4 +62,4 @@ def warn_if_login_runs_out(client):
 
 
 def _date(when):
-    return kodiutil.local_date(when) if when else "?"
+    return localtime.local_date(when) if when else "?"

@@ -9,6 +9,9 @@ import time
 from resources.lib.provider import errors
 from resources.lib.util import atomicfile
 
+# base64, hashlib and uuid are imported where used: menus that only call has_login load this
+# module alone, and the three add a fifth to its import time (measured 2026-11-10).
+
 BASE_URL = "https://player.telekomtvgo.hu"
 STARTUP_PAGE = BASE_URL + "/epg"
 SSO_REDIRECT_URI = BASE_URL + "/"
@@ -16,8 +19,6 @@ PHONE_REDIRECT_URI = BASE_URL + "/robots.txt"
 LANGUAGE = "hu"
 NATCO = "hu"
 OWNER_UID = "hu001"
-# The web client calls AMP with a double slash ("...com//v1/client/roll"); keep
-# it byte-identical rather than find out whether the gateway minds.
 AMP_URL = "https://ottapp-appgw-amp-a.proda.dtp.tv3cloud.com/"
 AZUKI_IMC = "IMC7.5.0_XX_Dx.x.x_Sx"
 DEFAULT_STS_SLOT = "Green"
@@ -28,7 +29,6 @@ USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/%s.0.0.0 Safari/537.36" % BROWSER_VERSION
 )
-# The web client's device name: the add-on logs in as the web player does.
 DEVICE_NAME = "Windows - Chrome"
 # Fallbacks for window.APP_CONSTANTS; they rotate with web-client releases, so the live page wins.
 DEFAULT_CONSTANTS = {
@@ -42,9 +42,11 @@ TIMEOUT = 20
 CONFIG_TTL = 24 * 3600
 ACCOUNT_TTL = 6 * 3600
 STATE_FILE = "session.json"
-CHANNELS_TTL = 3600
-# Line-ups change only with the account's channel map; favourites and order (editable in
-# the provider's apps) keep CHANNELS_TTL.
+# The channel lists, kept apart from the state: nine tenths of it, read and compared at its every save.
+CHANNELS_FILE = "channels.json"
+# Favourites and the own order are editable in the provider's apps; line-ups change only
+# with the account's channel map.
+FAVOURITES_TTL = 3600
 LINEUP_TTL = 12 * 3600
 # Favourite programmes and resume positions, kept while browsing (see Personal._kept).
 LIST_TTL = 5 * 60
@@ -63,7 +65,7 @@ def token_expiry(token):
     """Return when a JWT runs out (its "exp", Unix time); None if it is not one."""
     try:
         payload = token.split(".")[1]
-        import base64  # here: see _headers
+        import base64
 
         return int(json.loads(base64.urlsafe_b64decode(payload + "=" * (-len(payload) % 4)))["exp"])
     except (AttributeError, IndexError, KeyError, TypeError, ValueError):
@@ -130,7 +132,7 @@ class Api:
             % (len(r.content) // 1024, time.time() - began, r.headers.get("Content-Encoding") or "none")
         )
         cookies = r.cookies.get_dict()
-        import uuid  # here: see _headers
+        import uuid
 
         st["device_id"] = st.get("device_id") or cookies.get("deviceId") or str(uuid.uuid4())
         st["session_id"] = cookies.get("sessionId") or st.get("session_id") or str(uuid.uuid4())
@@ -149,7 +151,6 @@ class Api:
     def _headers(self, flow, step, token, account):
         st = self._state
         device_id, session_id = st["device_id"], st["session_id"]
-        # Lazy imports (also uuid, base64 elsewhere): menus that only call has_login skip them.
         import hashlib
         import uuid
 
@@ -208,9 +209,7 @@ def answer(r, method, path):
     :raises errors.ApiError: an error status (its `status` set), or not JSON
     """
     if not r.ok:
-        e = errors.ApiError("%s %s -> HTTP %s: %s" % (method, path, r.status_code, r.text[:300]))
-        e.status = r.status_code
-        raise e
+        raise errors.ApiError("%s %s -> HTTP %s: %s" % (method, path, r.status_code, r.text[:300]), status=r.status_code)
     try:
         return r.json() if r.content else {}
     except ValueError:

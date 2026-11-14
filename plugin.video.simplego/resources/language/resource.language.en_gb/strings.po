@@ -23,11 +23,11 @@ msgid "The login has expired or was used elsewhere. Log in again from the main m
 msgstr ""
 
 msgctxt "#30011"
-msgid "Playback is blocked outside Hungary. Turn off VPN / proxy on this device."
+msgid "Playback is refused from this internet address. Try without VPN / proxy, or another exit."
 msgstr ""
 
 msgctxt "#30012"
-msgid "The licence server does not trust this device's Widevine module (3099). On Windows/macOS Kodi this service cannot play; use Kodi on Android TV / Google TV."
+msgid "The licence server does not accept this device's Widevine module: only Kodi on Android plays this service (Android TV, phones, tablets)."
 msgstr ""
 
 msgctxt "#30013"
@@ -40,10 +40,6 @@ msgstr ""
 
 msgctxt "#30023"
 msgid "Log out? This device is also removed from the account's devices, freeing its slot."
-msgstr ""
-
-msgctxt "#30030"
-msgid "Show in the TV menu"
 msgstr ""
 
 msgctxt "#30031"
@@ -63,7 +59,7 @@ msgid "Log in from a phone (QR code)"
 msgstr ""
 
 msgctxt "#30028"
-msgid "Scan the QR code with your phone's camera (the phone on the same Wi-Fi as the TV). On the page that opens, log in with your Telekom TV GO e-mail address and password, then copy the address of the page you land on from the address bar, paste it and send it. This window closes by itself. Back = cancel."
+msgid "Scan the QR code with your phone's camera (the phone on the same Wi-Fi as Kodi). On the page that opens, log in with your Telekom TV GO e-mail address and password, then copy the address of the page you land on from the address bar, paste it and send it. This window closes by itself. Back = cancel."
 msgstr ""
 
 msgctxt "#30034"
@@ -537,11 +533,11 @@ msgid "Come back to this page, paste the address and send it:"
 msgstr ""
 
 msgctxt "#30250"
-msgid "Send to the TV"
+msgid "Send to Kodi"
 msgstr ""
 
 msgctxt "#30251"
-msgid "Done! The TV is logging in."
+msgid "Done! Kodi is logging in."
 msgstr ""
 
 msgctxt "#30252"
@@ -549,7 +545,7 @@ msgid "You can close this page and the Telekom page."
 msgstr ""
 
 msgctxt "#30253"
-msgid "Wrong or expired code. Start the login again on the TV."
+msgid "Wrong or expired code. Start the login again in Kodi."
 msgstr ""
 
 msgctxt "#30254"
@@ -594,4 +590,20 @@ msgstr ""
 
 msgctxt "#30264"
 msgid "Remove it from Continue watching?"
+msgstr ""
+
+msgctxt "#30265"
+msgid "Picture quality"
+msgstr ""
+
+msgctxt "#30266"
+msgid "Full HD (1080p)"
+msgstr ""
+
+msgctxt "#30267"
+msgid "Where the service offers it. Off: 720p."
+msgstr ""
+
+msgctxt "#30268"
+msgid "Tap the address to log in on this device, or scan the QR code with another phone on the same Wi-Fi. On the page that opens, log in with your Telekom TV GO e-mail address and password, then copy the address of the page you land on from the address bar, paste it and send it. This window closes by itself. Back = cancel."
 msgstr ""

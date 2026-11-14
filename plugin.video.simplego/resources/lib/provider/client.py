@@ -9,10 +9,11 @@ from resources.lib.provider import guide
 from resources.lib.provider import personal
 from resources.lib.provider import playback
 from resources.lib.provider import statefile
+from resources.lib.util import sharedfile
 
 
 class _Part:
-    """A Client attribute that is one of its parts': the method or value of that name there.
+    """A read-only Client attribute that is one of its parts': the method or value of that name there.
 
     The add-on asks the client, not its parts (they are the client's own business).
     """
@@ -30,6 +31,13 @@ class _Part:
         return getattr(getattr(client, self._part), self._name)
 
     def __set__(self, client, value):
+        raise AttributeError("%s is read-only" % self._name)
+
+
+class _WritablePart(_Part):
+    """A Client attribute that is one of its parts' values, set there when assigned."""
+
+    def __set__(self, client, value):
         setattr(getattr(client, self._part), self._name, value)
 
 
@@ -41,7 +49,7 @@ class Client:
     stream sessions; `state` what they keep (session.json), shared with every other client of the
     profile. The add-on uses the client's own attributes below, each one of a part's.
 
-    :param profile_dir: where its state (session.json) is kept
+    :param profile_dir: where its state (session.json) and channel lists (channels.json) are kept
     :param ca_bundle: certificates to verify the web player's host with (see core.Api)
     :param debug: debug(message), where the client's measurements go (state file, startup page)
     :param lock_wait: lock_wait(seconds) waits for the state file's lock, True to give up (Kodi exiting)
@@ -49,13 +57,12 @@ class Client:
 
     # The login and the account.
     authed = _Part("auth")
-    guest = _Part("auth")
+    guest = _WritablePart("auth")
     device_id = _Part("auth")
     is_logged_in = _Part("auth")
     login_expires = _Part("auth")
     login_url = _Part("auth")
     login_with_refresh_token = _Part("auth")
-    logout = _Part("auth")
     valid_account = _Part("auth")
     devices = _Part("auth")
     remove_device = _Part("auth")
@@ -82,7 +89,6 @@ class Client:
     now_and_next = _Part("guide")
     programme_at = _Part("guide")
     epg_blocks = _Part("guide")
-    epg_stats = _Part("guide")
     details = _Part("guide")
     # Stream sessions.
     play_live = _Part("playback")
@@ -91,16 +97,23 @@ class Client:
     close_stale_sessions = _Part("playback")
     get_ready = _Part("playback")
     # What other clients of the profile wrote, taken up (and this one's changes written).
-    reload = _Part("state", "save")
+    sync = _Part("state", "save")
 
     def __init__(self, profile_dir, ca_bundle=None, debug=None, lock_wait=None):
         self.state = statefile.State(os.path.join(profile_dir, core.STATE_FILE), debug=debug, lock_wait=lock_wait)
         self._api = core.Api(self.state, ca_bundle, debug=debug)
         self.auth = auth.Auth(self.state, self._api)
-        self.channels = channels.Channels(self.state, self._api, self.auth)
+        kept_lists = sharedfile.SharedJson(os.path.join(profile_dir, core.CHANNELS_FILE), self.state.lock)
+        self.channels = channels.Channels(self.state, self._api, self.auth, kept_lists)
+        self.channels.drop_state_copy()
         self.personal = personal.Personal(self.state, self._api, self.auth, self.channels)
         self.guide = guide.Guide(self._api, self.auth)
         self.playback = playback.Playback(self.state, self._api, self.auth, self.channels)
+
+    def logout(self):
+        """Forget the login (see auth.Auth.logout) and the account's channel lists."""
+        self.auth.logout()
+        self.channels.forget_all()
 
     @property
     def ca_bundle(self):

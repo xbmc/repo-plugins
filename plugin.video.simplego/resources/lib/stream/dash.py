@@ -10,14 +10,48 @@ from urllib.parse import urljoin
 
 WIDEVINE_URN = "urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed"
 WIDEVINE_SYSTEM_ID = bytes.fromhex("edef8ba979d64acea3c827dcd51d21ed")
+# Marks a trick-mode AdaptationSet (pictures for fast seeking), which ISA leaves out.
+TRICK_MODE = "http://dashif.org/guidelines/trickmode"
 # The provider's MPDs: self-closing Representation tags inside each AdaptationSet.
 ADAPTATION_SET = re.compile(r"<AdaptationSet\b.*?</AdaptationSet>", re.S)
 REPRESENTATION = re.compile(r"<Representation\b[^>]*/>")
+SEGMENT_TEMPLATE = re.compile(r"<SegmentTemplate\b.*?</SegmentTemplate>", re.S)
+STATIC_MPD = re.compile(r'<MPD\b[^>]*\btype="static"')
+# Compiled once and one pass per timeline entry: a live timeline grows by one entry per segment, the
+# sound's not folded into r, and every refresh reads them all.
+TIMESCALE = re.compile(r'\btimescale="(\d+)"')
+TIMELINE_ENTRY = re.compile(r"<S\b([^>]*)/>")
+TIMELINE_ATTRIBUTE = re.compile(r'\b([tdr])="(-?\d+)"')
 
 
 def adaptation_sets(xml):
     """Return the AdaptationSets of a manifest or a period, as text."""
     return ADAPTATION_SET.findall(xml)
+
+
+def is_trick_mode(aset):
+    """Return whether an AdaptationSet is a trick-mode one (see TRICK_MODE)."""
+    return TRICK_MODE in aset
+
+
+def is_static(mpd):
+    """Return whether a manifest is a static one (a programme watched back), not a live one."""
+    return bool(STATIC_MPD.search(mpd))
+
+
+def is_video(aset):
+    """Return whether an AdaptationSet holds video, by its contentType or its mimeType."""
+    return 'contentType="video"' in aset or 'mimeType="video/' in aset
+
+
+def is_audio(aset):
+    """Return whether an AdaptationSet holds audio, by its contentType or its mimeType."""
+    return 'contentType="audio"' in aset or 'mimeType="audio/' in aset
+
+
+def is_text(aset):
+    """Return whether an AdaptationSet holds subtitles, by its contentType, its mimeType or its codec."""
+    return 'contentType="text"' in aset or 'mimeType="text/' in aset or 'codecs="stpp' in aset
 
 
 def representations(aset):
@@ -66,10 +100,12 @@ def fragment_protection(data):
     return pssh, uuid(data[i + 16 : i + 32])
 
 
-# Seconds behind the live edge ISA starts a live stream (its live_delay; its default and least: 16).
-# Not a cure for the sound starting up to ~3 s off the picture on some channels until a rebuffer a few
-# seconds in (Kodi's SyncStream log): 24 changed nothing there (measured 2026-11-02).
-LIVE_DELAY = 16
+# ISA's live_delay (its least: 16 s). ISA starts each track floor(delay / its last segment's length)
+# segments before its newest (https://github.com/xbmc/inputstream.adaptive/blob/Omega/src/common/AdaptiveStream.cpp).
+# The picture's segments last 4 s, the sound's 3.9893 and 4.0107 s in turn: at 16 (or 24) the sound went
+# back one segment less after a longer one and started 4 s late, until a rebuffer. Half way between,
+# 18 takes every track back 4 segments.
+LIVE_DELAY = 18
 # Seconds of a live window kept where the programme allows no rewinding ("ts"):
 # a little over the live delay, so it still starts at its usual point.
 NO_TIMESHIFT_WINDOW = LIVE_DELAY + 4
@@ -81,20 +117,21 @@ def parse_timeline(template, default_scale=None):
     Only the first <S> need carry a start time (audio has many entries of
     slightly different durations), so the whole timeline is walked.
     """
-    scale = re.search(r'\btimescale="(\d+)"', template)
+    scale = TIMESCALE.search(template)
     scale = int(scale.group(1)) if scale else default_scale
-    entries = re.findall(r"<S\b[^>]*/>", template)
+    entries = TIMELINE_ENTRY.findall(template)
     if not scale or not entries:
         return None, []
     segments, now = [], 0
-    for s in entries:
-        start, duration, repeat = (re.search(r'\b%s="(-?\d+)"' % k, s) for k in ("t", "d", "r"))
-        if not duration:
+    for attributes in entries:
+        entry = dict(TIMELINE_ATTRIBUTE.findall(attributes))
+        if "d" not in entry:
             return None, []
-        now = int(start.group(1)) if start else now
-        for _ in range(1 + (int(repeat.group(1)) if repeat and int(repeat.group(1)) > 0 else 0)):
-            segments.append((now, int(duration.group(1))))
-            now += int(duration.group(1))
+        duration = int(entry["d"])
+        now = int(entry["t"]) if "t" in entry else now
+        for _ in range(1 + max(int(entry.get("r", 0)), 0)):
+            segments.append((now, duration))
+            now += duration
     return scale, segments
 
 
@@ -123,7 +160,7 @@ def align_live_edges(mpd, window=None):
         though the manifest's window is always 15 minutes
     """
     timelines = {}
-    for template in re.findall(r"<SegmentTemplate\b.*?</SegmentTemplate>", mpd, re.S):
+    for template in SEGMENT_TEMPLATE.findall(mpd):
         scale, segments = parse_timeline(template)
         if segments:
             timelines[template] = (scale, segments)
@@ -243,7 +280,7 @@ def start_time(aset, from_start):
     The first one when played from the beginning, else the newest but one (the
     newest may still be in the making).
     """
-    template = re.search(r"<SegmentTemplate\b.*?</SegmentTemplate>", aset, re.S)
+    template = SEGMENT_TEMPLATE.search(aset)
     if not template:
         return None
     segments = parse_timeline(template.group(0), default_scale=1)[1]

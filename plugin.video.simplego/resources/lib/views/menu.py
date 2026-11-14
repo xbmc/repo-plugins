@@ -19,7 +19,7 @@ ROOT_SHOWN = "%s.root_shown" % kodiutil.ADDON_ID
 
 
 class MainMenu:
-    """The add-on's first page (see plugin.ROUTES).
+    """The add-on's first page (see views.routes).
 
     :param call: the plugin call (see views.call.Call)
     """
@@ -47,8 +47,7 @@ class MainMenu:
         xbmcplugin.addDirectoryItem(self._call.handle, self._call.url(**params), rows.menu_item(label, icon), isFolder=True)
 
     def _action(self, label, icon, **params):
-        # A non-folder, non-playable item: Kodi just runs the plugin, so the
-        # current listing stays and Container.Refresh can rebuild it.
+        """Add a row that runs an action: neither a folder nor playable, so the listing stays and can be refreshed."""
         xbmcplugin.addDirectoryItem(self._call.handle, self._call.url(**params), rows.menu_item(label, icon), isFolder=False)
 
     def _notes(self):

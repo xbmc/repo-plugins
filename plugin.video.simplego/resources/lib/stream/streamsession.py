@@ -17,6 +17,8 @@ from resources.lib.data import onair
 from resources.lib.net import transport
 from resources.lib.stream import keyfollower
 from resources.lib.stream import licproxy
+from resources.lib.stream import manifest
+from resources.lib.stream import windowrenewal
 from resources.lib.util import isotime
 
 # Seconds between position saves while watching back (the web player saves every 2 s).
@@ -26,58 +28,90 @@ CLOSE_WAIT = 5
 # How near the start or end (seconds) a saved position counts as none.
 BOOKMARK_MARGIN = 60
 
-# Home window property: a 3099 refusal seen in this Kodi run (see licence_refused).
+# A licence refusal that repeats on every channel in this Kodi run: later channels fail fast without
+# opening a session.
+NOT_TRUSTED = "3099"
+# Home window property: a NOT_TRUSTED refusal seen in this Kodi run (see licence_refused).
 LICENCE_REFUSED = "%s.licence_refused" % kodiutil.ADDON_ID
 
+# Programmes whose key changes are kept for a later stream of them (see _key_changes): the ones found last.
+KEPT_KEY_CHANGES = 16
 # (channel, start) -> key change segment indexes found by the proxy, reused when the next part starts.
 _key_changes = {}
 
 
-def start_stream(client, channel, programme=None, laps=None):
+def start_stream(client, channel, programme=None, laps=None, ask_resume=None):
     """Open a stream session and the local proxy ISA talks to (see licproxy).
 
     :param programme: see provider.playback.Playback.play_live
     :param laps: laps(step) after each step (see resources.lib.util.laps), for the log
+    :param ask_resume: asks where to start, see resume_offset
     :return: (stream, proxy): the session's details and its licproxy.LicenceProxy
     """
     laps = laps or (lambda step: None)
-    refused = "3099" if kodiutil.untrusted_widevine() else kodiutil.home().getProperty(LICENCE_REFUSED)
+    if kodiutil.untrusted_widevine():
+        raise provider.LicenceRefusedError()
+    refused = kodiutil.home().getProperty(LICENCE_REFUSED)
     if refused:
         raise provider.LicenceRefusedError(refused)
     unlocked = parental.gate(client, channel, programme)
     laps("parental")
     ahead = _positions_ahead(client, programme)
-    stream = client.play_live(channel, programme, laps)
+    stream = _open(client, channel, programme, laps)
+    laps("guide")
+    start_at = _start_position(client, stream, ahead, ask_resume)
+    laps("position")
+    proxy = make_proxy(client, stream, start_at=start_at, unlocked=unlocked)
+    laps("proxy")
+    return stream, proxy
+
+
+def _open(client, channel, programme, laps):
+    """Open the stream session and return its details, with the guide's and the saved position's (see start_stream)."""
+    stream = client.play_live(channel, programme, laps, kodiutil.addon().getSettingBool("full_hd"))
+    kodiutil.log("stream manifest: %s" % stream.get("manifest"), xbmc.LOGDEBUG)
     stream["channel"], stream["programme"] = channel, programme
     stream["logo"] = (client.channel_of(channel["id"]) or {}).get("logo")
-    stream["details"] = programme_details(client, channel, programme)
-    stream["bookmark"] = bookmark_info(client, channel, programme)
+    entry = _guide_entry(client, channel, programme)
+    stream["details"] = guidedata.details(entry) if entry else None
+    stream["bookmark"] = bookmark_info(client, channel, programme, entry)
     if stream["bookmark"] and stream["details"]:
         # For the "Continue watching" list, which has no plots of its own.
         infopages.keep_plot(stream["bookmark"]["program_id"], stream["details"]["plot"], kodiutil.PROFILE)
-    laps("guide")
     if programme:
         kept = (stream["bookmark"] or {}).get("id") or "nothing (live, or on air still)"
         kodiutil.log("position kept as: %s" % kept, xbmc.LOGDEBUG)
-    resume = (programme or {}).get("resume")
+    return stream
+
+
+def _start_position(client, stream, ahead, ask_resume):
+    """Set the stream's start_offset (where the add-on seeks to) and return where playback starts (seconds).
+
+    :param ahead: the thread fetching the saved positions (see _positions_ahead), or None
+    :param ask_resume: see resume_offset
+    :raises provider.CancelledError: the question where to resume was cancelled; the session is closed
+    """
+    programme = stream["programme"] or {}
+    resume = programme.get("resume")
     if ahead:
         ahead.join()
     try:
-        if (programme or {}).get("continue"):  # picked to play on: there, without asking
+        if programme.get("continue"):  # picked to play on: there, without asking
             stream["start_offset"] = saved_position(client, stream["bookmark"])
         else:
-            stream["start_offset"] = resume_offset(client, stream["bookmark"], resume)
+            stream["start_offset"] = resume_offset(client, stream["bookmark"], resume, ask_resume)
     except provider.CancelledError:
         # Nothing plays: the stream session just opened must not count against the stream limit.
         with contextlib.suppress(provider.ApiError):
             client.beacon(stream["session"], complete=True)
         raise
     # Where it starts: there, or where Kodi resumes it (it seeks itself, see resume_offset).
-    start_at = stream["start_offset"] or (saved_position(client, stream["bookmark"]) if resume else 0)
-    laps("position")
-    proxy = make_proxy(client, stream, start_at=start_at, unlocked=unlocked)
-    laps("proxy")
-    return stream, proxy
+    return stream["start_offset"] or (saved_position(client, stream["bookmark"]) if resume else 0)
+
+
+def _is_watch_back(client, programme):
+    """Return whether a programme is watched back (it has ended) by a logged-in account: one with saved positions."""
+    return bool(programme) and programme["end"] <= time.time() and client.authed
 
 
 def _positions_ahead(client, programme):
@@ -85,7 +119,7 @@ def _positions_ahead(client, programme):
 
     :return: the thread to join before saved_position; None for live, a restart, or "from the start"
     """
-    if not programme or programme["end"] > time.time() or programme.get("resume") is False or not client.authed:
+    if not _is_watch_back(client, programme) or programme.get("resume") is False:
         return None
 
     def fetch():
@@ -97,12 +131,17 @@ def _positions_ahead(client, programme):
     return thread
 
 
-def programme_details(client, channel, programme):
-    """Return the guide's details of a programme watched back or restarted; None for live or no guide."""
+def _guide_entry(client, channel, programme):
+    """Return the guide's entry of a programme watched back or restarted; None for live or if the guide does not know it."""
     if programme is None:
         return None
-    found = onair.on_air(client, client.station_of(channel["id"]), programme["start"])[0]
-    return guidedata.details(found) if found else None
+    return onair.on_air(client, client.station_of(channel["id"]), programme["start"])[0]
+
+
+def programme_start(client, channel, when):
+    """Return the start (a timestamp) of the programme on a channel at `when`; None if the guide does not know."""
+    programme = onair.on_air(client, client.station_of(channel["id"]), when)[0]
+    return isotime.stamp(programme["start_time"]) if programme else None
 
 
 def make_proxy(client, stream, start_at=None, part=None, unlocked=None):
@@ -117,46 +156,57 @@ def make_proxy(client, stream, start_at=None, part=None, unlocked=None):
     http.verify = client.ca_bundle
     http.headers["User-Agent"] = provider.USER_AGENT
 
+    def debug(msg):
+        kodiutil.log(msg, xbmc.LOGDEBUG)
+
     def locked(p):
         return parental.locked_now(client, channel, p, unlocked)
 
+    rewriter = manifest.ManifestRewriter(
+        http,
+        lambda: proxy.base,
+        kodiutil.log,
+        debug=debug,
+        audio_langs=audio_languages(),
+        from_start=bool(stream.get("from_start")),
+        no_timeshift=onair.on_air_check(client, station, lambda p: "ts" in (p.get("content_flags") or [])),
+        change_hint=_key_changes.get((channel["id"], (programme or {}).get("start"))),
+        part=part,
+        start_at=start_at,
+        label=channel.get("name"),
+    )
     proxy = licproxy.LicenceProxy(
         http,
         stream["license_url"],
         # Asked again for each licence: the access token in them expires after about an hour.
         lambda: client.licence_headers(channel["id"]),
         kodiutil.log,
-        debug=lambda msg: kodiutil.log(msg, xbmc.LOGDEBUG),
         on_refused=licence_refused,
         manifest_url=stream["manifest"],
-        audio_langs=audio_languages(),
-        from_start=bool(stream.get("from_start")),
-        no_timeshift=onair.on_air_check(client, station, lambda p: "ts" in (p.get("content_flags") or [])),
+        fallback_url=stream.get("manifest_fallback"),
         # A live channel only: a programme from its beginning is the one the lock was checked for.
         stop_when=None if programme else onair.on_air_check(client, station, locked),
-        key_changes=_key_changes.get((channel["id"], (programme or {}).get("start"))),
-        part=part,
-        start_at=start_at,
-        label=channel.get("name"),
+        debug=debug,
+        rewriter=rewriter,
     )
     return proxy.start()
 
 
-def bookmark_info(client, channel, programme):
+def bookmark_info(client, channel, programme, entry=None):
     """Return what the provider keeps a position of watching back under (as the web player sends it).
 
+    :param entry: the programme's guide entry (see _guide_entry), for its ID
     :return: None for live TV and a restarted programme
     """
-    if not programme or programme["end"] > time.time() or not client.authed:
+    if not _is_watch_back(client, programme):
         return None
     station = client.station_of(channel["id"])
     if not station:
         return None
-    found = onair.on_air(client, station, programme["start"])[0] or {}
     end = isotime.iso(programme["end"])
     return {
         "id": guidedata.bookmark_id(station, programme["start"], end),
-        "program_id": found.get("program_id", ""),
+        "program_id": (entry or {}).get("program_id", ""),
         "media_id": channel["media_id"],
         "start_time": programme["start"],
         "end_time": end,
@@ -164,21 +214,30 @@ def bookmark_info(client, channel, programme):
     }
 
 
-def resume_offset(client, info, resume=None):
+def resume_offset(client, info, resume=None, ask_resume=None):
     """Return the seconds to start at: where it was left off, if the user picks it; else 0.
 
     :param resume: Kodi has already asked (True: continue, False: from the start); on
         "continue" Kodi seeks to its resume point itself, so no seek here either way
+    :param ask_resume: ask_resume(seconds) returns whether to continue there (see ask_where_to_resume, the default)
     """
     if resume is not None or not info:
         return 0
     seconds = saved_position(client, info)
     if not seconds:
         return 0
+    return seconds if (ask_resume or ask_where_to_resume)(seconds) else 0
+
+
+def ask_where_to_resume(seconds):
+    """Ask whether to continue where it was left off, `seconds` in, or to play from the start; return True to continue.
+
+    :raises provider.CancelledError: cancelled ("Back"): neither, so nothing plays
+    """
     choice = xbmcgui.Dialog().contextmenu([kodiutil.string(30186) % kodiutil.clock(seconds), kodiutil.string(30187)])
-    if choice < 0:  # cancelled ("Back"): neither, so nothing plays
+    if choice < 0:
         raise provider.CancelledError("where to resume: cancelled")
-    return seconds if choice == 0 else 0
+    return choice == 0
 
 
 def saved_position(client, info):
@@ -218,10 +277,16 @@ def save_bookmark(client, info, seconds, runtime):
 class Session:
     """Keep a stream's session with the provider alive (beacons), save positions, close it at the end.
 
-    Closing matters: the account's stream limit (2413) is small. Proxies and key parts are `keys`' job.
+    Closing matters: the account's stream limit (2413) is small. Proxies and key parts are a
+    keyfollower.KeyFollower's job.
+
+    :param restart: restart(session, part, seconds) plays this stream again through part's proxy, from
+        `seconds` (None: live, from its edge); without it, key changes are not followed
+    :param reopen: reopen() opens the stream again for its sleeping proxy and returns that proxy's base (see sleep)
+    :param renew: renew(why) opens the live stream again (see windowrenewal)
     """
 
-    def __init__(self, client, stream, proxy):
+    def __init__(self, client, stream, proxy, restart=None, reopen=None, renew=None):
         self.client = client
         self.stream = stream
         self.session = stream["session"]
@@ -232,13 +297,20 @@ class Session:
         self.last_beacon = self.saved = self.created
         self.position = self.runtime = 0
         self._sending = None  # the thread sending the last round's beacon and position
+        self._reopen = reopen
+        self._renew = renew
         programme = stream.get("programme")
-        self.keys = keyfollower.KeyFollower(
+        _forget_old_key_changes()
+        self._key_follower = keyfollower.KeyFollower(
             proxy,
             lambda part: make_proxy(client, stream, part=part),
             known=_key_changes,
             key=(stream["channel"]["id"], programme["start"]) if programme else None,
+            restart=(lambda part, seconds: restart(self, part, seconds)) if restart else None,
         )
+        window_end = stream.get("window_end")
+        starts = functools.partial(programme_start, client, stream["channel"])
+        self.renewal = windowrenewal.WindowRenewal(window_end, starts) if window_end else None
 
     @property
     def id(self):
@@ -248,14 +320,33 @@ class Session:
     @property
     def proxy(self):
         """Return the proxy the stream plays through now (see KeyFollower)."""
-        return self.keys.proxy
+        return self._key_follower.proxy
+
+    @property
+    def switch_began(self):
+        """Return when the switch to another key's part began (see switch_to); 0 while none is on."""
+        return self._key_follower.switch_began
 
     def start(self):
         """Note that playback started: beacons and key changes are timed from now."""
         self.started = True
         self.last_beacon = time.time()
-        self.keys.started()
+        self._key_follower.started()
         kodiutil.log("session %s started" % self.id)
+
+    def hold(self):
+        """Call off a restart timed for this stream: another stream is on its way."""
+        self._key_follower.hold()
+
+    def switch_to(self, part):
+        """Note that Kodi is about to play this stream through another key's part's proxy; return that proxy."""
+        proxy = self._key_follower.part_proxy(part)
+        self._key_follower.switch(proxy)
+        return proxy
+
+    def switched(self):
+        """Note that the proxy switched to plays: the one before goes."""
+        self._key_follower.switched()
 
     def tick(self, player, now=None, own=True):
         """Note the position while it plays, save it now and then, and send the beacon when due.
@@ -267,6 +358,7 @@ class Session:
         due = []
         if own:
             self._follow(player, now)
+            self._renew_if_due(player, now)
             if self.bookmark and now - self.saved >= BOOKMARK_EVERY:
                 self.saved = now
                 due.append(functools.partial(save_bookmark, self.client, self.bookmark, self.position, self.runtime))
@@ -299,14 +391,22 @@ class Session:
         except provider.ApiError as e:
             kodiutil.log("beacon failed: %s" % e, xbmc.LOGWARNING)
 
+    def _renew_if_due(self, player, now):
+        """Open the live stream again when its window renewal is due (see windowrenewal); a new stream ends this session."""
+        if self.renewal and self._renew and self.renewal.is_due(now, keyfollower.live_lag(player)):
+            self.renewal.note_try(now)
+            why = "before its window ends" if now < self.renewal.window_end else "after its window ended"
+            kodiutil.log("opening the live stream again %s" % why)
+            self._renew(why)
+
     def _follow(self, player, now):
-        if self.bookmark or self.proxy.change_times:
+        if self.bookmark or self.proxy.rewriter.change_times:
             try:
                 if player.isPlaying():
                     self.position, self.runtime = player.getTime(), player.getTotalTime()
             except RuntimeError:
                 pass
-        self.keys.follow(self.position, player, now)
+        self._key_follower.follow(self.position, player, now)
 
     def seek_to_start(self, player):
         """Seek to where playback should start (where it was left off); its part's keys are already declared."""
@@ -318,7 +418,7 @@ class Session:
 
         :param keep_proxy: the proxy it plays through stays (see licproxy.LicenceProxy.sleep)
         """
-        self.keys.close(keep=self.proxy if keep_proxy else None)
+        self._key_follower.close(keep=self.proxy if keep_proxy else None)
         if self._sending:
             # A beacon still on its way must not arrive after the closing one.
             self._sending.join(CLOSE_WAIT)
@@ -330,19 +430,29 @@ class Session:
             kodiutil.log("closing session failed: %s" % e, xbmc.LOGWARNING)
         kodiutil.log("session %s closed" % self.id)
 
+    def sleep(self):
+        """Close the session but keep its proxy, asleep: a request to it reopens the stream (see licproxy.LicenceProxy.sleep)."""
+        self.close(keep_proxy=True)
+        self.proxy.sleep(self._reopen)
+
+
+def _forget_old_key_changes():
+    """Keep the key changes of only the KEPT_KEY_CHANGES programmes found last."""
+    # list() copies the keys at once: a KeyFollower may add one from another thread meanwhile.
+    for key in list(_key_changes)[:-KEPT_KEY_CHANGES]:
+        _key_changes.pop(key, None)
+
 
 def licence_refused(code):
-    """Tell the user the licence server refused the stream, and remember a 3099 until Kodi restarts."""
-    # 3099 "browser framework is not trusted": Verified Media Path required, which Kodi's
-    # desktop CDM cannot provide, so later channels fail fast without opening a session.
-    if code == "3099":
+    """Tell the user the licence server refused the stream, and remember a NOT_TRUSTED one until Kodi restarts."""
+    if code == NOT_TRUSTED:
         kodiutil.home().setProperty(LICENCE_REFUSED, code)
     xbmcgui.Dialog().ok(kodiutil.name(), licence_message(code))
 
 
 def licence_message(code):
-    """Return the message for a licence refused with this code."""
-    return kodiutil.string(30012) if code == "3099" else kodiutil.string(30013) % code
+    """Return the message for a licence refused with this code (None: a Kodi off Android, see untrusted_widevine)."""
+    return kodiutil.string(30012) if code in (None, NOT_TRUSTED) else kodiutil.string(30013) % code
 
 
 def audio_languages():

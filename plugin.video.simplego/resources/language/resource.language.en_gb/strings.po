@@ -1,0 +1,597 @@
+# Kodi Media Center language file
+# Addon Name: Simple GO
+# Addon id: plugin.video.simplego
+msgid ""
+msgstr ""
+"Language: en_GB\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgctxt "#30001"
+msgid "Live channels"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Log in"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Log out"
+msgstr ""
+
+msgctxt "#30010"
+msgid "The login has expired or was used elsewhere. Log in again from the main menu."
+msgstr ""
+
+msgctxt "#30011"
+msgid "Playback is blocked outside Hungary. Turn off VPN / proxy on this device."
+msgstr ""
+
+msgctxt "#30012"
+msgid "The licence server does not trust this device's Widevine module (3099). On Windows/macOS Kodi this service cannot play; use Kodi on Android TV / Google TV."
+msgstr ""
+
+msgctxt "#30013"
+msgid "The licence server refused playback (code %s)."
+msgstr ""
+
+msgctxt "#30022"
+msgid "Logged in"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Log out? This device is also removed from the account's devices, freeing its slot."
+msgstr ""
+
+msgctxt "#30030"
+msgid "Show in the TV menu"
+msgstr ""
+
+msgctxt "#30031"
+msgid "IPTV Simple Client could not be installed."
+msgstr ""
+
+msgctxt "#30032"
+msgid "Downloading channel list and guide..."
+msgstr ""
+
+msgctxt "#30033"
+msgid "The “Simple GO” source shows in the TV menu after Kodi restarts (%d channels, %d programmes exported)."
+msgstr ""
+
+msgctxt "#30027"
+msgid "Log in from a phone (QR code)"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Scan the QR code with your phone's camera (the phone on the same Wi-Fi as the TV). On the page that opens, log in with your Telekom TV GO e-mail address and password, then copy the address of the page you land on from the address bar, paste it and send it. This window closes by itself. Back = cancel."
+msgstr ""
+
+msgctxt "#30034"
+msgid "My devices"
+msgstr ""
+
+msgctxt "#30035"
+msgid "%s - This device"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Removing the device automatically logs you out on that device."
+msgstr ""
+
+msgctxt "#30037"
+msgid "Device removed"
+msgstr ""
+
+msgctxt "#30043"
+msgid "You are logged in on these devices"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#30047"
+msgid "Back"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Kodi TV set up"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Favourites"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Refresh"
+msgstr ""
+
+msgctxt "#30121"
+msgid "3 hours"
+msgstr ""
+
+msgctxt "#30122"
+msgid "6 hours"
+msgstr ""
+
+msgctxt "#30123"
+msgid "12 hours"
+msgstr ""
+
+msgctxt "#30124"
+msgid "24 hours"
+msgstr ""
+
+msgctxt "#30125"
+msgid "Last fetch"
+msgstr ""
+
+msgctxt "#30126"
+msgid "%s · %d channels, %d programmes"
+msgstr ""
+
+msgctxt "#30127"
+msgid "public guide, log in"
+msgstr ""
+
+msgctxt "#30128"
+msgid "Off"
+msgstr ""
+
+msgctxt "#30129"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30130"
+msgid "Series"
+msgstr ""
+
+msgctxt "#30131"
+msgid "Other programmes"
+msgstr ""
+
+msgctxt "#30132"
+msgid "Days"
+msgstr ""
+
+msgctxt "#30133"
+msgid "as Kodi's guide shows: %d back, %d ahead"
+msgstr ""
+
+msgctxt "#30134"
+msgid "Waiting for the running export..."
+msgstr ""
+
+msgctxt "#30135"
+msgid "Channel list..."
+msgstr ""
+
+msgctxt "#30136"
+msgid "Guide: %s (-%d/+%d days)"
+msgstr ""
+
+msgctxt "#30137"
+msgid "Cast: %d of %d"
+msgstr ""
+
+msgctxt "#30138"
+msgid "Saving..."
+msgstr ""
+
+msgctxt "#30139"
+msgid "A subscription is needed to watch this content!"
+msgstr ""
+
+msgctxt "#30141"
+msgid "Restart is not available for this content."
+msgstr ""
+
+msgctxt "#30142"
+msgid "This programme is not available in the archive."
+msgstr ""
+
+msgctxt "#30144"
+msgid "%d channels, %d programmes exported. IPTV Simple takes them at its next read of the \"Simple GO\" source (hourly unless set otherwise there), or when Kodi restarts."
+msgstr ""
+
+msgctxt "#30148"
+msgid "Parental lock"
+msgstr ""
+
+msgctxt "#30149"
+msgid "Age ratings"
+msgstr ""
+
+msgctxt "#30151"
+msgid "6+"
+msgstr ""
+
+msgctxt "#30152"
+msgid "12+"
+msgstr ""
+
+msgctxt "#30153"
+msgid "16+"
+msgstr ""
+
+msgctxt "#30154"
+msgid "18"
+msgstr ""
+
+msgctxt "#30155"
+msgid "18+"
+msgstr ""
+
+msgctxt "#30156"
+msgid "Lock unrated content"
+msgstr ""
+
+msgctxt "#30157"
+msgid "Show adult content"
+msgstr ""
+
+msgctxt "#30158"
+msgid "Change parental lock..."
+msgstr ""
+
+msgctxt "#30159"
+msgid "Enter the four-digit PIN"
+msgstr ""
+
+msgctxt "#30160"
+msgid "Wrong PIN. If you have forgotten it, call Telekom on 1414."
+msgstr ""
+
+msgctxt "#30162"
+msgid "Lock unrated content (without an age rating)?"
+msgstr ""
+
+msgctxt "#30163"
+msgid "Show adult channels?"
+msgstr ""
+
+msgctxt "#30164"
+msgid "Yes"
+msgstr ""
+
+msgctxt "#30165"
+msgid "No"
+msgstr ""
+
+msgctxt "#30166"
+msgid "To protect your children, lock content that is not suitable for them. Locking an age rating locks the content rated above it too. This is the Telekom account's parental lock, with the account's PIN; not Kodi's own channel lock."
+msgstr ""
+
+msgctxt "#30167"
+msgid "The parental lock needs a PIN. To protect your children, lock content that is not suitable for them. Locking an age rating locks the content rated above it too. This is the Telekom account's parental lock, with the account's PIN; not Kodi's own channel lock."
+msgstr ""
+
+msgctxt "#30168"
+msgid "Favourite programmes"
+msgstr ""
+
+msgctxt "#30171"
+msgid "Add to favourite programmes"
+msgstr ""
+
+msgctxt "#30172"
+msgid "Added to favourite programmes"
+msgstr ""
+
+msgctxt "#30173"
+msgid "Removed from favourite programmes"
+msgstr ""
+
+msgctxt "#30175"
+msgid "My channels"
+msgstr ""
+
+msgctxt "#30176"
+msgid "Move..."
+msgstr ""
+
+msgctxt "#30177"
+msgid "Reset channel order"
+msgstr ""
+
+msgctxt "#30178"
+msgid "To the end of the list"
+msgstr ""
+
+msgctxt "#30179"
+msgid "Move %s before:"
+msgstr ""
+
+msgctxt "#30180"
+msgid "Resetting deletes the channel order you set. Are you sure?"
+msgstr ""
+
+msgctxt "#30183"
+msgid "Added to my favourite channels"
+msgstr ""
+
+msgctxt "#30184"
+msgid "Removed from my favourite channels"
+msgstr ""
+
+msgctxt "#30186"
+msgid "Resume from %s"
+msgstr ""
+
+msgctxt "#30187"
+msgid "Play from the beginning"
+msgstr ""
+
+msgctxt "#30188"
+msgid "Continue watching"
+msgstr ""
+
+msgctxt "#30189"
+msgid "Kodi TV updated: %d channels, %d programmes"
+msgstr ""
+
+msgctxt "#30190"
+msgid "Now"
+msgstr ""
+
+msgctxt "#30191"
+msgid "Account"
+msgstr ""
+
+msgctxt "#30192"
+msgid "Login"
+msgstr ""
+
+msgctxt "#30193"
+msgid "valid until %s"
+msgstr ""
+
+msgctxt "#30195"
+msgid "Subscription"
+msgstr ""
+
+msgctxt "#30196"
+msgid "Catch-up"
+msgstr ""
+
+msgctxt "#30197"
+msgid "Timeshift"
+msgstr ""
+
+msgctxt "#30198"
+msgid "Recording"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Your login runs out on %s: log in again before then."
+msgstr ""
+
+msgctxt "#30203"
+msgid "General"
+msgstr ""
+
+msgctxt "#30204"
+msgid "TV menu"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Cast"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Show in the TV menu – switch on…"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Show in the TV menu – switch off…"
+msgstr ""
+
+msgctxt "#30208"
+msgid "The channels and the guide appear in Kodi's TV menu. For this IPTV Simple is installed, a Simple GO source is added to its settings (switching off removes it), and the guide is downloaded. Continue?"
+msgstr ""
+
+msgctxt "#30209"
+msgid "The Simple GO source leaves Kodi's TV menu, with its playlist and guide files. IPTV Simple itself and your other sources stay. Continue?"
+msgstr ""
+
+msgctxt "#30210"
+msgid "The “Simple GO” source leaves the TV menu after Kodi restarts."
+msgstr ""
+
+msgctxt "#30211"
+msgid "Taking the Simple GO source out of the TV menu…"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Building: %d of %d blocks"
+msgstr ""
+
+msgctxt "#30213"
+msgid "Refresh now…"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Audio description"
+msgstr ""
+
+msgctxt "#30215"
+msgid "Sign language"
+msgstr ""
+
+msgctxt "#30216"
+msgid "Display"
+msgstr ""
+
+msgctxt "#30217"
+msgid "Category colours"
+msgstr ""
+
+msgctxt "#30218"
+msgid "The guide's category colours in the channel list and in Kodi's TV guide."
+msgstr ""
+
+msgctxt "#30219"
+msgid "The cast on the information page, in the lists and in the TV menu's guide."
+msgstr ""
+
+
+
+msgctxt "#30223"
+msgid "No airing known"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Show in the TV menu"
+msgstr ""
+
+msgctxt "#30225"
+msgid "On"
+msgstr ""
+
+msgctxt "#30226"
+msgid "Off"
+msgstr ""
+
+msgctxt "#30227"
+msgid "The channels and the guide in Kodi's TV menu, as a separate IPTV Simple source."
+msgstr ""
+
+msgctxt "#30228"
+msgid "Not on yet"
+msgstr ""
+
+msgctxt "#30222"
+msgid "Further airings"
+msgstr ""
+
+msgctxt "#30229"
+msgid "%d episodes"
+msgstr ""
+
+msgctxt "#30230"
+msgid "Deactivate"
+msgstr ""
+
+msgctxt "#30231"
+msgid "Activate"
+msgstr ""
+
+msgctxt "#30232"
+msgid "This channel is deactivated. You can activate it again under My channels."
+msgstr ""
+
+msgctxt "#30233"
+msgid "Channel deactivated"
+msgstr ""
+
+msgctxt "#30234"
+msgid "Channel activated"
+msgstr ""
+
+msgctxt "#30236"
+msgid "Deactivated"
+msgstr ""
+
+msgctxt "#30237"
+msgid "Favourite"
+msgstr ""
+
+msgctxt "#30239"
+msgid "%d subscribed channels"
+msgstr ""
+
+msgctxt "#30241"
+msgid "Channel not in your subscription. Available in: %s (%s Ft/month)"
+msgstr ""
+
+msgctxt "#30242"
+msgid "Other"
+msgstr ""
+
+msgctxt "#30243"
+msgid "Kodi's TV menu shows the change after Kodi restarts."
+msgstr ""
+
+msgctxt "#30244"
+msgid "Simple GO – login"
+msgstr ""
+
+msgctxt "#30245"
+msgid "Log in with your Telekom account"
+msgstr ""
+
+msgctxt "#30246"
+msgid "The button opens the usual telekom.hu login in a new tab."
+msgstr ""
+
+msgctxt "#30247"
+msgid "After logging in, a page of odd English text appears (“User-agent: …”). Copy not the text but the page's web address from the browser's address bar: the long address starting with"
+msgstr ""
+
+msgctxt "#30248"
+msgid "Tap the address bar → Copy, or ⋮ → Share → Copy."
+msgstr ""
+
+msgctxt "#30249"
+msgid "Come back to this page, paste the address and send it:"
+msgstr ""
+
+msgctxt "#30250"
+msgid "Send to the TV"
+msgstr ""
+
+msgctxt "#30251"
+msgid "Done! The TV is logging in."
+msgstr ""
+
+msgctxt "#30252"
+msgid "You can close this page and the Telekom page."
+msgstr ""
+
+msgctxt "#30253"
+msgid "Wrong or expired code. Start the login again on the TV."
+msgstr ""
+
+msgctxt "#30254"
+msgid "Wrong code."
+msgstr ""
+
+msgctxt "#30255"
+msgid "This is the page's text. Copy the web address in the browser's address bar instead (the one starting with https://player.telekomtvgo.hu/robots.txt?…)."
+msgstr ""
+
+msgctxt "#30256"
+msgid "This holds no login data. Copy the web address of the page shown after logging in, from the address bar."
+msgstr ""
+
+msgctxt "#30257"
+msgid "Quit now? Then start Kodi again."
+msgstr ""
+
+msgctxt "#30258"
+msgid "Restart now?"
+msgstr ""
+
+msgctxt "#30259"
+msgid "This programme can no longer be watched back: its catch-up time is over."
+msgstr ""
+
+msgctxt "#30260"
+msgid "Next on: %s. Add %s to your favourite programmes?"
+msgstr ""
+
+msgctxt "#30261"
+msgid "The provider did not add it to the favourite programmes."
+msgstr ""
+
+msgctxt "#30262"
+msgid "The provider did not remove it from the favourite programmes."
+msgstr ""
+
+msgctxt "#30263"
+msgid "Remove from the list"
+msgstr ""
+
+msgctxt "#30264"
+msgid "Remove it from Continue watching?"
+msgstr ""

@@ -1,0 +1,14 @@
+The library logo identifies Biblioteques Públiques de Catalunya. The original
+transparent logo is preserved in library-logo-original.png, recovered from this
+project's Git history (commit 752e2c7). The square navy-background adaptation
+was prepared with imagegen; library-icon-master.png is its source.
+resources/icon.png is the 512×512 opaque RGB export, rebuilt by
+scripts/build_artwork.py. The service logo and branding belong to their
+respective owners; this project does not claim ownership or relicense them
+under the GPL.
+
+The geometric fanart was created for this project in 2026.
+Copyright (C) 2026 Rick Nitsche and contributors.
+SPDX-License-Identifier: GPL-2.0-or-later
+Source: fanart.svg and scripts/build_artwork.py in this repository.
+See the repository's LICENSE.txt for the full license.

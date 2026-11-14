@@ -1,0 +1,25 @@
+v0.2.3
+- Prepare official Kodi submission with square opaque library artwork.
+- Use lower-case Python module filenames and omit unused artwork source from packages.
+- Simplify the entry point and update service website metadata.
+
+v0.2.2
+- Restore the original library logo.
+- Explain exhausted eFilm loan allowances instead of showing a generic service error.
+
+v0.2.1
+- Simplify account navigation to sign-in and sign-out only.
+
+v0.2.0
+- Adopt the permanent plugin.video.ebibliocat.efilm ID.
+- Add safe loan reconciliation, session persistence, and playback prerequisite checks.
+- Add search, A-Z navigation, progress/cancellation, refresh, and resilient caching.
+- Remove inherited TV3 routes and artwork; localize the current interface.
+- Add supported-version playback configuration, regression tests, CI, and reproducible release ZIPs.
+
+v0.1.0
+- Add eFilm authentication, loan confirmation, and movie playback.
+- Add dynamic lists, movie catalog, genre filters, and series/season/episode browsing.
+
+v0.0.1
+- Initial experimental eFilm adaptation of the TV3cat add-on.

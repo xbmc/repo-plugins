@@ -1,0 +1,99 @@
+# Kodi Media Center language file
+# Addon Name: ZUN rádio
+# Addon id: plugin.audio.zunradio
+# Addon Provider: Underground Media Management s.r.o.
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.audio.zunradio\n"
+"Report-Msgid-Bugs-To: https://github.com/xbmc/repo-plugins\n"
+"POT-Creation-Date: 2026-11-08 12:00+0000\n"
+"PO-Revision-Date: 2026-11-10 12:00+0000\n"
+"Last-Translator: Underground Media Management s.r.o.\n"
+"Language-Team: Czech\n"
+"Language: cs_CZ\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+msgctxt "#30000"
+msgid "ZUN radio"
+msgstr "ZUN rádio"
+
+msgctxt "#30001"
+msgid "ZUN radio · AAC 128 kbps (recommended)"
+msgstr "ZUN rádio · AAC 128 kbps (doporučeno)"
+
+msgctxt "#30002"
+msgid "ZUN radio · HE-AAC 64 kbps (saves data)"
+msgstr "ZUN rádio · HE-AAC 64 kbps (šetří data)"
+
+msgctxt "#30003"
+msgid "ZUN radio · MP3 192 kbps (for older devices)"
+msgstr "ZUN rádio · MP3 192 kbps (pro starší zařízení)"
+
+#. {artist} and {title} are replaced with the track on air, keep them unchanged
+msgctxt "#30010"
+msgid "Now playing: {artist}, {title}"
+msgstr "Právě hraje: {artist}, {title}"
+
+#. {show} is replaced with the name of the show on air, keep it unchanged
+msgctxt "#30011"
+msgid "Show: {show}"
+msgstr "Pořad: {show}"
+
+msgctxt "#30012"
+msgid "Live stream, 24 hours a day. You've got taste!"
+msgstr "Živé vysílání 24 hodin denně. Máte vkus!"
+
+msgctxt "#30004"
+msgid "ZUN radio · Full screen scene"
+msgstr "ZUN rádio · Scéna přes celou obrazovku"
+
+msgctxt "#30005"
+msgid "Dots and rings to the beat, the cover, the artist and the title over the whole screen. Any key returns."
+msgstr "Tečky a kruhy v rytmu, obal, interpret a název přes celou obrazovku. Zpátky libovolnou klávesou."
+
+msgctxt "#30020"
+msgid "Now playing"
+msgstr "Právě hraje"
+
+msgctxt "#30021"
+msgid "You've got taste!"
+msgstr "Máte vkus!"
+
+msgctxt "#30100"
+msgid "Full screen scene"
+msgstr "Scéna přes celou obrazovku"
+
+msgctxt "#30101"
+msgid "Show the ZUN scene in full screen"
+msgstr "Na celé obrazovce ukázat scénu ZUN"
+
+msgctxt "#30102"
+msgid "While ZUN radio plays, the full screen view (and the screensaver of music) shows the ZUN scene instead of the standard visualisation."
+msgstr "Při poslechu ZUN rádia ukazuje celá obrazovka (i spořič při hudbě) scénu ZUN místo běžné vizualizace."
+
+msgctxt "#30103"
+msgid "Dots and rings to the beat in the scene"
+msgstr "Tečky a kruhy v rytmu ve scéně"
+
+msgctxt "#30104"
+msgid "Needs the visualisation \"ZUN rádio scéna\" (visualization.zunradio). The scene selects it while it is open and then puts back your visualisation."
+msgstr "Potřebuje vizualizaci „ZUN rádio scéna“ (visualization.zunradio). Scéna ji po dobu otevření vybere a pak vrátí vaši vizualizaci."
+
+msgctxt "#30105"
+msgid "Install the visualisation \"ZUN rádio scéna\""
+msgstr "Nainstalovat vizualizaci „ZUN rádio scéna“"
+
+msgctxt "#30106"
+msgid "Dots and rings to the beat need the visualisation ZUN rádio scéna."
+msgstr "Tečky a kruhy v rytmu potřebují vizualizaci ZUN rádio scéna."
+
+msgctxt "#30107"
+msgid "The visualisation \"ZUN rádio scéna\" is not available for this device yet. The scene works without it, with still dots."
+msgstr "Vizualizace „ZUN rádio scéna“ pro toto zařízení zatím není k dispozici. Scéna funguje i bez ní, s nehybnými tečkami."
+
+msgctxt "#30108"
+msgid "The visualisation \"ZUN rádio scéna\" is already installed."
+msgstr "Vizualizace „ZUN rádio scéna“ už je nainstalovaná."

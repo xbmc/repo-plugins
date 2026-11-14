@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.zunradio" name="ZUN rádio" version="1.0.0" provider-name="Underground Media Management s.r.o.">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py"/>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Live stream of ZUN radio with the track now playing</summary>
+        <summary lang="cs_CZ">Živé vysílání ZUN rádia s právě hrající skladbou</summary>
+        <description lang="en_GB">ZUN radio is a Czech station playing positive electronic dance music: nu-disco, soulful house, jackin, deep house and tech house, along with R&amp;B, funk, soul, disco and acid jazz. It broadcasts 24 hours a day on DAB+ and online.
+
+The add-on plays the live stream in three qualities. While you listen, it shows the artist and title of the track, its cover and the show on air, in step with the music.
+
+In full screen it shows the ZUN scene, as on zunradio.cz: the cover in a red card, the artist and title in red fields, the record label and the show. Where the visualisation "ZUN rádio scéna" (visualization.zunradio) is available for the device, red dots, rings and waves move to the beat and the card and the fields pump with the bass; without it the dots stand still. Any key returns.
+
+You've got taste!</description>
+        <description lang="cs_CZ">ZUN rádio je česká stanice s pozitivní elektronickou taneční hudbou. Hraje nu-disco, soulful house, jackin, deep house a tech house, k tomu R&amp;B, funk, soul, disco a acid jazz. Vysílá 24 hodin denně v DAB+ a na internetu.
+
+Doplněk přehrává živé vysílání ve třech kvalitách. Během poslechu ukazuje interpreta a název skladby, její obal a pořad, který se právě vysílá, a to současně s hudbou.
+
+Na celé obrazovce ukáže scénu ZUN jako na zunradio.cz: obal v červené kartě, interpreta a název v červených polích, label a pořad. Kde je pro zařízení k dispozici vizualizace „ZUN rádio scéna“ (visualization.zunradio), pohybují se v rytmu červené tečky, kruhy a vlny a karta s poli pumpuje s basy; bez ní tečky stojí. Zpátky libovolnou klávesou.
+
+Máte vkus!</description>
+        <disclaimer lang="en_GB">ZUN radio is operated by Underground Media Management s.r.o. The stream, the track information and the cover art come from zunradio.cz. The ZUN radio name and logo belong to the operator.</disclaimer>
+        <disclaimer lang="cs_CZ">ZUN rádio provozuje Underground Media Management s.r.o. Stream, údaje o skladbách a obaly pocházejí ze zunradio.cz. Název a logo ZUN rádia patří provozovateli.</disclaimer>
+        <language>cs</language>
+        <platform>all</platform>
+        <license>GPL-2.0-or-later</license>
+        <website>https://zunradio.cz/</website>
+        <source>https://github.com/undergroundmm/plugin.audio.zunradio</source>
+        <email>info@undergroundmediamanagement.cz</email>
+        <news>1.0.0 (2026-11-10)
+- First version: three live streams, the track now playing with its cover and the show on air
+- Full screen scene, with dots and rings to the beat where visualization.zunradio is available</news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/screenshot-01.jpg</screenshot>
+            <screenshot>resources/screenshot-02.jpg</screenshot>
+        </assets>
+    </extension>
+</addon>

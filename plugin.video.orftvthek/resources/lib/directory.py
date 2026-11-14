@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 
 class Directory:
+    # pylint: disable-next=too-many-positional-arguments
     def __init__(self, title, description, link, content_id="", content_type="", thumbnail="", backdrop="", poster="", source={}, translator=None):
         self.translator = translator
         self.title = title

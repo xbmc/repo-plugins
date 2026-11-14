@@ -2,7 +2,7 @@
 
 ORF ON is an addon that provides access to the ORF ON Video Platform (Austrian Television, formerly ORF TVthek)
 
-[![Kodi version](https://img.shields.io/badge/kodi%20versions-20--21-blue)](https://kodi.tv/)
+[![Kodi version](https://img.shields.io/badge/kodi%20versions-21--22-blue)](https://kodi.tv/)
 
 
 Current Features

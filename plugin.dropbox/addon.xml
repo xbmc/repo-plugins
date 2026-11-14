@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.dropbox" name="Dropbox" version="1.0.7" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.dropbox" name="Dropbox" version="1.0.11" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
-		<import addon="script.module.clouddrive.common" version="1.5.11"/>
+		<import addon="script.module.clouddrive.common" version="1.5.18"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="entrypoint.py">
 		<provides>image audio video</provides>
@@ -14,6 +14,7 @@
 		<description lang="en_GB">Browse your Dropbox in Kodi and play your videos, music and pictures.
 - Any number of Dropbox accounts
 - Search your Dropbox
+- Shared with me: folders and files others share with you
 - Subtitles stored next to your videos are loaded automatically
 - Export videos and music to the Kodi library (.strm files)
 - Use Dropbox as a source
@@ -24,6 +25,7 @@ Sign in from your phone or computer with a short code shown in Kodi.</descriptio
 		<description lang="es_ES">Explora tu Dropbox en Kodi y reproduce tus videos, música e imágenes.
 - Cualquier número de cuentas de Dropbox
 - Busca en tu Dropbox
+- Compartido contigo: carpetas y archivos que otros comparten contigo
 - Los subtítulos guardados junto a tus videos se cargan automáticamente
 - Exporta videos y música a la biblioteca de Kodi (archivos .strm)
 - Usa Dropbox como fuente
@@ -34,6 +36,7 @@ Inicia sesión desde tu teléfono o computadora con un código corto que muestra
 		<description lang="pt_BR">Navegue pelo seu Dropbox no Kodi e reproduza seus vídeos, músicas e imagens.
 - Qualquer número de contas do Dropbox
 - Pesquise no seu Dropbox
+- Compartilhados com você: pastas e arquivos que outras pessoas compartilham com você
 - As legendas salvas junto aos seus vídeos são carregadas automaticamente
 - Exporte vídeos e músicas para a biblioteca do Kodi (arquivos .strm)
 - Use o Dropbox como fonte
@@ -44,6 +47,7 @@ Entre na conta pelo celular ou computador com um código curto mostrado no Kodi.
 		<description lang="sv_SE">Bläddra i din Dropbox i Kodi och spela upp dina videor, din musik och dina bilder.
 - Valfritt antal Dropbox-konton
 - Sök i din Dropbox
+- Delat med mig: mappar och filer som andra delar med dig
 - Undertexter som sparats bredvid dina videor läses in automatiskt
 - Exportera videor och musik till Kodi-biblioteket (.strm-filer)
 - Använd Dropbox som källa
@@ -52,38 +56,35 @@ Logga in från din telefon eller dator med en kort kod som visas i Kodi.</descri
 		<disclaimer lang="sv_SE">Det här tillägget är inte anslutet till eller godkänt av Dropbox.</disclaimer>
 		<license>GPL-3.0-or-later</license>
 		<source>https://github.com/cguZZman/plugin.dropbox</source>
-		<forum>https://github.com/cguZZman/plugin.dropbox/issues</forum>
+		<forum>https://forum.kodi.tv/showthread.php?tid=389080</forum>
 		<assets>
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>v1.0.7 released Oct 24, 2026:
+		<news>v1.0.11 released Oct 31, 2026:
+- Videos show the plot, cast and artwork of the Kodi .nfo files and pictures next to them (it can be turned off in the settings)
+- Requires clouddrive.common 1.5.18
+
+v1.0.10 released Oct 31, 2026:
+- The add-on's forum link goes to its thread in the Kodi forum
+
+v1.0.9 released Oct 31, 2026:
+- Each account opens a menu, as in Google Drive and OneDrive: Files, Shared with me, Exports and Search
+- Shared with me: folders and files others share with you, even those not added to your Dropbox. Accounts added before this version need to be added again to see them
+- Requires clouddrive.common 1.5.13
+
+v1.0.8 released Oct 30, 2026:
+- Big folders open a page at a time: Items per page in the Advanced settings (500 by default, 0 for the whole folder)
+- Going back to a folder, after viewing a picture for example, doesn't load it again for a few minutes (Cache expiration time)
+- Auto-refreshed slideshow for pictures, as in Google Drive and OneDrive
+- Requires clouddrive.common 1.5.13
+
+v1.0.7 released Oct 24, 2026:
 - The remove dialog says revoking only signs out this Kodi
 - Requires clouddrive.common 1.5.11
 
 v1.0.6 released Oct 24, 2026:
 - Removing an account can also revoke the add-on's access to your Dropbox account
-- Requires clouddrive.common 1.5.10
-
-v1.0.5 released Oct 16, 2026:
-- Use Dropbox as a source in Kodi's file manager works: files play, and the source server moved to port 8588 so it can run next to Google Drive's
-- Requires clouddrive.common 1.5.7
-
-v1.0.4 released Oct 16, 2026:
-- Much faster exports to the library: a folder tree is listed in one request
-- Requires clouddrive.common 1.5.6
-
-v1.0.3 released Oct 15, 2026:
-- Swedish translation (thanks to Daniel Nylander)
-
-v1.0.2 released Oct 15, 2026:
-- New icon and fanart
-
-v1.0.1 released Oct 12, 2026:
-- Only subtitles named after the video are loaded
-- Requires clouddrive.common 1.5.4 (storage and stability fixes)
-
-v1.0.0 released Oct 11, 2026:
-- First release</news>
+- Requires clouddrive.common 1.5.10</news>
 	</extension>
 </addon>

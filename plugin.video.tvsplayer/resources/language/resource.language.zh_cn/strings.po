@@ -1,0 +1,214 @@
+# Kodi Media Center language file
+# Addon Name: TVS Player
+# Addon id: plugin.video.tvsplayer
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.tvsplayer\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "#30000"
+msgid "TV"
+msgstr "电视"
+
+msgctxt "#30001"
+msgid "Radio"
+msgstr "电台"
+
+msgctxt "#30002"
+msgid "Favourites"
+msgstr "收藏"
+
+msgctxt "#30003"
+msgid "Playlists"
+msgstr "播放列表"
+
+msgctxt "#30004"
+msgid "Search"
+msgstr "搜索"
+
+msgctxt "#30005"
+msgid "All"
+msgstr "全部"
+
+msgctxt "#30006"
+msgid "Add M3U playlist (web address)"
+msgstr "添加 M3U 播放列表（网址）"
+
+msgctxt "#30007"
+msgid "Add M3U playlist (file)"
+msgstr "添加 M3U 播放列表（文件）"
+
+msgctxt "#30008"
+msgid "Add free radio stations by country"
+msgstr "按国家添加免费电台"
+
+msgctxt "#30009"
+msgid "Playlist address (http://… .m3u)"
+msgstr "播放列表地址（http://… .m3u）"
+
+msgctxt "#30010"
+msgid "Name of the playlist"
+msgstr "播放列表名称"
+
+msgctxt "#30011"
+msgid "Content of this playlist"
+msgstr "此播放列表的内容"
+
+msgctxt "#30012"
+msgid "Automatic (TV and radio)"
+msgstr "自动（电视和电台）"
+
+msgctxt "#30013"
+msgid "TV only"
+msgstr "仅电视"
+
+msgctxt "#30014"
+msgid "Radio only"
+msgstr "仅电台"
+
+msgctxt "#30015"
+msgid "Loading…"
+msgstr "正在加载…"
+
+msgctxt "#30016"
+msgid "{1}: {0} channels"
+msgstr "{1}：{0} 个频道"
+
+msgctxt "#30017"
+msgid "Could not load the playlist"
+msgstr "无法加载播放列表"
+
+msgctxt "#30018"
+msgid "Refresh"
+msgstr "刷新"
+
+msgctxt "#30019"
+msgid "Delete"
+msgstr "删除"
+
+msgctxt "#30020"
+msgid "Delete \"{0}\"? Its channels are removed. Favourites stay."
+msgstr "删除“{0}”？其频道将被移除，收藏会保留。"
+
+msgctxt "#30021"
+msgid "Add to favourites"
+msgstr "添加到收藏"
+
+msgctxt "#30022"
+msgid "Remove from favourites"
+msgstr "从收藏中移除"
+
+msgctxt "#30023"
+msgid "Choose link"
+msgstr "选择链接"
+
+msgctxt "#30024"
+msgid "Link {0}"
+msgstr "链接 {0}"
+
+msgctxt "#30025"
+msgid "Channel not available (no working link)"
+msgstr "频道不可用（没有可用的链接）"
+
+msgctxt "#30026"
+msgid "No channels yet: add your M3U playlist in Playlists"
+msgstr "还没有频道：请在“播放列表”中添加你的 M3U 播放列表"
+
+msgctxt "#30027"
+msgid "Radio stations of…"
+msgstr "电台所在国家…"
+
+msgctxt "#30028"
+msgid "Load free radio stations now? (Radio Browser, an open directory)"
+msgstr "现在加载免费电台吗？（Radio Browser，一个开放目录）"
+
+msgctxt "#30029"
+msgid "TVS Player does not provide any TV channels. Add only playlists you have the right to use."
+msgstr "TVS Player 不提供任何电视频道。请只添加你有权使用的播放列表。"
+
+msgctxt "#30030"
+msgid "{0} channels · updated {1}"
+msgstr "{0} 个频道 · 更新于 {1}"
+
+msgctxt "#30031"
+msgid "Added to favourites"
+msgstr "已添加到收藏"
+
+msgctxt "#30032"
+msgid "Move up"
+msgstr "上移"
+
+msgctxt "#30033"
+msgid "Move down"
+msgstr "下移"
+
+msgctxt "#30034"
+msgid "Search channels and radio"
+msgstr "搜索频道和电台"
+
+msgctxt "#30035"
+msgid "never"
+msgstr "从未"
+
+msgctxt "#30036"
+msgid "Which link?"
+msgstr "哪个链接？"
+
+msgctxt "#30038"
+msgid "{0} links"
+msgstr "{0} 个链接"
+
+msgctxt "#30039"
+msgid "No channels found: is this an M3U playlist?"
+msgstr "未找到频道：这是 M3U 播放列表吗？"
+
+msgctxt "#30040"
+msgid "The address must start with http:// or https://"
+msgstr "地址必须以 http:// 或 https:// 开头"
+
+msgctxt "#30041"
+msgid "Radio stations – {0}"
+msgstr "电台 – {0}"
+
+msgctxt "#30042"
+msgid "Poor internet connection: the channel may not start"
+msgstr "网络连接较差：频道可能无法播放"
+
+msgctxt "#30043"
+msgid "TV channels of this playlist"
+msgstr "此播放列表的电视频道"
+
+msgctxt "#30044"
+msgid "Radio stations of this playlist"
+msgstr "此播放列表的电台"
+
+msgctxt "#30045"
+msgid "TVS Player in the browser and on Android"
+msgstr "浏览器和 Android 上的 TVS Player"
+
+msgctxt "#30046"
+msgid "Your playlists and radio also in any web browser, nothing to install: https://tvsplayer.app\nOn Android phones and tablets: TVS Player (free) and TVS Player Pro (TV guide, rewind, recordings) on Google Play."
+msgstr "在任何浏览器中也能使用你的播放列表和电台，无需安装：https://tvsplayer.app/zh/\nAndroid 手机和平板：Google Play 上的 TVS Player（免费）和 TVS Player Pro（电视指南、回看、录制）。"
+
+msgctxt "#30100"
+msgid "General"
+msgstr "常规"
+
+msgctxt "#30101"
+msgid "Check links before playing (skip dead links)"
+msgstr "播放前检查链接（跳过无法播放的链接）"
+
+msgctxt "#30102"
+msgid "Link check timeout (seconds)"
+msgstr "链接检查超时（秒）"
+
+msgctxt "#30103"
+msgid "Radio stations to load per country"
+msgstr "每个国家加载的电台数量"
+
+msgctxt "#30104"
+msgid "First start done"
+msgstr "已完成首次启动"

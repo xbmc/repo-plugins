@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tvsplayer" name="TVS Player" version="1.0.2" provider-name="TVS Player">
+<addon id="plugin.video.tvsplayer" name="TVS Player" version="1.1.1" provider-name="TVS Player">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
     </requires>
@@ -9,6 +9,13 @@
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">Your own M3U playlists and free radio</summary>
         <summary lang="it_IT">Le tue playlist M3U e radio gratuite</summary>
+        <summary lang="fr_FR">Vos playlists M3U et la radio gratuite</summary>
+        <summary lang="de_DE">Deine eigenen M3U-Playlists und kostenloses Radio</summary>
+        <summary lang="es_ES">Tus listas M3U y radio gratis</summary>
+        <summary lang="pt_PT">As suas listas M3U e rádio gratuita</summary>
+        <summary lang="pl_PL">Twoje playlisty M3U i darmowe radio</summary>
+        <summary lang="zh_CN">你自己的 M3U 播放列表和免费电台</summary>
+        <summary lang="ja_JP">自分の M3U プレイリストと無料ラジオ</summary>
         <description lang="en_GB">TVS Player plays your own M3U / M3U8 playlists (from a web address or a file) and thousands of free radio stations from the open Radio Browser directory, by country and genre.
 
 Channels are sorted by category with logos and search. Channels with several streams skip dead links automatically. Favourites you can reorder.
@@ -19,13 +26,43 @@ TVS Player is also available on Android phones and tablets (TVS Player, free, an
 Canali ordinati per categoria con loghi e ricerca. I canali con più flussi saltano da soli i link non funzionanti. Preferiti riordinabili.
 
 TVS Player c'è anche per telefoni e tablet Android (TVS Player, gratis, e TVS Player Pro, con guida TV, replay e registrazioni, su Google Play) e in qualsiasi browser su https://tvsplayer.app</description>
+        <description lang="fr_FR">TVS Player lit vos playlists M3U / M3U8 (adresse web ou fichier) et des milliers de radios gratuites de l’annuaire ouvert Radio Browser, par pays et par genre. Chaînes par catégorie avec logos et recherche, favoris, filtre par playlist.
+
+TVS Player existe aussi sur Android (TVS Player gratuit et TVS Player Pro) et dans tout navigateur sur https://tvsplayer.app/fr/</description>
+        <description lang="de_DE">TVS Player spielt deine M3U-/M3U8-Playlists (Webadresse oder Datei) und tausende kostenlose Radiosender aus dem offenen Verzeichnis Radio Browser, nach Land und Genre. Sender nach Kategorie mit Logos und Suche, Favoriten, Filter nach Playlist.
+
+TVS Player gibt es auch für Android (TVS Player kostenlos und TVS Player Pro) und in jedem Browser unter https://tvsplayer.app/de/</description>
+        <description lang="es_ES">TVS Player reproduce tus listas M3U / M3U8 (dirección web o archivo) y miles de radios gratuitas del directorio abierto Radio Browser, por país y género. Canales por categoría con logos y búsqueda, favoritos, filtro por lista.
+
+TVS Player también está en Android (TVS Player gratis y TVS Player Pro) y en cualquier navegador en https://tvsplayer.app/es/</description>
+        <description lang="pt_PT">O TVS Player reproduz as suas listas M3U / M3U8 (endereço web ou ficheiro) e milhares de rádios gratuitas do diretório aberto Radio Browser, por país e género. Canais por categoria com logótipos e pesquisa, favoritos, filtro por lista.
+
+O TVS Player também existe para Android (TVS Player gratuito e TVS Player Pro) e em qualquer navegador em https://tvsplayer.app/pt/</description>
+        <description lang="pl_PL">TVS Player odtwarza Twoje playlisty M3U / M3U8 (adres internetowy lub plik) i tysiące darmowych stacji radiowych z otwartego katalogu Radio Browser, według kraju i gatunku. Kanały według kategorii z logo i wyszukiwaniem, ulubione, filtr według playlisty.
+
+TVS Player jest też na Androida (TVS Player za darmo i TVS Player Pro) i w każdej przeglądarce na https://tvsplayer.app/pl/</description>
+        <description lang="zh_CN">TVS Player 播放你自己的 M3U / M3U8 播放列表（网址或文件），以及开放目录 Radio Browser 中按国家和类型分类的数千个免费电台。频道按类别显示，带台标和搜索，支持收藏和按播放列表筛选。
+
+TVS Player 也有 Android 版本（免费的 TVS Player 和 TVS Player Pro），并可在任何浏览器中使用：https://tvsplayer.app/zh/</description>
+        <description lang="ja_JP">TVS Player は、自分の M3U / M3U8 プレイリスト（Web アドレスまたはファイル）と、オープンなディレクトリ Radio Browser の数千の無料ラジオ局（国・ジャンル別）を再生します。カテゴリ別のチャンネル、ロゴと検索、お気に入り、プレイリストでの絞り込み。
+
+TVS Player は Android（無料の TVS Player と TVS Player Pro）と、どのブラウザでも https://tvsplayer.app/ja/ で使えます。</description>
         <disclaimer lang="en_GB">TVS Player is only a player and does not provide any TV channels or playlists. Add only content you have the right to use. Radio station data: radio-browser.info.</disclaimer>
         <disclaimer lang="it_IT">TVS Player è solo un lettore e non fornisce canali TV o playlist. Aggiungi solo contenuti che hai il diritto di usare. Dati delle radio: radio-browser.info.</disclaimer>
+        <disclaimer lang="fr_FR">TVS Player n’est qu’un lecteur et ne fournit aucune chaîne TV ni playlist. Ajoutez seulement des contenus que vous avez le droit d’utiliser. Données des radios : radio-browser.info.</disclaimer>
+        <disclaimer lang="de_DE">TVS Player ist nur ein Player und stellt keine TV-Sender oder Playlists bereit. Füge nur Inhalte hinzu, die du nutzen darfst. Radiodaten: radio-browser.info.</disclaimer>
+        <disclaimer lang="es_ES">TVS Player es solo un reproductor y no ofrece canales de TV ni listas. Añade solo contenidos que tengas derecho a usar. Datos de las radios: radio-browser.info.</disclaimer>
+        <disclaimer lang="pt_PT">O TVS Player é apenas um leitor e não fornece canais de TV nem listas. Adicione apenas conteúdos que tem o direito de usar. Dados das rádios: radio-browser.info.</disclaimer>
+        <disclaimer lang="pl_PL">TVS Player to tylko odtwarzacz i nie dostarcza kanałów TV ani playlist. Dodawaj tylko treści, do których masz prawa. Dane stacji radiowych: radio-browser.info.</disclaimer>
+        <disclaimer lang="zh_CN">TVS Player 只是一个播放器，不提供任何电视频道或播放列表。请只添加你有权使用的内容。电台数据：radio-browser.info。</disclaimer>
+        <disclaimer lang="ja_JP">TVS Player はプレーヤーにすぎず、テレビチャンネルやプレイリストを提供しません。利用する権利のあるコンテンツだけを追加してください。ラジオ局データ：radio-browser.info。</disclaimer>
         <platform>all</platform>
         <license>GPL-2.0-or-later</license>
         <website>https://tvsplayer.app</website>
         <source>https://github.com/gnardelli/tvsplayer-kodi</source>
-        <news>1.0.2 - Description: TVS Player also on Android (free and Pro) and in the browser at tvsplayer.app.
+        <news>1.1.1 - Search works again: the keyboard opens from the main menu and the results list appears.
+1.1.0 - In 9 languages (English, Italian, French, German, Spanish, Portuguese, Polish, Chinese, Japanese). Playlists: the TV channels and radio stations of one playlist only (Playlists, then the playlist). When no link answers because the internet is slow or missing, a message says so. Main menu: TVS Player in the browser (tvsplayer.app) and on Android.
+1.0.2 - Description: TVS Player also on Android (free and Pro) and in the browser at tvsplayer.app.
 1.0.1 - Safer saving of playlists and favourites; slow streams are still tried; stream headers with "&amp;" (e.g. Referer) kept intact; accented names in local Latin-1 playlists.
 1.0.0 - First release: M3U playlists (web address or file), free radio by country, link fallback, favourites, search.</news>
         <assets>

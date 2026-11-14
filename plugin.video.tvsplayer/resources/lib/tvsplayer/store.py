@@ -81,12 +81,15 @@ class Store(object):
         return self._load("entries_%s.json" % playlist_id, [])
 
     # ── channels (entries merged across playlists) ───────────────────────
-    def channels(self, stream_type, group=None, query=None):
-        """Entries with the same name and category = one channel with several links (fallback)."""
+    def channels(self, stream_type, group=None, query=None, playlist_id=None):
+        """Entries with the same name and category = one channel with several links (fallback).
+        playlist_id: only the channels of that playlist (filter by playlist, as in the Android apps)."""
         merged = {}
         order = []
         query = (query or "").lower()
         for p in self.playlists():
+            if playlist_id and p["id"] != playlist_id:
+                continue
             for e in self.entries(p["id"]):
                 if e["type"] != stream_type:
                     continue
@@ -110,11 +113,11 @@ class Store(object):
     def channel(self, stream_type, group, name):
         return next((c for c in self.channels(stream_type, group) if c["name"] == name), None)
 
-    def groups(self, stream_type):
+    def groups(self, stream_type, playlist_id=None):
         """[(group, channel_count)] in playlist order."""
         counts = {}
         order = []
-        for c in self.channels(stream_type):
+        for c in self.channels(stream_type, playlist_id=playlist_id):
             if c["group"] not in counts:
                 counts[c["group"]] = 0
                 order.append(c["group"])

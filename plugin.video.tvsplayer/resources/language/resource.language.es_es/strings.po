@@ -1,0 +1,214 @@
+# Kodi Media Center language file
+# Addon Name: TVS Player
+# Addon id: plugin.video.tvsplayer
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.tvsplayer\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "#30000"
+msgid "TV"
+msgstr "TV"
+
+msgctxt "#30001"
+msgid "Radio"
+msgstr "Radio"
+
+msgctxt "#30002"
+msgid "Favourites"
+msgstr "Favoritos"
+
+msgctxt "#30003"
+msgid "Playlists"
+msgstr "Listas"
+
+msgctxt "#30004"
+msgid "Search"
+msgstr "Buscar"
+
+msgctxt "#30005"
+msgid "All"
+msgstr "Todos"
+
+msgctxt "#30006"
+msgid "Add M3U playlist (web address)"
+msgstr "Añadir lista M3U (dirección web)"
+
+msgctxt "#30007"
+msgid "Add M3U playlist (file)"
+msgstr "Añadir lista M3U (archivo)"
+
+msgctxt "#30008"
+msgid "Add free radio stations by country"
+msgstr "Añadir radios gratuitas por país"
+
+msgctxt "#30009"
+msgid "Playlist address (http://… .m3u)"
+msgstr "Dirección de la lista (http://… .m3u)"
+
+msgctxt "#30010"
+msgid "Name of the playlist"
+msgstr "Nombre de la lista"
+
+msgctxt "#30011"
+msgid "Content of this playlist"
+msgstr "Contenido de esta lista"
+
+msgctxt "#30012"
+msgid "Automatic (TV and radio)"
+msgstr "Automático (TV y radio)"
+
+msgctxt "#30013"
+msgid "TV only"
+msgstr "Solo TV"
+
+msgctxt "#30014"
+msgid "Radio only"
+msgstr "Solo radio"
+
+msgctxt "#30015"
+msgid "Loading…"
+msgstr "Cargando…"
+
+msgctxt "#30016"
+msgid "{1}: {0} channels"
+msgstr "{1}: {0} canales"
+
+msgctxt "#30017"
+msgid "Could not load the playlist"
+msgstr "No se ha podido cargar la lista"
+
+msgctxt "#30018"
+msgid "Refresh"
+msgstr "Actualizar"
+
+msgctxt "#30019"
+msgid "Delete"
+msgstr "Eliminar"
+
+msgctxt "#30020"
+msgid "Delete \"{0}\"? Its channels are removed. Favourites stay."
+msgstr "¿Eliminar «{0}»? Se quitan sus canales. Los favoritos se quedan."
+
+msgctxt "#30021"
+msgid "Add to favourites"
+msgstr "Añadir a favoritos"
+
+msgctxt "#30022"
+msgid "Remove from favourites"
+msgstr "Quitar de favoritos"
+
+msgctxt "#30023"
+msgid "Choose link"
+msgstr "Elegir enlace"
+
+msgctxt "#30024"
+msgid "Link {0}"
+msgstr "Enlace {0}"
+
+msgctxt "#30025"
+msgid "Channel not available (no working link)"
+msgstr "Canal no disponible (ningún enlace funciona)"
+
+msgctxt "#30026"
+msgid "No channels yet: add your M3U playlist in Playlists"
+msgstr "Aún no hay canales: añade tu lista M3U en Listas"
+
+msgctxt "#30027"
+msgid "Radio stations of…"
+msgstr "Radios de…"
+
+msgctxt "#30028"
+msgid "Load free radio stations now? (Radio Browser, an open directory)"
+msgstr "¿Cargar ahora las radios gratuitas? (Radio Browser, un directorio abierto)"
+
+msgctxt "#30029"
+msgid "TVS Player does not provide any TV channels. Add only playlists you have the right to use."
+msgstr "TVS Player no ofrece canales de TV. Añade solo listas que tengas derecho a usar."
+
+msgctxt "#30030"
+msgid "{0} channels · updated {1}"
+msgstr "{0} canales · actualizada {1}"
+
+msgctxt "#30031"
+msgid "Added to favourites"
+msgstr "Añadido a favoritos"
+
+msgctxt "#30032"
+msgid "Move up"
+msgstr "Subir"
+
+msgctxt "#30033"
+msgid "Move down"
+msgstr "Bajar"
+
+msgctxt "#30034"
+msgid "Search channels and radio"
+msgstr "Buscar canales y radios"
+
+msgctxt "#30035"
+msgid "never"
+msgstr "nunca"
+
+msgctxt "#30036"
+msgid "Which link?"
+msgstr "¿Qué enlace?"
+
+msgctxt "#30038"
+msgid "{0} links"
+msgstr "{0} enlaces"
+
+msgctxt "#30039"
+msgid "No channels found: is this an M3U playlist?"
+msgstr "No se han encontrado canales: ¿es una lista M3U?"
+
+msgctxt "#30040"
+msgid "The address must start with http:// or https://"
+msgstr "La dirección debe empezar por http:// o https://"
+
+msgctxt "#30041"
+msgid "Radio stations – {0}"
+msgstr "Radios – {0}"
+
+msgctxt "#30042"
+msgid "Poor internet connection: the channel may not start"
+msgstr "Conexión a internet débil: puede que el canal no arranque"
+
+msgctxt "#30043"
+msgid "TV channels of this playlist"
+msgstr "Canales de TV de esta lista"
+
+msgctxt "#30044"
+msgid "Radio stations of this playlist"
+msgstr "Radios de esta lista"
+
+msgctxt "#30045"
+msgid "TVS Player in the browser and on Android"
+msgstr "TVS Player en el navegador y en Android"
+
+msgctxt "#30046"
+msgid "Your playlists and radio also in any web browser, nothing to install: https://tvsplayer.app\nOn Android phones and tablets: TVS Player (free) and TVS Player Pro (TV guide, rewind, recordings) on Google Play."
+msgstr "Tus listas y la radio también en cualquier navegador, sin instalar nada: https://tvsplayer.app/es/\nEn móviles y tablets Android: TVS Player (gratis) y TVS Player Pro (guía TV, retroceder, grabaciones) en Google Play."
+
+msgctxt "#30100"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30101"
+msgid "Check links before playing (skip dead links)"
+msgstr "Comprobar los enlaces antes de reproducir (saltar los que no funcionan)"
+
+msgctxt "#30102"
+msgid "Link check timeout (seconds)"
+msgstr "Tiempo máximo de comprobación (segundos)"
+
+msgctxt "#30103"
+msgid "Radio stations to load per country"
+msgstr "Radios que cargar por país"
+
+msgctxt "#30104"
+msgid "First start done"
+msgstr "Primer inicio hecho"

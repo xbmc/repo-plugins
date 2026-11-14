@@ -59,7 +59,8 @@ def view(client, scope=None):
         except provider.ApiError as e:
             kodiutil.log("EPG unavailable: %s" % e, xbmc.LOGWARNING)
         # A deactivated channel's row has no programme, nor one outside the subscription.
-        shown = {c["station_id"] for c in channels if str(c["id"]) not in off and (subscribed is None or c["id"] in subscribed)}
+        plays = [c for c in channels if not is_deactivated(c["id"], off) and (subscribed is None or c["id"] in subscribed)]
+        shown = {c["station_id"] for c in plays}
         on_air = {station: pair for station, pair in on_air.items() if station in shown}
     return {
         "channels": channels,
@@ -72,6 +73,15 @@ def view(client, scope=None):
     }
 
 
+def public_view(client, scope=None):
+    """Return what a channel list shows without the login (see view): after a refused one, the public channels.
+
+    The client makes guest calls from then on.
+    """
+    client.guest = True
+    return view(client, scope)
+
+
 def grouped(channels, subscribed, favourites, off):
     """Return the channels in the lists' default order, each group in the order given.
 
@@ -80,14 +90,14 @@ def grouped(channels, subscribed, favourites, off):
 
     :param subscribed: the subscribed channel ids; None: all are
     :param favourites: the favourite channel ids; None: none
-    :param off: the deactivated channel ids, as strings (see deactivated)
+    :param off: the deactivated channel ids (see deactivated)
     """
     favourites = set(favourites or ())
 
     def group(c):
         if subscribed is not None and c["id"] not in subscribed:
             return 3
-        if str(c["id"]) in off:
+        if is_deactivated(c["id"], off):
             return 2
         return 0 if c["id"] in favourites else 1
 
@@ -95,8 +105,16 @@ def grouped(channels, subscribed, favourites, off):
 
 
 def deactivated():
-    """Return the ids of the channels the user deactivated (as strings); none if there is no such list."""
+    """Return the ids of the channels the user deactivated, as text (see is_deactivated); none if there is no such list."""
     return set(atomicfile.read_json(DEACTIVATED, []))
+
+
+def is_deactivated(channel_id, off):
+    """Return whether a channel is among the deactivated ids `off` (see deactivated).
+
+    Kept as text: the provider gives a channel id as a number or as text.
+    """
+    return str(channel_id) in off
 
 
 def set_deactivated(channel_id, on):

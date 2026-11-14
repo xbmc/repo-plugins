@@ -4,10 +4,20 @@
 class ApiError(Exception):
     """The provider refused a call or could not be reached; base of the client's errors.
 
-    kind: the user-facing message key (see service.quickplay.ERRORS).
+    kind: the user-facing message key (see playmessages.ERRORS).
+
+    :param code: the provider's error code, if it gave one
+    :param status: the HTTP status, if the call got that far
     """
 
     kind = None
+    # Something else to watch, set by the view that caught it (see plugin.tell).
+    offer = None
+
+    def __init__(self, message="", code=None, status=None):
+        Exception.__init__(self, message)
+        self.code = code
+        self.status = status
 
 
 class AuthError(ApiError):
@@ -17,7 +27,7 @@ class AuthError(ApiError):
 
 
 class GeoBlockedError(ApiError):
-    """The provider refused playback from outside Hungary (7027, "out of country blocked")."""
+    """The provider refused playback from this address."""
 
     kind = "geo"
 
@@ -29,13 +39,15 @@ class NotSubscribedError(ApiError):
 
 
 class LicenceRefusedError(ApiError):
-    """The licence server refused this device's Widevine module before (3099); retrying is futile."""
+    """The licence server refuses this device's Widevine module; retrying is futile.
+
+    :param code: the server's refusal code; None when the caller knows it would be refused and never asked
+    """
 
     kind = "licence"
 
-    def __init__(self, code):
-        ApiError.__init__(self, "licence refused before (%s)" % code)
-        self.code = code
+    def __init__(self, code=None):
+        ApiError.__init__(self, "licence refused (%s)" % (code or "not asked"), code=code)
 
 
 class RestartNotAllowedError(ApiError):

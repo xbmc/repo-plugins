@@ -15,6 +15,7 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
+from resources.lib import playmessages
 from resources.lib import resolveditem
 from resources.lib.data import guidedata
 from resources.lib.util import kodienv
@@ -24,42 +25,11 @@ PROPERTY = "%s.playservice" % kodienv.ADDON_ID
 PLAYING = "%s.playing" % kodienv.ADDON_ID
 CONNECT_TIMEOUT = 5
 ANSWER_TIMEOUT = 600
-# Error kinds told no more: the PIN dialog has said why, or the user cancelled a question.
-SILENT = ("parental", "cancelled")
-# Messages for the service's error kinds (shared with the full plugin).
-ERRORS = {
-    "auth": 30010,
-    "geo": 30011,
-    "subscription": 30139,
-    "restart": 30141,
-    "archive": 30142,
-    "expired": 30259,
-    "licence": 30012,
-}
 
 
 def playing_mark(params):
     """Return what PLAYING keeps for a play: a live channel's id; nothing for a programme (watched back or restarted)."""
     return "" if params.get("programme") else params.get("id", "")
-
-
-def offer_instead(base, why, offer):
-    """Say why nothing plays and offer what is left: the programme onto the favourites, or its row off Continue watching.
-
-    :param base: the plugin's address (its actions do it, see views.programmes and views.continuing)
-    :param why: the message (an airing no longer watched back)
-    :param offer: {"id", "kind", "title", "next"} or {"mark"} (see watchoffer)
-    """
-    addon = xbmcaddon.Addon()
-    if "mark" in offer:
-        question = addon.getLocalizedString(30264)
-        action = {"action": "continue_remove", "mark": offer["mark"]}
-    else:
-        question = addon.getLocalizedString(30260) % (offer["next"], offer["title"])
-        action = {"action": "watch", "id": offer["id"], "kind": offer["kind"], "on": 1}
-    # Kodi's own Yes/No: "Add to favourite programmes" did not fit the button.
-    if xbmcgui.Dialog().yesno(addon.getAddonInfo("name"), "%s[CR][CR]%s" % (why, question)):
-        xbmc.executebuiltin("RunPlugin(%s?%s)" % (base, urlencode(action)))
 
 
 def _log(msg, level=xbmc.LOGDEBUG):
@@ -90,16 +60,16 @@ def run(argv, started):
     handle = int(argv[1])
     if result.get("error") == "auth":
         return False  # no (valid) login: the full plugin logs in by QR code, then plays
-    if result.get("error") in SILENT:
+    if result.get("error") in playmessages.SILENT:
         xbmcplugin.setResolvedUrl(handle, False, xbmcgui.ListItem())
         return True
     if "error" in result:
         addon = xbmcaddon.Addon()
         _log("play failed: %s" % result.get("message"), xbmc.LOGWARNING)
         if result.get("offer"):
-            offer_instead(argv[0], addon.getLocalizedString(ERRORS[result["error"]]), result["offer"])
-        elif result["error"] in ERRORS:
-            xbmcgui.Dialog().ok(addon.getAddonInfo("name"), addon.getLocalizedString(ERRORS[result["error"]]))
+            playmessages.offer_instead(argv[0], addon.getLocalizedString(playmessages.ERRORS[result["error"]]), result["offer"])
+        elif result["error"] in playmessages.ERRORS:
+            xbmcgui.Dialog().ok(addon.getAddonInfo("name"), addon.getLocalizedString(playmessages.ERRORS[result["error"]]))
         else:
             xbmcgui.Dialog().notification(
                 addon.getAddonInfo("name"), (result.get("message") or "")[:120], xbmcgui.NOTIFICATION_ERROR
@@ -108,7 +78,7 @@ def run(argv, started):
         return True
     answered = time.time()
     xbmcplugin.setResolvedUrl(handle, True, resolveditem.list_item(result))
-    xbmcgui.Window(10000).setProperty(PLAYING, playing_mark(params))
+    xbmcgui.Window(kodienv.HOME_WINDOW).setProperty(PLAYING, playing_mark(params))
     now = time.time()
     _log(
         "play: resolved through the service after %.2fs"
@@ -132,7 +102,7 @@ def ask(path, timeout, **query):
 
 def _connect():
     """Return (socket connected to the play service, its token); None if it does not run (or not yet)."""
-    address = xbmcgui.Window(10000).getProperty(PROPERTY).split()
+    address = xbmcgui.Window(kodienv.HOME_WINDOW).getProperty(PROPERTY).split()
     if len(address) != 2:
         return None
     try:

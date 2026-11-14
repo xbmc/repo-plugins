@@ -28,7 +28,7 @@ def resolve(call, params):
 
 
 class PlayViews:
-    """The plugin's own playback (see plugin.ROUTES).
+    """The plugin's own playback (see views.routes).
 
     :param call: the plugin call (see views.call.Call)
     """
@@ -44,16 +44,25 @@ class PlayViews:
 
         call, client, params = self._call, self._call.client, self._call.params
         started = time.time()
-        # Before the login too: on Windows/macOS it would be for nothing.
+        # Before the login too: off Android the licence would be refused anyway.
         if kodiutil.untrusted_widevine():
-            raise provider.LicenceRefusedError("3099")
+            raise provider.LicenceRefusedError()
+        # InputStream Adaptive ready before the stream session opens: a session waiting on InputStream
+        # Helper's questions is closed before the player asks for it. Skipping it where it has nothing
+        # to check saves its import on every switch.
+        if not kodiutil.isa_ready():
+            import inputstreamhelper
+
+            # The provider's streams are DASH (see playback.play_live).
+            if not inputstreamhelper.Helper("mpd", drm="com.widevine.alpha").check_inputstream():
+                return call.end(False)
         # Not logged in: the phone login first, then the channel starts.
         if not client.is_logged_in():
             token = phonelogin.wait_for_token(client)
             if not token:
                 return call.end(False)
             client.login_with_refresh_token(token)
-            loginstate.login_changed()
+            loginstate.login_changed(client)
         try:
             stream, proxy = streamsession.start_stream(client, self._channel(), guidedata.from_param(params.get("programme")))
         except provider.errors.CatchupExpiredError as e:
@@ -63,15 +72,6 @@ class PlayViews:
             raise
         session = streamsession.Session(client, stream, proxy)
         rolled = time.time()
-        # Skipping InputStream Helper when it has nothing to check saves its import on every switch.
-        if not kodiutil.isa_ready():
-            import inputstreamhelper
-
-            manifest_type = "hls" if stream["type"].startswith("hls") else "mpd"
-            if not inputstreamhelper.Helper(manifest_type, drm="com.widevine.alpha").check_inputstream():
-                session.close()
-                return call.end(False)
-
         li = resolveditem.list_item(playitem.spec(stream, proxy.manifest, proxy.url, kodiutil.kodi_major()))
         xbmcplugin.setResolvedUrl(call.handle, True, li)
         from resources.lib.service import quickplay

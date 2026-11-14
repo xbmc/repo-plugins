@@ -10,6 +10,11 @@ from resources.lib.util import isotime
 # Plugin URL form of a programme: "start~end~flags~age" (UTC times, content_flags,
 # rating_age or empty), see from_param.
 SEPARATOR = "~"
+# Guide content flags: the programme can be watched back; the programme on air may not be watched from its beginning.
+CATCHUP_FLAG = "ct"
+NO_RESTART_FLAG = "rn"
+# The age the lock counts an "18+" (adult) rating as: above a plain "18".
+ADULT_AGE = 19
 
 
 def param(p, known_age=True, then=None):
@@ -42,10 +47,10 @@ def rating_number(rating):
 
 
 def rating_age(rating):
-    """Return the age a rating locks from: "12+" 12, "18" 18, "18+" 19 (adult), "0-99" 0; None: not rated."""
+    """Return the age a rating locks from: "12+" 12, "18" 18, "18+" ADULT_AGE, "0-99" 0; None: not rated."""
     rating = str(rating or "").strip()
     if rating == "18+":
-        return 19
+        return ADULT_AGE
     if rating == "0-99":
         return 0
     return rating_number(rating)
@@ -114,10 +119,9 @@ def kodi_resume(param, argv):
     return head + sep + (RESUME if answer == "resume:true" else FROM_START)
 
 
-# The guide data rarely carries an image itself.
+# A programme's 16:9 picture by its id, for guide data without an image.
 PROGRAM_IMAGE = "https://ottapp-akamai-client-a.proda.dtp.tv3cloud.com/images/images/program/%s/16x9/keyartmedium.jpg"
-# By kind ("program"/"series"), id and shape: 2:3 poster (310x465) and 16:9 (711x400, sharper
-# than the guide's 426x240). Every item of a sampled block had both (2026-10-30).
+# A programme's or series' artwork by kind ("program"/"series"), id and shape: the 2:3 poster or a 16:9 picture.
 ARTWORK = "https://ottapp-akamai-client-a.proda.dtp.tv3cloud.com/images/images/%s/%s/%s/keyartxlarge.jpg"
 # Guide flags shown as tags: flag -> string id.
 ACCESS_TAGS = {"has_audio_description": 30214, "has_sign_language": 30215}
@@ -239,8 +243,17 @@ def kind(p):
 
 
 def watchable_back(p):
-    """Return whether a guide programme is in the archive ("ct" flag)."""
-    return "ct" in (p.get("content_flags") if isinstance(p.get("content_flags"), list) else [])
+    """Return whether a guide programme is in the archive (see CATCHUP_FLAG)."""
+    return CATCHUP_FLAG in _flags(p)
+
+
+def restartable(p):
+    """Return whether a guide programme on air may be watched from its beginning (see NO_RESTART_FLAG)."""
+    return NO_RESTART_FLAG not in _flags(p)
+
+
+def _flags(p):
+    return p.get("content_flags") if isinstance(p.get("content_flags"), list) else []
 
 
 def image(p):

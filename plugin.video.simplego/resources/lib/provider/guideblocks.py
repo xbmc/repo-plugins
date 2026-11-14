@@ -12,11 +12,15 @@ import time
 
 from resources.lib.util import atomicfile
 
-# An ended block never changes; a later one is refetched after BLOCK_FRESH (the CDN serves them
-# up to 15 minutes old).
+DAY_SECONDS = 24 * 3600
+# The guide API serves only these 3-hour UTC blocks.
+BLOCK_HOURS = 3
+BLOCK_SECONDS = BLOCK_HOURS * 3600
+BLOCK_OFFSETS = range(0, 24, BLOCK_HOURS)
+# An ended block never changes; a later one is refetched after BLOCK_FRESH.
 BLOCK_FRESH = 15 * 60
 # Blocks beyond NEAR rarely change; refreshing them was most of an export (~100 of ~130 blocks).
-NEAR = 2 * 86400
+NEAR = 2 * DAY_SECONDS
 FAR_BLOCK_FRESH = 12 * 3600
 # In the kept block's file name: blocks of an older layout are ignored.
 BLOCK_VERSION = 5
@@ -25,8 +29,8 @@ ARCHIVE_DAYS = 7
 # Parsed blocks kept in memory (see read_channels): live lookups reread the same block, and
 # parsing it was most of a channel start (0.4-0.5 s on a TV stick).
 READ_KEPT = 2
-_read = collections.OrderedDict()
-_read_lock = threading.Lock()
+_parsed_blocks = collections.OrderedDict()
+_parsed_blocks_lock = threading.Lock()
 
 
 def block_path(cache_dir, date, offset):
@@ -85,7 +89,7 @@ def block_header(path, stations, date, offset, any_stations=False, fresh=None):
         return None
     start = calendar.timegm(time.strptime(date, "%Y-%m-%d")) + offset * 3600
     fresh = fresh or (FAR_BLOCK_FRESH if start - time.time() > NEAR else BLOCK_FRESH)
-    if fetched < start + 3 * 3600 and time.time() - fetched > fresh:
+    if fetched < start + BLOCK_SECONDS and time.time() - fetched > fresh:
         return None
     try:
         with gzip.open(path, "rt", encoding="utf-8") as f:
@@ -107,8 +111,8 @@ def read_channels(path, stations):
     except (OSError, TypeError):
         return None
     key = (path, info.st_mtime_ns, info.st_size)  # a block fetched again is another file
-    with _read_lock:
-        channels = _read.get(key)
+    with _parsed_blocks_lock:
+        channels = _parsed_blocks.get(key)
     if channels is None:
         try:
             with gzip.open(path, "rt", encoding="utf-8") as f:
@@ -116,10 +120,10 @@ def read_channels(path, stations):
                 channels = json.loads(f.read())
         except (OSError, EOFError, ValueError):
             return None
-        with _read_lock:
-            _read[key] = channels
-            while len(_read) > READ_KEPT:
-                _read.popitem(last=False)
+        with _parsed_blocks_lock:
+            _parsed_blocks[key] = channels
+            while len(_parsed_blocks) > READ_KEPT:
+                _parsed_blocks.popitem(last=False)
     return {s: progs for s, progs in channels.items() if stations is None or s in stations}
 
 
@@ -132,7 +136,7 @@ def cached_block(path, stations, date, offset, any_stations=False, fresh=None):
 
 def drop_old_blocks(cache_dir):
     """Remove kept blocks older than the archive."""
-    oldest = time.strftime("%Y-%m-%d", time.gmtime(time.time() - (ARCHIVE_DAYS + 1) * 86400))
+    oldest = time.strftime("%Y-%m-%d", time.gmtime(time.time() - (ARCHIVE_DAYS + 1) * DAY_SECONDS))
     for name in os.listdir(cache_dir):
         if name[:10] < oldest:
             with contextlib.suppress(OSError):

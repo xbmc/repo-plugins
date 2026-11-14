@@ -12,10 +12,13 @@ from resources.lib import kodiutil
 # and the raw escape and backspace key codes.
 ACTIONS_CLOSE = (9, 10, 92, 216, 247, 257, 275, 61467, 61448)
 CENTRE = 0x00000002  # XBFONT_CENTER_X
+MIDDLE = 0x00000004  # XBFONT_CENTER_Y
 # Names in Kodi's colour list (system/colors.xml): mediumvioletred is the nearest to the provider's magenta.
 TITLE_COLOUR = "mediumvioletred"
 URL_COLOUR = "white"
 HINT_COLOUR = "lightgrey"
+# The address button's resting and focused fill: it must look tappable on the dark background.
+BUTTON_FILLS = ((40, 40, 48), (226, 0, 116))
 
 
 def _solid_png(path, rgb):
@@ -34,6 +37,14 @@ def _solid_png(path, rgb):
         )
 
 
+def _texture(workdir, name, rgb):
+    """Return a single-colour PNG in the folder, written on first use."""
+    path = os.path.join(workdir, name)
+    if not os.path.exists(path):
+        _solid_png(path, rgb)
+    return path
+
+
 def make_qr_png(text, path):
     """Write a PNG of the QR code for this text."""
     import pyqrcode
@@ -44,29 +55,42 @@ def make_qr_png(text, path):
 class QrWindow(xbmcgui.WindowDialog):
     """Show a title, the QR code, its address and a hint; `closed` turns true when the user closes it.
 
-    :param workdir: a folder for the background image
+    :param workdir: a folder for the background images
     :param title: the heading above the QR code
     :param qr_png: the QR code's image (see make_qr_png)
     :param url: the address the QR code holds, shown under it
     :param hint: the instructions shown at the bottom
+    :param open_url: on a phone or tablet, the address to open in its own browser: the shown one becomes a button
     """
 
-    def __init__(self, workdir, title, qr_png, url, hint):
+    def __init__(self, workdir, title, qr_png, url, hint, open_url=None):
         super().__init__()
         self.closed = False
-        bg = os.path.join(workdir, "login_bg.png")
-        if not os.path.exists(bg):
-            _solid_png(bg, (16, 16, 20))
-        self.addControl(xbmcgui.ControlImage(0, 0, 1280, 720, bg))
+        self._open_url = open_url
+        self._link = None
+        self.addControl(xbmcgui.ControlImage(0, 0, 1280, 720, _texture(workdir, "login_bg.png", (16, 16, 20))))
         # Colours by name (textColor takes only hex): Kodi's colour list, which a skin can override.
         title = kodiutil.coloured(TITLE_COLOUR, title)
         self.addControl(xbmcgui.ControlLabel(0, 30, 1280, 50, title, font="font30", alignment=CENTRE))
         self.addControl(xbmcgui.ControlImage(460, 100, 360, 360, qr_png))
         url = kodiutil.coloured(URL_COLOUR, url)
-        self.addControl(xbmcgui.ControlLabel(0, 480, 1280, 40, url, font="font13", alignment=CENTRE))
+        if open_url:
+            rest, focus = (_texture(workdir, "login_button%d.png" % i, rgb) for i, rgb in enumerate(BUTTON_FILLS))
+            self._link = xbmcgui.ControlButton(
+                240, 472, 800, 50, url, focusTexture=focus, noFocusTexture=rest, font="font13", alignment=CENTRE | MIDDLE
+            )
+            self.addControl(self._link)
+            self.setFocus(self._link)
+        else:
+            self.addControl(xbmcgui.ControlLabel(0, 480, 1280, 40, url, font="font13", alignment=CENTRE))
         hint_box = xbmcgui.ControlTextBox(140, 530, 1000, 170, font="font13")
         self.addControl(hint_box)
         hint_box.setText(kodiutil.coloured(HINT_COLOUR, hint))
+
+    def onControl(self, control):
+        """Open the address in this device's browser when its button is chosen (see open_url)."""
+        if self._link is not None and control.getId() == self._link.getId():
+            kodiutil.open_in_browser(self._open_url)
 
     def onAction(self, action):
         """Close the window on back, stop and the like (see ACTIONS_CLOSE)."""

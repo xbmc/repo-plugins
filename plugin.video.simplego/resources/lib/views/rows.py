@@ -6,6 +6,7 @@ import xbmcplugin
 
 from resources.lib import kodiutil
 from resources.lib.data import guidedata
+from resources.lib.util import localtime
 
 _s = kodiutil.string
 _log = kodiutil.log
@@ -15,7 +16,7 @@ def row_title(prog):
     """Return a channel row's first line: "07:30 Title | S1E10: Episode title", the parts it has."""
     title = prog["description"]
     if prog.get("start_time"):
-        title = "%s %s" % (kodiutil.local_time(prog["start_time"], date=False), title)
+        title = "%s %s" % (localtime.local_time(prog["start_time"], date=False), title)
     return with_episode(title, prog)
 
 
@@ -42,10 +43,7 @@ def with_note(label, note):
 
 
 def panel_logo(url):
-    """Return a channel logo the size of Estuary's side panel (561x421), not the listed 308x231.
-
-    The size is in the address; every channel had the larger one (checked 2026-10-30).
-    """
+    """Return the large size of a channel logo, which fits Estuary's side panel (561x421)."""
     return url.replace("/logomedium.png", "/logolarge.png") if url else url
 
 
@@ -108,18 +106,12 @@ def set_programme_extras(tag, prog):
         tag.setTags(tags)
 
 
-def set_right_label(tag, text):
-    """Put text on the right of a row (see show_right_labels)."""
-    tag.setProductionCode(text)
+def hide_right_labels(handle):
+    """Show the rows' own labels and nothing on their right in this list.
 
-
-def show_right_labels(handle):
-    """Show the rows' right-hand labels (see set_right_label) in this list.
-
-    Kodi takes a plugin item's second label only from a sort method's mask, so it is
-    carried in the otherwise unused production code (%P).
+    Without a sort method of its own, Kodi shows a plugin row's length there.
     """
-    xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_NONE, labelMask="%L", label2Mask="%P")
+    xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_NONE, labelMask="%L", label2Mask=" ")
 
 
 def set_channel_sort_keys(tag, channel, position):

@@ -11,20 +11,24 @@ SCOPES = {
     "all": ("/epg/channel", "START_UP", "EPG_CHANNEL"),
     "favourite": ("/epg/channel/favourite", "EPG", "FAVOURITE_CHANNELS"),
 }
+# Above every channel number, so a channel without one sorts last.
+NO_NUMBER = 9999
 
 
 class Channels:
-    """The channel lists, kept in the state.
+    """The channel lists, kept by scope in a file every client of the profile shares (see core.CHANNELS_FILE).
 
-    :param state: the client's statefile.State
+    :param state: the client's statefile.State (older versions kept the lists there, see drop_state_copy)
     :param api: the client's core.Api (the public list)
     :param auth: the client's auth.Auth (the account's lists)
+    :param kept: where the lists are kept (a sharedfile.SharedJson)
     """
 
-    def __init__(self, state, api, auth):
+    def __init__(self, state, api, auth, kept):
         self._state = state
         self._api = api
         self._auth = auth
+        self._kept = kept
 
     def list(self, scope="all", kind="all"):
         """Return the channels of the subscriber's channel map (the public one in guest mode), with their MediaKind ids.
@@ -37,21 +41,31 @@ class Channels:
         if not self._auth.authed:
             scope = "guest"
         acc = self._auth.valid_account() if self._auth.authed else {}
-        cache = self._state.setdefault("channels_cache", {})
-        entry = cache.get(scope)
-        ttl = core.CHANNELS_TTL if scope == "favourite" else core.LINEUP_TTL
+        entry = self._kept.read().get(scope)
+        ttl = core.FAVOURITES_TTL if scope == "favourite" else core.LINEUP_TTL
         if not entry or entry["at"] + ttl < time.time() or entry["map"] != acc.get("channelMap_id"):
-            entry = cache[scope] = {"at": time.time(), "map": acc.get("channelMap_id"), "list": self._fetch_channels(scope)}
-            self._state.save()
+            entry = {"at": time.time(), "map": acc.get("channelMap_id"), "list": self._fetch_channels(scope)}
+            self._kept.change(lambda kept: kept.update({scope: entry}))
         return [c for c in entry["list"] if kind == "all" or c["radio"] == (kind == "radio")]
 
     def forget(self, scope):
         """Drop a kept channel list (it changed on the account): the next ask fetches it again."""
-        self._state.get("channels_cache", {}).pop(scope, None)
+        self._kept.change(lambda kept: kept.pop(scope, None))
+
+    def drop_state_copy(self):
+        """Drop the lists that versions up to 0.8.150 kept in the state (they made its every save slow)."""
+        # TODO(#21): delete once updates from 0.8.150 or older are a few releases behind.
+        if "channels_cache" in self._state:
+            del self._state["channels_cache"]
+            self._state.save()
+
+    def forget_all(self):
+        """Drop every kept channel list (a logout: the next account's are its own)."""
+        self._kept.change(dict.clear)
 
     def channel_of(self, channel_id):
         """Return a channel's entry from the kept channel lists; None if not there."""
-        for entry in (self._state.get("channels_cache") or {}).values():
+        for entry in self._kept.read().values():
             for c in entry.get("list") or []:
                 if c.get("id") == channel_id:
                     return c
@@ -70,7 +84,7 @@ class Channels:
         if not self._auth.authed:
             return None
         if not fetch:
-            entry = (self._state.get("channels_cache") or {}).get("subscribed")
+            entry = self._kept.read().get("subscribed")
             return {c["id"] for c in entry["list"]} if entry else None
         try:
             return {c["id"] for c in self.list("subscribed")}
@@ -79,7 +93,8 @@ class Channels:
 
     def _fetch_channels(self, scope):
         if scope == "guest":
-            data = self._api.call("/epg/channel", "START_UP", "EPG_CHANNEL", params={"includeVirtualChannels": "false"})
+            path, flow, step = SCOPES["all"]
+            data = self._api.call(path, flow, step, params={"includeVirtualChannels": "false"})
         else:
             path, flow, step = SCOPES[scope]
             params = {"channelMap_id": self._auth.channel_map(), "includeVirtualChannels": "false"}
@@ -113,5 +128,10 @@ class Channels:
                     ],
                 }
             )
-        out.sort(key=lambda c: c["number"] or 9999)
+        out.sort(key=sort_key)
         return out
+
+
+def sort_key(channel):
+    """Return a channel's place in the number order: one without a number goes last."""
+    return channel["number"] or NO_NUMBER

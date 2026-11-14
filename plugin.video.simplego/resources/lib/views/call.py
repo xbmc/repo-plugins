@@ -11,9 +11,7 @@ from resources.lib import clientfactory
 from resources.lib import kodiutil
 from resources.lib.data import guidedata
 from resources.lib.util import laps
-
-# The actions that list a folder: one failing ends its listing, as failed (see end).
-LISTINGS = ("root", "channels", "mychannels", "watchlist", "seasons", "continue")
+from resources.lib.views import routes
 
 
 class Call:
@@ -71,7 +69,7 @@ class Call:
             return
         if self.action == "play":
             xbmcplugin.setResolvedUrl(self.handle, False, xbmcgui.ListItem())
-        elif self.action in LISTINGS:
+        elif routes.is_listing(self.action):
             xbmcplugin.endOfDirectory(self.handle, succeeded=ok)
 
     def decline_play(self):

@@ -33,8 +33,7 @@ def list_view(call, scope=None):
     except provider.AuthError as e:
         _log("auth error: %s" % e, xbmc.LOGWARNING)
         xbmcgui.Dialog().notification(kodiutil.name(), kodiutil.string(30010), xbmcgui.NOTIFICATION_WARNING)
-        call.client.guest = True
-        view = channellist.view(call.client, scope)
+        view = channellist.public_view(call.client, scope)
     call.laps("made here")
     return view
 

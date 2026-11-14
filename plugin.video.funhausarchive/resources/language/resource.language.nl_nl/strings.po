@@ -1,0 +1,263 @@
+# Kodi Media Center language file
+# Addon Name: Funhaus Archive
+# Addon id: plugin.video.funhausarchive
+msgid ""
+msgstr ""
+"Project-Id-Version: Funhaus Archive\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-08 20:30-0500\n"
+"PO-Revision-Date: 2026-11-08 20:30-0500\n"
+"Language-Team: Dutch (Netherlands)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl_nl\n"
+
+# Settings
+msgctxt "#30000"
+msgid "General Settings"
+msgstr "Algemene Instellingen"
+
+msgctxt "#30001"
+msgid "Playback & Navigation"
+msgstr "Afspelen & Navigatie"
+
+msgctxt "#30002"
+msgid "Playback Method"
+msgstr "Afspeelmethode"
+
+msgctxt "#30003"
+msgid "Recommended: YouTube Add-on handles playback via Kodi's official YouTube plugin."
+msgstr "Aanbevolen: De YouTube-add-on verzorgt het afspelen via Kodi's officiële YouTube-plug-in."
+
+msgctxt "#30004"
+msgid "Videos Per Page"
+msgstr "Video's per Pagina"
+
+msgctxt "#30005"
+msgid "Number of videos to display per page in large video listings."
+msgstr "Aantal video's dat per pagina wordt weergegeven in grote lijsten."
+
+msgctxt "#30006"
+msgid "Remember Last Visited Page"
+msgstr "Laatst bezochte pagina onthouden"
+
+msgctxt "#30007"
+msgid "Persist pagination position across Kodi restarts and show Resume shortcuts"
+msgstr "Paginapositie behouden na het opnieuw opstarten van Kodi en hervat-snelkoppelingen tonen"
+
+msgctxt "#30008"
+msgid "Maximum Video Quality"
+msgstr "Maximale Videokwaliteit"
+
+msgctxt "#30009"
+msgid "Preferred maximum video resolution when using direct resolver"
+msgstr "Voorkeur voor maximale videoresolutie bij gebruik van directe resolver"
+
+msgctxt "#30010"
+msgid "Enable Metadata Caching"
+msgstr "Metadaten-caching inschakelen"
+
+msgctxt "#30011"
+msgid "Cache website scrape responses locally to speed up navigation"
+msgstr "Scrape-reacties van website lokaal cachen om navigatie te versnellen"
+
+msgctxt "#30012"
+msgid "Cache Expiration (Hours)"
+msgstr "Cache-verlooptijd (Uren)"
+
+msgctxt "#30013"
+msgid "Number of hours before refreshing cached lists"
+msgstr "Aantal uren voordat gecachete lijsten worden vernieuwd"
+
+# Navigation Menus
+msgctxt "#30100"
+msgid "All Videos"
+msgstr "Alle Video's"
+
+msgctxt "#30101"
+msgid "Browse all 4,899+ videos with chronological and custom sorting filters."
+msgstr "Blader door meer dan 4.899 video's met chronologische en aangepaste sorteerfilters."
+
+msgctxt "#30102"
+msgid "Browse by Series"
+msgstr "Bladeren op Serie"
+
+msgctxt "#30103"
+msgid "Explore 40+ curated series (Demo Disk, Dude Soup, GTA 5, Wheelhaus, etc.)."
+msgstr "Ontdek meer dan 40 samengestelde series (Demo Disk, Dude Soup, GTA 5, Wheelhaus, enz.)."
+
+msgctxt "#30104"
+msgid "Browse by Cast"
+msgstr "Bladeren op Cast"
+
+msgctxt "#30105"
+msgid "Browse videos featuring James, Bruce, Elyse, Adam, Lawrence, Jacob, and more."
+msgstr "Bekijk video's met James, Bruce, Elyse, Adam, Lawrence, Jacob en meer."
+
+msgctxt "#30106"
+msgid "Browse by Year"
+msgstr "Bladeren op Jaar"
+
+msgctxt "#30107"
+msgid "Browse complete archives year-by-year from 2015 to 2024."
+msgstr "Blader door complete archieven jaar na jaar van 2015 tot 2024."
+
+msgctxt "#30108"
+msgid "Browse by Content Type"
+msgstr "Bladeren op Inhoudstype"
+
+msgctxt "#30109"
+msgid "Filter by Gameplay, Podcasts, Full Episodes, Clips, Shorts, and Compilations."
+msgstr "Filter op gameplay, podcasts, volledige afleveringen, clips, shorts en compilaties."
+
+msgctxt "#30110"
+msgid "Search Videos"
+msgstr "Video's Zoeken"
+
+msgctxt "#30111"
+msgid "Search through thousands of archived Funhaus episodes by title or cast."
+msgstr "Zoek door duizenden gearchiveerde Funhaus-afleveringen op titel of cast."
+
+# Resume & Pagination
+msgctxt "#30120"
+msgid "Resume: {title} (Page {page} of {total})"
+msgstr "Hervatten: {title} (Pagina {page} van {total})"
+
+msgctxt "#30121"
+msgid "Resume: {title} (Page {page})"
+msgstr "Hervatten: {title} (Pagina {page})"
+
+msgctxt "#30122"
+msgid "Jump directly back to page {page} where you left off across Kodi restarts."
+msgstr "Direct terugkeren naar pagina {page} waar u gebleven was na een herstart van Kodi."
+
+msgctxt "#30123"
+msgid "Reset Resume Bookmark to Page 1"
+msgstr "Hervat-bladwijzer resetten naar Pagina 1"
+
+msgctxt "#30124"
+msgid "Resume bookmark reset to Page 1"
+msgstr "Hervat-bladwijzer gereset naar Pagina 1"
+
+msgctxt "#30125"
+msgid "Previous Page (Page {page} of {total})"
+msgstr "Vorige Pagina (Pagina {page} van {total})"
+
+msgctxt "#30126"
+msgid "Go back to page {page}."
+msgstr "Ga terug naar pagina {page}."
+
+msgctxt "#30127"
+msgid "Jump to Page... (Currently Page {page} of {total})"
+msgstr "Ga naar Pagina... (Momenteel Pagina {page} van {total})"
+
+msgctxt "#30128"
+msgid "Jump directly to any page number between 1 and {total}."
+msgstr "Spring direct naar elk paginanummer tussen 1 en {total}."
+
+msgctxt "#30129"
+msgid "Next Page >> (Page {page} of {total}) [Showing {start}-{end} of {total_videos}]"
+msgstr "Volgende Pagina >> (Pagina {page} van {total}) [Toont {start}-{end} van {total_videos}]"
+
+msgctxt "#30130"
+msgid "Proceed to page {page} of {total}."
+msgstr "Doorgaan naar pagina {page} van {total}."
+
+msgctxt "#30131"
+msgid "Jump to Page (1 - {total}):"
+msgstr "Ga naar Pagina (1 - {total}):"
+
+# Sort Options
+msgctxt "#30140"
+msgid "Oldest First (Chronological)"
+msgstr "Oudste Eerst (Chronologisch)"
+
+msgctxt "#30141"
+msgid "Oldest First (Chronological) [From Page 1]"
+msgstr "Oudste Eerst (Chronologisch) [Vanaf Pagina 1]"
+
+msgctxt "#30142"
+msgid "Watch the Funhaus archive in chronological order from February 2015 forward."
+msgstr "Bekijk het Funhaus-archief in chronologische volgorde vanaf februari 2015."
+
+msgctxt "#30143"
+msgid "Newest First"
+msgstr "Nieuwste Eerst"
+
+msgctxt "#30144"
+msgid "Most recently uploaded videos first."
+msgstr "Meest recent geüploade video's eerst."
+
+msgctxt "#30145"
+msgid "Most Viewed"
+msgstr "Meest Bekeken"
+
+msgctxt "#30146"
+msgid "Highest all-time view counts."
+msgstr "Hoogste aantal weergaven aller tijden."
+
+msgctxt "#30147"
+msgid "Most Liked"
+msgstr "Meest Gewaardeerd"
+
+msgctxt "#30148"
+msgid "Fan-favorite videos with the most likes."
+msgstr "Favoriete video's van fans met de meeste likes."
+
+msgctxt "#30149"
+msgid "Longest First"
+msgstr "Langste Eerst"
+
+msgctxt "#30150"
+msgid "Longest podcasts, livestreams, and full gameplay recordings."
+msgstr "Langste podcasts, livestreams en complete gameplay-opnames."
+
+msgctxt "#30151"
+msgid "Shortest First"
+msgstr "Kortste Eerst"
+
+msgctxt "#30152"
+msgid "Quick clips, shorts, and highlights."
+msgstr "Korte clips, shorts en hoogtepunten."
+
+msgctxt "#30153"
+msgid "Title (A-Z)"
+msgstr "Titel (A-Z)"
+
+msgctxt "#30154"
+msgid "Alphabetical order by video title."
+msgstr "Alfabetische volgorde op videotitel."
+
+msgctxt "#30155"
+msgid "Title (Z-A)"
+msgstr "Titel (Z-A)"
+
+msgctxt "#30156"
+msgid "Reverse alphabetical order by video title."
+msgstr "Omgekeerd alfabetische volgorde op videotitel."
+
+msgctxt "#30157"
+msgid "Random / Shuffle"
+msgstr "Willekeurig / Shuffle"
+
+msgctxt "#30158"
+msgid "Random shuffle of the entire 4,900 video library."
+msgstr "Willekeurige weergave van de gehele bibliotheek met 4.900 video's."
+
+# Dialogs & Notifications
+msgctxt "#30160"
+msgid "Search Funhaus Archive"
+msgstr "Zoeken in Funhaus Archive"
+
+msgctxt "#30161"
+msgid "No videos found for this selection."
+msgstr "Geen video's gevonden voor deze selectie."
+
+msgctxt "#30162"
+msgid "Failed to resolve video stream"
+msgstr "Kan videostream niet oplossen"
+
+msgctxt "#30163"
+msgid "videos"
+msgstr "video's"

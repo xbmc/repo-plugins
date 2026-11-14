@@ -1,0 +1,13 @@
+v0.1.0
+- Initial version
+v0.2.1
+- Updated plugintools to v1.0.8
+v0.2.2
+- updated for Isengard and Jarvis
+- added COMPET-N records channel
+v0.2.3
+- added DSDA records channel maintained by Zero Master
+v1.0.0
+- Rewritten for Python 3: works on Kodi 21 (Omega) and Kodi 22 (Piers)
+- Dropped plugintools and script.module.addon.common (only Kodi and the YouTube add-on are needed)
+- Channel thumbnails use the add-on icon (the old images on doom.com.hr are gone)

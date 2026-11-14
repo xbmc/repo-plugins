@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.doomcomhr"
+    name="Competition Doom"
+    version="1.0.0"
+    provider-name="doom.com.hr">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+        <import addon="plugin.video.youtube" version="7.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Watch Doom world speed records</summary>
+        <description lang="en_GB">This is the official YouTube channel for Doom world speed records, also known as COMPET-N, and for its re-incarnation called Competition Doom aka. CNDOOM. Covers the Doom Speed Demo Archive (DSDA) too.</description>
+        <platform>all</platform>
+        <license>GPL-3.0-or-later</license>
+        <website>https://doom.com.hr/</website>
+        <source>https://github.com/fx02/plugin.video.doomcomhr</source>
+        <email>admin@doom.com.hr</email>
+        <news>v1.0.0: Python 3 rewrite for Kodi 21 (Omega) and Kodi 22 (Piers); no extra library add-ons needed.</news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.onedrive" name="OneDrive" version="2.4.6" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.onedrive" name="OneDrive" version="2.4.11" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.clouddrive.common" version="1.5.7"/>
+		<import addon="script.module.clouddrive.common" version="1.5.18"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="entrypoint.py">
 		<provides>image audio video</provides>
@@ -47,7 +47,27 @@ Spela upp alla dina medier från OneDrive, inklusive videor, musik och bilder.
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>v2.4.6 released Oct 16, 2026:
+		<news>v2.4.11 released Oct 31, 2026:
+- Videos show the plot, cast and artwork of the Kodi .nfo files and pictures next to them (it can be turned off in the settings)
+- Requires clouddrive.common 1.5.18
+
+v2.4.10 released Oct 30, 2026:
+- Big folders open a page at a time: Items per page in the Advanced settings (500 by default, 0 for the whole folder)
+- Going back to a folder, after viewing a picture for example, doesn't load it again for a few minutes (Cache expiration time)
+- .vtt subtitles are loaded too
+- Requires clouddrive.common 1.5.13
+
+v2.4.9 released Oct 30, 2026:
+- Subtitles next to a video are found in its folder, also with OneDrive for Business accounts where search missed them
+
+v2.4.8 released Oct 30, 2026:
+- Folders shared with you and added to your files show their name, and open in Use as a source
+- Auto-refreshed slideshow: notices replaced pictures, not only a different number of them
+
+v2.4.7 released Oct 30, 2026:
+- Adding an account shows only its OneDrive: personal accounts moved to Microsoft's new storage listed several system drives (Bundles, ODCMetadataArchive...)
+
+v2.4.6 released Oct 16, 2026:
 - Use as a source: folders with spaces or special characters in their names open, and files no longer put download links in the Kodi log
 - Requires clouddrive.common 1.5.7
 
@@ -55,26 +75,7 @@ v2.4.5 released Oct 15, 2026:
 - Swedish translation (thanks to Daniel Nylander)
 
 v2.4.4 released Oct 15, 2026:
-- New icon and fanart
-
-v2.4.3 released Oct 12, 2026:
-- A search no longer affects the folder listings that follow it
-- Kodi 17 (Krypton) settings removed
-- Requires clouddrive.common 1.5.4
-
-v2.4.2 released Oct 11, 2026:
-- New sign-in server address: https://drive.signinserver.com (the old one keeps working for older versions)
-- Sign-in works when Kodi or the phone uses IPv6 (requires clouddrive.common 1.5.2)
-
-v2.4.1 released Oct 5, 2026:
-- Requires clouddrive.common 1.5.1 (review fixes: safer redirects, account migration, removed accounts)
-- Unused strings removed
-
-v2.4.0 released Oct 4, 2026:
-- Security: tokens and pre-authenticated download links are no longer written to the Kodi log; error reporting removed
-
-v2.3.0 released Jan 21, 2023:
-- Kodi 20 fix</news>
+- New icon and fanart</news>
 		<disclaimer lang="en_GB">
 This cloud drive addon uses a third-party authentication mechanism commonly known as OAuth 2.0.
 If you want to know more about OAuth 2.0 you can visit the following pages:

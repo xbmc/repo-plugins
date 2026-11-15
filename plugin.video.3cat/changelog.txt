@@ -1,0 +1,23 @@
+﻿v1.3.0
+- Added Films section (new releases, full catalogue, categories)
+
+v1.2.2
+- Improved video playback compatibility across different devices
+- Added intelligent DRM detection to only use DRM when needed
+- Added better support for HLS (.m3u8) streams
+- Added automatic license URL extraction from MPD files
+- Improved error handling and fallback mechanisms
+- Fixed issues with video playback on some devices
+
+v1.2.1
+- Replaced "Simple MP4 Playback" by "xbmcplugin.setResolvedUrl" with "ListItem"
+
+v1.2.0
+- Added direct stream
+- Fix naming
+
+v1.1.0
+-Play old mp4 format videos
+
+v1.0.0
+- First version

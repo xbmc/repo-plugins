@@ -10,7 +10,7 @@ _log = kodiutil.log
 
 
 class TvViews:
-    """Kodi TV's actions (see plugin.ROUTES).
+    """Kodi TV's actions (see views.routes).
 
     :param call: the plugin call (see views.call.Call)
     """
@@ -20,7 +20,9 @@ class TvViews:
 
     def do_tv_toggle(self):
         """Switch the TV menu on or off (the settings' row, its state on the right; see kodipvr.show_state)."""
-        return self.do_tv_off() if kodiutil.addon().getSettingBool("pvr_enabled") else self.do_tv_on()
+        from resources.lib.tv import kodipvr
+
+        return self.do_tv_off() if kodipvr.enabled() else self.do_tv_on()
 
     def do_tv_on(self):
         """Show the channels and the guide in Kodi's TV menu (the settings' button), once confirmed."""
@@ -38,7 +40,7 @@ class TvViews:
         # lists the TV guide category.
         kodiutil.close_settings()
         progress = xbmcgui.DialogProgress()
-        progress.create(_s(30030), _s(30032))
+        progress.create(_s(30224), _s(30032))
         try:
             done = kodipvr.switch_on(self._call.client, exportprogress.ProgressDialog(progress))
         except iptvfiles.Cancelled:

@@ -16,21 +16,30 @@ KEPT = os.path.join(kodiutil.PROFILE, "continue.json")
 # Not when a row's programme leaves catch-up: that varies by channel (Mozi+ HD: under four days, seen
 # 2026-11-02) and the provider says it nowhere but in the programme's airings (see on_catchup).
 CATCHUP_SECONDS = 7 * 86400
-# A position this far into the programme counts as watched (Kodi's own default playcountminimumpercent).
-WATCHED_SHARE = 0.9
+# How long a programme stays on catch-up after it ended, as measured: Mozi+ HD, 2026-11-15 (one that
+# ended 11:25Z on 11-12 played at 11:18Z on 11-15 and was refused at 11:55Z). Other channels fit it
+# but were not measured this close: the rows' order and their "N days left" are estimates by it.
+EXPECTED_CATCHUP_SECONDS = 72 * 3600
 # What a row is: being watched (resumable), watched to its end, or its position reset here.
 ACTIVE, WATCHED, REMOVED = "active", "watched", "removed"
 
 
 def available_until(mark):
     """Return the latest a position's programme can leave catch-up (a timestamp); None if its id has no times."""
-    marked = guidedata.from_bookmark_id(mark.get("id"))
-    if not marked:
-        return None
-    try:
-        return isotime.stamp(marked[2]) + CATCHUP_SECONDS
-    except ValueError:
-        return None
+    ended = _ended(mark)
+    return None if ended is None else ended + CATCHUP_SECONDS
+
+
+def expected_until(mark):
+    """Return when a position's programme is expected to leave catch-up (see EXPECTED_CATCHUP_SECONDS); None if unknown."""
+    ended = _ended(mark)
+    return None if ended is None else ended + EXPECTED_CATCHUP_SECONDS
+
+
+def seconds_left(mark, now=None):
+    """Return the seconds until a position's programme is expected to leave catch-up (below 0: past it); None if unknown."""
+    until = expected_until(mark)
+    return None if until is None else until - (time.time() if now is None else now)
 
 
 def catchup(marks):
@@ -41,15 +50,16 @@ def catchup(marks):
 def rows(marks, now=None):
     """Return the rows to list as [(mark, state)]: the account's positions first, in its order, then the greyed ones.
 
-    A position gone from the account's list is WATCHED unless reset here (REMOVED); one in it is WATCHED
-    from WATCHED_SHARE on. Rows whose programme left catch-up are dropped, here and from KEPT.
+    A position in the account's list is ACTIVE, however far it got; one gone from it is WATCHED unless
+    reset here (REMOVED). Rows whose programme left catch-up are dropped, here and from KEPT.
+    The active ones first, then the greyed ones, each the soonest to leave catch-up first (see expected_until).
 
     :param marks: the account's catch-up positions (see catchup)
     """
     now = time.time() if now is None else now
     kept = _load()
     listed = {mark["id"]: mark for mark in marks if (available_until(mark) or 0) > now}
-    out = [(mark, WATCHED if _share(mark) >= WATCHED_SHARE else ACTIVE) for mark in listed.values()]
+    out = [(mark, ACTIVE) for mark in listed.values()]
     fresh = {mark_id: {"mark": mark, "removed": False} for mark_id, mark in listed.items()}
     for mark_id, entry in kept.items():
         if mark_id not in listed and (available_until(entry["mark"]) or 0) > now:
@@ -57,8 +67,8 @@ def rows(marks, now=None):
             out.append((entry["mark"], REMOVED if entry.get("removed") else WATCHED))
     if fresh != kept:
         _save(fresh)
-    # Stable: the active ones keep the account's order, the greyed ones the order they were kept in.
-    return sorted(out, key=lambda row: row[1] != ACTIVE)
+    # The active ones first, then the greyed ones; each the soonest to leave catch-up first (stable for equal ones).
+    return sorted(out, key=lambda row: (row[1] != ACTIVE, expected_until(row[0]) or 0))
 
 
 def on_catchup(mark, airings):
@@ -93,9 +103,15 @@ def set_removed(mark):
     _save(kept)
 
 
-def _share(mark):
-    runtime = float(mark.get("runtime_seconds") or 0)
-    return float(mark.get("time_seconds") or 0) / runtime if runtime else 0
+def _ended(mark):
+    """Return when a position's programme ended (a timestamp); None if its id has no times."""
+    marked = guidedata.from_bookmark_id(mark.get("id"))
+    if not marked:
+        return None
+    try:
+        return isotime.stamp(marked[2])
+    except ValueError:
+        return None
 
 
 def _load():

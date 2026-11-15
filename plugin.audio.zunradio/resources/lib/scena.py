@@ -5,8 +5,9 @@ The window (resources/skins/Default/1080i/zunradio-scena.xml) shows the cover in
 the artist and title in red fields, the station logo and the show. The dots, rings and waves
 that move to the beat come from the visualisation add-on visualization.zunradio: a skin
 visualisation control always shows the visualisation chosen in the Kodi settings, so the scene
-selects it while it is open and puts back the previous choice when it closes (also after a crash,
-see restore_visualisation). Without that add-on the scene shows still dots instead.
+shows it only when the user has chosen visualization.zunradio there (Player > Music >
+Visualisation). The add-on only reads that setting and never installs the visualisation (add-on
+rules, review of 1.0.0). Otherwise the scene shows still dots instead.
 
 The scene is a whole window (WindowXML), not a dialog over the previous window: under a dialog
 Kodi keeps drawing that window, Estuary runs a second instance of the visualisation in its
@@ -15,11 +16,9 @@ pumped unevenly, Lada 2026-11-08).
 """
 
 import json
-import os
 
 import xbmc
 import xbmcgui
-import xbmcvfs
 
 from resources.lib import kodiutils
 
@@ -33,42 +32,12 @@ SMALL_FROM = 34  # characters; longer texts get a smaller font
 KEEP_ACTIONS = {0, 12, 13, 79, 85, 88, 89, 90, 91, 93, 94, 107, 199, 229, 999}
 
 
-def _rpc(method, params):
+def chosen_visualisation():
+    """The visualisation chosen in the Kodi settings (read only)."""
     answer = json.loads(xbmc.executeJSONRPC(json.dumps(
-        {'jsonrpc': '2.0', 'id': 1, 'method': method, 'params': params})))
-    return answer.get('result')
-
-
-def _profile_file(addon, name):
-    profile = xbmcvfs.translatePath(addon.getAddonInfo('profile'))
-    return os.path.join(profile, name)
-
-
-def _restore_file(addon):
-    return _profile_file(addon, 'vizualizace-pred-scenou.json')
-
-
-def vis_in_repository():
-    """True when an add-on repository offers visualization.zunradio (not installed yet)."""
-    result = _rpc('Addons.GetAddons', {'type': 'xbmc.player.musicviz', 'installed': False}) or {}
-    return any(item.get('addonid') == VIS_ID for item in result.get('addons') or [])
-
-
-def restore_visualisation(addon):
-    """Put back the visualisation chosen before the scene, if the scene did not do it."""
-    path = _restore_file(addon)
-    if not os.path.exists(path):
-        return
-    try:
-        with open(path, encoding='utf-8') as f:
-            previous = json.load(f).get('vizualizace', '')
-        _rpc('Settings.SetSettingValue', {'setting': VIS_SETTING, 'value': previous})
-    except (OSError, ValueError):
-        pass
-    try:
-        os.remove(path)
-    except OSError:
-        pass
+        {'jsonrpc': '2.0', 'id': 1, 'method': 'Settings.GetSettingValue',
+         'params': {'setting': VIS_SETTING}})))
+    return (answer.get('result') or {}).get('value', '')
 
 
 class SceneWindow(xbmcgui.WindowXML):
@@ -96,57 +65,18 @@ class Scene:
     def is_open(self):
         return self._window is not None and not self._window.closed
 
-    def _vis_available(self):
-        return xbmc.getCondVisibility('System.HasAddon({0}) + System.AddonIsEnabled({0})'.format(VIS_ID))
-
-    def _offer_visualisation(self):
-        """Once: offer the visualisation for the dots to the beat, where a repository has it.
-
-        The add-on cannot require it (Kodi installs only required dependencies, and a required one
-        would block this add-on where no repository offers the visualisation, LibreELEC and
-        CoreELEC so far). Kodi itself asks before it installs (InstallAddon). The button in the
-        settings of the add-on does the same on demand (plugin.install_visualisation).
-        """
-        if (not self._addon.getSettings().getBool('scena_vizualizace')
-                or xbmc.getCondVisibility('System.HasAddon({})'.format(VIS_ID))):
-            return
-        path = _profile_file(self._addon, 'nabidka-vizualizace.json')
-        if os.path.exists(path) or not vis_in_repository():
-            return
-        try:
-            os.makedirs(os.path.dirname(path), exist_ok=True)
-            with open(path, 'w', encoding='utf-8') as f:
-                json.dump({'nabidnuto': True}, f)
-        except OSError:
-            return
-        xbmcgui.Dialog().notification(self._addon.getLocalizedString(30000),
-                                      self._addon.getLocalizedString(30106),
-                                      self._addon.getAddonInfo('icon'), 8000)
-        xbmc.executebuiltin('InstallAddon({})'.format(VIS_ID), True)
-        kodiutils.log('Visualisation offered, installed: {}'.format(
-            xbmc.getCondVisibility('System.HasAddon({})'.format(VIS_ID))))
-
-    def _select_visualisation(self):
-        """Select visualization.zunradio for the time of the scene. True when it is selected."""
-        if not self._addon.getSettings().getBool('scena_vizualizace') or not self._vis_available():
-            return False
-        current = (_rpc('Settings.GetSettingValue', {'setting': VIS_SETTING}) or {}).get('value', '')
-        if current == VIS_ID:
-            return True
-        path = _restore_file(self._addon)
-        try:
-            os.makedirs(os.path.dirname(path), exist_ok=True)
-            with open(path, 'w', encoding='utf-8') as f:
-                json.dump({'vizualizace': current}, f)
-        except OSError:
-            return False
-        return bool(_rpc('Settings.SetSettingValue', {'setting': VIS_SETTING, 'value': VIS_ID}))
+    def with_visualisation(self):
+        """True when the scene shows visualization.zunradio: wanted in the settings of this add-on,
+        installed, enabled and chosen by the user in the Kodi settings."""
+        return (self._addon.getSettings().getBool('scena_vizualizace')
+                and xbmc.getCondVisibility(
+                    'System.HasAddon({0}) + System.AddonIsEnabled({0})'.format(VIS_ID))
+                and chosen_visualisation() == VIS_ID)
 
     def open(self, now_playing=None):
         if self.is_open:
             return
-        self._offer_visualisation()
-        with_vis = self._select_visualisation()
+        with_vis = self.with_visualisation()
         self._window = SceneWindow('zunradio-scena.xml', self._addon.getAddonInfo('path'),
                                    'Default', '1080i')
         self._shown = {}
@@ -191,10 +121,9 @@ class Scene:
             self._window = None
             self._window_id = 0
             xbmc.executebuiltin('InhibitScreensaver(false)')
-            restore_visualisation(self._addon)
 
     def finish_if_closed(self):
-        """After the user closed or left the window: put the visualisation back. True when closed."""
+        """After the user closed or left the window: clean up. True when closed."""
         left = bool(self._window_id) and xbmcgui.getCurrentWindowId() != self._window_id
         if self._window is not None and (self._window.closed or left):
             self.close()

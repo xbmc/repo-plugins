@@ -104,7 +104,6 @@ def run():
     )
     scene = scena.Scene(addon)
     home = xbmcgui.Window(kodiutils.HOME_WINDOW)
-    scena.restore_visualisation(addon)  # after a crash while the scene was open
     kodiutils.log('Service started')
     active = False
     play_requested = 0.0  # when the service started ZUN radio for the scene (time.monotonic)

@@ -13,19 +13,6 @@
                     <default>true</default>
                     <control type="toggle"/>
                 </setting>
-                <setting id="instalovat_vizualizaci" type="action" label="30105" help="30104">
-                    <level>0</level>
-                    <data>RunPlugin(plugin://plugin.audio.zunradio/?action=vizualizace)</data>
-                    <constraints>
-                        <allowempty>true</allowempty>
-                    </constraints>
-                    <dependencies>
-                        <dependency type="visible">
-                            <condition on="property" name="InfoBool">!System.HasAddon(visualization.zunradio)</condition>
-                        </dependency>
-                    </dependencies>
-                    <control type="button" format="action"/>
-                </setting>
             </group>
         </category>
     </section>

@@ -4,19 +4,14 @@
 import sys
 from urllib.parse import parse_qsl, urlencode
 
-import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-from resources.lib import api, kodiutils, scena
+from resources.lib import api, kodiutils
 
 # Short timeout: the user is waiting for the list or for the music
 TIMEOUT = 4
-
-# Strings: the visualisation is not available for this device, it is installed already
-VIS_UNAVAILABLE = 30107
-VIS_INSTALLED = 30108
 
 
 def run(argv=None):
@@ -32,9 +27,6 @@ def run(argv=None):
         # item Kodi put it into the playlist of the songs and skipped it as unplayable.
         xbmcplugin.endOfDirectory(handle, succeeded=False, cacheToDisc=False)
         request_scene()
-    elif params.get('action') == 'vizualizace':
-        # The button in the settings (RunPlugin, no list to fill)
-        install_visualisation(addon)
     else:
         list_streams(base_url, handle, addon)
 
@@ -83,23 +75,6 @@ def play(handle, addon, stream):
     item.setContentLookup(False)
     kodiutils.set_now_playing(item, kodiutils.fetch_now_playing(addon, TIMEOUT), addon)
     xbmcplugin.setResolvedUrl(handle, True, item)
-
-
-def install_visualisation(addon):
-    """Install visualization.zunradio where a repository offers it for this device, else say so.
-
-    Binary add-ons are built per platform and not every repository has them (LibreELEC and
-    CoreELEC build their own), so a plain InstallAddon would fail without a word there.
-    Kodi itself asks before it installs.
-    """
-    if xbmc.getCondVisibility('System.HasAddon({})'.format(scena.VIS_ID)):
-        message = VIS_INSTALLED
-    elif scena.vis_in_repository():
-        xbmc.executebuiltin('InstallAddon({})'.format(scena.VIS_ID), True)
-        return
-    else:
-        message = VIS_UNAVAILABLE
-    xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(message))
 
 
 def request_scene():

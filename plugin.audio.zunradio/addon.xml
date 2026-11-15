@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.zunradio" name="ZUN rádio" version="1.0.0" provider-name="Underground Media Management s.r.o.">
+<addon id="plugin.audio.zunradio" name="ZUN rádio" version="1.0.1" provider-name="Underground Media Management s.r.o.">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
     </requires>
@@ -14,14 +14,14 @@
 
 The add-on plays the live stream in three qualities. While you listen, it shows the artist and title of the track, its cover and the show on air, in step with the music.
 
-In full screen it shows the ZUN scene, as on zunradio.cz: the cover in a red card, the artist and title in red fields, the record label and the show. Where the visualisation "ZUN rádio scéna" (visualization.zunradio) is available for the device, red dots, rings and waves move to the beat and the card and the fields pump with the bass; without it the dots stand still. Any key returns.
+In full screen it shows the ZUN scene, as on zunradio.cz: the cover in a red card, the artist and title in red fields, the record label and the show. With the separate visualisation "ZUN rádio scéna" (visualization.zunradio), where it is available for your device, installed and chosen in the Kodi settings (Player > Music > Visualisation), red dots, rings and waves move to the beat and the card and the fields pump with the bass; otherwise the dots stand still. Any key returns.
 
 You've got taste!</description>
         <description lang="cs_CZ">ZUN rádio je česká stanice s pozitivní elektronickou taneční hudbou. Hraje nu-disco, soulful house, jackin, deep house a tech house, k tomu R&amp;B, funk, soul, disco a acid jazz. Vysílá 24 hodin denně v DAB+ a na internetu.
 
 Doplněk přehrává živé vysílání ve třech kvalitách. Během poslechu ukazuje interpreta a název skladby, její obal a pořad, který se právě vysílá, a to současně s hudbou.
 
-Na celé obrazovce ukáže scénu ZUN jako na zunradio.cz: obal v červené kartě, interpreta a název v červených polích, label a pořad. Kde je pro zařízení k dispozici vizualizace „ZUN rádio scéna“ (visualization.zunradio), pohybují se v rytmu červené tečky, kruhy a vlny a karta s poli pumpuje s basy; bez ní tečky stojí. Zpátky libovolnou klávesou.
+Na celé obrazovce ukáže scénu ZUN jako na zunradio.cz: obal v červené kartě, interpreta a název v červených polích, label a pořad. Se samostatnou vizualizací „ZUN rádio scéna“ (visualization.zunradio), pokud je pro vaše zařízení k dispozici, nainstalovanou a vybranou v nastavení Kodi (Přehrávač > Hudba > Vizualizace), se v rytmu pohybují červené tečky, kruhy a vlny a karta s poli pumpuje s basy; jinak tečky stojí. Zpátky libovolnou klávesou.
 
 Máte vkus!</description>
         <disclaimer lang="en_GB">ZUN radio is operated by Underground Media Management s.r.o. The stream, the track information and the cover art come from zunradio.cz. The ZUN radio name and logo belong to the operator.</disclaimer>
@@ -32,7 +32,11 @@ Máte vkus!</description>
         <website>https://zunradio.cz/</website>
         <source>https://github.com/undergroundmm/plugin.audio.zunradio</source>
         <email>info@undergroundmediamanagement.cz</email>
-        <news>1.0.0 (2026-11-10)
+        <news>1.0.1 (2026-11-14)
+- The add-on no longer installs the visualisation and no longer changes the Kodi settings
+- The scene shows visualization.zunradio when you choose it in Player > Music > Visualisation
+
+1.0.0 (2026-11-10)
 - First version: three live streams, the track now playing with its cover and the show on air
 - Full screen scene, with dots and rings to the beat where visualization.zunradio is available</news>
         <assets>

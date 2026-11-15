@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.funhausarchive"
+       name="Funhaus Archive"
+       version="1.2.2"
+       provider-name="GonadiusPrime">
+  <requires>
+    <import addon="xbmc.python" version="3.0.1"/>
+    <import addon="plugin.video.youtube" version="6.8.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="main.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>en</language>
+    <summary lang="en_GB">Funhaus Archive Video Add-on for Kodi</summary>
+    <description lang="en_GB">Browse and stream over 4,900+ Funhaus gaming, comedy, and variety videos from funhausarchive.com directly in Kodi.</description>
+    <license>MIT</license>
+    <website>https://funhausarchive.com/</website>
+    <source>https://github.com/GonadiusPrime/plugin.video.funhausarchive</source>
+    <forum>https://github.com/GonadiusPrime/plugin.video.funhausarchive/issues</forum>
+    <news>v1.2.2 - Initial Kodi release with chronological sorting, navigation resume bookmarks, series/cast filtering, and search.</news>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

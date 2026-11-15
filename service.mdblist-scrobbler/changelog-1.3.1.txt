@@ -1,0 +1,3 @@
+v1.3.1
+
+- Fixed watched sync: a rewatch that only updated the watched date (without changing membership) could be silently dropped by the scheduled full sync, and would only reach MDBList via the live push on stop.

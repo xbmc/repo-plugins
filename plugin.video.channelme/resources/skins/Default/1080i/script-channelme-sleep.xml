@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ChannelMe! - sleep-timer warning dialog (1920x1080 design space; Kodi scales).
+  A centred panel with a live M:SS countdown and Cancel / Restart buttons. Control IDs
+  are referenced from resources/lib/sleeptimer.py - keep them in sync. Label TEXT is set
+  from Python (storage.L); the English here is a harmless fallback.
+-->
+<window type="dialog">
+  <defaultcontrol always="true">6003</defaultcontrol>
+  <controls>
+
+    <!-- Dim the screen behind the panel -->
+    <control type="image">
+      <left>0</left><top>0</top><width>1920</width><height>1080</height>
+      <texture colordiffuse="CC000000">white.png</texture>
+    </control>
+
+    <!-- Panel -->
+    <control type="group">
+      <left>560</left><top>360</top><width>800</width><height>360</height>
+      <control type="image">
+        <left>0</left><top>0</top><width>800</width><height>360</height>
+        <texture colordiffuse="FF2A3742">white.png</texture>
+      </control>
+      <control type="image">
+        <left>0</left><top>0</top><width>800</width><height>64</height>
+        <texture colordiffuse="FF202B36">white.png</texture>
+      </control>
+      <control type="label" id="6000">
+        <left>32</left><top>0</top><width>736</width><height>64</height>
+        <font>font14</font><textcolor>white</textcolor><aligny>center</aligny>
+        <label>Sleep timer</label>
+      </control>
+
+      <!-- Message + big countdown -->
+      <control type="label" id="6010">
+        <left>0</left><top>96</top><width>800</width><height>40</height>
+        <font>font13</font><textcolor>grey</textcolor><align>center</align><aligny>center</aligny>
+        <label>Playback stops in</label>
+      </control>
+      <control type="label" id="6001">
+        <left>0</left><top>140</top><width>800</width><height>80</height>
+        <font>font40</font><textcolor>white</textcolor><align>center</align><aligny>center</aligny>
+        <label>0:00</label>
+      </control>
+
+      <!-- Buttons -->
+      <control type="button" id="6002">
+        <left>60</left><top>260</top><width>320</width><height>72</height>
+        <texturefocus colordiffuse="button_focus">white.png</texturefocus>
+        <texturenofocus colordiffuse="FF181F29">white.png</texturenofocus>
+        <font>font13</font><align>center</align><aligny>center</aligny>
+        <textcolor>white</textcolor><focusedcolor>FF0E1A1F</focusedcolor>
+        <label>Cancel timer</label>
+        <onleft>6002</onleft><onright>6003</onright><onup>6002</onup><ondown>6002</ondown>
+      </control>
+      <control type="button" id="6003">
+        <left>420</left><top>260</top><width>320</width><height>72</height>
+        <texturefocus colordiffuse="button_focus">white.png</texturefocus>
+        <texturenofocus colordiffuse="FF181F29">white.png</texturenofocus>
+        <font>font13</font><align>center</align><aligny>center</aligny>
+        <textcolor>white</textcolor><focusedcolor>FF0E1A1F</focusedcolor>
+        <label>Restart timer</label>
+        <onleft>6002</onleft><onright>6003</onright><onup>6003</onup><ondown>6003</ondown>
+      </control>
+    </control>
+
+  </controls>
+</window>

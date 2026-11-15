@@ -1,0 +1,20 @@
+v 1.0.0 - 16-10-2026
+- First full release
+
+v 0.3.0 - 07-10-2026
+- Restored the possibility to sign in from outside the UK. (regression from 0.2.0)
+- Added main menu icons, thanks @berkhornet
+- Fixed: Wrong message at account sign-out.
+
+v 0.2.0 - 17-09-2026
+- Fix: Due to a change at the BBC, signing in using either method failed with a TypeError.
+- Fix: In wall views some items did not have a title.
+- When an item failed to play, the next item played automatically without notice when Kodi's player setting 'play next song automatically' is enabled.
+- For the same reason, the current audio playlist is cleared when live radio is played.
+
+v 0.1.0 - 26-08-2026
+- Fixed live radio on Kodi 22-beta1 (Piers) at the expense of 'listen from the start'.
+- Fixed installation on OSMC
+
+v 0.0.1 - 16-08-2026
+- first alpha release

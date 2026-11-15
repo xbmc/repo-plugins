@@ -1,0 +1,263 @@
+# Kodi Media Center language file
+# Addon Name: Funhaus Archive
+# Addon id: plugin.video.funhausarchive
+msgid ""
+msgstr ""
+"Project-Id-Version: Funhaus Archive\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-08 20:30-0500\n"
+"PO-Revision-Date: 2026-11-08 20:30-0500\n"
+"Language-Team: Portuguese (Brazil)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_br\n"
+
+# Settings
+msgctxt "#30000"
+msgid "General Settings"
+msgstr "Configurações Gerais"
+
+msgctxt "#30001"
+msgid "Playback & Navigation"
+msgstr "Reprodução e Navegação"
+
+msgctxt "#30002"
+msgid "Playback Method"
+msgstr "Método de Reprodução"
+
+msgctxt "#30003"
+msgid "Recommended: YouTube Add-on handles playback via Kodi's official YouTube plugin."
+msgstr "Recomendado: O add-on do YouTube gerencia a reprodução através do plugin oficial do YouTube do Kodi."
+
+msgctxt "#30004"
+msgid "Videos Per Page"
+msgstr "Vídeos por Página"
+
+msgctxt "#30005"
+msgid "Number of videos to display per page in large video listings."
+msgstr "Número de vídeos para exibir por página em listagens grandes."
+
+msgctxt "#30006"
+msgid "Remember Last Visited Page"
+msgstr "Lembrar Última Página Visitada"
+
+msgctxt "#30007"
+msgid "Persist pagination position across Kodi restarts and show Resume shortcuts"
+msgstr "Manter a posição de paginação após reiniciar o Kodi e mostrar atalhos para continuar"
+
+msgctxt "#30008"
+msgid "Maximum Video Quality"
+msgstr "Qualidade Máxima de Vídeo"
+
+msgctxt "#30009"
+msgid "Preferred maximum video resolution when using direct resolver"
+msgstr "Resolução de vídeo máxima preferida ao usar o resolvedor direto"
+
+msgctxt "#30010"
+msgid "Enable Metadata Caching"
+msgstr "Ativar Cache de Metadados"
+
+msgctxt "#30011"
+msgid "Cache website scrape responses locally to speed up navigation"
+msgstr "Salvar localmente em cache as respostas do site para acelerar a navegação"
+
+msgctxt "#30012"
+msgid "Cache Expiration (Hours)"
+msgstr "Expiração do Cache (Horas)"
+
+msgctxt "#30013"
+msgid "Number of hours before refreshing cached lists"
+msgstr "Número de horas antes de atualizar as listas em cache"
+
+# Navigation Menus
+msgctxt "#30100"
+msgid "All Videos"
+msgstr "Todos os Vídeos"
+
+msgctxt "#30101"
+msgid "Browse all 4,899+ videos with chronological and custom sorting filters."
+msgstr "Navegue por mais de 4.899 vídeos com filtros cronológicos e personalizados."
+
+msgctxt "#30102"
+msgid "Browse by Series"
+msgstr "Navegar por Séries"
+
+msgctxt "#30103"
+msgid "Explore 40+ curated series (Demo Disk, Dude Soup, GTA 5, Wheelhaus, etc.)."
+msgstr "Explore mais de 40 séries selecionadas (Demo Disk, Dude Soup, GTA 5, Wheelhaus, etc.)."
+
+msgctxt "#30104"
+msgid "Browse by Cast"
+msgstr "Navegar por Elenco"
+
+msgctxt "#30105"
+msgid "Browse videos featuring James, Bruce, Elyse, Adam, Lawrence, Jacob, and more."
+msgstr "Navegue por vídeos com James, Bruce, Elyse, Adam, Lawrence, Jacob e mais."
+
+msgctxt "#30106"
+msgid "Browse by Year"
+msgstr "Navegar por Ano"
+
+msgctxt "#30107"
+msgid "Browse complete archives year-by-year from 2015 to 2024."
+msgstr "Navegue pelos arquivos completos ano a ano de 2015 a 2024."
+
+msgctxt "#30108"
+msgid "Browse by Content Type"
+msgstr "Navegar por Tipo de Conteúdo"
+
+msgctxt "#30109"
+msgid "Filter by Gameplay, Podcasts, Full Episodes, Clips, Shorts, and Compilations."
+msgstr "Filtrar por Gameplays, Podcasts, Episódios Completos, Clipes, Shorts e Compilações."
+
+msgctxt "#30110"
+msgid "Search Videos"
+msgstr "Pesquisar Vídeos"
+
+msgctxt "#30111"
+msgid "Search through thousands of archived Funhaus episodes by title or cast."
+msgstr "Pesquise em milhares de episódios arquivados de Funhaus por título ou elenco."
+
+# Resume & Pagination
+msgctxt "#30120"
+msgid "Resume: {title} (Page {page} of {total})"
+msgstr "Continuar: {title} (Página {page} de {total})"
+
+msgctxt "#30121"
+msgid "Resume: {title} (Page {page})"
+msgstr "Continuar: {title} (Página {page})"
+
+msgctxt "#30122"
+msgid "Jump directly back to page {page} where you left off across Kodi restarts."
+msgstr "Volte diretamente para a página {page} onde parou mesmo após reiniciar o Kodi."
+
+msgctxt "#30123"
+msgid "Reset Resume Bookmark to Page 1"
+msgstr "Redefinir Marcador para a Página 1"
+
+msgctxt "#30124"
+msgid "Resume bookmark reset to Page 1"
+msgstr "Marcador de continuação redefinido para a Página 1"
+
+msgctxt "#30125"
+msgid "Previous Page (Page {page} of {total})"
+msgstr "Página Anterior (Página {page} de {total})"
+
+msgctxt "#30126"
+msgid "Go back to page {page}."
+msgstr "Voltar para a página {page}."
+
+msgctxt "#30127"
+msgid "Jump to Page... (Currently Page {page} of {total})"
+msgstr "Pular para a Página... (Atualmente Página {page} de {total})"
+
+msgctxt "#30128"
+msgid "Jump directly to any page number between 1 and {total}."
+msgstr "Pule diretamente para qualquer página entre 1 e {total}."
+
+msgctxt "#30129"
+msgid "Next Page >> (Page {page} of {total}) [Showing {start}-{end} of {total_videos}]"
+msgstr "Próxima Página >> (Página {page} de {total}) [Mostrando {start}-{end} de {total_videos}]"
+
+msgctxt "#30130"
+msgid "Proceed to page {page} of {total}."
+msgstr "Avançar para a página {page} de {total}."
+
+msgctxt "#30131"
+msgid "Jump to Page (1 - {total}):"
+msgstr "Pular para a Página (1 - {total}):"
+
+# Sort Options
+msgctxt "#30140"
+msgid "Oldest First (Chronological)"
+msgstr "Mais Antigos Primeiro (Cronológico)"
+
+msgctxt "#30141"
+msgid "Oldest First (Chronological) [From Page 1]"
+msgstr "Mais Antigos Primeiro (Cronológico) [A partir da Página 1]"
+
+msgctxt "#30142"
+msgid "Watch the Funhaus archive in chronological order from February 2015 forward."
+msgstr "Assista ao arquivo de Funhaus em ordem cronológica de fevereiro de 2015 em diante."
+
+msgctxt "#30143"
+msgid "Newest First"
+msgstr "Mais Recentes Primeiro"
+
+msgctxt "#30144"
+msgid "Most recently uploaded videos first."
+msgstr "Vídeos enviados mais recentemente primeiro."
+
+msgctxt "#30145"
+msgid "Most Viewed"
+msgstr "Mais Vistos"
+
+msgctxt "#30146"
+msgid "Highest all-time view counts."
+msgstr "Maior número de visualizações de todos os tempos."
+
+msgctxt "#30147"
+msgid "Most Liked"
+msgstr "Mais Curtidos"
+
+msgctxt "#30148"
+msgid "Fan-favorite videos with the most likes."
+msgstr "Vídeos favoritos dos fãs com mais curtidas."
+
+msgctxt "#30149"
+msgid "Longest First"
+msgstr "Mais Longos Primeiro"
+
+msgctxt "#30150"
+msgid "Longest podcasts, livestreams, and full gameplay recordings."
+msgstr "Podcasts, transmissões ao vivo e gravações completas mais longas."
+
+msgctxt "#30151"
+msgid "Shortest First"
+msgstr "Mais Curtos Primeiro"
+
+msgctxt "#30152"
+msgid "Quick clips, shorts, and highlights."
+msgstr "Clipes rápidos, vídeos curtos e destaques."
+
+msgctxt "#30153"
+msgid "Title (A-Z)"
+msgstr "Título (A-Z)"
+
+msgctxt "#30154"
+msgid "Alphabetical order by video title."
+msgstr "Ordem alfabética pelo título do vídeo."
+
+msgctxt "#30155"
+msgid "Title (Z-A)"
+msgstr "Título (Z-A)"
+
+msgctxt "#30156"
+msgid "Reverse alphabetical order by video title."
+msgstr "Ordem alfabética inversa pelo título do vídeo."
+
+msgctxt "#30157"
+msgid "Random / Shuffle"
+msgstr "Aleatório / Embaralhar"
+
+msgctxt "#30158"
+msgid "Random shuffle of the entire 4,900 video library."
+msgstr "Reprodução aleatória de toda a biblioteca de 4.900 vídeos."
+
+# Dialogs & Notifications
+msgctxt "#30160"
+msgid "Search Funhaus Archive"
+msgstr "Pesquisar no Arquivo Funhaus"
+
+msgctxt "#30161"
+msgid "No videos found for this selection."
+msgstr "Nenhum vídeo encontrado para esta seleção."
+
+msgctxt "#30162"
+msgid "Failed to resolve video stream"
+msgstr "Falha ao resolver o fluxo de vídeo"
+
+msgctxt "#30163"
+msgid "videos"
+msgstr "vídeos"

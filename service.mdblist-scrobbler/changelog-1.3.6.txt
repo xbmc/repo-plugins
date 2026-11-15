@@ -1,0 +1,4 @@
+v1.3.6
+
+- Fixed the rating prompt's "Save to MDBList" being controlled by the Sync settings' ratings toggle (unrelated to the prompt, and off by default) -- it's now its own "Save to MDBList" setting in the Rating category, alongside "Save to Kodi library", so enabling the rating prompt is enough on its own.
+- Fixed the rating prompt showing no feedback at all when nothing could actually be saved (no supported provider IDs on a non-library/plugin-streamed item, an API error, or a sync running at the same moment) -- it now shows an error notification and logs the specific reason.

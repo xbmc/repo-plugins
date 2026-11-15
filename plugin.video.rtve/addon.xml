@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.rtve" name="RTVE" version="1.0.0" provider-name="mcr222">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.future" version="1.0.0"/>
+        <import addon="script.module.inputstreamhelper" version="0.4.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">Entertainment, news, documentaries, etc from spanish television https://www.rtve.es/play/</summary>
+        <description lang="en_GB">Entertainment, news, documentaries, etc from spanish television https://www.rtve.es/play/. </description>
+        <summary lang="ca_ES">Tots els programes de RTVE.</summary>
+        <description lang="ca_ES">Tota la programació de RTVE.</description>
+        <summary lang="es_ES">Toda la programación de RTVE</summary>
+        <description lang="es_ES">Toda la programación de RTVE</description>
+        <language>ca</language>
+        <license>GPL-2.0-or-later</license>
+        <source>https://github.com/mcr222/plugin.video.rtve</source>
+        <website>https://www.rtve.es/play/</website>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

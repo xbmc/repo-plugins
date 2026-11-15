@@ -1,0 +1,165 @@
+# Kodi Media Center language file
+# Addon Name: TheAudioDB Helper
+# Addon id: plugin.audio.theaudiodb.helper
+# Addon Provider: manfeed, black_eagle
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.audio.theaudiodb.helper\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2026-01-17 23:00+0000\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (United Kingdom) (http://www.transifex.com/projects/p/kodi-main/language/en_GB/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Music Video Links Helper"
+msgstr "Music Video Links Helper"
+
+msgctxt "#30001"
+msgid "HTTP Error"
+msgstr "HTTP Error"
+
+msgctxt "#30002"
+msgid "URL Error"
+msgstr "URL Error"
+
+msgctxt "#30003"
+msgid "Setting video URL for songid"
+msgstr "Setting video URL for songid"
+
+msgctxt "#30004"
+msgid "to database"
+msgstr "to database"
+
+msgctxt "#30008"
+msgid "Getting all video links"
+msgstr "Getting all video links"
+
+msgctxt "#30009"
+msgid "Processing artistid"
+msgstr "Processing artistid"
+
+msgctxt "#30010"
+msgid "artist name"
+msgstr "artist name"
+
+msgctxt "#30011"
+msgid "Skipping missing tag artist: "
+msgstr "Skipping missing tag artist: "
+
+msgctxt "#30012"
+msgid "Looking for video links for: "
+msgstr "Looking for video links for: "
+
+msgctxt "#30013"
+msgid "User cancelled"
+msgstr "User cancelled"
+
+msgctxt "#30014"
+msgid "Video Links - Error"
+msgstr "Video Links - Error"
+
+msgctxt "#30015"
+msgid "Getting video links"
+msgstr "Getting video links"
+
+msgctxt "#30016"
+msgid "Please wait..."
+msgstr "Please wait..."
+
+msgctxt "#30017"
+msgid "while getting"
+msgstr "while getting"
+
+msgctxt "#30018"
+msgid "Removed"
+msgstr "Removed"
+
+msgctxt "#30019"
+msgid "Added"
+msgstr "Added"
+
+msgctxt "#30024"
+msgid "No MusicBrainz ID found"
+msgstr "No MusicBrainz ID found"
+
+msgctxt "#30025"
+msgid "No videos found for this artist"
+msgstr "No videos found for this artist"
+
+msgctxt "#30026"
+msgid "Music Videos"
+msgstr "Music Videos"
+
+msgctxt "#30027"
+msgid "All videos are already in your library"
+msgstr "All videos are already in your library"
+
+msgctxt "#30028"
+msgid "Missing Music Videos"
+msgstr "Missing Music Videos"
+
+msgctxt "#30029"
+msgid "Finished"
+msgstr "Finished"
+
+msgctxt "#32001"
+msgid "Settings"
+msgstr "Settings"
+
+msgctxt "#32002"
+msgid "Additional Data Sources"
+msgstr "Additional Data Sources"
+
+msgctxt "#32003"
+msgid "Wikipedia"
+msgstr "Wikipedia"
+
+msgctxt "#32004"
+msgid "Last.fm"
+msgstr "Last.fm"
+
+msgctxt "#32005"
+msgid "Last.fm API Settings"
+msgstr "Last.fm API Settings"
+
+msgctxt "#32006"
+msgid "Enter your own Last.fm API key (recommended)"
+msgstr "Enter your own Last.fm API key (recommended)"
+
+msgctxt "#32007"
+msgid "Note: TheAudioDB is always enabled as primary source"
+msgstr "Note: TheAudioDB is always enabled as primary source"
+
+msgctxt "#32008"
+msgid "Auto-Save data"
+msgstr "Auto-Save data"
+
+msgctxt "#32009"
+msgid "Save biography/album description to Kodi database if empty"
+msgstr "Save biography/album description to Kodi database if empty"
+
+msgctxt "#32010"
+msgid "Free API key at https://www.last.fm/api/account/create"
+msgstr "Free API key at https://www.last.fm/api/account/create"
+
+msgctxt "#32011"
+msgid "Auto-Save Artwork"
+msgstr "Auto-Save Artwork"
+
+msgctxt "#32012"
+msgid "Save artwork to Kodi database if empty"
+msgstr "Save artwork to Kodi database if empty"
+
+msgctxt "#32013"
+msgid "Save biography to Kodi database?"
+msgstr "Save biography to Kodi database?"
+
+msgctxt "#32014"
+msgid "Save album description to Kodi database?"
+msgstr "Save album description to Kodi database?"

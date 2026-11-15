@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.opentakserver"
+version="1.0.0"
+name="OpenTAKServer Video Plugin"
+provider-name="OpenTAKServer">
+<requires>
+  <import addon="xbmc.python" version="3.0.1"/>
+  <import addon="script.module.requests" version="2.31.0"/>
+</requires>
+<extension point="xbmc.python.pluginsource" library="addon.py">
+  <provides>video</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+  <summary lang="en_GB">OpenTAKServer Video Plugin</summary>
+  <description lang="en_GB">View your OpenTAKServer video streams and recordings in Kodi</description>
+  <license>GPL-3.0-only</license>
+  <language>en</language>
+  <website>https://docs.opentakserver.io</website>
+  <source>https://github.com/brian7704/OpenTAKServer-Kodi</source>
+  <email>brian@opentakserver.io</email>
+  <assets>
+    <icon>resources/images/ots-logo.png</icon>
+  </assets>
+</extension>
+</addon>

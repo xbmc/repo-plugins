@@ -1,0 +1,3 @@
+v1.3.8
+
+- Fixed an item unwatched in MDBList staying watched: after a sync pulled a watched state from MDBList, the next sync pushed it back as a new local watch, undoing a later unwatch in MDBList. Pulled changes are now recorded as synced.

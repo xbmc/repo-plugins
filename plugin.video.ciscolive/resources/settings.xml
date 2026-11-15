@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+    <category label="General">
+        <setting id="show_no_video" type="bool" label="Show sessions without video" default="false"/>
+        <setting id="show_session_codes" type="bool" label="Show session codes in titles" default="false"/>
+    </category>
+    <category label="Performance">
+        <setting id="cache_hours" type="slider" label="Cache duration (hours)" default="6" range="1,1,48" option="int"/>
+    </category>
+</settings>

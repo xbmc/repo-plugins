@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="32001">
+        <setting label="Username" type="text"   id="username" default="" />
+        <setting label="Password" type="text"   id="password" option="hidden"  enable="!eq(-1,)" default="" />
+        <setting label="Server URL" type="text" id="server_url" default="https://public.opentakserver.io" />
+        <setting label="Verify HTTPS Certificates" type="bool" id="verify_certificates" default="false" />
+    </category>
+</settings>

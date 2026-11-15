@@ -1,0 +1,158 @@
+# Kodi Media Center language file
+# Addon Name: BBC Sounds
+# Addon id: plugin.audio.bbcsounds
+# Addon Provider: Dim Kroon
+
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+# 30100 - 30299 Settings
+msgctxt "#30100"
+msgid "BBC Account"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Sign in by entering email and password"
+msgstr ""
+
+msgctxt "#30102"
+msgid "You will be asked to enter your email and password."
+msgstr ""
+
+msgctxt "#30103"
+msgid "Sign in with email link"
+msgstr ""
+
+msgctxt "#30104"
+msgid "The BBC will send you an email. Open the email and click on the button to sign in."
+msgstr ""
+
+msgctxt "#30105"
+msgid "Sign out"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Appearance and Behaviour"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Maximum items per page"
+msgstr ""
+
+
+# 30300 - 30500 dialogs
+msgctxt "#30301"
+msgid "Enter email address"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Enter password"
+msgstr ""
+
+msgctxt "#30303"
+msgid "This device is already signed in."
+msgstr ""
+
+msgctxt "#30304"
+msgid "This email address is not associated with any BBC account."
+msgstr ""
+
+msgctxt "#30305"
+msgid "You are now signed in."
+msgstr ""
+
+msgctxt "#30306"
+msgid "The BBC has sent an email to {email_addr}. Click on the link in the mail to sign in. "
+"Once signed in, this dialog will close automatically.\n\n"
+"The link is valid for 15 minutes. Press 'Cancel' to abort."
+msgstr ""
+
+msgctxt "#30307"
+msgid "The operation has timed out and this link is no longer working.\nDo you want the BBC to send a new email?"
+msgstr ""
+
+msgctxt "#30308"
+msgid "Send me a new link"
+msgstr ""
+
+msgctxt "#30309"
+msgid "Sign in canceled."
+msgstr ""
+
+msgctxt "#30310"
+msgid "Signed out successfully"
+msgstr ""
+
+msgctxt "#30311"
+msgid "This device is already signed out."
+msgstr ""
+
+msgctxt "#30320"
+msgid "This BBC Sounds item is available in the UK only."
+msgstr ""
+
+msgctxt "#30321"
+msgid "For this operation you'll need to sign in with your BBC account\nOpen settings to sign in."
+msgstr ""
+
+msgctxt "#30322"
+msgid "Open settings"
+msgstr ""
+
+msgctxt "#30323"
+msgid "Remove '{title}' from Continue Listening?"
+msgstr ""
+
+
+# Context menu items
+msgctxt "#30600"
+msgid "More episodes"
+msgstr ""
+
+msgctxt "#30601"
+msgid "Subscribe"
+msgstr ""
+
+msgctxt "#30602"
+msgid "Unsubscribe"
+msgstr ""
+
+msgctxt "#30603"
+msgid "Bookmark"
+msgstr ""
+
+msgctxt "#30604"
+msgid "Remove bookmark"
+msgstr ""
+
+msgctxt "#30605"
+msgid "Listen from the start"
+msgstr ""
+
+msgctxt "#30606"
+msgid "Remove search term"
+msgstr ""
+
+msgctxt "#30607"
+msgid "Edit search term"
+msgstr ""
+
+msgctxt "#30608"
+msgid "Clear search history"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Remove from listening"
+msgstr ""

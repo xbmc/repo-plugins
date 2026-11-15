@@ -1,0 +1,40 @@
+﻿v1.4.1
+- Packaging fixes for the Kodi add-on repository (simpler entry point, no .gitignore in the zip)
+
+v1.4.0
+- Search for programmes and videos
+- Subtitles for on-demand videos (including subtitles for the deaf and automatic translations)
+- Setting to play the fixed 720p MP4 instead of the adaptive stream
+- Duration, season, episode, air date and artwork in listings
+- Faster browsing: the catalogue and programme ids are cached
+- Retries when 3cat does not answer, and an error message instead of a silent failure
+- Films lists no longer show collections and programmes that cannot be played
+- Removed unused menu code
+
+v1.3.1
+- Fixed programme episodes not loading after 3cat changed its page layout
+- Fixed programmes whose name contains an underscore
+
+v1.3.0
+- Added Films section (new releases, full catalogue, categories)
+
+v1.2.2
+- Improved video playback compatibility across different devices
+- Added intelligent DRM detection to only use DRM when needed
+- Added better support for HLS (.m3u8) streams
+- Added automatic license URL extraction from MPD files
+- Improved error handling and fallback mechanisms
+- Fixed issues with video playback on some devices
+
+v1.2.1
+- Replaced "Simple MP4 Playback" by "xbmcplugin.setResolvedUrl" with "ListItem"
+
+v1.2.0
+- Added direct stream
+- Fix naming
+
+v1.1.0
+-Play old mp4 format videos
+
+v1.0.0
+- First version

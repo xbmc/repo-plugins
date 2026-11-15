@@ -16,8 +16,8 @@ from resources.lib.data import guidedata
 from resources.lib.data import onair
 from resources.lib.util import atomicfile
 
-# Ages of the lock's limit, as the web player offers them (19: "18+"; 0: none), and their names.
-AGES = (0, 6, 12, 16, 18, 19)
+# Ages of the lock's limit, as the web player offers them (ADULT_AGE: "18+"; 0: none), and their names.
+AGES = (0, 6, 12, 16, 18, guidedata.ADULT_AGE)
 AGE_LABELS = (30128, 30151, 30152, 30153, 30154, 30155)
 FILE = os.path.join(kodiutil.PROFILE, "parental.json")
 # As the web player starts: no age limit, unrated content locked, adult channels hidden.

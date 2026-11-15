@@ -34,7 +34,7 @@ def counts(client):
         "subscribed": None if subscribed is None else len(subscribed),
         "favourites": None if favourites is None else len(favourites),
         # Only those still subscribed: a channel deactivated and since dropped from the subscription is not one.
-        "deactivated": None if subscribed is None else len({str(i) for i in subscribed} & (off or set())),
+        "deactivated": None if subscribed is None else sum(channellist.is_deactivated(i, off or set()) for i in set(subscribed)),
         # The favourite programmes by type: series, and the rest ("Program": films, but not only).
         "series": None if kinds is None else sum(kinds),
         "other": None if kinds is None else len(kinds) - sum(kinds),

@@ -1,19 +1,16 @@
 """The manifest as ISA gets it: each track's keys declared, key changes found.
 
-The MPD says only "Widevine", without PSSH or KID, while some channels encrypt each
-track group with its own key pair (Film+ HD). Left alone, ISA opens one DRM session and
-gets one pair. The proxy writes each representation's pssh and default_KID (from its init
-segment) into the MPD; segments still come straight from the CDN through an inserted <BaseURL>.
+The proxy writes each representation's pssh and default_KID (from its init segment) into the MPD,
+so ISA asks for every key pair a channel uses; segments still come straight from the CDN through an
+inserted <BaseURL>.
 
-Rotated keys (RTL HD): the init segment names one pair while the fragments use another
-(their own pssh and "seig" group). ISA goes by the init segment and decrypts garbage, so
-the proxy declares the fragments' pair and serves such init segments with that key ID
-in their "tenc" box (see licproxy).
+Where the fragments use another key than their init segment names, the proxy declares the
+fragments' key and serves such init segments with that key ID (see licproxy): ISA goes by the
+init segment.
 
-Keys changing while a live channel plays (seen on several channels): ISA keeps decrypting with
-the key it started with (no version implements key rotation), and the picture stops. Each
-refresh reads the newest fragments' keys; a change is noted for the player to restart there
-(see _watch_live_keys and keyfollower).
+Keys changing while a live channel plays: ISA keeps decrypting with the key it started with (no
+version implements key rotation), and the picture stops. Each refresh reads the newest fragments'
+keys; a change is noted for the player to restart there (see _watch_live_keys and keyfollower).
 """
 
 import re
@@ -29,6 +26,10 @@ from resources.lib.stream import keychanges
 
 # A rewritten manifest, and where its rewrite's time went (for the log: which step to make faster, if any).
 Rewritten = namedtuple("Rewritten", "mpd steps")
+# Seconds an HTTP request to the provider or the CDN may take.
+HTTP_TIMEOUT = 20
+# A fragment's head (moof, naming its key) lies within its first this many bytes: its media data is not needed.
+FRAGMENT_HEAD_BYTES = 65536
 
 
 class ManifestRewriter:
@@ -99,7 +100,7 @@ class ManifestRewriter:
         """
         began = time.time()
         asets = dash.adaptation_sets(mpd)
-        static = bool(re.search(r'<MPD\b[^>]*\btype="static"', mpd))
+        static = dash.is_static(mpd)
         from_start = self._from_start or static
         self._read_keys(asets, mpd_url, from_start)
         keys = self._part_keys(asets, mpd_url) if static else self._protection
@@ -139,7 +140,7 @@ class ManifestRewriter:
             return
         tasks = [("init", url) for url in wanted] + [("fragment", url) for url in set(wanted.values()) if url]
         with ThreadPoolExecutor(max_workers=8) as pool:
-            found = dict(zip(tasks, pool.map(self._fetch_keys, tasks)))
+            found = dict(zip(tasks, pool.map(self._fetch_keys, tasks), strict=True))
         for url, segment in wanted.items():
             if segment and not from_start:  # the fragment a live refresh would read first (see _watch_live_keys)
                 self._live_last = dict(self._live_last or {}, **{url: segment})
@@ -156,13 +157,13 @@ class ManifestRewriter:
 
         At each refresh, the video's newest fragment but one (the newest may still be in the making) is
         read once, from its smallest quality (all share a key): a range request per segment. The video
-        only: the sound changed keys with it where seen (LIVE$369), and the restart reads every track's
-        new key anyway. live_changes gets (when noticed, seconds before the live edge, track, old kid, new kid).
+        only: the restart reads every track's new key anyway.
+        live_changes gets (when noticed, seconds before the live edge, track, old kid, new kid).
         """
         last, noticed = self._live_last or {}, self._live_noticed or {}
         checks = []
         for aset in asets:
-            if 'contentType="video"' not in aset and 'mimeType="video/' not in aset:
+            if not dash.is_video(aset) or dash.is_trick_mode(aset):
                 continue
             tag = dash.smallest(dash.representations(aset))
             init = dash.init_url(aset, tag, mpd_url) if tag else None
@@ -177,14 +178,14 @@ class ManifestRewriter:
             return
         with ThreadPoolExecutor(max_workers=len(checks)) as pool:
             kids = list(pool.map(self._live_kid, [url for *_, url in checks]))
-        for (aset, init, declared, start, url), kid in zip(checks, kids):
+        for (aset, init, declared, start, url), kid in zip(checks, kids, strict=True):
             if kid is None:
                 continue  # unread: tried again at the next refresh
             last[init] = url
             if kid in (declared, noticed.get(init)):
                 continue
             noticed[init] = kid
-            template = re.search(r"<SegmentTemplate\b.*?</SegmentTemplate>", aset, re.S).group(0)
+            template = dash.SEGMENT_TEMPLATE.search(aset).group(0)
             scale, segments = dash.parse_timeline(template, default_scale=1)  # as start_time read it
             edge = (segments[-1][0] + segments[-1][1]) / scale
             track = (re.search(r'\bcontentType="(\w+)"', aset) or [None, "?"])[1]
@@ -233,8 +234,7 @@ class ManifestRewriter:
         """Return the key pair the tracks played must share; None to keep them all.
 
         Android ISA keeps one DRM session for all streams (HasLicenseKey always
-        says yes) and the server licenses one pair per request, so only that
-        pair's tracks can play. The others are dropped: left in, they stall
+        says yes), so only one pair's tracks can play. The others are dropped: left in, they stall
         playback or feed encrypted audio to the decoder (which crashed Kodi).
         The pair is the preferred audio language's, else the first audio's.
         """
@@ -245,12 +245,12 @@ class ManifestRewriter:
             return self._audio_langs.index(lang) if lang in self._audio_langs else len(self._audio_langs)
 
         main_pair = None
-        for aset in sorted((a for a in asets if 'contentType="audio"' in a), key=audio_rank):
+        for aset in sorted((a for a in asets if dash.is_audio(a)), key=audio_rank):
             for tag in dash.representations(aset):
                 main_pair = main_pair or dash.key_pair(rep_protection(aset, tag)[0])
             if main_pair:
                 break
-        video_tags = [(a, t) for a in asets if 'contentType="video"' in a for t in dash.representations(a)]
+        video_tags = [(a, t) for a in asets if dash.is_video(a) for t in dash.representations(a)]
         # No video track in the audio's pair: better some picture than none.
         if main_pair and not any(dash.key_pair(rep_protection(a, t)[0]) == main_pair for a, t in video_tags):
             return None
@@ -262,10 +262,8 @@ class ManifestRewriter:
             return
         self._tracks_logged = True
         pairs, tracks = {}, []
-        for aset in (a for a in asets if 'contentType="video"' in a):
+        for aset in (a for a in asets if dash.is_video(a) and not dash.is_trick_mode(a)):
             for tag in dash.representations(aset):
-                if 'id="trickmode' in tag:
-                    continue
                 size = re.search(r'\bwidth="(\d+)".*?\bheight="(\d+)"', tag) or re.search(r'\bheight="(\d+)"', tag)
                 rate = re.search(r'\bbandwidth="(\d+)"', tag)
                 pair = dash.key_pair(rep_protection(aset, tag)[0])
@@ -282,7 +280,7 @@ class ManifestRewriter:
                 )
         self._debug("video tracks offered: %s" % "; ".join(tracks))
         texts = []
-        for aset in (a for a in asets if 'contentType="text"' in a or 'mimeType="text/' in a or 'codecs="stpp' in a):
+        for aset in (a for a in asets if dash.is_text(a)):
             lang = re.search(r'\blang="([^"]+)"', aset)
             codecs = re.search(r'\bcodecs="([^"]+)"', aset)
             role = re.search(r'<Role\b[^>]*\bvalue="([^"]+)"', aset)
@@ -350,7 +348,6 @@ class ManifestRewriter:
         started = time.time()
         try:
             found = keychanges.find(track_groups, key, self._change_hint)
-            self.found_changes = found
         except keychanges.Unknown as e:
             self._log("key change search failed, playing it in one part: %s" % e)
             return []
@@ -360,8 +357,14 @@ class ManifestRewriter:
         out = [self._change(track_groups, found, k, key, mpd_url) for k in range(len(found[0]))]
         if None in out:
             self._log("a key change to no key of its own: playing it in one part")
-            self.change_times = ()
             return []
+        video = track_groups[keychanges.video_index(track_groups)]
+        first = video.segments[0][0] / video.scale
+        self.found_changes = found
+        self.change_times = tuple(seconds - first for seconds, _, _ in out)
+        for offset, (_, _, protection) in zip(self.change_times, out, strict=True):
+            kids = ", ".join(sorted({p[1] for p in protection.values()}))
+            self._debug("key change %.0f s into the stream: %s" % (offset, kids))
         if out:
             self._debug("key changes found in %.2fs, %d fragment heads read" % (time.time() - started, len(keys)))
         return out
@@ -372,7 +375,7 @@ class ManifestRewriter:
         index = found[keychanges.video_index(track_groups)][k]
         seconds = video.segments[index][0] / video.scale
         starts, protection = {}, {}
-        for group, indexes in zip(track_groups, found):
+        for group, indexes in zip(track_groups, found, strict=True):
             starts[group.aset] = indexes[k]
             pssh, kid = key(group, indexes[k])
             if not kid:
@@ -382,9 +385,6 @@ class ManifestRewriter:
                 init_kid = self._protection.get(url) or (None, None, None)
                 init_kid = init_kid[2] or init_kid[1]
                 protection[url] = (pssh, kid, init_kid if kid != init_kid else None)
-        offset = seconds - video.segments[0][0] / video.scale
-        self.change_times = tuple(self.change_times) + (offset,)
-        self._debug("key change %.0f s into the stream: %s" % (offset, ", ".join(sorted({p[1] for p in protection.values()}))))
         return seconds, starts, protection
 
     def _fragment_key(self, url):
@@ -393,12 +393,11 @@ class ManifestRewriter:
         :raises keychanges.Unknown: the fragment cannot be read
         """
         try:
-            # Only the fragment's head (moof) is needed, not its media data.
-            r = self._http.get(url, headers={"Range": "bytes=0-65535"}, timeout=20)
+            r = self._http.get(url, headers={"Range": "bytes=0-%d" % (FRAGMENT_HEAD_BYTES - 1)}, timeout=HTTP_TIMEOUT)
             data = r.content
         except transport.Error as e:
             raise keychanges.Unknown("%s: %s" % (url.rsplit("/", 1)[-1], e)) from e
-        if getattr(r, "status_code", 200) not in (200, 206):
+        if r.status_code not in (200, 206):
             raise keychanges.Unknown("%s: HTTP %s" % (url.rsplit("/", 1)[-1], r.status_code))
         return dash.fragment_protection(data)
 
@@ -416,7 +415,7 @@ class ManifestRewriter:
         kind, url = task
         try:
             if kind == "init":
-                return dash.init_protection(self._http.get(url, timeout=20).content)
+                return dash.init_protection(self._http.get(url, timeout=HTTP_TIMEOUT).content)
             return self._fragment_key(url)
         except (transport.Error, keychanges.Unknown) as e:
             self._log("%s segment fetch failed: %s" % (kind, e))

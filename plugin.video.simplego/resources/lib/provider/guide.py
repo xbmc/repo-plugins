@@ -35,9 +35,6 @@ GUIDE_FIELDS = (
 # Freshness for "what is on" lookups (see _any_block): with guideblocks.BLOCK_FRESH the live stream's
 # manifest request kept waiting for a whole block to be refetched.
 LOOKUP_FRESH = 2 * 3600
-# The guide API serves only these 3-hour UTC blocks.
-BLOCK_OFFSETS = range(0, 24, 3)
-BLOCK_SECONDS = 3 * 3600
 
 
 class Guide:
@@ -50,8 +47,6 @@ class Guide:
     def __init__(self, api, auth):
         self._api = api
         self._auth = auth
-        # Blocks fetched and kept by the last epg_blocks, for the export's log.
-        self.epg_stats = {"fetched": 0, "cached": 0}
 
     def _schedule_block(self, day, hour_offset):
         """Return the programmes of all channels for one 3-hour UTC block, keyed by station_id.
@@ -59,7 +54,7 @@ class Guide:
         :param day: a "YYYY-MM-DD" UTC date
         :param hour_offset: a UTC hour (0, 3, ... 21)
         """
-        params = {"date": day, "hour_offset": str(hour_offset), "hour_range": "3", "filler": "true"}
+        params = {"date": day, "hour_offset": str(hour_offset), "hour_range": str(guideblocks.BLOCK_HOURS), "filler": "true"}
         params["isFullDescriptionRequired"] = "true"
         if self._auth.authed:
             # Without a login the server answers with the public channel map anyway.
@@ -94,9 +89,10 @@ class Guide:
         A block already over is good however old: refetching it was most of a catch-up
         start (2-2.5 s).
         """
-        date, offset = time.strftime("%Y-%m-%d", time.gmtime(when)), time.gmtime(when).tm_hour // 3 * 3
+        hours = guideblocks.BLOCK_HOURS
+        date, offset = time.strftime("%Y-%m-%d", time.gmtime(when)), time.gmtime(when).tm_hour // hours * hours
         path = guideblocks.block_path(cache_dir, date, offset) if cache_dir else None
-        over = (int(when) // BLOCK_SECONDS + 1) * BLOCK_SECONDS <= time.time()
+        over = (int(when) // guideblocks.BLOCK_SECONDS + 1) * guideblocks.BLOCK_SECONDS <= time.time()
         kept = guideblocks.cached_block(path, None, date, offset, any_stations=True, fresh=float("inf") if over else LOOKUP_FRESH)
         if kept is not None and (station is None or station in kept):
             return kept
@@ -107,20 +103,24 @@ class Guide:
             guideblocks.drop_old_blocks(cache_dir)
         return channels
 
-    def epg_blocks(self, past_days=1, days_ahead=7, stations=None, cache_dir=None, progress=None):
+    def epg_blocks(self, past_days=1, days_ahead=7, stations=None, cache_dir=None, progress=None, pause=None):
         """Return the guide from `past_days` before today (UTC) to `days_ahead` after it, block by block.
 
         Days ahead stop at the first day without programmes (13 days published when
-        tried, 2026-10-27). A programme spanning two blocks is in both. Sets epg_stats.
+        tried, 2026-10-27). A programme spanning two blocks is in both.
 
         :param stations: the station ids to keep (every block lists all of them)
         :param cache_dir: where the blocks are kept between calls (see GUIDE_FIELDS)
         :param progress: progress(done, total) is called after each block; what it raises ends the fetch
-        :return: [(date, offset, guideblocks.GuideBlock), ...] in time order
+        :param pause: pause() is called before each block, by the thread fetching it; it may wait
+        :return: ([(date, offset, guideblocks.GuideBlock), ...] in time order,
+            {"fetched": blocks fetched, "cached": kept blocks used})
         """
         from concurrent.futures import ThreadPoolExecutor
 
-        today = int(time.time()) // 86400 * 86400
+        day_seconds = guideblocks.DAY_SECONDS
+        offsets = guideblocks.BLOCK_OFFSETS
+        today = int(time.time()) // day_seconds * day_seconds
         # Login and account first, so the parallel requests below only read them.
         if self._auth.authed:
             self._auth.valid_account()
@@ -128,32 +128,30 @@ class Guide:
         wanted = None if stations is None else set(stations)
         if cache_dir:
             os.makedirs(cache_dir, exist_ok=True)
-        self.epg_stats = {"fetched": 0, "cached": 0}
+        counts = {"fetched": 0, "cached": 0}
         kept = set()
         days = range(-past_days, days_ahead + 1)
-        total, done = len(days) * 8, 0
+        total, done = len(days) * len(offsets), 0
         blocks = []
         # A week is ~70 blocks, a minute and a half one by one.
         with ThreadPoolExecutor(max_workers=EPG_WORKERS) as pool:
             for day in days:
-                date = time.strftime("%Y-%m-%d", time.gmtime(today + day * 86400))
-                kept.update(
-                    os.path.basename(guideblocks.block_path(cache_dir, date, offset)) for offset in BLOCK_OFFSETS if cache_dir
-                )
-                fetch = functools.partial(self._kept_or_fetched, date, cache_dir=cache_dir, stations=wanted)
+                date = time.strftime("%Y-%m-%d", time.gmtime(today + day * day_seconds))
+                kept.update(os.path.basename(guideblocks.block_path(cache_dir, date, offset)) for offset in offsets if cache_dir)
+                fetch = functools.partial(self._kept_or_fetched, date, cache_dir=cache_dir, stations=wanted, pause=pause)
                 found = 0
-                for offset, (block, fetched) in zip(BLOCK_OFFSETS, pool.map(fetch, BLOCK_OFFSETS)):
-                    self.epg_stats["fetched" if fetched else "cached"] += 1
+                for offset, (block, fetched) in zip(offsets, pool.map(fetch, offsets), strict=True):
+                    counts["fetched" if fetched else "cached"] += 1
                     blocks.append((date, offset, block))
                     found += block.programmes
                     done += 1
                     if progress:
                         progress(done, total)
                 if day > 0 and not found:
-                    del blocks[-len(BLOCK_OFFSETS) :]  # the first day without programmes: none ahead
+                    del blocks[-len(offsets) :]  # the first day without programmes: none ahead
                     break
         guideblocks.drop_blocks(cache_dir, kept)
-        return blocks
+        return blocks, counts
 
     def _block(self, date, offset, cache_dir, stations):
         """Return (programmes by station, whether fetched from the provider)."""
@@ -163,8 +161,10 @@ class Guide:
             return channels, False
         return self._fetch_block(date, offset, path, stations), True
 
-    def _kept_or_fetched(self, date, offset, cache_dir, stations):
+    def _kept_or_fetched(self, date, offset, cache_dir, stations, pause=None):
         """Return (guideblocks.GuideBlock, whether fetched) for epg_blocks: a kept block is not read yet."""
+        if pause:
+            pause()
         path = guideblocks.block_path(cache_dir, date, offset) if cache_dir else None
         header = guideblocks.block_header(path, stations, date, offset)
         if header is not None:
@@ -181,7 +181,7 @@ class Guide:
             fetched = self._schedule_block(date, offset)
         except errors.ApiError as e:
             # A day out of range is refused (400), not empty; only today must exist.
-            if getattr(e, "status", None) != 400 or date == time.strftime("%Y-%m-%d", time.gmtime()):
+            if e.status != 400 or date == time.strftime("%Y-%m-%d", time.gmtime()):
                 raise
             fetched = {}
         channels = {

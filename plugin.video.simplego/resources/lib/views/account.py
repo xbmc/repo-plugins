@@ -13,7 +13,7 @@ _s = kodiutil.string
 
 
 class AccountViews:
-    """The account's actions (see plugin.ROUTES).
+    """The account's actions (see views.routes).
 
     :param call: the plugin call (see views.call.Call)
     """
@@ -27,7 +27,7 @@ class AccountViews:
         text = phonelogin.wait_for_token(self._call.client)
         if text:
             self._call.client.login_with_refresh_token(text)
-            loginstate.login_changed()
+            loginstate.login_changed(self._call.client)
             xbmcgui.Dialog().notification(kodiutil.name(), _s(30022))
             xbmc.executebuiltin("Container.Refresh")
 
@@ -35,7 +35,7 @@ class AccountViews:
         """Log out after asking, then refresh the listing."""
         if xbmcgui.Dialog().yesno(kodiutil.name(), _s(30023)):
             self._call.client.logout()
-            loginstate.login_changed()
+            loginstate.login_changed(self._call.client)
             xbmc.executebuiltin("Container.Refresh")
 
     def do_devices(self):

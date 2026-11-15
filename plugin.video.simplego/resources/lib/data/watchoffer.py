@@ -6,13 +6,13 @@ with no airing (seen 2026-11-02: taken without a word, never listed), and one wi
 One question at most: the removal only when there is no favourite to offer.
 """
 
-from resources.lib import kodiutil
 from resources.lib import provider
 from resources.lib.data import channellist
 from resources.lib.data import continuelist
 from resources.lib.data import guidedata
 from resources.lib.data import onair
 from resources.lib.util import isotime
+from resources.lib.util import localtime
 
 
 def offer(client, channel_id, start):
@@ -39,7 +39,7 @@ def offer(client, channel_id, start):
     return dict(
         wanted,
         title=programme.get("description") or "",
-        next="%s, %s" % (kodiutil.local_time(airing["start_utc"]), channel["name"]),
+        next="%s, %s" % (localtime.local_time(airing["start_utc"]), channel["name"]),
     )
 
 

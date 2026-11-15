@@ -1,16 +1,8 @@
-"""The TV provider's client: what its web player does, without Kodi.
+"""The TV provider's client, without Kodi.
 
-The web player (see core.BASE_URL) runs on a "yo-digital" OneTV front end, with
-a MediaKind (tv3cloud) back end behind it:
-
-  * bifrost (tv-hu-prod.yo-digital.com/bifrost): channel list, EPG, account.
-    Every call carries x-txn-id = sha256(trackingId+sessionId+deviceId+callTime)[:32].
-  * MediaKind STS (ottapp-appgw-client-a...): issues the "AuthToken1..." access
-    token. The SSO login (Keycloak, with reCAPTCHA) rules out password login, so the
-    add-on takes the 365-day refresh token from one browser login and renews through
-    the STS refresh_login_url redirect.
-  * MediaKind AMP (ottapp-appgw-amp-a...): device registration, "roll" (the
-    playback session: manifest + CDN) and the Widevine licence.
+* bifrost (see core.DEFAULT_CONSTANTS): channel list, EPG, account.
+* STS: the access token, renewed from the login's refresh token.
+* AMP: device registration, "roll" (the playback session: manifest and CDN) and the Widevine licence.
 """
 
 import importlib

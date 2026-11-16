@@ -1,0 +1,1961 @@
+# Kodi Media Center language file
+# Addon Name: Kofin
+# Addon id: plugin.video.kofin
+# Addon Provider: kontell
+# Note: machine-translated (LLM), pending native review.
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.kofin\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-08-14 00:00+0000\n"
+"Last-Translator: Claude (machine translation) <noreply@anthropic.com>\n"
+"Language-Team: Hungarian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu_HU\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "Addon Summary"
+msgid "Jellyfin client for seamless Kodi integration"
+msgstr "Jellyfin-kliens zökkenőmentes Kodi-integrációval"
+
+msgctxt "Addon Description"
+msgid "Play movies, shows & music from a Jellyfin server."
+msgstr "Filmek, sorozatok és zene lejátszása Jellyfin-kiszolgálóról."
+
+msgctxt "#30010"
+msgid "Play with transcoding"
+msgstr "Lejátszás átkódolással"
+
+msgctxt "#30011"
+msgid "Quick Connect"
+msgstr "Quick Connect"
+
+msgctxt "#30012"
+msgid "Username and password"
+msgstr "Felhasználónév és jelszó"
+
+msgctxt "#30013"
+msgid "Username"
+msgstr "Felhasználónév"
+
+msgctxt "#30014"
+msgid "Password"
+msgstr "Jelszó"
+
+msgctxt "#30015"
+msgid "Enter code [B]%s[/B] in the Jellyfin app or web interface."
+msgstr "Írja be a(z) [B]%s[/B] kódot a Jellyfin alkalmazásban vagy a webes felületen."
+
+msgctxt "#30016"
+msgid "Logged in as %s"
+msgstr "Bejelentkezve mint %s"
+
+msgctxt "#30017"
+msgid "Login failed: wrong username or password"
+msgstr "Sikertelen bejelentkezés: hibás felhasználónév vagy jelszó"
+
+msgctxt "#30018"
+msgid "Server unreachable"
+msgstr "A kiszolgáló nem érhető el"
+
+msgctxt "#30019"
+msgid "Log out from %s?"
+msgstr "Kijelentkezés innen: %s?"
+
+msgctxt "#30020"
+msgid "Logged out"
+msgstr "Kijelentkezve"
+
+msgctxt "#30021"
+msgid "Connection OK — %s (%s)"
+msgstr "A kapcsolat rendben — %s (%s)"
+
+msgctxt "#30022"
+msgid "Session rejected — log in again from the Account tab"
+msgstr "A munkamenet elutasítva — jelentkezzen be újra a Fiók lapon"
+
+msgctxt "#30023"
+msgid "Restarting the Kofin service"
+msgstr "A Kofin szolgáltatás újraindul"
+
+msgctxt "#30024"
+msgid "Quick Connect timed out"
+msgstr "A Quick Connect túllépte az időkorlátot"
+
+msgctxt "#30025"
+msgid "Already logged in"
+msgstr "Már be van jelentkezve"
+
+msgctxt "#30026"
+msgid "Not logged in"
+msgstr "Nincs bejelentkezve"
+
+msgctxt "#30027"
+msgid "Log in to %s"
+msgstr "Bejelentkezés ide: %s"
+
+msgctxt "#30050"
+msgid "Account"
+msgstr "Fiók"
+
+msgctxt "#30051"
+msgid "Connect to your Jellyfin server and manage the session."
+msgstr "Csatlakozás a Jellyfin-kiszolgálóhoz és a munkamenet kezelése."
+
+msgctxt "#30052"
+msgid "Server address"
+msgstr "Kiszolgáló címe"
+
+msgctxt "#30053"
+msgid "Host name, IP address or full URL of the Jellyfin server. A bare host uses http on port 8096."
+msgstr "A Jellyfin-kiszolgáló gépneve, IP-címe vagy teljes URL-címe. Puszta gépnév esetén http és a 8096-os port az alapértelmezés."
+
+msgctxt "#30054"
+msgid "Log in…"
+msgstr "Bejelentkezés…"
+
+msgctxt "#30055"
+msgid "Connect to the server above using Quick Connect or a username and password."
+msgstr "Csatlakozás a fenti kiszolgálóhoz Quick Connecttel vagy felhasználónévvel és jelszóval."
+
+msgctxt "#30056"
+msgid "Server"
+msgstr "Kiszolgáló"
+
+msgctxt "#30057"
+msgid "The connected Jellyfin server."
+msgstr "A csatlakoztatott Jellyfin-kiszolgáló."
+
+msgctxt "#30058"
+msgid "Logged-in user"
+msgstr "Bejelentkezett felhasználó"
+
+msgctxt "#30059"
+msgid "The Jellyfin user this device plays and reports as."
+msgstr "Az a Jellyfin-felhasználó, akiként ez az eszköz lejátszik és jelent."
+
+msgctxt "#30060"
+msgid "Test connection"
+msgstr "Kapcsolat tesztelése"
+
+msgctxt "#30061"
+msgid "Check that the server is reachable and the session is still valid."
+msgstr "Annak ellenőrzése, hogy a kiszolgáló elérhető-e és a munkamenet még érvényes-e."
+
+msgctxt "#30062"
+msgid "Log out"
+msgstr "Kijelentkezés"
+
+msgctxt "#30063"
+msgid "End the session on the server and forget it on this device. The server address is kept."
+msgstr "A munkamenet lezárása a kiszolgálón és elfelejtése ezen az eszközön. A kiszolgáló címe megmarad."
+
+msgctxt "#30064"
+msgid "Restart Kofin"
+msgstr "A Kofin újraindítása"
+
+msgctxt "#30065"
+msgid "Restart the background service without restarting Kodi."
+msgstr "A háttérszolgáltatás újraindítása a Kodi újraindítása nélkül."
+
+msgctxt "#30071"
+msgid "Advanced"
+msgstr "Speciális"
+
+msgctxt "#30072"
+msgid "Notification, browsing, playback and deletion options."
+msgstr "Értesítési, böngészési, lejátszási és törlési beállítások."
+
+msgctxt "#30073"
+msgid "Enable Delete from server"
+msgstr "Törlés a kiszolgálóról engedélyezése"
+
+msgctxt "#30074"
+msgid "Adds a Delete entry to an item's 'Jellyfin actions' context menu. Deletion is permanent: the file itself is removed on the Jellyfin server, for every user."
+msgstr "Törlés bejegyzést ad az elem „Jellyfin műveletek” helyi menüjéhez. A törlés végleges: maga a fájl törlődik a Jellyfin-kiszolgálón, minden felhasználó számára."
+
+msgctxt "#30075"
+msgid "Delete without confirmation"
+msgstr "Törlés megerősítés nélkül"
+
+msgctxt "#30076"
+msgid "Delete the item as soon as the entry is picked, with no 'are you sure?' prompt. The deletion is still permanent and applies on the server."
+msgstr "Az elem törlése azonnal, amint kiválasztja a bejegyzést, „biztos benne?” kérdés nélkül. A törlés továbbra is végleges, és a kiszolgálón történik."
+
+msgctxt "#30077"
+msgid "Offer to delete after watching"
+msgstr "Törlés felajánlása megtekintés után"
+
+msgctxt "#30078"
+msgid "When a movie or episode finishes, ask whether to delete it from the server. Always asks, whatever 'Delete without confirmation' is set to."
+msgstr "Ha egy film vagy epizód véget ér, rákérdez, hogy törölje-e a kiszolgálóról. Mindig rákérdez, a „Törlés megerősítés nélkül” beállítástól függetlenül."
+
+msgctxt "#30079"
+msgid "Who's watching shortlist"
+msgstr "A Ki néz? szűkített listája"
+
+msgctxt "#30080"
+msgid "Choose which server users the addon's Who's watching? entry offers. \"All\" offers everyone. With nothing selected the entry is hidden and anyone already on the session is removed."
+msgstr "Válassza ki, mely kiszolgálófelhasználókat kínálja fel a kiegészítő Ki néz? bejegyzése. Az \"Összes\" mindenkit felkínál. Ha semmi sincs kiválasztva, a bejegyzés eltűnik, és aki már a munkamenetben van, azt eltávolítja."
+
+msgctxt "#30030"
+msgid "All"
+msgstr "Összes"
+
+msgctxt "#30031"
+msgid "Recently added"
+msgstr "Nemrég hozzáadott"
+
+msgctxt "#30032"
+msgid "Next up"
+msgstr "Következik"
+
+msgctxt "#30033"
+msgid "In progress"
+msgstr "Folyamatban"
+
+msgctxt "#30034"
+msgid "Unwatched"
+msgstr "Megtekintetlen"
+
+msgctxt "#30035"
+msgid "Favourites"
+msgstr "Kedvencek"
+
+msgctxt "#30036"
+msgid "Genres"
+msgstr "Műfajok"
+
+msgctxt "#30037"
+msgid "Random"
+msgstr "Véletlenszerű"
+
+msgctxt "#30038"
+msgid "Sets"
+msgstr "Gyűjtemények"
+
+msgctxt "#30039"
+msgid "Artists"
+msgstr "Előadók"
+
+msgctxt "#30040"
+msgid "Albums"
+msgstr "Albumok"
+
+msgctxt "#30049"
+msgid "Continue watching"
+msgstr "Nézés folytatása"
+
+msgctxt "#30100"
+msgid "Transcoding"
+msgstr "Átkódolás"
+
+msgctxt "#30101"
+msgid "When and how the server converts media for this device."
+msgstr "Mikor és hogyan alakítsa át a kiszolgáló a médiát ehhez az eszközhöz."
+
+msgctxt "#30102"
+msgid "Force direct play"
+msgstr "Közvetlen lejátszás kényszerítése"
+
+msgctxt "#30103"
+msgid "Always play the original video file. Overrides every other video transcoding setting; playback fails if the device cannot handle the media. Music is unaffected — see 'Transcode music'."
+msgstr "Mindig az eredeti videofájl lejátszása. Felülbírál minden más videoátkódolási beállítást; a lejátszás meghiúsul, ha az eszköz nem tudja kezelni a médiát. A zenét nem érinti — lásd a „Zene átkódolása” beállítást."
+
+msgctxt "#30104"
+msgid "Force remux"
+msgstr "Remuxolás kényszerítése"
+
+msgctxt "#30105"
+msgid "Remux into HLS and copy the source codecs. Does not use Maximum audio channels, Maximum streaming bitrate or Transcode audio bitrate below — those would re-encode a listed codec. Direct play codecs, Allowed HDR types and Maximum resolution still apply."
+msgstr "HLS-be remuxol, és a forrás kodekjeit másolja. Nem használja a lentebb lévő Hangcsatornák maximális száma, Maximális streamelési bitráta és Átkódolt hang bitrátája beállításokat — azok újrakódolnának egy listázott kodeket. A közvetlen lejátszás kodekjei, a Engedélyezett HDR-típusok és a Maximális felbontás továbbra is érvényesek."
+
+msgctxt "#30106"
+msgid "Force transcode"
+msgstr "Átkódolás kényszerítése"
+
+msgctxt "#30107"
+msgid "Always re-encode video and audio to the preferred codecs. Honours the bitrate cap, the channel cap, allowed codecs, HDR types and resolution."
+msgstr "Mindig a preferált kodekekre kódolja újra a videót és a hangot. Figyelembe veszi a bitráta-korlátot, a csatornakorlátot, az engedélyezett kodekeket, a HDR-típusokat és a felbontást."
+
+msgctxt "#30108"
+msgid "Direct play video codecs"
+msgstr "Közvetlen lejátszású videokodekek"
+
+msgctxt "#30109"
+msgid "Video formats this device can decode. Media using formats not selected here is transcoded."
+msgstr "Azok a videoformátumok, amelyeket ez az eszköz dekódolni tud. Az itt nem kiválasztott formátumú média átkódolásra kerül."
+
+msgctxt "#30110"
+msgid "Direct play audio codecs"
+msgstr "Közvetlen lejátszású hangkodekek"
+
+msgctxt "#30111"
+msgid "Audio formats this device can decode or pass through. Others are transcoded."
+msgstr "Azok a hangformátumok, amelyeket ez az eszköz dekódolni vagy továbbítani tud. A többi átkódolásra kerül."
+
+msgctxt "#30112"
+msgid "Allowed HDR types"
+msgstr "Engedélyezett HDR-típusok"
+
+msgctxt "#30113"
+msgid "HDR formats the display accepts. Media in formats not selected is tone-mapped or transcoded to SDR/HDR10 by the server."
+msgstr "A kijelző által elfogadott HDR-formátumok. A nem kiválasztott formátumú médiát a kiszolgáló tónusleképezéssel vagy átkódolással SDR-be, illetve HDR10-be alakítja."
+
+msgctxt "#30114"
+msgid "Preferred video codec"
+msgstr "Előnyben részesített videokodek"
+
+msgctxt "#30115"
+msgid "The codec the client asks for when video must be transcoded."
+msgstr "Az a kodek, amelyet a kliens kér, ha a videót át kell kódolni."
+
+msgctxt "#30116"
+msgid "Preferred audio codec"
+msgstr "Előnyben részesített hangkodek"
+
+msgctxt "#30117"
+msgid "The codec the client asks for when audio must be transcoded."
+msgstr "Az a kodek, amelyet a kliens kér, ha a hangot át kell kódolni."
+
+msgctxt "#30118"
+msgid "Maximum audio channels"
+msgstr "Hangcsatornák maximális száma"
+
+msgctxt "#30119"
+msgid "Maximum number of audio channels allowed when transcoding. Streams with more channels will be downmixed. No effect on direct playback."
+msgstr "Az átkódoláskor engedélyezett hangcsatornák maximális száma. A több csatornát tartalmazó adatfolyamok lekeverésre kerülnek. Nincs hatása a közvetlen lejátszásra."
+
+msgctxt "#30120"
+msgid "Maximum streaming bitrate"
+msgstr "Maximális streamelési bitráta"
+
+msgctxt "#30121"
+msgid "Media above this bitrate is transcoded down to it."
+msgstr "Az ennél nagyobb bitrátájú média erre a szintre lesz átkódolva."
+
+msgctxt "#30122"
+msgid "Maximum resolution"
+msgstr "Maximális felbontás"
+
+msgctxt "#30123"
+msgid "Wider media is downscaled by the server."
+msgstr "A szélesebb médiát a kiszolgáló leskálázza."
+
+msgctxt "#30124"
+msgid "Transcode audio bitrate"
+msgstr "Átkódolt hang bitrátája"
+
+msgctxt "#30125"
+msgid "Bitrate for the audio track when video is transcoded."
+msgstr "A hangsáv bitrátája, ha a videó átkódolásra kerül."
+
+msgctxt "#30126"
+msgid "Context menu bitrates"
+msgstr "Helyi menü bitrátái"
+
+msgctxt "#30127"
+msgid "Bitrates offered by 'Play with transcoding'. With one selected the popup is skipped."
+msgstr "A „Lejátszás átkódolással” által felkínált bitráták. Ha csak egy van kiválasztva, a felugró ablak kimarad."
+
+msgctxt "#30129"
+msgid "Maximum music bitrate"
+msgstr "Maximális zenebitráta"
+
+msgctxt "#30130"
+msgid "Music above this bitrate is transcoded using the codec and bitrate below. Unlimited never transcodes."
+msgstr "Az ennél nagyobb bitrátájú zene az alábbi kodekkel és bitrátával lesz átkódolva. A korlátlan sosem kódol át."
+
+msgctxt "#30131"
+msgid "Music transcode codec"
+msgstr "Zene átkódolási kodeke"
+
+msgctxt "#30132"
+msgid "Codec for transcoded music streams."
+msgstr "Az átkódolt zenei adatfolyamok kodeke."
+
+msgctxt "#30133"
+msgid "Music transcode bitrate"
+msgstr "Zene átkódolási bitrátája"
+
+msgctxt "#30134"
+msgid "Bitrate for transcoded music streams."
+msgstr "Az átkódolt zenei adatfolyamok bitrátája."
+
+msgctxt "#30135"
+msgid "Transcode music"
+msgstr "Zene átkódolása"
+
+msgctxt "#30150"
+msgid "H.264 (AVC)"
+msgstr "H.264 (AVC)"
+
+msgctxt "#30151"
+msgid "H.264 10-bit (Hi10P)"
+msgstr "H.264 10-bit (Hi10P)"
+
+msgctxt "#30152"
+msgid "H.265 (HEVC)"
+msgstr "H.265 (HEVC)"
+
+msgctxt "#30153"
+msgid "HEVC RExt (4:2:2/4:4:4)"
+msgstr "HEVC RExt (4:2:2/4:4:4)"
+
+msgctxt "#30154"
+msgid "AV1"
+msgstr "AV1"
+
+msgctxt "#30155"
+msgid "MPEG-2"
+msgstr "MPEG-2"
+
+msgctxt "#30156"
+msgid "VP9"
+msgstr "VP9"
+
+msgctxt "#30157"
+msgid "VC-1"
+msgstr "VC-1"
+
+msgctxt "#30158"
+msgid "AAC"
+msgstr "AAC"
+
+msgctxt "#30159"
+msgid "MP2"
+msgstr "MP2"
+
+msgctxt "#30160"
+msgid "MP3"
+msgstr "MP3"
+
+msgctxt "#30161"
+msgid "AC3 (Dolby Digital)"
+msgstr "AC3 (Dolby Digital)"
+
+msgctxt "#30162"
+msgid "E-AC3 (Dolby Digital Plus)"
+msgstr "E-AC3 (Dolby Digital Plus)"
+
+msgctxt "#30163"
+msgid "Opus"
+msgstr "Opus"
+
+msgctxt "#30164"
+msgid "FLAC"
+msgstr "FLAC"
+
+msgctxt "#30165"
+msgid "DTS"
+msgstr "DTS"
+
+msgctxt "#30166"
+msgid "HDR10"
+msgstr "HDR10"
+
+msgctxt "#30167"
+msgid "HLG"
+msgstr "HLG"
+
+msgctxt "#30168"
+msgid "HDR10+"
+msgstr "HDR10+"
+
+msgctxt "#30169"
+msgid "Dolby Vision"
+msgstr "Dolby Vision"
+
+msgctxt "#30170"
+msgid "Dolby Vision with HDR10 fallback"
+msgstr "Dolby Vision (HDR10 tartalék)"
+
+msgctxt "#30171"
+msgid "Dolby Vision with HLG fallback"
+msgstr "Dolby Vision (HLG tartalék)"
+
+msgctxt "#30172"
+msgid "Dolby Vision with SDR fallback"
+msgstr "Dolby Vision (SDR tartalék)"
+
+msgctxt "#30173"
+msgid "Dolby Vision Profile 7 (EL)"
+msgstr "Dolby Vision 7. profil (EL)"
+
+msgctxt "#30174"
+msgid "Dolby Vision with HDR10+ fallback"
+msgstr "Dolby Vision (HDR10+ tartalék)"
+
+msgctxt "#30175"
+msgid "Dolby Vision P7 with HDR10+ fallback"
+msgstr "Dolby Vision P7 (HDR10+ tartalék)"
+
+msgctxt "#30176"
+msgid "Unlimited"
+msgstr "Korlátlan"
+
+msgctxt "#30177"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30178"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30179"
+msgid "4K"
+msgstr "4K"
+
+msgctxt "#30180"
+msgid "2.0 stereo"
+msgstr "2.0 sztereó"
+
+msgctxt "#30181"
+msgid "5.1 surround"
+msgstr "5.1 térhatású"
+
+msgctxt "#30182"
+msgid "7.1 surround"
+msgstr "7.1 térhatású"
+
+msgctxt "#30183"
+msgid "1 Mbit/s"
+msgstr "1 Mbit/s"
+
+msgctxt "#30184"
+msgid "2 Mbit/s"
+msgstr "2 Mbit/s"
+
+msgctxt "#30185"
+msgid "3 Mbit/s"
+msgstr "3 Mbit/s"
+
+msgctxt "#30186"
+msgid "4 Mbit/s"
+msgstr "4 Mbit/s"
+
+msgctxt "#30187"
+msgid "6 Mbit/s"
+msgstr "6 Mbit/s"
+
+msgctxt "#30188"
+msgid "8 Mbit/s"
+msgstr "8 Mbit/s"
+
+msgctxt "#30189"
+msgid "10 Mbit/s"
+msgstr "10 Mbit/s"
+
+msgctxt "#30190"
+msgid "15 Mbit/s"
+msgstr "15 Mbit/s"
+
+msgctxt "#30191"
+msgid "20 Mbit/s"
+msgstr "20 Mbit/s"
+
+msgctxt "#30192"
+msgid "25 Mbit/s"
+msgstr "25 Mbit/s"
+
+msgctxt "#30193"
+msgid "40 Mbit/s"
+msgstr "40 Mbit/s"
+
+msgctxt "#30194"
+msgid "60 Mbit/s"
+msgstr "60 Mbit/s"
+
+msgctxt "#30195"
+msgid "120 Mbit/s"
+msgstr "120 Mbit/s"
+
+msgctxt "#30196"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30197"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30198"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30199"
+msgid "256 kbit/s"
+msgstr "256 kbit/s"
+
+msgctxt "#30200"
+msgid "320 kbit/s"
+msgstr "320 kbit/s"
+
+msgctxt "#30201"
+msgid "384 kbit/s"
+msgstr "384 kbit/s"
+
+msgctxt "#30202"
+msgid "448 kbit/s"
+msgstr "448 kbit/s"
+
+msgctxt "#30203"
+msgid "640 kbit/s"
+msgstr "640 kbit/s"
+
+msgctxt "#30204"
+msgid "0.5 Mbit/s"
+msgstr "0.5 Mbit/s"
+
+msgctxt "#30205"
+msgid "0.75 Mbit/s"
+msgstr "0.75 Mbit/s"
+
+msgctxt "#30206"
+msgid "Default (max streaming bitrate)"
+msgstr "Alapértelmezett (max. streamelési bitráta)"
+
+msgctxt "#30041"
+msgid "Who's watching?"
+msgstr "Ki néz?"
+
+msgctxt "#30045"
+msgid "No active session on the server yet"
+msgstr "Még nincs aktív munkamenet a kiszolgálón"
+
+msgctxt "#30046"
+msgid "Who's watching? (%s)"
+msgstr "Ki néz? (%s)"
+
+msgctxt "#30047"
+msgid "Who's watching with %s?"
+msgstr "Ki néz %s mellett?"
+
+msgctxt "#30048"
+msgid "Who can be added to the session"
+msgstr "Ki adható hozzá a munkamenethez"
+
+msgctxt "#30250"
+msgid "Library"
+msgstr "Médiatár"
+
+msgctxt "#30251"
+msgid "Select and manage the Jellyfin libraries mirrored into Kodi's own database."
+msgstr "A Kodi saját adatbázisába tükrözött Jellyfin-médiatárak kiválasztása és kezelése."
+
+msgctxt "#30252"
+msgid "Select libraries to sync"
+msgstr "Szinkronizálandó médiatárak kiválasztása"
+
+msgctxt "#30253"
+msgid "Choose which server libraries are mirrored into the Kodi library. Changes apply when you confirm the selection."
+msgstr "Válassza ki, mely kiszolgálói médiatárak tükröződjenek a Kodi médiatárába. A módosítások a kiválasztás megerősítésekor lépnek életbe."
+
+msgctxt "#30256"
+msgid "Update libraries"
+msgstr "Médiatárak frissítése"
+
+msgctxt "#30258"
+msgid "Repair libraries"
+msgstr "Médiatárak javítása"
+
+msgctxt "#30259"
+msgid "Remove and re-sync the libraries you pick from scratch, restoring watched state from the server. Runs when you confirm the selection."
+msgstr "A kiválasztott médiatárak eltávolítása és újraszinkronizálása a nulláról, a megtekintettségi állapot visszaállításával a kiszolgálóról. A kiválasztás megerősítésekor fut le."
+
+msgctxt "#30262"
+msgid "Sync status"
+msgstr "Szinkronizálás állapota"
+
+msgctxt "#30264"
+msgid "Remove synced library?"
+msgstr "Eltávolítja a szinkronizált médiatárat?"
+
+msgctxt "#30265"
+msgid "Remove %s from the Kodi library? The items are deleted from this device only."
+msgstr "Eltávolítja a Kodi médiatárából: %s? Az elemek csak erről az eszközről törlődnek."
+
+msgctxt "#30266"
+msgid "Repair which libraries?"
+msgstr "Mely médiatárakat javítsa?"
+
+msgctxt "#30267"
+msgid "All"
+msgstr "Összes"
+
+msgctxt "#30268"
+msgid "Select libraries"
+msgstr "Médiatárak kiválasztása"
+
+msgctxt "#30269"
+msgid "No libraries available"
+msgstr "Nincs elérhető médiatár"
+
+msgctxt "#30302"
+msgid "Hide update status below (items)"
+msgstr "Frissítési állapot elrejtése ez alatt (elem)"
+
+msgctxt "#30303"
+msgid "Hide Kodi's library-update progress for syncs smaller than this. 0 always shows it."
+msgstr "A Kodi médiatár-frissítési folyamatjelzőjének elrejtése az ennél kisebb szinkronizálásoknál. A 0 mindig megjeleníti."
+
+msgctxt "#30318"
+msgid "Compress artwork"
+msgstr "Grafikák tömörítése"
+
+msgctxt "#30319"
+msgid "Re-encode capped artwork at JPEG quality 90. No effect without a resolution cap."
+msgstr "A korlátozott méretű grafikák újrakódolása 90-es JPEG-minőséggel. Felbontáskorlát nélkül nincs hatása."
+
+msgctxt "#30320"
+msgid "Maximum artwork resolution"
+msgstr "Grafikák maximális felbontása"
+
+msgctxt "#30321"
+msgid "Cap the height of synced artwork. Original keeps the server size."
+msgstr "A szinkronizált grafikák magasságának korlátozása. Az Eredeti megtartja a kiszolgálón lévő méretet."
+
+msgctxt "#30322"
+msgid "Original"
+msgstr "Eredeti"
+
+msgctxt "#30323"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30324"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30325"
+msgid "2160p"
+msgstr "2160p"
+
+msgctxt "#30326"
+msgid "Notify on server connection changes"
+msgstr "Értesítés a kiszolgálókapcsolat változásairól"
+
+msgctxt "#30327"
+msgid "Show a notification when the server connects, disconnects or restarts."
+msgstr "Értesítés megjelenítése, amikor a kiszolgáló csatlakozik, lecsatlakozik vagy újraindul."
+
+msgctxt "#30350"
+msgid "Recently added"
+msgstr "Nemrég hozzáadott"
+
+msgctxt "#30351"
+msgid "In progress"
+msgstr "Folyamatban"
+
+msgctxt "#30352"
+msgid "Unwatched"
+msgstr "Megtekintetlen"
+
+msgctxt "#30353"
+msgid "Random"
+msgstr "Véletlenszerű"
+
+msgctxt "#30354"
+msgid "Recommended"
+msgstr "Ajánlott"
+
+msgctxt "#30355"
+msgid "Recently added episodes"
+msgstr "Nemrég hozzáadott epizódok"
+
+msgctxt "#30356"
+msgid "In progress episodes"
+msgstr "Folyamatban lévő epizódok"
+
+msgctxt "#30358"
+msgid "Favorite movies"
+msgstr "Kedvenc filmek"
+
+msgctxt "#30359"
+msgid "Favorite shows"
+msgstr "Kedvenc sorozatok"
+
+msgctxt "#30360"
+msgid "Favorite episodes"
+msgstr "Kedvenc epizódok"
+
+msgctxt "#30401"
+msgid "Updating media"
+msgstr "Média frissítése"
+
+msgctxt "#30403"
+msgid "Sync incomplete; retrying shortly"
+msgstr "Szinkron nem teljes; újrapróbálom"
+
+msgctxt "#30408"
+msgid "Removing library"
+msgstr "Médiatár eltávolítása"
+
+msgctxt "#30415"
+msgid "Connected to %s"
+msgstr "Csatlakozva ide: %s"
+
+msgctxt "#30416"
+msgid "Lost connection to the server"
+msgstr "Megszakadt a kiszolgálókapcsolat"
+
+msgctxt "#30417"
+msgid "Server is restarting"
+msgstr "A kiszolgáló újraindul"
+
+msgctxt "#30418"
+msgid "Server is shutting down"
+msgstr "A kiszolgáló leáll"
+
+msgctxt "#30420"
+msgid "Library sync is off: %s"
+msgstr "Szinkronizálás kikapcsolva: %s"
+
+msgctxt "#30450"
+msgid "Skipping & Play next"
+msgstr "Kihagyás és következő lejátszása"
+
+msgctxt "#30451"
+msgid "Media segment skipping and the Play Next prompt."
+msgstr "Médiaszakaszok átugrása és a Következő lejátszása kérdés."
+
+msgctxt "#30453"
+msgid "Skip media segments"
+msgstr "Médiaszakaszok átugrása"
+
+msgctxt "#30454"
+msgid "Fetch Jellyfin media segments (intro, credits, recap, preview, commercial) during playback and act on them per type."
+msgstr "A Jellyfin médiaszakaszainak (főcím, stáblista, összefoglaló, előzetes, reklám) lekérése lejátszás közben, és típusonkénti kezelése."
+
+msgctxt "#30455"
+msgid "Intros"
+msgstr "Főcímek"
+
+msgctxt "#30456"
+msgid "Off ignores intro segments, Auto skips past them, Ask shows a skip button."
+msgstr "A Ki figyelmen kívül hagyja a főcímszakaszokat, az Automatikus átugorja őket, a Rákérdezés kihagyás gombot jelenít meg."
+
+msgctxt "#30457"
+msgid "Credits"
+msgstr "Stáblista"
+
+msgctxt "#30458"
+msgid "Off ignores credits, Auto seeks past them, Ask offers Skip Outro — with Play Next when a next episode exists."
+msgstr "A Ki figyelmen kívül hagyja a stáblistát, az Automatikus átteker rajta, a Rákérdezés felkínálja a Stáblista átugrása lehetőséget — a Következő lejátszásával együtt, ha van következő epizód."
+
+msgctxt "#30459"
+msgid "Recaps"
+msgstr "Összefoglalók"
+
+msgctxt "#30460"
+msgid "Off ignores recap segments, Auto skips past them, Ask shows a skip button."
+msgstr "A Ki figyelmen kívül hagyja az összefoglaló szakaszokat, az Automatikus átugorja őket, a Rákérdezés kihagyás gombot jelenít meg."
+
+msgctxt "#30461"
+msgid "Previews"
+msgstr "Előzetesek"
+
+msgctxt "#30462"
+msgid "Off ignores preview segments, Auto skips past them, Ask shows a skip button."
+msgstr "A Ki figyelmen kívül hagyja az előzetes szakaszokat, az Automatikus átugorja őket, a Rákérdezés kihagyás gombot jelenít meg."
+
+msgctxt "#30463"
+msgid "Commercials"
+msgstr "Reklámok"
+
+msgctxt "#30464"
+msgid "Off ignores commercial segments, Auto skips past them, Ask shows a skip button."
+msgstr "A Ki figyelmen kívül hagyja a reklámszakaszokat, az Automatikus átugorja őket, a Rákérdezés kihagyás gombot jelenít meg."
+
+msgctxt "#30465"
+msgid "Off"
+msgstr "Ki"
+
+msgctxt "#30466"
+msgid "Auto"
+msgstr "Automatikus"
+
+msgctxt "#30467"
+msgid "Ask"
+msgstr "Rákérdezés"
+
+msgctxt "#30469"
+msgid "Offer Play Next"
+msgstr "A Következő lejátszása felkínálása"
+
+msgctxt "#30470"
+msgid "Offer the next episode at the credits, or near the end when no credits segment exists."
+msgstr "A következő epizód felkínálása a stáblistánál, vagy a vége felé, ha nincs stáblista-szakasz."
+
+msgctxt "#30471"
+msgid "Play Next lead time"
+msgstr "A Következő lejátszása előjelzési ideje"
+
+msgctxt "#30472"
+msgid "Seconds before the end to show the Play Next prompt for content without a credits segment."
+msgstr "Hány másodperccel a vége előtt jelenjen meg a Következő lejátszása kérdés a stáblista-szakasz nélküli tartalmaknál."
+
+msgctxt "#30473"
+msgid "Autoplay next episode"
+msgstr "Következő epizód automatikus lejátszása"
+
+msgctxt "#30474"
+msgid "Count down on the Play Next prompt and start the next episode automatically."
+msgstr "Visszaszámlálás a Következő lejátszása kérdésen, és a következő epizód automatikus indítása."
+
+msgctxt "#30475"
+msgid "Resume offset (seconds)"
+msgstr "Folytatási eltolás (másodperc)"
+
+msgctxt "#30476"
+msgid "Seconds to rewind before the stored resume point."
+msgstr "Hány másodperccel a tárolt folytatási pont elé tekerjen vissza."
+
+msgctxt "#30477"
+msgid "Hide the skip button after"
+msgstr "A kihagyás gomb elrejtése ennyi után"
+
+msgctxt "#30478"
+msgid "How far into a segment the skip button disappears. 100% keeps it up for the whole segment."
+msgstr "A szakasz mekkora részéig látszik a kihagyás gomb. A 100% a teljes szakasz alatt fenntartja."
+
+msgctxt "#30481"
+msgid "Skip Intro"
+msgstr "Főcím átugrása"
+
+msgctxt "#30482"
+msgid "Skip Outro"
+msgstr "Stáblista átugrása"
+
+msgctxt "#30483"
+msgid "Skip Recap"
+msgstr "Összefoglaló átugrása"
+
+msgctxt "#30484"
+msgid "Skip Preview"
+msgstr "Előzetes átugrása"
+
+msgctxt "#30485"
+msgid "Skip Ad"
+msgstr "Reklám átugrása"
+
+msgctxt "#30486"
+msgid "Play Next"
+msgstr "Következő lejátszása"
+
+msgctxt "#30487"
+msgid "Close"
+msgstr "Bezárás"
+
+msgctxt "#30488"
+msgid "Skipped %s"
+msgstr "Kihagyva: %s"
+
+msgctxt "#30489"
+msgid "Up next: %s"
+msgstr "Következik: %s"
+
+msgctxt "#30500"
+msgid "Extras"
+msgstr "Extrák"
+
+msgctxt "#30501"
+msgid "Browse extras"
+msgstr "Extrák böngészése"
+
+msgctxt "#30502"
+msgid "Jellyfin actions"
+msgstr "Jellyfin műveletek"
+
+msgctxt "#30504"
+msgid "Settings"
+msgstr "Beállítások"
+
+msgctxt "#30505"
+msgid "Permanently delete \"%s\" from the server? This cannot be undone."
+msgstr "Véglegesen törli a(z) \"%s\" elemet a kiszolgálóról? Ez nem vonható vissza."
+
+msgctxt "#30506"
+msgid "Finished \"%s\". Permanently delete it from the server? This cannot be undone."
+msgstr "Vége: \"%s\". Véglegesen törli a kiszolgálóról? Ez nem vonható vissza."
+
+msgctxt "#30507"
+msgid "Server request failed"
+msgstr "A kiszolgálói kérés meghiúsult"
+
+msgctxt "#30508"
+msgid "Mark as watched on Jellyfin"
+msgstr "Megjelölés megtekintettként a Jellyfinben"
+
+msgctxt "#30509"
+msgid "Mark as unwatched on Jellyfin"
+msgstr "Megjelölés megtekintetlenként a Jellyfinben"
+
+msgctxt "#30550"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30551"
+msgid "Enable SyncPlay"
+msgstr "SyncPlay engedélyezése"
+
+msgctxt "#30552"
+msgid "Watch in sync with other Jellyfin clients. Leave Kodi's 'Sync playback to display' off for a reliable experience"
+msgstr "Nézd szinkronban más Jellyfin-kliensekkel. A megbízható működéshez hagyd kikapcsolva a Kodi Lejátszás szinkronizálása a képernyőhöz beállítását"
+
+msgctxt "#30557"
+msgid "Group notifications"
+msgstr "Csoportértesítések"
+
+msgctxt "#30558"
+msgid "Show member join/leave and group-waiting notifications. Errors are always shown."
+msgstr "Tagok belépéséről és kilépéséről, valamint a csoportra várásról szóló értesítések megjelenítése. A hibák mindig megjelennek."
+
+msgctxt "#30560"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30561"
+msgid "New group..."
+msgstr "Új csoport…"
+
+msgctxt "#30562"
+msgid "Leave group"
+msgstr "Kilépés a csoportból"
+
+msgctxt "#30563"
+msgid "Joined group: %s"
+msgstr "Csatlakozott a csoporthoz: %s"
+
+msgctxt "#30564"
+msgid "Left the group"
+msgstr "Kilépett a csoportból"
+
+msgctxt "#30565"
+msgid "%s joined the group"
+msgstr "%s csatlakozott a csoporthoz"
+
+msgctxt "#30566"
+msgid "%s left the group"
+msgstr "%s kilépett a csoportból"
+
+msgctxt "#30567"
+msgid "Group name"
+msgstr "Csoport neve"
+
+msgctxt "#30568"
+msgid "Playback stopped — what should the group do?"
+msgstr "A lejátszás leállt — mit tegyen a csoport?"
+
+msgctxt "#30569"
+msgid "Spectator mode: the group will not wait for you"
+msgstr "Nézői mód: a csoport nem vár Önre"
+
+msgctxt "#30570"
+msgid "SyncPlay needs a working websocket connection to the server"
+msgstr "A SyncPlayhez működő websocket-kapcsolat kell a kiszolgálóhoz"
+
+msgctxt "#30571"
+msgid "Removed from the group"
+msgstr "Eltávolítva a csoportból"
+
+msgctxt "#30572"
+msgid "Members"
+msgstr "Tagok"
+
+msgctxt "#30573"
+msgid "Resync with group"
+msgstr "Újraszinkronizálás a csoporttal"
+
+msgctxt "#30574"
+msgid "SyncPlay is unavailable (server not reachable?)"
+msgstr "A SyncPlay nem érhető el (a kiszolgáló nem elérhető?)"
+
+msgctxt "#30575"
+msgid "External players cannot be synchronized"
+msgstr "A külső lejátszók nem szinkronizálhatók"
+
+msgctxt "#30576"
+msgid "Playback could not be synchronized"
+msgstr "A lejátszást nem sikerült szinkronizálni"
+
+msgctxt "#30577"
+msgid "buffering"
+msgstr "pufferel"
+
+msgctxt "#30578"
+msgid "Could not join the group"
+msgstr "Nem sikerült belépni a csoportba"
+
+msgctxt "#30579"
+msgid "You don't have access to some items in the group's queue"
+msgstr "Nincs hozzáférése a csoport várólistájának néhány eleméhez"
+
+msgctxt "#30580"
+msgid "Become a spectator (group won't wait for me)"
+msgstr "Nézővé válás (a csoport ne várjon rám)"
+
+msgctxt "#30581"
+msgid "Wait for me again (leave spectator mode)"
+msgstr "Várjanak rám újra (kilépés a nézői módból)"
+
+msgctxt "#30582"
+msgid "disconnected"
+msgstr "lecsatlakozott"
+
+msgctxt "#30583"
+msgid "The group will wait for you again"
+msgstr "A csoport újra várni fog Önre"
+
+msgctxt "#30584"
+msgid "Stop playback for everyone"
+msgstr "Lejátszás leállítása mindenkinél"
+
+msgctxt "#30585"
+msgid "Waiting for the group..."
+msgstr "Várakozás a csoportra…"
+
+msgctxt "#30586"
+msgid "Fine sync using tempo"
+msgstr "Finomszinkron tempóval"
+
+msgctxt "#30587"
+msgid "Keeps this device on the group's position by briefly playing faster or slower. A video correction decodes passthrough audio until the next item."
+msgstr "A csoport pozícióján tartja ezt az eszközt úgy, hogy rövid ideig gyorsabban vagy lassabban játszik le. Egy videókorrekció a következő elemig dekódolja a passthrough hangot."
+
+msgctxt "#30592"
+msgid "Fine sync stopped: rate mismatch"
+msgstr "Finomszinkron leállt: eltérő tempó"
+
+msgctxt "#30593"
+msgid "Largest video error closed by tempo (ms)"
+msgstr "Tempóval javított legnagyobb videóhiba (ms)"
+
+msgctxt "#30594"
+msgid "Position errors up to this are closed by playing faster or slower; anything larger is closed with a skip. Higher means fewer skips and longer speed changes."
+msgstr "Az eddig terjedő pozícióhibákat gyorsabb vagy lassabb lejátszás javítja; a nagyobbakat ugrás. Magasabb érték kevesebb ugrást és hosszabb sebességváltást jelent."
+
+msgctxt "#30595"
+msgid "Fastest video correction speed (%)"
+msgstr "Leggyorsabb videójavítási sebesség (%)"
+
+msgctxt "#30596"
+msgid "The most playback speed may change during a correction. At 25% a 2.5 second error takes 10 seconds to close; lower is less noticeable but slower. Large changes ramp in and out."
+msgstr "Legfeljebb ennyit változhat a lejátszási sebesség egy javítás alatt. 25%-nál egy 2,5 másodperces hiba 10 másodperc alatt zárul; alacsonyabb érték kevésbé feltűnő, de lassabb. A nagy változások fokozatosan lépnek be és ki."
+
+msgctxt "#30604"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30605"
+msgid "1440p"
+msgstr "1440p"
+
+msgctxt "#30613"
+msgid "Audio and subtitle streams"
+msgstr "Hang- és feliratsávok"
+
+msgctxt "#30614"
+msgid "Audio stream"
+msgstr "Hangsáv"
+
+msgctxt "#30615"
+msgid "Subtitles"
+msgstr "Feliratok"
+
+msgctxt "#30616"
+msgid "Restarting to change stream..."
+msgstr "Újraindítás a sáv váltásához…"
+
+msgctxt "#30617"
+msgid "burned in, restarts playback"
+msgstr "ráégetett, újraindítja a lejátszást"
+
+msgctxt "#30618"
+msgid "Use Jellyfin's default tracks"
+msgstr "A Jellyfin alapértelmezett sávjainak használata"
+
+msgctxt "#30619"
+msgid "Start playback on the audio and subtitle tracks your Jellyfin account asks for, instead of the ones Kodi's own language settings pick. The server resolves both from your Jellyfin profile, so the choice follows you to every client."
+msgstr "A lejátszás azokon a hang- és feliratsávokon induljon, amelyeket a Jellyfin-fiókja kér, a Kodi saját nyelvi beállításai által választottak helyett. A kiszolgáló mindkettőt a Jellyfin-profilja alapján oldja fel, így a választás minden kliensre elkíséri."
+
+msgctxt "#30622"
+msgid "Notify about new content"
+msgstr "Értesítés az új tartalomról"
+
+msgctxt "#30623"
+msgid "Show a notification when new films, shows, episodes, music videos, artists or albums are added to your library."
+msgstr "Értesítés megjelenítése, amikor új film, sorozat, epizód, videóklip, előadó vagy album kerül a médiatárba."
+
+msgctxt "#30624"
+msgid "%s movie added to library"
+msgstr "Új film: %s"
+
+msgctxt "#30625"
+msgid "%s movies added to library"
+msgstr "%s új film a médiatárban"
+
+msgctxt "#30626"
+msgid "%s show added to library"
+msgstr "Új sorozat: %s"
+
+msgctxt "#30627"
+msgid "%s new shows added to library"
+msgstr "%s új sorozat a médiatárban"
+
+msgctxt "#30628"
+msgid "%s episode of %s added to library"
+msgstr "%s új epizód: %s"
+
+msgctxt "#30629"
+msgid "%s episodes of %s added to library"
+msgstr "%s új epizód ebből: %s"
+
+msgctxt "#30630"
+msgid "%s episodes added to library"
+msgstr "%s új epizód a médiatárban"
+
+msgctxt "#30631"
+msgid "%s music video added to library"
+msgstr "Új videóklip: %s"
+
+msgctxt "#30632"
+msgid "%s music videos added to library"
+msgstr "%s új videóklip a médiatárban"
+
+msgctxt "#30633"
+msgid "%s added to music library"
+msgstr "Új előadó: %s"
+
+msgctxt "#30634"
+msgid "%s artists added to library"
+msgstr "%s új előadó a médiatárban"
+
+msgctxt "#30635"
+msgid "%s added to music library"
+msgstr "Új album: %s"
+
+msgctxt "#30636"
+msgid "%s albums added to library"
+msgstr "%s új album a médiatárban"
+
+msgctxt "#30637"
+msgid "Use the server's splashscreen as the backdrop"
+msgstr "A kiszolgáló indítóképe legyen a háttér"
+
+msgctxt "#30638"
+msgid "Show the Jellyfin server's splashscreen behind the addon instead of the bundled artwork. Refreshed when the service connects, at most once a day."
+msgstr "A Jellyfin-kiszolgáló indítóképének megjelenítése a kiegészítő hátterében a beépített grafika helyett. A szolgáltatás csatlakozásakor frissül, naponta legfeljebb egyszer."
+
+msgctxt "#30700"
+msgid "Downloads"
+msgstr "Letöltések"
+
+msgctxt "#30701"
+msgid "Download items for offline playback"
+msgstr "Elemek letöltése offline lejátszáshoz"
+
+msgctxt "#30702"
+msgid "Enable downloads"
+msgstr "Letöltések engedélyezése"
+
+msgctxt "#30703"
+msgid "Adds Download to the Jellyfin actions menu and runs the download manager. Only for libraries you sync with Kofin."
+msgstr "Letöltés bejegyzést ad a Jellyfin műveletek menühöz, és elindítja a letöltéskezelőt. Csak a Kofinnal szinkronizált médiatárakhoz."
+
+msgctxt "#30704"
+msgid "Download location"
+msgstr "Letöltések helye"
+
+msgctxt "#30705"
+msgid "Where downloaded files are kept. Leave empty for the addon profile folder"
+msgstr "Hol tárolódnak a letöltött fájlok. Hagyja üresen a kiegészítő profilmappájához"
+
+msgctxt "#30706"
+msgid "Parallel video downloads"
+msgstr "Párhuzamos videoletöltések"
+
+msgctxt "#30707"
+msgid "How many movies and episodes download at the same time"
+msgstr "Hány film és epizód töltődjön le egyszerre"
+
+msgctxt "#30708"
+msgid "Download"
+msgstr "Letöltés"
+
+msgctxt "#30709"
+msgid "Cancel download"
+msgstr "Letöltés megszakítása"
+
+msgctxt "#30710"
+msgid "Delete download"
+msgstr "Letöltés törlése"
+
+msgctxt "#30712"
+msgid "Download complete: %s"
+msgstr "Letöltés kész: %s"
+
+msgctxt "#30713"
+msgid "Download failed: %s"
+msgstr "Sikertelen letöltés: %s"
+
+msgctxt "#30714"
+msgid "Delete the download of %s?"
+msgstr "Törli ennek a letöltését: %s?"
+
+msgctxt "#30715"
+msgid "Not enough free space for %s"
+msgstr "Nincs elég szabad hely ehhez: %s"
+
+msgctxt "#30717"
+msgid "The downloads folder is not writable"
+msgstr "A letöltési mappa nem írható"
+
+msgctxt "#30718"
+msgid "Downloaded movies"
+msgstr "Letöltött filmek"
+
+msgctxt "#30719"
+msgid "Downloaded shows"
+msgstr "Letöltött sorozatok"
+
+msgctxt "#30720"
+msgid "Not available offline"
+msgstr "Offline nem érhető el"
+
+msgctxt "#30721"
+msgid "Downloaded episodes"
+msgstr "Letöltött epizódok"
+
+msgctxt "#30722"
+msgid "Transcode videos"
+msgstr "Videók átkódolása"
+
+msgctxt "#30723"
+msgid "Transcode when the original exceeds a limit below or when triggered by settings in the Transcoding tab (HDR, codec, etc)"
+msgstr "Átkódolás, ha az eredeti túllépi az alábbi korlátok valamelyikét, vagy ha az Átkódolás lap beállításai (HDR, kodek stb.) kiváltják"
+
+msgctxt "#30724"
+msgid "Maximum download bitrate"
+msgstr "Maximális letöltési bitráta"
+
+msgctxt "#30725"
+msgid "Videos over this total bitrate are transcoded down to it. Unlimited transcodes only for codec, HDR or resolution reasons."
+msgstr "Az ennél nagyobb összbitrátájú videók erre a szintre lesznek átkódolva. A korlátlan csak kodek, HDR vagy felbontás miatt kódol át."
+
+msgctxt "#30726"
+msgid "Maximum download resolution"
+msgstr "Maximális letöltési felbontás"
+
+msgctxt "#30727"
+msgid "Videos wider than this are scaled down. Unlimited never scales."
+msgstr "Az ennél szélesebb videók leskálázódnak. A korlátlan sosem skáláz."
+
+msgctxt "#30728"
+msgid "Transcode music"
+msgstr "Zene átkódolása"
+
+msgctxt "#30729"
+msgid "Transcode a track only when it is lossless or over the bitrate limit below. Compliant tracks download as the original file."
+msgstr "Egy szám átkódolása csak akkor, ha veszteségmentes, vagy meghaladja az alábbi bitrátakorlátot. A megfelelő számok az eredeti fájlként töltődnek le."
+
+msgctxt "#30730"
+msgid "Transcode music over"
+msgstr "Zene átkódolása e felett"
+
+msgctxt "#30731"
+msgid "Tracks over this bitrate, and all lossless tracks, are transcoded. Unlimited transcodes only lossless tracks."
+msgstr "Az ennél nagyobb bitrátájú számok és minden veszteségmentes szám átkódolásra kerül. A korlátlan csak a veszteségmentes számokat kódolja át."
+
+msgctxt "#30732"
+msgid "Transcode music to"
+msgstr "Zene átkódolása erre"
+
+msgctxt "#30733"
+msgid "The codec transcoded tracks are encoded with. Opus gives the best quality per megabyte."
+msgstr "Az a kodek, amellyel az átkódolt számok kódolódnak. Az Opus adja a legjobb minőséget megabájtonként."
+
+msgctxt "#30734"
+msgid "Transcoded music bitrate"
+msgstr "Átkódolt zene bitrátája"
+
+msgctxt "#30735"
+msgid "The bitrate transcoded tracks are encoded at. 128 kbps Opus is transparent for most listening."
+msgstr "Az a bitráta, amellyel az átkódolt számok kódolódnak. A 128 kbps Opus a legtöbb hallgatáshoz átlátszó."
+
+msgctxt "#30737"
+msgid "Kofin downloads"
+msgstr "Kofin letöltések"
+
+msgctxt "#30738"
+msgid "Download the next episodes automatically"
+msgstr "A következő epizódok automatikus letöltése"
+
+msgctxt "#30739"
+msgid "While watching a downloaded episode, the next unwatched episodes of the show are queued for download at the 50% mark."
+msgstr "Letöltött epizód nézése közben a sorozat következő megtekintetlen epizódjai az 50%-os pontnál letöltési sorba kerülnek."
+
+msgctxt "#30740"
+msgid "Episodes to keep ahead"
+msgstr "Előre tartandó epizódok"
+
+msgctxt "#30741"
+msgid "How many unwatched episodes ahead of the one playing are kept downloaded."
+msgstr "Hány megtekintetlen epizód maradjon letöltve a most játszott után."
+
+msgctxt "#30742"
+msgid "Download newly added movies"
+msgstr "Újonnan hozzáadott filmek letöltése"
+
+msgctxt "#30743"
+msgid "Movies newly added to a synced library are downloaded automatically."
+msgstr "A szinkronizált médiatárba újonnan felvett filmek automatikusan letöltődnek."
+
+msgctxt "#30746"
+msgid "Delete download after watching"
+msgstr "Letöltés törlése megtekintés után"
+
+msgctxt "#30747"
+msgid "When you finish watching a downloaded item, its local copy is removed. The item stays on the server and in your library."
+msgstr "Ha végignéz egy letöltött elemet, a helyi másolata törlődik. Az elem megmarad a kiszolgálón és a médiatárban."
+
+msgctxt "#30751"
+msgid "%s new movies were not downloaded automatically"
+msgstr "%s új film nem töltődött le automatikusan"
+
+msgctxt "#30752"
+msgid "Export NFO files and artwork"
+msgstr "NFO-fájlok és grafikák exportálása"
+
+msgctxt "#30753"
+msgid "Write NFO metadata and artwork beside downloaded files, so other Kodi profiles and apps can scan the download folder as a library."
+msgstr "NFO-metaadatok és grafikák írása a letöltött fájlok mellé, hogy más Kodi-profilok és alkalmazások médiatárként olvashassák be a letöltési mappát."
+
+msgctxt "#30754"
+msgid "Download all new episodes"
+msgstr "Minden új epizód letöltése"
+
+msgctxt "#30755"
+msgid "Every episode newly added to a synced library is downloaded automatically."
+msgstr "A szinkronizált médiatárba újonnan felvett minden epizód automatikusan letöltődik."
+
+msgctxt "#30756"
+msgid "Download new albums"
+msgstr "Új albumok letöltése"
+
+msgctxt "#30757"
+msgid "Albums newly added to a synced library are downloaded automatically."
+msgstr "A szinkronizált médiatárba újonnan felvett albumok automatikusan letöltődnek."
+
+msgctxt "#30758"
+msgid "Shows downloading new episodes"
+msgstr "Új epizódokat letöltő sorozatok"
+
+msgctxt "#30759"
+msgid "Review the shows set to download their new episodes automatically, and untick any to stop."
+msgstr "Tekintse át, mely sorozatok töltik le automatikusan az új epizódjaikat, és vegye ki a pipát, ha le szeretné állítani."
+
+msgctxt "#30760"
+msgid "Download new episodes"
+msgstr "Új epizódok letöltése"
+
+msgctxt "#30761"
+msgid "Stop downloading new episodes"
+msgstr "Az új epizódok letöltésének leállítása"
+
+msgctxt "#30762"
+msgid "New episodes of %s will download automatically"
+msgstr "%s: az új epizódok automatikusan letöltődnek"
+
+msgctxt "#30763"
+msgid "New episodes of %s will no longer download automatically"
+msgstr "%s: az új epizódok többé nem töltődnek le automatikusan"
+
+msgctxt "#30764"
+msgid "%s new episodes were not downloaded automatically"
+msgstr "%s új epizód nem töltődött le automatikusan"
+
+msgctxt "#30765"
+msgid "%s new albums were not downloaded automatically"
+msgstr "%s új album nem töltődött le automatikusan"
+
+msgctxt "#30766"
+msgid "No shows are set to download new episodes"
+msgstr "Egyetlen sorozat sincs új epizódok letöltésére beállítva"
+
+msgctxt "#30767"
+msgid "Show download notifications"
+msgstr "Letöltési értesítések megjelenítése"
+
+msgctxt "#30768"
+msgid "Announce queued and completed downloads. Failures and warnings are always shown."
+msgstr "A sorba állított és a befejezett letöltések bejelentése. A hibák és a figyelmeztetések mindig megjelennek."
+
+msgctxt "#30769"
+msgid "Delete download automatically"
+msgstr "Letöltés automatikus törlése"
+
+msgctxt "#30770"
+msgid "Remove the local copy without asking. With this off, Kofin asks first each time."
+msgstr "A helyi másolat eltávolítása rákérdezés nélkül. Ha ki van kapcsolva, a Kofin minden alkalommal rákérdez."
+
+msgctxt "#30771"
+msgid "Download %s item(s), about %s? %s free"
+msgstr "Letölt %s elemet, kb. %s? Szabad: %s"
+
+msgctxt "#30772"
+msgid "Parallel music downloads"
+msgstr "Párhuzamos zeneletöltések"
+
+msgctxt "#30773"
+msgid "How many tracks download at the same time. Tracks are small and mostly overhead, so this can sit well above the video figure."
+msgstr "Hány szám töltődjön le egyszerre. A számok kicsik és többnyire többletterhelést jelentenek, így ez jóval a videós érték fölött lehet."
+
+msgctxt "#30775"
+msgid "downloaded from the server"
+msgstr "letöltve a kiszolgálóról"
+
+msgctxt "#30776"
+msgid "Downloading subtitle..."
+msgstr "Felirat letöltése…"
+
+msgctxt "#30777"
+msgid "Jellyfin account settings"
+msgstr "Jellyfin-fiókbeállítások"
+
+msgctxt "#30778"
+msgid "Audio and subtitle preferences stored on the server against your Jellyfin account. They apply to every client you sign in from, not just this one."
+msgstr "A kiszolgálón, a Jellyfin-fiókjához tárolt hang- és feliratbeállítások. Minden kliensre érvényesek, ahonnan bejelentkezik, nem csak erre."
+
+msgctxt "#30779"
+msgid "Jellyfin settings for %s"
+msgstr "Jellyfin-beállítások — %s"
+
+msgctxt "#30780"
+msgid "Preferred audio language"
+msgstr "Előnyben részesített hangnyelv"
+
+msgctxt "#30781"
+msgid "Play default audio track"
+msgstr "Alapértelmezett hangsáv lejátszása"
+
+msgctxt "#30782"
+msgid "Preferred subtitle language"
+msgstr "Előnyben részesített feliratnyelv"
+
+msgctxt "#30783"
+msgid "Subtitle mode"
+msgstr "Feliratmód"
+
+msgctxt "#30784"
+msgid "Remember audio selections"
+msgstr "Hangsáv-választások megjegyzése"
+
+msgctxt "#30785"
+msgid "Remember subtitle selections"
+msgstr "Feliratválasztások megjegyzése"
+
+msgctxt "#30786"
+msgid "Enabled"
+msgstr "Engedélyezve"
+
+msgctxt "#30787"
+msgid "Disabled"
+msgstr "Letiltva"
+
+msgctxt "#30788"
+msgid "Any"
+msgstr "Bármelyik"
+
+msgctxt "#30789"
+msgid "Default"
+msgstr "Alapértelmezett"
+
+msgctxt "#30790"
+msgid "Always"
+msgstr "Mindig"
+
+msgctxt "#30791"
+msgid "Only forced"
+msgstr "Csak a kényszerített"
+
+msgctxt "#30792"
+msgid "None"
+msgstr "Nincs"
+
+msgctxt "#30793"
+msgid "Smart"
+msgstr "Intelligens"
+
+msgctxt "#30794"
+msgid "Not applied here: \"Use Jellyfin's default tracks\" is off"
+msgstr "Itt nem érvényes: \"A Jellyfin alapértelmezett sávjainak használata\" ki van kapcsolva"
+
+msgctxt "#30795"
+msgid "Could not load your Jellyfin settings"
+msgstr "Nem sikerült betölteni a Jellyfin-beállításait"
+
+msgctxt "#30796"
+msgid "Could not save to the server"
+msgstr "Nem sikerült menteni a kiszolgálóra"
+
+msgctxt "#30797"
+msgid "Your Jellyfin account is not allowed to change these settings"
+msgstr "A Jellyfin-fiókja nem módosíthatja ezeket a beállításokat"
+
+msgctxt "#30798"
+msgid "Skip movie imports larger than"
+msgstr "Filmimport kihagyása e fölött"
+
+msgctxt "#30799"
+msgid "When a sync adds more new movies than this at once, none of them are downloaded — a bulk import is rarely a request to fill the disk. Raise it if you want big additions pulled automatically."
+msgstr "Ha egy szinkronizálás ennél több új filmet ad hozzá egyszerre, egyik sem töltődik le — egy tömeges import ritkán szól a lemez megtöltéséről. Emelje meg, ha a nagy bővítéseket is automatikusan le szeretné tölteni."
+
+msgctxt "#30800"
+msgid "Skip episode imports larger than"
+msgstr "Epizódimport kihagyása e fölött"
+
+msgctxt "#30801"
+msgid "When a sync adds more new episodes than this at once, none of them are downloaded. Shows you have subscribed to are exempt — a subscription is a standing order."
+msgstr "Ha egy szinkronizálás ennél több új epizódot ad hozzá egyszerre, egyik sem töltődik le. Az előfizetett sorozatok kivételt képeznek — az előfizetés állandó megrendelés."
+
+msgctxt "#30802"
+msgid "Skip album imports larger than"
+msgstr "Albumimport kihagyása e fölött"
+
+msgctxt "#30803"
+msgid "When a sync adds more new albums than this at once, none of them are downloaded. Counted in albums, not tracks."
+msgstr "Ha egy szinkronizálás ennél több új albumot ad hozzá egyszerre, egyik sem töltődik le. Albumban számolva, nem számokban."
+
+msgctxt "#30810"
+msgid "Needs %s, only %s free"
+msgstr "%s kell, csak %s szabad"
+
+msgctxt "#30804"
+msgid "Delete all downloads"
+msgstr "Összes letöltés törlése"
+
+msgctxt "#30805"
+msgid "Delete every downloaded file from this device and stop keeping playlists and music libraries in sync. The items stay in your library and play from the server again."
+msgstr "Minden letöltött fájl törlése erről az eszközről, és a lejátszási listák és zenei médiatárak szinkronban tartásának leállítása. Az elemek megmaradnak a médiatárban, és újra a kiszolgálóról játszódnak le."
+
+msgctxt "#30806"
+msgid "Delete all %s download(s), freeing about %s?"
+msgstr "Töröl %s letöltést, kb. %s felszabadul. Folytatja?"
+
+msgctxt "#30807"
+msgid "There are no downloads to delete"
+msgstr "Nincs törölhető letöltés"
+
+msgctxt "#30808"
+msgid "Pause downloads during playback"
+msgstr "Letöltések szüneteltetése lejátszás közben"
+
+msgctxt "#30809"
+msgid "Do not start new downloads while something is playing, video or music. A file already downloading finishes; the rest wait until playback stops."
+msgstr "Ne induljon új letöltés, amíg valami megy, videó vagy zene. A már folyamatban lévő fájl befejeződik; a többi megvárja a lejátszás végét."
+
+msgctxt "#30811"
+msgid "Delete stale downloads"
+msgstr "Elavult letöltések törlése"
+
+msgctxt "#30812"
+msgid "Remove downloaded files nobody has played for a while. Anything you are part-way through is kept, however long it sits. The items stay in your library and play from the server again."
+msgstr "Olyan letöltött fájlok eltávolítása, amelyeket egy ideje senki sem játszott le. Amibe belekezdett, az megmarad, bármeddig is áll. Az elemek megmaradnak a médiatárban, és újra a kiszolgálóról játszódnak le."
+
+msgctxt "#30813"
+msgid "Delete after (days)"
+msgstr "Törlés ennyi nap után"
+
+msgctxt "#30814"
+msgid "How long a download may sit unplayed before it is removed. Playing it again starts the count over."
+msgstr "Meddig állhat lejátszatlanul egy letöltés, mielőtt törlődik. Az újbóli lejátszás elölről indítja a számlálást."
+
+msgctxt "#30817"
+msgid "All"
+msgstr "Összes"
+
+msgctxt "#30818"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30819"
+msgid "Show cast in add-on listings"
+msgstr "Szereplők megjelenítése a kiegészítő listáiban"
+
+msgctxt "#30820"
+msgid "Fetch cast and crew for the shorter add-on listings — Recently added, In progress, Next up, Continue watching, search results and a show's episodes — so the information dialog can show them. Whole-library listings never fetch it, because the server needs about a second for every 40 items. The Kodi library always has cast."
+msgstr "Lekéri a szereplőket és a stábot a kiegészítő rövidebb listáihoz — Nemrég hozzáadott, Folyamatban, Következik, Nézés folytatása, a keresési találatok és egy sorozat epizódjai —, hogy az információs ablak megjeleníthesse őket. A teljes könyvtárat átfogó listák soha nem kérik le, mert a kiszolgálónak nagyjából egy másodpercre van szüksége 40 elemenként. A Kodi könyvtárban mindig megvannak a szereplők."
+
+msgctxt "#30821"
+msgid "Server error — %s"
+msgstr "Kiszolgálóhiba — %s"
+
+msgctxt "#30823"
+msgid "Download deleted: %s"
+msgstr "Letöltés törölve: %s"
+
+msgctxt "#30824"
+msgid "%s download(s) deleted"
+msgstr "%s letöltés törölve"
+
+msgctxt "#30825"
+msgid "Find servers on local network"
+msgstr "Kiszolgálók keresése a helyi hálózaton"
+
+msgctxt "#30826"
+msgid "Looks for Jellyfin servers on this network and lists the ones that answer. The one you choose is filled into \"Server address\"."
+msgstr "Jellyfin-kiszolgálókat keres ezen a hálózaton, és felsorolja azokat, amelyek válaszolnak. A kiválasztott bekerül a \"Kiszolgáló címe\" mezőbe."
+
+msgctxt "#30827"
+msgid "Searching for Jellyfin servers…"
+msgstr "Jellyfin-kiszolgálók keresése…"
+
+msgctxt "#30828"
+msgid "Select a server"
+msgstr "Válasszon kiszolgálót"
+
+msgctxt "#30829"
+msgid "No Jellyfin servers answered — enter the address manually"
+msgstr "Egyetlen Jellyfin-kiszolgáló sem válaszolt — adja meg a címet kézzel"
+
+msgctxt "#30830"
+msgid "did not answer"
+msgstr "nem válaszolt"
+
+msgctxt "#30831"
+msgid "%s did not answer — the address it gave may not work here"
+msgstr "%s nem válaszolt — a megadott cím itt nem feltétlenül működik"
+
+msgctxt "#30832"
+msgid "Storage used"
+msgstr "Felhasznált tárhely"
+
+msgctxt "#30833"
+msgid "Show where the downloads are kept and how much space each kind is using."
+msgstr "Megmutatja, hol tárolódnak a letöltések, és melyik típus mennyi helyet foglal."
+
+msgctxt "#30834"
+msgid "Other files in this folder"
+msgstr "Egyéb fájlok ebben a mappában"
+
+msgctxt "#30835"
+msgid "Nothing has been downloaded yet"
+msgstr "Még nincs letöltve semmi"
+
+msgctxt "#30836"
+msgid "Folder too large to measure fully — the totals above are partial"
+msgstr "A mappa túl nagy a teljes méréshez — a fenti összegek részlegesek"
+
+msgctxt "#30837"
+msgid "Watch in sync with other Jellyfin clients."
+msgstr "Nézd szinkronban más Jellyfin-kliensekkel."
+
+msgctxt "#30841"
+msgid "Save to Jellyfin"
+msgstr "Mentés a Jellyfinbe"
+
+msgctxt "#30842"
+msgid "This playlist mixes audio and video, which cannot be saved as one Jellyfin playlist"
+msgstr "Ez a lista hangot és videót kever, és nem menthető egyetlen Jellyfin-listaként"
+
+msgctxt "#30843"
+msgid "Playlist saved to Jellyfin"
+msgstr "Lista mentve a Jellyfinbe"
+
+msgctxt "#30844"
+msgid "No library items in this playlist to save"
+msgstr "Nincs könyvtárelem ebben a listában a mentéshez"
+
+msgctxt "#30845"
+msgid "Show library update progress"
+msgstr "Médiatár-frissítés folyamatának megjelenítése"
+
+msgctxt "#30846"
+msgid "Show Kodi's library-update progress while the library syncs."
+msgstr "A Kodi médiatár-frissítési folyamatjelzőjének megjelenítése szinkronizálás közben."
+
+msgctxt "#30849"
+msgid "Download & keep in sync"
+msgstr "Letöltés és szinkronban tartás"
+
+msgctxt "#30850"
+msgid "Stop keeping downloads in sync"
+msgstr "Letöltések szinkronizálásának leállítása"
+
+msgctxt "#30851"
+msgid "Manage playlist downloads"
+msgstr "Lejátszási listák letöltéseinek kezelése"
+
+msgctxt "#30852"
+msgid "Manage music library downloads"
+msgstr "Zenei könyvtárak letöltéseinek kezelése"
+
+msgctxt "#30853"
+msgid "Content not downloaded"
+msgstr "A tartalom nincs letöltve"
+
+msgctxt "#30854"
+msgid "Review subscribed playlists; untick to stop syncing downloads."
+msgstr "Nézd át a követett lejátszási listákat; a kijelölés törlésével leáll a letöltések szinkronizálása."
+
+msgctxt "#30855"
+msgid "Review subscribed music libraries; untick to stop syncing downloads."
+msgstr "Nézd át a követett zenei könyvtárakat; a kijelölés törlésével leáll a letöltések szinkronizálása."
+
+msgctxt "#30856"
+msgid "Library nodes and playlists"
+msgstr "Könyvtárcsomópontok és lejátszási listák"
+
+msgctxt "#30857"
+msgid "Create Kodi library nodes and smart playlists for the synced video libraries, and copy Jellyfin playlists into Kodi under Videos → Playlists → Kofin and Music → Playlists → Kofin. Turning this off removes every node and playlist Kofin created."
+msgstr "Kodi-könyvtárcsomópontok és intelligens lejátszási listák létrehozása a szinkronizált videókönyvtárakhoz, és a Jellyfin-lejátszási listák másolása a Kodiba a Videók → Lejátszási listák → Kofin és a Zene → Lejátszási listák → Kofin alá. Kikapcsolva a Kofin által létrehozott minden csomópont és lista eltűnik."
+
+msgctxt "#30859"
+msgid "Library status"
+msgstr "Médiatár állapota"
+
+msgctxt "#30860"
+msgid "What is synced, what is still pending and what the sync is doing now."
+msgstr "Mi van szinkronizálva, mi vár még, és mit csinál most a szinkronizálás."
+
+msgctxt "#30861"
+msgid "Transcode music whose bitrate is above the maximum set below. Off, songs play from the server untouched."
+msgstr "A lent beállított maximumnál nagyobb bitrátájú zene átkódolása. Kikapcsolva a dalok változatlanul, a kiszolgálóról játszódnak le."
+
+msgctxt "#30862"
+msgid "in Kodi / on the server"
+msgstr "a Kodiban / a kiszolgálón"
+
+msgctxt "#30863"
+msgid "Pending"
+msgstr "Függőben"
+
+msgctxt "#30864"
+msgid "Failed"
+msgstr "Sikertelen"
+
+msgctxt "#30865"
+msgid "Last full update"
+msgstr "Utolsó teljes frissítés"
+
+msgctxt "#30867"
+msgid "Repair to add codec details"
+msgstr "Javítás a kodekadatok hozzáadásához"
+
+msgctxt "#30868"
+msgid "Kodi cannot import"
+msgstr "A Kodi nem tudja importálni"
+
+msgctxt "#30869"
+msgid "Scheduled full update"
+msgstr "Ütemezett teljes frissítés"
+
+msgctxt "#30870"
+msgid "How often to re-read every library from the server. Turn this on if the server lacks the KofinSyncQueue plugin, or deletions there won't reach Kodi."
+msgstr "Milyen gyakran olvassa be újra az összes médiatárat a kiszolgálóról. Kapcsolja be, ha a kiszolgálón nincs KofinSyncQueue bővítmény, különben a törlések nem jutnak el a Kodiba."
+
+msgctxt "#30871"
+msgid "Daily"
+msgstr "Naponta"
+
+msgctxt "#30872"
+msgid "Weekly"
+msgstr "Hetente"
+
+msgctxt "#30873"
+msgid "Update all libraries now?"
+msgstr "Frissíti most az összes médiatárat?"
+
+msgctxt "#30874"
+msgid "Re-read every library from the server now."
+msgstr "Most újraolvassa az összes médiatárat a kiszolgálóról."
+
+msgctxt "#30876"
+msgid "Not on this Kodi"
+msgstr "Ezen a Kodin nem elérhető"
+
+msgctxt "#30877"
+msgid "Season plots"
+msgstr "Évadleírások"
+
+msgctxt "#30878"
+msgid "Favorite episodes"
+msgstr "Kedvenc epizódok"
+
+msgctxt "#30879"
+msgid "Removing emptied collections"
+msgstr "Kiürült gyűjtemények eltávolítása"
+
+msgctxt "#30880"
+msgid "Movie versions"
+msgstr "Filmverziók"
+
+msgctxt "#30881"
+msgid "Stream flags"
+msgstr "Sávjelzők"
+
+msgctxt "#30882"
+msgid "Song date added"
+msgstr "Dalok hozzáadási dátuma"
+
+msgctxt "#30883"
+msgid "Removing dropped versions and extras"
+msgstr "Eltávolított verziók és extrák eltávolítása"
+
+msgctxt "#30884"
+msgid "Fine sync"
+msgstr "Finomszinkron"
+
+msgctxt "#30885"
+msgid "Kodi imports a special only with an episode number. Give these one on the server, or play them from the Kofin add-on."
+msgstr "A Kodi csak epizódszámmal rendelkező különkiadást importál. Adjon nekik számot a kiszolgálón, vagy játssza le őket a Kofin bővítményből."
+
+msgctxt "#30886"
+msgid "KofinSyncQueue"
+msgstr "KofinSyncQueue"
+
+msgctxt "#30887"
+msgid "Available"
+msgstr "Elérhető"
+
+msgctxt "#30888"
+msgid "this profile holds a library from an older Kofin"
+msgstr "ez a profil egy régebbi Kofin médiatárát tartalmazza"
+
+msgctxt "#30889"
+msgid "Kofin cannot use it. To clean it, go back to Kofin 0.29:"
+msgstr "A Kofin nem tudja használni. A kitakarításhoz térjen vissza a Kofin 0.29-es verziójára:"
+
+msgctxt "#30890"
+msgid "Open Kofin in Kodi's add-on list, select Versions and choose 0.29."
+msgstr "Nyissa meg a Kofint a Kodi bővítménylistájában, válassza a Verziók gombot, majd a 0.29-et."
+
+msgctxt "#30891"
+msgid "In Kofin's settings, log out on the Account tab and run Clean databases."
+msgstr "A Kofin beállításaiban jelentkezzen ki a Fiók lapon, és futtassa az Adatbázisok kitakarítása műveletet."
+
+msgctxt "#30892"
+msgid "When Kodi has restarted, open Kofin again, select Versions and choose the newest version. Then log in and choose the libraries to sync."
+msgstr "Miután a Kodi újraindult, nyissa meg ismét a Kofint, válassza a Verziók gombot, majd a legújabb verziót. Ezután jelentkezzen be, és válassza ki a szinkronizálandó médiatárakat."
+
+msgctxt "#30893"
+msgid "Alternatively, close Kodi and delete its video and music databases by hand, as the Kofin wiki describes:"
+msgstr "Másik lehetőségként zárja be a Kodit, és törölje kézzel a videó- és zenei adatbázisait, ahogy a Kofin wiki leírja:"
+
+msgctxt "#30894"
+msgid "No longer on the server"
+msgstr "Már nincs a kiszolgálón"
+
+msgctxt "#30895"
+msgid "%s is no longer on the server and was removed from the library"
+msgstr "%s már nincs a kiszolgálón, ezért el lett távolítva a médiatárból"
+
+msgctxt "#30896"
+msgid "The synced libraries stay in Kodi until you log in again; a different account removes them."
+msgstr "A szinkronizált könyvtárak a Kodiban maradnak, amíg újra be nem jelentkezel; egy másik fiók eltávolítja őket."
+
+msgctxt "#30897"
+msgid "Queued %s of %s tracks"
+msgstr "%s / %s szám sorba állítva"

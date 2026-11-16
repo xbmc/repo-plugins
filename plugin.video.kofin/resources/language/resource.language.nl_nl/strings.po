@@ -1,0 +1,1961 @@
+# Kodi Media Center language file
+# Addon Name: Kofin
+# Addon id: plugin.video.kofin
+# Addon Provider: kontell
+# Note: machine-translated (LLM), pending native review.
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.kofin\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-08-14 00:00+0000\n"
+"Last-Translator: Claude (machine translation) <noreply@anthropic.com>\n"
+"Language-Team: Dutch\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl_NL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "Addon Summary"
+msgid "Jellyfin client for seamless Kodi integration"
+msgstr "Jellyfin-client voor naadloze Kodi-integratie"
+
+msgctxt "Addon Description"
+msgid "Play movies, shows & music from a Jellyfin server."
+msgstr "Speel films, series en muziek af van een Jellyfin-server."
+
+msgctxt "#30010"
+msgid "Play with transcoding"
+msgstr "Afspelen met transcoderen"
+
+msgctxt "#30011"
+msgid "Quick Connect"
+msgstr "Quick Connect"
+
+msgctxt "#30012"
+msgid "Username and password"
+msgstr "Gebruikersnaam en wachtwoord"
+
+msgctxt "#30013"
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+msgctxt "#30014"
+msgid "Password"
+msgstr "Wachtwoord"
+
+msgctxt "#30015"
+msgid "Enter code [B]%s[/B] in the Jellyfin app or web interface."
+msgstr "Voer code [B]%s[/B] in de Jellyfin-app of webinterface in."
+
+msgctxt "#30016"
+msgid "Logged in as %s"
+msgstr "Aangemeld als %s"
+
+msgctxt "#30017"
+msgid "Login failed: wrong username or password"
+msgstr "Aanmelden mislukt: verkeerde gebruikersnaam of wachtwoord"
+
+msgctxt "#30018"
+msgid "Server unreachable"
+msgstr "Server onbereikbaar"
+
+msgctxt "#30019"
+msgid "Log out from %s?"
+msgstr "Afmelden bij %s?"
+
+msgctxt "#30020"
+msgid "Logged out"
+msgstr "Afgemeld"
+
+msgctxt "#30021"
+msgid "Connection OK — %s (%s)"
+msgstr "Verbinding OK — %s (%s)"
+
+msgctxt "#30022"
+msgid "Session rejected — log in again from the Account tab"
+msgstr "Sessie geweigerd — meld je opnieuw aan op het tabblad Account"
+
+msgctxt "#30023"
+msgid "Restarting the Kofin service"
+msgstr "Kofin-dienst wordt herstart"
+
+msgctxt "#30024"
+msgid "Quick Connect timed out"
+msgstr "Time-out van Quick Connect"
+
+msgctxt "#30025"
+msgid "Already logged in"
+msgstr "Al aangemeld"
+
+msgctxt "#30026"
+msgid "Not logged in"
+msgstr "Niet aangemeld"
+
+msgctxt "#30027"
+msgid "Log in to %s"
+msgstr "Aanmelden bij %s"
+
+msgctxt "#30050"
+msgid "Account"
+msgstr "Account"
+
+msgctxt "#30051"
+msgid "Connect to your Jellyfin server and manage the session."
+msgstr "Maak verbinding met je Jellyfin-server en beheer de sessie."
+
+msgctxt "#30052"
+msgid "Server address"
+msgstr "Serveradres"
+
+msgctxt "#30053"
+msgid "Host name, IP address or full URL of the Jellyfin server. A bare host uses http on port 8096."
+msgstr "Hostnaam, IP-adres of volledige URL van de Jellyfin-server. Een kale hostnaam gebruikt http op poort 8096."
+
+msgctxt "#30054"
+msgid "Log in…"
+msgstr "Aanmelden…"
+
+msgctxt "#30055"
+msgid "Connect to the server above using Quick Connect or a username and password."
+msgstr "Maak verbinding met de server hierboven via Quick Connect of met een gebruikersnaam en wachtwoord."
+
+msgctxt "#30056"
+msgid "Server"
+msgstr "Server"
+
+msgctxt "#30057"
+msgid "The connected Jellyfin server."
+msgstr "De verbonden Jellyfin-server."
+
+msgctxt "#30058"
+msgid "Logged-in user"
+msgstr "Aangemelde gebruiker"
+
+msgctxt "#30059"
+msgid "The Jellyfin user this device plays and reports as."
+msgstr "De Jellyfin-gebruiker waarmee dit apparaat afspeelt en rapporteert."
+
+msgctxt "#30060"
+msgid "Test connection"
+msgstr "Verbinding testen"
+
+msgctxt "#30061"
+msgid "Check that the server is reachable and the session is still valid."
+msgstr "Controleer of de server bereikbaar is en de sessie nog geldig is."
+
+msgctxt "#30062"
+msgid "Log out"
+msgstr "Afmelden"
+
+msgctxt "#30063"
+msgid "End the session on the server and forget it on this device. The server address is kept."
+msgstr "Beëindig de sessie op de server en vergeet die op dit apparaat. Het serveradres blijft bewaard."
+
+msgctxt "#30064"
+msgid "Restart Kofin"
+msgstr "Kofin herstarten"
+
+msgctxt "#30065"
+msgid "Restart the background service without restarting Kodi."
+msgstr "Herstart de achtergronddienst zonder Kodi te herstarten."
+
+msgctxt "#30071"
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+msgctxt "#30072"
+msgid "Notification, browsing, playback and deletion options."
+msgstr "Opties voor meldingen, bladeren, afspelen en verwijderen."
+
+msgctxt "#30073"
+msgid "Enable Delete from server"
+msgstr "Verwijderen van server inschakelen"
+
+msgctxt "#30074"
+msgid "Adds a Delete entry to an item's 'Jellyfin actions' context menu. Deletion is permanent: the file itself is removed on the Jellyfin server, for every user."
+msgstr "Voegt een optie 'Verwijderen' toe aan het contextmenu 'Jellyfin-acties' van een item. Verwijderen is definitief: het bestand zelf wordt van de Jellyfin-server verwijderd, voor alle gebruikers."
+
+msgctxt "#30075"
+msgid "Delete without confirmation"
+msgstr "Verwijderen zonder bevestiging"
+
+msgctxt "#30076"
+msgid "Delete the item as soon as the entry is picked, with no 'are you sure?' prompt. The deletion is still permanent and applies on the server."
+msgstr "Verwijder het item zodra de optie wordt gekozen, zonder 'weet je het zeker?'-vraag. Het verwijderen is nog steeds definitief en geldt op de server."
+
+msgctxt "#30077"
+msgid "Offer to delete after watching"
+msgstr "Verwijderen aanbieden na het kijken"
+
+msgctxt "#30078"
+msgid "When a movie or episode finishes, ask whether to delete it from the server. Always asks, whatever 'Delete without confirmation' is set to."
+msgstr "Vraag na afloop van een film of aflevering of die van de server verwijderd moet worden. Vraagt altijd, ongeacht hoe 'Verwijderen zonder bevestiging' is ingesteld."
+
+msgctxt "#30079"
+msgid "Who's watching shortlist"
+msgstr "Shortlist voor 'Wie kijkt er?'"
+
+msgctxt "#30080"
+msgid "Choose which server users the addon's Who's watching? entry offers. \"All\" offers everyone. With nothing selected the entry is hidden and anyone already on the session is removed."
+msgstr "Kies welke servergebruikers de optie 'Wie kijkt er?' van de add-on aanbiedt. \"Alle\" biedt iedereen aan. Zonder selectie verdwijnt de optie en wordt iedereen die al in de sessie zit verwijderd."
+
+msgctxt "#30030"
+msgid "All"
+msgstr "Alles"
+
+msgctxt "#30031"
+msgid "Recently added"
+msgstr "Recent toegevoegd"
+
+msgctxt "#30032"
+msgid "Next up"
+msgstr "Volgende aflevering"
+
+msgctxt "#30033"
+msgid "In progress"
+msgstr "Bezig met kijken"
+
+msgctxt "#30034"
+msgid "Unwatched"
+msgstr "Niet bekeken"
+
+msgctxt "#30035"
+msgid "Favourites"
+msgstr "Favorieten"
+
+msgctxt "#30036"
+msgid "Genres"
+msgstr "Genres"
+
+msgctxt "#30037"
+msgid "Random"
+msgstr "Willekeurig"
+
+msgctxt "#30038"
+msgid "Sets"
+msgstr "Filmreeksen"
+
+msgctxt "#30039"
+msgid "Artists"
+msgstr "Artiesten"
+
+msgctxt "#30040"
+msgid "Albums"
+msgstr "Albums"
+
+msgctxt "#30049"
+msgid "Continue watching"
+msgstr "Verder kijken"
+
+msgctxt "#30100"
+msgid "Transcoding"
+msgstr "Transcoderen"
+
+msgctxt "#30101"
+msgid "When and how the server converts media for this device."
+msgstr "Wanneer en hoe de server media omzet voor dit apparaat."
+
+msgctxt "#30102"
+msgid "Force direct play"
+msgstr "Direct afspelen forceren"
+
+msgctxt "#30103"
+msgid "Always play the original video file. Overrides every other video transcoding setting; playback fails if the device cannot handle the media. Music is unaffected — see 'Transcode music'."
+msgstr "Speel altijd het originele videobestand af. Overschrijft alle andere instellingen voor videotranscodering; het afspelen mislukt als het apparaat de media niet aankan. Muziek valt hierbuiten — zie 'Muziek transcoderen'."
+
+msgctxt "#30104"
+msgid "Force remux"
+msgstr "Remuxen forceren"
+
+msgctxt "#30105"
+msgid "Remux into HLS and copy the source codecs. Does not use Maximum audio channels, Maximum streaming bitrate or Transcode audio bitrate below — those would re-encode a listed codec. Direct play codecs, Allowed HDR types and Maximum resolution still apply."
+msgstr "Remuxt naar HLS en kopieert de broncodecs. Gebruikt 'Maximaal aantal audiokanalen', 'Maximale streamingbitrate' en 'Audiobitrate bij transcoderen' hieronder niet — die zouden een codec uit de lijst hercoderen. Direct-play-codecs, 'Toegestane HDR-typen' en 'Maximale resolutie' blijven gelden."
+
+msgctxt "#30106"
+msgid "Force transcode"
+msgstr "Transcoderen forceren"
+
+msgctxt "#30107"
+msgid "Always re-encode video and audio to the preferred codecs. Honours the bitrate cap, the channel cap, allowed codecs, HDR types and resolution."
+msgstr "Hercodeert video en audio altijd naar de voorkeurscodecs. Houdt rekening met de bitrate-limiet, de kanaallimiet, toegestane codecs, HDR-typen en resolutie."
+
+msgctxt "#30108"
+msgid "Direct play video codecs"
+msgstr "Videocodecs voor direct afspelen"
+
+msgctxt "#30109"
+msgid "Video formats this device can decode. Media using formats not selected here is transcoded."
+msgstr "Videoformaten die dit apparaat kan decoderen. Media in niet-geselecteerde formaten worden getranscodeerd."
+
+msgctxt "#30110"
+msgid "Direct play audio codecs"
+msgstr "Audiocodecs voor direct afspelen"
+
+msgctxt "#30111"
+msgid "Audio formats this device can decode or pass through. Others are transcoded."
+msgstr "Audioformaten die dit apparaat kan decoderen of doorgeven. Andere worden getranscodeerd."
+
+msgctxt "#30112"
+msgid "Allowed HDR types"
+msgstr "Toegestane HDR-typen"
+
+msgctxt "#30113"
+msgid "HDR formats the display accepts. Media in formats not selected is tone-mapped or transcoded to SDR/HDR10 by the server."
+msgstr "HDR-formaten die het scherm accepteert. Media in niet-geselecteerde formaten worden door de server via tone-mapping of transcodering omgezet naar SDR/HDR10."
+
+msgctxt "#30114"
+msgid "Preferred video codec"
+msgstr "Voorkeurscodec voor video"
+
+msgctxt "#30115"
+msgid "The codec the client asks for when video must be transcoded."
+msgstr "De codec die de client vraagt wanneer video getranscodeerd moet worden."
+
+msgctxt "#30116"
+msgid "Preferred audio codec"
+msgstr "Voorkeurscodec voor audio"
+
+msgctxt "#30117"
+msgid "The codec the client asks for when audio must be transcoded."
+msgstr "De codec die de client vraagt wanneer audio getranscodeerd moet worden."
+
+msgctxt "#30118"
+msgid "Maximum audio channels"
+msgstr "Maximaal aantal audiokanalen"
+
+msgctxt "#30119"
+msgid "Maximum number of audio channels allowed when transcoding. Streams with more channels will be downmixed. No effect on direct playback."
+msgstr "Maximaal aantal audiokanalen dat bij het transcoderen is toegestaan. Streams met meer kanalen worden gedownmixt. Geen effect op direct afspelen."
+
+msgctxt "#30120"
+msgid "Maximum streaming bitrate"
+msgstr "Maximale streamingbitrate"
+
+msgctxt "#30121"
+msgid "Media above this bitrate is transcoded down to it."
+msgstr "Media boven deze bitrate worden ernaartoe getranscodeerd."
+
+msgctxt "#30122"
+msgid "Maximum resolution"
+msgstr "Maximale resolutie"
+
+msgctxt "#30123"
+msgid "Wider media is downscaled by the server."
+msgstr "Bredere media worden door de server verkleind."
+
+msgctxt "#30124"
+msgid "Transcode audio bitrate"
+msgstr "Audiobitrate bij transcoderen"
+
+msgctxt "#30125"
+msgid "Bitrate for the audio track when video is transcoded."
+msgstr "Bitrate voor het audiospoor wanneer video wordt getranscodeerd."
+
+msgctxt "#30126"
+msgid "Context menu bitrates"
+msgstr "Bitrates in het contextmenu"
+
+msgctxt "#30127"
+msgid "Bitrates offered by 'Play with transcoding'. With one selected the popup is skipped."
+msgstr "Bitrates die 'Afspelen met transcoderen' aanbiedt. Bij één selectie wordt de pop-up overgeslagen."
+
+msgctxt "#30129"
+msgid "Maximum music bitrate"
+msgstr "Maximale muziekbitrate"
+
+msgctxt "#30130"
+msgid "Music above this bitrate is transcoded using the codec and bitrate below. Unlimited never transcodes."
+msgstr "Muziek boven deze bitrate wordt getranscodeerd met de codec en bitrate hieronder. Onbeperkt transcodeert nooit."
+
+msgctxt "#30131"
+msgid "Music transcode codec"
+msgstr "Codec voor muziektranscodering"
+
+msgctxt "#30132"
+msgid "Codec for transcoded music streams."
+msgstr "Codec voor getranscodeerde muziekstreams."
+
+msgctxt "#30133"
+msgid "Music transcode bitrate"
+msgstr "Bitrate voor muziektranscodering"
+
+msgctxt "#30134"
+msgid "Bitrate for transcoded music streams."
+msgstr "Bitrate voor getranscodeerde muziekstreams."
+
+msgctxt "#30135"
+msgid "Transcode music"
+msgstr "Muziek transcoderen"
+
+msgctxt "#30150"
+msgid "H.264 (AVC)"
+msgstr "H.264 (AVC)"
+
+msgctxt "#30151"
+msgid "H.264 10-bit (Hi10P)"
+msgstr "H.264 10-bit (Hi10P)"
+
+msgctxt "#30152"
+msgid "H.265 (HEVC)"
+msgstr "H.265 (HEVC)"
+
+msgctxt "#30153"
+msgid "HEVC RExt (4:2:2/4:4:4)"
+msgstr "HEVC RExt (4:2:2/4:4:4)"
+
+msgctxt "#30154"
+msgid "AV1"
+msgstr "AV1"
+
+msgctxt "#30155"
+msgid "MPEG-2"
+msgstr "MPEG-2"
+
+msgctxt "#30156"
+msgid "VP9"
+msgstr "VP9"
+
+msgctxt "#30157"
+msgid "VC-1"
+msgstr "VC-1"
+
+msgctxt "#30158"
+msgid "AAC"
+msgstr "AAC"
+
+msgctxt "#30159"
+msgid "MP2"
+msgstr "MP2"
+
+msgctxt "#30160"
+msgid "MP3"
+msgstr "MP3"
+
+msgctxt "#30161"
+msgid "AC3 (Dolby Digital)"
+msgstr "AC3 (Dolby Digital)"
+
+msgctxt "#30162"
+msgid "E-AC3 (Dolby Digital Plus)"
+msgstr "E-AC3 (Dolby Digital Plus)"
+
+msgctxt "#30163"
+msgid "Opus"
+msgstr "Opus"
+
+msgctxt "#30164"
+msgid "FLAC"
+msgstr "FLAC"
+
+msgctxt "#30165"
+msgid "DTS"
+msgstr "DTS"
+
+msgctxt "#30166"
+msgid "HDR10"
+msgstr "HDR10"
+
+msgctxt "#30167"
+msgid "HLG"
+msgstr "HLG"
+
+msgctxt "#30168"
+msgid "HDR10+"
+msgstr "HDR10+"
+
+msgctxt "#30169"
+msgid "Dolby Vision"
+msgstr "Dolby Vision"
+
+msgctxt "#30170"
+msgid "Dolby Vision with HDR10 fallback"
+msgstr "Dolby Vision met HDR10-fallback"
+
+msgctxt "#30171"
+msgid "Dolby Vision with HLG fallback"
+msgstr "Dolby Vision met HLG-fallback"
+
+msgctxt "#30172"
+msgid "Dolby Vision with SDR fallback"
+msgstr "Dolby Vision met SDR-fallback"
+
+msgctxt "#30173"
+msgid "Dolby Vision Profile 7 (EL)"
+msgstr "Dolby Vision Profiel 7 (EL)"
+
+msgctxt "#30174"
+msgid "Dolby Vision with HDR10+ fallback"
+msgstr "Dolby Vision met HDR10+-fallback"
+
+msgctxt "#30175"
+msgid "Dolby Vision P7 with HDR10+ fallback"
+msgstr "Dolby Vision P7 met HDR10+-fallback"
+
+msgctxt "#30176"
+msgid "Unlimited"
+msgstr "Onbeperkt"
+
+msgctxt "#30177"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30178"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30179"
+msgid "4K"
+msgstr "4K"
+
+msgctxt "#30180"
+msgid "2.0 stereo"
+msgstr "2.0 stereo"
+
+msgctxt "#30181"
+msgid "5.1 surround"
+msgstr "5.1 surround"
+
+msgctxt "#30182"
+msgid "7.1 surround"
+msgstr "7.1 surround"
+
+msgctxt "#30183"
+msgid "1 Mbit/s"
+msgstr "1 Mbit/s"
+
+msgctxt "#30184"
+msgid "2 Mbit/s"
+msgstr "2 Mbit/s"
+
+msgctxt "#30185"
+msgid "3 Mbit/s"
+msgstr "3 Mbit/s"
+
+msgctxt "#30186"
+msgid "4 Mbit/s"
+msgstr "4 Mbit/s"
+
+msgctxt "#30187"
+msgid "6 Mbit/s"
+msgstr "6 Mbit/s"
+
+msgctxt "#30188"
+msgid "8 Mbit/s"
+msgstr "8 Mbit/s"
+
+msgctxt "#30189"
+msgid "10 Mbit/s"
+msgstr "10 Mbit/s"
+
+msgctxt "#30190"
+msgid "15 Mbit/s"
+msgstr "15 Mbit/s"
+
+msgctxt "#30191"
+msgid "20 Mbit/s"
+msgstr "20 Mbit/s"
+
+msgctxt "#30192"
+msgid "25 Mbit/s"
+msgstr "25 Mbit/s"
+
+msgctxt "#30193"
+msgid "40 Mbit/s"
+msgstr "40 Mbit/s"
+
+msgctxt "#30194"
+msgid "60 Mbit/s"
+msgstr "60 Mbit/s"
+
+msgctxt "#30195"
+msgid "120 Mbit/s"
+msgstr "120 Mbit/s"
+
+msgctxt "#30196"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30197"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30198"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30199"
+msgid "256 kbit/s"
+msgstr "256 kbit/s"
+
+msgctxt "#30200"
+msgid "320 kbit/s"
+msgstr "320 kbit/s"
+
+msgctxt "#30201"
+msgid "384 kbit/s"
+msgstr "384 kbit/s"
+
+msgctxt "#30202"
+msgid "448 kbit/s"
+msgstr "448 kbit/s"
+
+msgctxt "#30203"
+msgid "640 kbit/s"
+msgstr "640 kbit/s"
+
+msgctxt "#30204"
+msgid "0.5 Mbit/s"
+msgstr "0.5 Mbit/s"
+
+msgctxt "#30205"
+msgid "0.75 Mbit/s"
+msgstr "0.75 Mbit/s"
+
+msgctxt "#30206"
+msgid "Default (max streaming bitrate)"
+msgstr "Standaard (max. streamingbitrate)"
+
+msgctxt "#30041"
+msgid "Who's watching?"
+msgstr "Wie kijkt er?"
+
+msgctxt "#30045"
+msgid "No active session on the server yet"
+msgstr "Nog geen actieve sessie op de server"
+
+msgctxt "#30046"
+msgid "Who's watching? (%s)"
+msgstr "Wie kijkt er? (%s)"
+
+msgctxt "#30047"
+msgid "Who's watching with %s?"
+msgstr "Wie kijkt er mee met %s?"
+
+msgctxt "#30048"
+msgid "Who can be added to the session"
+msgstr "Wie aan de sessie toegevoegd kan worden"
+
+msgctxt "#30250"
+msgid "Library"
+msgstr "Bibliotheek"
+
+msgctxt "#30251"
+msgid "Select and manage the Jellyfin libraries mirrored into Kodi's own database."
+msgstr "Selecteer en beheer de Jellyfin-bibliotheken die naar Kodi's eigen database worden gespiegeld."
+
+msgctxt "#30252"
+msgid "Select libraries to sync"
+msgstr "Bibliotheken kiezen om te synchroniseren"
+
+msgctxt "#30253"
+msgid "Choose which server libraries are mirrored into the Kodi library. Changes apply when you confirm the selection."
+msgstr "Kies welke serverbibliotheken naar de Kodi-bibliotheek worden gespiegeld. Wijzigingen gaan in zodra je de selectie bevestigt."
+
+msgctxt "#30256"
+msgid "Update libraries"
+msgstr "Bibliotheken bijwerken"
+
+msgctxt "#30258"
+msgid "Repair libraries"
+msgstr "Bibliotheken repareren"
+
+msgctxt "#30259"
+msgid "Remove and re-sync the libraries you pick from scratch, restoring watched state from the server. Runs when you confirm the selection."
+msgstr "Verwijder de bibliotheken die je kiest en synchroniseer ze helemaal opnieuw, waarbij de bekeken-status van de server wordt hersteld. Wordt uitgevoerd zodra je de selectie bevestigt."
+
+msgctxt "#30262"
+msgid "Sync status"
+msgstr "Synchronisatiestatus"
+
+msgctxt "#30264"
+msgid "Remove synced library?"
+msgstr "Gesynchroniseerde bibliotheek verwijderen?"
+
+msgctxt "#30265"
+msgid "Remove %s from the Kodi library? The items are deleted from this device only."
+msgstr "%s uit de Kodi-bibliotheek verwijderen? De items worden alleen van dit apparaat verwijderd."
+
+msgctxt "#30266"
+msgid "Repair which libraries?"
+msgstr "Welke bibliotheken repareren?"
+
+msgctxt "#30267"
+msgid "All"
+msgstr "Alles"
+
+msgctxt "#30268"
+msgid "Select libraries"
+msgstr "Bibliotheken selecteren"
+
+msgctxt "#30269"
+msgid "No libraries available"
+msgstr "Geen bibliotheken beschikbaar"
+
+msgctxt "#30302"
+msgid "Hide update status below (items)"
+msgstr "Statusweergave hieronder verbergen (items)"
+
+msgctxt "#30303"
+msgid "Hide Kodi's library-update progress for syncs smaller than this. 0 always shows it."
+msgstr "Verberg Kodi's voortgangsweergave voor bibliotheekupdates bij synchronisaties kleiner dan dit. 0 toont die altijd."
+
+msgctxt "#30318"
+msgid "Compress artwork"
+msgstr "Afbeeldingen comprimeren"
+
+msgctxt "#30319"
+msgid "Re-encode capped artwork at JPEG quality 90. No effect without a resolution cap."
+msgstr "Hercodeer begrensde afbeeldingen met JPEG-kwaliteit 90. Zonder resolutiebegrenzing heeft dit geen effect."
+
+msgctxt "#30320"
+msgid "Maximum artwork resolution"
+msgstr "Maximale resolutie van afbeeldingen"
+
+msgctxt "#30321"
+msgid "Cap the height of synced artwork. Original keeps the server size."
+msgstr "Begrens de hoogte van gesynchroniseerde afbeeldingen. 'Origineel' behoudt de grootte van de server."
+
+msgctxt "#30322"
+msgid "Original"
+msgstr "Origineel"
+
+msgctxt "#30323"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30324"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30325"
+msgid "2160p"
+msgstr "2160p"
+
+msgctxt "#30326"
+msgid "Notify on server connection changes"
+msgstr "Melden bij wijzigingen in de serververbinding"
+
+msgctxt "#30327"
+msgid "Show a notification when the server connects, disconnects or restarts."
+msgstr "Toon een melding wanneer de server verbinding maakt, de verbinding verbreekt of herstart."
+
+msgctxt "#30350"
+msgid "Recently added"
+msgstr "Recent toegevoegd"
+
+msgctxt "#30351"
+msgid "In progress"
+msgstr "Bezig met kijken"
+
+msgctxt "#30352"
+msgid "Unwatched"
+msgstr "Niet bekeken"
+
+msgctxt "#30353"
+msgid "Random"
+msgstr "Willekeurig"
+
+msgctxt "#30354"
+msgid "Recommended"
+msgstr "Aanbevolen"
+
+msgctxt "#30355"
+msgid "Recently added episodes"
+msgstr "Recent toegevoegde afleveringen"
+
+msgctxt "#30356"
+msgid "In progress episodes"
+msgstr "Begonnen afleveringen"
+
+msgctxt "#30358"
+msgid "Favorite movies"
+msgstr "Favoriete films"
+
+msgctxt "#30359"
+msgid "Favorite shows"
+msgstr "Favoriete series"
+
+msgctxt "#30360"
+msgid "Favorite episodes"
+msgstr "Favoriete afleveringen"
+
+msgctxt "#30401"
+msgid "Updating media"
+msgstr "Media bijwerken"
+
+msgctxt "#30403"
+msgid "Sync incomplete; retrying shortly"
+msgstr "Sync onvolledig; nieuwe poging"
+
+msgctxt "#30408"
+msgid "Removing library"
+msgstr "Bibliotheek verwijderen"
+
+msgctxt "#30415"
+msgid "Connected to %s"
+msgstr "Verbonden met %s"
+
+msgctxt "#30416"
+msgid "Lost connection to the server"
+msgstr "Verbinding met server verloren"
+
+msgctxt "#30417"
+msgid "Server is restarting"
+msgstr "Server wordt herstart"
+
+msgctxt "#30418"
+msgid "Server is shutting down"
+msgstr "Server wordt afgesloten"
+
+msgctxt "#30420"
+msgid "Library sync is off: %s"
+msgstr "Bibliotheeksync staat uit: %s"
+
+msgctxt "#30450"
+msgid "Skipping & Play next"
+msgstr "Overslaan en volgende afspelen"
+
+msgctxt "#30451"
+msgid "Media segment skipping and the Play Next prompt."
+msgstr "Het overslaan van mediasegmenten en de vraag 'Volgende afspelen'."
+
+msgctxt "#30453"
+msgid "Skip media segments"
+msgstr "Mediasegmenten overslaan"
+
+msgctxt "#30454"
+msgid "Fetch Jellyfin media segments (intro, credits, recap, preview, commercial) during playback and act on them per type."
+msgstr "Haal Jellyfin-mediasegmenten (intro, aftiteling, samenvatting, voorvertoning, reclame) op tijdens het afspelen en reageer er per type op."
+
+msgctxt "#30455"
+msgid "Intros"
+msgstr "Intro's"
+
+msgctxt "#30456"
+msgid "Off ignores intro segments, Auto skips past them, Ask shows a skip button."
+msgstr "Uit negeert introsegmenten, Automatisch slaat ze over, Vragen toont een knop om over te slaan."
+
+msgctxt "#30457"
+msgid "Credits"
+msgstr "Aftiteling"
+
+msgctxt "#30458"
+msgid "Off ignores credits, Auto seeks past them, Ask offers Skip Outro — with Play Next when a next episode exists."
+msgstr "Uit negeert de aftiteling, Automatisch spoelt eroverheen, Vragen biedt 'Aftiteling overslaan' — met 'Volgende afspelen' als er een volgende aflevering is."
+
+msgctxt "#30459"
+msgid "Recaps"
+msgstr "Samenvattingen"
+
+msgctxt "#30460"
+msgid "Off ignores recap segments, Auto skips past them, Ask shows a skip button."
+msgstr "Uit negeert samenvattingssegmenten, Automatisch slaat ze over, Vragen toont een knop om over te slaan."
+
+msgctxt "#30461"
+msgid "Previews"
+msgstr "Voorvertoningen"
+
+msgctxt "#30462"
+msgid "Off ignores preview segments, Auto skips past them, Ask shows a skip button."
+msgstr "Uit negeert voorvertoningssegmenten, Automatisch slaat ze over, Vragen toont een knop om over te slaan."
+
+msgctxt "#30463"
+msgid "Commercials"
+msgstr "Reclames"
+
+msgctxt "#30464"
+msgid "Off ignores commercial segments, Auto skips past them, Ask shows a skip button."
+msgstr "Uit negeert reclamesegmenten, Automatisch slaat ze over, Vragen toont een knop om over te slaan."
+
+msgctxt "#30465"
+msgid "Off"
+msgstr "Uit"
+
+msgctxt "#30466"
+msgid "Auto"
+msgstr "Automatisch"
+
+msgctxt "#30467"
+msgid "Ask"
+msgstr "Vragen"
+
+msgctxt "#30469"
+msgid "Offer Play Next"
+msgstr "'Volgende afspelen' aanbieden"
+
+msgctxt "#30470"
+msgid "Offer the next episode at the credits, or near the end when no credits segment exists."
+msgstr "Bied de volgende aflevering aan bij de aftiteling, of tegen het einde wanneer er geen aftitelingssegment is."
+
+msgctxt "#30471"
+msgid "Play Next lead time"
+msgstr "Voorlooptijd voor 'Volgende afspelen'"
+
+msgctxt "#30472"
+msgid "Seconds before the end to show the Play Next prompt for content without a credits segment."
+msgstr "Seconden voor het einde waarop de vraag 'Volgende afspelen' verschijnt bij materiaal zonder aftitelingssegment."
+
+msgctxt "#30473"
+msgid "Autoplay next episode"
+msgstr "Volgende aflevering automatisch starten"
+
+msgctxt "#30474"
+msgid "Count down on the Play Next prompt and start the next episode automatically."
+msgstr "Tel af in de vraag 'Volgende afspelen' en start de volgende aflevering automatisch."
+
+msgctxt "#30475"
+msgid "Resume offset (seconds)"
+msgstr "Hervattingsmarge (seconden)"
+
+msgctxt "#30476"
+msgid "Seconds to rewind before the stored resume point."
+msgstr "Seconden die vóór het opgeslagen hervattingspunt worden teruggespoeld."
+
+msgctxt "#30477"
+msgid "Hide the skip button after"
+msgstr "Overslaan-knop verbergen na"
+
+msgctxt "#30478"
+msgid "How far into a segment the skip button disappears. 100% keeps it up for the whole segment."
+msgstr "Hoe ver in een segment de overslaan-knop verdwijnt. 100% houdt de knop het hele segment zichtbaar."
+
+msgctxt "#30481"
+msgid "Skip Intro"
+msgstr "Intro overslaan"
+
+msgctxt "#30482"
+msgid "Skip Outro"
+msgstr "Aftiteling overslaan"
+
+msgctxt "#30483"
+msgid "Skip Recap"
+msgstr "Samenvatting overslaan"
+
+msgctxt "#30484"
+msgid "Skip Preview"
+msgstr "Voorvertoning overslaan"
+
+msgctxt "#30485"
+msgid "Skip Ad"
+msgstr "Reclame overslaan"
+
+msgctxt "#30486"
+msgid "Play Next"
+msgstr "Volgende afspelen"
+
+msgctxt "#30487"
+msgid "Close"
+msgstr "Sluiten"
+
+msgctxt "#30488"
+msgid "Skipped %s"
+msgstr "%s overgeslagen"
+
+msgctxt "#30489"
+msgid "Up next: %s"
+msgstr "Hierna: %s"
+
+msgctxt "#30500"
+msgid "Extras"
+msgstr "Extra's"
+
+msgctxt "#30501"
+msgid "Browse extras"
+msgstr "Extra's doorbladeren"
+
+msgctxt "#30502"
+msgid "Jellyfin actions"
+msgstr "Jellyfin-acties"
+
+msgctxt "#30504"
+msgid "Settings"
+msgstr "Instellingen"
+
+msgctxt "#30505"
+msgid "Permanently delete \"%s\" from the server? This cannot be undone."
+msgstr "\"%s\" definitief van de server verwijderen? Dit kan niet ongedaan worden gemaakt."
+
+msgctxt "#30506"
+msgid "Finished \"%s\". Permanently delete it from the server? This cannot be undone."
+msgstr "\"%s\" is afgelopen. Definitief van de server verwijderen? Dit kan niet ongedaan worden gemaakt."
+
+msgctxt "#30507"
+msgid "Server request failed"
+msgstr "Serveraanvraag mislukt"
+
+msgctxt "#30508"
+msgid "Mark as watched on Jellyfin"
+msgstr "Markeren als bekeken op Jellyfin"
+
+msgctxt "#30509"
+msgid "Mark as unwatched on Jellyfin"
+msgstr "Markeren als niet bekeken op Jellyfin"
+
+msgctxt "#30550"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30551"
+msgid "Enable SyncPlay"
+msgstr "SyncPlay inschakelen"
+
+msgctxt "#30552"
+msgid "Watch in sync with other Jellyfin clients. Leave Kodi's 'Sync playback to display' off for a reliable experience"
+msgstr "Kijk synchroon met andere Jellyfin-clients. Laat 'Afspelen synchroniseren met scherm' uitgeschakeld in Kodi voor een betrouwbare ervaring"
+
+msgctxt "#30557"
+msgid "Group notifications"
+msgstr "Groepsmeldingen"
+
+msgctxt "#30558"
+msgid "Show member join/leave and group-waiting notifications. Errors are always shown."
+msgstr "Toon meldingen wanneer leden binnenkomen of vertrekken en wanneer de groep wacht. Fouten worden altijd getoond."
+
+msgctxt "#30560"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30561"
+msgid "New group..."
+msgstr "Nieuwe groep..."
+
+msgctxt "#30562"
+msgid "Leave group"
+msgstr "Groep verlaten"
+
+msgctxt "#30563"
+msgid "Joined group: %s"
+msgstr "Groep betreden: %s"
+
+msgctxt "#30564"
+msgid "Left the group"
+msgstr "Je hebt de groep verlaten"
+
+msgctxt "#30565"
+msgid "%s joined the group"
+msgstr "%s heeft de groep betreden"
+
+msgctxt "#30566"
+msgid "%s left the group"
+msgstr "%s heeft de groep verlaten"
+
+msgctxt "#30567"
+msgid "Group name"
+msgstr "Groepsnaam"
+
+msgctxt "#30568"
+msgid "Playback stopped — what should the group do?"
+msgstr "Afspelen gestopt — wat moet de groep doen?"
+
+msgctxt "#30569"
+msgid "Spectator mode: the group will not wait for you"
+msgstr "Toeschouwersmodus: de groep wacht niet op je"
+
+msgctxt "#30570"
+msgid "SyncPlay needs a working websocket connection to the server"
+msgstr "SyncPlay heeft een werkende websocketverbinding met de server nodig"
+
+msgctxt "#30571"
+msgid "Removed from the group"
+msgstr "Uit de groep verwijderd"
+
+msgctxt "#30572"
+msgid "Members"
+msgstr "Leden"
+
+msgctxt "#30573"
+msgid "Resync with group"
+msgstr "Hersynchroniseren met groep"
+
+msgctxt "#30574"
+msgid "SyncPlay is unavailable (server not reachable?)"
+msgstr "SyncPlay is niet beschikbaar (server niet bereikbaar?)"
+
+msgctxt "#30575"
+msgid "External players cannot be synchronized"
+msgstr "Externe spelers lopen niet synchroon"
+
+msgctxt "#30576"
+msgid "Playback could not be synchronized"
+msgstr "Afspelen kon niet synchroon lopen"
+
+msgctxt "#30577"
+msgid "buffering"
+msgstr "bufferen"
+
+msgctxt "#30578"
+msgid "Could not join the group"
+msgstr "Kon niet aan de groep deelnemen"
+
+msgctxt "#30579"
+msgid "You don't have access to some items in the group's queue"
+msgstr "Je hebt geen toegang tot sommige items in de wachtrij van de groep"
+
+msgctxt "#30580"
+msgid "Become a spectator (group won't wait for me)"
+msgstr "Toeschouwer worden (groep wacht niet op mij)"
+
+msgctxt "#30581"
+msgid "Wait for me again (leave spectator mode)"
+msgstr "Weer op mij wachten (toeschouwersmodus verlaten)"
+
+msgctxt "#30582"
+msgid "disconnected"
+msgstr "verbroken"
+
+msgctxt "#30583"
+msgid "The group will wait for you again"
+msgstr "De groep wacht weer op je"
+
+msgctxt "#30584"
+msgid "Stop playback for everyone"
+msgstr "Afspelen voor iedereen stoppen"
+
+msgctxt "#30585"
+msgid "Waiting for the group..."
+msgstr "Wachten op de groep..."
+
+msgctxt "#30586"
+msgid "Fine sync using tempo"
+msgstr "Fijnafstemming met tempo"
+
+msgctxt "#30587"
+msgid "Keeps this device on the group's position by briefly playing faster or slower. A video correction decodes passthrough audio until the next item."
+msgstr "Houdt dit apparaat op de groepspositie door kort sneller of langzamer af te spelen. Een videocorrectie decodeert passthrough-audio tot het volgende item."
+
+msgctxt "#30592"
+msgid "Fine sync stopped: rate mismatch"
+msgstr "Fijnafstemming gestopt: tempo wijkt af"
+
+msgctxt "#30593"
+msgid "Largest video error closed by tempo (ms)"
+msgstr "Grootste videofout die tempo wegwerkt (ms)"
+
+msgctxt "#30594"
+msgid "Position errors up to this are closed by playing faster or slower; anything larger is closed with a skip. Higher means fewer skips and longer speed changes."
+msgstr "Positiefouten tot hier worden weggewerkt door sneller of langzamer af te spelen; alles groter met een sprong. Hoger betekent minder sprongen en langere snelheidswijzigingen."
+
+msgctxt "#30595"
+msgid "Fastest video correction speed (%)"
+msgstr "Snelste videocorrectiesnelheid (%)"
+
+msgctxt "#30596"
+msgid "The most playback speed may change during a correction. At 25% a 2.5 second error takes 10 seconds to close; lower is less noticeable but slower. Large changes ramp in and out."
+msgstr "Hoeveel de afspeelsnelheid tijdens een correctie maximaal mag veranderen. Bij 25% is een fout van 2,5 seconde in 10 seconden weg; lager valt minder op maar duurt langer. Grote wijzigingen worden geleidelijk in- en uitgezet."
+
+msgctxt "#30604"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30605"
+msgid "1440p"
+msgstr "1440p"
+
+msgctxt "#30613"
+msgid "Audio and subtitle streams"
+msgstr "Audio- en ondertitelsporen"
+
+msgctxt "#30614"
+msgid "Audio stream"
+msgstr "Audiospoor"
+
+msgctxt "#30615"
+msgid "Subtitles"
+msgstr "Ondertiteling"
+
+msgctxt "#30616"
+msgid "Restarting to change stream..."
+msgstr "Herstarten om van spoor te wisselen..."
+
+msgctxt "#30617"
+msgid "burned in, restarts playback"
+msgstr "ingebrand, start het afspelen opnieuw"
+
+msgctxt "#30618"
+msgid "Use Jellyfin's default tracks"
+msgstr "Jellyfins standaardsporen gebruiken"
+
+msgctxt "#30619"
+msgid "Start playback on the audio and subtitle tracks your Jellyfin account asks for, instead of the ones Kodi's own language settings pick. The server resolves both from your Jellyfin profile, so the choice follows you to every client."
+msgstr "Start het afspelen met de audio- en ondertitelsporen waar je Jellyfin-account om vraagt, in plaats van die welke Kodi's eigen taalinstellingen kiezen. De server bepaalt beide uit je Jellyfin-profiel, zodat de keuze je naar elke client volgt."
+
+msgctxt "#30622"
+msgid "Notify about new content"
+msgstr "Melden bij nieuwe content"
+
+msgctxt "#30623"
+msgid "Show a notification when new films, shows, episodes, music videos, artists or albums are added to your library."
+msgstr "Toon een melding wanneer er nieuwe films, series, afleveringen, videoclips, artiesten of albums aan je bibliotheek worden toegevoegd."
+
+msgctxt "#30624"
+msgid "%s movie added to library"
+msgstr "Nieuwe film: %s"
+
+msgctxt "#30625"
+msgid "%s movies added to library"
+msgstr "%s nieuwe films toegevoegd"
+
+msgctxt "#30626"
+msgid "%s show added to library"
+msgstr "Nieuwe serie: %s"
+
+msgctxt "#30627"
+msgid "%s new shows added to library"
+msgstr "%s nieuwe series toegevoegd"
+
+msgctxt "#30628"
+msgid "%s episode of %s added to library"
+msgstr "%s aflevering van %s toegevoegd"
+
+msgctxt "#30629"
+msgid "%s episodes of %s added to library"
+msgstr "%s afleveringen van %s toegevoegd"
+
+msgctxt "#30630"
+msgid "%s episodes added to library"
+msgstr "%s nieuwe afleveringen toegevoegd"
+
+msgctxt "#30631"
+msgid "%s music video added to library"
+msgstr "Nieuwe videoclip: %s"
+
+msgctxt "#30632"
+msgid "%s music videos added to library"
+msgstr "%s nieuwe videoclips toegevoegd"
+
+msgctxt "#30633"
+msgid "%s added to music library"
+msgstr "Nieuwe artiest: %s"
+
+msgctxt "#30634"
+msgid "%s artists added to library"
+msgstr "%s nieuwe artiesten toegevoegd"
+
+msgctxt "#30635"
+msgid "%s added to music library"
+msgstr "Nieuw album: %s"
+
+msgctxt "#30636"
+msgid "%s albums added to library"
+msgstr "%s nieuwe albums toegevoegd"
+
+msgctxt "#30637"
+msgid "Use the server's splashscreen as the backdrop"
+msgstr "Splashscreen van de server als achtergrond"
+
+msgctxt "#30638"
+msgid "Show the Jellyfin server's splashscreen behind the addon instead of the bundled artwork. Refreshed when the service connects, at most once a day."
+msgstr "Toon de splashscreen van de Jellyfin-server achter de add-on in plaats van de meegeleverde afbeelding. Wordt vernieuwd wanneer de dienst verbinding maakt, hoogstens eens per dag."
+
+msgctxt "#30700"
+msgid "Downloads"
+msgstr "Downloads"
+
+msgctxt "#30701"
+msgid "Download items for offline playback"
+msgstr "Items downloaden voor offline afspelen"
+
+msgctxt "#30702"
+msgid "Enable downloads"
+msgstr "Downloads inschakelen"
+
+msgctxt "#30703"
+msgid "Adds Download to the Jellyfin actions menu and runs the download manager. Only for libraries you sync with Kofin."
+msgstr "Voegt 'Downloaden' toe aan het menu Jellyfin-acties en start de downloadbeheerder. Alleen voor bibliotheken die je met Kofin synchroniseert."
+
+msgctxt "#30704"
+msgid "Download location"
+msgstr "Downloadlocatie"
+
+msgctxt "#30705"
+msgid "Where downloaded files are kept. Leave empty for the addon profile folder"
+msgstr "Waar gedownloade bestanden worden bewaard. Laat leeg voor de profielmap van de add-on"
+
+msgctxt "#30706"
+msgid "Parallel video downloads"
+msgstr "Parallelle videodownloads"
+
+msgctxt "#30707"
+msgid "How many movies and episodes download at the same time"
+msgstr "Hoeveel films en afleveringen tegelijk downloaden"
+
+msgctxt "#30708"
+msgid "Download"
+msgstr "Downloaden"
+
+msgctxt "#30709"
+msgid "Cancel download"
+msgstr "Download annuleren"
+
+msgctxt "#30710"
+msgid "Delete download"
+msgstr "Download verwijderen"
+
+msgctxt "#30712"
+msgid "Download complete: %s"
+msgstr "Download voltooid: %s"
+
+msgctxt "#30713"
+msgid "Download failed: %s"
+msgstr "Download mislukt: %s"
+
+msgctxt "#30714"
+msgid "Delete the download of %s?"
+msgstr "De download van %s verwijderen?"
+
+msgctxt "#30715"
+msgid "Not enough free space for %s"
+msgstr "Te weinig vrije ruimte voor %s"
+
+msgctxt "#30717"
+msgid "The downloads folder is not writable"
+msgstr "De downloadmap is niet beschrijfbaar"
+
+msgctxt "#30718"
+msgid "Downloaded movies"
+msgstr "Gedownloade films"
+
+msgctxt "#30719"
+msgid "Downloaded shows"
+msgstr "Gedownloade series"
+
+msgctxt "#30720"
+msgid "Not available offline"
+msgstr "Offline niet beschikbaar"
+
+msgctxt "#30721"
+msgid "Downloaded episodes"
+msgstr "Gedownloade afleveringen"
+
+msgctxt "#30722"
+msgid "Transcode videos"
+msgstr "Video's transcoderen"
+
+msgctxt "#30723"
+msgid "Transcode when the original exceeds a limit below or when triggered by settings in the Transcoding tab (HDR, codec, etc)"
+msgstr "Transcodeer wanneer het origineel een limiet hieronder overschrijdt of wanneer instellingen op het tabblad Transcoderen dit veroorzaken (HDR, codec, enz.)"
+
+msgctxt "#30724"
+msgid "Maximum download bitrate"
+msgstr "Maximale downloadbitrate"
+
+msgctxt "#30725"
+msgid "Videos over this total bitrate are transcoded down to it. Unlimited transcodes only for codec, HDR or resolution reasons."
+msgstr "Video's boven deze totale bitrate worden ernaartoe getranscodeerd. Onbeperkt transcodeert alleen om redenen van codec, HDR of resolutie."
+
+msgctxt "#30726"
+msgid "Maximum download resolution"
+msgstr "Maximale downloadresolutie"
+
+msgctxt "#30727"
+msgid "Videos wider than this are scaled down. Unlimited never scales."
+msgstr "Video's die breder zijn, worden verkleind. Onbeperkt verkleint nooit."
+
+msgctxt "#30728"
+msgid "Transcode music"
+msgstr "Muziek transcoderen"
+
+msgctxt "#30729"
+msgid "Transcode a track only when it is lossless or over the bitrate limit below. Compliant tracks download as the original file."
+msgstr "Transcodeer een nummer alleen wanneer het lossless is of boven de bitratelimiet hieronder ligt. Nummers die voldoen, worden als origineel bestand gedownload."
+
+msgctxt "#30730"
+msgid "Transcode music over"
+msgstr "Muziek transcoderen boven"
+
+msgctxt "#30731"
+msgid "Tracks over this bitrate, and all lossless tracks, are transcoded. Unlimited transcodes only lossless tracks."
+msgstr "Nummers boven deze bitrate, en alle lossless nummers, worden getranscodeerd. Onbeperkt transcodeert alleen lossless nummers."
+
+msgctxt "#30732"
+msgid "Transcode music to"
+msgstr "Muziek transcoderen naar"
+
+msgctxt "#30733"
+msgid "The codec transcoded tracks are encoded with. Opus gives the best quality per megabyte."
+msgstr "De codec waarmee getranscodeerde nummers worden gecodeerd. Opus geeft de beste kwaliteit per megabyte."
+
+msgctxt "#30734"
+msgid "Transcoded music bitrate"
+msgstr "Bitrate van getranscodeerde muziek"
+
+msgctxt "#30735"
+msgid "The bitrate transcoded tracks are encoded at. 128 kbps Opus is transparent for most listening."
+msgstr "De bitrate waarmee getranscodeerde nummers worden gecodeerd. Opus op 128 kbps is transparant voor het meeste luisteren."
+
+msgctxt "#30737"
+msgid "Kofin downloads"
+msgstr "Kofin-downloads"
+
+msgctxt "#30738"
+msgid "Download the next episodes automatically"
+msgstr "De volgende afleveringen automatisch downloaden"
+
+msgctxt "#30739"
+msgid "While watching a downloaded episode, the next unwatched episodes of the show are queued for download at the 50% mark."
+msgstr "Terwijl je een gedownloade aflevering kijkt, worden de volgende niet-bekeken afleveringen van de serie op 50% in de downloadwachtrij gezet."
+
+msgctxt "#30740"
+msgid "Episodes to keep ahead"
+msgstr "Afleveringen vooruit bewaren"
+
+msgctxt "#30741"
+msgid "How many unwatched episodes ahead of the one playing are kept downloaded."
+msgstr "Hoeveel niet-bekeken afleveringen na de spelende aflevering gedownload blijven."
+
+msgctxt "#30742"
+msgid "Download newly added movies"
+msgstr "Nieuw toegevoegde films downloaden"
+
+msgctxt "#30743"
+msgid "Movies newly added to a synced library are downloaded automatically."
+msgstr "Films die nieuw aan een gesynchroniseerde bibliotheek worden toegevoegd, worden automatisch gedownload."
+
+msgctxt "#30746"
+msgid "Delete download after watching"
+msgstr "Download verwijderen na het kijken"
+
+msgctxt "#30747"
+msgid "When you finish watching a downloaded item, its local copy is removed. The item stays on the server and in your library."
+msgstr "Wanneer je een gedownload item hebt uitgekeken, wordt de lokale kopie verwijderd. Het item blijft op de server en in je bibliotheek."
+
+msgctxt "#30751"
+msgid "%s new movies were not downloaded automatically"
+msgstr "%s nieuwe films niet automatisch gedownload"
+
+msgctxt "#30752"
+msgid "Export NFO files and artwork"
+msgstr "NFO-bestanden en afbeeldingen exporteren"
+
+msgctxt "#30753"
+msgid "Write NFO metadata and artwork beside downloaded files, so other Kodi profiles and apps can scan the download folder as a library."
+msgstr "Schrijf NFO-metadata en afbeeldingen naast de gedownloade bestanden, zodat andere Kodi-profielen en apps de downloadmap als bibliotheek kunnen inlezen."
+
+msgctxt "#30754"
+msgid "Download all new episodes"
+msgstr "Alle nieuwe afleveringen downloaden"
+
+msgctxt "#30755"
+msgid "Every episode newly added to a synced library is downloaded automatically."
+msgstr "Elke aflevering die nieuw aan een gesynchroniseerde bibliotheek wordt toegevoegd, wordt automatisch gedownload."
+
+msgctxt "#30756"
+msgid "Download new albums"
+msgstr "Nieuwe albums downloaden"
+
+msgctxt "#30757"
+msgid "Albums newly added to a synced library are downloaded automatically."
+msgstr "Albums die nieuw aan een gesynchroniseerde bibliotheek worden toegevoegd, worden automatisch gedownload."
+
+msgctxt "#30758"
+msgid "Shows downloading new episodes"
+msgstr "Series die nieuwe afleveringen downloaden"
+
+msgctxt "#30759"
+msgid "Review the shows set to download their new episodes automatically, and untick any to stop."
+msgstr "Bekijk welke series hun nieuwe afleveringen automatisch downloaden, en vink alles uit dat daarmee moet stoppen."
+
+msgctxt "#30760"
+msgid "Download new episodes"
+msgstr "Nieuwe afleveringen downloaden"
+
+msgctxt "#30761"
+msgid "Stop downloading new episodes"
+msgstr "Nieuwe afleveringen niet meer downloaden"
+
+msgctxt "#30762"
+msgid "New episodes of %s will download automatically"
+msgstr "Nieuwe afleveringen van %s worden automatisch gedownload"
+
+msgctxt "#30763"
+msgid "New episodes of %s will no longer download automatically"
+msgstr "Nieuwe afleveringen van %s worden niet meer automatisch gedownload"
+
+msgctxt "#30764"
+msgid "%s new episodes were not downloaded automatically"
+msgstr "%s nieuwe afleveringen niet automatisch gedownload"
+
+msgctxt "#30765"
+msgid "%s new albums were not downloaded automatically"
+msgstr "%s nieuwe albums niet automatisch gedownload"
+
+msgctxt "#30766"
+msgid "No shows are set to download new episodes"
+msgstr "Geen enkele serie downloadt nieuwe afleveringen"
+
+msgctxt "#30767"
+msgid "Show download notifications"
+msgstr "Downloadmeldingen tonen"
+
+msgctxt "#30768"
+msgid "Announce queued and completed downloads. Failures and warnings are always shown."
+msgstr "Meld downloads die in de wachtrij komen en die klaar zijn. Fouten en waarschuwingen worden altijd getoond."
+
+msgctxt "#30769"
+msgid "Delete download automatically"
+msgstr "Download automatisch verwijderen"
+
+msgctxt "#30770"
+msgid "Remove the local copy without asking. With this off, Kofin asks first each time."
+msgstr "Verwijder de lokale kopie zonder te vragen. Staat dit uit, dan vraagt Kofin het elke keer."
+
+msgctxt "#30771"
+msgid "Download %s item(s), about %s? %s free"
+msgstr "%s item(s), ongeveer %s? %s vrij"
+
+msgctxt "#30772"
+msgid "Parallel music downloads"
+msgstr "Parallelle muziekdownloads"
+
+msgctxt "#30773"
+msgid "How many tracks download at the same time. Tracks are small and mostly overhead, so this can sit well above the video figure."
+msgstr "Hoeveel nummers tegelijk downloaden. Nummers zijn klein en bestaan grotendeels uit overhead, dus dit mag ruim boven het cijfer voor video liggen."
+
+msgctxt "#30775"
+msgid "downloaded from the server"
+msgstr "gedownload van de server"
+
+msgctxt "#30776"
+msgid "Downloading subtitle..."
+msgstr "Ondertiteling downloaden..."
+
+msgctxt "#30777"
+msgid "Jellyfin account settings"
+msgstr "Jellyfin-accountinstellingen"
+
+msgctxt "#30778"
+msgid "Audio and subtitle preferences stored on the server against your Jellyfin account. They apply to every client you sign in from, not just this one."
+msgstr "Audio- en ondertitelvoorkeuren die op de server bij je Jellyfin-account zijn opgeslagen. Ze gelden voor elke client waarop je je aanmeldt, niet alleen voor deze."
+
+msgctxt "#30779"
+msgid "Jellyfin settings for %s"
+msgstr "Jellyfin-instellingen voor %s"
+
+msgctxt "#30780"
+msgid "Preferred audio language"
+msgstr "Voorkeurstaal voor audio"
+
+msgctxt "#30781"
+msgid "Play default audio track"
+msgstr "Standaard audiospoor afspelen"
+
+msgctxt "#30782"
+msgid "Preferred subtitle language"
+msgstr "Voorkeurstaal voor ondertiteling"
+
+msgctxt "#30783"
+msgid "Subtitle mode"
+msgstr "Ondertitelmodus"
+
+msgctxt "#30784"
+msgid "Remember audio selections"
+msgstr "Audiokeuzes onthouden"
+
+msgctxt "#30785"
+msgid "Remember subtitle selections"
+msgstr "Ondertitelkeuzes onthouden"
+
+msgctxt "#30786"
+msgid "Enabled"
+msgstr "Ingeschakeld"
+
+msgctxt "#30787"
+msgid "Disabled"
+msgstr "Uitgeschakeld"
+
+msgctxt "#30788"
+msgid "Any"
+msgstr "Elke"
+
+msgctxt "#30789"
+msgid "Default"
+msgstr "Standaard"
+
+msgctxt "#30790"
+msgid "Always"
+msgstr "Altijd"
+
+msgctxt "#30791"
+msgid "Only forced"
+msgstr "Alleen geforceerd"
+
+msgctxt "#30792"
+msgid "None"
+msgstr "Geen"
+
+msgctxt "#30793"
+msgid "Smart"
+msgstr "Slim"
+
+msgctxt "#30794"
+msgid "Not applied here: \"Use Jellyfin's default tracks\" is off"
+msgstr "Hier niet toegepast: \"Jellyfins standaardsporen gebruiken\" staat uit"
+
+msgctxt "#30795"
+msgid "Could not load your Jellyfin settings"
+msgstr "Kon je Jellyfin-instellingen niet laden"
+
+msgctxt "#30796"
+msgid "Could not save to the server"
+msgstr "Kon niet opslaan op de server"
+
+msgctxt "#30797"
+msgid "Your Jellyfin account is not allowed to change these settings"
+msgstr "Je Jellyfin-account mag deze instellingen niet wijzigen"
+
+msgctxt "#30798"
+msgid "Skip movie imports larger than"
+msgstr "Filmimporten overslaan groter dan"
+
+msgctxt "#30799"
+msgid "When a sync adds more new movies than this at once, none of them are downloaded — a bulk import is rarely a request to fill the disk. Raise it if you want big additions pulled automatically."
+msgstr "Wanneer een synchronisatie in één keer meer nieuwe films toevoegt dan dit, wordt er geen enkele gedownload — een bulkimport is zelden een verzoek om de schijf te vullen. Verhoog dit als je wilt dat grote toevoegingen automatisch worden opgehaald."
+
+msgctxt "#30800"
+msgid "Skip episode imports larger than"
+msgstr "Afleveringimporten overslaan groter dan"
+
+msgctxt "#30801"
+msgid "When a sync adds more new episodes than this at once, none of them are downloaded. Shows you have subscribed to are exempt — a subscription is a standing order."
+msgstr "Wanneer een synchronisatie in één keer meer nieuwe afleveringen toevoegt dan dit, wordt er geen enkele gedownload. Series waarop je bent geabonneerd zijn uitgezonderd — een abonnement is een doorlopende opdracht."
+
+msgctxt "#30802"
+msgid "Skip album imports larger than"
+msgstr "Albumimporten overslaan groter dan"
+
+msgctxt "#30803"
+msgid "When a sync adds more new albums than this at once, none of them are downloaded. Counted in albums, not tracks."
+msgstr "Wanneer een synchronisatie in één keer meer nieuwe albums toevoegt dan dit, wordt er geen enkele gedownload. Geteld in albums, niet in nummers."
+
+msgctxt "#30810"
+msgid "Needs %s, only %s free"
+msgstr "Vereist %s, maar %s vrij"
+
+msgctxt "#30804"
+msgid "Delete all downloads"
+msgstr "Alle downloads verwijderen"
+
+msgctxt "#30805"
+msgid "Delete every downloaded file from this device and stop keeping playlists and music libraries in sync. The items stay in your library and play from the server again."
+msgstr "Verwijder elk gedownload bestand van dit apparaat en stop met het gesynchroniseerd houden van afspeellijsten en muziekbibliotheken. De items blijven in je bibliotheek en spelen weer af vanaf de server."
+
+msgctxt "#30806"
+msgid "Delete all %s download(s), freeing about %s?"
+msgstr "Alle %s download(s) verwijderen, ca. %s vrij?"
+
+msgctxt "#30807"
+msgid "There are no downloads to delete"
+msgstr "Geen downloads om te verwijderen"
+
+msgctxt "#30808"
+msgid "Pause downloads during playback"
+msgstr "Downloads pauzeren tijdens afspelen"
+
+msgctxt "#30809"
+msgid "Do not start new downloads while something is playing, video or music. A file already downloading finishes; the rest wait until playback stops."
+msgstr "Start geen nieuwe downloads terwijl er iets speelt, video of muziek. Een bestand dat al aan het downloaden is, wordt afgemaakt; de rest wacht tot het afspelen stopt."
+
+msgctxt "#30811"
+msgid "Delete stale downloads"
+msgstr "Verouderde downloads verwijderen"
+
+msgctxt "#30812"
+msgid "Remove downloaded files nobody has played for a while. Anything you are part-way through is kept, however long it sits. The items stay in your library and play from the server again."
+msgstr "Verwijder gedownloade bestanden die niemand een tijd lang heeft afgespeeld. Alles waar je halverwege in bent, blijft bewaard, hoe lang het er ook staat. De items blijven in je bibliotheek en spelen weer af vanaf de server."
+
+msgctxt "#30813"
+msgid "Delete after (days)"
+msgstr "Verwijderen na (dagen)"
+
+msgctxt "#30814"
+msgid "How long a download may sit unplayed before it is removed. Playing it again starts the count over."
+msgstr "Hoe lang een download onafgespeeld mag blijven staan voordat die wordt verwijderd. Hem opnieuw afspelen laat de telling opnieuw beginnen."
+
+msgctxt "#30817"
+msgid "All"
+msgstr "Alle"
+
+msgctxt "#30818"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30819"
+msgid "Show cast in add-on listings"
+msgstr "Cast tonen in add-onlijsten"
+
+msgctxt "#30820"
+msgid "Fetch cast and crew for the shorter add-on listings — Recently added, In progress, Next up, Continue watching, search results and a show's episodes — so the information dialog can show them. Whole-library listings never fetch it, because the server needs about a second for every 40 items. The Kodi library always has cast."
+msgstr "Haalt cast en crew op voor de korte lijsten van de add-on — Recent toegevoegd, Bezig met kijken, Volgende aflevering, Verder kijken, zoekresultaten en de afleveringen van een serie — zodat het informatievenster ze kan tonen. Lijsten die een hele bibliotheek beslaan doen dat nooit, omdat de server ongeveer een seconde per 40 items nodig heeft. De Kodi-bibliotheek heeft de cast altijd."
+
+msgctxt "#30821"
+msgid "Server error — %s"
+msgstr "Serverfout — %s"
+
+msgctxt "#30823"
+msgid "Download deleted: %s"
+msgstr "Download verwijderd: %s"
+
+msgctxt "#30824"
+msgid "%s download(s) deleted"
+msgstr "%s download(s) verwijderd"
+
+msgctxt "#30825"
+msgid "Find servers on local network"
+msgstr "Servers op lokaal netwerk zoeken"
+
+msgctxt "#30826"
+msgid "Looks for Jellyfin servers on this network and lists the ones that answer. The one you choose is filled into \"Server address\"."
+msgstr "Zoekt naar Jellyfin-servers op dit netwerk en toont de servers die antwoorden. De server die je kiest wordt ingevuld bij \"Serveradres\"."
+
+msgctxt "#30827"
+msgid "Searching for Jellyfin servers…"
+msgstr "Zoeken naar Jellyfin-servers…"
+
+msgctxt "#30828"
+msgid "Select a server"
+msgstr "Kies een server"
+
+msgctxt "#30829"
+msgid "No Jellyfin servers answered — enter the address manually"
+msgstr "Geen enkele Jellyfin-server antwoordde — voer het adres handmatig in"
+
+msgctxt "#30830"
+msgid "did not answer"
+msgstr "gaf geen antwoord"
+
+msgctxt "#30831"
+msgid "%s did not answer — the address it gave may not work here"
+msgstr "%s gaf geen antwoord — het opgegeven adres werkt hier misschien niet"
+
+msgctxt "#30832"
+msgid "Storage used"
+msgstr "Gebruikte opslag"
+
+msgctxt "#30833"
+msgid "Show where the downloads are kept and how much space each kind is using."
+msgstr "Laat zien waar de downloads staan en hoeveel ruimte elke soort inneemt."
+
+msgctxt "#30834"
+msgid "Other files in this folder"
+msgstr "Andere bestanden in deze map"
+
+msgctxt "#30835"
+msgid "Nothing has been downloaded yet"
+msgstr "Er is nog niets gedownload"
+
+msgctxt "#30836"
+msgid "Folder too large to measure fully — the totals above are partial"
+msgstr "Map te groot om helemaal te meten — de totalen hierboven zijn onvolledig"
+
+msgctxt "#30837"
+msgid "Watch in sync with other Jellyfin clients."
+msgstr "Kijk synchroon met andere Jellyfin-clients."
+
+msgctxt "#30841"
+msgid "Save to Jellyfin"
+msgstr "Opslaan in Jellyfin"
+
+msgctxt "#30842"
+msgid "This playlist mixes audio and video, which cannot be saved as one Jellyfin playlist"
+msgstr "Deze afspeellijst mengt audio en video en kan niet als één Jellyfin-afspeellijst worden opgeslagen"
+
+msgctxt "#30843"
+msgid "Playlist saved to Jellyfin"
+msgstr "Afspeellijst opgeslagen in Jellyfin"
+
+msgctxt "#30844"
+msgid "No library items in this playlist to save"
+msgstr "Geen bibliotheekitems in deze afspeellijst om op te slaan"
+
+msgctxt "#30845"
+msgid "Show library update progress"
+msgstr "Voortgang van bibliotheekupdate tonen"
+
+msgctxt "#30846"
+msgid "Show Kodi's library-update progress while the library syncs."
+msgstr "Toon Kodi's voortgangsweergave voor bibliotheekupdates tijdens het synchroniseren."
+
+msgctxt "#30849"
+msgid "Download & keep in sync"
+msgstr "Downloaden en synchroon houden"
+
+msgctxt "#30850"
+msgid "Stop keeping downloads in sync"
+msgstr "Downloads niet meer synchroniseren"
+
+msgctxt "#30851"
+msgid "Manage playlist downloads"
+msgstr "Afspeellijstdownloads beheren"
+
+msgctxt "#30852"
+msgid "Manage music library downloads"
+msgstr "Muziekbibliotheekdownloads beheren"
+
+msgctxt "#30853"
+msgid "Content not downloaded"
+msgstr "Inhoud niet gedownload"
+
+msgctxt "#30854"
+msgid "Review subscribed playlists; untick to stop syncing downloads."
+msgstr "Bekijk gevolgde afspeellijsten; vink ze uit om het synchroniseren van downloads te stoppen."
+
+msgctxt "#30855"
+msgid "Review subscribed music libraries; untick to stop syncing downloads."
+msgstr "Bekijk gevolgde muziekbibliotheken; vink ze uit om het synchroniseren van downloads te stoppen."
+
+msgctxt "#30856"
+msgid "Library nodes and playlists"
+msgstr "Bibliotheekknooppunten en afspeellijsten"
+
+msgctxt "#30857"
+msgid "Create Kodi library nodes and smart playlists for the synced video libraries, and copy Jellyfin playlists into Kodi under Videos → Playlists → Kofin and Music → Playlists → Kofin. Turning this off removes every node and playlist Kofin created."
+msgstr "Maak Kodi-bibliotheekknooppunten en slimme afspeellijsten voor de gesynchroniseerde videobibliotheken en kopieer Jellyfin-afspeellijsten naar Kodi onder Video's → Afspeellijsten → Kofin en Muziek → Afspeellijsten → Kofin. Uitgeschakeld worden alle knooppunten en afspeellijsten die Kofin heeft gemaakt verwijderd."
+
+msgctxt "#30859"
+msgid "Library status"
+msgstr "Bibliotheekstatus"
+
+msgctxt "#30860"
+msgid "What is synced, what is still pending and what the sync is doing now."
+msgstr "Wat gesynchroniseerd is, wat nog in de wachtrij staat en wat de synchronisatie nu doet."
+
+msgctxt "#30861"
+msgid "Transcode music whose bitrate is above the maximum set below. Off, songs play from the server untouched."
+msgstr "Transcodeer muziek met een bitrate boven het hieronder ingestelde maximum. Uit: nummers worden ongewijzigd vanaf de server afgespeeld."
+
+msgctxt "#30862"
+msgid "in Kodi / on the server"
+msgstr "in Kodi / op de server"
+
+msgctxt "#30863"
+msgid "Pending"
+msgstr "In afwachting"
+
+msgctxt "#30864"
+msgid "Failed"
+msgstr "Mislukt"
+
+msgctxt "#30865"
+msgid "Last full update"
+msgstr "Laatste volledige update"
+
+msgctxt "#30867"
+msgid "Repair to add codec details"
+msgstr "Repareer om codecdetails toe te voegen"
+
+msgctxt "#30868"
+msgid "Kodi cannot import"
+msgstr "Kodi kan niet importeren"
+
+msgctxt "#30869"
+msgid "Scheduled full update"
+msgstr "Geplande volledige update"
+
+msgctxt "#30870"
+msgid "How often to re-read every library from the server. Turn this on if the server lacks the KofinSyncQueue plugin, or deletions there won't reach Kodi."
+msgstr "Hoe vaak alle bibliotheken opnieuw van de server worden gelezen. Zet dit aan als de server de plug-in KofinSyncQueue niet heeft, anders bereiken verwijderingen Kodi niet."
+
+msgctxt "#30871"
+msgid "Daily"
+msgstr "Dagelijks"
+
+msgctxt "#30872"
+msgid "Weekly"
+msgstr "Wekelijks"
+
+msgctxt "#30873"
+msgid "Update all libraries now?"
+msgstr "Alle bibliotheken nu bijwerken?"
+
+msgctxt "#30874"
+msgid "Re-read every library from the server now."
+msgstr "Leest nu alle bibliotheken opnieuw van de server."
+
+msgctxt "#30876"
+msgid "Not on this Kodi"
+msgstr "Niet op deze Kodi"
+
+msgctxt "#30877"
+msgid "Season plots"
+msgstr "Seizoensbeschrijvingen"
+
+msgctxt "#30878"
+msgid "Favorite episodes"
+msgstr "Favoriete afleveringen"
+
+msgctxt "#30879"
+msgid "Removing emptied collections"
+msgstr "Verwijderen van leeggemaakte verzamelingen"
+
+msgctxt "#30880"
+msgid "Movie versions"
+msgstr "Filmversies"
+
+msgctxt "#30881"
+msgid "Stream flags"
+msgstr "Spoormarkeringen"
+
+msgctxt "#30882"
+msgid "Song date added"
+msgstr "Datum toegevoegd van nummers"
+
+msgctxt "#30883"
+msgid "Removing dropped versions and extras"
+msgstr "Verwijderen van verwijderde versies en extra's"
+
+msgctxt "#30884"
+msgid "Fine sync"
+msgstr "Fijnsynchronisatie"
+
+msgctxt "#30885"
+msgid "Kodi imports a special only with an episode number. Give these one on the server, or play them from the Kofin add-on."
+msgstr "Kodi importeert een special alleen met een afleveringsnummer. Geef ze er een op de server of speel ze af vanuit de Kofin-add-on."
+
+msgctxt "#30886"
+msgid "KofinSyncQueue"
+msgstr "KofinSyncQueue"
+
+msgctxt "#30887"
+msgid "Available"
+msgstr "Beschikbaar"
+
+msgctxt "#30888"
+msgid "this profile holds a library from an older Kofin"
+msgstr "dit profiel bevat een bibliotheek van een oudere Kofin"
+
+msgctxt "#30889"
+msgid "Kofin cannot use it. To clean it, go back to Kofin 0.29:"
+msgstr "Kofin kan die niet gebruiken. Ga terug naar Kofin 0.29 om hem op te schonen:"
+
+msgctxt "#30890"
+msgid "Open Kofin in Kodi's add-on list, select Versions and choose 0.29."
+msgstr "Open Kofin in Kodi's lijst met add-ons, selecteer Versies en kies 0.29."
+
+msgctxt "#30891"
+msgid "In Kofin's settings, log out on the Account tab and run Clean databases."
+msgstr "Meld je in de Kofin-instellingen af op het tabblad Account en voer Databases opschonen uit."
+
+msgctxt "#30892"
+msgid "When Kodi has restarted, open Kofin again, select Versions and choose the newest version. Then log in and choose the libraries to sync."
+msgstr "Open Kofin opnieuw als Kodi opnieuw is opgestart, selecteer Versies en kies de nieuwste versie. Meld je daarna aan en kies de bibliotheken om te synchroniseren."
+
+msgctxt "#30893"
+msgid "Alternatively, close Kodi and delete its video and music databases by hand, as the Kofin wiki describes:"
+msgstr "Je kunt ook Kodi sluiten en de video- en muziekdatabases met de hand verwijderen, zoals de Kofin-wiki beschrijft:"
+
+msgctxt "#30894"
+msgid "No longer on the server"
+msgstr "Niet meer op de server"
+
+msgctxt "#30895"
+msgid "%s is no longer on the server and was removed from the library"
+msgstr "%s staat niet meer op de server en is uit de bibliotheek verwijderd"
+
+msgctxt "#30896"
+msgid "The synced libraries stay in Kodi until you log in again; a different account removes them."
+msgstr "De gesynchroniseerde bibliotheken blijven in Kodi tot je opnieuw inlogt; een ander account verwijdert ze."
+
+msgctxt "#30897"
+msgid "Queued %s of %s tracks"
+msgstr "%s van %s nummers in de wachtrij gezet"

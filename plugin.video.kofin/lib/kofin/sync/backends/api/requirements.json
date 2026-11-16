@@ -1,0 +1,314 @@
+{
+  "minimum_kodi_major": 22,
+  "system_addons": {
+    "xbmc.addon": "21.90.802",
+    "xbmc.python": "3.1.0"
+  },
+  "methods": {
+    "VideoLibrary.SetSourceContent": {
+      "path": [],
+      "content": [
+        "movies",
+        "tvshows",
+        "musicvideos",
+        "none"
+      ],
+      "scraperid": [],
+      "containssingleitem": [],
+      "refresh": [],
+      "clearmode": [
+        "clear",
+        "exclude",
+        "remove"
+      ]
+    },
+    "VideoLibrary.Scan": {
+      "directory": [],
+      "showdialogs": []
+    },
+    "AudioLibrary.Scan": {
+      "directory": [],
+      "showdialogs": []
+    },
+    "Files.SetFileDetails": {
+      "file": [],
+      "media": [],
+      "playcount": [],
+      "lastplayed": [],
+      "resume": []
+    },
+    "VideoLibrary.SetMovieDetails": {
+      "movieid": [],
+      "title": [],
+      "plot": [],
+      "playcount": [],
+      "lastplayed": [],
+      "resume": [],
+      "uniqueid": [],
+      "ratings": [],
+      "art": [],
+      "tag": [],
+      "set": [],
+      "dateadded": []
+    },
+    "VideoLibrary.RefreshMovie": {
+      "movieid": []
+    },
+    "VideoLibrary.RemoveMovie": {
+      "movieid": []
+    },
+    "VideoLibrary.SetTVShowDetails": {
+      "tvshowid": [],
+      "title": [],
+      "plot": [],
+      "uniqueid": [],
+      "ratings": [],
+      "art": [],
+      "tag": [],
+      "dateadded": [],
+      "status": [],
+      "premiered": [],
+      "genre": [],
+      "studio": [],
+      "runtime": []
+    },
+    "VideoLibrary.RefreshTVShow": {
+      "tvshowid": [],
+      "refreshepisodes": []
+    },
+    "VideoLibrary.RemoveTVShow": {
+      "tvshowid": []
+    },
+    "VideoLibrary.SetEpisodeDetails": {
+      "episodeid": [],
+      "title": [],
+      "plot": [],
+      "playcount": [],
+      "lastplayed": [],
+      "resume": [],
+      "uniqueid": [],
+      "ratings": [],
+      "art": [],
+      "dateadded": [],
+      "season": [],
+      "episode": [],
+      "firstaired": [],
+      "director": [],
+      "writer": [],
+      "runtime": []
+    },
+    "VideoLibrary.RefreshEpisode": {
+      "episodeid": []
+    },
+    "VideoLibrary.RemoveEpisode": {
+      "episodeid": []
+    },
+    "VideoLibrary.SetMusicVideoDetails": {
+      "musicvideoid": [],
+      "title": [],
+      "playcount": [],
+      "lastplayed": [],
+      "resume": [],
+      "art": [],
+      "tag": [],
+      "dateadded": [],
+      "artist": [],
+      "album": [],
+      "track": [],
+      "genre": [],
+      "studio": [],
+      "director": [],
+      "premiered": [],
+      "uniqueid": []
+    },
+    "VideoLibrary.RefreshMusicVideo": {
+      "musicvideoid": []
+    },
+    "VideoLibrary.RemoveMusicVideo": {
+      "musicvideoid": []
+    },
+    "AudioLibrary.SetSongDetails": {
+      "songid": [],
+      "playcount": [],
+      "lastplayed": [],
+      "art": []
+    },
+    "AudioLibrary.SetAlbumDetails": {
+      "albumid": [],
+      "title": [],
+      "art": [],
+      "description": []
+    },
+    "AudioLibrary.SetArtistDetails": {
+      "artistid": [],
+      "artist": [],
+      "art": [],
+      "description": []
+    },
+    "VideoLibrary.GetMovies": {
+      "properties": [],
+      "limits": []
+    },
+    "VideoLibrary.GetTVShows": {
+      "properties": [],
+      "limits": []
+    },
+    "VideoLibrary.GetEpisodes": {
+      "tvshowid": [],
+      "properties": [],
+      "limits": []
+    },
+    "VideoLibrary.GetSeasons": {
+      "tvshowid": [],
+      "properties": [],
+      "limits": []
+    },
+    "VideoLibrary.GetMusicVideos": {
+      "properties": [],
+      "limits": []
+    },
+    "VideoLibrary.GetMovieSets": {
+      "properties": [],
+      "limits": []
+    },
+    "AudioLibrary.GetSongs": {
+      "properties": [],
+      "limits": [],
+      "filter": [],
+      "sort": []
+    },
+    "AudioLibrary.GetAlbums": {
+      "properties": [],
+      "limits": [],
+      "filter": []
+    },
+    "AudioLibrary.GetArtists": {
+      "properties": [],
+      "limits": [],
+      "filter": [],
+      "albumartistsonly": []
+    },
+    "VideoLibrary.SetSeasonDetails": {
+      "seasonid": [],
+      "title": [],
+      "art": []
+    },
+    "VideoLibrary.SetMovieSetDetails": {
+      "setid": [],
+      "title": [],
+      "plot": [],
+      "art": []
+    },
+    "VideoLibrary.GetMovieSetDetails": {
+      "setid": [],
+      "properties": []
+    },
+    "VideoLibrary.Clean": {
+      "showdialogs": [],
+      "directory": []
+    },
+    "AudioLibrary.GetSongDetails": {
+      "songid": [],
+      "properties": []
+    },
+    "AudioLibrary.GetAlbumDetails": {
+      "albumid": [],
+      "properties": []
+    },
+    "AudioLibrary.GetArtistDetails": {
+      "artistid": [],
+      "properties": []
+    }
+  },
+  "python": {
+    "python_video_methods": [
+      "setUniqueID",
+      "setCast",
+      "addVideoStream",
+      "addSeason",
+      "setSortSeason",
+      "setSortEpisode",
+      "setTags"
+    ],
+    "python_music_methods": [
+      "setTitle",
+      "setArtist",
+      "setAlbum",
+      "setMusicBrainzTrackID",
+      "setPlayCount",
+      "setLastPlayed"
+    ],
+    "python_stream_methods": []
+  },
+  "features": {
+    "season_plot": {
+      "methods": {
+        "VideoLibrary.SetSeasonDetails": {
+          "plot": []
+        }
+      }
+    },
+    "episode_tags": {
+      "methods": {
+        "VideoLibrary.SetEpisodeDetails": {
+          "tag": []
+        }
+      },
+      "fields": {
+        "Video.Fields.Episode": [
+          "tag"
+        ]
+      }
+    },
+    "remove_set": {
+      "methods": {
+        "VideoLibrary.RemoveMovieSet": {
+          "setid": []
+        }
+      }
+    },
+    "video_versions": {
+      "python": {
+        "python_video_methods": [
+          "setHasVideoVersions",
+          "setIsDefaultVideoVersion"
+        ]
+      }
+    },
+    "stream_flags": {
+      "python": {
+        "python_stream_methods": [
+          "AudioStreamDetail.setFlags",
+          "SubtitleStreamDetail.setFlags"
+        ]
+      }
+    },
+    "song_date_added": {
+      "python": {
+        "python_music_methods": [
+          "setDateAdded"
+        ]
+      }
+    },
+    "asset_clean": {
+      "system_addons": {
+        "xbmc.python": "3.2.0"
+      }
+    },
+    "tempo": {
+      "methods": {
+        "Player.SetTempo": {
+          "correction": []
+        }
+      }
+    }
+  },
+  "behavioral_gates": [
+    "Run the behavioural probes on each Kodi the build installs on: Piers 22.0, stock Kodi 23 and a Kodi 23 carrying the kontell/xbmc changes, and record each build's identity.",
+    "Music requires loaded tags, complete published snapshots, metadata rescan policy and post-import userdata.",
+    "Piers deletes tracks on failed/partial plugin listing; native music rollout requires recovery tests and an explicit reliability decision.",
+    "Refresh may change native IDs and overwrite userdata: reconcile and restore before reporting success.",
+    "ScanFinished and immediate OK are insufficient without ownership-checked readback.",
+    "A feature is on by its probe alone; a new Kodi build still needs behavioural qualification of what the probe turned on."
+  ]
+}

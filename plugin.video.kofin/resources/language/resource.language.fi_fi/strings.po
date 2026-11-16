@@ -1,0 +1,1961 @@
+# Kodi Media Center language file
+# Addon Name: Kofin
+# Addon id: plugin.video.kofin
+# Addon Provider: kontell
+# Note: machine-translated (LLM), pending native review.
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.kofin\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-08-14 00:00+0000\n"
+"Last-Translator: Claude (machine translation) <noreply@anthropic.com>\n"
+"Language-Team: Finnish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi_FI\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "Addon Summary"
+msgid "Jellyfin client for seamless Kodi integration"
+msgstr "Jellyfin-asiakas saumattomaan Kodi-integraatioon"
+
+msgctxt "Addon Description"
+msgid "Play movies, shows & music from a Jellyfin server."
+msgstr "Toista elokuvia, sarjoja ja musiikkia Jellyfin-palvelimelta."
+
+msgctxt "#30010"
+msgid "Play with transcoding"
+msgstr "Toista transkoodattuna"
+
+msgctxt "#30011"
+msgid "Quick Connect"
+msgstr "Quick Connect"
+
+msgctxt "#30012"
+msgid "Username and password"
+msgstr "Käyttäjänimi ja salasana"
+
+msgctxt "#30013"
+msgid "Username"
+msgstr "Käyttäjänimi"
+
+msgctxt "#30014"
+msgid "Password"
+msgstr "Salasana"
+
+msgctxt "#30015"
+msgid "Enter code [B]%s[/B] in the Jellyfin app or web interface."
+msgstr "Anna koodi [B]%s[/B] Jellyfin-sovelluksessa tai selainkäyttöliittymässä."
+
+msgctxt "#30016"
+msgid "Logged in as %s"
+msgstr "Kirjautunut käyttäjänä %s"
+
+msgctxt "#30017"
+msgid "Login failed: wrong username or password"
+msgstr "Kirjautuminen epäonnistui: väärä käyttäjänimi tai salasana"
+
+msgctxt "#30018"
+msgid "Server unreachable"
+msgstr "Palvelinta ei tavoiteta"
+
+msgctxt "#30019"
+msgid "Log out from %s?"
+msgstr "Kirjaudutaanko ulos palvelimelta %s?"
+
+msgctxt "#30020"
+msgid "Logged out"
+msgstr "Kirjauduttu ulos"
+
+msgctxt "#30021"
+msgid "Connection OK — %s (%s)"
+msgstr "Yhteys OK — %s (%s)"
+
+msgctxt "#30022"
+msgid "Session rejected — log in again from the Account tab"
+msgstr "Istunto hylättiin — kirjaudu uudelleen Tili-välilehdeltä"
+
+msgctxt "#30023"
+msgid "Restarting the Kofin service"
+msgstr "Käynnistetään Kofin-palvelu uudelleen"
+
+msgctxt "#30024"
+msgid "Quick Connect timed out"
+msgstr "Quick Connect aikakatkaistiin"
+
+msgctxt "#30025"
+msgid "Already logged in"
+msgstr "Olet jo kirjautunut sisään"
+
+msgctxt "#30026"
+msgid "Not logged in"
+msgstr "Et ole kirjautunut sisään"
+
+msgctxt "#30027"
+msgid "Log in to %s"
+msgstr "Kirjaudu palvelimelle %s"
+
+msgctxt "#30050"
+msgid "Account"
+msgstr "Tili"
+
+msgctxt "#30051"
+msgid "Connect to your Jellyfin server and manage the session."
+msgstr "Yhdistä Jellyfin-palvelimeesi ja hallitse istuntoa."
+
+msgctxt "#30052"
+msgid "Server address"
+msgstr "Palvelimen osoite"
+
+msgctxt "#30053"
+msgid "Host name, IP address or full URL of the Jellyfin server. A bare host uses http on port 8096."
+msgstr "Jellyfin-palvelimen isäntänimi, IP-osoite tai koko URL-osoite. Pelkkä isäntänimi käyttää http:tä portissa 8096."
+
+msgctxt "#30054"
+msgid "Log in…"
+msgstr "Kirjaudu sisään…"
+
+msgctxt "#30055"
+msgid "Connect to the server above using Quick Connect or a username and password."
+msgstr "Yhdistä yllä olevaan palvelimeen Quick Connectilla tai käyttäjänimellä ja salasanalla."
+
+msgctxt "#30056"
+msgid "Server"
+msgstr "Palvelin"
+
+msgctxt "#30057"
+msgid "The connected Jellyfin server."
+msgstr "Yhdistetty Jellyfin-palvelin."
+
+msgctxt "#30058"
+msgid "Logged-in user"
+msgstr "Kirjautunut käyttäjä"
+
+msgctxt "#30059"
+msgid "The Jellyfin user this device plays and reports as."
+msgstr "Jellyfin-käyttäjä, jona tämä laite toistaa ja raportoi."
+
+msgctxt "#30060"
+msgid "Test connection"
+msgstr "Testaa yhteys"
+
+msgctxt "#30061"
+msgid "Check that the server is reachable and the session is still valid."
+msgstr "Tarkista, että palvelin on tavoitettavissa ja istunto on yhä voimassa."
+
+msgctxt "#30062"
+msgid "Log out"
+msgstr "Kirjaudu ulos"
+
+msgctxt "#30063"
+msgid "End the session on the server and forget it on this device. The server address is kept."
+msgstr "Päätä istunto palvelimella ja unohda se tältä laitteelta. Palvelimen osoite säilytetään."
+
+msgctxt "#30064"
+msgid "Restart Kofin"
+msgstr "Käynnistä Kofin uudelleen"
+
+msgctxt "#30065"
+msgid "Restart the background service without restarting Kodi."
+msgstr "Käynnistä taustapalvelu uudelleen käynnistämättä Kodia."
+
+msgctxt "#30071"
+msgid "Advanced"
+msgstr "Lisäasetukset"
+
+msgctxt "#30072"
+msgid "Notification, browsing, playback and deletion options."
+msgstr "Ilmoitusten, selaamisen, toiston ja poistamisen asetukset."
+
+msgctxt "#30073"
+msgid "Enable Delete from server"
+msgstr "Ota käyttöön Poista palvelimelta"
+
+msgctxt "#30074"
+msgid "Adds a Delete entry to an item's 'Jellyfin actions' context menu. Deletion is permanent: the file itself is removed on the Jellyfin server, for every user."
+msgstr "Lisää Poista-toiminnon kohteen Jellyfin-toiminnot-valikkoon. Poisto on pysyvä: itse tiedosto poistetaan Jellyfin-palvelimelta kaikilta käyttäjiltä."
+
+msgctxt "#30075"
+msgid "Delete without confirmation"
+msgstr "Poista ilman vahvistusta"
+
+msgctxt "#30076"
+msgid "Delete the item as soon as the entry is picked, with no 'are you sure?' prompt. The deletion is still permanent and applies on the server."
+msgstr "Poistaa kohteen heti, kun toiminto valitaan, ilman ”oletko varma?” -kysymystä. Poisto on silti pysyvä ja koskee palvelinta."
+
+msgctxt "#30077"
+msgid "Offer to delete after watching"
+msgstr "Tarjoa poistoa katselun jälkeen"
+
+msgctxt "#30078"
+msgid "When a movie or episode finishes, ask whether to delete it from the server. Always asks, whatever 'Delete without confirmation' is set to."
+msgstr "Kun elokuva tai jakso päättyy, kysy poistetaanko se palvelimelta. Kysyy aina riippumatta ”Poista ilman vahvistusta” -asetuksesta."
+
+msgctxt "#30079"
+msgid "Who's watching shortlist"
+msgstr "Kuka katsoo? -lista"
+
+msgctxt "#30080"
+msgid "Choose which server users the addon's Who's watching? entry offers. \"All\" offers everyone. With nothing selected the entry is hidden and anyone already on the session is removed."
+msgstr "Valitse, ketkä palvelimen käyttäjät lisäosan Kuka katsoo? -toiminto tarjoaa. \"Kaikki\" tarjoaa jokaista. Jos mitään ei ole valittu, toiminto piilotetaan ja istunnossa jo olevat poistetaan."
+
+msgctxt "#30030"
+msgid "All"
+msgstr "Kaikki"
+
+msgctxt "#30031"
+msgid "Recently added"
+msgstr "Viimeksi lisätyt"
+
+msgctxt "#30032"
+msgid "Next up"
+msgstr "Seuraavaksi"
+
+msgctxt "#30033"
+msgid "In progress"
+msgstr "Kesken"
+
+msgctxt "#30034"
+msgid "Unwatched"
+msgstr "Katsomattomat"
+
+msgctxt "#30035"
+msgid "Favourites"
+msgstr "Suosikit"
+
+msgctxt "#30036"
+msgid "Genres"
+msgstr "Lajityypit"
+
+msgctxt "#30037"
+msgid "Random"
+msgstr "Satunnainen"
+
+msgctxt "#30038"
+msgid "Sets"
+msgstr "Kokoelmat"
+
+msgctxt "#30039"
+msgid "Artists"
+msgstr "Esittäjät"
+
+msgctxt "#30040"
+msgid "Albums"
+msgstr "Albumit"
+
+msgctxt "#30049"
+msgid "Continue watching"
+msgstr "Jatka katselua"
+
+msgctxt "#30100"
+msgid "Transcoding"
+msgstr "Transkoodaus"
+
+msgctxt "#30101"
+msgid "When and how the server converts media for this device."
+msgstr "Milloin ja miten palvelin muuntaa mediaa tälle laitteelle."
+
+msgctxt "#30102"
+msgid "Force direct play"
+msgstr "Pakota suora toisto"
+
+msgctxt "#30103"
+msgid "Always play the original video file. Overrides every other video transcoding setting; playback fails if the device cannot handle the media. Music is unaffected — see 'Transcode music'."
+msgstr "Toista aina alkuperäinen videotiedosto. Ohittaa kaikki muut videon transkoodausasetukset; toisto epäonnistuu, jos laite ei osaa käsitellä mediaa. Ei koske musiikkia — katso ”Transkoodaa musiikki”."
+
+msgctxt "#30104"
+msgid "Force remux"
+msgstr "Pakota remuxaus"
+
+msgctxt "#30105"
+msgid "Remux into HLS and copy the source codecs. Does not use Maximum audio channels, Maximum streaming bitrate or Transcode audio bitrate below — those would re-encode a listed codec. Direct play codecs, Allowed HDR types and Maximum resolution still apply."
+msgstr "Remuxaa HLS:ään ja kopioi lähteen koodekit. Ei käytä alempana olevia asetuksia Äänikanavien enimmäismäärä, Suoratoiston enimmäisbittinopeus eikä Äänen transkoodausbittinopeus — ne koodaisivat listatun koodekin uudelleen. Suoran toiston koodekit, Sallitut HDR-tyypit ja Enimmäistarkkuus ovat yhä voimassa."
+
+msgctxt "#30106"
+msgid "Force transcode"
+msgstr "Pakota transkoodaus"
+
+msgctxt "#30107"
+msgid "Always re-encode video and audio to the preferred codecs. Honours the bitrate cap, the channel cap, allowed codecs, HDR types and resolution."
+msgstr "Koodaa videon ja äänen aina uudelleen haluttuihin koodekkeihin. Noudattaa bittinopeusrajaa, kanavarajaa, sallittuja koodekkeja, HDR-tyyppejä ja tarkkuutta."
+
+msgctxt "#30108"
+msgid "Direct play video codecs"
+msgstr "Suoran toiston videokoodekit"
+
+msgctxt "#30109"
+msgid "Video formats this device can decode. Media using formats not selected here is transcoded."
+msgstr "Videomuodot, jotka tämä laite osaa purkaa. Media, jonka muotoa ei ole valittu tässä, transkoodataan."
+
+msgctxt "#30110"
+msgid "Direct play audio codecs"
+msgstr "Suoran toiston äänikoodekit"
+
+msgctxt "#30111"
+msgid "Audio formats this device can decode or pass through. Others are transcoded."
+msgstr "Äänimuodot, jotka tämä laite osaa purkaa tai välittää eteenpäin. Muut transkoodataan."
+
+msgctxt "#30112"
+msgid "Allowed HDR types"
+msgstr "Sallitut HDR-tyypit"
+
+msgctxt "#30113"
+msgid "HDR formats the display accepts. Media in formats not selected is tone-mapped or transcoded to SDR/HDR10 by the server."
+msgstr "HDR-muodot, jotka näyttö hyväksyy. Valitsemattomissa muodoissa oleva media sävykartoitetaan tai transkoodataan palvelimella SDR- tai HDR10-muotoon."
+
+msgctxt "#30114"
+msgid "Preferred video codec"
+msgstr "Ensisijainen videokoodekki"
+
+msgctxt "#30115"
+msgid "The codec the client asks for when video must be transcoded."
+msgstr "Koodekki, jota asiakasohjelma pyytää, kun video on transkoodattava."
+
+msgctxt "#30116"
+msgid "Preferred audio codec"
+msgstr "Ensisijainen äänikoodekki"
+
+msgctxt "#30117"
+msgid "The codec the client asks for when audio must be transcoded."
+msgstr "Koodekki, jota asiakasohjelma pyytää, kun ääni on transkoodattava."
+
+msgctxt "#30118"
+msgid "Maximum audio channels"
+msgstr "Äänikanavien enimmäismäärä"
+
+msgctxt "#30119"
+msgid "Maximum number of audio channels allowed when transcoding. Streams with more channels will be downmixed. No effect on direct playback."
+msgstr "Transkoodauksessa sallittujen äänikanavien enimmäismäärä. Useampikanavaiset virrat alaskanavoidaan. Ei vaikutusta suoraan toistoon."
+
+msgctxt "#30120"
+msgid "Maximum streaming bitrate"
+msgstr "Suoratoiston enimmäisbittinopeus"
+
+msgctxt "#30121"
+msgid "Media above this bitrate is transcoded down to it."
+msgstr "Tätä bittinopeutta suurempi media transkoodataan tähän rajaan."
+
+msgctxt "#30122"
+msgid "Maximum resolution"
+msgstr "Enimmäistarkkuus"
+
+msgctxt "#30123"
+msgid "Wider media is downscaled by the server."
+msgstr "Palvelin skaalaa tätä leveämmän median alaspäin."
+
+msgctxt "#30124"
+msgid "Transcode audio bitrate"
+msgstr "Äänen transkoodausbittinopeus"
+
+msgctxt "#30125"
+msgid "Bitrate for the audio track when video is transcoded."
+msgstr "Ääniraidan bittinopeus, kun videota transkoodataan."
+
+msgctxt "#30126"
+msgid "Context menu bitrates"
+msgstr "Pikavalikon bittinopeudet"
+
+msgctxt "#30127"
+msgid "Bitrates offered by 'Play with transcoding'. With one selected the popup is skipped."
+msgstr "Bittinopeudet, joita ”Toista transkoodattuna” tarjoaa. Jos vain yksi on valittu, ponnahdusvalinta ohitetaan."
+
+msgctxt "#30129"
+msgid "Maximum music bitrate"
+msgstr "Musiikin enimmäisbittinopeus"
+
+msgctxt "#30130"
+msgid "Music above this bitrate is transcoded using the codec and bitrate below. Unlimited never transcodes."
+msgstr "Tätä bittinopeutta suurempi musiikki transkoodataan alla olevalla koodekilla ja bittinopeudella. Rajoittamaton ei transkoodaa koskaan."
+
+msgctxt "#30131"
+msgid "Music transcode codec"
+msgstr "Musiikin transkoodauskoodekki"
+
+msgctxt "#30132"
+msgid "Codec for transcoded music streams."
+msgstr "Transkoodattujen musiikkivirtojen koodekki."
+
+msgctxt "#30133"
+msgid "Music transcode bitrate"
+msgstr "Musiikin transkoodausbittinopeus"
+
+msgctxt "#30134"
+msgid "Bitrate for transcoded music streams."
+msgstr "Transkoodattujen musiikkivirtojen bittinopeus."
+
+msgctxt "#30135"
+msgid "Transcode music"
+msgstr "Transkoodaa musiikki"
+
+msgctxt "#30150"
+msgid "H.264 (AVC)"
+msgstr "H.264 (AVC)"
+
+msgctxt "#30151"
+msgid "H.264 10-bit (Hi10P)"
+msgstr "H.264 10-bit (Hi10P)"
+
+msgctxt "#30152"
+msgid "H.265 (HEVC)"
+msgstr "H.265 (HEVC)"
+
+msgctxt "#30153"
+msgid "HEVC RExt (4:2:2/4:4:4)"
+msgstr "HEVC RExt (4:2:2/4:4:4)"
+
+msgctxt "#30154"
+msgid "AV1"
+msgstr "AV1"
+
+msgctxt "#30155"
+msgid "MPEG-2"
+msgstr "MPEG-2"
+
+msgctxt "#30156"
+msgid "VP9"
+msgstr "VP9"
+
+msgctxt "#30157"
+msgid "VC-1"
+msgstr "VC-1"
+
+msgctxt "#30158"
+msgid "AAC"
+msgstr "AAC"
+
+msgctxt "#30159"
+msgid "MP2"
+msgstr "MP2"
+
+msgctxt "#30160"
+msgid "MP3"
+msgstr "MP3"
+
+msgctxt "#30161"
+msgid "AC3 (Dolby Digital)"
+msgstr "AC3 (Dolby Digital)"
+
+msgctxt "#30162"
+msgid "E-AC3 (Dolby Digital Plus)"
+msgstr "E-AC3 (Dolby Digital Plus)"
+
+msgctxt "#30163"
+msgid "Opus"
+msgstr "Opus"
+
+msgctxt "#30164"
+msgid "FLAC"
+msgstr "FLAC"
+
+msgctxt "#30165"
+msgid "DTS"
+msgstr "DTS"
+
+msgctxt "#30166"
+msgid "HDR10"
+msgstr "HDR10"
+
+msgctxt "#30167"
+msgid "HLG"
+msgstr "HLG"
+
+msgctxt "#30168"
+msgid "HDR10+"
+msgstr "HDR10+"
+
+msgctxt "#30169"
+msgid "Dolby Vision"
+msgstr "Dolby Vision"
+
+msgctxt "#30170"
+msgid "Dolby Vision with HDR10 fallback"
+msgstr "Dolby Vision (HDR10-varatila)"
+
+msgctxt "#30171"
+msgid "Dolby Vision with HLG fallback"
+msgstr "Dolby Vision (HLG-varatila)"
+
+msgctxt "#30172"
+msgid "Dolby Vision with SDR fallback"
+msgstr "Dolby Vision (SDR-varatila)"
+
+msgctxt "#30173"
+msgid "Dolby Vision Profile 7 (EL)"
+msgstr "Dolby Vision -profiili 7 (EL)"
+
+msgctxt "#30174"
+msgid "Dolby Vision with HDR10+ fallback"
+msgstr "Dolby Vision (HDR10+ -varatila)"
+
+msgctxt "#30175"
+msgid "Dolby Vision P7 with HDR10+ fallback"
+msgstr "Dolby Vision P7 (HDR10+ -varatila)"
+
+msgctxt "#30176"
+msgid "Unlimited"
+msgstr "Rajoittamaton"
+
+msgctxt "#30177"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30178"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30179"
+msgid "4K"
+msgstr "4K"
+
+msgctxt "#30180"
+msgid "2.0 stereo"
+msgstr "2.0 stereo"
+
+msgctxt "#30181"
+msgid "5.1 surround"
+msgstr "5.1 surround"
+
+msgctxt "#30182"
+msgid "7.1 surround"
+msgstr "7.1 surround"
+
+msgctxt "#30183"
+msgid "1 Mbit/s"
+msgstr "1 Mbit/s"
+
+msgctxt "#30184"
+msgid "2 Mbit/s"
+msgstr "2 Mbit/s"
+
+msgctxt "#30185"
+msgid "3 Mbit/s"
+msgstr "3 Mbit/s"
+
+msgctxt "#30186"
+msgid "4 Mbit/s"
+msgstr "4 Mbit/s"
+
+msgctxt "#30187"
+msgid "6 Mbit/s"
+msgstr "6 Mbit/s"
+
+msgctxt "#30188"
+msgid "8 Mbit/s"
+msgstr "8 Mbit/s"
+
+msgctxt "#30189"
+msgid "10 Mbit/s"
+msgstr "10 Mbit/s"
+
+msgctxt "#30190"
+msgid "15 Mbit/s"
+msgstr "15 Mbit/s"
+
+msgctxt "#30191"
+msgid "20 Mbit/s"
+msgstr "20 Mbit/s"
+
+msgctxt "#30192"
+msgid "25 Mbit/s"
+msgstr "25 Mbit/s"
+
+msgctxt "#30193"
+msgid "40 Mbit/s"
+msgstr "40 Mbit/s"
+
+msgctxt "#30194"
+msgid "60 Mbit/s"
+msgstr "60 Mbit/s"
+
+msgctxt "#30195"
+msgid "120 Mbit/s"
+msgstr "120 Mbit/s"
+
+msgctxt "#30196"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30197"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30198"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30199"
+msgid "256 kbit/s"
+msgstr "256 kbit/s"
+
+msgctxt "#30200"
+msgid "320 kbit/s"
+msgstr "320 kbit/s"
+
+msgctxt "#30201"
+msgid "384 kbit/s"
+msgstr "384 kbit/s"
+
+msgctxt "#30202"
+msgid "448 kbit/s"
+msgstr "448 kbit/s"
+
+msgctxt "#30203"
+msgid "640 kbit/s"
+msgstr "640 kbit/s"
+
+msgctxt "#30204"
+msgid "0.5 Mbit/s"
+msgstr "0.5 Mbit/s"
+
+msgctxt "#30205"
+msgid "0.75 Mbit/s"
+msgstr "0.75 Mbit/s"
+
+msgctxt "#30206"
+msgid "Default (max streaming bitrate)"
+msgstr "Oletus (suoratoiston enimmäisbittinopeus)"
+
+msgctxt "#30041"
+msgid "Who's watching?"
+msgstr "Kuka katsoo?"
+
+msgctxt "#30045"
+msgid "No active session on the server yet"
+msgstr "Palvelimella ei ole vielä aktiivista istuntoa"
+
+msgctxt "#30046"
+msgid "Who's watching? (%s)"
+msgstr "Kuka katsoo? (%s)"
+
+msgctxt "#30047"
+msgid "Who's watching with %s?"
+msgstr "Kuka katsoo yhdessä käyttäjän %s kanssa?"
+
+msgctxt "#30048"
+msgid "Who can be added to the session"
+msgstr "Ketkä voidaan lisätä istuntoon"
+
+msgctxt "#30250"
+msgid "Library"
+msgstr "Kirjasto"
+
+msgctxt "#30251"
+msgid "Select and manage the Jellyfin libraries mirrored into Kodi's own database."
+msgstr "Valitse ja hallitse Kodin omaan tietokantaan peilattavia Jellyfin-kirjastoja."
+
+msgctxt "#30252"
+msgid "Select libraries to sync"
+msgstr "Valitse synkronoitavat kirjastot"
+
+msgctxt "#30253"
+msgid "Choose which server libraries are mirrored into the Kodi library. Changes apply when you confirm the selection."
+msgstr "Valitse, mitkä palvelimen kirjastot peilataan Kodin kirjastoon. Muutokset tulevat voimaan, kun vahvistat valinnan."
+
+msgctxt "#30256"
+msgid "Update libraries"
+msgstr "Päivitä kirjastot"
+
+msgctxt "#30258"
+msgid "Repair libraries"
+msgstr "Korjaa kirjastot"
+
+msgctxt "#30259"
+msgid "Remove and re-sync the libraries you pick from scratch, restoring watched state from the server. Runs when you confirm the selection."
+msgstr "Poista valitsemasi kirjastot ja synkronoi ne alusta uudelleen sekä palauta katselutila palvelimelta. Suoritetaan, kun vahvistat valinnan."
+
+msgctxt "#30262"
+msgid "Sync status"
+msgstr "Synkronoinnin tila"
+
+msgctxt "#30264"
+msgid "Remove synced library?"
+msgstr "Poistetaanko synkronoitu kirjasto?"
+
+msgctxt "#30265"
+msgid "Remove %s from the Kodi library? The items are deleted from this device only."
+msgstr "Poistetaanko %s Kodin kirjastosta? Kohteet poistetaan vain tältä laitteelta."
+
+msgctxt "#30266"
+msgid "Repair which libraries?"
+msgstr "Mitkä kirjastot korjataan?"
+
+msgctxt "#30267"
+msgid "All"
+msgstr "Kaikki"
+
+msgctxt "#30268"
+msgid "Select libraries"
+msgstr "Valitse kirjastot"
+
+msgctxt "#30269"
+msgid "No libraries available"
+msgstr "Ei kirjastoja saatavilla"
+
+msgctxt "#30302"
+msgid "Hide update status below (items)"
+msgstr "Piilota päivityksen tila alle (kohdetta)"
+
+msgctxt "#30303"
+msgid "Hide Kodi's library-update progress for syncs smaller than this. 0 always shows it."
+msgstr "Piilota Kodin kirjastopäivityksen edistyminen tätä pienemmiltä synkronoinneilta. 0 näyttää sen aina."
+
+msgctxt "#30318"
+msgid "Compress artwork"
+msgstr "Pakkaa kuvitus"
+
+msgctxt "#30319"
+msgid "Re-encode capped artwork at JPEG quality 90. No effect without a resolution cap."
+msgstr "Koodaa rajoitettu kuvitus uudelleen JPEG-laadulla 90. Ei vaikutusta ilman tarkkuusrajaa."
+
+msgctxt "#30320"
+msgid "Maximum artwork resolution"
+msgstr "Kuvituksen enimmäistarkkuus"
+
+msgctxt "#30321"
+msgid "Cap the height of synced artwork. Original keeps the server size."
+msgstr "Rajoita synkronoidun kuvituksen korkeutta. Alkuperäinen säilyttää palvelimen koon."
+
+msgctxt "#30322"
+msgid "Original"
+msgstr "Alkuperäinen"
+
+msgctxt "#30323"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30324"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30325"
+msgid "2160p"
+msgstr "2160p"
+
+msgctxt "#30326"
+msgid "Notify on server connection changes"
+msgstr "Ilmoita palvelinyhteyden muutoksista"
+
+msgctxt "#30327"
+msgid "Show a notification when the server connects, disconnects or restarts."
+msgstr "Näytä ilmoitus, kun palvelin yhdistää, katkaisee yhteyden tai käynnistyy uudelleen."
+
+msgctxt "#30350"
+msgid "Recently added"
+msgstr "Viimeksi lisätyt"
+
+msgctxt "#30351"
+msgid "In progress"
+msgstr "Kesken"
+
+msgctxt "#30352"
+msgid "Unwatched"
+msgstr "Katsomattomat"
+
+msgctxt "#30353"
+msgid "Random"
+msgstr "Satunnainen"
+
+msgctxt "#30354"
+msgid "Recommended"
+msgstr "Suositellut"
+
+msgctxt "#30355"
+msgid "Recently added episodes"
+msgstr "Viimeksi lisätyt jaksot"
+
+msgctxt "#30356"
+msgid "In progress episodes"
+msgstr "Kesken olevat jaksot"
+
+msgctxt "#30358"
+msgid "Favorite movies"
+msgstr "Suosikkielokuvat"
+
+msgctxt "#30359"
+msgid "Favorite shows"
+msgstr "Suosikkisarjat"
+
+msgctxt "#30360"
+msgid "Favorite episodes"
+msgstr "Suosikkijaksot"
+
+msgctxt "#30401"
+msgid "Updating media"
+msgstr "Päivitetään mediaa"
+
+msgctxt "#30403"
+msgid "Sync incomplete; retrying shortly"
+msgstr "Synkronointi kesken, uusi yritys"
+
+msgctxt "#30408"
+msgid "Removing library"
+msgstr "Poistetaan kirjastoa"
+
+msgctxt "#30415"
+msgid "Connected to %s"
+msgstr "Yhdistetty palvelimeen %s"
+
+msgctxt "#30416"
+msgid "Lost connection to the server"
+msgstr "Yhteys palvelimeen katkesi"
+
+msgctxt "#30417"
+msgid "Server is restarting"
+msgstr "Palvelin käynnistyy uudelleen"
+
+msgctxt "#30418"
+msgid "Server is shutting down"
+msgstr "Palvelin sammuu"
+
+msgctxt "#30420"
+msgid "Library sync is off: %s"
+msgstr "Kirjaston synkronointi pois: %s"
+
+msgctxt "#30450"
+msgid "Skipping & Play next"
+msgstr "Ohitukset ja toista seuraava"
+
+msgctxt "#30451"
+msgid "Media segment skipping and the Play Next prompt."
+msgstr "Mediasegmenttien ohitus ja Toista seuraava -kehote."
+
+msgctxt "#30453"
+msgid "Skip media segments"
+msgstr "Ohita mediasegmentit"
+
+msgctxt "#30454"
+msgid "Fetch Jellyfin media segments (intro, credits, recap, preview, commercial) during playback and act on them per type."
+msgstr "Hae Jellyfinin mediasegmentit (intro, lopputekstit, kertaus, ennakko, mainos) toiston aikana ja toimi kunkin tyypin mukaan."
+
+msgctxt "#30455"
+msgid "Intros"
+msgstr "Introt"
+
+msgctxt "#30456"
+msgid "Off ignores intro segments, Auto skips past them, Ask shows a skip button."
+msgstr "Pois jättää introsegmentit huomiotta, Automaattinen hyppää niiden yli, Kysy näyttää ohituspainikkeen."
+
+msgctxt "#30457"
+msgid "Credits"
+msgstr "Lopputekstit"
+
+msgctxt "#30458"
+msgid "Off ignores credits, Auto seeks past them, Ask offers Skip Outro — with Play Next when a next episode exists."
+msgstr "Pois jättää lopputekstit huomiotta, Automaattinen kelaa niiden yli, Kysy tarjoaa Ohita lopputekstit -painikkeen — ja Toista seuraava, jos seuraava jakso on olemassa."
+
+msgctxt "#30459"
+msgid "Recaps"
+msgstr "Kertaukset"
+
+msgctxt "#30460"
+msgid "Off ignores recap segments, Auto skips past them, Ask shows a skip button."
+msgstr "Pois jättää kertaussegmentit huomiotta, Automaattinen hyppää niiden yli, Kysy näyttää ohituspainikkeen."
+
+msgctxt "#30461"
+msgid "Previews"
+msgstr "Ennakot"
+
+msgctxt "#30462"
+msgid "Off ignores preview segments, Auto skips past them, Ask shows a skip button."
+msgstr "Pois jättää ennakkosegmentit huomiotta, Automaattinen hyppää niiden yli, Kysy näyttää ohituspainikkeen."
+
+msgctxt "#30463"
+msgid "Commercials"
+msgstr "Mainokset"
+
+msgctxt "#30464"
+msgid "Off ignores commercial segments, Auto skips past them, Ask shows a skip button."
+msgstr "Pois jättää mainossegmentit huomiotta, Automaattinen hyppää niiden yli, Kysy näyttää ohituspainikkeen."
+
+msgctxt "#30465"
+msgid "Off"
+msgstr "Pois"
+
+msgctxt "#30466"
+msgid "Auto"
+msgstr "Automaattinen"
+
+msgctxt "#30467"
+msgid "Ask"
+msgstr "Kysy"
+
+msgctxt "#30469"
+msgid "Offer Play Next"
+msgstr "Tarjoa Toista seuraava"
+
+msgctxt "#30470"
+msgid "Offer the next episode at the credits, or near the end when no credits segment exists."
+msgstr "Tarjoa seuraavaa jaksoa lopputekstien kohdalla tai lähellä loppua, kun lopputekstisegmenttiä ei ole."
+
+msgctxt "#30471"
+msgid "Play Next lead time"
+msgstr "Toista seuraava -kehotteen ennakkoaika"
+
+msgctxt "#30472"
+msgid "Seconds before the end to show the Play Next prompt for content without a credits segment."
+msgstr "Sekunteja ennen loppua, jolloin Toista seuraava -kehote näytetään sisällölle, jolla ei ole lopputekstisegmenttiä."
+
+msgctxt "#30473"
+msgid "Autoplay next episode"
+msgstr "Toista seuraava jakso automaattisesti"
+
+msgctxt "#30474"
+msgid "Count down on the Play Next prompt and start the next episode automatically."
+msgstr "Laske Toista seuraava -kehotteessa alaspäin ja käynnistä seuraava jakso automaattisesti."
+
+msgctxt "#30475"
+msgid "Resume offset (seconds)"
+msgstr "Jatkamisen siirtymä (sekuntia)"
+
+msgctxt "#30476"
+msgid "Seconds to rewind before the stored resume point."
+msgstr "Sekunteja, jotka kelataan taaksepäin tallennetusta jatkamiskohdasta."
+
+msgctxt "#30477"
+msgid "Hide the skip button after"
+msgstr "Piilota ohituspainike kohdassa"
+
+msgctxt "#30478"
+msgid "How far into a segment the skip button disappears. 100% keeps it up for the whole segment."
+msgstr "Kuinka pitkälle segmenttiin edettäessä ohituspainike katoaa. 100% pitää sen näkyvissä koko segmentin ajan."
+
+msgctxt "#30481"
+msgid "Skip Intro"
+msgstr "Ohita intro"
+
+msgctxt "#30482"
+msgid "Skip Outro"
+msgstr "Ohita lopputekstit"
+
+msgctxt "#30483"
+msgid "Skip Recap"
+msgstr "Ohita kertaus"
+
+msgctxt "#30484"
+msgid "Skip Preview"
+msgstr "Ohita ennakko"
+
+msgctxt "#30485"
+msgid "Skip Ad"
+msgstr "Ohita mainos"
+
+msgctxt "#30486"
+msgid "Play Next"
+msgstr "Toista seuraava"
+
+msgctxt "#30487"
+msgid "Close"
+msgstr "Sulje"
+
+msgctxt "#30488"
+msgid "Skipped %s"
+msgstr "Ohitettu %s"
+
+msgctxt "#30489"
+msgid "Up next: %s"
+msgstr "Seuraavaksi: %s"
+
+msgctxt "#30500"
+msgid "Extras"
+msgstr "Ekstrat"
+
+msgctxt "#30501"
+msgid "Browse extras"
+msgstr "Selaa ekstroja"
+
+msgctxt "#30502"
+msgid "Jellyfin actions"
+msgstr "Jellyfin-toiminnot"
+
+msgctxt "#30504"
+msgid "Settings"
+msgstr "Asetukset"
+
+msgctxt "#30505"
+msgid "Permanently delete \"%s\" from the server? This cannot be undone."
+msgstr "Poistetaanko \"%s\" pysyvästi palvelimelta? Tätä ei voi kumota."
+
+msgctxt "#30506"
+msgid "Finished \"%s\". Permanently delete it from the server? This cannot be undone."
+msgstr "\"%s\" katsottu loppuun. Poistetaanko se pysyvästi palvelimelta? Tätä ei voi kumota."
+
+msgctxt "#30507"
+msgid "Server request failed"
+msgstr "Palvelinpyyntö epäonnistui"
+
+msgctxt "#30508"
+msgid "Mark as watched on Jellyfin"
+msgstr "Merkitse katsotuksi Jellyfinissä"
+
+msgctxt "#30509"
+msgid "Mark as unwatched on Jellyfin"
+msgstr "Merkitse katsomattomaksi Jellyfinissä"
+
+msgctxt "#30550"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30551"
+msgid "Enable SyncPlay"
+msgstr "Ota SyncPlay käyttöön"
+
+msgctxt "#30552"
+msgid "Watch in sync with other Jellyfin clients. Leave Kodi's 'Sync playback to display' off for a reliable experience"
+msgstr "Katso synkronissa muiden Jellyfin-asiakkaiden kanssa. Jätä Synkronoi toisto näyttöön pois päältä Kodissa luotettavan kokemuksen vuoksi"
+
+msgctxt "#30557"
+msgid "Group notifications"
+msgstr "Ryhmäilmoitukset"
+
+msgctxt "#30558"
+msgid "Show member join/leave and group-waiting notifications. Errors are always shown."
+msgstr "Näytä jäsenten liittymis- ja poistumisilmoitukset sekä ryhmän odotusilmoitukset. Virheet näytetään aina."
+
+msgctxt "#30560"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30561"
+msgid "New group..."
+msgstr "Uusi ryhmä..."
+
+msgctxt "#30562"
+msgid "Leave group"
+msgstr "Poistu ryhmästä"
+
+msgctxt "#30563"
+msgid "Joined group: %s"
+msgstr "Liityit ryhmään: %s"
+
+msgctxt "#30564"
+msgid "Left the group"
+msgstr "Poistuit ryhmästä"
+
+msgctxt "#30565"
+msgid "%s joined the group"
+msgstr "%s liittyi ryhmään"
+
+msgctxt "#30566"
+msgid "%s left the group"
+msgstr "%s poistui ryhmästä"
+
+msgctxt "#30567"
+msgid "Group name"
+msgstr "Ryhmän nimi"
+
+msgctxt "#30568"
+msgid "Playback stopped — what should the group do?"
+msgstr "Toisto pysähtyi — mitä ryhmä tekee?"
+
+msgctxt "#30569"
+msgid "Spectator mode: the group will not wait for you"
+msgstr "Katsojatila: ryhmä ei odota sinua"
+
+msgctxt "#30570"
+msgid "SyncPlay needs a working websocket connection to the server"
+msgstr "SyncPlay vaatii toimivan websocket-yhteyden palvelimeen"
+
+msgctxt "#30571"
+msgid "Removed from the group"
+msgstr "Poistettu ryhmästä"
+
+msgctxt "#30572"
+msgid "Members"
+msgstr "Jäsenet"
+
+msgctxt "#30573"
+msgid "Resync with group"
+msgstr "Synkronoi ryhmän kanssa"
+
+msgctxt "#30574"
+msgid "SyncPlay is unavailable (server not reachable?)"
+msgstr "SyncPlay ei ole käytettävissä (eikö palvelinta tavoiteta?)"
+
+msgctxt "#30575"
+msgid "External players cannot be synchronized"
+msgstr "Ulkoisia soittimia ei voi synkronoida"
+
+msgctxt "#30576"
+msgid "Playback could not be synchronized"
+msgstr "Toistoa ei voitu synkronoida"
+
+msgctxt "#30577"
+msgid "buffering"
+msgstr "puskuroi"
+
+msgctxt "#30578"
+msgid "Could not join the group"
+msgstr "Ryhmään ei voitu liittyä"
+
+msgctxt "#30579"
+msgid "You don't have access to some items in the group's queue"
+msgstr "Sinulla ei ole oikeutta kaikkiin ryhmän jonon kohteisiin"
+
+msgctxt "#30580"
+msgid "Become a spectator (group won't wait for me)"
+msgstr "Siirry katsojaksi (ryhmä ei odota minua)"
+
+msgctxt "#30581"
+msgid "Wait for me again (leave spectator mode)"
+msgstr "Odota minua taas (poistu katsojatilasta)"
+
+msgctxt "#30582"
+msgid "disconnected"
+msgstr "ei yhteyttä"
+
+msgctxt "#30583"
+msgid "The group will wait for you again"
+msgstr "Ryhmä odottaa sinua taas"
+
+msgctxt "#30584"
+msgid "Stop playback for everyone"
+msgstr "Pysäytä toisto kaikilta"
+
+msgctxt "#30585"
+msgid "Waiting for the group..."
+msgstr "Odotetaan ryhmää..."
+
+msgctxt "#30586"
+msgid "Fine sync using tempo"
+msgstr "Hienosynkronointi tempolla"
+
+msgctxt "#30587"
+msgid "Keeps this device on the group's position by briefly playing faster or slower. A video correction decodes passthrough audio until the next item."
+msgstr "Pitää tämän laitteen ryhmän kohdassa toistamalla hetken nopeammin tai hitaammin. Videon korjaus dekoodaa läpivientiäänen seuraavaan kohteeseen asti."
+
+msgctxt "#30592"
+msgid "Fine sync stopped: rate mismatch"
+msgstr "Hienosynkronointi pysäytetty: tahti ei täsmää"
+
+msgctxt "#30593"
+msgid "Largest video error closed by tempo (ms)"
+msgstr "Suurin tempolla korjattava videovirhe (ms)"
+
+msgctxt "#30594"
+msgid "Position errors up to this are closed by playing faster or slower; anything larger is closed with a skip. Higher means fewer skips and longer speed changes."
+msgstr "Tähän asti kohdan virheet korjataan toistamalla nopeammin tai hitaammin; suuremmat hypyllä. Suurempi arvo tarkoittaa vähemmän hyppyjä ja pidempiä nopeudenmuutoksia."
+
+msgctxt "#30595"
+msgid "Fastest video correction speed (%)"
+msgstr "Videon suurin korjausnopeus (%)"
+
+msgctxt "#30596"
+msgid "The most playback speed may change during a correction. At 25% a 2.5 second error takes 10 seconds to close; lower is less noticeable but slower. Large changes ramp in and out."
+msgstr "Kuinka paljon toistonopeus saa enintään muuttua korjauksen aikana. 25 %:lla 2,5 sekunnin virhe korjautuu 10 sekunnissa; pienempi huomataan vähemmän mutta on hitaampi. Suuret muutokset tehdään asteittain."
+
+msgctxt "#30604"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30605"
+msgid "1440p"
+msgstr "1440p"
+
+msgctxt "#30613"
+msgid "Audio and subtitle streams"
+msgstr "Ääni- ja tekstitysraidat"
+
+msgctxt "#30614"
+msgid "Audio stream"
+msgstr "Ääniraita"
+
+msgctxt "#30615"
+msgid "Subtitles"
+msgstr "Tekstitykset"
+
+msgctxt "#30616"
+msgid "Restarting to change stream..."
+msgstr "Käynnistetään uudelleen raidan vaihtamiseksi..."
+
+msgctxt "#30617"
+msgid "burned in, restarts playback"
+msgstr "poltettu kuvaan, käynnistää toiston uudelleen"
+
+msgctxt "#30618"
+msgid "Use Jellyfin's default tracks"
+msgstr "Käytä Jellyfinin oletusraitoja"
+
+msgctxt "#30619"
+msgid "Start playback on the audio and subtitle tracks your Jellyfin account asks for, instead of the ones Kodi's own language settings pick. The server resolves both from your Jellyfin profile, so the choice follows you to every client."
+msgstr "Aloita toisto niillä ääni- ja tekstitysraidoilla, joita Jellyfin-tilisi pyytää, sen sijaan että Kodin omat kieliasetukset valitsisivat ne. Palvelin ratkaisee molemmat Jellyfin-profiilistasi, joten valinta seuraa sinua jokaiseen asiakasohjelmaan."
+
+msgctxt "#30622"
+msgid "Notify about new content"
+msgstr "Ilmoita uudesta sisällöstä"
+
+msgctxt "#30623"
+msgid "Show a notification when new films, shows, episodes, music videos, artists or albums are added to your library."
+msgstr "Näytä ilmoitus, kun kirjastoosi lisätään uusia elokuvia, sarjoja, jaksoja, musiikkivideoita, esittäjiä tai albumeita."
+
+msgctxt "#30624"
+msgid "%s movie added to library"
+msgstr "Elokuva %s lisätty kirjastoon"
+
+msgctxt "#30625"
+msgid "%s movies added to library"
+msgstr "%s elokuvaa lisätty kirjastoon"
+
+msgctxt "#30626"
+msgid "%s show added to library"
+msgstr "Sarja %s lisätty kirjastoon"
+
+msgctxt "#30627"
+msgid "%s new shows added to library"
+msgstr "%s sarjaa lisätty kirjastoon"
+
+msgctxt "#30628"
+msgid "%s episode of %s added to library"
+msgstr "%s jakso sarjasta %s lisätty"
+
+msgctxt "#30629"
+msgid "%s episodes of %s added to library"
+msgstr "%s jaksoa sarjasta %s lisätty"
+
+msgctxt "#30630"
+msgid "%s episodes added to library"
+msgstr "%s jaksoa lisätty kirjastoon"
+
+msgctxt "#30631"
+msgid "%s music video added to library"
+msgstr "Musiikkivideo %s lisätty"
+
+msgctxt "#30632"
+msgid "%s music videos added to library"
+msgstr "%s musiikkivideota lisätty"
+
+msgctxt "#30633"
+msgid "%s added to music library"
+msgstr "Esittäjä %s lisätty kirjastoon"
+
+msgctxt "#30634"
+msgid "%s artists added to library"
+msgstr "%s esittäjää lisätty kirjastoon"
+
+msgctxt "#30635"
+msgid "%s added to music library"
+msgstr "Albumi %s lisätty kirjastoon"
+
+msgctxt "#30636"
+msgid "%s albums added to library"
+msgstr "%s albumia lisätty kirjastoon"
+
+msgctxt "#30637"
+msgid "Use the server's splashscreen as the backdrop"
+msgstr "Käytä palvelimen aloituskuvaa taustana"
+
+msgctxt "#30638"
+msgid "Show the Jellyfin server's splashscreen behind the addon instead of the bundled artwork. Refreshed when the service connects, at most once a day."
+msgstr "Näytä Jellyfin-palvelimen aloituskuva lisäosan taustalla mukana toimitetun kuvituksen sijaan. Päivitetään, kun palvelu yhdistää, enintään kerran päivässä."
+
+msgctxt "#30700"
+msgid "Downloads"
+msgstr "Lataukset"
+
+msgctxt "#30701"
+msgid "Download items for offline playback"
+msgstr "Lataa kohteita offline-toistoa varten"
+
+msgctxt "#30702"
+msgid "Enable downloads"
+msgstr "Ota lataukset käyttöön"
+
+msgctxt "#30703"
+msgid "Adds Download to the Jellyfin actions menu and runs the download manager. Only for libraries you sync with Kofin."
+msgstr "Lisää Lataa-toiminnon Jellyfin-toiminnot-valikkoon ja käynnistää latausten hallinnan. Vain Kofinilla synkronoiduille kirjastoille."
+
+msgctxt "#30704"
+msgid "Download location"
+msgstr "Latausten sijainti"
+
+msgctxt "#30705"
+msgid "Where downloaded files are kept. Leave empty for the addon profile folder"
+msgstr "Minne ladatut tiedostot tallennetaan. Jätä tyhjäksi, jos haluat käyttää lisäosan profiilikansiota"
+
+msgctxt "#30706"
+msgid "Parallel video downloads"
+msgstr "Rinnakkaiset videolataukset"
+
+msgctxt "#30707"
+msgid "How many movies and episodes download at the same time"
+msgstr "Kuinka monta elokuvaa ja jaksoa ladataan samanaikaisesti"
+
+msgctxt "#30708"
+msgid "Download"
+msgstr "Lataa"
+
+msgctxt "#30709"
+msgid "Cancel download"
+msgstr "Peruuta lataus"
+
+msgctxt "#30710"
+msgid "Delete download"
+msgstr "Poista lataus"
+
+msgctxt "#30712"
+msgid "Download complete: %s"
+msgstr "Lataus valmis: %s"
+
+msgctxt "#30713"
+msgid "Download failed: %s"
+msgstr "Lataus epäonnistui: %s"
+
+msgctxt "#30714"
+msgid "Delete the download of %s?"
+msgstr "Poistetaanko kohteen %s lataus?"
+
+msgctxt "#30715"
+msgid "Not enough free space for %s"
+msgstr "Ei tarpeeksi tilaa kohteelle %s"
+
+msgctxt "#30717"
+msgid "The downloads folder is not writable"
+msgstr "Latauskansioon ei voi kirjoittaa"
+
+msgctxt "#30718"
+msgid "Downloaded movies"
+msgstr "Ladatut elokuvat"
+
+msgctxt "#30719"
+msgid "Downloaded shows"
+msgstr "Ladatut sarjat"
+
+msgctxt "#30720"
+msgid "Not available offline"
+msgstr "Ei saatavilla offline-tilassa"
+
+msgctxt "#30721"
+msgid "Downloaded episodes"
+msgstr "Ladatut jaksot"
+
+msgctxt "#30722"
+msgid "Transcode videos"
+msgstr "Transkoodaa videot"
+
+msgctxt "#30723"
+msgid "Transcode when the original exceeds a limit below or when triggered by settings in the Transcoding tab (HDR, codec, etc)"
+msgstr "Transkoodaa, kun alkuperäinen ylittää alla olevan rajan tai kun Transkoodaus-välilehden asetukset (HDR, koodekki jne.) niin vaativat"
+
+msgctxt "#30724"
+msgid "Maximum download bitrate"
+msgstr "Latauksen enimmäisbittinopeus"
+
+msgctxt "#30725"
+msgid "Videos over this total bitrate are transcoded down to it. Unlimited transcodes only for codec, HDR or resolution reasons."
+msgstr "Tämän kokonaisbittinopeuden ylittävät videot transkoodataan tähän rajaan. Rajoittamaton transkoodaa vain koodekin, HDR:n tai tarkkuuden takia."
+
+msgctxt "#30726"
+msgid "Maximum download resolution"
+msgstr "Latauksen enimmäistarkkuus"
+
+msgctxt "#30727"
+msgid "Videos wider than this are scaled down. Unlimited never scales."
+msgstr "Tätä leveämmät videot skaalataan alaspäin. Rajoittamaton ei skaalaa koskaan."
+
+msgctxt "#30728"
+msgid "Transcode music"
+msgstr "Transkoodaa musiikki"
+
+msgctxt "#30729"
+msgid "Transcode a track only when it is lossless or over the bitrate limit below. Compliant tracks download as the original file."
+msgstr "Transkoodaa kappale vain, jos se on häviötön tai ylittää alla olevan bittinopeusrajan. Rajan täyttävät kappaleet ladataan alkuperäisenä tiedostona."
+
+msgctxt "#30730"
+msgid "Transcode music over"
+msgstr "Musiikin transkoodausraja"
+
+msgctxt "#30731"
+msgid "Tracks over this bitrate, and all lossless tracks, are transcoded. Unlimited transcodes only lossless tracks."
+msgstr "Tämän bittinopeuden ylittävät kappaleet ja kaikki häviöttömät kappaleet transkoodataan. Rajoittamaton transkoodaa vain häviöttömät kappaleet."
+
+msgctxt "#30732"
+msgid "Transcode music to"
+msgstr "Transkoodaa musiikki muotoon"
+
+msgctxt "#30733"
+msgid "The codec transcoded tracks are encoded with. Opus gives the best quality per megabyte."
+msgstr "Koodekki, jolla transkoodatut kappaleet koodataan. Opus antaa parhaan laadun megatavua kohden."
+
+msgctxt "#30734"
+msgid "Transcoded music bitrate"
+msgstr "Transkoodatun musiikin bittinopeus"
+
+msgctxt "#30735"
+msgid "The bitrate transcoded tracks are encoded at. 128 kbps Opus is transparent for most listening."
+msgstr "Bittinopeus, jolla transkoodatut kappaleet koodataan. 128 kbps Opus on useimmassa kuuntelussa läpinäkyvä."
+
+msgctxt "#30737"
+msgid "Kofin downloads"
+msgstr "Kofin-lataukset"
+
+msgctxt "#30738"
+msgid "Download the next episodes automatically"
+msgstr "Lataa seuraavat jaksot automaattisesti"
+
+msgctxt "#30739"
+msgid "While watching a downloaded episode, the next unwatched episodes of the show are queued for download at the 50% mark."
+msgstr "Kun katsot ladattua jaksoa, sarjan seuraavat katsomattomat jaksot asetetaan latausjonoon 50% kohdalla."
+
+msgctxt "#30740"
+msgid "Episodes to keep ahead"
+msgstr "Etukäteen ladattavat jaksot"
+
+msgctxt "#30741"
+msgid "How many unwatched episodes ahead of the one playing are kept downloaded."
+msgstr "Kuinka monta katsomatonta jaksoa toistettavan jakson jälkeen pidetään ladattuna."
+
+msgctxt "#30742"
+msgid "Download newly added movies"
+msgstr "Lataa uudet elokuvat"
+
+msgctxt "#30743"
+msgid "Movies newly added to a synced library are downloaded automatically."
+msgstr "Synkronoituun kirjastoon lisätyt uudet elokuvat ladataan automaattisesti."
+
+msgctxt "#30746"
+msgid "Delete download after watching"
+msgstr "Poista lataus katselun jälkeen"
+
+msgctxt "#30747"
+msgid "When you finish watching a downloaded item, its local copy is removed. The item stays on the server and in your library."
+msgstr "Kun katsot ladatun kohteen loppuun, sen paikallinen kopio poistetaan. Kohde säilyy palvelimella ja kirjastossasi."
+
+msgctxt "#30751"
+msgid "%s new movies were not downloaded automatically"
+msgstr "%s uutta elokuvaa jäi lataamatta automaattisesti"
+
+msgctxt "#30752"
+msgid "Export NFO files and artwork"
+msgstr "Vie NFO-tiedostot ja kuvitus"
+
+msgctxt "#30753"
+msgid "Write NFO metadata and artwork beside downloaded files, so other Kodi profiles and apps can scan the download folder as a library."
+msgstr "Kirjoita NFO-metatiedot ja kuvitus ladattujen tiedostojen viereen, jotta muut Kodi-profiilit ja sovellukset voivat lukea latauskansion kirjastona."
+
+msgctxt "#30754"
+msgid "Download all new episodes"
+msgstr "Lataa kaikki uudet jaksot"
+
+msgctxt "#30755"
+msgid "Every episode newly added to a synced library is downloaded automatically."
+msgstr "Jokainen synkronoituun kirjastoon lisätty uusi jakso ladataan automaattisesti."
+
+msgctxt "#30756"
+msgid "Download new albums"
+msgstr "Lataa uudet albumit"
+
+msgctxt "#30757"
+msgid "Albums newly added to a synced library are downloaded automatically."
+msgstr "Synkronoituun kirjastoon lisätyt uudet albumit ladataan automaattisesti."
+
+msgctxt "#30758"
+msgid "Shows downloading new episodes"
+msgstr "Sarjat, joiden uudet jaksot ladataan"
+
+msgctxt "#30759"
+msgid "Review the shows set to download their new episodes automatically, and untick any to stop."
+msgstr "Tarkista sarjat, joiden uudet jaksot ladataan automaattisesti, ja poista rasti niiltä, jotka haluat lopettaa."
+
+msgctxt "#30760"
+msgid "Download new episodes"
+msgstr "Lataa uudet jaksot"
+
+msgctxt "#30761"
+msgid "Stop downloading new episodes"
+msgstr "Lopeta uusien jaksojen lataaminen"
+
+msgctxt "#30762"
+msgid "New episodes of %s will download automatically"
+msgstr "Sarjan %s uudet jaksot ladataan automaattisesti"
+
+msgctxt "#30763"
+msgid "New episodes of %s will no longer download automatically"
+msgstr "Sarjan %s uusia jaksoja ei enää ladata automaattisesti"
+
+msgctxt "#30764"
+msgid "%s new episodes were not downloaded automatically"
+msgstr "%s uutta jaksoa jäi lataamatta automaattisesti"
+
+msgctxt "#30765"
+msgid "%s new albums were not downloaded automatically"
+msgstr "%s uutta albumia jäi lataamatta automaattisesti"
+
+msgctxt "#30766"
+msgid "No shows are set to download new episodes"
+msgstr "Yhdellekään sarjalle ei ole asetettu uusien jaksojen latausta"
+
+msgctxt "#30767"
+msgid "Show download notifications"
+msgstr "Näytä latausilmoitukset"
+
+msgctxt "#30768"
+msgid "Announce queued and completed downloads. Failures and warnings are always shown."
+msgstr "Ilmoita jonoon asetetuista ja valmistuneista latauksista. Virheet ja varoitukset näytetään aina."
+
+msgctxt "#30769"
+msgid "Delete download automatically"
+msgstr "Poista lataus automaattisesti"
+
+msgctxt "#30770"
+msgid "Remove the local copy without asking. With this off, Kofin asks first each time."
+msgstr "Poista paikallinen kopio kysymättä. Kun tämä on pois päältä, Kofin kysyy joka kerta."
+
+msgctxt "#30771"
+msgid "Download %s item(s), about %s? %s free"
+msgstr "Ladataanko %s kohdetta, noin %s? %s vapaana"
+
+msgctxt "#30772"
+msgid "Parallel music downloads"
+msgstr "Rinnakkaiset musiikkilataukset"
+
+msgctxt "#30773"
+msgid "How many tracks download at the same time. Tracks are small and mostly overhead, so this can sit well above the video figure."
+msgstr "Kuinka monta kappaletta ladataan samanaikaisesti. Kappaleet ovat pieniä ja enimmäkseen yleisrasitetta, joten tämä voi olla selvästi videoiden lukua suurempi."
+
+msgctxt "#30775"
+msgid "downloaded from the server"
+msgstr "ladattu palvelimelta"
+
+msgctxt "#30776"
+msgid "Downloading subtitle..."
+msgstr "Ladataan tekstitystä..."
+
+msgctxt "#30777"
+msgid "Jellyfin account settings"
+msgstr "Jellyfin-tilin asetukset"
+
+msgctxt "#30778"
+msgid "Audio and subtitle preferences stored on the server against your Jellyfin account. They apply to every client you sign in from, not just this one."
+msgstr "Ääni- ja tekstitysvalinnat, jotka on tallennettu palvelimelle Jellyfin-tilillesi. Ne koskevat jokaista asiakasohjelmaa, johon kirjaudut, eivät vain tätä."
+
+msgctxt "#30779"
+msgid "Jellyfin settings for %s"
+msgstr "Käyttäjän %s Jellyfin-asetukset"
+
+msgctxt "#30780"
+msgid "Preferred audio language"
+msgstr "Ensisijainen äänen kieli"
+
+msgctxt "#30781"
+msgid "Play default audio track"
+msgstr "Toista oletusääniraita"
+
+msgctxt "#30782"
+msgid "Preferred subtitle language"
+msgstr "Ensisijainen tekstityksen kieli"
+
+msgctxt "#30783"
+msgid "Subtitle mode"
+msgstr "Tekstitystila"
+
+msgctxt "#30784"
+msgid "Remember audio selections"
+msgstr "Muista ääniraitavalinnat"
+
+msgctxt "#30785"
+msgid "Remember subtitle selections"
+msgstr "Muista tekstitysvalinnat"
+
+msgctxt "#30786"
+msgid "Enabled"
+msgstr "Käytössä"
+
+msgctxt "#30787"
+msgid "Disabled"
+msgstr "Ei käytössä"
+
+msgctxt "#30788"
+msgid "Any"
+msgstr "Mikä tahansa"
+
+msgctxt "#30789"
+msgid "Default"
+msgstr "Oletus"
+
+msgctxt "#30790"
+msgid "Always"
+msgstr "Aina"
+
+msgctxt "#30791"
+msgid "Only forced"
+msgstr "Vain pakotetut"
+
+msgctxt "#30792"
+msgid "None"
+msgstr "Ei mitään"
+
+msgctxt "#30793"
+msgid "Smart"
+msgstr "Älykäs"
+
+msgctxt "#30794"
+msgid "Not applied here: \"Use Jellyfin's default tracks\" is off"
+msgstr "Ei käytössä täällä: \"Käytä Jellyfinin oletusraitoja\" on pois päältä"
+
+msgctxt "#30795"
+msgid "Could not load your Jellyfin settings"
+msgstr "Jellyfin-asetuksiasi ei voitu ladata"
+
+msgctxt "#30796"
+msgid "Could not save to the server"
+msgstr "Palvelimelle tallentaminen epäonnistui"
+
+msgctxt "#30797"
+msgid "Your Jellyfin account is not allowed to change these settings"
+msgstr "Jellyfin-tililläsi ei ole oikeutta muuttaa näitä asetuksia"
+
+msgctxt "#30798"
+msgid "Skip movie imports larger than"
+msgstr "Ohita tätä suuremmat elokuvatuonnit"
+
+msgctxt "#30799"
+msgid "When a sync adds more new movies than this at once, none of them are downloaded — a bulk import is rarely a request to fill the disk. Raise it if you want big additions pulled automatically."
+msgstr "Kun synkronointi lisää kerralla enemmän uusia elokuvia kuin tämä, mitään niistä ei ladata — joukkotuonti on harvoin pyyntö täyttää levy. Nosta arvoa, jos haluat isot lisäykset haettavan automaattisesti."
+
+msgctxt "#30800"
+msgid "Skip episode imports larger than"
+msgstr "Ohita tätä suuremmat jaksotuonnit"
+
+msgctxt "#30801"
+msgid "When a sync adds more new episodes than this at once, none of them are downloaded. Shows you have subscribed to are exempt — a subscription is a standing order."
+msgstr "Kun synkronointi lisää kerralla enemmän uusia jaksoja kuin tämä, mitään niistä ei ladata. Tilaamasi sarjat ovat poikkeus — tilaus on pysyväismääräys."
+
+msgctxt "#30802"
+msgid "Skip album imports larger than"
+msgstr "Ohita tätä suuremmat albumituonnit"
+
+msgctxt "#30803"
+msgid "When a sync adds more new albums than this at once, none of them are downloaded. Counted in albums, not tracks."
+msgstr "Kun synkronointi lisää kerralla enemmän uusia albumeita kuin tämä, mitään niistä ei ladata. Lasketaan albumeina, ei kappaleina."
+
+msgctxt "#30810"
+msgid "Needs %s, only %s free"
+msgstr "Vaatii %s, vapaana vain %s"
+
+msgctxt "#30804"
+msgid "Delete all downloads"
+msgstr "Poista kaikki lataukset"
+
+msgctxt "#30805"
+msgid "Delete every downloaded file from this device and stop keeping playlists and music libraries in sync. The items stay in your library and play from the server again."
+msgstr "Poista jokainen ladattu tiedosto tältä laitteelta ja lopeta soittolistojen ja musiikkikirjastojen pitäminen ajan tasalla. Kohteet säilyvät kirjastossasi ja toistuvat taas palvelimelta."
+
+msgctxt "#30806"
+msgid "Delete all %s download(s), freeing about %s?"
+msgstr "Poistetaanko kaikki %s latausta (%s)?"
+
+msgctxt "#30807"
+msgid "There are no downloads to delete"
+msgstr "Ei poistettavia latauksia"
+
+msgctxt "#30808"
+msgid "Pause downloads during playback"
+msgstr "Keskeytä lataukset toiston ajaksi"
+
+msgctxt "#30809"
+msgid "Do not start new downloads while something is playing, video or music. A file already downloading finishes; the rest wait until playback stops."
+msgstr "Älä aloita uusia latauksia, kun jotain toistetaan, videota tai musiikkia. Jo latautuva tiedosto ladataan loppuun; loput odottavat toiston päättymistä."
+
+msgctxt "#30811"
+msgid "Delete stale downloads"
+msgstr "Poista vanhentuneet lataukset"
+
+msgctxt "#30812"
+msgid "Remove downloaded files nobody has played for a while. Anything you are part-way through is kept, however long it sits. The items stay in your library and play from the server again."
+msgstr "Poista ladatut tiedostot, joita kukaan ei ole toistanut vähään aikaan. Kesken jääneet säilytetään, olivat ne kuinka kauan tahansa. Kohteet säilyvät kirjastossasi ja toistuvat taas palvelimelta."
+
+msgctxt "#30813"
+msgid "Delete after (days)"
+msgstr "Poista, kun päiviä kulunut"
+
+msgctxt "#30814"
+msgid "How long a download may sit unplayed before it is removed. Playing it again starts the count over."
+msgstr "Kuinka kauan lataus saa olla toistamatta ennen poistoa. Uusi toisto aloittaa laskennan alusta."
+
+msgctxt "#30817"
+msgid "All"
+msgstr "Kaikki"
+
+msgctxt "#30818"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30819"
+msgid "Show cast in add-on listings"
+msgstr "Näytä näyttelijät lisäosan listauksissa"
+
+msgctxt "#30820"
+msgid "Fetch cast and crew for the shorter add-on listings — Recently added, In progress, Next up, Continue watching, search results and a show's episodes — so the information dialog can show them. Whole-library listings never fetch it, because the server needs about a second for every 40 items. The Kodi library always has cast."
+msgstr "Hakee näyttelijät ja tekijät lisäosan lyhyisiin listauksiin — Viimeksi lisätyt, Kesken, Seuraavaksi, Jatka katselua, hakutulokset ja sarjan jaksot — jotta tietoikkuna voi näyttää ne. Koko kirjaston kattavat listaukset eivät hae niitä koskaan, koska palvelin tarvitsee noin sekunnin jokaista 40:tä kohdetta kohden. Kodin kirjastossa näyttelijät ovat aina mukana."
+
+msgctxt "#30821"
+msgid "Server error — %s"
+msgstr "Palvelinvirhe — %s"
+
+msgctxt "#30823"
+msgid "Download deleted: %s"
+msgstr "Lataus poistettu: %s"
+
+msgctxt "#30824"
+msgid "%s download(s) deleted"
+msgstr "%s latausta poistettu"
+
+msgctxt "#30825"
+msgid "Find servers on local network"
+msgstr "Etsi palvelimia lähiverkosta"
+
+msgctxt "#30826"
+msgid "Looks for Jellyfin servers on this network and lists the ones that answer. The one you choose is filled into \"Server address\"."
+msgstr "Etsii Jellyfin-palvelimia tästä verkosta ja luettelee ne, jotka vastaavat. Valitsemasi palvelin täytetään kenttään \"Palvelimen osoite\"."
+
+msgctxt "#30827"
+msgid "Searching for Jellyfin servers…"
+msgstr "Etsitään Jellyfin-palvelimia…"
+
+msgctxt "#30828"
+msgid "Select a server"
+msgstr "Valitse palvelin"
+
+msgctxt "#30829"
+msgid "No Jellyfin servers answered — enter the address manually"
+msgstr "Yksikään Jellyfin-palvelin ei vastannut — syötä osoite käsin"
+
+msgctxt "#30830"
+msgid "did not answer"
+msgstr "ei vastannut"
+
+msgctxt "#30831"
+msgid "%s did not answer — the address it gave may not work here"
+msgstr "%s ei vastannut — sen antama osoite ei ehkä toimi täältä"
+
+msgctxt "#30832"
+msgid "Storage used"
+msgstr "Käytetty tila"
+
+msgctxt "#30833"
+msgid "Show where the downloads are kept and how much space each kind is using."
+msgstr "Näytä, missä lataukset säilytetään ja kuinka paljon tilaa kukin tyyppi vie."
+
+msgctxt "#30834"
+msgid "Other files in this folder"
+msgstr "Muut tämän kansion tiedostot"
+
+msgctxt "#30835"
+msgid "Nothing has been downloaded yet"
+msgstr "Mitään ei ole vielä ladattu"
+
+msgctxt "#30836"
+msgid "Folder too large to measure fully — the totals above are partial"
+msgstr "Kansio on liian suuri mitattavaksi kokonaan — yllä olevat summat ovat osittaisia"
+
+msgctxt "#30837"
+msgid "Watch in sync with other Jellyfin clients."
+msgstr "Katso synkronissa muiden Jellyfin-asiakkaiden kanssa."
+
+msgctxt "#30841"
+msgid "Save to Jellyfin"
+msgstr "Tallenna Jellyfiniin"
+
+msgctxt "#30842"
+msgid "This playlist mixes audio and video, which cannot be saved as one Jellyfin playlist"
+msgstr "Tämä soittolista sekoittaa ääntä ja videota eikä sitä voi tallentaa yhtenä Jellyfin-soittolistana"
+
+msgctxt "#30843"
+msgid "Playlist saved to Jellyfin"
+msgstr "Soittolista tallennettu Jellyfiniin"
+
+msgctxt "#30844"
+msgid "No library items in this playlist to save"
+msgstr "Tässä soittolistassa ei ole kirjaston kohteita tallennettavaksi"
+
+msgctxt "#30845"
+msgid "Show library update progress"
+msgstr "Näytä kirjaston päivityksen edistyminen"
+
+msgctxt "#30846"
+msgid "Show Kodi's library-update progress while the library syncs."
+msgstr "Näytä Kodin kirjastopäivityksen edistyminen synkronoinnin aikana."
+
+msgctxt "#30849"
+msgid "Download & keep in sync"
+msgstr "Lataa ja pidä synkronoituna"
+
+msgctxt "#30850"
+msgid "Stop keeping downloads in sync"
+msgstr "Lopeta latausten synkronointi"
+
+msgctxt "#30851"
+msgid "Manage playlist downloads"
+msgstr "Hallinnoi soittolistojen latauksia"
+
+msgctxt "#30852"
+msgid "Manage music library downloads"
+msgstr "Hallinnoi musiikkikirjastojen latauksia"
+
+msgctxt "#30853"
+msgid "Content not downloaded"
+msgstr "Sisältöä ei ole ladattu"
+
+msgctxt "#30854"
+msgid "Review subscribed playlists; untick to stop syncing downloads."
+msgstr "Tarkastele tilattuja soittolistoja; poista valinta lopettaaksesi latausten synkronoinnin."
+
+msgctxt "#30855"
+msgid "Review subscribed music libraries; untick to stop syncing downloads."
+msgstr "Tarkastele tilattuja musiikkikirjastoja; poista valinta lopettaaksesi latausten synkronoinnin."
+
+msgctxt "#30856"
+msgid "Library nodes and playlists"
+msgstr "Kirjastosolmut ja soittolistat"
+
+msgctxt "#30857"
+msgid "Create Kodi library nodes and smart playlists for the synced video libraries, and copy Jellyfin playlists into Kodi under Videos → Playlists → Kofin and Music → Playlists → Kofin. Turning this off removes every node and playlist Kofin created."
+msgstr "Luo Kodin kirjastosolmut ja älysoittolistat synkronoiduille videokirjastoille ja kopioi Jellyfin-soittolistat Kodiin kohtiin Videot → Soittolistat → Kofin ja Musiikki → Soittolistat → Kofin. Pois kytkettynä kaikki Kofinin luomat solmut ja soittolistat poistetaan."
+
+msgctxt "#30859"
+msgid "Library status"
+msgstr "Kirjaston tila"
+
+msgctxt "#30860"
+msgid "What is synced, what is still pending and what the sync is doing now."
+msgstr "Mitä on synkronoitu, mitä on vielä jonossa ja mitä synkronointi tekee juuri nyt."
+
+msgctxt "#30861"
+msgid "Transcode music whose bitrate is above the maximum set below. Off, songs play from the server untouched."
+msgstr "Transkoodaa musiikki, jonka bittinopeus ylittää alla asetetun enimmäisarvon. Pois päältä kappaleet toistetaan palvelimelta muuttamattomina."
+
+msgctxt "#30862"
+msgid "in Kodi / on the server"
+msgstr "Kodissa / palvelimella"
+
+msgctxt "#30863"
+msgid "Pending"
+msgstr "Odottaa"
+
+msgctxt "#30864"
+msgid "Failed"
+msgstr "Epäonnistui"
+
+msgctxt "#30865"
+msgid "Last full update"
+msgstr "Viimeisin täysi päivitys"
+
+msgctxt "#30867"
+msgid "Repair to add codec details"
+msgstr "Korjaa lisätäksesi koodekkitiedot"
+
+msgctxt "#30868"
+msgid "Kodi cannot import"
+msgstr "Kodi ei voi tuoda"
+
+msgctxt "#30869"
+msgid "Scheduled full update"
+msgstr "Ajoitettu täysi päivitys"
+
+msgctxt "#30870"
+msgid "How often to re-read every library from the server. Turn this on if the server lacks the KofinSyncQueue plugin, or deletions there won't reach Kodi."
+msgstr "Kuinka usein kaikki kirjastot luetaan palvelimelta uudelleen. Ota käyttöön, jos palvelimella ei ole KofinSyncQueue-laajennusta, muuten poistot eivät näy Kodissa."
+
+msgctxt "#30871"
+msgid "Daily"
+msgstr "Päivittäin"
+
+msgctxt "#30872"
+msgid "Weekly"
+msgstr "Viikoittain"
+
+msgctxt "#30873"
+msgid "Update all libraries now?"
+msgstr "Päivitetäänkö kaikki kirjastot nyt?"
+
+msgctxt "#30874"
+msgid "Re-read every library from the server now."
+msgstr "Lukee nyt kaikki kirjastot palvelimelta uudelleen."
+
+msgctxt "#30876"
+msgid "Not on this Kodi"
+msgstr "Ei tässä Kodissa"
+
+msgctxt "#30877"
+msgid "Season plots"
+msgstr "Kausien kuvaukset"
+
+msgctxt "#30878"
+msgid "Favorite episodes"
+msgstr "Suosikkijaksot"
+
+msgctxt "#30879"
+msgid "Removing emptied collections"
+msgstr "Tyhjentyneiden kokoelmien poisto"
+
+msgctxt "#30880"
+msgid "Movie versions"
+msgstr "Elokuvaversiot"
+
+msgctxt "#30881"
+msgid "Stream flags"
+msgstr "Raitojen liput"
+
+msgctxt "#30882"
+msgid "Song date added"
+msgstr "Kappaleiden lisäyspäivä"
+
+msgctxt "#30883"
+msgid "Removing dropped versions and extras"
+msgstr "Poistettujen versioiden ja lisämateriaalin poisto"
+
+msgctxt "#30884"
+msgid "Fine sync"
+msgstr "Hienosynkronointi"
+
+msgctxt "#30885"
+msgid "Kodi imports a special only with an episode number. Give these one on the server, or play them from the Kofin add-on."
+msgstr "Kodi tuo erikoisjakson vain, jos sillä on jaksonumero. Anna niille numero palvelimella tai toista ne Kofin-lisäosasta."
+
+msgctxt "#30886"
+msgid "KofinSyncQueue"
+msgstr "KofinSyncQueue"
+
+msgctxt "#30887"
+msgid "Available"
+msgstr "Käytettävissä"
+
+msgctxt "#30888"
+msgid "this profile holds a library from an older Kofin"
+msgstr "tässä profiilissa on vanhemman Kofinin kirjasto"
+
+msgctxt "#30889"
+msgid "Kofin cannot use it. To clean it, go back to Kofin 0.29:"
+msgstr "Kofin ei voi käyttää sitä. Palaa sen puhdistamiseksi Kofin 0.29:ään:"
+
+msgctxt "#30890"
+msgid "Open Kofin in Kodi's add-on list, select Versions and choose 0.29."
+msgstr "Avaa Kofin Kodin lisäosaluettelossa, valitse Versiot ja sitten 0.29."
+
+msgctxt "#30891"
+msgid "In Kofin's settings, log out on the Account tab and run Clean databases."
+msgstr "Kirjaudu ulos Kofinin asetusten Tili-välilehdellä ja suorita Puhdista tietokannat."
+
+msgctxt "#30892"
+msgid "When Kodi has restarted, open Kofin again, select Versions and choose the newest version. Then log in and choose the libraries to sync."
+msgstr "Kun Kodi on käynnistynyt uudelleen, avaa Kofin uudelleen, valitse Versiot ja sitten uusin versio. Kirjaudu sen jälkeen sisään ja valitse synkronoitavat kirjastot."
+
+msgctxt "#30893"
+msgid "Alternatively, close Kodi and delete its video and music databases by hand, as the Kofin wiki describes:"
+msgstr "Voit myös sulkea Kodin ja poistaa sen video- ja musiikkitietokannat käsin Kofin-wikin ohjeiden mukaan:"
+
+msgctxt "#30894"
+msgid "No longer on the server"
+msgstr "Ei enää palvelimella"
+
+msgctxt "#30895"
+msgid "%s is no longer on the server and was removed from the library"
+msgstr "%s ei ole enää palvelimella, ja se poistettiin kirjastosta"
+
+msgctxt "#30896"
+msgid "The synced libraries stay in Kodi until you log in again; a different account removes them."
+msgstr "Synkronoidut kirjastot pysyvät Kodissa, kunnes kirjaudut uudelleen; toinen tili poistaa ne."
+
+msgctxt "#30897"
+msgid "Queued %s of %s tracks"
+msgstr "%s/%s kappaletta jonossa"

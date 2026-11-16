@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.kofin" name="Kofin" version="1.0.0" provider-name="kontell">
+  <requires>
+    <import addon="xbmc.addon" version="21.90.802"/>
+    <import addon="xbmc.python" version="3.1.0"/>
+    <import addon="script.module.requests" version="2.22.0+matrix.1"/>
+    <import addon="script.module.websocket" version="1.6.4"/>
+    <import addon="script.kofin.lyrics" version="0.1.0" optional="true"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video audio</provides>
+    <medialibraryscanpath content="movies">/native/</medialibraryscanpath>
+    <medialibraryscanpath content="tvshows">/native/</medialibraryscanpath>
+    <medialibraryscanpath content="musicvideos">/native/</medialibraryscanpath>
+  </extension>
+  <extension point="xbmc.service" library="service.py"/>
+  <extension point="kodi.context.item">
+    <menu id="kodi.core.main">
+      <item library="context_manage.py">
+        <label>30502</label>
+        <visible>[!String.IsEmpty(ListItem.Property(kofin.id)) | [!String.IsEmpty(ListItem.DBID) + [String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,episode) | String.IsEqual(ListItem.DBTYPE,musicvideo) | String.IsEqual(ListItem.DBTYPE,tvshow) | String.IsEqual(ListItem.DBTYPE,season) | String.IsEqual(ListItem.DBTYPE,set) | String.IsEqual(ListItem.DBTYPE,song) | String.IsEqual(ListItem.DBTYPE,album) | String.IsEqual(ListItem.DBTYPE,artist)]] | [String.IsEqual(Container.FolderPath,library://music/kofin/) + String.Contains(ListItem.FileNameAndPath,library://music/kofin/kofinmusic)]]</visible>
+      </item>
+      <item library="context_play.py">
+        <label>30010</label>
+        <visible>[String.IsEqual(ListItem.DBTYPE,movie) | String.IsEqual(ListItem.DBTYPE,episode) | String.IsEqual(ListItem.DBTYPE,musicvideo) | [!String.IsEmpty(ListItem.Property(kofin.id)) + String.IsEqual(ListItem.DBTYPE,video)]] + [!String.IsEmpty(ListItem.Property(kofin.id)) | !String.IsEmpty(ListItem.DBID)] + !String.IsEmpty(Window(Home).Property(kofin.context.bitrates))</visible>
+      </item>
+      <item library="context_streams.py" args="both">
+        <label>30613</label>
+        <visible>ListItem.IsPlaying + String.IsEqual(Window(Home).Property(kofin.playing.menu),both)</visible>
+      </item>
+      <item library="context_streams.py" args="audio">
+        <label>30614</label>
+        <visible>ListItem.IsPlaying + String.IsEqual(Window(Home).Property(kofin.playing.menu),audio)</visible>
+      </item>
+      <item library="context_streams.py" args="subtitle">
+        <label>30615</label>
+        <visible>ListItem.IsPlaying + String.IsEqual(Window(Home).Property(kofin.playing.menu),subtitle)</visible>
+      </item>
+      <item library="context_playlist.py">
+        <label>30841</label>
+        <visible>[String.EndsWith(ListItem.FileNameAndPath,.m3u) | String.EndsWith(ListItem.FileNameAndPath,.m3u8)] + !String.Contains(ListItem.FileNameAndPath,playlists/music/Kofin/) + !String.Contains(ListItem.FileNameAndPath,playlists/video/Kofin/)</visible>
+      </item>
+      <item library="context_download_playlist.py">
+        <label>30708</label>
+        <visible>String.EndsWith(ListItem.FileNameAndPath,.m3u8) + String.Contains(ListItem.FileNameAndPath,playlists/music/Kofin/)</visible>
+      </item>
+    </menu>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+    <platform>all</platform>
+    <license>GPL-3.0-only</license>
+    <website>https://github.com/kontell/plugin.video.kofin/wiki</website>
+    <source>https://github.com/kontell/plugin.video.kofin</source>
+    <forum>https://forum.kodi.tv/showthread.php?tid=388267</forum>
+    <summary lang="en_GB">Jellyfin client for seamless Kodi integration</summary>
+    <summary lang="ca_ES">Client del Jellyfin per a una integració perfecta amb el Kodi</summary>
+    <summary lang="cs_CZ">Klient Jellyfin pro plynulou integraci s Kodi</summary>
+    <summary lang="da_DK">Jellyfin-klient til problemfri Kodi-integration</summary>
+    <summary lang="de_DE">Jellyfin-Client für nahtlose Kodi-Integration</summary>
+    <summary lang="el_GR">Πρόγραμμα-πελάτης Jellyfin για απρόσκοπτη ενσωμάτωση στο Kodi</summary>
+    <summary lang="es_ES">Cliente de Jellyfin con integración total en Kodi</summary>
+    <summary lang="es_MX">Cliente de Jellyfin con integración total en Kodi</summary>
+    <summary lang="fi_FI">Jellyfin-asiakas saumattomaan Kodi-integraatioon</summary>
+    <summary lang="fr_CA">Client Jellyfin pour une intégration transparente à Kodi</summary>
+    <summary lang="fr_FR">Client Jellyfin pour une intégration transparente à Kodi</summary>
+    <summary lang="hu_HU">Jellyfin-kliens zökkenőmentes Kodi-integrációval</summary>
+    <summary lang="it_IT">Client Jellyfin per un'integrazione perfetta con Kodi</summary>
+    <summary lang="ja_JP">Kodi にシームレスに統合される Jellyfin クライアント</summary>
+    <summary lang="ko_KR">Kodi와 매끄럽게 통합되는 Jellyfin 클라이언트</summary>
+    <summary lang="nb_NO">Jellyfin-klient for sømløs Kodi-integrasjon</summary>
+    <summary lang="nl_NL">Jellyfin-client voor naadloze Kodi-integratie</summary>
+    <summary lang="pl_PL">Klient Jellyfin do płynnej integracji z Kodi</summary>
+    <summary lang="pt_BR">Cliente Jellyfin com integração total ao Kodi</summary>
+    <summary lang="pt_PT">Cliente Jellyfin com integração total no Kodi</summary>
+    <summary lang="ro_RO">Client Jellyfin pentru o integrare perfectă în Kodi</summary>
+    <summary lang="ru_RU">Клиент Jellyfin для полной интеграции с Kodi</summary>
+    <summary lang="sk_SK">Klient Jellyfin pre plynulú integráciu s Kodi</summary>
+    <summary lang="sv_SE">Jellyfin-klient för sömlös Kodi-integration</summary>
+    <summary lang="uk_UA">Клієнт Jellyfin для повної інтеграції з Kodi</summary>
+    <summary lang="zh_CN">无缝集成 Kodi 的 Jellyfin 客户端</summary>
+    <summary lang="zh_TW">無縫整合 Kodi 的 Jellyfin 用戶端</summary>
+    <description lang="en_GB">Play movies, shows &amp; music from a Jellyfin server.</description>
+    <description lang="ca_ES">Reproduïu pel·lícules, sèries i música des d'un servidor Jellyfin.</description>
+    <description lang="cs_CZ">Přehrávejte filmy, seriály a hudbu ze serveru Jellyfin.</description>
+    <description lang="da_DK">Afspil film, serier og musik fra en Jellyfin-server.</description>
+    <description lang="de_DE">Filme, Serien und Musik von einem Jellyfin-Server wiedergeben.</description>
+    <description lang="el_GR">Αναπαραγωγή ταινιών, σειρών και μουσικής από έναν διακομιστή Jellyfin.</description>
+    <description lang="es_ES">Reproduce películas, series y música desde un servidor Jellyfin.</description>
+    <description lang="es_MX">Reproduce películas, series y música desde un servidor Jellyfin.</description>
+    <description lang="fi_FI">Toista elokuvia, sarjoja ja musiikkia Jellyfin-palvelimelta.</description>
+    <description lang="fr_CA">Lisez des films, des séries et de la musique depuis un serveur Jellyfin.</description>
+    <description lang="fr_FR">Lisez des films, des séries et de la musique depuis un serveur Jellyfin.</description>
+    <description lang="hu_HU">Filmek, sorozatok és zene lejátszása Jellyfin-kiszolgálóról.</description>
+    <description lang="it_IT">Riproduci film, serie e musica da un server Jellyfin.</description>
+    <description lang="ja_JP">Jellyfin サーバーの映画、テレビ番組、音楽を再生します。</description>
+    <description lang="ko_KR">Jellyfin 서버의 영화, 시리즈, 음악을 재생합니다.</description>
+    <description lang="nb_NO">Spill av filmer, serier og musikk fra en Jellyfin-server.</description>
+    <description lang="nl_NL">Speel films, series en muziek af van een Jellyfin-server.</description>
+    <description lang="pl_PL">Odtwarzaj filmy, seriale i muzykę z serwera Jellyfin.</description>
+    <description lang="pt_BR">Reproduza filmes, séries e músicas de um servidor Jellyfin.</description>
+    <description lang="pt_PT">Reproduza filmes, séries e música de um servidor Jellyfin.</description>
+    <description lang="ro_RO">Redați filme, seriale și muzică de pe un server Jellyfin.</description>
+    <description lang="ru_RU">Воспроизведение фильмов, сериалов и музыки с сервера Jellyfin.</description>
+    <description lang="sk_SK">Prehrávajte filmy, seriály a hudbu zo servera Jellyfin.</description>
+    <description lang="sv_SE">Spela upp filmer, serier och musik från en Jellyfin-server.</description>
+    <description lang="uk_UA">Відтворюйте фільми, серіали та музику із сервера Jellyfin.</description>
+    <description lang="zh_CN">播放来自 Jellyfin 服务器的电影、电视剧和音乐。</description>
+    <description lang="zh_TW">播放 Jellyfin 伺服器上的電影、影集與音樂。</description>
+    <news>v1.0.0
+- The server's certificate is always checked. "Verify SSL certificate" is gone.
+- A certificate authority given to Kodi is trusted, including through a proxy.
+- New and changed items reach Kodi sooner.
+- Home screen widgets show edited titles and artwork straight away.
+- Removing an artist on the server removes its albums from Kodi.
+- Choose which version of a movie or episode to play when Kodi does not offer the choice itself.</news>
+    <assets>
+      <icon>resources/media/icon.png</icon>
+      <fanart>resources/media/fanart.jpeg</fanart>
+    </assets>
+  </extension>
+</addon>

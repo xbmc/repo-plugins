@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Kofin segment overlay: Skip <type> / Play Next / Close (plan §2).
+     Buttons show when their window property is non-empty; stock textures
+     only (colordiffused white.png), no addon-branded art. -->
+<window>
+	<defaultcontrol always="true">3010</defaultcontrol>
+	<onload>Dialog.Close(fullscreeninfo,true)</onload>
+	<controls>
+		<control type="group">
+			<!-- Slide in from the right, bottom-right anchored -->
+			<animation type="WindowOpen" reversible="false">
+				<effect type="fade" start="0" end="100" time="300" />
+				<effect type="slide" start="400,0" end="0,0" time="300" tween="cubic" easing="out"/>
+			</animation>
+			<animation type="WindowClose" reversible="false">
+				<effect type="fade" start="100" end="0" time="300" />
+				<effect type="slide" start="0,0" end="400,0" time="300" tween="cubic" easing="in"/>
+			</animation>
+			<left>1120</left>
+			<top>896</top>
+			<control type="group">
+				<width>760</width>
+				<height>122</height>
+				<!-- Everything hugs the right edge: the buttons carry their own
+				     backgrounds, so a fixed-width panel behind them is just
+				     empty black whenever the row is short (Skip + Close is
+				     less than half the width Skip + Play Next + Close needs).
+				     A grouplist cannot size itself to its content, but it does
+				     right-align it when the content is narrower than the list
+				     (CGUIControlGroupList::GetAlignOffset), which comes to the
+				     same thing against a right-anchored panel. -->
+				<!-- Up-next info line (only when a next episode is on offer) -->
+				<control type="label">
+					<visible>!String.IsEmpty(Window.Property(kofin.next.info))</visible>
+					<left>0</left>
+					<top>2</top>
+					<width>760</width>
+					<height>36</height>
+					<font>font12</font>
+					<align>right</align>
+					<textcolor>E6FFFFFF</textcolor>
+					<shadowcolor>FF000000</shadowcolor>
+					<label>$INFO[Window.Property(kofin.next.info)]</label>
+				</control>
+				<control type="grouplist" id="3010">
+					<left>0</left>
+					<top>52</top>
+					<width>760</width>
+					<height>56</height>
+					<orientation>horizontal</orientation>
+					<align>right</align>
+					<itemgap>10</itemgap>
+					<!-- Accent bar: inside the list so it tracks the row -->
+					<control type="image">
+						<width>4</width>
+						<height>56</height>
+						<texture colordiffuse="FF00A4DC">white.png</texture>
+					</control>
+					<control type="button" id="3012">
+						<visible>!String.IsEmpty(Window.Property(kofin.skip.label))</visible>
+						<label>$INFO[Window.Property(kofin.skip.label)]$INFO[Window.Property(kofin.skip.duration), (,)]</label>
+						<height>56</height>
+						<width min="200">auto</width>
+						<font>font13</font>
+						<textoffsetx>20</textoffsetx>
+						<textcolor>FFFFFFFF</textcolor>
+						<focusedcolor>FF000000</focusedcolor>
+						<shadowcolor>66000000</shadowcolor>
+						<aligny>center</aligny>
+						<align>center</align>
+						<texturefocus colordiffuse="FF00A4DC">white.png</texturefocus>
+						<texturenofocus colordiffuse="D9000000">white.png</texturenofocus>
+						<pulseonselect>no</pulseonselect>
+					</control>
+					<control type="button" id="3014">
+						<visible>!String.IsEmpty(Window.Property(kofin.next.label))</visible>
+						<label>$INFO[Window.Property(kofin.next.label)]$INFO[Window.Property(kofin.countdown), (,)]</label>
+						<height>56</height>
+						<width min="200">auto</width>
+						<font>font13</font>
+						<textoffsetx>20</textoffsetx>
+						<textcolor>FFFFFFFF</textcolor>
+						<focusedcolor>FF000000</focusedcolor>
+						<shadowcolor>66000000</shadowcolor>
+						<aligny>center</aligny>
+						<align>center</align>
+						<texturefocus colordiffuse="FF00A4DC">white.png</texturefocus>
+						<texturenofocus colordiffuse="D9000000">white.png</texturenofocus>
+						<pulseonselect>no</pulseonselect>
+					</control>
+					<control type="button" id="3013">
+						<label>$INFO[Window.Property(kofin.close.label)]</label>
+						<height>56</height>
+						<width min="120">auto</width>
+						<font>font13</font>
+						<textoffsetx>15</textoffsetx>
+						<textcolor>FFFFFFFF</textcolor>
+						<focusedcolor>FF000000</focusedcolor>
+						<shadowcolor>66000000</shadowcolor>
+						<aligny>center</aligny>
+						<align>center</align>
+						<texturefocus colordiffuse="FF00A4DC">white.png</texturefocus>
+						<texturenofocus colordiffuse="D9000000">white.png</texturenofocus>
+						<pulseonselect>no</pulseonselect>
+					</control>
+				</control>
+			</control>
+		</control>
+	</controls>
+</window>

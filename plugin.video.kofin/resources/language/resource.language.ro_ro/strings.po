@@ -1,0 +1,1961 @@
+# Kodi Media Center language file
+# Addon Name: Kofin
+# Addon id: plugin.video.kofin
+# Addon Provider: kontell
+# Note: machine-translated (LLM), pending native review.
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.kofin\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-08-14 00:00+0000\n"
+"Last-Translator: Claude (machine translation) <noreply@anthropic.com>\n"
+"Language-Team: Romanian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ro_RO\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100>0 && n%100<20)) ? 1 : 2);\n"
+
+msgctxt "Addon Summary"
+msgid "Jellyfin client for seamless Kodi integration"
+msgstr "Client Jellyfin pentru o integrare perfectă în Kodi"
+
+msgctxt "Addon Description"
+msgid "Play movies, shows & music from a Jellyfin server."
+msgstr "Redați filme, seriale și muzică de pe un server Jellyfin."
+
+msgctxt "#30010"
+msgid "Play with transcoding"
+msgstr "Redă cu transcodare"
+
+msgctxt "#30011"
+msgid "Quick Connect"
+msgstr "Quick Connect"
+
+msgctxt "#30012"
+msgid "Username and password"
+msgstr "Nume de utilizator și parolă"
+
+msgctxt "#30013"
+msgid "Username"
+msgstr "Nume de utilizator"
+
+msgctxt "#30014"
+msgid "Password"
+msgstr "Parolă"
+
+msgctxt "#30015"
+msgid "Enter code [B]%s[/B] in the Jellyfin app or web interface."
+msgstr "Introduceți codul [B]%s[/B] în aplicația Jellyfin sau în interfața web."
+
+msgctxt "#30016"
+msgid "Logged in as %s"
+msgstr "Autentificat ca %s"
+
+msgctxt "#30017"
+msgid "Login failed: wrong username or password"
+msgstr "Autentificare eșuată: nume de utilizator sau parolă greșite"
+
+msgctxt "#30018"
+msgid "Server unreachable"
+msgstr "Server inaccesibil"
+
+msgctxt "#30019"
+msgid "Log out from %s?"
+msgstr "Vă deconectați de la %s?"
+
+msgctxt "#30020"
+msgid "Logged out"
+msgstr "Deconectat"
+
+msgctxt "#30021"
+msgid "Connection OK — %s (%s)"
+msgstr "Conexiune OK — %s (%s)"
+
+msgctxt "#30022"
+msgid "Session rejected — log in again from the Account tab"
+msgstr "Sesiune respinsă — autentificați-vă din nou din fila Cont"
+
+msgctxt "#30023"
+msgid "Restarting the Kofin service"
+msgstr "Se repornește serviciul Kofin"
+
+msgctxt "#30024"
+msgid "Quick Connect timed out"
+msgstr "Quick Connect a expirat"
+
+msgctxt "#30025"
+msgid "Already logged in"
+msgstr "Sunteți deja autentificat"
+
+msgctxt "#30026"
+msgid "Not logged in"
+msgstr "Nu sunteți autentificat"
+
+msgctxt "#30027"
+msgid "Log in to %s"
+msgstr "Autentificare la %s"
+
+msgctxt "#30050"
+msgid "Account"
+msgstr "Cont"
+
+msgctxt "#30051"
+msgid "Connect to your Jellyfin server and manage the session."
+msgstr "Conectați-vă la serverul Jellyfin și gestionați sesiunea."
+
+msgctxt "#30052"
+msgid "Server address"
+msgstr "Adresa serverului"
+
+msgctxt "#30053"
+msgid "Host name, IP address or full URL of the Jellyfin server. A bare host uses http on port 8096."
+msgstr "Numele de gazdă, adresa IP sau URL-ul complet al serverului Jellyfin. O gazdă simplă folosește http pe portul 8096."
+
+msgctxt "#30054"
+msgid "Log in…"
+msgstr "Autentificare…"
+
+msgctxt "#30055"
+msgid "Connect to the server above using Quick Connect or a username and password."
+msgstr "Conectați-vă la serverul de mai sus folosind Quick Connect sau un nume de utilizator și o parolă."
+
+msgctxt "#30056"
+msgid "Server"
+msgstr "Server"
+
+msgctxt "#30057"
+msgid "The connected Jellyfin server."
+msgstr "Serverul Jellyfin conectat."
+
+msgctxt "#30058"
+msgid "Logged-in user"
+msgstr "Utilizator autentificat"
+
+msgctxt "#30059"
+msgid "The Jellyfin user this device plays and reports as."
+msgstr "Utilizatorul Jellyfin sub care acest dispozitiv redă și raportează."
+
+msgctxt "#30060"
+msgid "Test connection"
+msgstr "Testează conexiunea"
+
+msgctxt "#30061"
+msgid "Check that the server is reachable and the session is still valid."
+msgstr "Verifică dacă serverul este accesibil și dacă sesiunea este încă validă."
+
+msgctxt "#30062"
+msgid "Log out"
+msgstr "Deconectare"
+
+msgctxt "#30063"
+msgid "End the session on the server and forget it on this device. The server address is kept."
+msgstr "Încheie sesiunea pe server și o uită pe acest dispozitiv. Adresa serverului este păstrată."
+
+msgctxt "#30064"
+msgid "Restart Kofin"
+msgstr "Repornește Kofin"
+
+msgctxt "#30065"
+msgid "Restart the background service without restarting Kodi."
+msgstr "Repornește serviciul din fundal fără a reporni Kodi."
+
+msgctxt "#30071"
+msgid "Advanced"
+msgstr "Avansat"
+
+msgctxt "#30072"
+msgid "Notification, browsing, playback and deletion options."
+msgstr "Opțiuni pentru notificări, navigare, redare și ștergere."
+
+msgctxt "#30073"
+msgid "Enable Delete from server"
+msgstr "Activează Șterge de pe server"
+
+msgctxt "#30074"
+msgid "Adds a Delete entry to an item's 'Jellyfin actions' context menu. Deletion is permanent: the file itself is removed on the Jellyfin server, for every user."
+msgstr "Adaugă o intrare Șterge în meniul contextual „Acțiuni Jellyfin” al unui element. Ștergerea este definitivă: fișierul este eliminat de pe serverul Jellyfin, pentru toți utilizatorii."
+
+msgctxt "#30075"
+msgid "Delete without confirmation"
+msgstr "Șterge fără confirmare"
+
+msgctxt "#30076"
+msgid "Delete the item as soon as the entry is picked, with no 'are you sure?' prompt. The deletion is still permanent and applies on the server."
+msgstr "Șterge elementul imediat ce intrarea este aleasă, fără întrebarea „sigur?”. Ștergerea rămâne definitivă și se aplică pe server."
+
+msgctxt "#30077"
+msgid "Offer to delete after watching"
+msgstr "Propune ștergerea după vizionare"
+
+msgctxt "#30078"
+msgid "When a movie or episode finishes, ask whether to delete it from the server. Always asks, whatever 'Delete without confirmation' is set to."
+msgstr "Când un film sau un episod se termină, întreabă dacă să fie șters de pe server. Întreabă întotdeauna, indiferent de setarea „Șterge fără confirmare”."
+
+msgctxt "#30079"
+msgid "Who's watching shortlist"
+msgstr "Listă scurtă pentru Cine se uită?"
+
+msgctxt "#30080"
+msgid "Choose which server users the addon's Who's watching? entry offers. \"All\" offers everyone. With nothing selected the entry is hidden and anyone already on the session is removed."
+msgstr "Alegeți ce utilizatori ai serverului sunt oferiți de intrarea Cine se uită? a suplimentului. \"Toți\" îi oferă pe toți. Fără nicio selecție, intrarea este ascunsă și oricine se află deja în sesiune este eliminat."
+
+msgctxt "#30030"
+msgid "All"
+msgstr "Toate"
+
+msgctxt "#30031"
+msgid "Recently added"
+msgstr "Adăugate recent"
+
+msgctxt "#30032"
+msgid "Next up"
+msgstr "Urmează"
+
+msgctxt "#30033"
+msgid "In progress"
+msgstr "În curs"
+
+msgctxt "#30034"
+msgid "Unwatched"
+msgstr "Nevizionate"
+
+msgctxt "#30035"
+msgid "Favourites"
+msgstr "Favorite"
+
+msgctxt "#30036"
+msgid "Genres"
+msgstr "Genuri"
+
+msgctxt "#30037"
+msgid "Random"
+msgstr "Aleatoriu"
+
+msgctxt "#30038"
+msgid "Sets"
+msgstr "Seturi"
+
+msgctxt "#30039"
+msgid "Artists"
+msgstr "Artiști"
+
+msgctxt "#30040"
+msgid "Albums"
+msgstr "Albume"
+
+msgctxt "#30049"
+msgid "Continue watching"
+msgstr "Continuă vizionarea"
+
+msgctxt "#30100"
+msgid "Transcoding"
+msgstr "Transcodare"
+
+msgctxt "#30101"
+msgid "When and how the server converts media for this device."
+msgstr "Când și cum convertește serverul fișierele media pentru acest dispozitiv."
+
+msgctxt "#30102"
+msgid "Force direct play"
+msgstr "Forțează redarea directă"
+
+msgctxt "#30103"
+msgid "Always play the original video file. Overrides every other video transcoding setting; playback fails if the device cannot handle the media. Music is unaffected — see 'Transcode music'."
+msgstr "Redă întotdeauna fișierul video original. Are prioritate față de orice altă setare de transcodare video; redarea eșuează dacă dispozitivul nu poate gestiona fișierul. Muzica nu este afectată — vedeți „Transcodează muzica”."
+
+msgctxt "#30104"
+msgid "Force remux"
+msgstr "Forțează remultiplexarea"
+
+msgctxt "#30105"
+msgid "Remux into HLS and copy the source codecs. Does not use Maximum audio channels, Maximum streaming bitrate or Transcode audio bitrate below — those would re-encode a listed codec. Direct play codecs, Allowed HDR types and Maximum resolution still apply."
+msgstr "Face remux în HLS și copiază codecurile sursă. Nu folosește Număr maxim de canale audio, Rată de biți maximă pentru streaming sau Rată de biți audio la transcodare de mai jos — ar recoda un codec din listă. Codecurile de redare directă, Tipuri HDR permise și Rezoluție maximă se aplică în continuare."
+
+msgctxt "#30106"
+msgid "Force transcode"
+msgstr "Forțează transcodarea"
+
+msgctxt "#30107"
+msgid "Always re-encode video and audio to the preferred codecs. Honours the bitrate cap, the channel cap, allowed codecs, HDR types and resolution."
+msgstr "Recodează întotdeauna video și audio către codecurile preferate. Respectă plafonul de rată de biți, plafonul de canale, codecurile permise, tipurile HDR și rezoluția."
+
+msgctxt "#30108"
+msgid "Direct play video codecs"
+msgstr "Codecuri video pentru redare directă"
+
+msgctxt "#30109"
+msgid "Video formats this device can decode. Media using formats not selected here is transcoded."
+msgstr "Formatele video pe care acest dispozitiv le poate decoda. Fișierele în formate neselectate aici sunt transcodate."
+
+msgctxt "#30110"
+msgid "Direct play audio codecs"
+msgstr "Codecuri audio pentru redare directă"
+
+msgctxt "#30111"
+msgid "Audio formats this device can decode or pass through. Others are transcoded."
+msgstr "Formatele audio pe care acest dispozitiv le poate decoda sau transmite mai departe. Restul sunt transcodate."
+
+msgctxt "#30112"
+msgid "Allowed HDR types"
+msgstr "Tipuri HDR permise"
+
+msgctxt "#30113"
+msgid "HDR formats the display accepts. Media in formats not selected is tone-mapped or transcoded to SDR/HDR10 by the server."
+msgstr "Formatele HDR acceptate de afișaj. Fișierele în formate neselectate sunt mapate tonal sau transcodate la SDR/HDR10 de către server."
+
+msgctxt "#30114"
+msgid "Preferred video codec"
+msgstr "Codec video preferat"
+
+msgctxt "#30115"
+msgid "The codec the client asks for when video must be transcoded."
+msgstr "Codecul pe care îl cere clientul când video trebuie transcodat."
+
+msgctxt "#30116"
+msgid "Preferred audio codec"
+msgstr "Codec audio preferat"
+
+msgctxt "#30117"
+msgid "The codec the client asks for when audio must be transcoded."
+msgstr "Codecul pe care îl cere clientul când audio trebuie transcodat."
+
+msgctxt "#30118"
+msgid "Maximum audio channels"
+msgstr "Număr maxim de canale audio"
+
+msgctxt "#30119"
+msgid "Maximum number of audio channels allowed when transcoding. Streams with more channels will be downmixed. No effect on direct playback."
+msgstr "Numărul maxim de canale audio permise la transcodare. Fluxurile cu mai multe canale vor fi reduse (downmix). Niciun efect asupra redării directe."
+
+msgctxt "#30120"
+msgid "Maximum streaming bitrate"
+msgstr "Rată de biți maximă pentru streaming"
+
+msgctxt "#30121"
+msgid "Media above this bitrate is transcoded down to it."
+msgstr "Fișierele peste această rată de biți sunt transcodate până la ea."
+
+msgctxt "#30122"
+msgid "Maximum resolution"
+msgstr "Rezoluție maximă"
+
+msgctxt "#30123"
+msgid "Wider media is downscaled by the server."
+msgstr "Fișierele mai late sunt reduse ca scală de către server."
+
+msgctxt "#30124"
+msgid "Transcode audio bitrate"
+msgstr "Rată de biți audio la transcodare"
+
+msgctxt "#30125"
+msgid "Bitrate for the audio track when video is transcoded."
+msgstr "Rata de biți a pistei audio când video este transcodat."
+
+msgctxt "#30126"
+msgid "Context menu bitrates"
+msgstr "Rate de biți în meniul contextual"
+
+msgctxt "#30127"
+msgid "Bitrates offered by 'Play with transcoding'. With one selected the popup is skipped."
+msgstr "Ratele de biți oferite de „Redă cu transcodare”. Cu una singură selectată, fereastra este omisă."
+
+msgctxt "#30129"
+msgid "Maximum music bitrate"
+msgstr "Rată de biți maximă pentru muzică"
+
+msgctxt "#30130"
+msgid "Music above this bitrate is transcoded using the codec and bitrate below. Unlimited never transcodes."
+msgstr "Muzica peste această rată de biți este transcodată cu codecul și rata de biți de mai jos. Nelimitat nu transcodează niciodată."
+
+msgctxt "#30131"
+msgid "Music transcode codec"
+msgstr "Codec de transcodare pentru muzică"
+
+msgctxt "#30132"
+msgid "Codec for transcoded music streams."
+msgstr "Codecul pentru fluxurile de muzică transcodate."
+
+msgctxt "#30133"
+msgid "Music transcode bitrate"
+msgstr "Rată de biți de transcodare pentru muzică"
+
+msgctxt "#30134"
+msgid "Bitrate for transcoded music streams."
+msgstr "Rata de biți pentru fluxurile de muzică transcodate."
+
+msgctxt "#30135"
+msgid "Transcode music"
+msgstr "Transcodează muzica"
+
+msgctxt "#30150"
+msgid "H.264 (AVC)"
+msgstr "H.264 (AVC)"
+
+msgctxt "#30151"
+msgid "H.264 10-bit (Hi10P)"
+msgstr "H.264 10-bit (Hi10P)"
+
+msgctxt "#30152"
+msgid "H.265 (HEVC)"
+msgstr "H.265 (HEVC)"
+
+msgctxt "#30153"
+msgid "HEVC RExt (4:2:2/4:4:4)"
+msgstr "HEVC RExt (4:2:2/4:4:4)"
+
+msgctxt "#30154"
+msgid "AV1"
+msgstr "AV1"
+
+msgctxt "#30155"
+msgid "MPEG-2"
+msgstr "MPEG-2"
+
+msgctxt "#30156"
+msgid "VP9"
+msgstr "VP9"
+
+msgctxt "#30157"
+msgid "VC-1"
+msgstr "VC-1"
+
+msgctxt "#30158"
+msgid "AAC"
+msgstr "AAC"
+
+msgctxt "#30159"
+msgid "MP2"
+msgstr "MP2"
+
+msgctxt "#30160"
+msgid "MP3"
+msgstr "MP3"
+
+msgctxt "#30161"
+msgid "AC3 (Dolby Digital)"
+msgstr "AC3 (Dolby Digital)"
+
+msgctxt "#30162"
+msgid "E-AC3 (Dolby Digital Plus)"
+msgstr "E-AC3 (Dolby Digital Plus)"
+
+msgctxt "#30163"
+msgid "Opus"
+msgstr "Opus"
+
+msgctxt "#30164"
+msgid "FLAC"
+msgstr "FLAC"
+
+msgctxt "#30165"
+msgid "DTS"
+msgstr "DTS"
+
+msgctxt "#30166"
+msgid "HDR10"
+msgstr "HDR10"
+
+msgctxt "#30167"
+msgid "HLG"
+msgstr "HLG"
+
+msgctxt "#30168"
+msgid "HDR10+"
+msgstr "HDR10+"
+
+msgctxt "#30169"
+msgid "Dolby Vision"
+msgstr "Dolby Vision"
+
+msgctxt "#30170"
+msgid "Dolby Vision with HDR10 fallback"
+msgstr "Dolby Vision cu rezervă HDR10"
+
+msgctxt "#30171"
+msgid "Dolby Vision with HLG fallback"
+msgstr "Dolby Vision cu rezervă HLG"
+
+msgctxt "#30172"
+msgid "Dolby Vision with SDR fallback"
+msgstr "Dolby Vision cu rezervă SDR"
+
+msgctxt "#30173"
+msgid "Dolby Vision Profile 7 (EL)"
+msgstr "Dolby Vision Profil 7 (EL)"
+
+msgctxt "#30174"
+msgid "Dolby Vision with HDR10+ fallback"
+msgstr "Dolby Vision cu rezervă HDR10+"
+
+msgctxt "#30175"
+msgid "Dolby Vision P7 with HDR10+ fallback"
+msgstr "Dolby Vision P7 cu rezervă HDR10+"
+
+msgctxt "#30176"
+msgid "Unlimited"
+msgstr "Nelimitat"
+
+msgctxt "#30177"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30178"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30179"
+msgid "4K"
+msgstr "4K"
+
+msgctxt "#30180"
+msgid "2.0 stereo"
+msgstr "2.0 stereo"
+
+msgctxt "#30181"
+msgid "5.1 surround"
+msgstr "5.1 surround"
+
+msgctxt "#30182"
+msgid "7.1 surround"
+msgstr "7.1 surround"
+
+msgctxt "#30183"
+msgid "1 Mbit/s"
+msgstr "1 Mbit/s"
+
+msgctxt "#30184"
+msgid "2 Mbit/s"
+msgstr "2 Mbit/s"
+
+msgctxt "#30185"
+msgid "3 Mbit/s"
+msgstr "3 Mbit/s"
+
+msgctxt "#30186"
+msgid "4 Mbit/s"
+msgstr "4 Mbit/s"
+
+msgctxt "#30187"
+msgid "6 Mbit/s"
+msgstr "6 Mbit/s"
+
+msgctxt "#30188"
+msgid "8 Mbit/s"
+msgstr "8 Mbit/s"
+
+msgctxt "#30189"
+msgid "10 Mbit/s"
+msgstr "10 Mbit/s"
+
+msgctxt "#30190"
+msgid "15 Mbit/s"
+msgstr "15 Mbit/s"
+
+msgctxt "#30191"
+msgid "20 Mbit/s"
+msgstr "20 Mbit/s"
+
+msgctxt "#30192"
+msgid "25 Mbit/s"
+msgstr "25 Mbit/s"
+
+msgctxt "#30193"
+msgid "40 Mbit/s"
+msgstr "40 Mbit/s"
+
+msgctxt "#30194"
+msgid "60 Mbit/s"
+msgstr "60 Mbit/s"
+
+msgctxt "#30195"
+msgid "120 Mbit/s"
+msgstr "120 Mbit/s"
+
+msgctxt "#30196"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30197"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30198"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30199"
+msgid "256 kbit/s"
+msgstr "256 kbit/s"
+
+msgctxt "#30200"
+msgid "320 kbit/s"
+msgstr "320 kbit/s"
+
+msgctxt "#30201"
+msgid "384 kbit/s"
+msgstr "384 kbit/s"
+
+msgctxt "#30202"
+msgid "448 kbit/s"
+msgstr "448 kbit/s"
+
+msgctxt "#30203"
+msgid "640 kbit/s"
+msgstr "640 kbit/s"
+
+msgctxt "#30204"
+msgid "0.5 Mbit/s"
+msgstr "0.5 Mbit/s"
+
+msgctxt "#30205"
+msgid "0.75 Mbit/s"
+msgstr "0.75 Mbit/s"
+
+msgctxt "#30206"
+msgid "Default (max streaming bitrate)"
+msgstr "Implicit (rată de biți maximă pentru streaming)"
+
+msgctxt "#30041"
+msgid "Who's watching?"
+msgstr "Cine se uită?"
+
+msgctxt "#30045"
+msgid "No active session on the server yet"
+msgstr "Încă nu există nicio sesiune activă pe server"
+
+msgctxt "#30046"
+msgid "Who's watching? (%s)"
+msgstr "Cine se uită? (%s)"
+
+msgctxt "#30047"
+msgid "Who's watching with %s?"
+msgstr "Cine se uită împreună cu %s?"
+
+msgctxt "#30048"
+msgid "Who can be added to the session"
+msgstr "Cine poate fi adăugat la sesiune"
+
+msgctxt "#30250"
+msgid "Library"
+msgstr "Bibliotecă"
+
+msgctxt "#30251"
+msgid "Select and manage the Jellyfin libraries mirrored into Kodi's own database."
+msgstr "Selectați și gestionați bibliotecile Jellyfin oglindite în baza de date proprie a Kodi."
+
+msgctxt "#30252"
+msgid "Select libraries to sync"
+msgstr "Selectați bibliotecile de sincronizat"
+
+msgctxt "#30253"
+msgid "Choose which server libraries are mirrored into the Kodi library. Changes apply when you confirm the selection."
+msgstr "Alegeți ce biblioteci ale serverului sunt oglindite în biblioteca Kodi. Modificările se aplică la confirmarea selecției."
+
+msgctxt "#30256"
+msgid "Update libraries"
+msgstr "Actualizează bibliotecile"
+
+msgctxt "#30258"
+msgid "Repair libraries"
+msgstr "Repară bibliotecile"
+
+msgctxt "#30259"
+msgid "Remove and re-sync the libraries you pick from scratch, restoring watched state from the server. Runs when you confirm the selection."
+msgstr "Elimină și resincronizează de la zero bibliotecile alese, restaurând starea de vizionare de pe server. Rulează la confirmarea selecției."
+
+msgctxt "#30262"
+msgid "Sync status"
+msgstr "Stare sincronizare"
+
+msgctxt "#30264"
+msgid "Remove synced library?"
+msgstr "Eliminați biblioteca sincronizată?"
+
+msgctxt "#30265"
+msgid "Remove %s from the Kodi library? The items are deleted from this device only."
+msgstr "Eliminați %s din biblioteca Kodi? Elementele sunt șterse doar de pe acest dispozitiv."
+
+msgctxt "#30266"
+msgid "Repair which libraries?"
+msgstr "Ce biblioteci se repară?"
+
+msgctxt "#30267"
+msgid "All"
+msgstr "Toate"
+
+msgctxt "#30268"
+msgid "Select libraries"
+msgstr "Selectați bibliotecile"
+
+msgctxt "#30269"
+msgid "No libraries available"
+msgstr "Nicio bibliotecă disponibilă"
+
+msgctxt "#30302"
+msgid "Hide update status below (items)"
+msgstr "Ascunde starea actualizării sub (elemente)"
+
+msgctxt "#30303"
+msgid "Hide Kodi's library-update progress for syncs smaller than this. 0 always shows it."
+msgstr "Ascunde progresul actualizării bibliotecii Kodi pentru sincronizări mai mici de atât. 0 îl afișează întotdeauna."
+
+msgctxt "#30318"
+msgid "Compress artwork"
+msgstr "Comprimă grafica"
+
+msgctxt "#30319"
+msgid "Re-encode capped artwork at JPEG quality 90. No effect without a resolution cap."
+msgstr "Recodează grafica limitată la calitatea JPEG 90. Niciun efect fără o limită de rezoluție."
+
+msgctxt "#30320"
+msgid "Maximum artwork resolution"
+msgstr "Rezoluție maximă a graficii"
+
+msgctxt "#30321"
+msgid "Cap the height of synced artwork. Original keeps the server size."
+msgstr "Limitează înălțimea graficii sincronizate. Original păstrează dimensiunea de pe server."
+
+msgctxt "#30322"
+msgid "Original"
+msgstr "Original"
+
+msgctxt "#30323"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30324"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30325"
+msgid "2160p"
+msgstr "2160p"
+
+msgctxt "#30326"
+msgid "Notify on server connection changes"
+msgstr "Notifică la schimbarea conexiunii cu serverul"
+
+msgctxt "#30327"
+msgid "Show a notification when the server connects, disconnects or restarts."
+msgstr "Afișează o notificare când serverul se conectează, se deconectează sau repornește."
+
+msgctxt "#30350"
+msgid "Recently added"
+msgstr "Adăugate recent"
+
+msgctxt "#30351"
+msgid "In progress"
+msgstr "În curs"
+
+msgctxt "#30352"
+msgid "Unwatched"
+msgstr "Nevizionate"
+
+msgctxt "#30353"
+msgid "Random"
+msgstr "Aleatoriu"
+
+msgctxt "#30354"
+msgid "Recommended"
+msgstr "Recomandate"
+
+msgctxt "#30355"
+msgid "Recently added episodes"
+msgstr "Episoade adăugate recent"
+
+msgctxt "#30356"
+msgid "In progress episodes"
+msgstr "Episoade în curs"
+
+msgctxt "#30358"
+msgid "Favorite movies"
+msgstr "Filme favorite"
+
+msgctxt "#30359"
+msgid "Favorite shows"
+msgstr "Seriale favorite"
+
+msgctxt "#30360"
+msgid "Favorite episodes"
+msgstr "Episoade favorite"
+
+msgctxt "#30401"
+msgid "Updating media"
+msgstr "Se actualizează media"
+
+msgctxt "#30403"
+msgid "Sync incomplete; retrying shortly"
+msgstr "Sincronizare incompletă, se reia"
+
+msgctxt "#30408"
+msgid "Removing library"
+msgstr "Se elimină biblioteca"
+
+msgctxt "#30415"
+msgid "Connected to %s"
+msgstr "Conectat la %s"
+
+msgctxt "#30416"
+msgid "Lost connection to the server"
+msgstr "Conexiune pierdută cu serverul"
+
+msgctxt "#30417"
+msgid "Server is restarting"
+msgstr "Serverul repornește"
+
+msgctxt "#30418"
+msgid "Server is shutting down"
+msgstr "Serverul se oprește"
+
+msgctxt "#30420"
+msgid "Library sync is off: %s"
+msgstr "Sincronizare oprită: %s"
+
+msgctxt "#30450"
+msgid "Skipping & Play next"
+msgstr "Omitere și redarea următorului"
+
+msgctxt "#30451"
+msgid "Media segment skipping and the Play Next prompt."
+msgstr "Omiterea segmentelor media și solicitarea Redă următorul."
+
+msgctxt "#30453"
+msgid "Skip media segments"
+msgstr "Omite segmentele media"
+
+msgctxt "#30454"
+msgid "Fetch Jellyfin media segments (intro, credits, recap, preview, commercial) during playback and act on them per type."
+msgstr "Preia segmentele media Jellyfin (intro, generic, rezumat, previzualizare, reclamă) în timpul redării și acționează în funcție de tip."
+
+msgctxt "#30455"
+msgid "Intros"
+msgstr "Intro-uri"
+
+msgctxt "#30456"
+msgid "Off ignores intro segments, Auto skips past them, Ask shows a skip button."
+msgstr "Dezactivat ignoră segmentele de intro, Auto trece peste ele, Întreabă afișează un buton de omitere."
+
+msgctxt "#30457"
+msgid "Credits"
+msgstr "Generic"
+
+msgctxt "#30458"
+msgid "Off ignores credits, Auto seeks past them, Ask offers Skip Outro — with Play Next when a next episode exists."
+msgstr "Dezactivat ignoră genericul, Auto derulează peste el, Întreabă oferă Omite genericul — cu Redă următorul când există un episod următor."
+
+msgctxt "#30459"
+msgid "Recaps"
+msgstr "Rezumate"
+
+msgctxt "#30460"
+msgid "Off ignores recap segments, Auto skips past them, Ask shows a skip button."
+msgstr "Dezactivat ignoră segmentele de rezumat, Auto trece peste ele, Întreabă afișează un buton de omitere."
+
+msgctxt "#30461"
+msgid "Previews"
+msgstr "Previzualizări"
+
+msgctxt "#30462"
+msgid "Off ignores preview segments, Auto skips past them, Ask shows a skip button."
+msgstr "Dezactivat ignoră segmentele de previzualizare, Auto trece peste ele, Întreabă afișează un buton de omitere."
+
+msgctxt "#30463"
+msgid "Commercials"
+msgstr "Reclame"
+
+msgctxt "#30464"
+msgid "Off ignores commercial segments, Auto skips past them, Ask shows a skip button."
+msgstr "Dezactivat ignoră segmentele de reclamă, Auto trece peste ele, Întreabă afișează un buton de omitere."
+
+msgctxt "#30465"
+msgid "Off"
+msgstr "Dezactivat"
+
+msgctxt "#30466"
+msgid "Auto"
+msgstr "Auto"
+
+msgctxt "#30467"
+msgid "Ask"
+msgstr "Întreabă"
+
+msgctxt "#30469"
+msgid "Offer Play Next"
+msgstr "Oferă Redă următorul"
+
+msgctxt "#30470"
+msgid "Offer the next episode at the credits, or near the end when no credits segment exists."
+msgstr "Oferă episodul următor la generic sau aproape de final când nu există un segment de generic."
+
+msgctxt "#30471"
+msgid "Play Next lead time"
+msgstr "Avans pentru Redă următorul"
+
+msgctxt "#30472"
+msgid "Seconds before the end to show the Play Next prompt for content without a credits segment."
+msgstr "Secundele înainte de final la care apare solicitarea Redă următorul pentru conținut fără segment de generic."
+
+msgctxt "#30473"
+msgid "Autoplay next episode"
+msgstr "Redă automat episodul următor"
+
+msgctxt "#30474"
+msgid "Count down on the Play Next prompt and start the next episode automatically."
+msgstr "Numără invers pe solicitarea Redă următorul și pornește automat episodul următor."
+
+msgctxt "#30475"
+msgid "Resume offset (seconds)"
+msgstr "Decalaj la reluare (secunde)"
+
+msgctxt "#30476"
+msgid "Seconds to rewind before the stored resume point."
+msgstr "Secundele de derulare înapoi față de punctul de reluare stocat."
+
+msgctxt "#30477"
+msgid "Hide the skip button after"
+msgstr "Ascunde butonul de omitere după"
+
+msgctxt "#30478"
+msgid "How far into a segment the skip button disappears. 100% keeps it up for the whole segment."
+msgstr "Cât de departe în segment dispare butonul de omitere. 100% îl păstrează pe tot segmentul."
+
+msgctxt "#30481"
+msgid "Skip Intro"
+msgstr "Omite intro"
+
+msgctxt "#30482"
+msgid "Skip Outro"
+msgstr "Omite genericul"
+
+msgctxt "#30483"
+msgid "Skip Recap"
+msgstr "Omite rezumatul"
+
+msgctxt "#30484"
+msgid "Skip Preview"
+msgstr "Omite previzualizarea"
+
+msgctxt "#30485"
+msgid "Skip Ad"
+msgstr "Omite reclama"
+
+msgctxt "#30486"
+msgid "Play Next"
+msgstr "Redă următorul"
+
+msgctxt "#30487"
+msgid "Close"
+msgstr "Închide"
+
+msgctxt "#30488"
+msgid "Skipped %s"
+msgstr "S-a omis %s"
+
+msgctxt "#30489"
+msgid "Up next: %s"
+msgstr "Urmează: %s"
+
+msgctxt "#30500"
+msgid "Extras"
+msgstr "Materiale bonus"
+
+msgctxt "#30501"
+msgid "Browse extras"
+msgstr "Răsfoiește materialele bonus"
+
+msgctxt "#30502"
+msgid "Jellyfin actions"
+msgstr "Acțiuni Jellyfin"
+
+msgctxt "#30504"
+msgid "Settings"
+msgstr "Setări"
+
+msgctxt "#30505"
+msgid "Permanently delete \"%s\" from the server? This cannot be undone."
+msgstr "Ștergeți definitiv \"%s\" de pe server? Această acțiune nu poate fi anulată."
+
+msgctxt "#30506"
+msgid "Finished \"%s\". Permanently delete it from the server? This cannot be undone."
+msgstr "Ați terminat \"%s\". Îl ștergeți definitiv de pe server? Această acțiune nu poate fi anulată."
+
+msgctxt "#30507"
+msgid "Server request failed"
+msgstr "Cererea către server a eșuat"
+
+msgctxt "#30508"
+msgid "Mark as watched on Jellyfin"
+msgstr "Marchează ca vizionat pe Jellyfin"
+
+msgctxt "#30509"
+msgid "Mark as unwatched on Jellyfin"
+msgstr "Marchează ca nevizionat pe Jellyfin"
+
+msgctxt "#30550"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30551"
+msgid "Enable SyncPlay"
+msgstr "Activează SyncPlay"
+
+msgctxt "#30552"
+msgid "Watch in sync with other Jellyfin clients. Leave Kodi's 'Sync playback to display' off for a reliable experience"
+msgstr "Urmărește sincronizat cu alți clienți Jellyfin. Lasă Sincronizează redarea cu afișajul dezactivat în Kodi pentru o experiență fiabilă"
+
+msgctxt "#30557"
+msgid "Group notifications"
+msgstr "Notificări de grup"
+
+msgctxt "#30558"
+msgid "Show member join/leave and group-waiting notifications. Errors are always shown."
+msgstr "Afișează notificările de intrare/ieșire a membrilor și de așteptare a grupului. Erorile sunt afișate întotdeauna."
+
+msgctxt "#30560"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30561"
+msgid "New group..."
+msgstr "Grup nou..."
+
+msgctxt "#30562"
+msgid "Leave group"
+msgstr "Părăsește grupul"
+
+msgctxt "#30563"
+msgid "Joined group: %s"
+msgstr "Ați intrat în grupul: %s"
+
+msgctxt "#30564"
+msgid "Left the group"
+msgstr "Ați părăsit grupul"
+
+msgctxt "#30565"
+msgid "%s joined the group"
+msgstr "%s a intrat în grup"
+
+msgctxt "#30566"
+msgid "%s left the group"
+msgstr "%s a părăsit grupul"
+
+msgctxt "#30567"
+msgid "Group name"
+msgstr "Numele grupului"
+
+msgctxt "#30568"
+msgid "Playback stopped — what should the group do?"
+msgstr "Redarea s-a oprit — ce face grupul?"
+
+msgctxt "#30569"
+msgid "Spectator mode: the group will not wait for you"
+msgstr "Mod spectator: grupul nu vă va aștepta"
+
+msgctxt "#30570"
+msgid "SyncPlay needs a working websocket connection to the server"
+msgstr "SyncPlay necesită o conexiune websocket cu serverul"
+
+msgctxt "#30571"
+msgid "Removed from the group"
+msgstr "Eliminat din grup"
+
+msgctxt "#30572"
+msgid "Members"
+msgstr "Membri"
+
+msgctxt "#30573"
+msgid "Resync with group"
+msgstr "Resincronizează cu grupul"
+
+msgctxt "#30574"
+msgid "SyncPlay is unavailable (server not reachable?)"
+msgstr "SyncPlay indisponibil (server inaccesibil?)"
+
+msgctxt "#30575"
+msgid "External players cannot be synchronized"
+msgstr "Playerele externe nu pot fi sincronizate"
+
+msgctxt "#30576"
+msgid "Playback could not be synchronized"
+msgstr "Redarea nu a putut fi sincronizată"
+
+msgctxt "#30577"
+msgid "buffering"
+msgstr "se încarcă în buffer"
+
+msgctxt "#30578"
+msgid "Could not join the group"
+msgstr "Nu s-a putut intra în grup"
+
+msgctxt "#30579"
+msgid "You don't have access to some items in the group's queue"
+msgstr "Nu aveți acces la unele elemente din coada grupului"
+
+msgctxt "#30580"
+msgid "Become a spectator (group won't wait for me)"
+msgstr "Devin spectator (grupul nu mă așteaptă)"
+
+msgctxt "#30581"
+msgid "Wait for me again (leave spectator mode)"
+msgstr "Așteptați-mă din nou (ies din spectator)"
+
+msgctxt "#30582"
+msgid "disconnected"
+msgstr "deconectat"
+
+msgctxt "#30583"
+msgid "The group will wait for you again"
+msgstr "Grupul vă va aștepta din nou"
+
+msgctxt "#30584"
+msgid "Stop playback for everyone"
+msgstr "Oprește redarea pentru toți"
+
+msgctxt "#30585"
+msgid "Waiting for the group..."
+msgstr "Se așteaptă grupul..."
+
+msgctxt "#30586"
+msgid "Fine sync using tempo"
+msgstr "Sincronizare fină prin tempo"
+
+msgctxt "#30587"
+msgid "Keeps this device on the group's position by briefly playing faster or slower. A video correction decodes passthrough audio until the next item."
+msgstr "Ține acest dispozitiv pe poziția grupului, redând pentru scurt timp mai repede sau mai încet. O corecție video decodează sunetul passthrough până la următorul element."
+
+msgctxt "#30592"
+msgid "Fine sync stopped: rate mismatch"
+msgstr "Sincronizare fină oprită: ritm diferit"
+
+msgctxt "#30593"
+msgid "Largest video error closed by tempo (ms)"
+msgstr "Cea mai mare eroare video corectată prin tempo (ms)"
+
+msgctxt "#30594"
+msgid "Position errors up to this are closed by playing faster or slower; anything larger is closed with a skip. Higher means fewer skips and longer speed changes."
+msgstr "Erorile de poziție până la această valoare sunt corectate redând mai repede sau mai încet; cele mai mari, printr-un salt. Mai mare înseamnă mai puține salturi și schimbări de viteză mai lungi."
+
+msgctxt "#30595"
+msgid "Fastest video correction speed (%)"
+msgstr "Viteza maximă de corecție video (%)"
+
+msgctxt "#30596"
+msgid "The most playback speed may change during a correction. At 25% a 2.5 second error takes 10 seconds to close; lower is less noticeable but slower. Large changes ramp in and out."
+msgstr "Cât de mult se poate schimba cel mult viteza de redare în timpul unei corecții. La 25 %, o eroare de 2,5 secunde se închide în 10 secunde; mai jos e mai puțin sesizabil, dar mai lent. Schimbările mari sunt aplicate treptat."
+
+msgctxt "#30604"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30605"
+msgid "1440p"
+msgstr "1440p"
+
+msgctxt "#30613"
+msgid "Audio and subtitle streams"
+msgstr "Fluxuri audio și de subtitrare"
+
+msgctxt "#30614"
+msgid "Audio stream"
+msgstr "Flux audio"
+
+msgctxt "#30615"
+msgid "Subtitles"
+msgstr "Subtitrări"
+
+msgctxt "#30616"
+msgid "Restarting to change stream..."
+msgstr "Se repornește pentru schimbarea fluxului..."
+
+msgctxt "#30617"
+msgid "burned in, restarts playback"
+msgstr "încrustată, repornește redarea"
+
+msgctxt "#30618"
+msgid "Use Jellyfin's default tracks"
+msgstr "Folosește pistele implicite din Jellyfin"
+
+msgctxt "#30619"
+msgid "Start playback on the audio and subtitle tracks your Jellyfin account asks for, instead of the ones Kodi's own language settings pick. The server resolves both from your Jellyfin profile, so the choice follows you to every client."
+msgstr "Pornește redarea pe pistele audio și de subtitrare cerute de contul dvs. Jellyfin, în locul celor alese de setările de limbă ale Kodi. Serverul le rezolvă pe amândouă din profilul dvs. Jellyfin, așa că alegerea vă urmează pe fiecare client."
+
+msgctxt "#30622"
+msgid "Notify about new content"
+msgstr "Notifică despre conținutul nou"
+
+msgctxt "#30623"
+msgid "Show a notification when new films, shows, episodes, music videos, artists or albums are added to your library."
+msgstr "Afișează o notificare când în bibliotecă sunt adăugate filme, seriale, episoade, videoclipuri muzicale, artiști sau albume noi."
+
+msgctxt "#30624"
+msgid "%s movie added to library"
+msgstr "Filmul %s adăugat în bibliotecă"
+
+msgctxt "#30625"
+msgid "%s movies added to library"
+msgstr "%s filme adăugate în bibliotecă"
+
+msgctxt "#30626"
+msgid "%s show added to library"
+msgstr "Serialul %s adăugat în bibliotecă"
+
+msgctxt "#30627"
+msgid "%s new shows added to library"
+msgstr "%s seriale noi adăugate în bibliotecă"
+
+msgctxt "#30628"
+msgid "%s episode of %s added to library"
+msgstr "%s episod din %s adăugat în bibliotecă"
+
+msgctxt "#30629"
+msgid "%s episodes of %s added to library"
+msgstr "%s episoade din %s adăugate în bibliotecă"
+
+msgctxt "#30630"
+msgid "%s episodes added to library"
+msgstr "%s episoade adăugate în bibliotecă"
+
+msgctxt "#30631"
+msgid "%s music video added to library"
+msgstr "Videoclipul muzical %s adăugat"
+
+msgctxt "#30632"
+msgid "%s music videos added to library"
+msgstr "%s videoclipuri muzicale adăugate"
+
+msgctxt "#30633"
+msgid "%s added to music library"
+msgstr "Artistul %s adăugat în bibliotecă"
+
+msgctxt "#30634"
+msgid "%s artists added to library"
+msgstr "%s artiști adăugați în bibliotecă"
+
+msgctxt "#30635"
+msgid "%s added to music library"
+msgstr "Albumul %s adăugat în bibliotecă"
+
+msgctxt "#30636"
+msgid "%s albums added to library"
+msgstr "%s albume adăugate în bibliotecă"
+
+msgctxt "#30637"
+msgid "Use the server's splashscreen as the backdrop"
+msgstr "Folosește ecranul de întâmpinare al serverului ca fundal"
+
+msgctxt "#30638"
+msgid "Show the Jellyfin server's splashscreen behind the addon instead of the bundled artwork. Refreshed when the service connects, at most once a day."
+msgstr "Afișează ecranul de întâmpinare al serverului Jellyfin în spatele suplimentului, în locul graficii incluse. Se reîmprospătează când serviciul se conectează, cel mult o dată pe zi."
+
+msgctxt "#30700"
+msgid "Downloads"
+msgstr "Descărcări"
+
+msgctxt "#30701"
+msgid "Download items for offline playback"
+msgstr "Descărcați elemente pentru redare offline"
+
+msgctxt "#30702"
+msgid "Enable downloads"
+msgstr "Activează descărcările"
+
+msgctxt "#30703"
+msgid "Adds Download to the Jellyfin actions menu and runs the download manager. Only for libraries you sync with Kofin."
+msgstr "Adaugă Descarcă în meniul Acțiuni Jellyfin și pornește managerul de descărcări. Doar pentru bibliotecile pe care le sincronizați cu Kofin."
+
+msgctxt "#30704"
+msgid "Download location"
+msgstr "Locația descărcărilor"
+
+msgctxt "#30705"
+msgid "Where downloaded files are kept. Leave empty for the addon profile folder"
+msgstr "Unde sunt păstrate fișierele descărcate. Lăsați gol pentru dosarul de profil al suplimentului"
+
+msgctxt "#30706"
+msgid "Parallel video downloads"
+msgstr "Descărcări video paralele"
+
+msgctxt "#30707"
+msgid "How many movies and episodes download at the same time"
+msgstr "Câte filme și episoade se descarcă în același timp"
+
+msgctxt "#30708"
+msgid "Download"
+msgstr "Descarcă"
+
+msgctxt "#30709"
+msgid "Cancel download"
+msgstr "Anulează descărcarea"
+
+msgctxt "#30710"
+msgid "Delete download"
+msgstr "Șterge descărcarea"
+
+msgctxt "#30712"
+msgid "Download complete: %s"
+msgstr "Descărcare finalizată: %s"
+
+msgctxt "#30713"
+msgid "Download failed: %s"
+msgstr "Descărcare eșuată: %s"
+
+msgctxt "#30714"
+msgid "Delete the download of %s?"
+msgstr "Ștergeți descărcarea pentru %s?"
+
+msgctxt "#30715"
+msgid "Not enough free space for %s"
+msgstr "Spațiu liber insuficient pentru %s"
+
+msgctxt "#30717"
+msgid "The downloads folder is not writable"
+msgstr "Dosarul de descărcări nu permite scrierea"
+
+msgctxt "#30718"
+msgid "Downloaded movies"
+msgstr "Filme descărcate"
+
+msgctxt "#30719"
+msgid "Downloaded shows"
+msgstr "Seriale descărcate"
+
+msgctxt "#30720"
+msgid "Not available offline"
+msgstr "Indisponibil offline"
+
+msgctxt "#30721"
+msgid "Downloaded episodes"
+msgstr "Episoade descărcate"
+
+msgctxt "#30722"
+msgid "Transcode videos"
+msgstr "Transcodează videoclipurile"
+
+msgctxt "#30723"
+msgid "Transcode when the original exceeds a limit below or when triggered by settings in the Transcoding tab (HDR, codec, etc)"
+msgstr "Transcodează când originalul depășește o limită de mai jos sau când este declanșat de setările din fila Transcodare (HDR, codec etc.)"
+
+msgctxt "#30724"
+msgid "Maximum download bitrate"
+msgstr "Rată de biți maximă la descărcare"
+
+msgctxt "#30725"
+msgid "Videos over this total bitrate are transcoded down to it. Unlimited transcodes only for codec, HDR or resolution reasons."
+msgstr "Videoclipurile peste această rată de biți totală sunt transcodate până la ea. Nelimitat transcodează doar din motive de codec, HDR sau rezoluție."
+
+msgctxt "#30726"
+msgid "Maximum download resolution"
+msgstr "Rezoluție maximă la descărcare"
+
+msgctxt "#30727"
+msgid "Videos wider than this are scaled down. Unlimited never scales."
+msgstr "Videoclipurile mai late de atât sunt reduse ca scală. Nelimitat nu reduce niciodată."
+
+msgctxt "#30728"
+msgid "Transcode music"
+msgstr "Transcodează muzica"
+
+msgctxt "#30729"
+msgid "Transcode a track only when it is lossless or over the bitrate limit below. Compliant tracks download as the original file."
+msgstr "Transcodează o piesă doar când este fără pierderi sau când depășește limita de rată de biți de mai jos. Piesele conforme se descarcă în fișierul original."
+
+msgctxt "#30730"
+msgid "Transcode music over"
+msgstr "Transcodează muzica peste"
+
+msgctxt "#30731"
+msgid "Tracks over this bitrate, and all lossless tracks, are transcoded. Unlimited transcodes only lossless tracks."
+msgstr "Piesele peste această rată de biți, precum și toate piesele fără pierderi, sunt transcodate. Nelimitat transcodează doar piesele fără pierderi."
+
+msgctxt "#30732"
+msgid "Transcode music to"
+msgstr "Transcodează muzica în"
+
+msgctxt "#30733"
+msgid "The codec transcoded tracks are encoded with. Opus gives the best quality per megabyte."
+msgstr "Codecul cu care sunt codate piesele transcodate. Opus oferă cea mai bună calitate per megaoctet."
+
+msgctxt "#30734"
+msgid "Transcoded music bitrate"
+msgstr "Rată de biți pentru muzica transcodată"
+
+msgctxt "#30735"
+msgid "The bitrate transcoded tracks are encoded at. 128 kbps Opus is transparent for most listening."
+msgstr "Rata de biți la care sunt codate piesele transcodate. Opus la 128 kbps este transparent pentru majoritatea ascultărilor."
+
+msgctxt "#30737"
+msgid "Kofin downloads"
+msgstr "Descărcări Kofin"
+
+msgctxt "#30738"
+msgid "Download the next episodes automatically"
+msgstr "Descarcă automat episoadele următoare"
+
+msgctxt "#30739"
+msgid "While watching a downloaded episode, the next unwatched episodes of the show are queued for download at the 50% mark."
+msgstr "În timp ce vizionați un episod descărcat, următoarele episoade nevizionate ale serialului sunt puse la coadă pentru descărcare la 50% din durată."
+
+msgctxt "#30740"
+msgid "Episodes to keep ahead"
+msgstr "Episoade de păstrat în avans"
+
+msgctxt "#30741"
+msgid "How many unwatched episodes ahead of the one playing are kept downloaded."
+msgstr "Câte episoade nevizionate de după cel redat sunt păstrate descărcate."
+
+msgctxt "#30742"
+msgid "Download newly added movies"
+msgstr "Descarcă filmele nou adăugate"
+
+msgctxt "#30743"
+msgid "Movies newly added to a synced library are downloaded automatically."
+msgstr "Filmele nou adăugate într-o bibliotecă sincronizată sunt descărcate automat."
+
+msgctxt "#30746"
+msgid "Delete download after watching"
+msgstr "Șterge descărcarea după vizionare"
+
+msgctxt "#30747"
+msgid "When you finish watching a downloaded item, its local copy is removed. The item stays on the server and in your library."
+msgstr "Când terminați de vizionat un element descărcat, copia locală este eliminată. Elementul rămâne pe server și în bibliotecă."
+
+msgctxt "#30751"
+msgid "%s new movies were not downloaded automatically"
+msgstr "%s filme noi nu au fost descărcate automat"
+
+msgctxt "#30752"
+msgid "Export NFO files and artwork"
+msgstr "Exportă fișiere NFO și grafică"
+
+msgctxt "#30753"
+msgid "Write NFO metadata and artwork beside downloaded files, so other Kodi profiles and apps can scan the download folder as a library."
+msgstr "Scrie metadate NFO și grafică lângă fișierele descărcate, astfel încât alte profiluri Kodi și aplicații să poată scana dosarul de descărcări ca bibliotecă."
+
+msgctxt "#30754"
+msgid "Download all new episodes"
+msgstr "Descarcă toate episoadele noi"
+
+msgctxt "#30755"
+msgid "Every episode newly added to a synced library is downloaded automatically."
+msgstr "Fiecare episod nou adăugat într-o bibliotecă sincronizată este descărcat automat."
+
+msgctxt "#30756"
+msgid "Download new albums"
+msgstr "Descarcă albumele noi"
+
+msgctxt "#30757"
+msgid "Albums newly added to a synced library are downloaded automatically."
+msgstr "Albumele nou adăugate într-o bibliotecă sincronizată sunt descărcate automat."
+
+msgctxt "#30758"
+msgid "Shows downloading new episodes"
+msgstr "Seriale care descarcă episoade noi"
+
+msgctxt "#30759"
+msgid "Review the shows set to download their new episodes automatically, and untick any to stop."
+msgstr "Verificați serialele setate să își descarce automat episoadele noi și debifați-le pe cele pe care doriți să le opriți."
+
+msgctxt "#30760"
+msgid "Download new episodes"
+msgstr "Descarcă episoadele noi"
+
+msgctxt "#30761"
+msgid "Stop downloading new episodes"
+msgstr "Nu mai descărca episoadele noi"
+
+msgctxt "#30762"
+msgid "New episodes of %s will download automatically"
+msgstr "Episoadele noi din %s se vor descărca automat"
+
+msgctxt "#30763"
+msgid "New episodes of %s will no longer download automatically"
+msgstr "Episoadele noi din %s nu se vor mai descărca automat"
+
+msgctxt "#30764"
+msgid "%s new episodes were not downloaded automatically"
+msgstr "%s episoade noi nu au fost descărcate automat"
+
+msgctxt "#30765"
+msgid "%s new albums were not downloaded automatically"
+msgstr "%s albume noi nu au fost descărcate automat"
+
+msgctxt "#30766"
+msgid "No shows are set to download new episodes"
+msgstr "Niciun serial nu este setat să descarce episoade noi"
+
+msgctxt "#30767"
+msgid "Show download notifications"
+msgstr "Afișează notificările de descărcare"
+
+msgctxt "#30768"
+msgid "Announce queued and completed downloads. Failures and warnings are always shown."
+msgstr "Anunță descărcările puse la coadă și pe cele finalizate. Eșecurile și avertismentele sunt afișate întotdeauna."
+
+msgctxt "#30769"
+msgid "Delete download automatically"
+msgstr "Șterge descărcarea automat"
+
+msgctxt "#30770"
+msgid "Remove the local copy without asking. With this off, Kofin asks first each time."
+msgstr "Elimină copia locală fără a întreba. Cu această opțiune dezactivată, Kofin întreabă de fiecare dată."
+
+msgctxt "#30771"
+msgid "Download %s item(s), about %s? %s free"
+msgstr "Descărcați %s elemente, circa %s? %s liberi"
+
+msgctxt "#30772"
+msgid "Parallel music downloads"
+msgstr "Descărcări muzicale paralele"
+
+msgctxt "#30773"
+msgid "How many tracks download at the same time. Tracks are small and mostly overhead, so this can sit well above the video figure."
+msgstr "Câte piese se descarcă în același timp. Piesele sunt mici și în mare parte cost de administrare, așa că această valoare poate sta mult peste cea video."
+
+msgctxt "#30775"
+msgid "downloaded from the server"
+msgstr "descărcat de pe server"
+
+msgctxt "#30776"
+msgid "Downloading subtitle..."
+msgstr "Se descarcă subtitrarea..."
+
+msgctxt "#30777"
+msgid "Jellyfin account settings"
+msgstr "Setările contului Jellyfin"
+
+msgctxt "#30778"
+msgid "Audio and subtitle preferences stored on the server against your Jellyfin account. They apply to every client you sign in from, not just this one."
+msgstr "Preferințele audio și de subtitrare stocate pe server pentru contul dvs. Jellyfin. Se aplică pe fiecare client de pe care vă autentificați, nu doar pe acesta."
+
+msgctxt "#30779"
+msgid "Jellyfin settings for %s"
+msgstr "Setări Jellyfin pentru %s"
+
+msgctxt "#30780"
+msgid "Preferred audio language"
+msgstr "Limbă audio preferată"
+
+msgctxt "#30781"
+msgid "Play default audio track"
+msgstr "Redă pista audio implicită"
+
+msgctxt "#30782"
+msgid "Preferred subtitle language"
+msgstr "Limbă de subtitrare preferată"
+
+msgctxt "#30783"
+msgid "Subtitle mode"
+msgstr "Mod subtitrare"
+
+msgctxt "#30784"
+msgid "Remember audio selections"
+msgstr "Reține selecțiile audio"
+
+msgctxt "#30785"
+msgid "Remember subtitle selections"
+msgstr "Reține selecțiile de subtitrare"
+
+msgctxt "#30786"
+msgid "Enabled"
+msgstr "Activat"
+
+msgctxt "#30787"
+msgid "Disabled"
+msgstr "Dezactivat"
+
+msgctxt "#30788"
+msgid "Any"
+msgstr "Oricare"
+
+msgctxt "#30789"
+msgid "Default"
+msgstr "Implicit"
+
+msgctxt "#30790"
+msgid "Always"
+msgstr "Întotdeauna"
+
+msgctxt "#30791"
+msgid "Only forced"
+msgstr "Doar forțate"
+
+msgctxt "#30792"
+msgid "None"
+msgstr "Niciuna"
+
+msgctxt "#30793"
+msgid "Smart"
+msgstr "Inteligent"
+
+msgctxt "#30794"
+msgid "Not applied here: \"Use Jellyfin's default tracks\" is off"
+msgstr "Nu se aplică aici: \"Folosește pistele implicite din Jellyfin\" este dezactivat"
+
+msgctxt "#30795"
+msgid "Could not load your Jellyfin settings"
+msgstr "Nu s-au putut încărca setările dvs. Jellyfin"
+
+msgctxt "#30796"
+msgid "Could not save to the server"
+msgstr "Nu s-a putut salva pe server"
+
+msgctxt "#30797"
+msgid "Your Jellyfin account is not allowed to change these settings"
+msgstr "Contul dvs. Jellyfin nu are permisiunea de a schimba aceste setări"
+
+msgctxt "#30798"
+msgid "Skip movie imports larger than"
+msgstr "Omite importurile de filme mai mari de"
+
+msgctxt "#30799"
+msgid "When a sync adds more new movies than this at once, none of them are downloaded — a bulk import is rarely a request to fill the disk. Raise it if you want big additions pulled automatically."
+msgstr "Când o sincronizare adaugă deodată mai multe filme noi decât atât, niciunul nu este descărcat — un import în masă este rareori o cerere de a umple discul. Măriți valoarea dacă doriți ca adăugările mari să fie preluate automat."
+
+msgctxt "#30800"
+msgid "Skip episode imports larger than"
+msgstr "Omite importurile de episoade mai mari de"
+
+msgctxt "#30801"
+msgid "When a sync adds more new episodes than this at once, none of them are downloaded. Shows you have subscribed to are exempt — a subscription is a standing order."
+msgstr "Când o sincronizare adaugă deodată mai multe episoade noi decât atât, niciunul nu este descărcat. Serialele la care v-ați abonat sunt exceptate — un abonament este o comandă permanentă."
+
+msgctxt "#30802"
+msgid "Skip album imports larger than"
+msgstr "Omite importurile de albume mai mari de"
+
+msgctxt "#30803"
+msgid "When a sync adds more new albums than this at once, none of them are downloaded. Counted in albums, not tracks."
+msgstr "Când o sincronizare adaugă deodată mai multe albume noi decât atât, niciunul nu este descărcat. Se numără albumele, nu piesele."
+
+msgctxt "#30810"
+msgid "Needs %s, only %s free"
+msgstr "Necesită %s, doar %s liberi"
+
+msgctxt "#30804"
+msgid "Delete all downloads"
+msgstr "Șterge toate descărcările"
+
+msgctxt "#30805"
+msgid "Delete every downloaded file from this device and stop keeping playlists and music libraries in sync. The items stay in your library and play from the server again."
+msgstr "Șterge de pe acest dispozitiv fiecare fișier descărcat și nu mai păstrează listele de redare și bibliotecile de muzică sincronizate. Elementele rămân în bibliotecă și se redau din nou de pe server."
+
+msgctxt "#30806"
+msgid "Delete all %s download(s), freeing about %s?"
+msgstr "Ștergeți toate cele %s descărcări, eliberând circa %s?"
+
+msgctxt "#30807"
+msgid "There are no downloads to delete"
+msgstr "Nu există descărcări de șters"
+
+msgctxt "#30808"
+msgid "Pause downloads during playback"
+msgstr "Suspendă descărcările în timpul redării"
+
+msgctxt "#30809"
+msgid "Do not start new downloads while something is playing, video or music. A file already downloading finishes; the rest wait until playback stops."
+msgstr "Nu porni descărcări noi cât timp se redă ceva, video sau muzică. Un fișier aflat deja în descărcare se termină; restul așteaptă până se oprește redarea."
+
+msgctxt "#30811"
+msgid "Delete stale downloads"
+msgstr "Șterge descărcările vechi"
+
+msgctxt "#30812"
+msgid "Remove downloaded files nobody has played for a while. Anything you are part-way through is kept, however long it sits. The items stay in your library and play from the server again."
+msgstr "Elimină fișierele descărcate pe care nu le-a redat nimeni de o vreme. Orice element început este păstrat, oricât ar sta. Elementele rămân în bibliotecă și se redau din nou de pe server."
+
+msgctxt "#30813"
+msgid "Delete after (days)"
+msgstr "Șterge după (zile)"
+
+msgctxt "#30814"
+msgid "How long a download may sit unplayed before it is removed. Playing it again starts the count over."
+msgstr "Cât timp poate sta o descărcare neredată înainte de a fi eliminată. Redarea ei din nou reia numărătoarea."
+
+msgctxt "#30817"
+msgid "All"
+msgstr "Toți"
+
+msgctxt "#30818"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30819"
+msgid "Show cast in add-on listings"
+msgstr "Afișează distribuția în listele suplimentului"
+
+msgctxt "#30820"
+msgid "Fetch cast and crew for the shorter add-on listings — Recently added, In progress, Next up, Continue watching, search results and a show's episodes — so the information dialog can show them. Whole-library listings never fetch it, because the server needs about a second for every 40 items. The Kodi library always has cast."
+msgstr "Preia distribuția și echipa pentru listele scurte ale suplimentului — Adăugate recent, În curs, Urmează, Continuă vizionarea, rezultatele căutării și episoadele unui serial — astfel încât fereastra de informații să le poată afișa. Listele care acoperă o bibliotecă întreagă nu fac niciodată acest lucru, deoarece serverul are nevoie de aproximativ o secundă la fiecare 40 de elemente. Biblioteca Kodi are întotdeauna distribuția."
+
+msgctxt "#30821"
+msgid "Server error — %s"
+msgstr "Eroare de server — %s"
+
+msgctxt "#30823"
+msgid "Download deleted: %s"
+msgstr "Descărcare ștearsă: %s"
+
+msgctxt "#30824"
+msgid "%s download(s) deleted"
+msgstr "%s descărcări șterse"
+
+msgctxt "#30825"
+msgid "Find servers on local network"
+msgstr "Caută servere în rețeaua locală"
+
+msgctxt "#30826"
+msgid "Looks for Jellyfin servers on this network and lists the ones that answer. The one you choose is filled into \"Server address\"."
+msgstr "Caută servere Jellyfin în această rețea și le afișează pe cele care răspund. Cel ales este completat în \"Adresa serverului\"."
+
+msgctxt "#30827"
+msgid "Searching for Jellyfin servers…"
+msgstr "Se caută servere Jellyfin…"
+
+msgctxt "#30828"
+msgid "Select a server"
+msgstr "Alegeți un server"
+
+msgctxt "#30829"
+msgid "No Jellyfin servers answered — enter the address manually"
+msgstr "Niciun server Jellyfin nu a răspuns — introduceți adresa manual"
+
+msgctxt "#30830"
+msgid "did not answer"
+msgstr "nu a răspuns"
+
+msgctxt "#30831"
+msgid "%s did not answer — the address it gave may not work here"
+msgstr "%s nu a răspuns — adresa indicată s-ar putea să nu funcționeze aici"
+
+msgctxt "#30832"
+msgid "Storage used"
+msgstr "Spațiu folosit"
+
+msgctxt "#30833"
+msgid "Show where the downloads are kept and how much space each kind is using."
+msgstr "Arată unde sunt păstrate descărcările și cât spațiu ocupă fiecare tip."
+
+msgctxt "#30834"
+msgid "Other files in this folder"
+msgstr "Alte fișiere din acest folder"
+
+msgctxt "#30835"
+msgid "Nothing has been downloaded yet"
+msgstr "Nu a fost descărcat nimic încă"
+
+msgctxt "#30836"
+msgid "Folder too large to measure fully — the totals above are partial"
+msgstr "Folderul este prea mare pentru a fi măsurat complet — totalurile de mai sus sunt parțiale"
+
+msgctxt "#30837"
+msgid "Watch in sync with other Jellyfin clients."
+msgstr "Urmărește sincronizat cu alți clienți Jellyfin."
+
+msgctxt "#30841"
+msgid "Save to Jellyfin"
+msgstr "Salvează în Jellyfin"
+
+msgctxt "#30842"
+msgid "This playlist mixes audio and video, which cannot be saved as one Jellyfin playlist"
+msgstr "Această listă amestecă audio și video și nu poate fi salvată ca o singură listă Jellyfin"
+
+msgctxt "#30843"
+msgid "Playlist saved to Jellyfin"
+msgstr "Listă salvată în Jellyfin"
+
+msgctxt "#30844"
+msgid "No library items in this playlist to save"
+msgstr "Nu există elemente din bibliotecă în această listă de salvat"
+
+msgctxt "#30845"
+msgid "Show library update progress"
+msgstr "Afișează progresul actualizării bibliotecii"
+
+msgctxt "#30846"
+msgid "Show Kodi's library-update progress while the library syncs."
+msgstr "Afișează progresul actualizării bibliotecii Kodi în timpul sincronizării."
+
+msgctxt "#30849"
+msgid "Download & keep in sync"
+msgstr "Descarcă și menține sincronizat"
+
+msgctxt "#30850"
+msgid "Stop keeping downloads in sync"
+msgstr "Oprește sincronizarea descărcărilor"
+
+msgctxt "#30851"
+msgid "Manage playlist downloads"
+msgstr "Gestionează descărcările listelor de redare"
+
+msgctxt "#30852"
+msgid "Manage music library downloads"
+msgstr "Gestionează descărcările bibliotecilor muzicale"
+
+msgctxt "#30853"
+msgid "Content not downloaded"
+msgstr "Conținut nedescărcat"
+
+msgctxt "#30854"
+msgid "Review subscribed playlists; untick to stop syncing downloads."
+msgstr "Verifică listele de redare abonate; debifează-le pentru a opri sincronizarea descărcărilor."
+
+msgctxt "#30855"
+msgid "Review subscribed music libraries; untick to stop syncing downloads."
+msgstr "Verifică bibliotecile muzicale abonate; debifează-le pentru a opri sincronizarea descărcărilor."
+
+msgctxt "#30856"
+msgid "Library nodes and playlists"
+msgstr "Noduri de bibliotecă și liste de redare"
+
+msgctxt "#30857"
+msgid "Create Kodi library nodes and smart playlists for the synced video libraries, and copy Jellyfin playlists into Kodi under Videos → Playlists → Kofin and Music → Playlists → Kofin. Turning this off removes every node and playlist Kofin created."
+msgstr "Creează noduri de bibliotecă Kodi și liste inteligente pentru bibliotecile video sincronizate și copiază listele Jellyfin în Kodi la Video → Liste de redare → Kofin și Muzică → Liste de redare → Kofin. Dezactivat, elimină toate nodurile și listele create de Kofin."
+
+msgctxt "#30859"
+msgid "Library status"
+msgstr "Stare bibliotecă"
+
+msgctxt "#30860"
+msgid "What is synced, what is still pending and what the sync is doing now."
+msgstr "Ce este sincronizat, ce mai este în așteptare și ce face acum sincronizarea."
+
+msgctxt "#30861"
+msgid "Transcode music whose bitrate is above the maximum set below. Off, songs play from the server untouched."
+msgstr "Transcodează muzica a cărei rată de biți depășește maximul stabilit mai jos. Dezactivat, melodiile sunt redate de pe server nemodificate."
+
+msgctxt "#30862"
+msgid "in Kodi / on the server"
+msgstr "în Kodi / pe server"
+
+msgctxt "#30863"
+msgid "Pending"
+msgstr "În așteptare"
+
+msgctxt "#30864"
+msgid "Failed"
+msgstr "Eșuate"
+
+msgctxt "#30865"
+msgid "Last full update"
+msgstr "Ultima actualizare completă"
+
+msgctxt "#30867"
+msgid "Repair to add codec details"
+msgstr "Repară pentru a adăuga detaliile codecurilor"
+
+msgctxt "#30868"
+msgid "Kodi cannot import"
+msgstr "Kodi nu poate importa"
+
+msgctxt "#30869"
+msgid "Scheduled full update"
+msgstr "Actualizare completă programată"
+
+msgctxt "#30870"
+msgid "How often to re-read every library from the server. Turn this on if the server lacks the KofinSyncQueue plugin, or deletions there won't reach Kodi."
+msgstr "Cât de des se recitesc toate bibliotecile de pe server. Activați dacă serverul nu are pluginul KofinSyncQueue, altfel ștergerile nu ajung în Kodi."
+
+msgctxt "#30871"
+msgid "Daily"
+msgstr "Zilnic"
+
+msgctxt "#30872"
+msgid "Weekly"
+msgstr "Săptămânal"
+
+msgctxt "#30873"
+msgid "Update all libraries now?"
+msgstr "Actualizați acum toate bibliotecile?"
+
+msgctxt "#30874"
+msgid "Re-read every library from the server now."
+msgstr "Recitește acum toate bibliotecile de pe server."
+
+msgctxt "#30876"
+msgid "Not on this Kodi"
+msgstr "Indisponibil pe acest Kodi"
+
+msgctxt "#30877"
+msgid "Season plots"
+msgstr "Rezumatele sezoanelor"
+
+msgctxt "#30878"
+msgid "Favorite episodes"
+msgstr "Episoade favorite"
+
+msgctxt "#30879"
+msgid "Removing emptied collections"
+msgstr "Eliminarea colecțiilor golite"
+
+msgctxt "#30880"
+msgid "Movie versions"
+msgstr "Versiuni de filme"
+
+msgctxt "#30881"
+msgid "Stream flags"
+msgstr "Marcaje ale pistelor"
+
+msgctxt "#30882"
+msgid "Song date added"
+msgstr "Data adăugării melodiilor"
+
+msgctxt "#30883"
+msgid "Removing dropped versions and extras"
+msgstr "Eliminarea versiunilor și extrelor șterse"
+
+msgctxt "#30884"
+msgid "Fine sync"
+msgstr "Sincronizare fină"
+
+msgctxt "#30885"
+msgid "Kodi imports a special only with an episode number. Give these one on the server, or play them from the Kofin add-on."
+msgstr "Kodi importă un episod special doar dacă are număr de episod. Atribuie-le unul pe server sau redă-le din suplimentul Kofin."
+
+msgctxt "#30886"
+msgid "KofinSyncQueue"
+msgstr "KofinSyncQueue"
+
+msgctxt "#30887"
+msgid "Available"
+msgstr "Disponibil"
+
+msgctxt "#30888"
+msgid "this profile holds a library from an older Kofin"
+msgstr "acest profil conține o bibliotecă dintr-un Kofin mai vechi"
+
+msgctxt "#30889"
+msgid "Kofin cannot use it. To clean it, go back to Kofin 0.29:"
+msgstr "Kofin nu o poate folosi. Pentru a o curăța, revino la Kofin 0.29:"
+
+msgctxt "#30890"
+msgid "Open Kofin in Kodi's add-on list, select Versions and choose 0.29."
+msgstr "Deschide Kofin în lista de suplimente din Kodi, selectează Versiuni și alege 0.29."
+
+msgctxt "#30891"
+msgid "In Kofin's settings, log out on the Account tab and run Clean databases."
+msgstr "În setările Kofin, deconectează-te din fila Cont și rulează Curăță bazele de date."
+
+msgctxt "#30892"
+msgid "When Kodi has restarted, open Kofin again, select Versions and choose the newest version. Then log in and choose the libraries to sync."
+msgstr "După repornirea Kodi, deschide din nou Kofin, selectează Versiuni și alege cea mai nouă versiune. Apoi conectează-te și alege bibliotecile de sincronizat."
+
+msgctxt "#30893"
+msgid "Alternatively, close Kodi and delete its video and music databases by hand, as the Kofin wiki describes:"
+msgstr "Alternativ, închide Kodi și șterge manual bazele sale de date video și muzicale, așa cum descrie wiki-ul Kofin:"
+
+msgctxt "#30894"
+msgid "No longer on the server"
+msgstr "Nu mai este pe server"
+
+msgctxt "#30895"
+msgid "%s is no longer on the server and was removed from the library"
+msgstr "Biblioteca %s nu mai este pe server și a fost eliminată din Kodi"
+
+msgctxt "#30896"
+msgid "The synced libraries stay in Kodi until you log in again; a different account removes them."
+msgstr "Bibliotecile sincronizate rămân în Kodi până te autentifici din nou; un alt cont le elimină."
+
+msgctxt "#30897"
+msgid "Queued %s of %s tracks"
+msgstr "%s din %s piese puse în coadă"

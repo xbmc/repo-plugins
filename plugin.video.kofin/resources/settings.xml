@@ -1,0 +1,1478 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+  <section id="plugin.video.kofin">
+
+    <category id="account" label="30050" help="30051">
+      <group id="1">
+        <!-- Hidden state written by kofin.core.settings.Credentials only. -->
+        <setting id="isLoggedIn" type="boolean">
+          <level>4</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="serverId" type="string">
+          <level>4</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+        <setting id="userId" type="string">
+          <level>4</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+        <setting id="accessToken" type="string">
+          <level>4</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+        <setting id="deviceId" type="string">
+          <level>4</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+
+        <setting id="serverAddress" type="string" label="30052" help="30053">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="enable">
+              <condition operator="is" setting="isLoggedIn">false</condition>
+            </dependency>
+          </dependencies>
+          <control type="edit" format="string"/>
+        </setting>
+        <!-- close=true is load-bearing here, not house style. Kodi runs
+             SaveAndClose before the builtin, so the route writes
+             serverAddress with the dialog already shut; written into an open
+             dialog it is reverted when the user backs out. The route reopens
+             settings afterwards so the filled field is the confirmation. -->
+        <setting id="findServers" type="string" label="30825" help="30826">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="isLoggedIn">false</condition>
+            </dependency>
+          </dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=findservers)</data>
+            <close>true</close>
+          </control>
+        </setting>
+        <setting id="loginButton" type="string" label="30054" help="30055">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="isLoggedIn">false</condition>
+            </dependency>
+          </dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=login)</data>
+            <close>true</close>
+          </control>
+        </setting>
+        <setting id="serverName" type="string" label="30056" help="30057">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <enable>false</enable>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="isLoggedIn">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="edit" format="string"/>
+        </setting>
+        <setting id="displayUser" type="string" label="30058" help="30059">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <enable>false</enable>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="isLoggedIn">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="edit" format="string"/>
+        </setting>
+        <!-- Playback honour of the account's track preferences. Lives here
+             rather than with the player settings because it is about the
+             Jellyfin profile, and it is the gate on the button below. -->
+        <setting id="honourJellyfinDefaultTracks" type="boolean" label="30618" help="30619">
+          <level>0</level>
+          <default>true</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="isLoggedIn">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <!-- No <close>, unlike the buttons around it: the menu is meant to
+             read as a sub-dialog of this one, so Back returns here. The
+             Downloads tab's "Storage used" button is the same shape.
+             Visible only while the toggle above is on: with it off nothing
+             here reaches playback on this box, and a button that opens a
+             dialog that then has to say so is worse than hiding it. -->
+        <setting id="jellyfinUserSettings" type="action" label="30777" help="30778">
+          <level>0</level>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="isLoggedIn">true</condition>
+                <condition operator="is" setting="honourJellyfinDefaultTracks">true</condition>
+              </and>
+            </dependency>
+          </dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=userprefs)</data>
+          </control>
+        </setting>
+        <setting id="testConnection" type="string" label="30060" help="30061">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="isLoggedIn">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=testconnection)</data>
+            <close>true</close>
+          </control>
+        </setting>
+        <setting id="logoutButton" type="string" label="30062" help="30063">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="isLoggedIn">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=logout)</data>
+            <close>true</close>
+          </control>
+        </setting>
+        <setting id="restartAddon" type="string" label="30064" help="30065">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=restart)</data>
+            <close>true</close>
+          </control>
+        </setting>
+      </group>
+    </category>
+
+    <!-- Library. One group on purpose: a second draws a separator. -->
+    <category id="library" label="30250" help="30251">
+      <group id="1">
+        <!-- Hidden state: written by the service and the library picker only. -->
+        <setting id="librarySelection" type="string">
+          <level>4</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+        <setting id="apiMovieBindings" type="string">
+          <level>4</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+        </setting>
+
+        <setting id="selectLibraries" type="string" label="30252" help="30253">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="enable">
+              <condition operator="is" setting="isLoggedIn">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=selectlibraries)</data>
+            <close>true</close>
+          </control>
+        </setting>
+        <setting id="showLibraryUpdateProgress" type="boolean" label="30845" help="30846">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="syncProgressThreshold" type="integer" label="30302" help="30303">
+          <level>0</level>
+          <default>100</default>
+          <constraints>
+            <minimum>0</minimum>
+            <step>20</step>
+            <maximum>1000</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="showLibraryUpdateProgress">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="slider" format="integer"/>
+        </setting>
+        <!-- The Library status report (plugin/actions.py library_status).
+             No <close>: a sub-dialog of this page. Readable logged out,
+             when the report says what becomes of the synced libraries. -->
+        <setting id="libraryStatus" type="action" label="30859" help="30860">
+          <level>0</level>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=librarystatus)</data>
+          </control>
+        </setting>
+        <setting id="notifyNewContent" type="boolean" label="30622" help="30623">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="updateLibraries" type="string" label="30256" help="30874">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="enable">
+              <condition operator="is" setting="isLoggedIn">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=updatelibs)</data>
+            <close>true</close>
+          </control>
+        </setting>
+        <setting id="repairLibraries" type="string" label="30258" help="30259">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="enable">
+              <condition operator="is" setting="isLoggedIn">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=repairlibs)</data>
+            <close>true</close>
+          </control>
+        </setting>
+        <!-- Days between complete enumerations, 0 for none
+             (sync/backends/api/library.py). -->
+        <setting id="fullUpdateInterval" type="integer" label="30869" help="30870">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="30465">0</option>
+              <option label="30871">1</option>
+              <option label="30872">7</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="maxArtResolution" type="integer" label="30320" help="30321">
+          <level>0</level>
+          <default>1080</default>
+          <constraints>
+            <options>
+              <option label="30322">0</option>
+              <option label="30323">720</option>
+              <option label="30324">1080</option>
+              <option label="30325">2160</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <!-- Only offered alongside a resolution cap: the server keeps the
+             source bytes when the requested quality is no lower than the
+             image's, so compression saves nothing without a re-encode. -->
+        <setting id="compressArt" type="boolean" label="30318" help="30319">
+          <level>0</level>
+          <default>true</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="!is" setting="maxArtResolution">0</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <!-- The one presentation toggle (sync/dynamic.py): the node tree,
+             the smart playlists and the Jellyfin playlists together. -->
+        <setting id="libraryNodes" type="boolean" label="30856" help="30857">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+    </category>
+
+    <!-- Skipping & Next up (segments + Play Next). One group on purpose: two
+         groups drew a separator between features that belong together. -->
+    <category id="skipping" label="30450" help="30451">
+      <group id="1">
+        <!-- Off by default: acting on segments moves the picture without being
+             asked, and a viewer who has not opted in reads that as the addon
+             skipping ahead on its own. The per-type modes below keep their own
+             defaults for whoever turns it on. -->
+        <setting id="mediaSegmentsEnabled" type="boolean" label="30453" help="30454">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="skipIntroductionMode" type="integer" label="30455" help="30456">
+          <level>0</level>
+          <default>2</default>
+          <constraints>
+            <options>
+              <option label="30465">0</option>
+              <option label="30466">1</option>
+              <option label="30467">2</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="mediaSegmentsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="skipCreditsMode" type="integer" label="30457" help="30458">
+          <level>0</level>
+          <default>2</default>
+          <constraints>
+            <options>
+              <option label="30465">0</option>
+              <option label="30466">1</option>
+              <option label="30467">2</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="mediaSegmentsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <!-- Recap, Preview and Commercial default Off; only Intro and
+             Credits act out of the box. -->
+        <setting id="skipRecapMode" type="integer" label="30459" help="30460">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="30465">0</option>
+              <option label="30466">1</option>
+              <option label="30467">2</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="mediaSegmentsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="skipPreviewMode" type="integer" label="30461" help="30462">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="30465">0</option>
+              <option label="30466">1</option>
+              <option label="30467">2</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="mediaSegmentsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="skipCommercialMode" type="integer" label="30463" help="30464">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="30465">0</option>
+              <option label="30466">1</option>
+              <option label="30467">2</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="mediaSegmentsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="skipPromptHidePercent" type="integer" label="30477" help="30478">
+          <level>0</level>
+          <default>50</default>
+          <constraints>
+            <minimum>10</minimum>
+            <step>5</step>
+            <maximum>100</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="mediaSegmentsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="slider" format="percentage"/>
+        </setting>
+        <setting id="playNextEnabled" type="boolean" label="30469" help="30470">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="playNextLeadTime" type="integer" label="30471" help="30472">
+          <level>0</level>
+          <default>30</default>
+          <constraints>
+            <minimum>10</minimum>
+            <step>5</step>
+            <maximum>120</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="playNextEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="slider" format="integer"/>
+        </setting>
+        <setting id="playNextAutoplay" type="boolean" label="30473" help="30474">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="playNextEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+      </group>
+    </category>
+
+    <category id="syncplay" label="30550" help="30837">
+      <group id="1">
+        <setting id="syncPlayEnabled" type="boolean" label="30551" help="30552">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="syncPlayNotifications" type="boolean" label="30557" help="30558">
+          <level>0</level>
+          <default>true</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="syncPlayEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <!-- Fine sync between group commands, through Kodi's own tempo
+             (syncplay/tempo.py). An item Kodi cannot play at a tempo is left
+             to the commands. This setting and the two sliders are greyed out
+             on a Kodi without the tempo feature, which the service publishes
+             from its probe (core/state.py, PROP_FEATURE_TEMPO). -->
+        <setting id="syncPlayTempo" type="boolean" label="30586" help="30587">
+          <level>0</level>
+          <default>true</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="syncPlayEnabled">true</condition>
+            </dependency>
+            <dependency type="enable">
+              <condition on="property" name="InfoBool">String.IsEqual(Window(Home).Property(kofin.feature.tempo),true)</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <!-- The two sliders are video's; music's limits are fixed
+             (syncplay/tempo.py, music_profile). -->
+        <setting id="syncPlayPulseBudget" type="integer" label="30593" help="30594">
+          <level>0</level>
+          <default>5000</default>
+          <constraints>
+            <minimum>1000</minimum>
+            <step>1000</step>
+            <maximum>10000</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="syncPlayEnabled">true</condition>
+                <condition operator="is" setting="syncPlayTempo">true</condition>
+              </and>
+            </dependency>
+            <dependency type="enable">
+              <condition on="property" name="InfoBool">String.IsEqual(Window(Home).Property(kofin.feature.tempo),true)</condition>
+            </dependency>
+          </dependencies>
+          <control type="slider" format="integer"/>
+        </setting>
+        <setting id="syncPlayMaxRate" type="integer" label="30595" help="30596">
+          <level>0</level>
+          <default>25</default>
+          <constraints>
+            <minimum>3</minimum>
+            <step>1</step>
+            <maximum>25</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="syncPlayEnabled">true</condition>
+                <condition operator="is" setting="syncPlayTempo">true</condition>
+              </and>
+            </dependency>
+            <dependency type="enable">
+              <condition on="property" name="InfoBool">String.IsEqual(Window(Home).Property(kofin.feature.tempo),true)</condition>
+            </dependency>
+          </dependencies>
+          <control type="slider" format="integer"/>
+        </setting>
+      </group>
+    </category>
+
+    <category id="transcoding" label="30100" help="30101">
+      <group id="1">
+        <setting id="forceDirectPlay" type="boolean" label="30102" help="30103">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="forceRemux" type="boolean" label="30104" help="30105">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="forceDirectPlay">false</condition>
+            </dependency>
+            <dependency type="enable">
+              <condition operator="is" setting="forceTranscode">false</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <setting id="forceTranscode" type="boolean" label="30106" help="30107">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="forceDirectPlay">false</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <setting id="directPlayVideoCodecs" type="list[string]" label="30108" help="30109">
+          <level>0</level>
+          <default>h264,h264_10bit,hevc,hevc_rext,av1,mpeg2video,vp9,vc1</default>
+          <constraints>
+            <options>
+              <option label="30150">h264</option>
+              <option label="30151">h264_10bit</option>
+              <option label="30152">hevc</option>
+              <option label="30153">hevc_rext</option>
+              <option label="30154">av1</option>
+              <option label="30155">mpeg2video</option>
+              <option label="30156">vp9</option>
+              <option label="30157">vc1</option>
+            </options>
+            <delimiter>,</delimiter>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="forceDirectPlay">false</condition>
+            </dependency>
+          </dependencies>
+          <control type="list" format="string">
+            <multiselect>true</multiselect>
+            <hidevalue>true</hidevalue>
+          </control>
+        </setting>
+        <setting id="directPlayAudioCodecs" type="list[string]" label="30110" help="30111">
+          <level>0</level>
+          <default>aac,mp2,mp3,ac3,eac3,opus,flac,dts</default>
+          <constraints>
+            <options>
+              <option label="30158">aac</option>
+              <option label="30159">mp2</option>
+              <option label="30160">mp3</option>
+              <option label="30161">ac3</option>
+              <option label="30162">eac3</option>
+              <option label="30163">opus</option>
+              <option label="30164">flac</option>
+              <option label="30165">dts</option>
+            </options>
+            <delimiter>,</delimiter>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="forceDirectPlay">false</condition>
+            </dependency>
+          </dependencies>
+          <control type="list" format="string">
+            <multiselect>true</multiselect>
+            <hidevalue>true</hidevalue>
+          </control>
+        </setting>
+        <setting id="allowedHdrTypes" type="list[string]" label="30112" help="30113">
+          <level>0</level>
+          <default>HDR10,HLG,HDR10Plus,DOVI,DOVIWithHDR10,DOVIWithHLG,DOVIWithSDR,DOVIWithEL,DOVIWithHDR10Plus,DOVIWithELHDR10Plus</default>
+          <constraints>
+            <options>
+              <option label="30166">HDR10</option>
+              <option label="30167">HLG</option>
+              <option label="30168">HDR10Plus</option>
+              <option label="30169">DOVI</option>
+              <option label="30170">DOVIWithHDR10</option>
+              <option label="30171">DOVIWithHLG</option>
+              <option label="30172">DOVIWithSDR</option>
+              <option label="30173">DOVIWithEL</option>
+              <option label="30174">DOVIWithHDR10Plus</option>
+              <option label="30175">DOVIWithELHDR10Plus</option>
+            </options>
+            <delimiter>,</delimiter>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="forceDirectPlay">false</condition>
+            </dependency>
+          </dependencies>
+          <control type="list" format="string">
+            <multiselect>true</multiselect>
+            <hidevalue>true</hidevalue>
+          </control>
+        </setting>
+        <!-- Preferred codecs, the transcode audio bitrate and the streaming
+             bitrate cap stay visible even under force direct play: they still
+             govern context-menu "Play with transcoding", whose default bitrate
+             is the cap. -->
+        <setting id="preferredVideoCodec" type="string" label="30114" help="30115">
+          <level>0</level>
+          <default>h264</default>
+          <constraints>
+            <options>
+              <option label="30150">h264</option>
+              <option label="30152">hevc</option>
+              <option label="30154">av1</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="preferredAudioCodec" type="string" label="30116" help="30117">
+          <level>0</level>
+          <default>aac</default>
+          <constraints>
+            <options>
+              <option label="30158">aac</option>
+              <option label="30160">mp3</option>
+              <option label="30163">opus</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <!-- Always visible: the ceiling describes the device. It reaches
+             only TranscodingProfiles.MaxAudioChannels (deviceprofile.py);
+             direct-played audio is not capped, since force direct play
+             suppresses codec-profile conditions. -->
+        <setting id="maxAudioChannels" type="integer" label="30118" help="30119">
+          <level>0</level>
+          <default>8</default>
+          <constraints>
+            <options>
+              <option label="30180">2</option>
+              <option label="30181">6</option>
+              <option label="30182">8</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <!-- A string setting, like the downloads cap it mirrors: Kodi's
+             ``integer`` type cannot express the sub-1 Mbit/s options and its
+             ``number`` type is a slider. Read with settings.get_float. -->
+        <setting id="maxStreamingBitrate" type="string" label="30120" help="30121">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="30176">0</option>
+              <option label="30204">0.5</option>
+              <option label="30205">0.75</option>
+              <option label="30183">1</option>
+              <option label="30184">2</option>
+              <option label="30185">3</option>
+              <option label="30186">4</option>
+              <option label="30187">6</option>
+              <option label="30188">8</option>
+              <option label="30189">10</option>
+              <option label="30190">15</option>
+              <option label="30191">20</option>
+              <option label="30192">25</option>
+              <option label="30193">40</option>
+              <option label="30194">60</option>
+              <option label="30195">120</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="maxResolution" type="integer" label="30122" help="30123">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="30176">0</option>
+              <option label="30604">854</option>
+              <option label="30177">1280</option>
+              <option label="30178">1920</option>
+              <option label="30605">2560</option>
+              <option label="30179">3840</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="forceDirectPlay">false</condition>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="audioBitrate" type="integer" label="30124" help="30125">
+          <level>0</level>
+          <default>384</default>
+          <constraints>
+            <options>
+              <option label="30196">96</option>
+              <option label="30197">128</option>
+              <option label="30198">192</option>
+              <option label="30199">256</option>
+              <option label="30200">320</option>
+              <option label="30201">384</option>
+              <option label="30202">448</option>
+              <option label="30203">640</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="contextBitrates" type="list[string]" label="30126" help="30127">
+          <level>0</level>
+          <default>3,10,20</default>
+          <constraints>
+            <options>
+              <option label="30206">0</option>
+              <option label="30204">0.5</option>
+              <option label="30205">0.75</option>
+              <option label="30183">1</option>
+              <option label="30184">2</option>
+              <option label="30185">3</option>
+              <option label="30186">4</option>
+              <option label="30187">6</option>
+              <option label="30188">8</option>
+              <option label="30189">10</option>
+              <option label="30190">15</option>
+              <option label="30191">20</option>
+              <option label="30192">25</option>
+              <option label="30193">40</option>
+              <option label="30194">60</option>
+              <option label="30195">120</option>
+            </options>
+            <delimiter>,</delimiter>
+          </constraints>
+          <control type="list" format="string">
+            <multiselect>true</multiselect>
+            <hidevalue>true</hidevalue>
+          </control>
+        </setting>
+      </group>
+      <group id="2">
+        <setting id="musicTranscode" type="boolean" label="30135" help="30861">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="musicMaxBitrate" type="integer" label="30129" help="30130">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="30176">0</option>
+              <option label="30197">128</option>
+              <option label="30198">192</option>
+              <option label="30199">256</option>
+              <option label="30200">320</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="musicTranscode">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="musicTranscodeCodec" type="string" label="30131" help="30132">
+          <level>0</level>
+          <default>opus</default>
+          <constraints>
+            <options>
+              <option label="30158">aac</option>
+              <option label="30160">mp3</option>
+              <option label="30163">opus</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="musicTranscode">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="musicTranscodeBitrate" type="integer" label="30133" help="30134">
+          <level>0</level>
+          <default>128</default>
+          <constraints>
+            <options>
+              <option label="30196">96</option>
+              <option label="30197">128</option>
+              <option label="30198">192</option>
+              <option label="30199">256</option>
+              <option label="30200">320</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="musicTranscode">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+      </group>
+    </category>
+
+    <!-- Downloads. One group: every setting but the master toggle is
+         visible only with downloadsEnabled, and Kodi does not recompute a
+         group's visibility when a member's changes, so a group without the
+         toggle stays hidden until the dialog is rebuilt. -->
+    <category id="downloads" label="30700" help="30701">
+      <group id="1">
+        <setting id="downloadsEnabled" type="boolean" label="30702" help="30703">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+        <!-- The local source alone: the browser offers no network location,
+             which translatePath leaves a URL and Python cannot write. -->
+        <setting id="downloadsPath" type="path" label="30704" help="30705">
+          <level>0</level>
+          <default></default>
+          <constraints>
+            <allowempty>true</allowempty>
+            <writable>true</writable>
+            <sources>
+              <source>local</source>
+            </sources>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="button" format="path"/>
+        </setting>
+        <setting id="downloadsNotify" type="boolean" label="30767" help="30768">
+          <level>0</level>
+          <default>true</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <!-- Two pools, because the two media kinds cost nothing alike: a
+             video is minutes of transfer, a track is seconds of it behind a
+             fixed per-item overhead, so the number that keeps a video
+             download civil throttles music to a crawl. -->
+        <setting id="downloadsMaxParallel" type="integer" label="30706" help="30707">
+          <level>0</level>
+          <default>2</default>
+          <constraints>
+            <minimum>1</minimum>
+            <step>1</step>
+            <maximum>4</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="slider" format="integer"/>
+        </setting>
+        <setting id="downloadsMusicParallel" type="integer" label="30772" help="30773">
+          <level>0</level>
+          <default>5</default>
+          <constraints>
+            <minimum>1</minimum>
+            <step>1</step>
+            <maximum>10</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="slider" format="integer"/>
+        </setting>
+        <!-- Conditional download transcoding. The device
+             codec/HDR compatibility lists are deliberately *not* duplicated
+             here — the downloads profile reads the transcode tab's
+             directPlayVideoCodecs/directPlayAudioCodecs/allowedHdrTypes,
+             since the device is the same device; only the caps are
+             downloads-own. -->
+        <setting id="downloadsTranscode" type="boolean" label="30722" help="30723">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <!-- A string like maxStreamingBitrate, for the sub-1 Mbit/s
+             options. Read with settings.get_float. -->
+        <setting id="downloadsMaxBitrate" type="string" label="30724" help="30725">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="30176">0</option>
+              <option label="30204">0.5</option>
+              <option label="30205">0.75</option>
+              <option label="30183">1</option>
+              <option label="30184">2</option>
+              <option label="30185">3</option>
+              <option label="30186">4</option>
+              <option label="30187">6</option>
+              <option label="30188">8</option>
+              <option label="30189">10</option>
+              <option label="30190">15</option>
+              <option label="30191">20</option>
+              <option label="30192">25</option>
+              <option label="30193">40</option>
+              <option label="30194">60</option>
+              <option label="30195">120</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="downloadsEnabled">true</condition>
+                <condition operator="is" setting="downloadsTranscode">true</condition>
+              </and>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="downloadsMaxResolution" type="integer" label="30726" help="30727">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="30176">0</option>
+              <option label="30604">854</option>
+              <option label="30177">1280</option>
+              <option label="30178">1920</option>
+              <option label="30605">2560</option>
+              <option label="30179">3840</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="downloadsEnabled">true</condition>
+                <condition operator="is" setting="downloadsTranscode">true</condition>
+              </and>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <!-- Music downloads, same conditional shape: lossless
+             tracks and anything over the cap transcode; compliant tracks
+             download as the original file. -->
+        <setting id="downloadsMusicTranscode" type="boolean" label="30728" help="30729">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <setting id="downloadsMusicMaxBitrate" type="integer" label="30730" help="30731">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="30176">0</option>
+              <option label="30197">128</option>
+              <option label="30198">192</option>
+              <option label="30199">256</option>
+              <option label="30200">320</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="downloadsEnabled">true</condition>
+                <condition operator="is" setting="downloadsMusicTranscode">true</condition>
+              </and>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="downloadsMusicCodec" type="string" label="30732" help="30733">
+          <level>0</level>
+          <default>opus</default>
+          <constraints>
+            <options>
+              <option label="30158">aac</option>
+              <option label="30160">mp3</option>
+              <option label="30163">opus</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="downloadsEnabled">true</condition>
+                <condition operator="is" setting="downloadsMusicTranscode">true</condition>
+              </and>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="downloadsMusicBitrate" type="integer" label="30734" help="30735">
+          <level>0</level>
+          <default>128</default>
+          <constraints>
+            <options>
+              <option label="30196">96</option>
+              <option label="30197">128</option>
+              <option label="30198">192</option>
+              <option label="30199">256</option>
+              <option label="30200">320</option>
+            </options>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="downloadsEnabled">true</condition>
+                <condition operator="is" setting="downloadsMusicTranscode">true</condition>
+              </and>
+            </dependency>
+          </dependencies>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="downloadsAutoAlbums" type="boolean" label="30756" help="30757">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <!-- Albums cap by album count, not by track: an album is naturally
+             bounded, a bulk import of albums is not. -->
+        <setting id="downloadsBulkAlbums" type="integer" label="30802" help="30803">
+          <level>0</level>
+          <default>5</default>
+          <constraints>
+            <minimum>1</minimum>
+            <step>1</step>
+            <maximum>50</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="downloadsEnabled">true</condition>
+                <condition operator="is" setting="downloadsAutoAlbums">true</condition>
+              </and>
+            </dependency>
+          </dependencies>
+          <control type="slider" format="integer"/>
+        </setting>
+        <setting id="downloadsPlaylists" type="string">
+          <level>4</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+        <!-- The two manage buttons here and the shows one below write the
+             list they show, so each closes the dialog before its route runs
+             (see findServers). -->
+        <setting id="downloadsManagePlaylists" type="string" label="30851" help="30854">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies><dependency type="visible"><condition operator="is" setting="downloadsEnabled">true</condition></dependency></dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=downloadsubscriptions&amp;kind=playlist)</data>
+            <close>true</close>
+          </control>
+        </setting>
+        <setting id="downloadsMusicLibraries" type="string">
+          <level>4</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+        <setting id="downloadsManageMusicLibraries" type="string" label="30852" help="30855">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies><dependency type="visible"><condition operator="is" setting="downloadsEnabled">true</condition></dependency></dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=downloadsubscriptions&amp;kind=library)</data>
+            <close>true</close>
+          </control>
+        </setting>
+        <!-- Automatic downloads and lifecycle, plus the metadata export. -->
+        <setting id="downloadsAutoNext" type="boolean" label="30738" help="30739">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <setting id="downloadsAutoNextKeep" type="integer" label="30740" help="30741">
+          <level>0</level>
+          <default>2</default>
+          <constraints>
+            <minimum>1</minimum>
+            <step>1</step>
+            <maximum>5</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="downloadsEnabled">true</condition>
+                <condition operator="is" setting="downloadsAutoNext">true</condition>
+              </and>
+            </dependency>
+          </dependencies>
+          <control type="slider" format="integer"/>
+        </setting>
+        <setting id="downloadsAutoMovies" type="boolean" label="30742" help="30743">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <!-- The bulk-import guard. A sync cycle adding more than this many
+             items queues *none* of them: a server-side bulk import is almost
+             never "I want all of this offline", and auto-pulling an arbitrary
+             few of hundreds would be worse than asking. Subscribed shows are
+             exempt by design (a subscription is a standing order). -->
+        <setting id="downloadsBulkMovies" type="integer" label="30798" help="30799">
+          <level>0</level>
+          <default>5</default>
+          <constraints>
+            <minimum>1</minimum>
+            <step>1</step>
+            <maximum>50</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="downloadsEnabled">true</condition>
+                <condition operator="is" setting="downloadsAutoMovies">true</condition>
+              </and>
+            </dependency>
+          </dependencies>
+          <control type="slider" format="integer"/>
+        </setting>
+        <setting id="downloadsAutoEpisodes" type="boolean" label="30754" help="30755">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <setting id="downloadsBulkEpisodes" type="integer" label="30800" help="30801">
+          <level>0</level>
+          <default>10</default>
+          <constraints>
+            <minimum>1</minimum>
+            <step>1</step>
+            <maximum>100</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="downloadsEnabled">true</condition>
+                <condition operator="is" setting="downloadsAutoEpisodes">true</condition>
+              </and>
+            </dependency>
+          </dependencies>
+          <control type="slider" format="integer"/>
+        </setting>
+        <!-- Hidden state: the shows subscribed to new-episode downloads
+             (comma-separated Jellyfin series ids). Written by the Series
+             context toggle and the manage button below. -->
+        <setting id="downloadsEpisodeShows" type="string">
+          <level>4</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+        <setting id="downloadsManageShows" type="string" label="30758" help="30759">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=downloadshows)</data>
+            <close>true</close>
+          </control>
+        </setting>
+        <!-- One lifecycle answer for every download, whoever queued it.
+             New ids: upgraded profiles hold old-format values under
+             downloadsDeleteAfterPlay and downloadsAutoCleanup, so neither may
+             be reused. Both default off. -->
+        <setting id="downloadsDeleteAfterWatching" type="boolean" label="30746" help="30747">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <setting id="downloadsDeleteAutomatically" type="boolean" label="30769" help="30770">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="downloadsEnabled">true</condition>
+                <condition operator="is" setting="downloadsDeleteAfterWatching">true</condition>
+              </and>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <!-- The other half of the lifecycle question: the pair above
+             answers "you finished it", this one answers "you never got to
+             it". Not dependent on downloadsDeleteAfterWatching, which would
+             make the never-watched case unreachable. Silent: there is nobody
+             to ask about something last touched a month ago, so turning it on
+             is the consent. -->
+        <setting id="downloadsDeleteStale" type="boolean" label="30811" help="30812">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <setting id="downloadsStaleDays" type="integer" label="30813" help="30814">
+          <level>0</level>
+          <default>30</default>
+          <constraints>
+            <minimum>1</minimum>
+            <step>1</step>
+            <maximum>365</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="visible">
+              <and>
+                <condition operator="is" setting="downloadsEnabled">true</condition>
+                <condition operator="is" setting="downloadsDeleteStale">true</condition>
+              </and>
+            </dependency>
+          </dependencies>
+          <control type="slider" format="integer"/>
+        </setting>
+        <setting id="downloadsExportMetadata" type="boolean" label="30752" help="30753">
+          <level>0</level>
+          <default>true</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <!-- Holds the *queue* while anything plays; a transfer already under
+             way finishes. Audio counts as playback too: a download saturates
+             the same link whichever it is competing with. -->
+        <setting id="downloadsPauseDuringPlayback" type="boolean" label="30808" help="30809">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <!-- Where the downloads are and what they weigh. No <close>: the
+             report is a sub-dialog of this page. -->
+        <setting id="downloadsShowSize" type="action" label="30832" help="30833">
+          <level>0</level>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=downloadsize)</data>
+          </control>
+        </setting>
+        <!-- No <close>, like "Storage used" above: the confirmation is meant
+             to read as a sub-dialog of this one, so answering it returns
+             here rather than dumping the user back to the library. -->
+        <setting id="downloadsDeleteAll" type="action" label="30804" help="30805">
+          <level>0</level>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="downloadsEnabled">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=deletealldownloads)</data>
+          </control>
+        </setting>
+      </group>
+    </category>
+
+    <category id="advanced" label="30071" help="30072">
+      <group id="1">
+        <!-- Hidden state written by the who's-watching shortlist picker only.
+             "all" (the default) offers every server user, "none" switches the
+             feature off, anything else is a user-id list; empty reads as "all"
+             for the installs that predate the sentinels. -->
+        <setting id="whoIsWatchingShortlist" type="string">
+          <level>4</level>
+          <default>all</default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+        <!-- Hidden state written by the Who's watching? picker; re-applied by
+             the service when a session comes up after restart/reconnect. -->
+        <setting id="whoIsWatching" type="string">
+          <level>4</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+
+        <setting id="notifyConnection" type="boolean" label="30326" help="30327">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <!-- Deliberately not gated on isLoggedIn: /Branding/Splashscreen is an
+             anonymous endpoint, so a configured server address is enough. -->
+        <setting id="useServerBackdrop" type="boolean" label="30637" help="30638">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <!-- Cast for kofin's own listings. Off by default for its server
+             cost; even when on, only the bounded listings ask for People
+             (plugin/browse.py bounded_fields). -->
+        <setting id="browseCast" type="boolean" label="30819" help="30820">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="resumeJumpBack" type="integer" label="30475" help="30476">
+          <level>0</level>
+          <default>-10</default>
+          <constraints>
+            <minimum>-60</minimum>
+            <step>5</step>
+            <maximum>0</maximum>
+          </constraints>
+          <control type="slider" format="integer"/>
+        </setting>
+        <setting id="selectWhoIsWatching" type="string" label="30079" help="30080">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="enable">
+              <condition operator="is" setting="isLoggedIn">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="button" format="action">
+            <data>RunPlugin(plugin://plugin.video.kofin/?mode=whoshortlist)</data>
+            <close>true</close>
+          </control>
+        </setting>
+        <setting id="enableDelete" type="boolean" label="30073" help="30074">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="deleteNoConfirm" type="boolean" label="30075" help="30076">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="enableDelete">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+        <!-- Deliberately not covered by deleteNoConfirm: this prompt *is* the
+             feature, and a silent auto-delete at the end of every episode is
+             not something an opt-out on the manual Delete entry should buy. -->
+        <setting id="deleteAfterWatching" type="boolean" label="30077" help="30078">
+          <level>0</level>
+          <default>false</default>
+          <dependencies>
+            <dependency type="visible">
+              <condition operator="is" setting="enableDelete">true</condition>
+            </dependency>
+          </dependencies>
+          <control type="toggle"/>
+        </setting>
+      </group>
+    </category>
+
+  </section>
+</settings>

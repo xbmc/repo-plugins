@@ -1,0 +1,462 @@
+v1.0.0
+- The server's certificate is always checked. "Verify SSL certificate" is gone.
+- A certificate authority given to Kodi is trusted, including through a proxy.
+- New and changed items reach Kodi sooner.
+- Home screen widgets show edited titles and artwork straight away.
+- Removing an artist on the server removes its albums from Kodi.
+- Choose which version of a movie or episode to play when Kodi does not offer the choice itself.
+
+v0.96.8
+- Logging in as another account replaces the previous account's library.
+- Kodi can quit while a Kofin dialog is open.
+- A download plays at once when the server is unreachable, and deleting its file no longer marks it watched.
+- SyncPlay keeps its group across a service restart, and a new film starts from its beginning.
+- Clearer messages when the server is down or the login is no longer valid.
+
+v0.96.7
+- The critic-rating setting, which had no effect, is gone.
+- The Jellyfin remote no longer offers audio, subtitle and repeat controls that did nothing on Kodi.
+- Live TV and recordings in progress can be paused and skipped through without FFmpeg Direct.
+- A SyncPlay member without Kofin PVR follows the group's live TV.
+- Stopping live TV frees the tuner.
+
+v0.96.6
+- Song play counts reach the library faster.
+- Removing a library shows its progress.
+- Library status explains how to clean out a library from an older Kofin with Kofin 0.29.
+- "Episodes to keep ahead" counts the episodes already downloaded.
+- The next episodes are queued for download half way through a downloaded episode.
+
+v0.96.5
+- Importing music again no longer clears played marks on the server.
+- Library status gives the migration steps when a library from an older Kofin blocks sync.
+
+v0.96.4
+- Preview thumbnails when scrubbing through a video, on Kodi 23 with the Kontell changes.
+
+v0.96.3
+- Library nodes and playlists are off unless switched on.
+- Play counts and watched marks reach the library faster.
+- Downloads no longer slow Kodi down on slow storage.
+- Kodi's "Ignore video extras on scan" setting is left as it is.
+- Settings reorganised.
+
+v0.96.2
+- A movie's original title reaches Kodi.
+- Jellyfin actions works on shows, seasons, sets, albums and artists.
+- Refreshing a movie or show is faster on large libraries.
+- The sync progress counts each kind against its own total.
+
+v0.96.1
+- New icon.
+- A Downloaded episodes node, on Kodi 23 with the Kontell changes.
+- Library status lists what Kodi cannot import.
+- Kofin's library tag no longer shows in the info dialog or Kodi's tag lists. The first sync after updating takes longer while it is removed.
+
+v0.96.0
+- Runs on Kodi 22 and Kodi 23 in one build. What a Kodi lacks is left out by name, and Library status lists it.
+- The companion add-on is no longer used.
+- On a Kodi without the Kontell changes a movie's default version plays and its other versions are not imported.
+- SyncPlay fine sync needs Kodi 23 with the Kontell changes; elsewhere a member follows the group's commands.
+
+v0.95.1
+- SyncPlay fine sync works on Kodi 23, for music too; inputstream.tempo is no longer used.
+- Live TV in a SyncPlay group plays through FFmpeg Direct, so fine sync reaches it.
+
+v0.95.0
+- For Kodi 23 with the kontell/xbmc changes; the companion add-on is no longer used.
+- Movie versions are grouped as one movie, and versions or extras removed on the server leave Kodi.
+- Favourite episodes, season plots and stream flags reach Kodi's library.
+- Chapter images in the chapters dialog.
+- Recently added albums follow the server's order.
+
+v0.93.6
+- Speed up starting playback of an album
+- Fix toasts for new content
+- Fix movie import looop
+- Settings tidy up
+
+v0.93.5
+- Scheduled full update setting, off by default.
+- Update libraries asks once, then updates every library.
+- Albums are no longer rewritten after every full update.
+
+v0.93.4
+- A profile that already has a local library, or another add-on's, can be synced; only an earlier Kofin library has to be removed first.
+- Less load on Kodi during a music import.
+
+v0.93.3
+- Movie sets keep their artwork and plot when a library is imported again.
+- Download badges on shows and seasons; home widgets update when a download finishes or is removed.
+- A play state for an item deleted on the server no longer stalls the sync.
+- Library status: picking a row no longer closes the list.
+
+v0.93.2
+- Video, audio and subtitle details on movies and episodes in the API build. Run Repair once on video libraries synced by an earlier version.
+- Music and show play counts match the server, and a cast change no longer fills the in-progress widget.
+- Episodes show their own image, album and artist artwork arrives before the video import, and chapter images appear sooner.
+- One progress bar through an update or a library removal, and removing a library no longer rescans the others.
+- Library status dialog in the settings; settings that Force direct play overrides are hidden while it is on.
+
+v0.93.1
+- Faster first import of music, movies and TV shows in the API build.
+- Requests for the Kofin Companion add-on: grouped movie versions, retired versions and extras, chapter images, favourite-episode tags, season plots, stream flags and emptied collections.
+- A large video import runs with Kodi's "Download actor thumbnails" off and puts the setting back afterwards.
+- A long import no longer slows other add-ons.
+
+v0.93.0
+- Movie versions and extras in the API build: Kodi imports a version as a movie of its own, to be grouped in the Versions Manager.
+- Kodi's "Ignore video extras on scan" is turned off once for the extras import, with a notice.
+- Settings toggle for Library nodes and smart playlists.
+- The full cast shows in a movie's information dialog again.
+- Downloads in the API build.
+- What the stock interfaces cannot do, grouping a movie's versions, is published as a request document for a companion add-on.
+- Every path that publishes a movie carries its special features, so Clean databases removes only files the server no longer lists.
+
+v0.92.0
+- Native music in the API build: songs, albums and artists of a selected music library, one directory per album.
+- Songs are files in their album directory; a tag change re-imports one directory; a song leaves through its directory's listing.
+- Changed directories are scanned by name; the root is walked only when most changed.
+- The music scanner is held while the pass writes, so home widgets stay quiet.
+- Faster repair, pass and idle service on large catalogues; whole-library removal in one transaction.
+- Scans run one at a time (Kodi stops a running scan on the next request).
+- Fixed a freed InfoTag written on every listing (segfault in setGenres on 32-bit ARM).
+- Payloads are read on demand; listings and the pass no longer hold a library in memory.
+- An empty premiere or aired date is left out of the desired state.
+- Library update progress in the API build: a bar for enumeration, scans and the pass; Kodi's own scanning dialog for video.
+- Every movie's URL sits in a folder of its own; a change scans that folder alone. Deselect and reselect the Movies library after upgrading.
+- A music directory is never handed to Kodi incomplete: a store that cannot be read is answered by Kodi's own rows read back in full, or by waiting.
+- The pass finds songs Kodi lost (a stopped scan, an interrupted rescan) and re-imports their directory; an album change re-tags its songs.
+- A song played with no server date is last played on the day it was added, so recently played albums stay the server's.
+- A first import no longer re-writes every row it just imported.
+- Actor thumbnails obey the artwork cap; changing the cap now re-patches art.
+- Clean databases puts back the row Kodi needs, or the music window asked to rescan tags on every visit.
+- The pass reads back only what finds a row; the full row only for items whose state moved.
+- Items acknowledged before are acknowledged again without a compare.
+- Listed artwork asks the server for 1080-high JPEG by default (existing settings, now on); existing art re-caches once.
+- No state migrates between development builds; a profile from an earlier build needs a fresh native library.
+- A music directory Kodi skips after a stopped scan is salted so the next scan imports it.
+- An episode's art no longer carries the show's and season's keys, which Kodi derives itself.
+
+v0.91.0
+- Native TV shows, seasons, episodes, music videos and collections in the API build: one scanner root per selected library and content type, shows as bound folders beneath it, sets filed at import.
+- Movies move to the per-library layout; a 0.90.0 profile is migrated automatically (its rows are removed and re-imported once) and the pre-release still needs an otherwise empty video library.
+- Store reshaped: payloads stored once, membership as generations, no snapshot blob — kofin.db went from 235 MB to 72 MB with 6,600 items.
+- Enumeration is a daily or Update-library pass; the websocket and the KofinSyncQueue change feed carry the rest, with a MinDateLastSaved catch-up when no companion is installed.
+- Deselecting one library removes only that library in one call; Kodi's Clean Library with the add-on enabled removes nothing; first content reloads the home widgets per kind.
+- Unnumbered specials and empty seasons stay dynamic-only (Kodi cannot file or list them); episode favourites remain a Kofin view.
+
+v0.90.0
+- First pre-release of the API build for Kodi 22 Piers: the native movie library is written through Kodi's public APIs, with no direct database access
+- Needs a fresh Kodi profile with an empty video library; an existing kofin (SQL) library is not adopted and sync stays off until the profile is fresh
+- Native movie sync with metadata refresh, watched/resume reconciliation, repair and removal; deselecting a library removes it in one call
+- Durable movie snapshots and retry after interrupted sync; incomplete server listings preserve existing content
+- Imported movies no longer show as in progress before their first detail patch, and the home widgets reload when the library fills from empty
+- Large libraries import without a scan timeout
+- Dynamic browsing, streaming and server actions remain available
+- Native TV/music, downloads, chapter art and SQL maintenance remain disabled pending their API ports
+- Kodi's own Clean Library run with the add-on disabled removes every synced movie; the next service start imports them again
+
+v0.29.0
+- Music libraries and playlists can be downloaded and kept in sync
+- A transcoded download is sized before it starts
+- A download announces once
+- A short music-library listing is refused, not taken as the whole library
+- Option to hide the library update progress bar
+- Sync playlists and Export NFO files and artwork default on
+- Search lists actors under episodes, and artists under songs
+- Clean library no longer deletes synced videos
+- Play Next highlights the episode that is playing
+- Playback progress is no longer reported against an unrelated item
+- A playlist update keeps its filename
+- Save to Jellyfin is hidden on Kofin's own playlist folders
+- Metadata edits no longer toast as new albums or artists
+
+v0.28.0
+- Changed playlist sync from a poll to use KofinSyncQueue (needs Jellyfin V12)
+- Added syncing of video playlists
+- Added option to disable reuse of language invoker.
+- Added favorite episodes to dynamic library
+- Settings refactor
+- Fix ghost album artist
+- Fixed favorite episodes library node
+
+v0.27.0
+- Artist search added
+- Synced show libraries now have season descriptions (v22 only)
+
+v0.26.0
+- Next up path added to plugin root
+- Listings now set PluginCategory to the place's name so skins show useful path info
+
+v0.25.2
+- Fine sync closes a larger slip by speed: default 5s, up to 10s; a pulse can last 40s
+- A leftover empty Singles album is removed with its song
+- A hung sync progress bar no longer stalls catch-up
+
+v0.25.1
+- Various live tv syncplay improvements
+- Default audio stream no longer reselected
+
+v0.25.0
+- Force remux now copies the source codecs instead of re-encoding the audio; force transcode re-encodes both and wins when both are set, so force remux greys out
+- A live channel a SyncPlay group starts now plays through the PVR add-on's own channel, with its programme information and live OSD
+
+v0.24.0
+- SyncPlay tunes live channels and catchup programmes together. Needs pvr.kofin 22.15.0
+- Live channels converge on the broadcast's own clock through Tempo; a member ahead of the group waits for it. Needs inputstream.tempo 22.5.0 or 21.5.0
+- A live channel plays the provider's stream directly when the server allows it
+- A recording played from the Recordings window reloads through Tempo so it can fine sync
+
+v0.23.0
+- Find servers on the local network
+- Downloads show how much space they take, including artwork and metadata
+- A music download exports artist and album metadata with it
+- SyncPlay groups can follow another add-on's content. Needs the SyncPlay v2 plugin with external-content support
+- Kodi 22.0 beta 2 syncs again
+- A playlist download announces once, not once per album
+- A downloaded song no longer offers to remove itself after playing
+- The Movies, Shows and Music folders stay when their last download is removed
+
+v0.22.0
+- Fine sync supported for a transcoded stream
+- Add-on refactored
+- A spectator's own playback is no longer driven by the group
+- Kodi's audio/video queue is restored after an interrupted SyncPlay session
+- A library that fails to sync no longer abandons the ones after it
+- An item deleted on the server mid-sync is skipped, not written
+- Removing an episode takes its resume bookmark with it
+- A sync page that fails to fetch is retried, not dropped
+- A whitelisted library kind with no nodes is skipped, not fatal
+- The IPC nonce is no longer written to the log
+- Kodi's "Manage versions" picker no longer lists every film in the library
+- A user whose library access was withdrawn no longer has every synced library deleted from Kodi
+- Cast is written correctly after Kodi's own "Clean library" has run
+- Leaving a SyncPlay group during shutdown no longer holds Kodi past its five-second stop grace when the server has gone away
+- The widget-refresh fingerprint reads kofin's mapping table about forty times faster per row
+- A music library whose item count answers zero no longer crashes its sync
+- Maximum streaming bitrate offers 0.5, 0.75, 1 and 2 Mbit/s, matching the download cap
+- "Jellyfin actions" and "Play with transcoding" no longer appear on other add-ons' listings
+- Deleting a download says so: the item by name, or a count when a season or album goes at once
+- A download that finishes or is deleted updates the widgets, so the downloaded badge appears and clears without waiting for something unrelated to change
+- An artist that arrives after its tracks re-credits them
+
+v0.21.1
+- Joining a group in progress starts at the group's position, not double it
+- A small slip on resume is smoothed by fine sync instead of seeked
+
+v0.21.0
+- SyncPlay keeps a group together between commands, not only at them: a member that has slipped plays faster or slower to catch up. Needs inputstream.tempo 21.4.1 / 22.4.1
+- inputstream.tempo is a recommended optional dependency
+- Two sliders: the largest slip closed by speed (2.5s), and the fastest correction (25%)
+- On Kodi 22 a session shortens the audio/video queue to 1s and restores it after, a crash included
+- Audio passthrough is suspended for a session
+- A member that keeps drifting is told once and left on command-only sync
+
+v0.20.1
+- Cast appears in search results and in a person's list of films
+- The cast setting says which listings it covers, and why whole-library ones never will
+
+v0.20.0
+- Reset resume position on items browsed through the add-on
+- An item finished on another device no longer shows as resumable
+- Recently added albums lists what actually arrived
+- Play all and Shuffle on albums, artists, genres and playlists
+- "Play with transcoding" is hidden where it could only force a transcode
+- Optional cast in the shorter add-on listings, off by default
+
+v0.19.1
+- Lyrics directory padded so Kofin Lyrics draws them correctly
+
+v0.19.0
+- SyncPlay holds a group together: starting, pausing, resuming and seeking land every member within about a fifth of a second
+- Drift correction removed, and the setting says why: it needed "Sync playback to display", which costs up to 4.3% drift
+- A transcoding member reloads at a group seek instead of being stranded
+- A stale timer no longer drops a member from its group after a seek
+- A sync that fails at startup no longer floods the screen with toasts
+- Music libraries start syncing sooner: 13 seconds off startup on a slow box
+- Waking from sleep runs one catch-up, not two
+
+v0.18.1
+- Unticking AV1 in the transcoding settings turns it off
+
+v0.18.0
+- Search the server: films, shows, episodes, albums, songs and people
+- More ways in: Years, Tags, A-Z, Unwatched, Album artists, Last played, Top 100 songs
+- Playlists show a playlist icon
+- A kofin path ending in a slash no longer comes up empty
+- Syncing music no longer hides Kodi's own Genres, Artists, Albums and Songs
+- Kodi 22 beta builds sync again
+- Each library appears on the home screen as it finishes, not when the whole sync does
+- A first sync no longer leaves a library's home row blank
+
+v0.17.0
+- Skins can show SyncPlay and Who's watching? on the home screen
+- Translated into 26 languages
+- Stopping a watch-together group no longer freezes Kodi
+- A downloaded item plays from disk on every client in a group
+- "Who's watching?" gains an All row and can be turned off
+- Removing a download no longer asks for confirmation
+- SyncPlay drift correction is off by default
+
+v0.16.0
+- Joining a group already playing no longer pauses it for everyone. Needs the SyncPlay v2 plugin 10.11.0.2
+- A scheduled group start seeks before the clock fires, so clients start together
+- SyncPlay speaks protocol v2 where the server has the plugin: clock sync on its own connection, versioned updates, snapshot recovery
+
+v0.15.2
+- Films, shows and episodes are stored under every external id the server has
+- Updating the add-on while Kodi is running no longer interrupts a sync
+
+v0.15.1
+- Updating the add-on while Kodi is running no longer leaves the server looking unreachable
+
+v0.15.0
+- The skip prompt shows how much it will skip, and steps out of the way part-way through
+- Recap, Preview and Commercial no longer skip by default
+- Two intro-detection plugins no longer produce two prompts
+- Catch-up ignores libraries you have not chosen to sync. Needs Kofin Sync Queue 10.11.0.1
+- Items that could not be added are no longer announced or queued for download
+- Clean databases offers to delete your downloaded files, and defaults to doing so
+- "Delete downloads you have not watched" is now "Delete stale downloads"
+
+v0.14.0
+- Jellyfin's audio and subtitle preferences are editable from the Account tab
+- The Kofin music node has a folder per library, and Downloaded music splits the same way
+- Downloads you never started can be cleared after a number of days
+- Menus and playback respond quicker: most listings open about twice as fast
+- The backdrop takes a fifth of the disk space it used to
+- A queued download starts in seconds, and eight further downloader fixes
+- Artists no longer collect duplicate or stray discography entries
+- Subtitles on a transcode arrive without restarting playback
+- The service recovers on its own when a thread dies or an update stalls
+
+v0.13.1
+- Music downloads are several times faster, with one notification per album
+- The Downloads settings page appears as soon as downloads are enabled
+- A downloaded show or album offers Remove download, with your free space shown
+- "After watching a download" is one toggle, and it starts off
+- Downloaded views appear straight away, with their own icon
+
+v0.13.0
+- Download for offline playback: movies, episodes and music
+- Downloads play with the server away; watched state and resume replay on reconnect
+- Optional transcoded downloads convert only what breaks a limit
+- Automatic downloads: next episodes, new items, show subscriptions, watched cleanup
+- Kofin can offer to remove a download once you finish it
+- Optional NFO and artwork export
+- Downloaded playbacks report to the server
+
+v0.12.0
+- Browsing large libraries is around nine times faster
+- Playback starts sooner, and a transcode with subtitles no longer stalls
+- Library nodes are grouped by type, favourites after them
+- Delete is offered only to accounts the server lets delete
+- Extras moved into Jellyfin actions
+- Resume offset moved to Settings / Playback
+- The image setting that did nothing is gone
+- A slow server no longer removes libraries or stalls shutdown
+
+v0.11.1
+- The subtitle your Jellyfin profile asks for is the one that plays
+- "Play with transcoding" starts while something else is already playing
+- Shows that live in more than one library are filed under the right one
+- A film in two collections no longer reads as permanently out of date
+- Library nodes generate when the server answers incompletely
+- A library that fails to sync notifies once, and the retries back off
+
+v0.11.0
+- "Clean databases" removes every trace of Kofin and jellyfin-kodi
+- Critic ratings are imported, and can replace the community rating
+- Media segment skipping is off by default
+- The stream menu marks the track playing, and can turn one off
+- Subtitle files beside your media show their language
+- Kofin's playlists moved into a "Kofin" folder
+- The add-on's fanart no longer sits behind items with no artwork of their own
+- Moved off the Jellyfin API routes 10.11 no longer documents
+
+v0.10.0
+- Kofin has a backdrop: your server's own splashscreen
+- Home-screen widgets redraw only when what they show has changed
+- Bursts of small changes fold into one refresh, aimed at the right library
+- Newly synced content appears on the home screen without a restart
+- Collections repair themselves
+- A collection is no longer emptied by a server answering that it has no members
+- The "pause sync while the screensaver is on" setting is gone
+
+v0.9.0
+- Kodi 22 (Piers) is supported
+- Chapter images from Jellyfin appear in Kodi's chapter list
+- Library nodes sit under a single "Kofin" parent, with a "Who's watching?" node
+- New content on the server raises a notification, one per type
+- Cast is back in the info dialog for shows and episodes
+- Watched flags follow Jellyfin's Played state, not the play count
+- HDR flags show on dynamically browsed items
+- Stock icons in the movies, shows and music sub-sections
+- Music playlist lines report to Jellyfin and pick up lyrics
+
+v0.8.0
+- Continue watching leads the add-on's own listing
+- The audio and subtitle chooser appears for every transcode that has something to offer
+- "Mark as watched on Jellyfin" no longer duplicates Kodi's own in a synced library
+- Music playlists show artist, album and title, and report to the dashboard
+
+v0.7.0
+- Music is no longer re-encoded by "Force remux" or "Force transcode"
+- Your Jellyfin music playlists keep themselves up to date, re-read every fifteen minutes
+- Films held in more than one version appear as one entry with its versions under it
+- Audio and subtitle tracks can be changed during a transcode, and picture subtitles burned in
+- The transcode context item offers the resume prompt, and re-encodes
+- Movie extras show their own running time
+- The "Who's watching" choice survives a Kodi restart
+
+v0.6.1
+- Lyrics are drawn by the new Kofin Lyrics add-on, installed alongside Kofin
+- Lyrics settings are now a choice: off, Kofin Lyrics, or your own lyrics add-on
+
+v0.6.0
+- Lyrics held on your server are handed to Kodi as each track starts, timings included. Needs an add-on that displays them
+
+v0.5.0
+- Resume starts where Kodi's prompt said it would, with a rewind slider (10 seconds)
+- Kodi's "Mark as watched", "Mark as unwatched" and "Reset resume position" reach the server
+- Resuming into the middle of an intro no longer flashes the skip dialog
+- The information dialog opens for items in Kofin's own listings
+- Jellyfin actions are no longer offered twice in the context menu
+- Notifications carry the right icon, and two that described the wrong problem are fixed
+- The music transcoding settings take effect
+- A song that names no artist is credited to its album artist
+- Sync no longer removes library rows it should have kept
+- Orphaned seasons and episodes heal themselves
+- A failed settings read no longer looks like every library was deselected
+- New on Advanced: a Who's watching shortlist, delete without confirmation, delete after watching
+- Force direct play is on by default, and AC3 is no longer a transcode target
+
+v0.4.0
+- Fixed episodes of an unrelated show being deleted when a season was removed
+- Library updates settle instead of rewriting every season on every run
+- Seasons with no folder of their own are tracked like any other
+- Kofin compares each library against the server at startup and repairs what is missing
+- "Some items did not sync" is no longer reported for folders that were never library content
+- Problems Kofin resolves itself are logged, not notified
+- Note: the first update after upgrading is a large one
+
+v0.3.0
+- Force transcode re-encodes instead of passing the original through
+- Transcoded audio bitrate scales with the streaming limit
+- Added E-AC3, and 480p/1440p maximum resolutions
+- "Play with transcoding" is hidden when no context bitrates are set
+- Fixed music sync failing, reporting false success, and hanging Kodi on quit
+- Sync resumes after a dropped connection and catches up; the startup delay setting is gone
+- Items downloaded but never written are recovered
+- A large catch-up sync no longer grows unbounded in memory
+- Faster music sync
+- Repairing a library asks once, and sync progress no longer misreports
+- Optional notifications when the server connects, disconnects or restarts
+- Fixed a real artist occupying Kodi's blank-artist slot
+
+v0.2.0
+- Added the "Jellyfin actions" context menu
+
+v0.1.0
+- First release

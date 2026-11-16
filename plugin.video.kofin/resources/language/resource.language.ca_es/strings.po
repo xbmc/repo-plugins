@@ -1,0 +1,1961 @@
+# Kodi Media Center language file
+# Addon Name: Kofin
+# Addon id: plugin.video.kofin
+# Addon Provider: kontell
+# Note: machine-translated (LLM), pending native review.
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.kofin\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-08-14 00:00+0000\n"
+"Last-Translator: Claude (machine translation) <noreply@anthropic.com>\n"
+"Language-Team: Catalan\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ca_ES\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "Addon Summary"
+msgid "Jellyfin client for seamless Kodi integration"
+msgstr "Client del Jellyfin per a una integració perfecta amb el Kodi"
+
+msgctxt "Addon Description"
+msgid "Play movies, shows & music from a Jellyfin server."
+msgstr "Reproduïu pel·lícules, sèries i música des d'un servidor Jellyfin."
+
+msgctxt "#30010"
+msgid "Play with transcoding"
+msgstr "Reprodueix amb transcodificació"
+
+msgctxt "#30011"
+msgid "Quick Connect"
+msgstr "Quick Connect"
+
+msgctxt "#30012"
+msgid "Username and password"
+msgstr "Nom d'usuari i contrasenya"
+
+msgctxt "#30013"
+msgid "Username"
+msgstr "Nom d'usuari"
+
+msgctxt "#30014"
+msgid "Password"
+msgstr "Contrasenya"
+
+msgctxt "#30015"
+msgid "Enter code [B]%s[/B] in the Jellyfin app or web interface."
+msgstr "Introduïu el codi [B]%s[/B] a l'aplicació o la interfície web del Jellyfin."
+
+msgctxt "#30016"
+msgid "Logged in as %s"
+msgstr "Sessió iniciada com a %s"
+
+msgctxt "#30017"
+msgid "Login failed: wrong username or password"
+msgstr "Error d'inici de sessió: nom d'usuari o contrasenya incorrectes"
+
+msgctxt "#30018"
+msgid "Server unreachable"
+msgstr "El servidor no és accessible"
+
+msgctxt "#30019"
+msgid "Log out from %s?"
+msgstr "Voleu tancar la sessió a %s?"
+
+msgctxt "#30020"
+msgid "Logged out"
+msgstr "Sessió tancada"
+
+msgctxt "#30021"
+msgid "Connection OK — %s (%s)"
+msgstr "Connexió correcta — %s (%s)"
+
+msgctxt "#30022"
+msgid "Session rejected — log in again from the Account tab"
+msgstr "Sessió rebutjada — torneu a iniciar-la des de la pestanya Compte"
+
+msgctxt "#30023"
+msgid "Restarting the Kofin service"
+msgstr "S'està reiniciant el servei del Kofin"
+
+msgctxt "#30024"
+msgid "Quick Connect timed out"
+msgstr "Quick Connect ha esgotat el temps d'espera"
+
+msgctxt "#30025"
+msgid "Already logged in"
+msgstr "La sessió ja està iniciada"
+
+msgctxt "#30026"
+msgid "Not logged in"
+msgstr "No heu iniciat la sessió"
+
+msgctxt "#30027"
+msgid "Log in to %s"
+msgstr "Inicia la sessió a %s"
+
+msgctxt "#30050"
+msgid "Account"
+msgstr "Compte"
+
+msgctxt "#30051"
+msgid "Connect to your Jellyfin server and manage the session."
+msgstr "Connecteu-vos al vostre servidor Jellyfin i gestioneu la sessió."
+
+msgctxt "#30052"
+msgid "Server address"
+msgstr "Adreça del servidor"
+
+msgctxt "#30053"
+msgid "Host name, IP address or full URL of the Jellyfin server. A bare host uses http on port 8096."
+msgstr "Nom d'amfitrió, adreça IP o URL completa del servidor Jellyfin. Un amfitrió sol fa servir http al port 8096."
+
+msgctxt "#30054"
+msgid "Log in…"
+msgstr "Inicia la sessió…"
+
+msgctxt "#30055"
+msgid "Connect to the server above using Quick Connect or a username and password."
+msgstr "Connecteu-vos al servidor indicat més amunt amb Quick Connect o amb un nom d'usuari i una contrasenya."
+
+msgctxt "#30056"
+msgid "Server"
+msgstr "Servidor"
+
+msgctxt "#30057"
+msgid "The connected Jellyfin server."
+msgstr "El servidor Jellyfin connectat."
+
+msgctxt "#30058"
+msgid "Logged-in user"
+msgstr "Usuari amb la sessió iniciada"
+
+msgctxt "#30059"
+msgid "The Jellyfin user this device plays and reports as."
+msgstr "L'usuari del Jellyfin amb què aquest dispositiu reprodueix i informa."
+
+msgctxt "#30060"
+msgid "Test connection"
+msgstr "Prova la connexió"
+
+msgctxt "#30061"
+msgid "Check that the server is reachable and the session is still valid."
+msgstr "Comprova que el servidor és accessible i que la sessió encara és vàlida."
+
+msgctxt "#30062"
+msgid "Log out"
+msgstr "Tanca la sessió"
+
+msgctxt "#30063"
+msgid "End the session on the server and forget it on this device. The server address is kept."
+msgstr "Finalitza la sessió al servidor i l'oblida en aquest dispositiu. L'adreça del servidor es conserva."
+
+msgctxt "#30064"
+msgid "Restart Kofin"
+msgstr "Reinicia el Kofin"
+
+msgctxt "#30065"
+msgid "Restart the background service without restarting Kodi."
+msgstr "Reinicia el servei en segon pla sense reiniciar el Kodi."
+
+msgctxt "#30071"
+msgid "Advanced"
+msgstr "Avançat"
+
+msgctxt "#30072"
+msgid "Notification, browsing, playback and deletion options."
+msgstr "Opcions de notificació, navegació, reproducció i supressió."
+
+msgctxt "#30073"
+msgid "Enable Delete from server"
+msgstr "Activa Suprimeix del servidor"
+
+msgctxt "#30074"
+msgid "Adds a Delete entry to an item's 'Jellyfin actions' context menu. Deletion is permanent: the file itself is removed on the Jellyfin server, for every user."
+msgstr "Afegeix una entrada Suprimeix al menú contextual «Accions del Jellyfin» d'un element. La supressió és permanent: el fitxer mateix s'elimina del servidor Jellyfin, per a tots els usuaris."
+
+msgctxt "#30075"
+msgid "Delete without confirmation"
+msgstr "Suprimeix sense confirmació"
+
+msgctxt "#30076"
+msgid "Delete the item as soon as the entry is picked, with no 'are you sure?' prompt. The deletion is still permanent and applies on the server."
+msgstr "Suprimeix l'element tan bon punt es tria l'entrada, sense cap pregunta de «n'esteu segur?». La supressió continua sent permanent i s'aplica al servidor."
+
+msgctxt "#30077"
+msgid "Offer to delete after watching"
+msgstr "Ofereix suprimir-lo després de veure'l"
+
+msgctxt "#30078"
+msgid "When a movie or episode finishes, ask whether to delete it from the server. Always asks, whatever 'Delete without confirmation' is set to."
+msgstr "Quan acaba una pel·lícula o un episodi, pregunta si voleu suprimir-lo del servidor. Ho pregunta sempre, sigui quin sigui el valor de «Suprimeix sense confirmació»."
+
+msgctxt "#30079"
+msgid "Who's watching shortlist"
+msgstr "Usuaris de «Qui està mirant?»"
+
+msgctxt "#30080"
+msgid "Choose which server users the addon's Who's watching? entry offers. \"All\" offers everyone. With nothing selected the entry is hidden and anyone already on the session is removed."
+msgstr "Trieu quins usuaris del servidor ofereix l'entrada «Qui està mirant?» del complement. \"Tots\" ofereix tothom. Si no seleccioneu res, l'entrada s'oculta i qui ja sigui a la sessió se'n treu."
+
+msgctxt "#30030"
+msgid "All"
+msgstr "Tots"
+
+msgctxt "#30031"
+msgid "Recently added"
+msgstr "Afegits recentment"
+
+msgctxt "#30032"
+msgid "Next up"
+msgstr "A continuació"
+
+msgctxt "#30033"
+msgid "In progress"
+msgstr "En curs"
+
+msgctxt "#30034"
+msgid "Unwatched"
+msgstr "No vistos"
+
+msgctxt "#30035"
+msgid "Favourites"
+msgstr "Preferits"
+
+msgctxt "#30036"
+msgid "Genres"
+msgstr "Gèneres"
+
+msgctxt "#30037"
+msgid "Random"
+msgstr "Aleatori"
+
+msgctxt "#30038"
+msgid "Sets"
+msgstr "Col·leccions"
+
+msgctxt "#30039"
+msgid "Artists"
+msgstr "Artistes"
+
+msgctxt "#30040"
+msgid "Albums"
+msgstr "Àlbums"
+
+msgctxt "#30049"
+msgid "Continue watching"
+msgstr "Continua mirant"
+
+msgctxt "#30100"
+msgid "Transcoding"
+msgstr "Transcodificació"
+
+msgctxt "#30101"
+msgid "When and how the server converts media for this device."
+msgstr "Quan i com el servidor converteix els mitjans per a aquest dispositiu."
+
+msgctxt "#30102"
+msgid "Force direct play"
+msgstr "Força la reproducció directa"
+
+msgctxt "#30103"
+msgid "Always play the original video file. Overrides every other video transcoding setting; playback fails if the device cannot handle the media. Music is unaffected — see 'Transcode music'."
+msgstr "Reprodueix sempre el fitxer de vídeo original. Té prioritat sobre la resta de paràmetres de transcodificació de vídeo; la reproducció falla si el dispositiu no pot gestionar el mitjà. La música no es veu afectada: vegeu «Transcodifica la música»."
+
+msgctxt "#30104"
+msgid "Force remux"
+msgstr "Força el remux"
+
+msgctxt "#30105"
+msgid "Remux into HLS and copy the source codecs. Does not use Maximum audio channels, Maximum streaming bitrate or Transcode audio bitrate below — those would re-encode a listed codec. Direct play codecs, Allowed HDR types and Maximum resolution still apply."
+msgstr "Remuxa a HLS i copia els còdecs d'origen. No fa servir «Nombre màxim de canals d'àudio», «Taxa de bits màxima de transmissió» ni «Taxa de bits de l'àudio transcodificat» més avall — això recodificaria un còdec de la llista. Els còdecs de reproducció directa, «Tipus d'HDR permesos» i «Resolució màxima» sí que s'apliquen."
+
+msgctxt "#30106"
+msgid "Force transcode"
+msgstr "Força la transcodificació"
+
+msgctxt "#30107"
+msgid "Always re-encode video and audio to the preferred codecs. Honours the bitrate cap, the channel cap, allowed codecs, HDR types and resolution."
+msgstr "Recodifica sempre el vídeo i l'àudio als còdecs preferits. Respecta el límit de taxa de bits, el de canals, els còdecs permesos, els tipus d'HDR i la resolució."
+
+msgctxt "#30108"
+msgid "Direct play video codecs"
+msgstr "Còdecs de vídeo de reproducció directa"
+
+msgctxt "#30109"
+msgid "Video formats this device can decode. Media using formats not selected here is transcoded."
+msgstr "Formats de vídeo que aquest dispositiu pot descodificar. Els mitjans amb formats no seleccionats aquí es transcodifiquen."
+
+msgctxt "#30110"
+msgid "Direct play audio codecs"
+msgstr "Còdecs d'àudio de reproducció directa"
+
+msgctxt "#30111"
+msgid "Audio formats this device can decode or pass through. Others are transcoded."
+msgstr "Formats d'àudio que aquest dispositiu pot descodificar o transmetre sense processar. La resta es transcodifiquen."
+
+msgctxt "#30112"
+msgid "Allowed HDR types"
+msgstr "Tipus d'HDR permesos"
+
+msgctxt "#30113"
+msgid "HDR formats the display accepts. Media in formats not selected is tone-mapped or transcoded to SDR/HDR10 by the server."
+msgstr "Formats HDR que accepta la pantalla. Els mitjans amb formats no seleccionats els converteix el servidor a SDR o HDR10 amb mapatge tonal o transcodificació."
+
+msgctxt "#30114"
+msgid "Preferred video codec"
+msgstr "Còdec de vídeo preferit"
+
+msgctxt "#30115"
+msgid "The codec the client asks for when video must be transcoded."
+msgstr "El còdec que el client demana quan el vídeo s'ha de transcodificar."
+
+msgctxt "#30116"
+msgid "Preferred audio codec"
+msgstr "Còdec d'àudio preferit"
+
+msgctxt "#30117"
+msgid "The codec the client asks for when audio must be transcoded."
+msgstr "El còdec que el client demana quan l'àudio s'ha de transcodificar."
+
+msgctxt "#30118"
+msgid "Maximum audio channels"
+msgstr "Nombre màxim de canals d'àudio"
+
+msgctxt "#30119"
+msgid "Maximum number of audio channels allowed when transcoding. Streams with more channels will be downmixed. No effect on direct playback."
+msgstr "Nombre màxim de canals d'àudio permesos en transcodificar. Els fluxos amb més canals es reduiran (downmix). No té cap efecte en la reproducció directa."
+
+msgctxt "#30120"
+msgid "Maximum streaming bitrate"
+msgstr "Taxa de bits màxima de transmissió"
+
+msgctxt "#30121"
+msgid "Media above this bitrate is transcoded down to it."
+msgstr "Els mitjans per sobre d'aquesta taxa de bits es transcodifiquen fins a aquest límit."
+
+msgctxt "#30122"
+msgid "Maximum resolution"
+msgstr "Resolució màxima"
+
+msgctxt "#30123"
+msgid "Wider media is downscaled by the server."
+msgstr "El servidor redueix l'escala dels mitjans més amples."
+
+msgctxt "#30124"
+msgid "Transcode audio bitrate"
+msgstr "Taxa de bits de l'àudio transcodificat"
+
+msgctxt "#30125"
+msgid "Bitrate for the audio track when video is transcoded."
+msgstr "Taxa de bits de la pista d'àudio quan es transcodifica el vídeo."
+
+msgctxt "#30126"
+msgid "Context menu bitrates"
+msgstr "Taxes de bits del menú contextual"
+
+msgctxt "#30127"
+msgid "Bitrates offered by 'Play with transcoding'. With one selected the popup is skipped."
+msgstr "Taxes de bits que ofereix «Reprodueix amb transcodificació». Amb només una de seleccionada, s'omet la finestra emergent."
+
+msgctxt "#30129"
+msgid "Maximum music bitrate"
+msgstr "Taxa de bits màxima de la música"
+
+msgctxt "#30130"
+msgid "Music above this bitrate is transcoded using the codec and bitrate below. Unlimited never transcodes."
+msgstr "La música per sobre d'aquesta taxa de bits es transcodifica amb el còdec i la taxa de bits de sota. Il·limitat no transcodifica mai."
+
+msgctxt "#30131"
+msgid "Music transcode codec"
+msgstr "Còdec de transcodificació de música"
+
+msgctxt "#30132"
+msgid "Codec for transcoded music streams."
+msgstr "Còdec per als fluxos de música transcodificats."
+
+msgctxt "#30133"
+msgid "Music transcode bitrate"
+msgstr "Taxa de bits de transcodificació de música"
+
+msgctxt "#30134"
+msgid "Bitrate for transcoded music streams."
+msgstr "Taxa de bits per als fluxos de música transcodificats."
+
+msgctxt "#30135"
+msgid "Transcode music"
+msgstr "Transcodifica la música"
+
+msgctxt "#30150"
+msgid "H.264 (AVC)"
+msgstr "H.264 (AVC)"
+
+msgctxt "#30151"
+msgid "H.264 10-bit (Hi10P)"
+msgstr "H.264 10-bit (Hi10P)"
+
+msgctxt "#30152"
+msgid "H.265 (HEVC)"
+msgstr "H.265 (HEVC)"
+
+msgctxt "#30153"
+msgid "HEVC RExt (4:2:2/4:4:4)"
+msgstr "HEVC RExt (4:2:2/4:4:4)"
+
+msgctxt "#30154"
+msgid "AV1"
+msgstr "AV1"
+
+msgctxt "#30155"
+msgid "MPEG-2"
+msgstr "MPEG-2"
+
+msgctxt "#30156"
+msgid "VP9"
+msgstr "VP9"
+
+msgctxt "#30157"
+msgid "VC-1"
+msgstr "VC-1"
+
+msgctxt "#30158"
+msgid "AAC"
+msgstr "AAC"
+
+msgctxt "#30159"
+msgid "MP2"
+msgstr "MP2"
+
+msgctxt "#30160"
+msgid "MP3"
+msgstr "MP3"
+
+msgctxt "#30161"
+msgid "AC3 (Dolby Digital)"
+msgstr "AC3 (Dolby Digital)"
+
+msgctxt "#30162"
+msgid "E-AC3 (Dolby Digital Plus)"
+msgstr "E-AC3 (Dolby Digital Plus)"
+
+msgctxt "#30163"
+msgid "Opus"
+msgstr "Opus"
+
+msgctxt "#30164"
+msgid "FLAC"
+msgstr "FLAC"
+
+msgctxt "#30165"
+msgid "DTS"
+msgstr "DTS"
+
+msgctxt "#30166"
+msgid "HDR10"
+msgstr "HDR10"
+
+msgctxt "#30167"
+msgid "HLG"
+msgstr "HLG"
+
+msgctxt "#30168"
+msgid "HDR10+"
+msgstr "HDR10+"
+
+msgctxt "#30169"
+msgid "Dolby Vision"
+msgstr "Dolby Vision"
+
+msgctxt "#30170"
+msgid "Dolby Vision with HDR10 fallback"
+msgstr "Dolby Vision amb alternativa HDR10"
+
+msgctxt "#30171"
+msgid "Dolby Vision with HLG fallback"
+msgstr "Dolby Vision amb alternativa HLG"
+
+msgctxt "#30172"
+msgid "Dolby Vision with SDR fallback"
+msgstr "Dolby Vision amb alternativa SDR"
+
+msgctxt "#30173"
+msgid "Dolby Vision Profile 7 (EL)"
+msgstr "Dolby Vision perfil 7 (EL)"
+
+msgctxt "#30174"
+msgid "Dolby Vision with HDR10+ fallback"
+msgstr "Dolby Vision amb alternativa HDR10+"
+
+msgctxt "#30175"
+msgid "Dolby Vision P7 with HDR10+ fallback"
+msgstr "Dolby Vision P7 amb alternativa HDR10+"
+
+msgctxt "#30176"
+msgid "Unlimited"
+msgstr "Il·limitat"
+
+msgctxt "#30177"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30178"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30179"
+msgid "4K"
+msgstr "4K"
+
+msgctxt "#30180"
+msgid "2.0 stereo"
+msgstr "2.0 estèreo"
+
+msgctxt "#30181"
+msgid "5.1 surround"
+msgstr "5.1 envoltant"
+
+msgctxt "#30182"
+msgid "7.1 surround"
+msgstr "7.1 envoltant"
+
+msgctxt "#30183"
+msgid "1 Mbit/s"
+msgstr "1 Mbit/s"
+
+msgctxt "#30184"
+msgid "2 Mbit/s"
+msgstr "2 Mbit/s"
+
+msgctxt "#30185"
+msgid "3 Mbit/s"
+msgstr "3 Mbit/s"
+
+msgctxt "#30186"
+msgid "4 Mbit/s"
+msgstr "4 Mbit/s"
+
+msgctxt "#30187"
+msgid "6 Mbit/s"
+msgstr "6 Mbit/s"
+
+msgctxt "#30188"
+msgid "8 Mbit/s"
+msgstr "8 Mbit/s"
+
+msgctxt "#30189"
+msgid "10 Mbit/s"
+msgstr "10 Mbit/s"
+
+msgctxt "#30190"
+msgid "15 Mbit/s"
+msgstr "15 Mbit/s"
+
+msgctxt "#30191"
+msgid "20 Mbit/s"
+msgstr "20 Mbit/s"
+
+msgctxt "#30192"
+msgid "25 Mbit/s"
+msgstr "25 Mbit/s"
+
+msgctxt "#30193"
+msgid "40 Mbit/s"
+msgstr "40 Mbit/s"
+
+msgctxt "#30194"
+msgid "60 Mbit/s"
+msgstr "60 Mbit/s"
+
+msgctxt "#30195"
+msgid "120 Mbit/s"
+msgstr "120 Mbit/s"
+
+msgctxt "#30196"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30197"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30198"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30199"
+msgid "256 kbit/s"
+msgstr "256 kbit/s"
+
+msgctxt "#30200"
+msgid "320 kbit/s"
+msgstr "320 kbit/s"
+
+msgctxt "#30201"
+msgid "384 kbit/s"
+msgstr "384 kbit/s"
+
+msgctxt "#30202"
+msgid "448 kbit/s"
+msgstr "448 kbit/s"
+
+msgctxt "#30203"
+msgid "640 kbit/s"
+msgstr "640 kbit/s"
+
+msgctxt "#30204"
+msgid "0.5 Mbit/s"
+msgstr "0.5 Mbit/s"
+
+msgctxt "#30205"
+msgid "0.75 Mbit/s"
+msgstr "0.75 Mbit/s"
+
+msgctxt "#30206"
+msgid "Default (max streaming bitrate)"
+msgstr "Per defecte (taxa de bits màxima de transmissió)"
+
+msgctxt "#30041"
+msgid "Who's watching?"
+msgstr "Qui està mirant?"
+
+msgctxt "#30045"
+msgid "No active session on the server yet"
+msgstr "Encara no hi ha cap sessió activa al servidor"
+
+msgctxt "#30046"
+msgid "Who's watching? (%s)"
+msgstr "Qui està mirant? (%s)"
+
+msgctxt "#30047"
+msgid "Who's watching with %s?"
+msgstr "Qui està mirant amb %s?"
+
+msgctxt "#30048"
+msgid "Who can be added to the session"
+msgstr "Qui es pot afegir a la sessió"
+
+msgctxt "#30250"
+msgid "Library"
+msgstr "Biblioteca"
+
+msgctxt "#30251"
+msgid "Select and manage the Jellyfin libraries mirrored into Kodi's own database."
+msgstr "Seleccioneu i gestioneu les biblioteques del Jellyfin reflectides a la base de dades del Kodi."
+
+msgctxt "#30252"
+msgid "Select libraries to sync"
+msgstr "Selecciona les biblioteques per sincronitzar"
+
+msgctxt "#30253"
+msgid "Choose which server libraries are mirrored into the Kodi library. Changes apply when you confirm the selection."
+msgstr "Trieu quines biblioteques del servidor es reflecteixen a la biblioteca del Kodi. Els canvis s'apliquen quan confirmeu la selecció."
+
+msgctxt "#30256"
+msgid "Update libraries"
+msgstr "Actualitza les biblioteques"
+
+msgctxt "#30258"
+msgid "Repair libraries"
+msgstr "Repara les biblioteques"
+
+msgctxt "#30259"
+msgid "Remove and re-sync the libraries you pick from scratch, restoring watched state from the server. Runs when you confirm the selection."
+msgstr "Elimina i torna a sincronitzar des de zero les biblioteques que trieu, restaurant l'estat de visualització des del servidor. S'executa quan confirmeu la selecció."
+
+msgctxt "#30262"
+msgid "Sync status"
+msgstr "Estat de la sincronització"
+
+msgctxt "#30264"
+msgid "Remove synced library?"
+msgstr "Voleu eliminar la biblioteca sincronitzada?"
+
+msgctxt "#30265"
+msgid "Remove %s from the Kodi library? The items are deleted from this device only."
+msgstr "Voleu eliminar %s de la biblioteca del Kodi? Els elements només se suprimeixen d'aquest dispositiu."
+
+msgctxt "#30266"
+msgid "Repair which libraries?"
+msgstr "Quines biblioteques voleu reparar?"
+
+msgctxt "#30267"
+msgid "All"
+msgstr "Totes"
+
+msgctxt "#30268"
+msgid "Select libraries"
+msgstr "Seleccioneu les biblioteques"
+
+msgctxt "#30269"
+msgid "No libraries available"
+msgstr "No hi ha cap biblioteca disponible"
+
+msgctxt "#30302"
+msgid "Hide update status below (items)"
+msgstr "Amaga l'estat d'actualització per sota de (elements)"
+
+msgctxt "#30303"
+msgid "Hide Kodi's library-update progress for syncs smaller than this. 0 always shows it."
+msgstr "Amaga el progrés d'actualització de la biblioteca del Kodi per a sincronitzacions més petites que aquest valor. Amb 0 es mostra sempre."
+
+msgctxt "#30318"
+msgid "Compress artwork"
+msgstr "Comprimeix les imatges"
+
+msgctxt "#30319"
+msgid "Re-encode capped artwork at JPEG quality 90. No effect without a resolution cap."
+msgstr "Recodifica les imatges limitades amb qualitat JPEG 90. No té cap efecte sense un límit de resolució."
+
+msgctxt "#30320"
+msgid "Maximum artwork resolution"
+msgstr "Resolució màxima de les imatges"
+
+msgctxt "#30321"
+msgid "Cap the height of synced artwork. Original keeps the server size."
+msgstr "Limita l'alçada de les imatges sincronitzades. Original conserva la mida del servidor."
+
+msgctxt "#30322"
+msgid "Original"
+msgstr "Original"
+
+msgctxt "#30323"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30324"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30325"
+msgid "2160p"
+msgstr "2160p"
+
+msgctxt "#30326"
+msgid "Notify on server connection changes"
+msgstr "Notifica els canvis de connexió amb el servidor"
+
+msgctxt "#30327"
+msgid "Show a notification when the server connects, disconnects or restarts."
+msgstr "Mostra una notificació quan el servidor es connecta, es desconnecta o es reinicia."
+
+msgctxt "#30350"
+msgid "Recently added"
+msgstr "Afegits recentment"
+
+msgctxt "#30351"
+msgid "In progress"
+msgstr "En curs"
+
+msgctxt "#30352"
+msgid "Unwatched"
+msgstr "No vistos"
+
+msgctxt "#30353"
+msgid "Random"
+msgstr "Aleatori"
+
+msgctxt "#30354"
+msgid "Recommended"
+msgstr "Recomanats"
+
+msgctxt "#30355"
+msgid "Recently added episodes"
+msgstr "Episodis afegits recentment"
+
+msgctxt "#30356"
+msgid "In progress episodes"
+msgstr "Episodis en curs"
+
+msgctxt "#30358"
+msgid "Favorite movies"
+msgstr "Pel·lícules preferides"
+
+msgctxt "#30359"
+msgid "Favorite shows"
+msgstr "Sèries preferides"
+
+msgctxt "#30360"
+msgid "Favorite episodes"
+msgstr "Episodis preferits"
+
+msgctxt "#30401"
+msgid "Updating media"
+msgstr "S'estan actualitzant els mitjans"
+
+msgctxt "#30403"
+msgid "Sync incomplete; retrying shortly"
+msgstr "Sincronització incompleta; es reintentarà"
+
+msgctxt "#30408"
+msgid "Removing library"
+msgstr "S'està eliminant la biblioteca"
+
+msgctxt "#30415"
+msgid "Connected to %s"
+msgstr "Connectat a %s"
+
+msgctxt "#30416"
+msgid "Lost connection to the server"
+msgstr "Connexió perduda amb el servidor"
+
+msgctxt "#30417"
+msgid "Server is restarting"
+msgstr "El servidor s'està reiniciant"
+
+msgctxt "#30418"
+msgid "Server is shutting down"
+msgstr "El servidor s'està aturant"
+
+msgctxt "#30420"
+msgid "Library sync is off: %s"
+msgstr "Sincronització desactivada: %s"
+
+msgctxt "#30450"
+msgid "Skipping & Play next"
+msgstr "Omissió i reproduir el següent"
+
+msgctxt "#30451"
+msgid "Media segment skipping and the Play Next prompt."
+msgstr "Omissió de segments multimèdia i avís de Reprodueix el següent."
+
+msgctxt "#30453"
+msgid "Skip media segments"
+msgstr "Omet els segments multimèdia"
+
+msgctxt "#30454"
+msgid "Fetch Jellyfin media segments (intro, credits, recap, preview, commercial) during playback and act on them per type."
+msgstr "Recupera els segments multimèdia del Jellyfin (introducció, crèdits, resum, avanç, anunci) durant la reproducció i actua-hi segons el tipus."
+
+msgctxt "#30455"
+msgid "Intros"
+msgstr "Introduccions"
+
+msgctxt "#30456"
+msgid "Off ignores intro segments, Auto skips past them, Ask shows a skip button."
+msgstr "Desactivat ignora els segments d'introducció, Automàtic els omet i Pregunta mostra un botó per ometre'ls."
+
+msgctxt "#30457"
+msgid "Credits"
+msgstr "Crèdits"
+
+msgctxt "#30458"
+msgid "Off ignores credits, Auto seeks past them, Ask offers Skip Outro — with Play Next when a next episode exists."
+msgstr "Desactivat ignora els crèdits, Automàtic hi avança i Pregunta ofereix Omet els crèdits, amb Reprodueix el següent quan hi ha un episodi posterior."
+
+msgctxt "#30459"
+msgid "Recaps"
+msgstr "Resums"
+
+msgctxt "#30460"
+msgid "Off ignores recap segments, Auto skips past them, Ask shows a skip button."
+msgstr "Desactivat ignora els segments de resum, Automàtic els omet i Pregunta mostra un botó per ometre'ls."
+
+msgctxt "#30461"
+msgid "Previews"
+msgstr "Avanços"
+
+msgctxt "#30462"
+msgid "Off ignores preview segments, Auto skips past them, Ask shows a skip button."
+msgstr "Desactivat ignora els segments d'avanç, Automàtic els omet i Pregunta mostra un botó per ometre'ls."
+
+msgctxt "#30463"
+msgid "Commercials"
+msgstr "Anuncis"
+
+msgctxt "#30464"
+msgid "Off ignores commercial segments, Auto skips past them, Ask shows a skip button."
+msgstr "Desactivat ignora els segments d'anuncis, Automàtic els omet i Pregunta mostra un botó per ometre'ls."
+
+msgctxt "#30465"
+msgid "Off"
+msgstr "Desactivat"
+
+msgctxt "#30466"
+msgid "Auto"
+msgstr "Automàtic"
+
+msgctxt "#30467"
+msgid "Ask"
+msgstr "Pregunta"
+
+msgctxt "#30469"
+msgid "Offer Play Next"
+msgstr "Ofereix Reprodueix el següent"
+
+msgctxt "#30470"
+msgid "Offer the next episode at the credits, or near the end when no credits segment exists."
+msgstr "Ofereix l'episodi següent als crèdits, o prop del final quan no hi ha cap segment de crèdits."
+
+msgctxt "#30471"
+msgid "Play Next lead time"
+msgstr "Antelació de Reprodueix el següent"
+
+msgctxt "#30472"
+msgid "Seconds before the end to show the Play Next prompt for content without a credits segment."
+msgstr "Segons abans del final per mostrar l'avís de Reprodueix el següent en contingut sense segment de crèdits."
+
+msgctxt "#30473"
+msgid "Autoplay next episode"
+msgstr "Reprodueix l'episodi següent automàticament"
+
+msgctxt "#30474"
+msgid "Count down on the Play Next prompt and start the next episode automatically."
+msgstr "Fa un compte enrere a l'avís de Reprodueix el següent i inicia l'episodi següent automàticament."
+
+msgctxt "#30475"
+msgid "Resume offset (seconds)"
+msgstr "Desplaçament de la represa (segons)"
+
+msgctxt "#30476"
+msgid "Seconds to rewind before the stored resume point."
+msgstr "Segons que es rebobinen abans del punt de represa desat."
+
+msgctxt "#30477"
+msgid "Hide the skip button after"
+msgstr "Amaga el botó d'ometre després de"
+
+msgctxt "#30478"
+msgid "How far into a segment the skip button disappears. 100% keeps it up for the whole segment."
+msgstr "Fins on dins d'un segment desapareix el botó d'ometre. Amb 100% es manté durant tot el segment."
+
+msgctxt "#30481"
+msgid "Skip Intro"
+msgstr "Omet la introducció"
+
+msgctxt "#30482"
+msgid "Skip Outro"
+msgstr "Omet els crèdits"
+
+msgctxt "#30483"
+msgid "Skip Recap"
+msgstr "Omet el resum"
+
+msgctxt "#30484"
+msgid "Skip Preview"
+msgstr "Omet l'avanç"
+
+msgctxt "#30485"
+msgid "Skip Ad"
+msgstr "Omet l'anunci"
+
+msgctxt "#30486"
+msgid "Play Next"
+msgstr "Reprodueix el següent"
+
+msgctxt "#30487"
+msgid "Close"
+msgstr "Tanca"
+
+msgctxt "#30488"
+msgid "Skipped %s"
+msgstr "S'ha omès %s"
+
+msgctxt "#30489"
+msgid "Up next: %s"
+msgstr "A continuació: %s"
+
+msgctxt "#30500"
+msgid "Extras"
+msgstr "Extres"
+
+msgctxt "#30501"
+msgid "Browse extras"
+msgstr "Explora els extres"
+
+msgctxt "#30502"
+msgid "Jellyfin actions"
+msgstr "Accions del Jellyfin"
+
+msgctxt "#30504"
+msgid "Settings"
+msgstr "Configuració"
+
+msgctxt "#30505"
+msgid "Permanently delete \"%s\" from the server? This cannot be undone."
+msgstr "Voleu suprimir permanentment \"%s\" del servidor? Aquesta acció no es pot desfer."
+
+msgctxt "#30506"
+msgid "Finished \"%s\". Permanently delete it from the server? This cannot be undone."
+msgstr "Heu acabat \"%s\". Voleu suprimir-lo permanentment del servidor? Aquesta acció no es pot desfer."
+
+msgctxt "#30507"
+msgid "Server request failed"
+msgstr "Ha fallat la petició al servidor"
+
+msgctxt "#30508"
+msgid "Mark as watched on Jellyfin"
+msgstr "Marca com a vist al Jellyfin"
+
+msgctxt "#30509"
+msgid "Mark as unwatched on Jellyfin"
+msgstr "Marca com a no vist al Jellyfin"
+
+msgctxt "#30550"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30551"
+msgid "Enable SyncPlay"
+msgstr "Activa SyncPlay"
+
+msgctxt "#30552"
+msgid "Watch in sync with other Jellyfin clients. Leave Kodi's 'Sync playback to display' off for a reliable experience"
+msgstr "Mira en sincronia amb altres clients del Jellyfin. Deixa «Sincronitza la reproducció amb la pantalla» desactivat al Kodi per a una experiència fiable"
+
+msgctxt "#30557"
+msgid "Group notifications"
+msgstr "Notificacions del grup"
+
+msgctxt "#30558"
+msgid "Show member join/leave and group-waiting notifications. Errors are always shown."
+msgstr "Mostra les notificacions d'entrada i sortida de membres i d'espera del grup. Els errors es mostren sempre."
+
+msgctxt "#30560"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30561"
+msgid "New group..."
+msgstr "Grup nou..."
+
+msgctxt "#30562"
+msgid "Leave group"
+msgstr "Surt del grup"
+
+msgctxt "#30563"
+msgid "Joined group: %s"
+msgstr "Us heu unit al grup: %s"
+
+msgctxt "#30564"
+msgid "Left the group"
+msgstr "Heu sortit del grup"
+
+msgctxt "#30565"
+msgid "%s joined the group"
+msgstr "%s s'ha unit al grup"
+
+msgctxt "#30566"
+msgid "%s left the group"
+msgstr "%s ha sortit del grup"
+
+msgctxt "#30567"
+msgid "Group name"
+msgstr "Nom del grup"
+
+msgctxt "#30568"
+msgid "Playback stopped — what should the group do?"
+msgstr "Reproducció aturada — què ha de fer el grup?"
+
+msgctxt "#30569"
+msgid "Spectator mode: the group will not wait for you"
+msgstr "Mode espectador: el grup no us esperarà"
+
+msgctxt "#30570"
+msgid "SyncPlay needs a working websocket connection to the server"
+msgstr "SyncPlay necessita una connexió websocket operativa amb el servidor"
+
+msgctxt "#30571"
+msgid "Removed from the group"
+msgstr "Us han tret del grup"
+
+msgctxt "#30572"
+msgid "Members"
+msgstr "Membres"
+
+msgctxt "#30573"
+msgid "Resync with group"
+msgstr "Torna a sincronitzar amb el grup"
+
+msgctxt "#30574"
+msgid "SyncPlay is unavailable (server not reachable?)"
+msgstr "SyncPlay no disponible (servidor inaccessible?)"
+
+msgctxt "#30575"
+msgid "External players cannot be synchronized"
+msgstr "Els reproductors externs no es poden sincronitzar"
+
+msgctxt "#30576"
+msgid "Playback could not be synchronized"
+msgstr "No s'ha pogut sincronitzar la reproducció"
+
+msgctxt "#30577"
+msgid "buffering"
+msgstr "emplenant la memòria intermèdia"
+
+msgctxt "#30578"
+msgid "Could not join the group"
+msgstr "No s'ha pogut entrar al grup"
+
+msgctxt "#30579"
+msgid "You don't have access to some items in the group's queue"
+msgstr "No teniu accés a alguns elements de la cua del grup"
+
+msgctxt "#30580"
+msgid "Become a spectator (group won't wait for me)"
+msgstr "Fes-me espectador (el grup no m'esperarà)"
+
+msgctxt "#30581"
+msgid "Wait for me again (leave spectator mode)"
+msgstr "Torna a esperar-me (surt del mode espectador)"
+
+msgctxt "#30582"
+msgid "disconnected"
+msgstr "desconnectat"
+
+msgctxt "#30583"
+msgid "The group will wait for you again"
+msgstr "El grup us tornarà a esperar"
+
+msgctxt "#30584"
+msgid "Stop playback for everyone"
+msgstr "Atura la reproducció per a tothom"
+
+msgctxt "#30585"
+msgid "Waiting for the group..."
+msgstr "S'està esperant el grup..."
+
+msgctxt "#30586"
+msgid "Fine sync using tempo"
+msgstr "Sincronització fina amb tempo"
+
+msgctxt "#30587"
+msgid "Keeps this device on the group's position by briefly playing faster or slower. A video correction decodes passthrough audio until the next item."
+msgstr "Manté aquest dispositiu a la posició del grup reproduint breument més ràpid o més lent. Una correcció de vídeo descodifica l'àudio passthrough fins al següent element."
+
+msgctxt "#30592"
+msgid "Fine sync stopped: rate mismatch"
+msgstr "Sinc. fina aturada: ritme no coincideix"
+
+msgctxt "#30593"
+msgid "Largest video error closed by tempo (ms)"
+msgstr "Error de vídeo més gran corregit amb tempo (ms)"
+
+msgctxt "#30594"
+msgid "Position errors up to this are closed by playing faster or slower; anything larger is closed with a skip. Higher means fewer skips and longer speed changes."
+msgstr "Els errors de posició fins a aquest valor es corregeixen reproduint més ràpid o més lent; els més grans, amb un salt. Més alt vol dir menys salts i canvis de velocitat més llargs."
+
+msgctxt "#30595"
+msgid "Fastest video correction speed (%)"
+msgstr "Velocitat màxima de correcció de vídeo (%)"
+
+msgctxt "#30596"
+msgid "The most playback speed may change during a correction. At 25% a 2.5 second error takes 10 seconds to close; lower is less noticeable but slower. Large changes ramp in and out."
+msgstr "Quant pot canviar com a màxim la velocitat de reproducció durant una correcció. Al 25 %, un error de 2,5 segons es tanca en 10 segons; més baix es nota menys però és més lent. Els canvis grans s'apliquen gradualment."
+
+msgctxt "#30604"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30605"
+msgid "1440p"
+msgstr "1440p"
+
+msgctxt "#30613"
+msgid "Audio and subtitle streams"
+msgstr "Fluxos d'àudio i de subtítols"
+
+msgctxt "#30614"
+msgid "Audio stream"
+msgstr "Flux d'àudio"
+
+msgctxt "#30615"
+msgid "Subtitles"
+msgstr "Subtítols"
+
+msgctxt "#30616"
+msgid "Restarting to change stream..."
+msgstr "S'està reiniciant per canviar el flux..."
+
+msgctxt "#30617"
+msgid "burned in, restarts playback"
+msgstr "incrustats, reinicia la reproducció"
+
+msgctxt "#30618"
+msgid "Use Jellyfin's default tracks"
+msgstr "Utilitza les pistes per defecte del Jellyfin"
+
+msgctxt "#30619"
+msgid "Start playback on the audio and subtitle tracks your Jellyfin account asks for, instead of the ones Kodi's own language settings pick. The server resolves both from your Jellyfin profile, so the choice follows you to every client."
+msgstr "Inicia la reproducció amb les pistes d'àudio i de subtítols que demana el vostre compte del Jellyfin, en lloc de les que trien els paràmetres d'idioma del Kodi. El servidor resol totes dues a partir del vostre perfil del Jellyfin, així que la tria us segueix a tots els clients."
+
+msgctxt "#30622"
+msgid "Notify about new content"
+msgstr "Notifica el contingut nou"
+
+msgctxt "#30623"
+msgid "Show a notification when new films, shows, episodes, music videos, artists or albums are added to your library."
+msgstr "Mostra una notificació quan s'afegeixen pel·lícules, sèries, episodis, vídeos musicals, artistes o àlbums nous a la vostra biblioteca."
+
+msgctxt "#30624"
+msgid "%s movie added to library"
+msgstr "Pel·lícula afegida: %s"
+
+msgctxt "#30625"
+msgid "%s movies added to library"
+msgstr "S'han afegit %s pel·lícules"
+
+msgctxt "#30626"
+msgid "%s show added to library"
+msgstr "Sèrie afegida: %s"
+
+msgctxt "#30627"
+msgid "%s new shows added to library"
+msgstr "S'han afegit %s sèries noves"
+
+msgctxt "#30628"
+msgid "%s episode of %s added to library"
+msgstr "S'ha afegit %s episodi de %s"
+
+msgctxt "#30629"
+msgid "%s episodes of %s added to library"
+msgstr "S'han afegit %s episodis de %s"
+
+msgctxt "#30630"
+msgid "%s episodes added to library"
+msgstr "S'han afegit %s episodis"
+
+msgctxt "#30631"
+msgid "%s music video added to library"
+msgstr "Vídeo musical afegit: %s"
+
+msgctxt "#30632"
+msgid "%s music videos added to library"
+msgstr "S'han afegit %s vídeos musicals"
+
+msgctxt "#30633"
+msgid "%s added to music library"
+msgstr "Artista afegit: %s"
+
+msgctxt "#30634"
+msgid "%s artists added to library"
+msgstr "S'han afegit %s artistes"
+
+msgctxt "#30635"
+msgid "%s added to music library"
+msgstr "Àlbum afegit: %s"
+
+msgctxt "#30636"
+msgid "%s albums added to library"
+msgstr "S'han afegit %s àlbums"
+
+msgctxt "#30637"
+msgid "Use the server's splashscreen as the backdrop"
+msgstr "Fes servir la pantalla de presentació del servidor com a fons"
+
+msgctxt "#30638"
+msgid "Show the Jellyfin server's splashscreen behind the addon instead of the bundled artwork. Refreshed when the service connects, at most once a day."
+msgstr "Mostra la pantalla de presentació del servidor Jellyfin darrere del complement en lloc de les imatges incloses. S'actualitza quan el servei es connecta, com a màxim un cop al dia."
+
+msgctxt "#30700"
+msgid "Downloads"
+msgstr "Baixades"
+
+msgctxt "#30701"
+msgid "Download items for offline playback"
+msgstr "Baixeu elements per reproduir-los sense connexió"
+
+msgctxt "#30702"
+msgid "Enable downloads"
+msgstr "Activa les baixades"
+
+msgctxt "#30703"
+msgid "Adds Download to the Jellyfin actions menu and runs the download manager. Only for libraries you sync with Kofin."
+msgstr "Afegeix Baixa al menú d'accions del Jellyfin i executa el gestor de baixades. Només per a les biblioteques que sincronitzeu amb el Kofin."
+
+msgctxt "#30704"
+msgid "Download location"
+msgstr "Ubicació de les baixades"
+
+msgctxt "#30705"
+msgid "Where downloaded files are kept. Leave empty for the addon profile folder"
+msgstr "On es guarden els fitxers baixats. Deixeu-ho buit per fer servir la carpeta de perfil del complement"
+
+msgctxt "#30706"
+msgid "Parallel video downloads"
+msgstr "Baixades de vídeo en paral·lel"
+
+msgctxt "#30707"
+msgid "How many movies and episodes download at the same time"
+msgstr "Quantes pel·lícules i episodis es baixen alhora"
+
+msgctxt "#30708"
+msgid "Download"
+msgstr "Baixa"
+
+msgctxt "#30709"
+msgid "Cancel download"
+msgstr "Cancel·la la baixada"
+
+msgctxt "#30710"
+msgid "Delete download"
+msgstr "Suprimeix la baixada"
+
+msgctxt "#30712"
+msgid "Download complete: %s"
+msgstr "Baixada completada: %s"
+
+msgctxt "#30713"
+msgid "Download failed: %s"
+msgstr "Ha fallat la baixada: %s"
+
+msgctxt "#30714"
+msgid "Delete the download of %s?"
+msgstr "Voleu suprimir la baixada de %s?"
+
+msgctxt "#30715"
+msgid "Not enough free space for %s"
+msgstr "No hi ha prou espai lliure per a %s"
+
+msgctxt "#30717"
+msgid "The downloads folder is not writable"
+msgstr "No es pot escriure a la carpeta de baixades"
+
+msgctxt "#30718"
+msgid "Downloaded movies"
+msgstr "Pel·lícules baixades"
+
+msgctxt "#30719"
+msgid "Downloaded shows"
+msgstr "Sèries baixades"
+
+msgctxt "#30720"
+msgid "Not available offline"
+msgstr "No disponible sense connexió"
+
+msgctxt "#30721"
+msgid "Downloaded episodes"
+msgstr "Episodis baixats"
+
+msgctxt "#30722"
+msgid "Transcode videos"
+msgstr "Transcodifica els vídeos"
+
+msgctxt "#30723"
+msgid "Transcode when the original exceeds a limit below or when triggered by settings in the Transcoding tab (HDR, codec, etc)"
+msgstr "Transcodifica quan l'original supera un límit de sota o quan ho activen els paràmetres de la pestanya Transcodificació (HDR, còdec, etc.)"
+
+msgctxt "#30724"
+msgid "Maximum download bitrate"
+msgstr "Taxa de bits màxima de baixada"
+
+msgctxt "#30725"
+msgid "Videos over this total bitrate are transcoded down to it. Unlimited transcodes only for codec, HDR or resolution reasons."
+msgstr "Els vídeos per sobre d'aquesta taxa de bits total es transcodifiquen fins a aquest límit. Il·limitat només transcodifica per motius de còdec, HDR o resolució."
+
+msgctxt "#30726"
+msgid "Maximum download resolution"
+msgstr "Resolució màxima de baixada"
+
+msgctxt "#30727"
+msgid "Videos wider than this are scaled down. Unlimited never scales."
+msgstr "Els vídeos més amples que això es redueixen d'escala. Il·limitat no en redueix mai cap."
+
+msgctxt "#30728"
+msgid "Transcode music"
+msgstr "Transcodifica la música"
+
+msgctxt "#30729"
+msgid "Transcode a track only when it is lossless or over the bitrate limit below. Compliant tracks download as the original file."
+msgstr "Transcodifica una pista només quan és sense pèrdua o supera el límit de taxa de bits de sota. Les pistes que el compleixen es baixen com el fitxer original."
+
+msgctxt "#30730"
+msgid "Transcode music over"
+msgstr "Transcodifica la música per sobre de"
+
+msgctxt "#30731"
+msgid "Tracks over this bitrate, and all lossless tracks, are transcoded. Unlimited transcodes only lossless tracks."
+msgstr "Les pistes per sobre d'aquesta taxa de bits, i totes les pistes sense pèrdua, es transcodifiquen. Il·limitat només transcodifica les pistes sense pèrdua."
+
+msgctxt "#30732"
+msgid "Transcode music to"
+msgstr "Transcodifica la música a"
+
+msgctxt "#30733"
+msgid "The codec transcoded tracks are encoded with. Opus gives the best quality per megabyte."
+msgstr "El còdec amb què es codifiquen les pistes transcodificades. L'Opus dóna la millor qualitat per megabyte."
+
+msgctxt "#30734"
+msgid "Transcoded music bitrate"
+msgstr "Taxa de bits de la música transcodificada"
+
+msgctxt "#30735"
+msgid "The bitrate transcoded tracks are encoded at. 128 kbps Opus is transparent for most listening."
+msgstr "La taxa de bits amb què es codifiquen les pistes transcodificades. 128 kbps en Opus és transparent per a la majoria d'escoltes."
+
+msgctxt "#30737"
+msgid "Kofin downloads"
+msgstr "Baixades del Kofin"
+
+msgctxt "#30738"
+msgid "Download the next episodes automatically"
+msgstr "Baixa automàticament els episodis següents"
+
+msgctxt "#30739"
+msgid "While watching a downloaded episode, the next unwatched episodes of the show are queued for download at the 50% mark."
+msgstr "Mentre mireu un episodi baixat, els episodis següents no vistos de la sèrie es posen a la cua de baixada al 50% de la reproducció."
+
+msgctxt "#30740"
+msgid "Episodes to keep ahead"
+msgstr "Episodis per mantenir per endavant"
+
+msgctxt "#30741"
+msgid "How many unwatched episodes ahead of the one playing are kept downloaded."
+msgstr "Quants episodis no vistos posteriors al que s'està reproduint es mantenen baixats."
+
+msgctxt "#30742"
+msgid "Download newly added movies"
+msgstr "Baixa les pel·lícules afegides recentment"
+
+msgctxt "#30743"
+msgid "Movies newly added to a synced library are downloaded automatically."
+msgstr "Les pel·lícules afegides recentment a una biblioteca sincronitzada es baixen automàticament."
+
+msgctxt "#30746"
+msgid "Delete download after watching"
+msgstr "Suprimeix la baixada després de veure-la"
+
+msgctxt "#30747"
+msgid "When you finish watching a downloaded item, its local copy is removed. The item stays on the server and in your library."
+msgstr "Quan acabeu de veure un element baixat, se n'elimina la còpia local. L'element es manté al servidor i a la vostra biblioteca."
+
+msgctxt "#30751"
+msgid "%s new movies were not downloaded automatically"
+msgstr "%s pel·lícules noves no s'han baixat automàticament"
+
+msgctxt "#30752"
+msgid "Export NFO files and artwork"
+msgstr "Exporta fitxers NFO i imatges"
+
+msgctxt "#30753"
+msgid "Write NFO metadata and artwork beside downloaded files, so other Kodi profiles and apps can scan the download folder as a library."
+msgstr "Escriu metadades NFO i imatges al costat dels fitxers baixats, perquè altres perfils de Kodi i aplicacions puguin escanejar la carpeta de baixades com una biblioteca."
+
+msgctxt "#30754"
+msgid "Download all new episodes"
+msgstr "Baixa tots els episodis nous"
+
+msgctxt "#30755"
+msgid "Every episode newly added to a synced library is downloaded automatically."
+msgstr "Tots els episodis afegits recentment a una biblioteca sincronitzada es baixen automàticament."
+
+msgctxt "#30756"
+msgid "Download new albums"
+msgstr "Baixa els àlbums nous"
+
+msgctxt "#30757"
+msgid "Albums newly added to a synced library are downloaded automatically."
+msgstr "Els àlbums afegits recentment a una biblioteca sincronitzada es baixen automàticament."
+
+msgctxt "#30758"
+msgid "Shows downloading new episodes"
+msgstr "Sèries que baixen els episodis nous"
+
+msgctxt "#30759"
+msgid "Review the shows set to download their new episodes automatically, and untick any to stop."
+msgstr "Reviseu les sèries configurades per baixar automàticament els episodis nous i desmarqueu les que vulgueu aturar."
+
+msgctxt "#30760"
+msgid "Download new episodes"
+msgstr "Baixa els episodis nous"
+
+msgctxt "#30761"
+msgid "Stop downloading new episodes"
+msgstr "Deixa de baixar els episodis nous"
+
+msgctxt "#30762"
+msgid "New episodes of %s will download automatically"
+msgstr "Els episodis nous de %s es baixaran automàticament"
+
+msgctxt "#30763"
+msgid "New episodes of %s will no longer download automatically"
+msgstr "Els episodis nous de %s ja no es baixaran automàticament"
+
+msgctxt "#30764"
+msgid "%s new episodes were not downloaded automatically"
+msgstr "%s episodis nous no s'han baixat automàticament"
+
+msgctxt "#30765"
+msgid "%s new albums were not downloaded automatically"
+msgstr "%s àlbums nous no s'han baixat automàticament"
+
+msgctxt "#30766"
+msgid "No shows are set to download new episodes"
+msgstr "Cap sèrie no està configurada per baixar episodis nous"
+
+msgctxt "#30767"
+msgid "Show download notifications"
+msgstr "Mostra les notificacions de baixada"
+
+msgctxt "#30768"
+msgid "Announce queued and completed downloads. Failures and warnings are always shown."
+msgstr "Anuncia les baixades posades a la cua i les completades. Els errors i els avisos es mostren sempre."
+
+msgctxt "#30769"
+msgid "Delete download automatically"
+msgstr "Suprimeix la baixada automàticament"
+
+msgctxt "#30770"
+msgid "Remove the local copy without asking. With this off, Kofin asks first each time."
+msgstr "Elimina la còpia local sense preguntar. Amb això desactivat, el Kofin ho pregunta cada vegada."
+
+msgctxt "#30771"
+msgid "Download %s item(s), about %s? %s free"
+msgstr "Voleu baixar %s elements, uns %s? %s lliures"
+
+msgctxt "#30772"
+msgid "Parallel music downloads"
+msgstr "Baixades de música en paral·lel"
+
+msgctxt "#30773"
+msgid "How many tracks download at the same time. Tracks are small and mostly overhead, so this can sit well above the video figure."
+msgstr "Quantes pistes es baixen alhora. Les pistes són petites i gairebé tot és sobrecàrrega, així que aquest valor pot ser força superior al del vídeo."
+
+msgctxt "#30775"
+msgid "downloaded from the server"
+msgstr "baixat del servidor"
+
+msgctxt "#30776"
+msgid "Downloading subtitle..."
+msgstr "S'està baixant el subtítol..."
+
+msgctxt "#30777"
+msgid "Jellyfin account settings"
+msgstr "Configuració del compte del Jellyfin"
+
+msgctxt "#30778"
+msgid "Audio and subtitle preferences stored on the server against your Jellyfin account. They apply to every client you sign in from, not just this one."
+msgstr "Preferències d'àudio i de subtítols desades al servidor amb el vostre compte del Jellyfin. S'apliquen a tots els clients on inicieu la sessió, no només a aquest."
+
+msgctxt "#30779"
+msgid "Jellyfin settings for %s"
+msgstr "Configuració del Jellyfin per a %s"
+
+msgctxt "#30780"
+msgid "Preferred audio language"
+msgstr "Idioma d'àudio preferit"
+
+msgctxt "#30781"
+msgid "Play default audio track"
+msgstr "Reprodueix la pista d'àudio per defecte"
+
+msgctxt "#30782"
+msgid "Preferred subtitle language"
+msgstr "Idioma preferit dels subtítols"
+
+msgctxt "#30783"
+msgid "Subtitle mode"
+msgstr "Mode dels subtítols"
+
+msgctxt "#30784"
+msgid "Remember audio selections"
+msgstr "Recorda les seleccions d'àudio"
+
+msgctxt "#30785"
+msgid "Remember subtitle selections"
+msgstr "Recorda les seleccions de subtítols"
+
+msgctxt "#30786"
+msgid "Enabled"
+msgstr "Activat"
+
+msgctxt "#30787"
+msgid "Disabled"
+msgstr "Desactivat"
+
+msgctxt "#30788"
+msgid "Any"
+msgstr "Qualsevol"
+
+msgctxt "#30789"
+msgid "Default"
+msgstr "Per defecte"
+
+msgctxt "#30790"
+msgid "Always"
+msgstr "Sempre"
+
+msgctxt "#30791"
+msgid "Only forced"
+msgstr "Només els forçats"
+
+msgctxt "#30792"
+msgid "None"
+msgstr "Cap"
+
+msgctxt "#30793"
+msgid "Smart"
+msgstr "Intel·ligent"
+
+msgctxt "#30794"
+msgid "Not applied here: \"Use Jellyfin's default tracks\" is off"
+msgstr "No s'aplica aquí: \"Utilitza les pistes per defecte del Jellyfin\" està desactivat"
+
+msgctxt "#30795"
+msgid "Could not load your Jellyfin settings"
+msgstr "No s'ha pogut carregar la vostra configuració del Jellyfin"
+
+msgctxt "#30796"
+msgid "Could not save to the server"
+msgstr "No s'ha pogut desar al servidor"
+
+msgctxt "#30797"
+msgid "Your Jellyfin account is not allowed to change these settings"
+msgstr "El vostre compte del Jellyfin no té permís per canviar aquesta configuració"
+
+msgctxt "#30798"
+msgid "Skip movie imports larger than"
+msgstr "Omet les importacions de pel·lícules de més de"
+
+msgctxt "#30799"
+msgid "When a sync adds more new movies than this at once, none of them are downloaded — a bulk import is rarely a request to fill the disk. Raise it if you want big additions pulled automatically."
+msgstr "Quan una sincronització afegeix més pel·lícules noves que aquest valor alhora, no se'n baixa cap: una importació massiva poques vegades és una petició d'omplir el disc. Augmenteu-ho si voleu que les addicions grans es baixin automàticament."
+
+msgctxt "#30800"
+msgid "Skip episode imports larger than"
+msgstr "Omet les importacions d'episodis de més de"
+
+msgctxt "#30801"
+msgid "When a sync adds more new episodes than this at once, none of them are downloaded. Shows you have subscribed to are exempt — a subscription is a standing order."
+msgstr "Quan una sincronització afegeix més episodis nous que aquest valor alhora, no se'n baixa cap. Les sèries a què esteu subscrit queden exemptes: una subscripció és una comanda permanent."
+
+msgctxt "#30802"
+msgid "Skip album imports larger than"
+msgstr "Omet les importacions d'àlbums de més de"
+
+msgctxt "#30803"
+msgid "When a sync adds more new albums than this at once, none of them are downloaded. Counted in albums, not tracks."
+msgstr "Quan una sincronització afegeix més àlbums nous que aquest valor alhora, no se'n baixa cap. Es compta en àlbums, no en pistes."
+
+msgctxt "#30810"
+msgid "Needs %s, only %s free"
+msgstr "Calen %s i només hi ha %s lliures"
+
+msgctxt "#30804"
+msgid "Delete all downloads"
+msgstr "Suprimeix totes les baixades"
+
+msgctxt "#30805"
+msgid "Delete every downloaded file from this device and stop keeping playlists and music libraries in sync. The items stay in your library and play from the server again."
+msgstr "Suprimeix tots els fitxers baixats d'aquest dispositiu i deixa de mantenir sincronitzades les llistes de reproducció i les biblioteques de música. Els elements es mantenen a la vostra biblioteca i es tornen a reproduir des del servidor."
+
+msgctxt "#30806"
+msgid "Delete all %s download(s), freeing about %s?"
+msgstr "Voleu suprimir totes les %s baixades i alliberar uns %s?"
+
+msgctxt "#30807"
+msgid "There are no downloads to delete"
+msgstr "No hi ha cap baixada per suprimir"
+
+msgctxt "#30808"
+msgid "Pause downloads during playback"
+msgstr "Atura les baixades durant la reproducció"
+
+msgctxt "#30809"
+msgid "Do not start new downloads while something is playing, video or music. A file already downloading finishes; the rest wait until playback stops."
+msgstr "No inicia baixades noves mentre s'està reproduint alguna cosa, vídeo o música. Un fitxer que ja s'està baixant s'acaba; la resta esperen fins que s'atura la reproducció."
+
+msgctxt "#30811"
+msgid "Delete stale downloads"
+msgstr "Suprimeix les baixades obsoletes"
+
+msgctxt "#30812"
+msgid "Remove downloaded files nobody has played for a while. Anything you are part-way through is kept, however long it sits. The items stay in your library and play from the server again."
+msgstr "Elimina els fitxers baixats que ningú no ha reproduït des de fa temps. Tot allò que teniu a mitges es conserva, per molt temps que faci que hi és. Els elements es mantenen a la vostra biblioteca i es tornen a reproduir des del servidor."
+
+msgctxt "#30813"
+msgid "Delete after (days)"
+msgstr "Suprimeix al cap de (dies)"
+
+msgctxt "#30814"
+msgid "How long a download may sit unplayed before it is removed. Playing it again starts the count over."
+msgstr "Quant de temps pot estar una baixada sense reproduir-se abans que s'elimini. Tornar-la a reproduir reinicia el compte."
+
+msgctxt "#30817"
+msgid "All"
+msgstr "Tots"
+
+msgctxt "#30818"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30819"
+msgid "Show cast in add-on listings"
+msgstr "Mostra el repartiment a les llistes del complement"
+
+msgctxt "#30820"
+msgid "Fetch cast and crew for the shorter add-on listings — Recently added, In progress, Next up, Continue watching, search results and a show's episodes — so the information dialog can show them. Whole-library listings never fetch it, because the server needs about a second for every 40 items. The Kodi library always has cast."
+msgstr "Obté el repartiment i l'equip de les llistes curtes del complement — Afegits recentment, En curs, A continuació, Continua mirant, els resultats de cerca i els episodis d'una sèrie — perquè el diàleg d'informació els pugui mostrar. Les llistes que abasten una biblioteca sencera no ho fan mai, perquè el servidor necessita aproximadament un segon per cada 40 elements. La biblioteca de Kodi sempre té el repartiment."
+
+msgctxt "#30821"
+msgid "Server error — %s"
+msgstr "Error del servidor — %s"
+
+msgctxt "#30823"
+msgid "Download deleted: %s"
+msgstr "Baixada eliminada: %s"
+
+msgctxt "#30824"
+msgid "%s download(s) deleted"
+msgstr "%s baixades eliminades"
+
+msgctxt "#30825"
+msgid "Find servers on local network"
+msgstr "Cerca servidors a la xarxa local"
+
+msgctxt "#30826"
+msgid "Looks for Jellyfin servers on this network and lists the ones that answer. The one you choose is filled into \"Server address\"."
+msgstr "Cerca servidors Jellyfin en aquesta xarxa i mostra els que responen. El que triïs s'omple a \"Adreça del servidor\"."
+
+msgctxt "#30827"
+msgid "Searching for Jellyfin servers…"
+msgstr "S'estan cercant servidors Jellyfin…"
+
+msgctxt "#30828"
+msgid "Select a server"
+msgstr "Selecciona un servidor"
+
+msgctxt "#30829"
+msgid "No Jellyfin servers answered — enter the address manually"
+msgstr "Cap servidor Jellyfin ha respost — introdueix l'adreça manualment"
+
+msgctxt "#30830"
+msgid "did not answer"
+msgstr "no ha respost"
+
+msgctxt "#30831"
+msgid "%s did not answer — the address it gave may not work here"
+msgstr "%s no ha respost — l'adreça que ha donat potser no funciona aquí"
+
+msgctxt "#30832"
+msgid "Storage used"
+msgstr "Espai utilitzat"
+
+msgctxt "#30833"
+msgid "Show where the downloads are kept and how much space each kind is using."
+msgstr "Mostra on es guarden les baixades i quant espai ocupa cada tipus."
+
+msgctxt "#30834"
+msgid "Other files in this folder"
+msgstr "Altres fitxers d'aquesta carpeta"
+
+msgctxt "#30835"
+msgid "Nothing has been downloaded yet"
+msgstr "Encara no s'ha baixat res"
+
+msgctxt "#30836"
+msgid "Folder too large to measure fully — the totals above are partial"
+msgstr "La carpeta és massa gran per mesurar-la del tot — els totals de dalt són parcials"
+
+msgctxt "#30837"
+msgid "Watch in sync with other Jellyfin clients."
+msgstr "Mira en sincronia amb altres clients del Jellyfin."
+
+msgctxt "#30841"
+msgid "Save to Jellyfin"
+msgstr "Desa a Jellyfin"
+
+msgctxt "#30842"
+msgid "This playlist mixes audio and video, which cannot be saved as one Jellyfin playlist"
+msgstr "Aquesta llista barreja àudio i vídeo i no es pot desar com una sola llista de Jellyfin"
+
+msgctxt "#30843"
+msgid "Playlist saved to Jellyfin"
+msgstr "Llista desada a Jellyfin"
+
+msgctxt "#30844"
+msgid "No library items in this playlist to save"
+msgstr "No hi ha elements de la biblioteca en aquesta llista per desar"
+
+msgctxt "#30845"
+msgid "Show library update progress"
+msgstr "Mostra el progrés d'actualització de la biblioteca"
+
+msgctxt "#30846"
+msgid "Show Kodi's library-update progress while the library syncs."
+msgstr "Mostra el progrés d'actualització de la biblioteca del Kodi mentre se sincronitza."
+
+msgctxt "#30849"
+msgid "Download & keep in sync"
+msgstr "Baixa i mantén les descàrregues sincronitzades"
+
+msgctxt "#30850"
+msgid "Stop keeping downloads in sync"
+msgstr "Deixa de sincronitzar les baixades"
+
+msgctxt "#30851"
+msgid "Manage playlist downloads"
+msgstr "Gestiona les baixades de llistes de reproducció"
+
+msgctxt "#30852"
+msgid "Manage music library downloads"
+msgstr "Gestiona les baixades de biblioteques musicals"
+
+msgctxt "#30853"
+msgid "Content not downloaded"
+msgstr "Contingut no descarregat"
+
+msgctxt "#30854"
+msgid "Review subscribed playlists; untick to stop syncing downloads."
+msgstr "Revisa les llistes de reproducció subscrites; desmarca-les per deixar de sincronitzar les descàrregues."
+
+msgctxt "#30855"
+msgid "Review subscribed music libraries; untick to stop syncing downloads."
+msgstr "Revisa les biblioteques de música subscrites; desmarca-les per deixar de sincronitzar les descàrregues."
+
+msgctxt "#30856"
+msgid "Library nodes and playlists"
+msgstr "Nodes de biblioteca i llistes de reproducció"
+
+msgctxt "#30857"
+msgid "Create Kodi library nodes and smart playlists for the synced video libraries, and copy Jellyfin playlists into Kodi under Videos → Playlists → Kofin and Music → Playlists → Kofin. Turning this off removes every node and playlist Kofin created."
+msgstr "Crea nodes de biblioteca de Kodi i llistes intel·ligents per a les biblioteques de vídeo sincronitzades, i copia les llistes de Jellyfin a Kodi a Vídeos → Llistes de reproducció → Kofin i Música → Llistes de reproducció → Kofin. Si ho desactives, s'eliminen tots els nodes i llistes que Kofin ha creat."
+
+msgctxt "#30859"
+msgid "Library status"
+msgstr "Estat de la biblioteca"
+
+msgctxt "#30860"
+msgid "What is synced, what is still pending and what the sync is doing now."
+msgstr "Què s'ha sincronitzat, què queda pendent i què fa ara la sincronització."
+
+msgctxt "#30861"
+msgid "Transcode music whose bitrate is above the maximum set below. Off, songs play from the server untouched."
+msgstr "Transcodifica la música amb una taxa de bits superior al màxim definit a sota. Si està desactivat, les cançons es reprodueixen des del servidor sense canvis."
+
+msgctxt "#30862"
+msgid "in Kodi / on the server"
+msgstr "a Kodi / al servidor"
+
+msgctxt "#30863"
+msgid "Pending"
+msgstr "Pendents"
+
+msgctxt "#30864"
+msgid "Failed"
+msgstr "Fallits"
+
+msgctxt "#30865"
+msgid "Last full update"
+msgstr "Darrera actualització completa"
+
+msgctxt "#30867"
+msgid "Repair to add codec details"
+msgstr "Repara per afegir els detalls dels còdecs"
+
+msgctxt "#30868"
+msgid "Kodi cannot import"
+msgstr "Kodi no pot importar"
+
+msgctxt "#30869"
+msgid "Scheduled full update"
+msgstr "Actualització completa programada"
+
+msgctxt "#30870"
+msgid "How often to re-read every library from the server. Turn this on if the server lacks the KofinSyncQueue plugin, or deletions there won't reach Kodi."
+msgstr "Cada quant es tornen a llegir totes les biblioteques del servidor. Activeu-ho si el servidor no té el connector KofinSyncQueue; si no, les supressions no arribaran a Kodi."
+
+msgctxt "#30871"
+msgid "Daily"
+msgstr "Diària"
+
+msgctxt "#30872"
+msgid "Weekly"
+msgstr "Setmanal"
+
+msgctxt "#30873"
+msgid "Update all libraries now?"
+msgstr "Voleu actualitzar ara totes les biblioteques?"
+
+msgctxt "#30874"
+msgid "Re-read every library from the server now."
+msgstr "Torna a llegir ara totes les biblioteques del servidor."
+
+msgctxt "#30876"
+msgid "Not on this Kodi"
+msgstr "No disponible en aquest Kodi"
+
+msgctxt "#30877"
+msgid "Season plots"
+msgstr "Resums de temporada"
+
+msgctxt "#30878"
+msgid "Favorite episodes"
+msgstr "Episodis preferits"
+
+msgctxt "#30879"
+msgid "Removing emptied collections"
+msgstr "Eliminació de col·leccions buidades"
+
+msgctxt "#30880"
+msgid "Movie versions"
+msgstr "Versions de pel·lícula"
+
+msgctxt "#30881"
+msgid "Stream flags"
+msgstr "Marques de les pistes"
+
+msgctxt "#30882"
+msgid "Song date added"
+msgstr "Data d'addició de les cançons"
+
+msgctxt "#30883"
+msgid "Removing dropped versions and extras"
+msgstr "Eliminació de versions i extres retirats"
+
+msgctxt "#30884"
+msgid "Fine sync"
+msgstr "Sincronització fina"
+
+msgctxt "#30885"
+msgid "Kodi imports a special only with an episode number. Give these one on the server, or play them from the Kofin add-on."
+msgstr "Kodi només importa un especial si té número d'episodi. Dona'ls-en un al servidor o reprodueix-los des del complement Kofin."
+
+msgctxt "#30886"
+msgid "KofinSyncQueue"
+msgstr "KofinSyncQueue"
+
+msgctxt "#30887"
+msgid "Available"
+msgstr "Disponible"
+
+msgctxt "#30888"
+msgid "this profile holds a library from an older Kofin"
+msgstr "aquest perfil conté una biblioteca d'un Kofin antic"
+
+msgctxt "#30889"
+msgid "Kofin cannot use it. To clean it, go back to Kofin 0.29:"
+msgstr "Kofin no la pot fer servir. Per netejar-la, torna a Kofin 0.29:"
+
+msgctxt "#30890"
+msgid "Open Kofin in Kodi's add-on list, select Versions and choose 0.29."
+msgstr "Obre Kofin a la llista de complements de Kodi, selecciona Versions i tria 0.29."
+
+msgctxt "#30891"
+msgid "In Kofin's settings, log out on the Account tab and run Clean databases."
+msgstr "A la configuració de Kofin, tanca la sessió a la pestanya Compte i executa Neteja les bases de dades."
+
+msgctxt "#30892"
+msgid "When Kodi has restarted, open Kofin again, select Versions and choose the newest version. Then log in and choose the libraries to sync."
+msgstr "Quan Kodi s'hagi reiniciat, torna a obrir Kofin, selecciona Versions i tria la versió més nova. Després inicia la sessió i tria les biblioteques per sincronitzar."
+
+msgctxt "#30893"
+msgid "Alternatively, close Kodi and delete its video and music databases by hand, as the Kofin wiki describes:"
+msgstr "També pots tancar Kodi i eliminar les seves bases de dades de vídeo i música a mà, tal com explica la wiki de Kofin:"
+
+msgctxt "#30894"
+msgid "No longer on the server"
+msgstr "Ja no és al servidor"
+
+msgctxt "#30895"
+msgid "%s is no longer on the server and was removed from the library"
+msgstr "%s ja no és al servidor i s'ha eliminat de la biblioteca"
+
+msgctxt "#30896"
+msgid "The synced libraries stay in Kodi until you log in again; a different account removes them."
+msgstr "Les biblioteques sincronitzades es mantenen a Kodi fins que tornis a iniciar sessió; un altre compte les elimina."
+
+msgctxt "#30897"
+msgid "Queued %s of %s tracks"
+msgstr "S'han posat a la cua %s de %s pistes"

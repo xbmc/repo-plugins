@@ -39,6 +39,25 @@ def L(string_id):
     """A localized UI string from resources/language/.../strings.po."""
     return ADDON.getLocalizedString(string_id)
 
+
+# Addon settings are read through a FRESH Addon() handle so a value the user just
+# changed in the settings screen is seen immediately (a long-lived handle can cache).
+
+def get_bool_setting(setting_id, default=False):
+    """A boolean addon setting (settings.xml), or `default` if unavailable."""
+    try:
+        return xbmcaddon.Addon().getSettingBool(setting_id)
+    except Exception:
+        return default
+
+
+def get_int_setting(setting_id, default=0):
+    """An integer addon setting (settings.xml), or `default` if unavailable."""
+    try:
+        return xbmcaddon.Addon().getSettingInt(setting_id)
+    except Exception:
+        return default
+
 # Custom icon shown on notification ("alert") pop-ups.
 ALERT_ICON = os.path.join(ADDON_PATH, 'resources', 'AlertIcon.png')
 

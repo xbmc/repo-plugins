@@ -1,0 +1,3 @@
+v1.3.9
+
+- Fixed ratings changed or removed in MDBList being pushed back: after a sync pulled a rating from MDBList, the next sync sent it back as a new local rating, which could undo a later change there. Pulled ratings are now recorded as synced.

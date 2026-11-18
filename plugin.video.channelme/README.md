@@ -62,8 +62,20 @@ JSON-RPC, so it inherits your titles, episode order, artwork and watched state.
   was the next time the channel plays it.
 - **Skip-aware** - jump ahead or back in the generated queue and the upcoming line-up
   regenerates sensibly instead of pushing your _last-viewed_ dozens of episodes ahead.
-- **Back-to-back cap** - limit how many episodes of the same show can air in a row
-  (1-20 or unlimited).
+- **Back-to-back, per channel and per show** - cap how many episodes of the same show
+  air in a row (1-30). Set a channel default (*Up to N*, or *Always N* for a fixed run),
+  then override any single show - handy for letting one dense show run in longer blocks
+  among smaller ones.
+- **Selection weight** - bias how often each show is picked (1.0x - 3.0x), so a large
+  library shows up proportionally more without exhausting your smaller shows. Weight
+  (how *often*) and back-to-back (how *long a run*) are independent dials.
+- **No-repeat shuffle** - in pure random, an episode will not repeat until the rest of
+  that show has played.
+- **Sleep timer** - optionally stop playback after a set time, with an on-screen
+  countdown you can cancel or restart before it fires.
+- **Leave your library alone** - optionally play without changing watched status, play
+  counts or resume points (on by default), so a background channel never messes up your
+  "continue watching".
 - **Starting episode** - set where in a show/collection the channel begins for easy setup, or correction.
 </br>
 <img width="1280" height="720" alt="Screen Shot 2026-06-22 at 10 51 49 740 PM" src="https://github.com/user-attachments/assets/2d851d10-584c-4321-af5a-f0c0e16516c5" />
@@ -81,6 +93,8 @@ JSON-RPC, so it inherits your titles, episode order, artwork and watched state.
 ### Browsing
 - **Sort channels** by name or **Last played** (the channel you watched most
   recently floats to the top).
+- **Standard "The" sorting** - title lists honour Kodi's own *ignore "The" when sorting*
+  setting, so "The Simpsons" files under **S** like the rest of your UI.
 - The **+ Add new channel** row stays pinned at the bottom under any sort.
 </br>
 

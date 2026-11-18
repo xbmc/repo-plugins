@@ -64,6 +64,23 @@ def display_name(name):
     return storage.L(32071).format(name)
 
 
+def _bias_note(channel, item):
+    """A compact '[x4, up to 8]' suffix for a title carrying a selection-weight
+    and/or back-to-back override; '' when it just follows the channel defaults."""
+    key = storage.item_key(item)
+    parts = []
+    weight = channel.get('weight_overrides', {}).get(key)
+    if weight and weight > 1:
+        parts.append(storage.L(32057).format('{0:g}'.format(weight)))   # "1.2x"
+    consec = channel.get('consec_overrides', {}).get(key)
+    if consec:
+        count = consec.get('count', 0)
+        word = storage.L(32066) if consec.get('always') else storage.L(32065)
+        amount = storage.L(32060) if count >= 999 else str(count)
+        parts.append('{0} {1}'.format(word, amount))          # "up to 8"
+    return '  [{0}]'.format(', '.join(parts)) if parts else ''
+
+
 def channel_plot(channel, total_episodes):
     """Multi-line text for the info panel: counts, mode, then the list of titles.
     Labels are bold ([B]); the [TV]/[Set]/[Movie] tags are dropped here (they only
@@ -91,7 +108,7 @@ def channel_plot(channel, total_episodes):
         title = item['title']
         if item['type'] == 'movie' and item.get('year'):
             title = '{0} ({1})'.format(title, item['year'])
-        lines.append('- {0}'.format(title))
+        lines.append('- {0}{1}'.format(title, _bias_note(channel, item)))
     return '\n'.join(lines)
 
 
@@ -210,11 +227,13 @@ def play_channel(channel_id):
     mode = channel.get('mode', 'pure_random')
     max_consecutive = channel.get('max_consecutive', 2)
     consec_always = channel.get('consec_always', False)
+    consec_overrides = channel.get('consec_overrides', {})
+    weights = channel.get('weight_overrides', {})
     pointers = data.get('state', {}).get(channel_id, {}).get('pointers', {})
     cursor = dict(pointers)   # start generating from the saved resume position
-    picks, positions, last_key, run = scheduler.build_items(
+    picks, positions, last_key, run, target = scheduler.build_items(
         channel['items'], mode, cursor, scheduler.INITIAL_SIZE, max_consecutive,
-        always=consec_always)
+        always=consec_always, consec_overrides=consec_overrides, weights=weights)
 
     if not picks:
         xbmcgui.Dialog().notification(storage.NAME, storage.L(32091),
@@ -238,8 +257,12 @@ def play_channel(channel_id):
         'lookahead': cursor,
         'max_consecutive': max_consecutive,
         'consec_always': consec_always,
+        'consec_overrides': consec_overrides,
+        'weight_overrides': weights,
         'last_key': last_key,
         'run': run,
+        'target': target,
+        'sleep_deadline': _sleep_deadline(),
         'session': session,
     }
     storage.save(data)
@@ -250,6 +273,13 @@ def play_channel(channel_id):
 
 def _notify(message):
     xbmcgui.Dialog().notification(storage.NAME, message, storage.ALERT_ICON, 3000)
+
+
+def _sleep_deadline():
+    """Absolute epoch at which the service should stop playback, or None. Every channel
+    start re-arms it from the global 'Sleep timer' setting (0 = off)."""
+    minutes = storage.get_int_setting('sleep_minutes', 0)
+    return time.time() + minutes * 60 if minutes > 0 else None
 
 
 def _launch_playlist(picks):
@@ -296,7 +326,7 @@ def play_random(params):
     items = [item]
     cursor = {}
     # A single title makes the back-to-back cap moot, so leave it unlimited.
-    picks, positions, last_key, run = scheduler.build_items(
+    picks, positions, last_key, run, target = scheduler.build_items(
         items, 'pure_random', cursor, scheduler.INITIAL_SIZE, max_consecutive=999)
     if not picks:
         _notify(storage.L(32111))
@@ -315,6 +345,8 @@ def play_random(params):
         'max_consecutive': 999,
         'last_key': last_key,
         'run': run,
+        'target': target,
+        'sleep_deadline': _sleep_deadline(),
         'session': session,
     }
     storage.save(data)

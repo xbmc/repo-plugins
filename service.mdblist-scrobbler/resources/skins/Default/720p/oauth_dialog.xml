@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<window type="dialog">
+    <defaultcontrol always="true">9001</defaultcontrol>
+    <controls>
+
+        <!-- Panel background -->
+        <control type="image">
+            <left>290</left><top>80</top>
+            <width>700</width><height>560</height>
+            <texture>DialogBack.png</texture>
+        </control>
+
+        <!-- Title -->
+        <control type="label">
+            <left>290</left><top>100</top>
+            <width>700</width><height>44</height>
+            <label>Connect to MDBList</label>
+            <font>font14</font>
+            <align>center</align>
+        </control>
+
+        <!-- White backing for QR code -->
+        <control type="image">
+            <left>536</left><top>148</top>
+            <width>208</width><height>208</height>
+            <texture colordiffuse="FFFFFFFF">../media/white.png</texture>
+        </control>
+
+        <!-- QR Code image (set dynamically) -->
+        <control type="image" id="200">
+            <left>540</left><top>152</top>
+            <width>200</width><height>200</height>
+        </control>
+
+        <!-- Instruction text -->
+        <control type="label">
+            <left>290</left><top>364</top>
+            <width>700</width><height>34</height>
+            <label>Scan QR code or visit:</label>
+            <font>font13</font>
+            <align>center</align>
+        </control>
+
+        <!-- Verification URL (set dynamically) -->
+        <control type="label" id="301">
+            <left>290</left><top>400</top>
+            <width>700</width><height>34</height>
+            <label></label>
+            <font>font13</font>
+            <align>center</align>
+        </control>
+
+        <!-- User code (set dynamically) -->
+        <control type="label" id="302">
+            <left>290</left><top>440</top>
+            <width>700</width><height>44</height>
+            <label></label>
+            <font>font14</font>
+            <align>center</align>
+        </control>
+
+        <!-- Status line (set dynamically) -->
+        <control type="label" id="400">
+            <left>290</left><top>494</top>
+            <width>700</width><height>30</height>
+            <label>Waiting for authorization...</label>
+            <font>font12</font>
+            <align>center</align>
+        </control>
+
+        <!-- Cancel button -->
+        <control type="button" id="9001">
+            <left>540</left><top>536</top>
+            <width>200</width><height>52</height>
+            <label>Cancel</label>
+        </control>
+
+    </controls>
+</window>

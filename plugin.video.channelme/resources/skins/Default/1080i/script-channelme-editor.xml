@@ -264,61 +264,124 @@
       </control>
     </control>
 
-    <!-- Panel: Mode -->
+    <!-- Panel: Mode (left) + per-show selection weight (right) -->
     <control type="group" id="5200">
       <visible>Integer.IsEqual(Container(100).CurrentItem,3)</visible>
       <control type="label" id="5202">
         <left>560</left><top>252</top><width>900</width><height>32</height>
         <font>font12</font><textcolor>grey</textcolor>
-        <label>Determine the playback mode.</label>
+        <label>Determine the playback mode, and how often each title is picked.</label>
+      </control>
+      <!-- Left column header: channel mode -->
+      <control type="label" id="5204">
+        <left>560</left><top>292</top><width>430</width><height>28</height>
+        <font>font12</font><textcolor>button_focus</textcolor><aligny>center</aligny>
+        <label>Mode</label>
       </control>
       <control type="image">
-        <left>560</left><top>300</top><width>900</width><height>560</height>
+        <left>560</left><top>324</top><width>430</width><height>536</height>
         <texture colordiffuse="FF181F29">white.png</texture>
       </control>
       <control type="list" id="5201">
-        <left>560</left><top>300</top><width>900</width><height>560</height>
-        <onleft>100</onleft><onright>900</onright>
-        <itemlayout height="60" width="900">
+        <left>560</left><top>324</top><width>430</width><height>536</height>
+        <onleft>100</onleft><onright>5203</onright>
+        <itemlayout height="60" width="430">
           <control type="image">
             <visible>String.IsEqual(ListItem.Property(sel),1)</visible>
-            <left>0</left><top>0</top><width>900</width><height>60</height>
+            <left>0</left><top>0</top><width>430</width><height>60</height>
             <texture colordiffuse="FF0E597E">white.png</texture>
           </control>
           <control type="label">
-            <left>24</left><top>0</top><width>852</width><height>60</height>
+            <left>20</left><top>0</top><width>390</width><height>60</height>
             <font>font13</font><textcolor>white</textcolor><aligny>center</aligny>
             <label>$INFO[ListItem.Label]</label>
           </control>
         </itemlayout>
-        <focusedlayout height="60" width="900">
+        <focusedlayout height="60" width="430">
           <control type="image">
             <visible>Control.HasFocus(5201)</visible>
-            <left>0</left><top>0</top><width>900</width><height>60</height>
+            <left>0</left><top>0</top><width>430</width><height>60</height>
             <texture colordiffuse="button_focus">white.png</texture>
           </control>
           <control type="image">
             <visible>!Control.HasFocus(5201) + String.IsEqual(ListItem.Property(sel),1)</visible>
-            <left>0</left><top>0</top><width>900</width><height>60</height>
+            <left>0</left><top>0</top><width>430</width><height>60</height>
             <texture colordiffuse="FF0E597E">white.png</texture>
           </control>
           <control type="label">
             <visible>Control.HasFocus(5201)</visible>
-            <left>24</left><top>0</top><width>852</width><height>60</height>
+            <left>20</left><top>0</top><width>390</width><height>60</height>
             <font>font13</font><textcolor>FF0E1A1F</textcolor><aligny>center</aligny>
             <label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
             <visible>!Control.HasFocus(5201)</visible>
-            <left>24</left><top>0</top><width>852</width><height>60</height>
+            <left>20</left><top>0</top><width>390</width><height>60</height>
             <font>font13</font><textcolor>white</textcolor><aligny>center</aligny>
             <label>$INFO[ListItem.Label]</label>
           </control>
         </focusedlayout>
       </control>
+      <!-- Right column header: per-show selection weight -->
+      <control type="label" id="5205">
+        <left>1010</left><top>292</top><width>450</width><height>28</height>
+        <font>font12</font><textcolor>button_focus</textcolor><aligny>center</aligny>
+        <label>Selection weight</label>
+      </control>
+      <control type="image">
+        <left>1010</left><top>324</top><width>450</width><height>536</height>
+        <texture colordiffuse="FF181F29">white.png</texture>
+      </control>
+      <control type="list" id="5203">
+        <left>1010</left><top>324</top><width>450</width><height>536</height>
+        <onleft>5201</onleft><onright>900</onright>
+        <itemlayout height="52" width="450">
+          <control type="label">
+            <left>18</left><top>0</top><width>250</width><height>52</height>
+            <font>font13</font><textcolor>white</textcolor><aligny>center</aligny>
+            <label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <left>244</left><top>0</top><width>188</width><height>52</height>
+            <font>font12</font><align>right</align><aligny>center</aligny><textcolor>grey</textcolor>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+        </itemlayout>
+        <focusedlayout height="52" width="450">
+          <control type="image">
+            <visible>Control.HasFocus(5203)</visible>
+            <left>0</left><top>0</top><width>450</width><height>52</height>
+            <texture colordiffuse="button_focus">white.png</texture>
+          </control>
+          <control type="label">
+            <visible>Control.HasFocus(5203)</visible>
+            <left>18</left><top>0</top><width>250</width><height>52</height>
+            <font>font13</font><textcolor>FF0E1A1F</textcolor><aligny>center</aligny>
+            <label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <visible>Control.HasFocus(5203)</visible>
+            <left>244</left><top>0</top><width>188</width><height>52</height>
+            <font>font12</font><align>right</align><aligny>center</aligny><textcolor>FF0E1A1F</textcolor>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+          <control type="label">
+            <visible>!Control.HasFocus(5203)</visible>
+            <left>18</left><top>0</top><width>250</width><height>52</height>
+            <font>font13</font><textcolor>white</textcolor><aligny>center</aligny>
+            <label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <visible>!Control.HasFocus(5203)</visible>
+            <left>244</left><top>0</top><width>188</width><height>52</height>
+            <font>font12</font><align>right</align><aligny>center</aligny><textcolor>grey</textcolor>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+        </focusedlayout>
+      </control>
     </control>
 
-    <!-- Panel: Back-to-back -->
+    <!-- Panel: Back-to-back = channel default (left) + per-show override (right) -->
     <control type="group" id="5300">
       <visible>Integer.IsEqual(Container(100).CurrentItem,4)</visible>
       <control type="label" id="5302">
@@ -326,57 +389,120 @@
         <font>font12</font><textcolor>grey</textcolor>
         <label>How many of the same title can be played back to back?</label>
       </control>
+      <!-- Left column header: channel default -->
+      <control type="label" id="5306">
+        <left>560</left><top>292</top><width>430</width><height>28</height>
+        <font>font12</font><textcolor>button_focus</textcolor><aligny>center</aligny>
+        <label>Channel default</label>
+      </control>
       <!-- toggle: 'Up to' (cap) vs 'Always' (fixed run); label set from Python -->
       <control type="button" id="5303">
-        <left>560</left><top>300</top><width>900</width><height>56</height>
+        <left>560</left><top>324</top><width>430</width><height>52</height>
         <texturefocus colordiffuse="button_focus">white.png</texturefocus>
         <texturenofocus colordiffuse="FF181F29">white.png</texturenofocus>
         <font>font13</font><textcolor>white</textcolor><focusedcolor>FF0E1A1F</focusedcolor>
         <align>left</align><textoffsetx>20</textoffsetx>
         <label>Up to</label>
-        <onleft>100</onleft><onright>900</onright><onup>5303</onup><ondown>5301</ondown>
+        <onleft>100</onleft><onright>5304</onright><onup>5303</onup><ondown>5307</ondown>
+      </control>
+      <!-- Channel default back-to-back "slider" (1..30) as a capsule. Three colour-fixed
+           frames gated by state (idle grey always / hover white / edit blue), the inset
+           track+fill, two knobs (dull hovered / white editing), a transparent focusable
+           overlay and an inline number. Python positions the pieces + flips 'cm_edit'. -->
+      <control type="image" id="5311">
+        <left>560</left><top>392</top><width>320</width><height>48</height>
+        <texture border="20" colordiffuse="FF8A9098">capsule.png</texture>
+      </control>
+      <control type="image" id="5312">
+        <visible>Control.HasFocus(5307) + String.IsEmpty(Window.Property(cm_edit))</visible>
+        <left>560</left><top>392</top><width>320</width><height>48</height>
+        <texture border="20" colordiffuse="FFFFFFFF">capsule.png</texture>
+      </control>
+      <control type="image" id="5313">
+        <visible>String.IsEqual(Window.Property(cm_edit),1)</visible>
+        <left>560</left><top>392</top><width>320</width><height>48</height>
+        <texture border="20" colordiffuse="FF2C9BE0">capsule.png</texture>
+      </control>
+      <control type="progress" id="5309">
+        <left>564</left><top>396</top><width>312</width><height>40</height>
+        <texturebg border="18" colordiffuse="FF11161D">capsule.png</texturebg>
+        <midtexture border="18" colordiffuse="FF0E597E">capsule.png</midtexture>
+      </control>
+      <control type="image" id="5310">
+        <visible>String.IsEmpty(Window.Property(cm_edit))</visible>
+        <left>564</left><top>398</top><width>36</width><height>36</height>
+        <texture colordiffuse="FF8A9098">handle.png</texture>
+      </control>
+      <control type="image" id="5314">
+        <visible>String.IsEqual(Window.Property(cm_edit),1)</visible>
+        <left>564</left><top>398</top><width>36</width><height>36</height>
+        <texture colordiffuse="FFFFFFFF">handle.png</texture>
+      </control>
+      <control type="button" id="5307">
+        <left>560</left><top>392</top><width>320</width><height>48</height>
+        <texturefocus>transparent.png</texturefocus>
+        <texturenofocus>transparent.png</texturenofocus>
+        <onleft>5307</onleft><onright>5307</onright><onup>5303</onup><ondown>5307</ondown>
+      </control>
+      <control type="label" id="5308">
+        <left>888</left><top>392</top><width>100</width><height>48</height>
+        <font>font14</font><textcolor>white</textcolor><align>center</align><aligny>center</aligny>
+        <label>2</label>
+      </control>
+      <!-- Right column header: per-show back-to-back override -->
+      <control type="label" id="5305">
+        <left>1010</left><top>292</top><width>450</width><height>28</height>
+        <font>font12</font><textcolor>button_focus</textcolor><aligny>center</aligny>
+        <label>Per-show</label>
       </control>
       <control type="image">
-        <left>560</left><top>372</top><width>900</width><height>488</height>
+        <left>1010</left><top>324</top><width>450</width><height>536</height>
         <texture colordiffuse="FF181F29">white.png</texture>
       </control>
-      <control type="list" id="5301">
-        <left>560</left><top>372</top><width>900</width><height>488</height>
-        <onleft>100</onleft><onright>900</onright><onup>5303</onup>
-        <itemlayout height="52" width="900">
-          <control type="image">
-            <visible>String.IsEqual(ListItem.Property(sel),1)</visible>
-            <left>0</left><top>0</top><width>900</width><height>52</height>
-            <texture colordiffuse="FF0E597E">white.png</texture>
-          </control>
+      <control type="list" id="5304">
+        <left>1010</left><top>324</top><width>450</width><height>536</height>
+        <onleft>5303</onleft><onright>900</onright><onup>5304</onup>
+        <itemlayout height="52" width="450">
           <control type="label">
-            <left>24</left><top>0</top><width>852</width><height>52</height>
+            <left>18</left><top>0</top><width>250</width><height>52</height>
             <font>font13</font><textcolor>white</textcolor><aligny>center</aligny>
             <label>$INFO[ListItem.Label]</label>
           </control>
+          <control type="label">
+            <left>244</left><top>0</top><width>188</width><height>52</height>
+            <font>font12</font><align>right</align><aligny>center</aligny><textcolor>grey</textcolor>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
         </itemlayout>
-        <focusedlayout height="52" width="900">
+        <focusedlayout height="52" width="450">
           <control type="image">
-            <visible>Control.HasFocus(5301)</visible>
-            <left>0</left><top>0</top><width>900</width><height>52</height>
+            <visible>Control.HasFocus(5304)</visible>
+            <left>0</left><top>0</top><width>450</width><height>52</height>
             <texture colordiffuse="button_focus">white.png</texture>
           </control>
-          <control type="image">
-            <visible>!Control.HasFocus(5301) + String.IsEqual(ListItem.Property(sel),1)</visible>
-            <left>0</left><top>0</top><width>900</width><height>52</height>
-            <texture colordiffuse="FF0E597E">white.png</texture>
-          </control>
           <control type="label">
-            <visible>Control.HasFocus(5301)</visible>
-            <left>24</left><top>0</top><width>852</width><height>52</height>
+            <visible>Control.HasFocus(5304)</visible>
+            <left>18</left><top>0</top><width>250</width><height>52</height>
             <font>font13</font><textcolor>FF0E1A1F</textcolor><aligny>center</aligny>
             <label>$INFO[ListItem.Label]</label>
           </control>
           <control type="label">
-            <visible>!Control.HasFocus(5301)</visible>
-            <left>24</left><top>0</top><width>852</width><height>52</height>
+            <visible>Control.HasFocus(5304)</visible>
+            <left>244</left><top>0</top><width>188</width><height>52</height>
+            <font>font12</font><align>right</align><aligny>center</aligny><textcolor>FF0E1A1F</textcolor>
+            <label>$INFO[ListItem.Label2]</label>
+          </control>
+          <control type="label">
+            <visible>!Control.HasFocus(5304)</visible>
+            <left>18</left><top>0</top><width>250</width><height>52</height>
             <font>font13</font><textcolor>white</textcolor><aligny>center</aligny>
             <label>$INFO[ListItem.Label]</label>
+          </control>
+          <control type="label">
+            <visible>!Control.HasFocus(5304)</visible>
+            <left>244</left><top>0</top><width>188</width><height>52</height>
+            <font>font12</font><align>right</align><aligny>center</aligny><textcolor>grey</textcolor>
+            <label>$INFO[ListItem.Label2]</label>
           </control>
         </focusedlayout>
       </control>

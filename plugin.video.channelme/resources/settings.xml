@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+  <section id="plugin.video.channelme">
+    <category id="playback" label="32200">
+      <group id="1">
+        <setting id="dont_mark_watched" type="boolean" label="32202" help="32203">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="sleep_minutes" type="integer" label="32204" help="32205">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="32220">0</option>
+              <option label="32221">5</option>
+              <option label="32222">7</option>
+              <option label="32223">10</option>
+              <option label="32224">15</option>
+              <option label="32225">30</option>
+              <option label="32226">45</option>
+              <option label="32227">60</option>
+              <option label="32228">90</option>
+              <option label="32229">120</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="sleep_warn_minutes" type="integer" label="32211" help="32212">
+          <level>0</level>
+          <default>2</default>
+          <constraints>
+            <minimum>0</minimum>
+            <step>1</step>
+            <maximum>30</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="enable" setting="sleep_minutes" operator="greaterthan">0</dependency>
+          </dependencies>
+          <control type="slider" format="integer">
+            <popup>false</popup>
+          </control>
+        </setting>
+      </group>
+    </category>
+  </section>
+</settings>

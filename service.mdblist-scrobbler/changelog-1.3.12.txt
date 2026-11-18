@@ -1,0 +1,5 @@
+v1.3.12
+
+- Fixed every sync check that saw new activity running a slow full watched sync, after a sync that held back unwatching items (e.g. right after an update). Regular checks now stay incremental; held items are rechecked on the daily or manual sync.
+- Fixed full watched syncs rewriting every already-synced item in the Kodi library, which was slow and put heavy load on shared MySQL libraries.
+- The debug log now names each item whose unwatch is held back, and each watched/unwatched change sent to MDBList right away.

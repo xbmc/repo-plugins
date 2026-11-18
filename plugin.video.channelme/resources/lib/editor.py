@@ -27,6 +27,7 @@ import xbmcgui
 
 from resources.lib import library
 from resources.lib import storage
+from resources.lib import valueprompt
 
 # Reopen guard. Two Home-window (10000) properties, shared across all plugin script
 # invocations, stop a stray second editor from opening:
@@ -62,9 +63,27 @@ TITLES_LIST = 5101
 TITLES_HINT = 5102
 MODE_LIST = 5201
 MODE_HINT = 5202
-CONSEC_LIST = 5301
+WEIGHT_LIST = 5203       # per-show selection weight (right column of the Mode panel)
+MODE_HEADER = 5204       # left column header ("Mode")
+WEIGHT_HEADER = 5205     # right column header ("Selection weight")
 CONSEC_HINT = 5302
-CONSEC_MODE_BTN = 5303   # "Up to" / "Always" toggle above the count list
+CONSEC_MODE_BTN = 5303   # "Up to" / "Always" toggle (channel default)
+BIAS_LIST = 5304         # per-show back-to-back override (right column of the panel)
+BIAS_HEADER = 5305       # right column header ("Per-show")
+DEFAULT_HEADER = 5306    # left column header ("Channel default")
+CONSEC_SLIDER = 5307     # channel default back-to-back (focusable overlay; Left/Right = adjust)
+CONSEC_VALUE = 5308      # inline numeric readout beside the capsule
+CONSEC_PROGRESS = 5309   # the fill track
+CONSEC_HANDLE = 5310     # the dull knob (shown when hovered, not editing)
+CONSEC_HANDLE_LIVE = 5314  # the white knob (shown while editing)
+CONSEC_FRAME = 5311      # the idle (grey) capsule frame - always shown
+
+# Capsule handle geometry (absolute, matching the skin): knob left at 0%, its travel range,
+# the track (progress) width and knob width for the "fill to the knob's right edge" maths.
+CONSEC_KNOB_LEFT, CONSEC_KNOB_TRAVEL, CONSEC_HANDLE_Y = 564, 276, 398
+CONSEC_INNER_W, CONSEC_KNOB_W = 312, 36
+# The three visual states (idle grey -> hover white -> edit blue) are driven entirely by the
+# skin (colour-fixed images gated on Control.HasFocus + the 'cm_edit' window property).
 STARTEPS_LIST = 5401
 STARTEPS_HINT = 5402
 ART_LIST = 5501
@@ -112,6 +131,9 @@ STATIC_LABELS = [
     (SAVE_BTN, 32033), (CANCEL_BTN, 32034),
     (FILTER_TV_LABEL, 32040), (FILTER_SET_LABEL, 32041), (FILTER_MOVIE_LABEL, 32042),
     (FILTER_FILE_LABEL, 32043), (SEARCH_BTN, 32024),
+    # Two-column panel headers (Mode: weight | Back-to-back: per-show).
+    (MODE_HEADER, 32003), (WEIGHT_HEADER, 32055),
+    (DEFAULT_HEADER, 32067), (BIAS_HEADER, 32068),
 ]
 
 # ----------------------------------------------------------------------------
@@ -120,6 +142,7 @@ STATIC_LABELS = [
 
 ACTION_PREVIOUS_MENU = 10
 ACTION_NAV_BACK = 92
+ACTION_MOVE_LEFT = 1
 ACTION_MOVE_RIGHT = 2
 
 # ----------------------------------------------------------------------------
@@ -128,8 +151,11 @@ ACTION_MOVE_RIGHT = 2
 
 # (stored value, label string id)
 MODES = [('serial_random', 32050), ('pure_random', 32051)]
-MAX_CONSEC_OPTIONS = [1, 2, 3, 4, 5, 8, 10, 15, 20, 999]
+
+# Back-to-back run length is a 1..30 slider (single-step, for fine control). The old
+# "Unlimited" option is gone; a legacy value is clamped into range on load.
 UNLIMITED_CONSEC = 999
+CONSEC_MIN, CONSEC_MAX = 1, 30
 
 
 # ----------------------------------------------------------------------------
@@ -147,10 +173,31 @@ def _title_text(item):
     return item['title']
 
 
-def _consec_label(value):
-    if value >= UNLIMITED_CONSEC:
-        return storage.L(32060)
-    return storage.L(32061).format(value)
+def _clamp_consec(value):
+    """Fold a stored back-to-back count (incl. a legacy 'Unlimited' 999) into 1..30."""
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        value = 2
+    return max(CONSEC_MIN, min(CONSEC_MAX, value))
+
+
+def _weight_label(value):
+    """Per-show selection weight: 1.0 == 'Normal', otherwise e.g. '1.2x' / '3x'."""
+    if not value or value <= 1:
+        return storage.L(32056)          # Normal
+    return storage.L(32057).format('{0:g}'.format(value))
+
+
+def _bias_label(entry):
+    """Per-show back-to-back override: 'Default' (inherit), else 'Up to N' / 'Always N'
+    ('Up to Unlimited' when the count is unlimited). `entry` is None or {count, always}."""
+    if not entry:
+        return storage.L(32063)          # Default (inherit the channel setting)
+    word = storage.L(32066) if entry.get('always') else storage.L(32065)
+    count = entry.get('count', 0)
+    amount = storage.L(32060) if count >= UNLIMITED_CONSEC else str(count)
+    return '{0} {1}'.format(word, amount)
 
 
 def _sequence(item):
@@ -189,6 +236,7 @@ class ChannelEditor(xbmcgui.WindowXMLDialog):
         self.starteps_titles = []  # multi-item titles shown in Starting eps
         self.filters = {'tvshow': True, 'movieset': True, 'movie': True, 'folder': True}
         self.search_query = ''
+        self.consec_editing = False   # channel-default slider: hover vs edit (two-stage)
 
     # ------------------------------------------------------------------
     # Lifecycle
@@ -208,8 +256,10 @@ class ChannelEditor(xbmcgui.WindowXMLDialog):
             self.getControl(on_image).setVisible(self.filters[type_key])
         self._fill_titles()
         self._fill_mode()
+        self._fill_weights()
         self._fill_consec_mode()
-        self._fill_consec()
+        self._init_consec()
+        self._fill_bias()
         self._fill_starteps()
         self._fill_artwork()
         self._fill_name()
@@ -224,6 +274,13 @@ class ChannelEditor(xbmcgui.WindowXMLDialog):
         # We only need to step focus INTO the current panel when Right is pressed.
         if self.getFocusId() == CAT_LIST and action_id == ACTION_MOVE_RIGHT:
             self._focus_panel()
+        # The channel-default slider only steps the count while EDITING; when merely
+        # hovered the arrows navigate normally (so you can reach the toggle / lists).
+        elif self.getFocusId() == CONSEC_SLIDER and self.consec_editing:
+            if action_id == ACTION_MOVE_LEFT:
+                self._step_consec(-1)
+            elif action_id == ACTION_MOVE_RIGHT:
+                self._step_consec(1)
 
     def onClick(self, control_id):
         if control_id == SAVE_BTN:
@@ -242,10 +299,14 @@ class ChannelEditor(xbmcgui.WindowXMLDialog):
             self._toggle_title()
         elif control_id == MODE_LIST:
             self._choose_mode()
+        elif control_id == WEIGHT_LIST:
+            self._choose_weight()
         elif control_id == CONSEC_MODE_BTN:
             self._toggle_consec_mode()
-        elif control_id == CONSEC_LIST:
-            self._choose_consec()
+        elif control_id == CONSEC_SLIDER:
+            self._set_consec_editing(not self.consec_editing)
+        elif control_id == BIAS_LIST:
+            self._choose_bias()
         elif control_id == STARTEPS_LIST:
             self._choose_start_episode()
         elif control_id == ART_LIST:
@@ -313,25 +374,74 @@ class ChannelEditor(xbmcgui.WindowXMLDialog):
         for value, string_id in MODES:
             control.addItem(_row(storage.L(string_id), selected=value == self.channel['mode']))
 
+    def _fill_weights(self):
+        """Right column of the Mode panel: each channel title with its selection
+        weight ('Normal' unless biased). Weight decides how OFTEN a title is picked."""
+        control = self.getControl(WEIGHT_LIST)
+        control.reset()
+        if not self.channel['items']:
+            control.addItem(_row(storage.L(32058)))
+            return
+        weights = self.channel.get('weight_overrides', {})
+        for item in self.channel['items']:
+            control.addItem(_row(_title_text(item),
+                                 label2=_weight_label(weights.get(_key(item), 1))))
+
     def _fill_consec_mode(self):
         """Label the toggle: 'Always' (fixed run) vs 'Up to' (maximum cap)."""
         always = self.channel.get('consec_always', False)
         self.getControl(CONSEC_MODE_BTN).setLabel(
             storage.L(32066) if always else storage.L(32065))
 
-    def _consec_options(self):
-        """Count choices for the current mode. 'Always' drops Unlimited (you cannot
-        always play an unlimited run before switching)."""
-        if self.channel.get('consec_always'):
-            return [v for v in MAX_CONSEC_OPTIONS if v < UNLIMITED_CONSEC]
-        return MAX_CONSEC_OPTIONS
+    def _init_consec(self):
+        """Seed the channel-default back-to-back slider (1..30) from the working copy."""
+        self.channel['max_consecutive'] = _clamp_consec(self.channel.get('max_consecutive', 2))
+        self._paint_consec()
+        self._set_consec_editing(False)
 
-    def _fill_consec(self):
-        control = self.getControl(CONSEC_LIST)
+    def _set_consec_editing(self, editing):
+        """Two-stage: enter/leave edit mode. Editing traps the arrows for value changes,
+        lights the capsule frame and brightens the knob."""
+        self.consec_editing = editing
+        slider = self.getControl(CONSEC_SLIDER)
+        if editing:
+            slider.setNavigation(slider, slider, slider, slider)
+        else:
+            slider.setNavigation(self.getControl(CONSEC_MODE_BTN), slider,
+                                 self.getControl(CAT_LIST), self.getControl(BIAS_LIST))
+        # The skin swaps frame/knob colours on this property (idle/hover vs editing).
+        self.setProperty('cm_edit', '1' if editing else '')
+
+    def _step_consec(self, direction):
+        """Nudge the channel default count by +/-1 (called on Left/Right while editing)."""
+        self.channel['max_consecutive'] = _clamp_consec(
+            self.channel['max_consecutive'] + direction)
+        self._paint_consec()
+
+    def _paint_consec(self):
+        """Repaint the numeric readout, the fill percent and the handle position."""
+        count = self.channel['max_consecutive']
+        self.getControl(CONSEC_VALUE).setLabel(str(count))
+        fraction = (count - CONSEC_MIN) / float(CONSEC_MAX - CONSEC_MIN)
+        # Fill to the knob's RIGHT edge so the bar reads as filled up to the knob.
+        fill_percent = (fraction * CONSEC_KNOB_TRAVEL + CONSEC_KNOB_W) * 100.0 / CONSEC_INNER_W
+        self.getControl(CONSEC_PROGRESS).setPercent(fill_percent)
+        handle_x = CONSEC_KNOB_LEFT + int(fraction * CONSEC_KNOB_TRAVEL)
+        self.getControl(CONSEC_HANDLE).setPosition(handle_x, CONSEC_HANDLE_Y)
+        self.getControl(CONSEC_HANDLE_LIVE).setPosition(handle_x, CONSEC_HANDLE_Y)
+
+    def _fill_bias(self):
+        """Right column of the Back-to-back panel: each channel title with its
+        back-to-back override ('Default' == inherit the channel setting on the left)."""
+        control = self.getControl(BIAS_LIST)
         control.reset()
-        for value in self._consec_options():
-            control.addItem(_row(_consec_label(value),
-                                 selected=value == self.channel['max_consecutive']))
+        if not self.channel['items']:
+            control.addItem(_row(storage.L(32058)))
+            return
+        overrides = self.channel.get('consec_overrides', {})
+        for item in self.channel['items']:
+            control.addItem(_row(_title_text(item),
+                                 label2=_bias_label(overrides.get(_key(item)))))
 
     def _fill_starteps(self):
         self.starteps_titles = [i for i in self.channel['items']
@@ -398,6 +508,9 @@ class ChannelEditor(xbmcgui.WindowXMLDialog):
         key = item.getProperty('key')
         if any(_key(i) == key for i in self.channel['items']):
             self.channel['items'] = [i for i in self.channel['items'] if _key(i) != key]
+            # A deselected title keeps no per-show overrides.
+            self.channel.get('consec_overrides', {}).pop(key, None)
+            self.channel.get('weight_overrides', {}).pop(key, None)
             item.setProperty('sel', '')
         else:
             source = next((i for i in self.catalog if _key(i) == key), None)
@@ -406,7 +519,10 @@ class ChannelEditor(xbmcgui.WindowXMLDialog):
             if source is not None:
                 self.channel['items'].append(source)
             item.setProperty('sel', '1')
-        # Titles drive the Starting-eps and Artwork panels - rebuild them.
+        # Titles drive the per-show weight / back-to-back / Starting-eps / Artwork
+        # panels - rebuild them all.
+        self._fill_weights()
+        self._fill_bias()
         self._fill_starteps()
         self._fill_artwork()
 
@@ -416,21 +532,53 @@ class ChannelEditor(xbmcgui.WindowXMLDialog):
         self.channel['mode'] = MODES[position][0]
         self._select_only(control, position)
 
+    def _choose_weight(self):
+        """Slider prompt (1.0..3.0) for the highlighted title's selection weight.
+        Default / a weight of 1.0 clears the override (the title then weighs Normal)."""
+        if not self.channel['items']:
+            return
+        control = self.getControl(WEIGHT_LIST)
+        position = control.getSelectedPosition()
+        item = self.channel['items'][position]
+        weights = self.channel.setdefault('weight_overrides', {})
+        current = float(weights.get(_key(item), 1.0))
+        result = valueprompt.show('weight', storage.L(32054).format(item['title']), current)
+        if result is None:                    # cancelled
+            return
+        if result == 'default':
+            weights.pop(_key(item), None)
+        else:
+            weights[_key(item)] = result
+        control.getListItem(position).setLabel2(_weight_label(weights.get(_key(item), 1.0)))
+
     def _toggle_consec_mode(self):
-        """Flip Up-to <-> Always. Entering Always hides Unlimited (and snaps a
-        currently-Unlimited count down to 2); leaving Always brings it back."""
-        always = not self.channel.get('consec_always', False)
-        self.channel['consec_always'] = always
-        if always and self.channel['max_consecutive'] >= UNLIMITED_CONSEC:
-            self.channel['max_consecutive'] = 2
-        self._fill_consec()        # rebuild with/without Unlimited for the new mode
+        """Flip the channel default between 'Up to' (cap) and 'Always' (fixed run)."""
+        self.channel['consec_always'] = not self.channel.get('consec_always', False)
         self._fill_consec_mode()
 
-    def _choose_consec(self):
-        control = self.getControl(CONSEC_LIST)
+    def _choose_bias(self):
+        """Slider prompt (Up to/Always + 1..30) for the highlighted title's back-to-back
+        override. Default clears it so the title follows the channel setting on the left."""
+        if not self.channel['items']:
+            return
+        control = self.getControl(BIAS_LIST)
         position = control.getSelectedPosition()
-        self.channel['max_consecutive'] = self._consec_options()[position]
-        self._select_only(control, position)
+        item = self.channel['items'][position]
+        overrides = self.channel.setdefault('consec_overrides', {})
+        current = overrides.get(_key(item))
+        init_count = _clamp_consec(current['count']) if current \
+            else _clamp_consec(self.channel.get('max_consecutive', 2))
+        init_always = current.get('always') if current \
+            else self.channel.get('consec_always', False)
+        result = valueprompt.show('consec', storage.L(32064).format(item['title']),
+                                  init_count, always=init_always)
+        if result is None:                    # cancelled
+            return
+        if result == 'default':
+            overrides.pop(_key(item), None)
+        else:
+            overrides[_key(item)] = result
+        control.getListItem(position).setLabel2(_bias_label(overrides.get(_key(item))))
 
     def _choose_start_episode(self):
         if not self.starteps_titles:

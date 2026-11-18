@@ -42,6 +42,12 @@ def _apply_start_points(data, channel_id, items, start_points):
             pointers[key] = index
 
 
+def _prune_overrides(overrides, items):
+    """Drop per-show override entries whose title is no longer on the channel."""
+    item_keys = {_key(item) for item in items}
+    return {key: value for key, value in (overrides or {}).items() if key in item_keys}
+
+
 # ----------------------------------------------------------------------------
 # Channel operations (called by the router)
 # ----------------------------------------------------------------------------
@@ -54,13 +60,15 @@ def add_channel(seed_items=None):
     name = seed_items[0].get('title', '') if len(seed_items) == 1 else ''
     working = {'name': name, 'mode': 'pure_random', 'items': list(seed_items),
                'art_source_key': None, 'max_consecutive': 2, 'consec_always': False,
-               'start_points': {}}
+               'consec_overrides': {}, 'weight_overrides': {}, 'start_points': {}}
     if not editor.run(storage.ADDON_PATH, working, is_new=True):
         return False
 
     data = storage.load()
     channel_id = storage.next_channel_id(data)
     start_points = working.pop('start_points', {})   # belongs in state, not the record
+    working['consec_overrides'] = _prune_overrides(working.get('consec_overrides'), working['items'])
+    working['weight_overrides'] = _prune_overrides(working.get('weight_overrides'), working['items'])
     working['id'] = channel_id
     data['channels'].append(working)
     _apply_start_points(data, channel_id, working['items'], start_points)
@@ -83,6 +91,10 @@ def edit_channel(channel_id):
         'art_source_key': channel.get('art_source_key'),
         'max_consecutive': channel.get('max_consecutive', 2),
         'consec_always': channel.get('consec_always', False),
+        # Deep-copy the per-show override maps so an edit that is cancelled leaves
+        # the stored channel untouched.
+        'consec_overrides': {k: dict(v) for k, v in channel.get('consec_overrides', {}).items()},
+        'weight_overrides': dict(channel.get('weight_overrides', {})),
         'start_points': dict(existing_pointers),   # seed from current positions
     }
     if not editor.run(storage.ADDON_PATH, working, is_new=False):
@@ -94,6 +106,8 @@ def edit_channel(channel_id):
     channel['art_source_key'] = working['art_source_key']
     channel['max_consecutive'] = working['max_consecutive']
     channel['consec_always'] = working['consec_always']
+    channel['consec_overrides'] = _prune_overrides(working['consec_overrides'], working['items'])
+    channel['weight_overrides'] = _prune_overrides(working['weight_overrides'], working['items'])
     _apply_start_points(data, channel_id, channel['items'], working['start_points'])
     storage.save(data)
     _notify(storage.L(32101).format(working['name']))

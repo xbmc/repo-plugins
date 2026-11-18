@@ -1,0 +1,5 @@
+v1.3.13
+
+- Fixed the daily or manual sync unwatching episodes stored as one multi-episode file (e.g. S10E17-18), which MDBList counts as one episode or numbers differently. Since Kodi keeps one play count per file, this could unwatch both episodes.
+- Fixed the first watched sync sending the whole Kodi history to MDBList if something was marked watched before it ran.
+- Live sync log lines now show the item title instead of 'None'.

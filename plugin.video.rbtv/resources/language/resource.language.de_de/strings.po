@@ -1,0 +1,94 @@
+# Kodi Media Center language file
+# Addon Name: Rocket Beans TV
+# Addon id: plugin.video.rbtv
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.rbtv\n"
+"Report-Msgid-Bugs-To: https://codeberg.org/randomDuderus/plugin.video.rbtv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30001"
+msgid "Show list"
+msgstr "Sendungsliste"
+
+msgctxt "#30002"
+msgid "Only shows with episodes from the last N years"
+msgstr "Nur Sendungen mit Folgen der letzten Jahre"
+
+msgctxt "#30003"
+msgid "0 shows every show. Any other value hides shows whose newest episode is older than N calendar years. Search and favourites are never filtered."
+msgstr "0 zeigt alle Sendungen. Jeder andere Wert blendet Sendungen aus, deren neueste Folge älter als N Kalenderjahre ist. Suche und Favoriten werden nie gefiltert."
+
+msgctxt "#30004"
+msgid "Sort shows by"
+msgstr "Sendungen sortieren nach"
+
+msgctxt "#30005"
+msgid "Alphabetically"
+msgstr "Alphabetisch"
+
+msgctxt "#30006"
+msgid "Newest episode first"
+msgstr "Neueste Folge zuerst"
+
+# Menu and dialogs
+
+msgctxt "#30100"
+msgid "Search"
+msgstr "Suche"
+
+msgctxt "#30101"
+msgid "Refresh list"
+msgstr "Liste aktualisieren"
+
+msgctxt "#30102"
+msgid "Manage favourites"
+msgstr "Favoriten verwalten"
+
+msgctxt "#30103"
+msgid "All shows"
+msgstr "Alle Sendungen"
+
+msgctxt "#30104"
+msgid "Add RBTV favourite"
+msgstr "RBTV-Favorit hinzufügen"
+
+msgctxt "#30105"
+msgid "Remove RBTV favourite"
+msgstr "RBTV-Favorit entfernen"
+
+msgctxt "#30106"
+msgid "Next page"
+msgstr "Nächste Seite"
+
+msgctxt "#30107"
+msgid "{0} episode"
+msgstr "{0} Folge"
+
+msgctxt "#30108"
+msgid "{0} episodes"
+msgstr "{0} Folgen"
+
+msgctxt "#30109"
+msgid "Search show"
+msgstr "Sendung suchen"
+
+msgctxt "#30110"
+msgid "Choose favourites"
+msgstr "Favoriten wählen"
+
+msgctxt "#30111"
+msgid "Loading shows"
+msgstr "Sendungen werden geladen"
+
+msgctxt "#30112"
+msgid "Reloading shows"
+msgstr "Sendungen werden neu geladen"

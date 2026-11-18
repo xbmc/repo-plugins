@@ -1,0 +1,3 @@
+v1.3.5
+
+- Fixed the addon taking 5+ seconds to stop on every Kodi quit, forcing Kodi to kill it instead of a clean shutdown -- its background sync/activity/ratings polling threads are now stopped as soon as shutdown begins.

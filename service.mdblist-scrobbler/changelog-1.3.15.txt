@@ -1,0 +1,6 @@
+v1.3.15
+
+- New: optionally send your files' media info (resolution, HDR, audio, channels, 3D) with collection sync. Off by default; turn it on under Settings > Sync.
+- Fixed interval scrobbles leaking timers on rapid playback changes (e.g. skipping through a playlist), which kept sending scrobbles until Kodi restarted and could use up the daily API limit (#4).
+- Interval scrobbles now pause when MDBList's rate limit is hit, until it resets, and stop for the rest of a playback when MDBList doesn't recognize the title. The interval setting now has a 10-second minimum.
+- Fixed every sync failing once the addon hadn't synced for 30 days. It now runs a full sync instead.

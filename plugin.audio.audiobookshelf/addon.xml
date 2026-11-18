@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.audiobookshelf" name="Audiobookshelf" version="2026.7.24" provider-name="Breezyslasher">
+<addon id="plugin.audio.audiobookshelf" name="Audiobookshelf" version="2026.11.17" provider-name="Breezyslasher">
 	<requires>
 		<import addon="xbmc.python" version="3.0.1"/>
 		<import addon="script.module.requests" version="2.31.0" />
@@ -29,6 +29,26 @@
 			<fanart>resources/fanart.jpg</fanart>
 		</assets>
 		<news>
+2026.11.17 - HTTPS servers, resume order
+- FIXED: Server address accepts a full URL (https, reverse proxy).
+- FIXED: Resume/chapter playback continues with the next track instead of
+  restarting at track 1.
+
+2026.7.28 - Live session sync
+- NEW: Position is now pushed to the open server session during online
+  playback, so Audiobookshelf's "currently listening" and listening-time
+  stats stay live. Final position is recorded when the session closes.
+
+2026.7.27 - API call fixes
+- FIXED: Playback sessions use the real endpoints; they previously hit
+  non-existent /api/session/local/... routes and never registered.
+- FIXED: Server-side podcast downloads no longer report a false error.
+
+2026.7.26 - Chapters for single-file audiobooks
+- FIXED: Single-file audiobooks (e.g. M4B) with embedded chapters now
+  open a chapter list. The library list API returns numChapters rather
+  than a chapters array, so they were treated as having no chapters.
+
 2026.7.24 - Separate libraries
 - CHANGED: Each Audiobookshelf library is now listed separately instead
   of merged into single Audiobooks/Podcasts folders. Enable "Group
@@ -40,28 +60,6 @@
 
 2026.7.9 - Kodi repo compliance
 - Settings localized via strings.po; icon flattened (no transparency);
-  LICENSE renamed to LICENSE.txt; fanart added.
-
-2026.7.8 - Chronological offline queues
-- Downloads store the episode publish date so offline auto-play queues
-  order chronologically, matching the online queue.
-
-2026.7.7 - Auto-play: mixed streamed/downloaded
-- Auto-play queues mix streamed and downloaded episodes; also works
-  fully offline. No resume dialog between episodes.
-
-2026.7.6 - Auto-play next podcast episode
-- "Auto-play next episode" setting (default off) plays a native Kodi
-  playlist from the selected episode forward. Progress tracked per
-  episode.
-
-2026.7.5 - Progress sync fix
-- Progress upload no longer loops forever; empty/non-JSON 2xx responses
-  are treated as success.
-
-2026.5.28 - Now-playing cover art, author, JWT auth
-- Covers/author on the now-playing screen; JWT auth with auto refresh
-  (requires server v2.26.0+).
-		</news>
+  LICENSE renamed to LICENSE.txt; fanart added.</news>
 	</extension>
 </addon>

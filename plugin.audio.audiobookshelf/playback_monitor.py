@@ -52,10 +52,7 @@ class PlaybackMonitor:
         self.last_position = 0
         self.last_synced_position = 0
         self.is_finished = False
-        # The media file this monitor is bound to. In an auto-play-next
-        # playlist Kodi advances to the next episode in the SAME player; if we
-        # kept reading getTime() we'd save the next track's position onto this
-        # episode. We record the file and stop cleanly when it changes.
+        # File this monitor tracks; stop when the playlist moves on.
         self.playing_file = None
         
         # Initialize sync manager with library service
@@ -129,6 +126,9 @@ class PlaybackMonitor:
             last_sync_time = time.time()
             self.last_position = self.start_position
             self.last_synced_position = self.start_position
+            # For time_listened since the last session sync.
+            self._session_clock = time.time()
+            self._session_position = self.start_position + self.file_offset
 
             # Main monitoring loop
             while self.is_monitoring:
@@ -137,9 +137,7 @@ class PlaybackMonitor:
                         xbmc.log("[MONITOR] Audio playback stopped", xbmc.LOGINFO)
                         break
 
-                    # Auto-play-next: the playlist advanced to a different item.
-                    # Stop now so we keep THIS episode's last good position
-                    # instead of overwriting it with the next episode's time.
+                    # Playlist advanced: stop before saving the next item's time here.
                     if self.playing_file:
                         try:
                             current_file = self.player.getPlayingFile()
@@ -169,6 +167,7 @@ class PlaybackMonitor:
                         if abs(current_time - self.last_synced_position) > 5:
                             xbmc.log(f"[MONITOR] Periodic sync at {current_time:.1f}s", xbmc.LOGINFO)
                             self._save_progress(current_time, is_final=False)
+                            self._sync_session(current_time)
                             self.last_synced_position = current_time
                         last_sync_time = time.time()
                     
@@ -182,10 +181,16 @@ class PlaybackMonitor:
                 xbmc.log(f"[MONITOR] Final sync at {self.last_position:.1f}s", xbmc.LOGINFO)
                 self._save_progress(self.last_position, is_final=True)
             
-            # Close session
+            # Close session, recording the final position in the same call
             if self.session_id and self.library_service:
                 try:
-                    self.library_service.close_playback_session(self.session_id)
+                    overall_time = self.last_position + self.file_offset
+                    self.library_service.close_playback_session(
+                        self.session_id,
+                        current_time=overall_time,
+                        duration=self.duration,
+                        time_listened=self._listened_since_last_sync(self.last_position)
+                    )
                     xbmc.log(f"[MONITOR] Closed session: {self.session_id}", xbmc.LOGINFO)
                 except:
                     pass
@@ -195,6 +200,29 @@ class PlaybackMonitor:
         except Exception as e:
             xbmc.log(f"[MONITOR] Worker error: {str(e)}", xbmc.LOGERROR)
     
+    def _listened_since_last_sync(self, current_time):
+        """Seconds listened since the last sync: min(position delta, wall-clock time)."""
+        overall_time = current_time + self.file_offset
+        wall_elapsed = time.time() - getattr(self, '_session_clock', time.time())
+        position_delta = overall_time - getattr(self, '_session_position', overall_time)
+        return max(0, min(position_delta, wall_elapsed))
+
+    def _sync_session(self, current_time):
+        """Push the current position to the open server-side playback session."""
+        if not self.session_id or not self.library_service:
+            return
+        try:
+            overall_time = current_time + self.file_offset
+            listened = self._listened_since_last_sync(current_time)
+            self.library_service.sync_playback_session(
+                self.session_id, overall_time, self.duration, time_listened=listened)
+            self._session_clock = time.time()
+            self._session_position = overall_time
+            xbmc.log(f"[MONITOR] Session synced at {overall_time:.1f}s "
+                     f"(+{listened:.0f}s listened)", xbmc.LOGDEBUG)
+        except Exception as e:
+            xbmc.log(f"[MONITOR] Session sync error: {str(e)}", xbmc.LOGDEBUG)
+
     def _save_progress(self, current_time, is_final=False):
         """Save progress using sync_manager"""
         try:

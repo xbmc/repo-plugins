@@ -122,6 +122,27 @@ def has_downloads():
     return len(downloads) > 0
 
 
+def build_server_url(address, port):
+    """Server base URL. A full URL (e.g. https://abs.example.com) is used as-is."""
+    address = (address or '').strip().rstrip('/')
+    port = (port or '').strip()
+    if not address:
+        return ''
+    if '://' in address:
+        return address
+
+    host, sep, path = address.partition('/')
+    path = f'/{path}' if sep else ''
+    has_port = (']:' in host) if host.startswith('[') else (':' in host)
+    if has_port:
+        return f'http://{host}{path}'
+    if port == '443':
+        return f'https://{host}{path}'
+    if port and port != '80':
+        return f'http://{host}:{port}{path}'
+    return f'http://{host}{path}'
+
+
 def get_library_service():
     """Get authenticated library service with caching"""
     if not is_network_available():
@@ -131,15 +152,12 @@ def get_library_service():
         xbmcgui.Dialog().ok('No Network', 'No network connection available')
         return None, None, None, False
     
-    ip = get_setting('ipaddress')
-    port = get_setting('port', '13378')
-    
-    if not ip:
+    url = build_server_url(get_setting('ipaddress'), get_setting('port', '13378'))
+
+    if not url:
         xbmcgui.Dialog().ok('Setup Required', 'Please configure server settings')
         ADDON.openSettings()
         return None, None, None, False
-    
-    url = f"http://{ip}:{port}"
 
     # API key auth: an Audiobookshelf API key is a long-lived bearer token, so
     # when one is set we use it directly and skip the whole login/refresh/cache
@@ -282,17 +300,14 @@ def set_music_info(list_item, title, artist='', duration=0, playcount=0, tracknu
                                     'playcount': playcount, 'tracknumber': tracknumber})
 
 
-def find_file_for_position(audio_files, position):
-    sorted_files = sorted(audio_files, key=lambda x: x.get('index', 0))
-    cumulative = 0
-    for f in sorted_files:
-        file_duration = f.get('duration', 0)
-        if position < cumulative + file_duration:
-            return f, position - cumulative, cumulative
-        cumulative += file_duration
-    if sorted_files:
-        return sorted_files[-1], 0, cumulative - sorted_files[-1].get('duration', 0)
-    return None, 0, 0
+def has_parts(media):
+    """True when a book should open a chapters/parts folder (minified media has numChapters, not chapters)."""
+    if media.get('numAudioFiles', 1) > 1:
+        return True
+    num_chapters = media.get('numChapters')
+    if num_chapters is None:
+        num_chapters = len(media.get('chapters') or [])
+    return num_chapters > 1
 
 
 def format_time(seconds):
@@ -553,14 +568,15 @@ def list_audiobooks_combined(book_libs=None):
                     context_items.append(('Download', f'RunPlugin({build_url(action="download", item_id=item_id, library_id=library_id)})'))
             list_item.addContextMenuItems(context_items)
             
-            if media.get('numAudioFiles', 1) > 1 or media.get('chapters'):
+            if has_parts(media):
                 xbmcplugin.addDirectoryItem(ADDON_HANDLE,
                                            build_url(action='parts', item_id=item_id),
                                            list_item, isFolder=True)
             else:
-                list_item.setProperty('IsPlayable', 'true')
+                # Not IsPlayable, so Kodi doesn't queue the folder and start the next book.
+                list_item.setProperty('IsPlayable', 'false')
                 xbmcplugin.addDirectoryItem(ADDON_HANDLE,
-                                           build_url(action='play', item_id=item_id),
+                                           build_url(action='play_book_resume', item_id=item_id),
                                            list_item, isFolder=False)
         
         xbmcplugin.endOfDirectory(ADDON_HANDLE)
@@ -754,9 +770,9 @@ def list_offline_books():
                                        build_url(action='offline_parts', item_id=item_id),
                                        list_item, isFolder=True)
         else:
-            list_item.setProperty('IsPlayable', 'true')
-            xbmcplugin.addDirectoryItem(ADDON_HANDLE, 
-                                       build_url(action='play_offline', key=item_id),
+            list_item.setProperty('IsPlayable', 'false')
+            xbmcplugin.addDirectoryItem(ADDON_HANDLE,
+                                       build_url(action='play_book_resume', item_id=item_id),
                                        list_item, isFolder=False)
     
     xbmcplugin.endOfDirectory(ADDON_HANDLE)
@@ -906,9 +922,9 @@ def list_offline_parts(item_id):
     # Resume option if progress exists
     if current_time > 10:
         list_item = xbmcgui.ListItem(label=f'[Resume: {format_time(current_time)}]')
-        list_item.setProperty('IsPlayable', 'true')
+        list_item.setProperty('IsPlayable', 'false')
         xbmcplugin.addDirectoryItem(ADDON_HANDLE,
-                                   build_url(action='play_offline', key=item_id),
+                                   build_url(action='play_book', item_id=item_id, position=current_time),
                                    list_item, isFolder=False)
     
     # Show chapters if available
@@ -924,12 +940,10 @@ def list_offline_parts(item_id):
             prefix = '> ' if ch_start <= current_time < ch_end else ''
             
             list_item = xbmcgui.ListItem(label=f'{prefix}{title}')
-            list_item.setProperty('IsPlayable', 'true')
+            list_item.setProperty('IsPlayable', 'false')
             set_music_info(list_item, title=title, duration=ch_end - ch_start, tracknumber=i+1)
-            
             xbmcplugin.addDirectoryItem(ADDON_HANDLE,
-                                       build_url(action='play_offline_at', item_id=item_id, 
-                                                seek_time=int(ch_start)),
+                                       build_url(action='play_book', item_id=item_id, position=ch_start),
                                        list_item, isFolder=False)
     elif files:
         # Show files as parts
@@ -942,12 +956,10 @@ def list_offline_parts(item_id):
             prefix = '> ' if cumulative <= current_time < cumulative + dur else ''
             
             list_item = xbmcgui.ListItem(label=f'{prefix}{title}')
-            list_item.setProperty('IsPlayable', 'true')
+            list_item.setProperty('IsPlayable', 'false')
             set_music_info(list_item, title=title, duration=dur)
-            
             xbmcplugin.addDirectoryItem(ADDON_HANDLE,
-                                       build_url(action='play_offline_at', item_id=item_id,
-                                                seek_time=int(cumulative)),
+                                       build_url(action='play_book', item_id=item_id, position=cumulative),
                                        list_item, isFolder=False)
             cumulative += dur
     
@@ -1203,14 +1215,15 @@ def list_library_items(library_id, is_podcast=False):
                 xbmcplugin.addDirectoryItem(ADDON_HANDLE, 
                                            build_url(action='episodes', item_id=item_id),
                                            list_item, isFolder=True)
-            elif media.get('numAudioFiles', 1) > 1 or media.get('chapters'):
+            elif has_parts(media):
                 xbmcplugin.addDirectoryItem(ADDON_HANDLE,
                                            build_url(action='parts', item_id=item_id),
                                            list_item, isFolder=True)
             else:
-                list_item.setProperty('IsPlayable', 'true')
+                # Not IsPlayable, so Kodi doesn't queue the folder and start the next book.
+                list_item.setProperty('IsPlayable', 'false')
                 xbmcplugin.addDirectoryItem(ADDON_HANDLE,
-                                           build_url(action='play', item_id=item_id),
+                                           build_url(action='play_book_resume', item_id=item_id),
                                            list_item, isFolder=False)
         
         xbmcplugin.endOfDirectory(ADDON_HANDLE)
@@ -1837,21 +1850,18 @@ def list_parts(item_id):
         
         # Resume option
         if current_time > 10 and not is_finished:
-            target_file, seek, _ = find_file_for_position(audio_files, current_time)
-            if target_file:
-                current_chapter = ""
-                for ch in sorted(chapters, key=lambda x: x.get('start', 0)):
-                    if ch.get('start', 0) <= current_time < ch.get('end', total_duration):
-                        current_chapter = f" - {ch.get('title', '')[:20]}"
-                        break
-                
-                list_item = xbmcgui.ListItem(label=f'[Resume: {format_time(current_time)}{current_chapter}]')
-                list_item.setProperty('IsPlayable', 'true')
-                xbmcplugin.addDirectoryItem(ADDON_HANDLE,
-                                           build_url(action='play_at_position', item_id=item_id,
-                                                    file_ino=target_file.get('ino'), seek_time=int(seek),
-                                                    overall_time=int(current_time)),
-                                           list_item, isFolder=False)
+            current_chapter = ""
+            for ch in sorted(chapters, key=lambda x: x.get('start', 0)):
+                if ch.get('start', 0) <= current_time < ch.get('end', total_duration):
+                    current_chapter = f" - {ch.get('title', '')[:20]}"
+                    break
+
+            list_item = xbmcgui.ListItem(label=f'[Resume: {format_time(current_time)}{current_chapter}]')
+            # Not IsPlayable: play_book queues the rest of the book itself.
+            list_item.setProperty('IsPlayable', 'false')
+            xbmcplugin.addDirectoryItem(ADDON_HANDLE,
+                                       build_url(action='play_book', item_id=item_id, position=current_time),
+                                       list_item, isFolder=False)
         
         if chapters:
             for i, ch in enumerate(sorted(chapters, key=lambda x: x.get('start', 0))):
@@ -1862,16 +1872,11 @@ def list_parts(item_id):
                 prefix = '> ' if ch_start <= current_time < ch_end else ''
                 
                 list_item = xbmcgui.ListItem(label=f'{prefix}{title}')
-                list_item.setProperty('IsPlayable', 'true')
+                list_item.setProperty('IsPlayable', 'false')
                 set_music_info(list_item, title=title, duration=ch_end - ch_start, tracknumber=i+1)
-                
-                target_file, seek, _ = find_file_for_position(audio_files, ch_start)
-                if target_file:
-                    xbmcplugin.addDirectoryItem(ADDON_HANDLE,
-                                               build_url(action='play_at_position', item_id=item_id,
-                                                        file_ino=target_file.get('ino'), seek_time=int(seek),
-                                                        overall_time=int(ch_start)),
-                                               list_item, isFolder=False)
+                xbmcplugin.addDirectoryItem(ADDON_HANDLE,
+                                           build_url(action='play_book', item_id=item_id, position=ch_start),
+                                           list_item, isFolder=False)
         else:
             cumulative = 0
             for i, f in enumerate(sorted(audio_files, key=lambda x: x.get('index', 0))):
@@ -1881,13 +1886,10 @@ def list_parts(item_id):
                 prefix = '> ' if cumulative <= current_time < cumulative + dur else ''
                 
                 list_item = xbmcgui.ListItem(label=f'{prefix}{title}')
-                list_item.setProperty('IsPlayable', 'true')
+                list_item.setProperty('IsPlayable', 'false')
                 set_music_info(list_item, title=title, duration=dur)
-                
                 xbmcplugin.addDirectoryItem(ADDON_HANDLE,
-                                           build_url(action='play_at_position', item_id=item_id,
-                                                    file_ino=f.get('ino'), seek_time=0,
-                                                    overall_time=int(cumulative)),
+                                           build_url(action='play_book', item_id=item_id, position=cumulative),
                                            list_item, isFolder=False)
                 cumulative += dur
         
@@ -2132,6 +2134,98 @@ def play_audio(play_url, title, duration, library_service, item_id, episode_id=N
         file_offset=file_offset
     )
     _active_monitor.start_monitoring_async(start_position)
+
+
+def play_book_from(item_id, position):
+    """Queue an audiobook's files from `position` to the end and play them."""
+    if download_manager.is_downloaded(item_id):
+        _play_offline_book_from(item_id, position)
+        return
+
+    library_service, url, token, offline = get_library_service()
+    if not library_service:
+        return
+
+    try:
+        item = library_service.get_library_item_by_id(item_id)
+        media = item.get('media', {})
+        files = sorted(media.get('audioFiles', []), key=lambda x: x.get('index', 0))
+        if not files:
+            raise ValueError('No audio files')
+        metadata = media.get('metadata', {})
+        title = metadata.get('title', 'Unknown')
+        author = metadata.get('authorName', '')
+        cover = download_cover(f"{url}/api/items/{item_id}/cover?token={token}", item_id)
+
+        starts, cumulative = [], 0.0
+        for f in files:
+            starts.append(cumulative)
+            cumulative += f.get('duration', 0) or 0
+        first = max([i for i, s in enumerate(starts) if s <= position] or [0])
+
+        pl = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
+        pl.clear()
+        for i in range(first, len(files)):
+            overall = position if i == first else starts[i]
+            li = xbmcgui.ListItem(label=title)
+            set_music_info(li, title=title, artist=author, duration=files[i].get('duration', 0))
+            if cover:
+                li.setArt({'thumb': cover, 'poster': cover, 'fanart': cover, 'icon': cover})
+            li.setProperty('IsPlayable', 'true')
+            pl.add(build_url(action='play_at_position', item_id=item_id, file_ino=files[i].get('ino'),
+                             seek_time=overall - starts[i], overall_time=overall), li)
+        xbmc.Player().play(pl)
+    except Exception as e:
+        xbmc.log(f"[PLAY] play_book_from error: {e}", xbmc.LOGERROR)
+        xbmcgui.Dialog().notification('Error', 'Playback failed', xbmcgui.NOTIFICATION_ERROR)
+
+
+def play_book_resume(item_id):
+    """Offer to resume, then play via play_book_from."""
+    library_service = None
+    if download_manager.is_downloaded(item_id):
+        try:
+            svc, _, _, offline = get_library_service()
+            if not offline:
+                library_service = svc
+        except Exception:
+            pass
+    else:
+        library_service, url, token, offline = get_library_service()
+        if not library_service:
+            return
+
+    current_time, is_finished, duration = get_best_resume_position(library_service, item_id)
+    start = current_time if current_time > 10 and not is_finished and ask_resume(current_time, duration) else 0
+    play_book_from(item_id, start)
+
+
+def _play_offline_book_from(item_id, position):
+    """Offline counterpart of play_book_from."""
+    info = download_manager.get_download_info(item_id)
+    if not info:
+        xbmcgui.Dialog().notification('Error', 'Not found', xbmcgui.NOTIFICATION_ERROR)
+        return
+
+    positions = [position]
+    if info.get('is_multifile'):
+        cumulative = 0.0
+        for f in sorted(info.get('files', []), key=lambda x: x.get('index', 0)):
+            if cumulative > position:
+                positions.append(cumulative)
+            cumulative += f.get('duration', 0) or 0
+
+    cover = info.get('cover_path')
+    pl = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
+    pl.clear()
+    for p in positions:
+        li = xbmcgui.ListItem(label=info.get('title', 'Unknown'))
+        set_music_info(li, title=info.get('title', 'Unknown'), artist=info.get('author', ''))
+        if cover and os.path.exists(cover):
+            li.setArt({'thumb': cover, 'poster': cover, 'fanart': cover, 'icon': cover})
+        li.setProperty('IsPlayable', 'true')
+        pl.add(build_url(action='play_offline_at', item_id=item_id, seek_time=p), li)
+    xbmc.Player().play(pl)
 
 
 def play_at_position(item_id, file_ino, seek_time, overall_time=None):
@@ -2796,8 +2890,12 @@ def router(paramstring):
     elif action == 'play':
         play_item(params['item_id'])
     elif action == 'play_at_position':
-        overall_time = int(params.get('overall_time')) if params.get('overall_time') else None
-        play_at_position(params['item_id'], params['file_ino'], int(params.get('seek_time', 0)), overall_time)
+        overall_time = float(params.get('overall_time')) if params.get('overall_time') else None
+        play_at_position(params['item_id'], params['file_ino'], float(params.get('seek_time', 0)), overall_time)
+    elif action == 'play_book_resume':
+        play_book_resume(params['item_id'])
+    elif action == 'play_book':
+        play_book_from(params['item_id'], float(params.get('position', 0)))
     elif action == 'play_episode':
         play_episode(params['item_id'], params['episode_id'], queued=params.get('queued') == '1')
     elif action == 'play_queue':
@@ -2808,7 +2906,7 @@ def router(paramstring):
         parts = params.get('key', '').split('_', 1)
         play_offline_item(parts[0], parts[1] if len(parts) > 1 else None)
     elif action == 'play_offline_at':
-        play_offline_at(params['item_id'], int(params.get('seek_time', 0)))
+        play_offline_at(params['item_id'], float(params.get('seek_time', 0)))
     # Offline browsing actions
     elif action == 'offline_books':
         list_offline_books()

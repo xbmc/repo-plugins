@@ -14,6 +14,16 @@ class AudioBookShelfLibraryService:
 			"Authorization": f"Bearer {token}"
 		}
 
+	@staticmethod
+	def _json_or_ok(response):
+		"""Parse a 2xx body as JSON, or return success for empty/"OK" bodies."""
+		if not response.content:
+			return {"success": True}
+		try:
+			return response.json()
+		except ValueError:
+			return {"success": True}
+
 	def get_all_libraries(self):
 		"""Get all available libraries from the server"""
 		url = f"{self.base_url}/api/libraries"
@@ -258,55 +268,62 @@ class AudioBookShelfLibraryService:
 			return None
 	
 	def start_playback_session(self, library_item_id, episode_id=None):
-		"""Start a playback session on the server"""
-		endpoint = f"/api/session/local"
-		
-		data = {
-			"libraryItemId": library_item_id,
-			"mediaPlayer": "Kodi",
-			"deviceInfo": {
-				"deviceId": "kodi-audiobookshelf-client",
-				"clientName": "Kodi Audiobookshelf Client"
-			}
-		}
-		
-		if episode_id:
-			data["episodeId"] = episode_id
-		
+		"""Start a playback session via POST /api/items/{id}/play."""
 		try:
-			response = requests.post(self.base_url + endpoint, headers=self.headers, json=data)
-			response.raise_for_status()
-			session = response.json()
+			session = self.play_library_item_by_id(
+				library_item_id,
+				episode_id=episode_id,
+				device_info={
+					"deviceId": "kodi-audiobookshelf-client",
+					"clientName": "Kodi Audiobookshelf Client"
+				},
+				force_direct_play=True,
+				media_player="Kodi"
+			)
 			xbmc.log(f"Started playback session: {session.get('id')}", xbmc.LOGINFO)
 			return session
 		except Exception as e:
 			xbmc.log(f"Error starting playback session: {str(e)}", xbmc.LOGERROR)
 			return None
-	
+
 	def sync_playback_session(self, session_id, current_time, duration, time_listened=0):
-		"""Sync playback session with server"""
-		endpoint = f"/api/session/local/{session_id}/sync"
-		
+		"""Sync playback session with server."""
+		endpoint = f"/api/session/{session_id}/sync"
+
 		data = {
 			"currentTime": current_time,
 			"duration": duration,
 			"timeListened": time_listened
 		}
-		
+
 		try:
 			response = requests.post(self.base_url + endpoint, headers=self.headers, json=data)
 			response.raise_for_status()
-			return response.json()
+			# The server answers with 200 and no JSON body on success.
+			if not response.content:
+				return {"success": True}
+			try:
+				return response.json()
+			except ValueError:
+				return {"success": True}
 		except Exception as e:
 			xbmc.log(f"Error syncing playback session: {str(e)}", xbmc.LOGDEBUG)
 			return None
-	
-	def close_playback_session(self, session_id):
-		"""Close a playback session on the server"""
-		endpoint = f"/api/session/local/{session_id}/close"
-		
+
+	def close_playback_session(self, session_id, current_time=None, duration=None, time_listened=0):
+		"""Close a playback session, recording the final position if given."""
+		endpoint = f"/api/session/{session_id}/close"
+
+		payload = None
+		if current_time is not None and duration:
+			payload = {
+				"currentTime": current_time,
+				"duration": duration,
+				"timeListened": time_listened
+			}
+
 		try:
-			response = requests.post(self.base_url + endpoint, headers=self.headers)
+			response = requests.post(self.base_url + endpoint, headers=self.headers, json=payload)
 			response.raise_for_status()
 			xbmc.log(f"Closed playback session: {session_id}", xbmc.LOGINFO)
 			return True
@@ -372,16 +389,16 @@ class AudioBookShelfLibraryService:
 			raise
 	
 	def download_podcast_episodes(self, podcast_id, episode_ids):
-		"""Download specific podcast episodes on the server"""
+		"""Download specific podcast episodes on the server (admin only)."""
 		try:
 			url = f"{self.base_url}/api/podcasts/{podcast_id}/download-episodes"
 			payload = episode_ids if isinstance(episode_ids, list) else [episode_ids]
-			
+
 			response = requests.post(url, headers=self.headers, json=payload, timeout=30)
 			response.raise_for_status()
-			result = response.json()
 			xbmc.log(f"Queued download for {len(payload)} episodes", xbmc.LOGINFO)
-			return result
+			# Success body is "OK", not JSON.
+			return self._json_or_ok(response)
 		except Exception as e:
 			xbmc.log(f"Error downloading podcast episodes: {str(e)}", xbmc.LOGERROR)
 			raise
@@ -413,29 +430,19 @@ class AudioBookShelfLibraryService:
 			raise
 	
 	def download_podcast_episodes_with_data(self, podcast_id, episode_data):
-		"""Download specific podcast episodes with full episode data"""
+		"""Download specific podcast episodes with full episode data (admin only)."""
 		try:
 			url = f"{self.base_url}/api/podcasts/{podcast_id}/download-episodes"
 			payload = [episode_data] if isinstance(episode_data, dict) else episode_data
-			
+
 			response = requests.post(url, headers=self.headers, json=payload, timeout=30)
 			response.raise_for_status()
-			
-			# Check if response has content
-			if response.text.strip():
-				result = response.json()
-				xbmc.log(f"Downloaded podcast episode with data: {episode_data.get('title', 'Unknown')}", xbmc.LOGINFO)
-				return result
-			else:
-				xbmc.log(f"Empty response from download API for: {episode_data.get('title', 'Unknown')}", xbmc.LOGWARNING)
-				return {"success": False, "message": "Empty response"}
+			title = episode_data.get('title', 'Unknown') if isinstance(episode_data, dict) else 'episodes'
+			xbmc.log(f"Queued download for: {title}", xbmc.LOGINFO)
+			# Success body is "OK", not JSON.
+			return self._json_or_ok(response)
 		except Exception as e:
-			# Suppress JSON parsing errors if functionality is working
-			error_msg = str(e)
-			if "Expecting value" in error_msg and "line 1 column 1" in error_msg:
-				xbmc.log(f"Suppressed JSON parsing error (functionality working): {error_msg}", xbmc.LOGDEBUG)
-			else:
-				xbmc.log(f"Error downloading podcast episodes with data: {error_msg}", xbmc.LOGERROR)
+			xbmc.log(f"Error downloading podcast episodes with data: {str(e)}", xbmc.LOGERROR)
 			raise
 	
 	def create_podcast_episode(self, podcast_id, episode_data):

@@ -38,11 +38,11 @@ msgstr ""
 
 # --- Settings: labels ---
 msgctxt "#30001"
-msgid "Server IP Address"
+msgid "Server address (IP, hostname, or full URL e.g. https://abs.example.com)"
 msgstr ""
 
 msgctxt "#30002"
-msgid "Server Port"
+msgid "Server port (ignored when the address is a full URL)"
 msgstr ""
 
 msgctxt "#30003"

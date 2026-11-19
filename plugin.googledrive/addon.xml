@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.googledrive" name="Google Drive" version="1.6.13" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.googledrive" name="Google Drive" version="1.6.14" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.clouddrive.common" version="1.5.20"/>
+		<import addon="script.module.clouddrive.common" version="1.5.21"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="entrypoint.py">
 		<provides>image audio video</provides>
@@ -48,7 +48,11 @@ Spela upp alla dina medier från Google Drive, inklusive videor, musik och bilde
 			<icon>icon.png</icon>
 			<fanart>fanart.jpg</fanart>
 		</assets>
-		<news>v1.6.13 released Nov 2, 2026:
+		<news>v1.6.14 released Nov 4, 2026:
+- An account whose sign-in has ended stops trying to renew it, also in the background, until you sign in again
+- Requires clouddrive.common 1.5.21
+
+v1.6.13 released Nov 2, 2026:
 - Sign in with your own Google app (a Google Cloud project of your own), for example while Google blocks new sign-ins to the add-on's app: see "Signing in with your own Google app" in the README
 - Requires clouddrive.common 1.5.20
 
@@ -70,11 +74,7 @@ v1.6.9 released Oct 30, 2026:
 
 v1.6.8 released Oct 24, 2026:
 - Removing an account can also revoke the add-on's access to your Google account
-- Requires clouddrive.common 1.5.10
-
-v1.6.7 released Oct 16, 2026:
-- Use Google Drive as a source in Kodi's file manager works again
-- Requires clouddrive.common 1.5.7</news>
+- Requires clouddrive.common 1.5.10</news>
 		<disclaimer lang="en_GB">
 This cloud drive addon uses a third-party authentication mechanism commonly known as OAuth 2.0.
 If you want to know more about OAuth 2.0 you can visit the following pages:

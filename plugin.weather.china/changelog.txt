@@ -1,0 +1,20 @@
+[B]1.0.2[/B] - 2026-11-16
+- Weather is now the primary add-on type, adding a Weather category in My add-ons
+
+[B]1.0.1[/B] - 2026-11-16
+- Fix: weather location buttons did nothing (unified plugin/weather entry point)
+- Add: manual Chinese city-name input for each location, station codes resolved automatically
+- Add: background service also publishes Kodi weather window (12600) properties
+- Add: logging and exception handling for weather provider calls
+
+[B]1.0.0[/B] - 2026-11-16
+- Initial release
+- Current conditions: temperature, feels-like, humidity, pressure, rain, wind, visibility, AQI/PM2.5, sunrise/sunset
+- 3/5/7 day forecast with day/night conditions, high/low temperatures, wind and precipitation
+- Chinese city search and switching: 2529 NMC stations + 3230 weather.com.cn city codes
+- CMA severe-weather alerts: type, Blue/Yellow/Orange/Red severity, colour coding, filtering, full text, nationwide list
+- 30 life indices
+- Two-source failover (nmc.cn / weather.com.cn), file cache and stale-cache fallback
+- UTF-8 Chinese UI with English and Simplified Chinese strings.po localisation (129 strings)
+- 20 condition icons, 5 alert-level icons, icon.png and fanart.jpg
+- Background service publishing Kodi weather Window Properties

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tvsplayer" name="TVS Player" version="1.1.1" provider-name="TVS Player">
+<addon id="plugin.video.tvsplayer" name="TVS Player" version="1.2.0" provider-name="TVS Player">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
     </requires>
@@ -60,7 +60,8 @@ TVS Player は Android（無料の TVS Player と TVS Player Pro）と、どの�
         <license>GPL-2.0-or-later</license>
         <website>https://tvsplayer.app</website>
         <source>https://github.com/gnardelli/tvsplayer-kodi</source>
-        <news>1.1.1 - Search works again: the keyboard opens from the main menu and the results list appears.
+        <news>1.2.0 - Channel names read correctly also when a line has a browser user agent with brackets and no quotes. The address of a single channel (.m3u8 stream) can be added as a playlist: it becomes a playlist with that channel. TVS Player in the browser and on Android: a QR code opens TVS Player Pro on Google Play on your phone.
+1.1.1 - Search works again: the keyboard opens from the main menu and the results list appears.
 1.1.0 - In 9 languages (English, Italian, French, German, Spanish, Portuguese, Polish, Chinese, Japanese). Playlists: the TV channels and radio stations of one playlist only (Playlists, then the playlist). When no link answers because the internet is slow or missing, a message says so. Main menu: TVS Player in the browser (tvsplayer.app) and on Android.
 1.0.2 - Description: TVS Player also on Android (free and Pro) and in the browser at tvsplayer.app.
 1.0.1 - Safer saving of playlists and favourites; slow streams are still tried; stream headers with "&amp;" (e.g. Referer) kept intact; accented names in local Latin-1 playlists.

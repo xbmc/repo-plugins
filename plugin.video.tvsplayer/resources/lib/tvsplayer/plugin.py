@@ -130,8 +130,12 @@ class Plugin(object):
         self._end()
 
     def do_about(self):
-        """tvsplayer.app and the Android apps (Kodi cannot open a web page: the address is shown)."""
-        xbmcgui.Dialog().ok(ADDON_NAME, _(30046))
+        """tvsplayer.app and the Android apps. Kodi cannot open a web page: the address is shown, then a
+        QR code of TVS Player Pro on Google Play to scan with the phone (Back closes it)."""
+        xbmcgui.Dialog().ok(ADDON_NAME, _(30046) + "\n\n" + _(30047))
+        qr = _translate_path(ADDON.getAddonInfo("path").rstrip("/\\") + "/resources/media/pro_qr.png")
+        if xbmcvfs.exists(qr):
+            xbmc.executebuiltin("ShowPicture(%s)" % qr)
         self._end_action()
 
     def _first_start(self):
@@ -330,7 +334,11 @@ class Plugin(object):
                 text = net.decode_text(text)
             else:
                 text = net.get_text(playlist["source"])
-            entries = m3u.parse(text, playlist["name"], playlist["type_mode"])
+            if playlist["kind"] != KIND_FILE and m3u.is_hls_stream(text):
+                # The address of one channel (.m3u8 stream), not a list: a playlist with that channel
+                entries = m3u.single(playlist["source"], playlist["name"])
+            else:
+                entries = m3u.parse(text, playlist["name"], playlist["type_mode"])
         if not entries:
             raise ValueError(_(30039))
         self.store.save_entries(playlist["id"], entries)

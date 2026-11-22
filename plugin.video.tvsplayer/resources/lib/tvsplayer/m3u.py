@@ -21,6 +21,7 @@ TYPE_TV = "tv"
 TYPE_RADIO = "radio"
 
 _ATTRIBUTE = re.compile(r'([\w-]+)="([^"]*)"')
+_ATTRIBUTE_SPAN = re.compile(r'[\w-]+="[^"]*"')
 _AUDIO_EXTENSIONS = (".mp3", ".aac", ".ogg", ".opus", ".m4a", ".pls", ".flac", ".wav")
 
 
@@ -72,14 +73,53 @@ def parse(text, default_group, type_mode=TYPE_AUTO):
 
 
 def _display_name(header):
-    """Text after the first comma outside quotes: '-1 tvg-name="a,b",Name' -> 'Name'."""
-    in_quotes = False
-    for i, c in enumerate(header):
+    """Name of an #EXTINF line: '-1 tvg-name="a,b",Name' -> 'Name'.
+
+    The name starts after the last key="value" attribute, at the first comma outside quotes and
+    brackets: works with user-agent=Mozilla/5.0 (KHTML, like Gecko) Chrome/... without quotes or
+    with only one (same rule as tvsplayer.app, Android and Samsung).
+    """
+    start = 0
+    for m in _ATTRIBUTE_SPAN.finditer(header):
+        start = m.end()
+    in_quotes, depth, first = False, 0, -1
+    for i in range(start, len(header)):
+        c = header[i]
         if c == '"':
             in_quotes = not in_quotes
-        elif c == "," and not in_quotes:
-            return header[i + 1:].strip()
-    return ""
+        elif in_quotes:
+            continue
+        elif c == "(":
+            depth += 1
+        elif c == ")":
+            depth = max(0, depth - 1)
+        elif c == ",":
+            if depth == 0:
+                return header[i + 1:].strip()
+            if first < 0:
+                first = i
+    return header[first + 1:].strip() if first >= 0 else ""   # bracket never closed
+
+
+def is_hls_stream(text):
+    """The address is a single HLS stream (one channel), not a playlist of channels."""
+    return re.search(r"#EXT-X-(STREAM-INF|TARGETDURATION|MEDIA-SEQUENCE)", text[:8192], re.I) is not None
+
+
+def single(url, group):
+    """An HLS stream as a one-channel playlist, named after the file or, if generic, the site."""
+    file = url.split("?")[0].split("#")[0].rstrip("/").rsplit("/", 1)[-1]
+    try:
+        from urllib.parse import unquote
+        file = unquote(file)
+    except Exception:
+        pass
+    file = re.sub(r"[_+]+", " ", re.sub(r"\.(m3u8?|ts|mp4)$", "", file, flags=re.I)).strip()
+    host = re.match(r"^https?://([^/:?#]+)", url, re.I)
+    host = re.sub(r"^www\.", "", host.group(1), flags=re.I) if host else url
+    generic = re.match(r"^(index|master|playlist|chunklist|stream|live|main|mono|manifest|video|hls)", file, re.I)
+    name = host if not file or generic else file
+    return [{"name": name, "logo": "", "group": group, "url": url, "type": TV}]
 
 
 def _type_of(type_mode, attrs, group, url):

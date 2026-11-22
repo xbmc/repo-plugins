@@ -193,6 +193,10 @@ msgctxt "#30046"
 msgid "Your playlists and radio also in any web browser, nothing to install: https://tvsplayer.app\nOn Android phones and tablets: TVS Player (free) and TVS Player Pro (TV guide, rewind, recordings) on Google Play."
 msgstr "在任何浏览器中也能使用你的播放列表和电台，无需安装：https://tvsplayer.app/zh/\nAndroid 手机和平板：Google Play 上的 TVS Player（免费）和 TVS Player Pro（电视指南、回看、录制）。"
 
+msgctxt "#30047"
+msgid "Scan the code with your phone to open TVS Player Pro on Google Play."
+msgstr "用手机扫描二维码，在 Google Play 打开 TVS Player Pro。"
+
 msgctxt "#30100"
 msgid "General"
 msgstr "常规"

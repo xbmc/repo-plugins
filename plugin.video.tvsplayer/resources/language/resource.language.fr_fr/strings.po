@@ -193,6 +193,10 @@ msgctxt "#30046"
 msgid "Your playlists and radio also in any web browser, nothing to install: https://tvsplayer.app\nOn Android phones and tablets: TVS Player (free) and TVS Player Pro (TV guide, rewind, recordings) on Google Play."
 msgstr "Vos playlists et la radio aussi dans n’importe quel navigateur, sans rien installer : https://tvsplayer.app/fr/\nSur téléphones et tablettes Android : TVS Player (gratuit) et TVS Player Pro (guide TV, retour en arrière, enregistrements) sur Google Play."
 
+msgctxt "#30047"
+msgid "Scan the code with your phone to open TVS Player Pro on Google Play."
+msgstr "Scannez le code avec votre téléphone pour ouvrir TVS Player Pro sur Google Play."
+
 msgctxt "#30100"
 msgid "General"
 msgstr "Général"

@@ -1,0 +1,33 @@
+[B]1.0.4[/B] - 2026-11-22
+- Fixed: the Settings → Services → Weather → Location 1/2/3 buttons still opened a keyboard input for Chinese city names on PC Kodi
+- Added: location buttons now open a "province → city" list selection first, requiring no typing at all; a final "Search city" entry keeps manual input available as a fallback
+- Note: v1.0.3 only covered the add-on menu's "Change city"; v1.0.4 extends the same no-typing flow to the weather-service location buttons
+
+[B]1.0.3[/B] - 2026-11-21
+- Fixed: PC Kodi's virtual keyboard cannot type Chinese, making city search / switching unusable
+- Added: "Browse by province (no typing)" entry pinned to the top of the Change city menu; arrow keys alone select a province and then a city
+- Added: bilingual strings 32192-32194 (142 strings in total); no new runtime dependencies
+
+[B]1.0.2[/B] - 2026-11-16
+- Added: the add-on now has its own "Weather" category in My add-ons, matching official weather add-ons, implemented by making the weather extension the primary add-on type
+- Note: a category correction over 1.0.1; no functional change
+
+[B]1.0.1[/B] - 2026-11-16
+- Fixed: clicking "Location 1" and friends in Kodi's weather settings did nothing (the add-on and weather service now share default.py as the entry point, avoiding RunScript being mistaken for a plugin call)
+- Added: each location supports typing a Chinese city name directly; the add-on resolves the matching NMC station code and China Weather Network city code automatically
+- Added: the background service now also writes to Kodi's weather window Window(12600), so skin weather widgets have data even when the location button is not used
+- Added: weather service call logging and exception fallback; search kodi.log for "weather provider called" / "weather provider failed" to troubleshoot
+- Upgrade note: if 1.0.0 is installed, overwrite with this version directly (the version number must increase for Kodi to recognise an upgrade)
+
+[B]1.0.0[/B] - 2026-11-16
+- First release
+- Current conditions: temperature, feels-like, humidity, pressure, precipitation, wind, visibility, AQI / PM2.5, sunrise / sunset
+- 3 / 5 / 7-day forecast with day / night conditions, high / low, wind direction / force, precipitation
+- Chinese city search and switching with a bundled index of 2529 NMC stations + 3230 China Weather Network city codes
+- CMA severe-weather alerts: alert type and Blue / Yellow / Orange / Red severity, colour coding, filtering, full alert text and a nationwide alert list
+- 30 life indices
+- Dual-source automatic failover (NMC / China Weather Network), file caching and stale cache when offline
+- Chinese UTF-8 UI end to end, bilingual strings.po localisation (128 strings)
+- 20 weather icons and 5 alert-severity icons, icon / fanart
+- Background service publishing Kodi skin weather Window Properties
+- Full documentation, offline self-tests and one-command packaging tools

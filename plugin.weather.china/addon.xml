@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.weather.china"
+       name="中国天气 China Weather"
+       version="1.0.4"
+       provider-name="RenJunJie2003">
+  <requires>
+    <!-- Kodi 19 (Matrix) 起内置 Python 3；本插件全部代码使用 Python 3 -->
+    <import addon="xbmc.python" version="3.0.0"/>
+  </requires>
+
+  <!-- 天气服务入口：注册后才会出现在「设置 → 服务 → 天气」的天气源列表。
+       与官方 weather.openmeteo 一致，weather 与 pluginsource 共用 default.py，
+       由 default.py 按 sys.argv[0] 区分插件调用与 RunScript/天气服务调用。
+       放在第一个扩展点，使插件主类型为天气，从而在「我的插件」里生成「天气」分类。 -->
+  <extension point="xbmc.python.weather" library="default.py"/>
+
+  <!-- 交互式插件入口：菜单 / 中文城市搜索 / 预报 / 预警 -->
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>executable</provides>
+  </extension>
+
+  <!-- 可选后台服务：定时把天气写入 Kodi 皮肤可读取的 Window Properties -->
+  <extension point="xbmc.service" library="service.py"/>
+
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <license>GPL-3.0</license>
+    <source>https://github.com/RenJunJie2003/kodi-weather-china</source>
+    <website>http://www.nmc.cn/</website>
+    <forum>https://github.com/RenJunJie2003/kodi-weather-china/issues</forum>
+    <email>2085547707@qq.com</email>
+    <summary lang="zh_CN">中国天气：实时天气、多日预报、中文城市搜索与中国气象预警</summary>
+    <summary lang="en_GB">China Weather: current conditions, multi-day forecast, Chinese city search and official CMA weather alerts</summary>
+    <description lang="zh_CN">基于中央气象台（nmc.cn）与中国天气网（weather.com.cn）公开接口的 Kodi 天气插件。提供实时实况、7 天预报、中文城市名搜索与切换、国家级气象预警（含预警类型与蓝/黄/橙/红等级）、生活指数、UTF-8 中文界面与 strings.po 中英文本地化。无需 API Key，无需注册。</description>
+    <description lang="en_GB">A Kodi weather add-on powered by the public endpoints of China's National Meteorological Center (nmc.cn) and China Weather Network (weather.com.cn). Features live observations, a 7-day forecast, Chinese city search and switching, official severe-weather alerts with type and Blue/Yellow/Orange/Red severity, life indices, a fully UTF-8 Chinese UI and strings.po localisation. No API key or registration required.</description>
+    <disclaimer lang="zh_CN">气象数据来自公开接口，仅供个人参考；预警与决策请以中央气象台及当地气象部门正式发布为准。</disclaimer>
+    <disclaimer lang="en_GB">Data comes from public endpoints for personal reference only. Always follow official issuances for safety-critical decisions.</disclaimer>
+    <news>v1.0.4 - Weather-service location buttons now use province-to-city list selection (no typing) on PC Kodi.</news>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

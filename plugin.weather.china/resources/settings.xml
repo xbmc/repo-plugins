@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Kodi 19+ (Matrix / Nexus / Omega) settings.xml
+  所有 label / help / option label 均指向 resources/language/*/strings.po 的 32xxx 编号。
+  数值型设置统一用 string 承载，由 lib/config.py 做安全的 int 转换与默认值兜底，
+  避免不同 Kodi 版本对 integer/slider 控件解析差异导致设置页打不开。
+-->
+<settings version="1">
+  <section id="plugin.weather.china">
+
+    <!-- Kodi「设置 → 服务 → 天气」会读取 location1..3 这几个按钮，
+         点击后运行 weather.py 并传入 locationN 参数进行中文城市搜索。 -->
+    <category id="locations" label="32181" help="32185">
+      <group id="1" label="32181">
+        <setting id="location1" type="string" label="32182" help="32185"><level>0</level><default></default><constraints><allowempty>true</allowempty></constraints><control type="button" format="action"><data>RunScript(plugin.weather.china,location1)</data></control></setting>
+        <setting id="location1_name" type="string" label="32190" help="32191"><level>0</level><default></default><constraints><allowempty>true</allowempty></constraints><control type="edit" format="string"/></setting>
+        <setting id="location2" type="string" label="32183" help="32185"><level>0</level><default></default><constraints><allowempty>true</allowempty></constraints><control type="button" format="action"><data>RunScript(plugin.weather.china,location2)</data></control></setting>
+        <setting id="location2_name" type="string" label="32190" help="32191"><level>0</level><default></default><constraints><allowempty>true</allowempty></constraints><control type="edit" format="string"/></setting>
+        <setting id="location3" type="string" label="32184" help="32185"><level>0</level><default></default><constraints><allowempty>true</allowempty></constraints><control type="button" format="action"><data>RunScript(plugin.weather.china,location3)</data></control></setting>
+        <setting id="location3_name" type="string" label="32190" help="32191"><level>0</level><default></default><constraints><allowempty>true</allowempty></constraints><control type="edit" format="string"/></setting>
+      </group>
+    </category>
+
+    <category id="general" label="32000" help="">
+      <group id="1" label="32001">
+        <setting id="city_name" type="string" label="32010" help="32011">
+          <default>北京</default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+        <setting id="nmc_code" type="string" label="32012" help="32013">
+          <default>Wqsps</default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+        <setting id="wcn_code" type="string" label="32014" help="32015">
+          <default>101010100</default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"/>
+        </setting>
+        <setting id="temp_unit" type="string" label="32016" help="">
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="32017">0</option>
+              <option label="32018">1</option>
+            </options>
+          </constraints>
+          <control type="list" format="string"/>
+        </setting>
+        <setting id="forecast_days" type="string" label="32019" help="">
+          <default>7</default>
+          <constraints>
+            <options>
+              <option label="32020">3</option>
+              <option label="32021">5</option>
+              <option label="32022">7</option>
+            </options>
+          </constraints>
+          <control type="list" format="string"/>
+        </setting>
+      </group>
+    </category>
+
+    <category id="sources" label="32002" help="">
+      <group id="1" label="32002">
+        <setting id="primary_source" type="string" label="32023" help="">
+          <default>auto</default>
+          <constraints>
+            <options>
+              <option label="32024">auto</option>
+              <option label="32025">nmc</option>
+              <option label="32026">wcn</option>
+            </options>
+          </constraints>
+          <control type="list" format="string"/>
+        </setting>
+        <setting id="enable_wcn" type="boolean" label="32029" help="32030">
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="timeout" type="string" label="32027" help="">
+          <default>10</default>
+          <control type="edit" format="string"/>
+        </setting>
+        <setting id="cache_ttl" type="string" label="32028" help="">
+          <default>10</default>
+          <control type="edit" format="string"/>
+        </setting>
+      </group>
+    </category>
+
+    <category id="alerts" label="32003" help="">
+      <group id="1" label="32003">
+        <setting id="enable_alerts" type="boolean" label="32031" help="">
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="alert_scope" type="string" label="32032" help="">
+          <default>all</default>
+          <constraints>
+            <options>
+              <option label="32033">local</option>
+              <option label="32034">national</option>
+              <option label="32035">all</option>
+            </options>
+          </constraints>
+          <control type="list" format="string"/>
+        </setting>
+        <setting id="alert_min_level" type="string" label="32036" help="">
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="32037">0</option>
+              <option label="32038">1</option>
+              <option label="32039">2</option>
+              <option label="32040">3</option>
+            </options>
+          </constraints>
+          <control type="list" format="string"/>
+        </setting>
+        <setting id="national_limit" type="string" label="32041" help="">
+          <default>30</default>
+          <control type="edit" format="string"/>
+        </setting>
+      </group>
+    </category>
+
+    <category id="advanced" label="32004" help="">
+      <group id="1" label="32004">
+        <setting id="skin_props" type="boolean" label="32042" help="32043">
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="refresh_interval" type="string" label="32044" help="">
+          <default>15</default>
+          <control type="edit" format="string"/>
+        </setting>
+        <setting id="debug" type="boolean" label="32045" help="32046">
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+    </category>
+
+  </section>
+</settings>

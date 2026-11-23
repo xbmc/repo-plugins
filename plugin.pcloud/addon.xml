@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.pcloud" name="pCloud" version="1.0.0" provider-name="Carlos Guzman (cguZZman)">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0"/>
+		<import addon="script.module.clouddrive.common" version="1.5.21"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="entrypoint.py">
+		<provides>image audio video</provides>
+	</extension>
+	<extension point="xbmc.service" library="service.py"/>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en_GB">Play your videos, music and pictures from pCloud</summary>
+		<description lang="en_GB">Browse your pCloud in Kodi and play your videos, music and pictures.
+- Any number of pCloud accounts, in the US or in Europe
+- Search your pCloud
+- Subtitles stored next to your videos are loaded automatically
+- Videos show the plot, cast and artwork of the Kodi .nfo files next to them
+- Export videos and music to the Kodi library (.strm files)
+- Use pCloud as a source
+- Read-only: the add-on never changes or deletes your files
+Sign in from your phone or computer with a short code shown in Kodi.</description>
+		<disclaimer lang="en_GB">This add-on is not affiliated with or endorsed by pCloud.</disclaimer>
+		<summary lang="es_ES">Reproduce tus videos, música e imágenes de pCloud</summary>
+		<description lang="es_ES">Explora tu pCloud en Kodi y reproduce tus videos, música e imágenes.
+- Cualquier número de cuentas de pCloud, en EE. UU. o en Europa
+- Busca en tu pCloud
+- Los subtítulos guardados junto a tus videos se cargan automáticamente
+- Los videos muestran la trama, el reparto y las imágenes de los archivos .nfo de Kodi que están junto a ellos
+- Exporta videos y música a la biblioteca de Kodi (archivos .strm)
+- Usa pCloud como fuente
+- Solo lectura: el complemento nunca cambia ni elimina tus archivos
+Inicia sesión desde tu teléfono o computadora con un código corto que muestra Kodi.</description>
+		<disclaimer lang="es_ES">Este complemento no está afiliado a pCloud ni cuenta con su respaldo.</disclaimer>
+		<summary lang="pt_BR">Reproduza seus vídeos, músicas e imagens do pCloud</summary>
+		<description lang="pt_BR">Navegue pelo seu pCloud no Kodi e reproduza seus vídeos, músicas e imagens.
+- Qualquer número de contas do pCloud, nos EUA ou na Europa
+- Pesquise no seu pCloud
+- As legendas salvas junto aos seus vídeos são carregadas automaticamente
+- Os vídeos mostram a sinopse, o elenco e as imagens dos arquivos .nfo do Kodi que estão junto a eles
+- Exporte vídeos e músicas para a biblioteca do Kodi (arquivos .strm)
+- Use o pCloud como fonte
+- Somente leitura: o add-on nunca altera nem exclui seus arquivos
+Entre na conta pelo celular ou computador com um código curto mostrado no Kodi.</description>
+		<disclaimer lang="pt_BR">Este add-on não é afiliado ao pCloud nem endossado por ele.</disclaimer>
+		<license>GPL-3.0-or-later</license>
+		<source>https://github.com/cguZZman/plugin.pcloud</source>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.jpg</fanart>
+		</assets>
+		<news>v1.0.0 released Nov 23, 2026:
+- First version: browse, search and play your pCloud files, US and Europe accounts
+- Requires clouddrive.common 1.5.21</news>
+	</extension>
+</addon>

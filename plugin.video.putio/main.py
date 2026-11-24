@@ -121,13 +121,13 @@ def populate_dir(files):
     xbmcplugin.endOfDirectory(handle=PLUGIN_HANDLE)
 
 
-def play(item):
+def play(item, download_token):
     """Plays the given item from where it was left off"""
 
     thumbnail = item.screenshot or item.icon
     li = xbmcgui.ListItem(label=item.name)
     li.setArt({'icon': thumbnail,'thumb': thumbnail})
-    li.setPath(item.stream_url())
+    li.setPath(item.stream_url(download_token))
     li.setMimeType(mimetype=item.content_type)
 
     if item.is_video:
@@ -196,7 +196,7 @@ def main():
         return
 
     if action == 'play':
-        play(item=item)
+        play(item=item, download_token=handler.download_token())
         return
 
 

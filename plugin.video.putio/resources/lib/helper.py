@@ -39,6 +39,9 @@ class PutioApiHandler(object):
             return True
         return False
 
+    def download_token(self):
+        return self.client.Account.download_token()
+
     def is_account_active(self):
         r = self.client.Account.info()
         if r['info'] and r['info']['account_status'] and r['info']['account_status'] == 'active':

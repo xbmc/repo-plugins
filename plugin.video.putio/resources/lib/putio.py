@@ -2,7 +2,6 @@
 import os
 import json
 import logging
-import binascii
 import webbrowser
 from urllib.parse import urlencode
 from datetime import datetime
@@ -13,13 +12,6 @@ import xbmcvfs
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
-
-KB = 1024
-MB = 1024 * KB
-
-# Read and write operations are limited to this chunk size.
-# This can make a big difference when dealing with large files.
-CHUNK_SIZE = 256 * KB
 
 BASE_URL = 'https://api.put.io/v2'
 ACCESS_TOKEN_URL = 'https://api.put.io/v2/oauth2/access_token'
@@ -96,19 +88,14 @@ class Client(object):
         Wrapper around requests.request()
 
         Prepends BASE_URL to path.
-        Inserts oauth_token to query params.
+        Sends the OAuth token in the Authorization header.
         Parses response as JSON and returns it.
 
         """
-        if not params:
-            params = {}
-
         if not headers:
             headers = {}
 
-        # All requests must include oauth_token
-        params['oauth_token'] = self.access_token
-
+        headers['Authorization'] = 'Token %s' % self.access_token
         headers['Accept'] = 'application/json'
 
         url = BASE_URL + path
@@ -173,9 +160,8 @@ class _File(_BaseResource):
         files = d['files']
         return [cls(f) for f in files]
 
-    # FIXME: temporarily added.
-    def stream_url(self):
-        return BASE_URL + '/files/%s/stream?oauth_token=%s' % (self.id, self.client.access_token)
+    def stream_url(self, download_token):
+        return BASE_URL + '/files/%s/stream?%s' % (self.id, urlencode({'oauth_token': download_token}))
 
     # FIXME: temporarily added.
     def subtitles(self):
@@ -186,7 +172,7 @@ class _File(_BaseResource):
         """
         subtitles_list_url = '/files/%s/subtitles' % self.id
         subtitles_list_response = self.client.request(subtitles_list_url)
-        assert subtitles_list_response.status_code == 200
+        assert subtitles_list_response['status'] == 'OK'
         # NOTE: The subtitle key (used below) is a bunch of base64 encoded bits. They are not
         # deterministic, and may change even if the video id and each subtitle file contents
         # stays the same. Deleting any previous temporary subtitle files (for all videos) to
@@ -254,90 +240,6 @@ class _File(_BaseResource):
     def dir(self):
         """List the files under directory."""
         return self.list(parent_id=self.id)
-
-    def download(self, dest='.', delete_after_download=False, chunk_size=CHUNK_SIZE):
-        if self.content_type == 'application/x-directory':
-            self._download_directory(dest, delete_after_download, chunk_size)
-        else:
-            self._download_file(dest, delete_after_download, chunk_size)
-
-    def _download_directory(self, dest, delete_after_download, chunk_size):
-        name = self.name
-        if isinstance(name, unicode):
-            name = name.encode('utf-8', 'replace')
-
-        dest = os.path.join(dest, name)
-        if not os.path.exists(dest):
-            os.mkdir(dest)
-
-        for sub_file in self.dir():
-            sub_file.download(dest, delete_after_download, chunk_size)
-
-        if delete_after_download:
-            self.delete()
-
-    def _verify_file(self, filepath):
-        logger.info('verifying crc32...')
-        filesize = os.path.getsize(filepath)
-        if self.size != filesize:
-            logging.error('file %s is %d bytes, should be %s bytes' % (filepath, filesize, self.size))
-            return False
-
-        crcbin = 0
-        with open(filepath, 'rb') as f:
-            while True:
-                chunk = f.read(CHUNK_SIZE)
-                if not chunk:
-                    break
-
-                crcbin = binascii.crc32(chunk, crcbin) & 0xffffffff
-
-        crc32 = '%08x' % crcbin
-
-        if crc32 != self.crc32:
-            logging.error('file %s CRC32 is %s, should be %s' % (filepath, crc32, self.crc32))
-            return False
-
-        return True
-
-    def _download_file(self, dest, delete_after_download, chunk_size):
-        name = self.name
-        if isinstance(name, unicode):
-            name = name.encode('utf-8', 'replace')
-
-        filepath = os.path.join(dest, name)
-        if os.path.exists(filepath):
-            first_byte = os.path.getsize(filepath)
-
-            if first_byte == self.size:
-                logger.warning('file %s exists and is the correct size %d' % (filepath, self.size))
-        else:
-            first_byte = 0
-
-        logger.debug('file %s is currently %d, should be %d' % (filepath, first_byte, self.size))
-
-        if self.size == 0:
-            # Create an empty file
-            open(filepath, 'w').close()
-            logger.debug('created empty file %s' % filepath)
-        else:
-            if first_byte < self.size:
-                with open(filepath, 'ab') as f:
-                    headers = {'Range': 'bytes=%d-' % first_byte}
-
-                    logger.debug('request range: bytes=%d-' % first_byte)
-                    response = self.client.request('/files/%s/download' % self.id,
-                                                headers=headers,
-                                                raw=True,
-                                                stream=True)
-
-                    for chunk in response.iter_content(chunk_size=chunk_size):
-                        if chunk:  # filter out keep-alive new chunks
-                            f.write(chunk)
-
-        if self._verify_file(filepath):
-            if delete_after_download:
-                self.delete()
 
     def delete(self):
         return self.client.request('/files/delete', method='POST',
@@ -409,8 +311,13 @@ class _Transfer(_BaseResource):
 class _Account(_BaseResource):
 
     @classmethod
-    def info(cls):
-        return cls.client.request('/account/info', method='GET')
+    def info(cls, download_token=False):
+        params = {'download_token': 1} if download_token else None
+        return cls.client.request('/account/info', method='GET', params=params)
+
+    @classmethod
+    def download_token(cls):
+        return cls.info(download_token=True)['info']['download_token']
 
     @classmethod
     def settings(cls):

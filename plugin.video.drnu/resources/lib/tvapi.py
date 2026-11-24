@@ -381,21 +381,17 @@ class Api:
     def unfold_list(self, item: dict, filter_kids: bool = False, headers: Optional[dict] = None,
                     progress: Any = None, use_cache: bool = True) -> list[dict]:
         items = item['items']
-        if 'next' in item['paging']:
+        # a falsy 'next' means there are no further pages. DR's /search sends
+        # the key with an empty string, and requesting that empty path hit the
+        # bare API root and raised on its HTML 404, so every search result
+        # crashed before showing anything (see issue 136)
+        while item['paging'].get('next'):
             if progress is not None:
                 if progress.iscanceled():
                     return items
                 progress.update(self.progress_prc, self.msg + f"page {item['paging']['page']} of {item['paging']['total']}")
-
-            next_js = self.get_next(item['paging']['next'], headers=headers, use_cache=use_cache)
-            items += next_js['items']
-            while 'next' in next_js['paging']:
-                if progress is not None:
-                    if progress.iscanceled():
-                        return items
-                    progress.update(self.progress_prc, self.msg + f"page {next_js['paging']['page']} of {next_js['paging']['total']}")
-                next_js = self.get_next(next_js['paging']['next'], headers=headers, use_cache=use_cache)
-                items += next_js['items']
+            item = self.get_next(item['paging']['next'], headers=headers, use_cache=use_cache)
+            items += item['items']
         if filter_kids:
             items = [item for item in items if not self.kids_item(item)]
         return items

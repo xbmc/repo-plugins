@@ -1,3 +1,8 @@
+v3.1.1 (2026-11-24) Omer Murat Yildirim <omermuratyildirim@gmail.com>
+    * Play streams with the account download token (#26)
+    * Send the OAuth token in the Authorization header instead of the URL (#26)
+    * Check for status OK instead of status code 200
+
 v3.1.0 (2024-10-08) Berkan Teber <berkan@put.io>
     * Better identify media files
     * Append language code to subtitle names for language identification

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="7.2.0" name="DR TV" provider-name="TermeHansen">
+<addon id="plugin.video.drnu" version="7.2.1" name="DR TV" provider-name="TermeHansen">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
         <import addon="script.module.dateutil" version="2.8.2" />
@@ -32,6 +32,10 @@
             <screenshot>resources/media/Screenshot3.jpg</screenshot>
             <screenshot>resources/media/Screenshot4.jpg</screenshot>
        </assets>
+       <news>[B]Version 7.2.1 - 2026-11-22[/B]
+        - Fix search results never opening: an empty "next" page marker was
+          read as another page, so listing crashed with an API error
+       </news>
        <news>[B]Version 7.2.0 - 2026-10-24[/B]
         - New setting "Show duration in titles" (default off): playable items
           get their duration appended as [H:MM] to the title

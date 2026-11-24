@@ -515,7 +515,9 @@ class DrDkTvAddon:
     def _route_searchresult(self, params):
         with self.search_path.open('rb') as fh:
             search_results = pickle.load(fh)
-        self.listEpisodes(self.api.unfold_list(search_results[params['searchresult']]))
+        # search's own request is authorized, so its later pages must be too
+        headers = {"X-Authorization": f'Bearer {self.api.profile_token()}'}
+        self.listEpisodes(self.api.unfold_list(search_results[params['searchresult']], headers=headers))
 
     def _route_listvideos(self, params):
         seasons = params.get('seasons', 'False') == 'True'

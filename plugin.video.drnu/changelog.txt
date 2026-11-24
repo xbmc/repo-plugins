@@ -2,7 +2,16 @@
 - New setting "Show duration in titles" (default off): playable items get
   their duration appended as [H:MM] to the title
 
-[B]Version 7.1.1 - 2026-10-16[/B]
+[B]Version 7.2.1 - 2026-11-22[/B]
+- Fix search results never opening: DR's search endpoint reports the next
+  page as an empty string rather than omitting it, and the paging loop
+  treated the key's presence as "there is another page", so it requested the
+  bare API root, got an HTML 404 and raised an API error instead of listing
+  the results (issue 136)
+- The later pages of a search result are now requested with the same
+  authorization header as the search itself, instead of anonymously
+
+[B]Version 7.2.0 - 2026-10-24[/B]
 - Fix the addon failing to load on the Windows and Xbox builds of Kodi 20/21,
   which bundle Python 3.8: the type annotations added in 7.1.0 (list[dict],
   dict[str, str]) are only valid from Python 3.9 and were evaluated at import

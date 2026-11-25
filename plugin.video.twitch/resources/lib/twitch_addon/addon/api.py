@@ -12,7 +12,7 @@
 import json
 import sys
 
-from . import cache, utils
+from . import cache, utils, gql_search
 from .common import kodi, log_utils
 from .constants import Keys, SCOPES
 from .error_handling import api_error_handler
@@ -23,6 +23,13 @@ from twitch import oauth
 from twitch.api import usher
 from twitch.api import helix as twitch
 from twitch.api.parameters import Language, Boolean, VideoSort, PeriodHelix
+
+try:
+    from inspect import signature as _signature
+    # Older library versions don't accept the supported_codecs keyword; degrade gracefully.
+    _USHER_SUPPORTS_CODECS = 'supported_codecs' in _signature(usher.live_request).parameters
+except Exception:
+    _USHER_SUPPORTS_CODECS = False
 
 i18n = utils.i18n
 
@@ -38,6 +45,9 @@ class Twitch:
     required_scopes = SCOPES
 
     def __init__(self):
+        # Silently refresh the Helix OAuth token if it is (near) expired (Device Code Flow).
+        utils.ensure_valid_token()
+        self.access_token = utils.get_oauth_token(token_only=True, required=False)
         self.queries.CLIENT_ID = self.client_id
         self.queries.CLIENT_SECRET = self.client_secret
         self.queries.OAUTH_TOKEN = self.access_token
@@ -72,7 +82,7 @@ class Twitch:
                             '[CR]'.join([
                                 i18n('missing_scopes') % missing_scopes,
                                 i18n('get_new_oauth_token') %
-                                (i18n('settings'), i18n('login'), i18n('get_oauth_token'))
+                                (i18n('settings'), i18n('login'), i18n('device_login'))
                             ])
                         )
                         log_utils.log('Error: Current OAuth token is missing required scopes |%s|' % missing_scopes,
@@ -83,27 +93,28 @@ class Twitch:
                 else:
                     return False
             else:
-                matches_default = token_check['client_id'] == utils.get_client_id(default=True)
-                log_utils.log('Error: OAuth Client-ID mismatch', log_utils.LOGERROR)
-                if matches_default:
-                    _ = kodi.Dialog().ok(
-                        i18n('oauth_token'),
-                        '[CR]'.join([i18n('client_id_mismatch'), i18n('ok_to_resolve')])
-                    )
-                    utils.clear_client_id()
-                    self.client_id = utils.get_client_id(default=True)
-                    self.queries.CLIENT_ID = self.client_id
-                    self.client = oauth.clients.MobileClient(self.client_id, self.client_secret)
-                else:
-                    _ = kodi.Dialog().ok(
-                        i18n('oauth_token'),
-                        '[CR]'.join([
-                            i18n('client_id_mismatch'),
-                            i18n('get_new_oauth_token') %
-                            (i18n('settings'), i18n('login'), i18n('get_oauth_token'))
-                        ])
-                    )
-                    return False
+                # The stored token belongs to a different Client-ID than the configured one. The
+                # configured Client-ID is the user's deliberate setting, so the stale token is what
+                # has to go -- discard it and ask for a new login.
+                #
+                # Do NOT clear the configured Client-ID here (as this used to do when the token
+                # matched the bundled one). Following the README, a user logs in first and enters
+                # their own Client-ID afterwards, which lands exactly in this branch: clearing the
+                # setting sent them back to the bundled Client-ID, which is confidential and cannot
+                # refresh, so every subsequent login died again an hour later -- and re-entering the
+                # Client-ID triggered the very same wipe. See issue #712.
+                log_utils.log('Error: OAuth Client-ID mismatch, discarding the stored token',
+                              log_utils.LOGERROR)
+                utils.clear_oauth_tokens()
+                _ = kodi.Dialog().ok(
+                    i18n('oauth_token'),
+                    '[CR]'.join([
+                        i18n('client_id_mismatch'),
+                        i18n('get_new_oauth_token') %
+                        (i18n('settings'), i18n('login'), i18n('device_login'))
+                    ])
+                )
+                return False
 
     @cache.cache_method(cache_limit=1)
     def valid_private_token(self, client_id, token):  # client_id used for unique caching only
@@ -230,6 +241,10 @@ class Twitch:
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_channel_search(self, search_query, after='MA==', first=20):
+        if utils.use_gql_search():
+            gql = gql_search.search(search_query, 'channels')
+            if gql is not None:
+                return gql  # GQL ok -> use it; else fall back to Helix below
         results = self.api.search.get_channels(search_query=search_query, after=after, first=first,
                                                live_only=Boolean.FALSE)
         return self.error_check(results)
@@ -237,6 +252,10 @@ class Twitch:
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_stream_search(self, search_query, after='MA==', first=20):
+        if utils.use_gql_search():
+            gql = gql_search.search(search_query, 'streams')
+            if gql is not None:
+                return gql
         results = self.api.search.get_channels(search_query=search_query, after=after, first=first,
                                                live_only=Boolean.TRUE)
         return self.error_check(results)
@@ -244,6 +263,10 @@ class Twitch:
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_game_search(self, search_query, after='MA==', first=20):
+        if utils.use_gql_search():
+            gql = gql_search.search(search_query, 'games')
+            if gql is not None:
+                return gql
         results = self.api.search.get_categories(search_query=search_query, after=after, first=first)
         return self.error_check(results)
 
@@ -329,10 +352,17 @@ class Twitch:
         results = self.error_check(results)
         return results
 
+    @staticmethod
+    def _codec_kwargs():
+        codecs = utils.get_supported_codecs()
+        if codecs and _USHER_SUPPORTS_CODECS:
+            return {'supported_codecs': codecs}
+        return {}
+
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_vod(self, video_id):
-        results = self.usher.video(video_id, headers=self.get_private_credential_headers())
+        results = self.usher.video(video_id, headers=self.get_private_credential_headers(), **self._codec_kwargs())
         return self.error_check(results, private=True)
 
     @api_error_handler
@@ -343,25 +373,25 @@ class Twitch:
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_live(self, name):
-        results = self.usher.live(name, headers=self.get_private_credential_headers())
+        results = self.usher.live(name, headers=self.get_private_credential_headers(), **self._codec_kwargs())
         return self.error_check(results, private=True)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def live_request(self, name):
         if not utils.inputstream_adpative_supports('EXT-X-DISCONTINUITY'):
-            results = self.usher.live_request(name, platform='ps4', headers=self.get_private_credential_headers())
+            results = self.usher.live_request(name, platform='ps4', headers=self.get_private_credential_headers(), **self._codec_kwargs())
         else:
-            results = self.usher.live_request(name, headers=self.get_private_credential_headers())
+            results = self.usher.live_request(name, headers=self.get_private_credential_headers(), **self._codec_kwargs())
         return self.error_check(results, private=True)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def video_request(self, video_id):
         if not utils.inputstream_adpative_supports('EXT-X-DISCONTINUITY'):
-            results = self.usher.video_request(video_id, platform='ps4', headers=self.get_private_credential_headers())
+            results = self.usher.video_request(video_id, platform='ps4', headers=self.get_private_credential_headers(), **self._codec_kwargs())
         else:
-            results = self.usher.video_request(video_id, headers=self.get_private_credential_headers())
+            results = self.usher.video_request(video_id, headers=self.get_private_credential_headers(), **self._codec_kwargs())
         return self.error_check(results, private=True)
 
     @staticmethod
@@ -377,7 +407,7 @@ class Twitch:
             if not private:
                 _ = kodi.Dialog().ok(
                     i18n('oauth_heading'),
-                    i18n('oauth_message') % (i18n('settings'), i18n('login'), i18n('get_oauth_token'))
+                    i18n('oauth_message') % (i18n('settings'), i18n('login'), i18n('device_login'))
                 )
             else:
                 _ = kodi.Dialog().ok(

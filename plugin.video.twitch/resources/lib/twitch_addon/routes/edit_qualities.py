@@ -32,6 +32,7 @@ def route(api, content_type, target_id=None, name=None, video_id=None, remove=Fa
             use_ia = utils.use_inputstream_adaptive()
             if use_ia and not any(v['name'] == 'Adaptive' for v in videos) and (content_type != 'clip'):
                 videos.append(ADAPTIVE_SOURCE_TEMPLATE)
+            videos = utils.filter_qualities(videos)  # drop sub-720p (keep Source/720p+/audio_only/Adaptive)
             result = converter.select_video_for_quality(videos)
             if result:
                 quality = result['name']

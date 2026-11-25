@@ -56,7 +56,7 @@ def _search_history(content):
 @error_handler
 def _new_search(content):
     from .routes import new_search
-    new_search.route(content)
+    new_search.route(twitch_api, content)
 
 
 @dispatcher.register(MODES.SEARCHRESULTS, args=['content', 'query'], kwargs=['after'])
@@ -108,20 +108,6 @@ def _list_channel_video_categories(channel_id=None, channel_name=None, display_n
     channel_video_categories.route(channel_id, channel_name, display_name, game, game_name)
 
 
-@dispatcher.register(MODES.COLLECTIONS, args=['channel_id'], kwargs=['cursor'])
-@error_handler(route_type=1)
-def _list_collections(channel_id, cursor='MA=='):
-    from .routes import collections
-    collections.route(twitch_api, channel_id, cursor)
-
-
-@dispatcher.register(MODES.COLLECTIONVIDEOLIST, args=['collection_id'])
-@error_handler(route_type=1)
-def _list_collection_videos(collection_id):
-    from .routes import collection_videos
-    collection_videos.route(twitch_api, collection_id)
-
-
 @dispatcher.register(MODES.CLIPSLIST, kwargs=['after', 'channel_id', 'game_id'])
 @error_handler(route_type=1)
 def _list_clips(after='MA==', channel_id='', game_id=''):
@@ -162,13 +148,6 @@ def _play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use
 def _edit_user_follows(channel_id=None, channel_name=None, game_id=None, game_name=None, follow=True):
     from .routes import edit_user_follows
     edit_user_follows.route(twitch_api, channel_id, channel_name, game_id, game_name, follow)
-
-
-@dispatcher.register(MODES.EDITBLACKLIST, kwargs=['list_type', 'target_id', 'name', 'remove', 'refresh'])
-@error_handler
-def _edit_blacklist(list_type='user', target_id=None, name=None, remove=False, refresh=False):
-    from .routes import edit_blacklist
-    edit_blacklist.route(list_type, target_id, name, remove, refresh)
 
 
 @dispatcher.register(MODES.EDITQUALITIES, args=['content_type'], kwargs=['video_id', 'target_id', 'name', 'remove', 'clip_id'])
@@ -234,13 +213,6 @@ def _reset_cache():
     reset_cache.route()
 
 
-@dispatcher.register(MODES.INSTALLIRCCHAT)
-@error_handler
-def _install_ircchat():
-    from .routes import install_ircchat
-    install_ircchat.route()
-
-
 @dispatcher.register(MODES.CONFIGUREIA)
 @error_handler
 def _configure_ia():
@@ -248,11 +220,25 @@ def _configure_ia():
     configure_inputstream_adaptive.route()
 
 
-@dispatcher.register(MODES.TOKENURL)
+@dispatcher.register(MODES.DEVICELOGIN)
 @error_handler
-def _get_token_url():
-    from .routes import token_url
-    token_url.route(twitch_api)
+def _device_login():
+    from .routes import device_login
+    device_login.route()
+
+
+@dispatcher.register(MODES.DEVICELOGINPRIVATE)
+@error_handler
+def _device_login_private():
+    from .routes import device_login_private
+    device_login_private.route()
+
+
+@dispatcher.register(MODES.REVOKEPRIVATETOKEN)
+@error_handler
+def _revoke_private_token():
+    from .routes import revoke_private_token
+    revoke_private_token.route()
 
 
 @dispatcher.register(MODES.REVOKETOKEN)

@@ -15,6 +15,11 @@ from ..addon.utils import i18n
 
 
 def route():
+    # No-history fallback navigates straight to New Search from here -> clear any
+    # remembered query so a deliberate new search prompts the keyboard (see new_search.py).
+    from . import new_search
+    for _content in ('streams', 'channels', 'games', 'id_url'):
+        new_search.clear_query(_content)
     kodi.set_view('files', set_sort=False)
     history_size = utils.get_search_history_size()
     use_history = history_size > 0

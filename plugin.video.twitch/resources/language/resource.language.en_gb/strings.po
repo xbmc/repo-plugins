@@ -1005,3 +1005,71 @@ msgstr ""
 msgctxt "#30273"
 msgid "OAuth Token is expired or invalid"
 msgstr ""
+
+msgctxt "#30300"
+msgid "Login (device code)"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Go to [B]%s[/B] and enter this code:[CR][CR][B]%s[/B]"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Waiting for authorization..."
+msgstr ""
+
+msgctxt "#30303"
+msgid "Login successful. The access token will now be refreshed automatically."
+msgstr ""
+
+msgctxt "#30304"
+msgid "Login failed or timed out."
+msgstr ""
+
+msgctxt "#30305"
+msgid "Login cancelled."
+msgstr ""
+
+msgctxt "#30306"
+msgid "Device login is not available for this Client-ID.[CR]Register your own application (Public type) at dev.twitch.tv/console/apps and set its Client-ID in the add-on settings, then try again."
+msgstr ""
+
+msgctxt "#30307"
+msgid "Supported codecs"
+msgstr ""
+
+msgctxt "#30308"
+msgid "Twitch default"
+msgstr ""
+
+msgctxt "#30309"
+msgid "H.265 (HEVC)"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Automatic token refresh needs a public Client-ID.[CR]Register your own application (Public type) at dev.twitch.tv/console/apps and set its Client-ID in the add-on settings."
+msgstr ""
+
+msgctxt "#30311"
+msgid "Login: ad-free playback / Turbo (device code)"
+msgstr ""
+
+msgctxt "#30312"
+msgid "Go to [B]%s[/B] with your [B]Turbo/subscriber account[/B] and enter this code:[CR][CR][B]%s[/B]"
+msgstr ""
+
+msgctxt "#30313"
+msgid "Turbo / ad-free login successful. The token is renewed automatically. Ad-free playback only applies if the logged-in account has Turbo or is subscribed to the channel."
+msgstr ""
+
+msgctxt "#30330"
+msgid "Search method"
+msgstr ""
+
+msgctxt "#30331"
+msgid "Website (twitch.tv, fuzzy)"
+msgstr ""
+
+msgctxt "#30332"
+msgid "Helix API"
+msgstr ""

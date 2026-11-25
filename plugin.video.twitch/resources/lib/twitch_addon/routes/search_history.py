@@ -15,6 +15,10 @@ from ..addon.utils import i18n
 
 
 def route(content):
+    # Reaching "New Search" always passes through here -> clear any remembered query so a
+    # deliberate new search prompts the keyboard (see new_search.py for the mechanism).
+    from . import new_search
+    new_search.clear_query(content)
     kodi.set_view('files', set_sort=False)
     context_menu = list()
     context_menu.extend(menu_items.clear_search_history(content, do_refresh=True))

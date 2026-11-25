@@ -28,6 +28,6 @@ def route(api):
                 raise TwitchException(response)
             raise TwitchException(response['error'])
         else:
-            kodi.set_setting('oauth_token_helix', '')
+            utils.clear_oauth_tokens()
             kodi.notify(msg=i18n('token_revoked'))
             cache.reset_cache()

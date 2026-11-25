@@ -11,12 +11,19 @@
 
 import re
 import time
+import os
+import json as _json
+
+try:
+    import fcntl as _fcntl
+except ImportError:
+    _fcntl = None
 
 from base64 import b64decode
 from datetime import datetime
 from urllib.parse import quote_plus
 
-from .common import kodi, json_store
+from .common import kodi, json_store, log_utils
 from .strings import STRINGS
 from .constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, COLORS, Keys
 from .search_history import StreamsSearchHistory, ChannelsSearchHistory, GamesSearchHistory, IdUrlSearchHistory
@@ -97,11 +104,45 @@ def inputstream_adpative_supports(feature):
         if loose_version(ia_version) >= loose_version('2.4.6'):
             return True
 
+    # Kodi 21 detects the manifest type itself and warns that the property is deprecated;
+    # Kodi 22 drops it entirely. Older versions still need it, so it is set conditionally.
+    if feature == 'MANIFEST_TYPE_DETECTION':
+        if loose_version(ia_version) >= loose_version('21.0.0'):
+            return True
+
     return False
 
 
+def format_isa_headers(headers):
+    # key=value&... (url-encoded) for InputStream Adaptive stream_headers / manifest_headers properties.
+    return '&'.join(['%s=%s' % (key, quote_plus(headers[key])) for key in headers])
+
+
 def append_headers(headers):
-    return '|%s' % '&'.join(['%s=%s' % (key, quote_plus(headers[key])) for key in headers])
+    return '|%s' % format_isa_headers(headers)
+
+
+# supported_codecs setting -> usher 'supported_codecs' value. Index 0 = Twitch default (omit param).
+SUPPORTED_CODECS = ('', 'h265,h264')
+
+
+def get_supported_codecs():
+    try:
+        return SUPPORTED_CODECS[int(kodi.get_setting('supported_codecs'))]
+    except (ValueError, IndexError):
+        return ''
+
+
+# Drop sub-720p video variants from a usher quality list; keep Source/720p+/audio_only/Adaptive.
+QUALITY_FLOOR_DROP = ('160p', '360p', '480p')
+
+
+def filter_qualities(videos):
+    if not videos:
+        return videos
+    filtered = [v for v in videos
+                if not any(drop in v.get('name', '').lower() for drop in QUALITY_FLOOR_DROP)]
+    return filtered if filtered else videos  # never return empty -> fall back to original list
 
 
 def get_redirect_uri():
@@ -139,21 +180,16 @@ def get_private_client_id():
     return kodi.decode_utf8(settings_id)
 
 
-def clear_client_id():
-    kodi.set_setting('oauth_clientid', '')
-
-
 def get_oauth_token(token_only=True, required=False):
-    oauth_token = kodi.get_setting('oauth_token_helix')
+    oauth_token = _read_oauth_store().get('access', '')
+    if not oauth_token or not oauth_token.strip():
+        oauth_token = kodi.get_setting('oauth_token_helix')  # legacy fallback (manual entry)
     if not oauth_token or not oauth_token.strip():
         if not required: return ''
         kodi.notify(kodi.get_name(), i18n('token_required'), sound=False)
         kodi.show_settings()
-        oauth_token = kodi.get_setting('oauth_token_helix')
-    stripped_token = oauth_token.strip()
-    if oauth_token != stripped_token:
-        oauth_token = stripped_token
-        kodi.set_setting('oauth_token_helix', oauth_token)
+        oauth_token = _read_oauth_store().get('access', '') or kodi.get_setting('oauth_token_helix')
+    oauth_token = oauth_token.strip()
     if oauth_token:
         if token_only:
             idx = oauth_token.find(':')
@@ -169,6 +205,12 @@ def get_oauth_token(token_only=True, required=False):
 
 
 def get_private_oauth_token():
+    # Prefer the device-login store (Turbo/ad-free, auto-refreshed); fall back to the manual
+    # `private_oauth_token` setting so an existing long-lived token keeps working.
+    if (_read_private_store().get('access') or '').strip():
+        token = ensure_valid_private_token()
+        if token:
+            return kodi.decode_utf8(token)
     settings_id = kodi.get_setting('private_oauth_token')
     stripped_id = settings_id.strip()
     if settings_id != stripped_id:
@@ -179,8 +221,259 @@ def get_private_oauth_token():
     return kodi.decode_utf8(settings_id)
 
 
+# --- OAuth Device Code Flow: token storage + silent refresh -----------------------------
+#
+# The rotating, single-use refresh token must survive two hazards the Kodi settings store
+# cannot: (a) concurrent refreshes from several add-on processes (service + plugin calls)
+# racing to consume the same single-use token, and (b) one process clobbering another's
+# settings.xml write from its in-memory cache. Both are solved by keeping the tokens in a
+# dedicated JSON file that is read fresh every time, written atomically (os.replace), and
+# guarded by a cross-process file lock for the whole refresh.
+
+_OAUTH_STORE_FILE = os.path.join(ADDON_DATA_DIR, 'oauth_tokens.json')
+_OAUTH_LOCK_FILE = os.path.join(ADDON_DATA_DIR, 'oauth_tokens.lock')
+
+
+class _OAuthLock:
+    """Serialise token refresh across processes (flock on POSIX; no-op fallback elsewhere)."""
+
+    def __init__(self, lock_file=_OAUTH_LOCK_FILE):
+        self._fh = None
+        self._lock_file = lock_file
+
+    def __enter__(self):
+        if _fcntl is not None:
+            try:
+                self._fh = open(self._lock_file, 'a+')
+                _fcntl.flock(self._fh.fileno(), _fcntl.LOCK_EX)
+            except Exception as e:
+                log_utils.log('OAuth: lock acquire failed: %s' % e, log_utils.LOGWARNING)
+                self._fh = None
+        return self
+
+    def __exit__(self, *exc):
+        if self._fh is not None:
+            try:
+                _fcntl.flock(self._fh.fileno(), _fcntl.LOCK_UN)
+                self._fh.close()
+            except Exception:
+                pass
+            self._fh = None
+        return False
+
+
+def _read_oauth_store():
+    """Token dict {access, refresh, expiry}, read fresh from disk (never cached). Migrates
+    once from the legacy Kodi settings so existing logins keep working. Never logs values."""
+    data = {}
+    try:
+        if os.path.exists(_OAUTH_STORE_FILE):
+            with open(_OAUTH_STORE_FILE, 'r') as fh:
+                data = _json.load(fh) or {}
+    except Exception as e:
+        log_utils.log('OAuth: store read failed: %s' % e, log_utils.LOGWARNING)
+        data = {}
+    if not data.get('access') and not data.get('refresh'):
+        access = (kodi.get_setting('oauth_token_helix') or '').strip()
+        refresh = (kodi.get_setting('oauth_refresh_token') or '').strip()
+        try:
+            expiry = int(float(kodi.get_setting('oauth_token_expiry') or '0'))
+        except (TypeError, ValueError):
+            expiry = 0
+        if access or refresh:
+            data = {'access': access, 'refresh': refresh, 'expiry': expiry}
+            _write_oauth_store(data)
+    return data
+
+
+def _write_oauth_store(data):
+    """Atomically persist the token dict, then mirror it to the legacy settings for backward
+    compatibility (the mirror is never read back for refresh, so a clobber is harmless). Never
+    logs token values."""
+    try:
+        tmp = _OAUTH_STORE_FILE + '.tmp'
+        with open(tmp, 'w') as fh:
+            _json.dump(data, fh)
+        os.replace(tmp, _OAUTH_STORE_FILE)
+    except Exception as e:
+        log_utils.log('OAuth: store write failed: %s' % e, log_utils.LOGERROR)
+        return False
+    try:
+        kodi.set_setting('oauth_token_helix', data.get('access', ''))
+        kodi.set_setting('oauth_refresh_token', data.get('refresh', ''))
+        kodi.set_setting('oauth_token_expiry', str(int(data.get('expiry', 0) or 0)))
+    except Exception:
+        pass
+    return True
+
+
+def get_refresh_token():
+    return (_read_oauth_store().get('refresh') or '').strip()
+
+
+def store_oauth_tokens(access_token, refresh_token, expires_in):
+    try:
+        expiry = int(time.time()) + int(expires_in) - 120  # refresh ~2 min before expiry
+    except (TypeError, ValueError):
+        expiry = int(time.time()) + 3600
+    _write_oauth_store({'access': (access_token or '').strip(),
+                        'refresh': (refresh_token or '').strip(),
+                        'expiry': expiry})
+    kodi.set_setting('oauth_refresh_unsupported', '')  # fresh working tokens -> (re)enable auto-refresh
+
+
+def clear_oauth_tokens():
+    _write_oauth_store({'access': '', 'refresh': '', 'expiry': 0})
+
+
+def ensure_valid_token(force=False):
+    """Silently refresh the Helix OAuth token via the stored refresh_token when it is
+    (near) expired. No-op for legacy implicit tokens (no refresh_token stored). Serialised
+    across processes so the single-use refresh token is never consumed twice. Returns the
+    (possibly refreshed) access token, or '' if none available."""
+    from . import device_oauth
+    client_id = get_client_id()
+    # A confidential app (one registered with a secret) cannot refresh without that secret;
+    # Twitch then replies 'missing client secret'. Once we have seen that for this client id we
+    # stop retrying, so we neither spam the log every few minutes nor block API calls -> the user
+    # falls back to the manual login until they configure a public client id.
+    if not force and kodi.get_setting('oauth_refresh_unsupported') == client_id:
+        return (_read_oauth_store().get('access') or '').strip()
+    with _OAuthLock():
+        store = _read_oauth_store()
+        refresh_token = (store.get('refresh') or '').strip()
+        access_token = (store.get('access') or '').strip()
+        if not refresh_token:
+            return access_token  # legacy implicit-grant token -> nothing to refresh
+        try:
+            expiry = float(store.get('expiry') or 0)
+        except (TypeError, ValueError):
+            expiry = 0
+        # Re-check INSIDE the lock: if another process refreshed while we waited, the store
+        # is now fresh -> reuse it instead of consuming the rotated token a second time.
+        if access_token and not force and time.time() < expiry:
+            return access_token
+        ok, data = device_oauth.refresh_access_token(client_id, refresh_token)
+        if ok and data.get('access_token'):
+            store_oauth_tokens(data['access_token'], data.get('refresh_token', refresh_token),
+                               data.get('expires_in', 3600))
+            log_utils.log('OAuth: access token refreshed via refresh_token', log_utils.LOGNOTICE)
+            return data['access_token']
+        if 'client secret' in str(data.get('message', '')).lower():
+            # Confidential client id -> a silent refresh is impossible. Remember it, and tell the
+            # user once how to fix it (register a public app and set its Client-ID).
+            kodi.set_setting('oauth_refresh_unsupported', client_id)
+            log_utils.log('OAuth: refresh needs a public client id (this one is confidential); set your own '
+                          'under Settings > Login. Falling back to manual login.', log_utils.LOGWARNING)
+            kodi.notify(msg=i18n('oauth_refresh_needs_public_client'))
+            return access_token
+        log_utils.log('OAuth: token refresh failed |%s|' % (data.get('message') or data.get('error') or 'error'),
+                      log_utils.LOGWARNING)  # log only the reason, never token values
+        return access_token  # keep current; valid_token() will prompt re-login if truly invalid
+
+
+# --- Private (Turbo/ad-free) OAuth token store -- device login + silent refresh ----------
+#
+# Mirrors the main store above but for the "private" credentials used by usher/GQL
+# (Turbo/subscriber ad-free playback). Separate file from the main (login/Helix) token and
+# additive: get_private_oauth_token() prefers this store (auto-refreshed) and falls back to
+# the manual `private_oauth_token` setting, so an existing long-lived token keeps working.
+
+_PRIVATE_STORE_FILE = os.path.join(ADDON_DATA_DIR, 'oauth_private_tokens.json')
+_PRIVATE_LOCK_FILE = os.path.join(ADDON_DATA_DIR, 'oauth_private_tokens.lock')
+
+_KIMNE_CLIENT_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'  # Twitch public web client (Turbo-aware GQL)
+
+
+def effective_private_client_id():
+    return get_private_client_id() or _KIMNE_CLIENT_ID
+
+
+def _read_private_store():
+    try:
+        if os.path.exists(_PRIVATE_STORE_FILE):
+            with open(_PRIVATE_STORE_FILE, 'r') as fh:
+                return _json.load(fh) or {}
+    except Exception as e:
+        log_utils.log('OAuth(private): store read failed: %s' % e, log_utils.LOGWARNING)
+    return {}
+
+
+def _write_private_store(data):
+    try:
+        tmp = _PRIVATE_STORE_FILE + '.tmp'
+        with open(tmp, 'w') as fh:
+            _json.dump(data, fh)
+        os.replace(tmp, _PRIVATE_STORE_FILE)
+    except Exception as e:
+        log_utils.log('OAuth(private): store write failed: %s' % e, log_utils.LOGERROR)
+        return False
+    return True
+
+
+def store_private_tokens(access_token, refresh_token, expires_in):
+    try:
+        expiry = int(time.time()) + int(expires_in) - 120  # refresh ~2 min before expiry
+    except (TypeError, ValueError):
+        expiry = int(time.time()) + 3600
+    _write_private_store({'access': (access_token or '').strip(),
+                          'refresh': (refresh_token or '').strip(),
+                          'expiry': expiry})
+
+
+def clear_private_tokens():
+    _write_private_store({'access': '', 'refresh': '', 'expiry': 0})
+
+
+def ensure_valid_private_token(force=False):
+    """Refresh the private (Turbo) token via its stored refresh_token when (near)
+    expired. No-op if no refresh_token (e.g. legacy long-lived token). Serialised across
+    processes. Never logs token values."""
+    from . import device_oauth
+    with _OAuthLock(_PRIVATE_LOCK_FILE):
+        store = _read_private_store()
+        refresh_token = (store.get('refresh') or '').strip()
+        access_token = (store.get('access') or '').strip()
+        if not refresh_token:
+            return access_token
+        # The kimne78 web client is a *confidential* client: its tokens cannot be refreshed
+        # without a client secret we don't have (-> "missing client secret"), but they also
+        # never expire (Twitch /validate reports expires_in=0). Our stored expiry is just the
+        # device-flow expires_in, which lapses while the token stays valid -> attempting a
+        # refresh here only spams a doomed HTTP POST + warning on every API call. So for
+        # kimne78 just use the stored access token. Only a user-supplied *public* private
+        # client (own client id) is actually refreshable.
+        if effective_private_client_id() == _KIMNE_CLIENT_ID:
+            return access_token
+        try:
+            expiry = float(store.get('expiry') or 0)
+        except (TypeError, ValueError):
+            expiry = 0
+        if access_token and not force and time.time() < expiry:
+            return access_token
+        ok, data = device_oauth.refresh_access_token(effective_private_client_id(), refresh_token)
+        if ok and data.get('access_token'):
+            store_private_tokens(data['access_token'], data.get('refresh_token', refresh_token),
+                                 data.get('expires_in', 3600))
+            log_utils.log('OAuth(private): token refreshed via refresh_token', log_utils.LOGNOTICE)
+            return data['access_token']
+        # Token (near) expired and refresh failed -> signal invalid so get_private_oauth_token()
+        # falls back to the manual long-lived private_oauth_token instead of using a dead token.
+        log_utils.log('OAuth(private): token refresh failed |%s|' % (data.get('message') or data.get('error') or 'error'),
+                      log_utils.LOGWARNING)  # log only the reason, never token values
+        return ''
+
+
 def get_search_history_size():
     return int(kodi.get_setting('search_history_size'))
+
+
+def use_gql_search():
+    # search_backend: 0 = Website (GQL, fuzzy/relevance ranking), 1 = Helix (search/channels)
+    try:
+        return int(kodi.get_setting('search_backend')) == 0
+    except (ValueError, TypeError):
+        return True  # default to the website (GQL) search
 
 
 def get_search_history(search_type):
@@ -231,21 +524,6 @@ def link_to_next_page(queries):
             'art': the_art(),
             'path': kodi.get_plugin_url(queries),
             'info': {'plot': i18n('next_page')}}
-
-
-def irc_enabled():
-    return (kodi.get_setting('irc_enable') == 'true') and kodi.has_addon('script.ircchat')
-
-
-def exec_irc_script(username, channel):
-    if not irc_enabled():
-        return
-    password = get_oauth_token(token_only=False, required=True)
-    if username and password:
-        host = 'irc.chat.twitch.tv'
-        builtin = 'RunScript(script.ircchat, run_irc=True&nickname=%s&username=%s&password=%s&host=%s&channel=#%s)' % \
-                  (username, username, password, host, channel)
-        kodi.execute_builtin(builtin)
 
 
 def notify_refresh():
@@ -504,6 +782,33 @@ def convert_duration(duration):
     return payload
 
 
+# Characters Kodi's default skin font (Estuary/Noto Sans) cannot render show up as an empty
+# box ("tofu") -- mostly emoji/symbols in stream titles. Filter them out before display.
+_TOFU_RE = re.compile(
+    u'['
+    u'\U0001F000-\U0001FAFF'  # emoji & pictographs (emoticons, transport, symbols & pictographs, flags ...)
+    u'\U00002600-\U000027BF'  # misc symbols + dingbats
+    u'\U00002B00-\U00002BFF'  # misc symbols and arrows
+    u'\U000023E9-\U000023FA'  # media/clock emoji from misc technical
+    u'\U0000FE00-\U0000FE0F'  # variation selectors (emoji presentation)
+    u'\U0000200D'             # zero width joiner (emoji sequences)
+    u'\U000020E3'             # combining enclosing keycap
+    u']+'
+)
+
+
+def strip_tofu(text):
+    # Replace non-renderable emoji/symbols (would show as tofu boxes) with a single space --
+    # dropping them glues words together ("WEEKEND<emoji>Type" -> "WEEKENDType"). Only
+    # horizontal whitespace is collapsed, line breaks are kept (matters for plots).
+    if not isinstance(text, str):
+        return text
+    text = _TOFU_RE.sub(u' ', text)
+    text = re.sub(u'[ \\t]{2,}', u' ', text)
+    text = re.sub(u'[ \\t]*\\n[ \\t]*', u'\n', text)
+    return text.strip()
+
+
 class TitleBuilder(object):
     class Templates(object):
         TITLE = u"{title}"
@@ -570,6 +875,7 @@ class TitleBuilder(object):
                 pass
             value = value.replace(u'\r\n', u' ')
             value = value.replace(u'\n', u' ')
+            value = strip_tofu(value)  # drop emoji/symbols the skin font cannot render
             value = value.strip()
             return value
         else:

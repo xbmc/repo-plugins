@@ -42,20 +42,9 @@ class TwitchPlayer(xbmc.Player):
         self.reset()
 
     def reset(self):
-        self.close_chat()
         self.reset_player()
         self.reset_seek()
         self.reset_reconnect()
-
-    def close_chat(self):
-        win_dialog_id = kodi.get_current_window_dialog_id()
-        if utils.irc_enabled() and \
-                self.window.getProperty(key=self.player_keys['twitch_playing']) == 'True' and \
-                win_dialog_id != 9999:
-            xbmc.executebuiltin('Dialog.Close(%s,true)' % win_dialog_id)
-            win_dialog_id = kodi.get_current_window_dialog_id()
-            if win_dialog_id != 9999:
-                xbmc.executebuiltin('Dialog.Close(all,true)')
 
     def reset_seek(self):
         for k in self.seek_keys.keys():
@@ -97,7 +86,6 @@ class TwitchPlayer(xbmc.Player):
             if reconnect:
                 live_channel = self.window.getProperty(self.reconnect_keys['stream'])
                 if live_channel:
-                    self.close_chat()
                     channel_id, name, display_name, quality = live_channel.split(',')
                     retries = 0
                     max_retries = 5
@@ -152,25 +140,29 @@ class TwitchPlayer(xbmc.Player):
                                             if request:
                                                 if kodi.get_kodi_version().major >= 18:
                                                     request['headers']['verifypeer'] = 'false'
-                                                item_dict['path'] = \
-                                                    request['url'] + utils.append_headers(request['headers'])
+                                                item_dict['path'] = request['url']  # headers via ISA props below
                                         playback_item = kodi.create_item(item_dict, add=False)
                                         if video['name'] == 'Adaptive':
                                             inputstream_property = 'inputstream'
                                             if kodi.get_kodi_version().major < 19:
                                                 inputstream_property += 'addon'
                                             playback_item.setProperty(inputstream_property, 'inputstream.adaptive')
-                                            playback_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+                                            if not utils.inputstream_adpative_supports('MANIFEST_TYPE_DETECTION'):
+                                                playback_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+                                            playback_item.setProperty('inputstream.adaptive.chooser_resolution_max', '1440p')
+                                            playback_item.setProperty('inputstream.adaptive.chooser_resolution_secure_max', '1440p')
+                                            if request:
+                                                isa_headers = utils.format_isa_headers(
+                                                    {k: v for k, v in request['headers'].items() if k != 'verifypeer'})
+                                                if isa_headers:
+                                                    playback_item.setProperty('inputstream.adaptive.manifest_headers', isa_headers)
+                                                    playback_item.setProperty('inputstream.adaptive.stream_headers', isa_headers)
 
                                         stream_name = display_name or name
                                         self.window.setProperty(self.reconnect_keys['stream'],
                                                                 '{0},{1},{2},{3}'.format(channel_id, name,
                                                                                          stream_name, quality))
                                         self.play(item_dict['path'], playback_item)
-                                        if utils.irc_enabled() and twitch.access_token:
-                                            username = twitch.get_username()
-                                            if username:
-                                                utils.exec_irc_script(username, name)
                                         break
                                 except:
                                     log_utils.log('Player: |Reconnection| Failed attempt |{0}|'.format(retries),

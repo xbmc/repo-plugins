@@ -1,3 +1,32 @@
+3.0.4
+[fix] Client-ID mismatch: discard the stale OAuth token instead of clearing a custom Client-ID,
+      which sent users back to the bundled (non-refreshable) Client-ID (#712)
+[fix] discard the stored OAuth token as soon as the Client-ID setting changes
+[fix] replace unrenderable emoji with a space so surrounding words stay separated
+[upd] only set inputstream.adaptive.manifest_type for InputStream Adaptive < 21 (deprecated
+      in 21, removed in 22)
+
+3.0.3
+[add] OAuth device-code login with automatic background token refresh (Settings -> "Login (device code)")
+    - tokens kept in addon_data/oauth_tokens.json with atomic writes and a cross-process lock,
+      so the rotating single-use refresh token survives Kodi's multi-process settings race
+    - confidential client ids (no silent refresh possible) are detected once and fall back
+      to manual login with a one-time hint
+[add] second device-code login for ad-free playback (Turbo/subscriber) with its own
+      auto-refreshed token store; manual private token keeps working as fallback
+[add] website (GQL) search backend with fuzzy/relevance ranking, selectable via
+      "Search method" with automatic Helix fallback
+[add] optional "Supported codecs" setting: request H.265 (HEVC) so Enhanced Broadcasting
+      1440p variants are offered (requires script.module.python.twitch >= 3.0.3; silently
+      ignored with older library versions)
+[fix] search hanging at "Working..." / keyboard re-prompt after stopping playback that was
+      started from search results
+[fix] hide emoji/symbols the skin font cannot render (tofu boxes) in titles, plots and info
+[upd] InputStream Adaptive: pass headers via stream/manifest_headers properties instead of
+      the URL pipe; allow up to 1440p (chooser_resolution_max); drop sub-720p variants from
+      quality selection; default to Adaptive quality with InputStream Adaptive enabled
+[rem] IRC chat integration (script.ircchat) and the obsolete browser-based token flow
+
 2.6.0
 [update] Update Twitch API usage from v5 to Helix
     - This change will require you to generate a new oauth token from the add-on settings

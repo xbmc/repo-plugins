@@ -161,7 +161,7 @@ def route(api, seek_time=0, channel_id=None, video_id=None, slug=None, ask=False
                     if request:
                         if kodi.get_kodi_version().major >= 18:
                             request['headers']['verifypeer'] = 'false'
-                        play_url = request['url'] + utils.append_headers(request['headers'])
+                        play_url = request['url']  # headers passed via ISA stream/manifest_headers below
 
                 if not play_url:
                     play_url = result['url']
@@ -202,7 +202,17 @@ def route(api, seek_time=0, channel_id=None, video_id=None, slug=None, ask=False
                     if kodi.get_kodi_version().major < 19:
                         inputstream_property += 'addon'
                     playback_item.setProperty(inputstream_property, 'inputstream.adaptive')
-                    playback_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+                    if not utils.inputstream_adpative_supports('MANIFEST_TYPE_DETECTION'):
+                        playback_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+                    # allow up to Twitch-2K (1440p HEVC) regardless of screen res (ISA "2K"=2048x1080 < 1440p)
+                    playback_item.setProperty('inputstream.adaptive.chooser_resolution_max', '1440p')
+                    playback_item.setProperty('inputstream.adaptive.chooser_resolution_secure_max', '1440p')
+                    if request:
+                        isa_headers = utils.format_isa_headers(
+                            {k: v for k, v in request['headers'].items() if k != 'verifypeer'})
+                        if isa_headers:
+                            playback_item.setProperty('inputstream.adaptive.manifest_headers', isa_headers)
+                            playback_item.setProperty('inputstream.adaptive.stream_headers', isa_headers)
                 if (seek_time > 0) and video_id:
                     _set_seek_time(seek_time)
                 _set_playing()
@@ -210,11 +220,6 @@ def route(api, seek_time=0, channel_id=None, video_id=None, slug=None, ask=False
                     kodi.Player().play(item_dict['path'], playback_item)
                 else:
                     kodi.set_resolved_url(playback_item)
-                if (not slug and not video_id) and (name is not None):
-                    if utils.irc_enabled() and api.access_token:
-                        username = api.get_username()
-                        if username:
-                            utils.exec_irc_script(username, name)
                 return
             else:
                 kodi.set_resolved_url(kodi.ListItem(), succeeded=False)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.twitch" version="3.0.2" name="Twitch" provider-name="anxdpanic, A Talented Community">
+<addon id="plugin.video.twitch" version="3.0.4" name="Twitch" provider-name="anxdpanic, A Talented Community">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
         <import addon="script.module.requests" version="2.9.1"/>
@@ -15,8 +15,17 @@
             <fanart>resources/media/fanart.jpg</fanart>
         </assets>
         <news>
-[fix] Following Channels
-[lang] updated translations from Weblate
+[add] OAuth device-code login with automatic background token refresh
+[add] second device-code login for ad-free playback (Turbo/subscriber)
+[add] website (GQL) search backend with fuzzy/relevance ranking (+ Helix fallback)
+[add] optional "Supported codecs" setting (H.265/HEVC for Enhanced Broadcasting 1440p)
+[fix] search hanging at "Working..." after stopping playback started from search results
+[fix] hide emoji/symbols the skin font cannot render (tofu boxes) in titles and plots
+[upd] InputStream Adaptive: headers via properties, allow up to 1440p, drop sub-720p variants
+[rem] IRC chat integration and the obsolete browser-based token flow
+[fix] a Client-ID mismatch no longer resets a custom Client-ID; the stale token is discarded
+[fix] keep word boundaries when hiding unrenderable emoji
+[upd] stop setting the deprecated manifest_type on InputStream Adaptive 21+
         </news>
         <platform>all</platform>
         <source>https://github.com/anxdpanic/plugin.video.twitch</source>

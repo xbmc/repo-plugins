@@ -23,7 +23,7 @@ def route(api):
     if not has_token:
         _ = kodi.Dialog().ok(
             i18n('oauth_heading'),
-            i18n('oauth_message') % (i18n('settings'), i18n('login'), i18n('get_oauth_token'))
+            i18n('oauth_message') % (i18n('settings'), i18n('login'), i18n('device_login'))
         )
 
     if has_token:

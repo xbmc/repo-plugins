@@ -171,11 +171,11 @@ def get_kodi_version():
         if ('result' in _json_query) and ('name' in _json_query['result']):
             application = decode_utf8(_json_query['result']['name'])
         version = decode_utf8(xbmc.getInfoLabel('System.BuildVersion'))
-        match = re.search('([0-9]+)\.([0-9]+)', version)
+        match = re.search(r'([0-9]+)\.([0-9]+)', version)
         if match: major, minor = match.groups()
-        match = re.search('-([a-zA-Z]+)([0-9]*)', version)
+        match = re.search(r'-([a-zA-Z]+)([0-9]*)', version)
         if match: tag, tag_version = match.groups()
-        match = re.search('\w+:(\w+-\w+)', version)
+        match = re.search(r'\w+:(\w+-\w+)', version)
         if match: revision = match.group(1)
 
         try:

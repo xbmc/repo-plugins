@@ -19,7 +19,8 @@ import threading
 
 from .addon.common import kodi, log_utils
 from .addon.constants import Keys
-from .addon.utils import i18n, get_stamp_diff, get_vodcast_color
+from .addon.utils import (i18n, get_stamp_diff, get_vodcast_color, ensure_valid_token,
+                          get_client_id, get_oauth_token, clear_oauth_tokens)
 from .addon.player import TwitchPlayer
 from .addon import api, cache
 
@@ -202,10 +203,43 @@ class LiveNotificationsThread(threading.Thread):
         return self._stopped.is_set()
 
 
+class SettingsMonitor(xbmc.Monitor):
+    """Discards the stored OAuth token as soon as the configured Client-ID changes.
+
+    A token is only valid for the Client-ID it was issued for. Without this, entering a
+    Client-ID *after* logging in leaves a stale token behind that surfaces much later, on
+    the next API call, as a "Client id mismatch" dialog -- the trap behind issue #712.
+    Dropping the token right here makes the order of "log in" and "set Client-ID"
+    irrelevant: whichever comes last, the user simply logs in once more.
+
+    Note on re-entrancy: clearing the store mirrors the empty values back into the Kodi
+    settings, which fires onSettingsChanged again. Updating self._client_id *before*
+    clearing makes that second call a no-op.
+    """
+
+    def __init__(self):
+        xbmc.Monitor.__init__(self)
+        self._client_id = get_client_id()
+
+    def onSettingsChanged(self):
+        client_id = get_client_id()
+        if client_id == self._client_id:
+            return
+        self._client_id = client_id
+        if not get_oauth_token(token_only=True, required=False):
+            return  # no token stored -> nothing to invalidate
+        clear_oauth_tokens()
+        log_utils.log('OAuth: Client-ID changed, discarded the token issued for the previous one',
+                      log_utils.LOGNOTICE)
+        kodi.notify(header=i18n('client_id_mismatch'),
+                    msg=i18n('get_new_oauth_token') % (i18n('settings'), i18n('login'), i18n('device_login')),
+                    duration=7000)
+
+
 def run():
     log_utils.log('Service: Start', log_utils.LOGNOTICE)
 
-    monitor = xbmc.Monitor()
+    monitor = SettingsMonitor()
 
     check_adaptive()
 
@@ -216,10 +250,22 @@ def run():
 
     live_notifications_thread = LiveNotificationsThread()
 
+    token_check = 0
+    try:
+        ensure_valid_token()  # refresh on startup if needed
+    except Exception:
+        pass
     while not monitor.abortRequested():
 
         if monitor.waitForAbort(1.0):
             break
+        token_check += 1
+        if token_check >= 300:  # proactively refresh the OAuth token every ~5 min
+            token_check = 0
+            try:
+                ensure_valid_token()
+            except Exception:
+                pass
 
     live_notifications_thread.stop()
     live_notifications_thread.join()

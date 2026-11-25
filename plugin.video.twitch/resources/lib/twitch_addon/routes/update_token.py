@@ -8,10 +8,12 @@
     SPDX-License-Identifier: GPL-3.0-only
     See LICENSES/GPL-3.0-only for more information.
 """
+from ..addon import utils
 from ..addon.common import kodi
 from ..addon.utils import i18n
 
 
 def route(oauth_token):
-    kodi.set_setting('oauth_token_helix', oauth_token)
+    # Manually entered token has no refresh token; route it through the race-free store.
+    utils.store_oauth_tokens(oauth_token, '', 0)
     kodi.notify(msg=i18n('token_updated'))

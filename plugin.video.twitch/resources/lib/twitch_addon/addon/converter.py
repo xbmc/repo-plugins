@@ -14,7 +14,7 @@ from urllib.parse import quote
 from . import menu_items
 from .common import kodi
 from .constants import Keys, Images, MODES, ADAPTIVE_SOURCE_TEMPLATE
-from .utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive, get_thumbnail_size, get_refresh_stamp, to_string, get_private_oauth_token, convert_duration
+from .utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive, get_thumbnail_size, get_refresh_stamp, to_string, get_private_oauth_token, convert_duration, filter_qualities, strip_tofu
 
 
 class PlaylistConverter(object):
@@ -403,6 +403,12 @@ class JsonListItemConverter(object):
             value = item_template.format(head=val_heading, info=val_info)
         return value
 
+    @staticmethod
+    def _clean_info(info):
+        # Strip emoji/symbols Kodi's skin font cannot render from the free-text fields
+        # (title/description) -- affects the text below the thumb (tagline) + info dialog (plot).
+        return {key: strip_tofu(value) for key, value in info.items()}
+
     def get_plot_for_search(self, search, include_title=True):
         headings = {Keys.GAME: i18n('game'),
                     Keys.BROADCASTER_LANGUAGE: i18n('language')}
@@ -421,7 +427,7 @@ class JsonListItemConverter(object):
         plot = plot_template.format(title=title, game=self._format_key(Keys.GAME, headings, info),
                                     broadcaster_language=self._format_key(Keys.BROADCASTER_LANGUAGE, headings, info))
 
-        return {u'plot': plot, u'plotoutline': plot, u'tagline': _title.rstrip('\r\n')}
+        return self._clean_info({u'plot': plot, u'plotoutline': plot, u'tagline': _title.rstrip('\r\n')})
 
     def get_plot_for_stream(self, stream, include_title=True):
         headings = {Keys.GAME: i18n('game'),
@@ -446,7 +452,7 @@ class JsonListItemConverter(object):
                                     broadcaster_language=self._format_key(Keys.BROADCASTER_LANGUAGE, headings, info),
                                     mature=self._format_key(Keys.MATURE, headings, info))
 
-        return {u'plot': plot, u'plotoutline': plot, u'tagline': _title.rstrip('\r\n')}
+        return self._clean_info({u'plot': plot, u'plotoutline': plot, u'tagline': _title.rstrip('\r\n')})
 
     def get_plot_for_channel(self, channel):
         headings = {Keys.VIEWS: i18n('views'),
@@ -468,7 +474,7 @@ class JsonListItemConverter(object):
                                     broadcaster_type=broadcaster_type + '\r\n',
                                     date=date)
 
-        return {u'plot': plot, u'plotoutline': plot, u'tagline': title.rstrip('\r\n')}
+        return self._clean_info({u'plot': plot, u'plotoutline': plot, u'tagline': title.rstrip('\r\n')})
 
     def get_plot_for_clip(self, clip, include_title=True):
         headings = {Keys.VIEWS: i18n('views'),
@@ -495,7 +501,7 @@ class JsonListItemConverter(object):
                                     curator=self._format_key(Keys.CURATOR, headings, info),
                                     date=date)
 
-        return {u'plot': plot, u'plotoutline': plot, u'tagline': _title.rstrip('\r\n')}
+        return self._clean_info({u'plot': plot, u'plotoutline': plot, u'tagline': _title.rstrip('\r\n')})
 
     def get_plot_for_video(self, video, include_title=True):
         headings = {Keys.VIEWS: i18n('views'),
@@ -519,12 +525,13 @@ class JsonListItemConverter(object):
                                     if video.get(Keys.DESCRIPTION) else title,
                                     date=date)
 
-        return {u'plot': plot, u'plotoutline': plot, u'tagline': _title.rstrip('\r\n')}
+        return self._clean_info({u'plot': plot, u'plotoutline': plot, u'tagline': _title.rstrip('\r\n')})
 
     def get_video_for_quality(self, videos, ask=True, quality=None, clip=False):
         use_ia = use_inputstream_adaptive()
         if use_ia and not any(v['name'] == 'Adaptive' for v in videos) and not clip:
             videos.append(ADAPTIVE_SOURCE_TEMPLATE)
+        videos = filter_qualities(videos)  # drop sub-720p variants (keep Source/720p+/audio_only/Adaptive)
         if ask is True:
             return self.select_video_for_quality(videos)
         else:
@@ -574,12 +581,15 @@ class JsonListItemConverter(object):
                     bwidth = int(video['bandwidth'])
                     if bwidth <= bandwidth_value:
                         bandwidths.append(bwidth)
-                best_match = max(bandwidths)
-                try:
-                    index = next(idx for idx, video in enumerate(videos) if int(video['bandwidth']) == best_match)
-                    return videos[index]
-                except:
-                    pass
+                # may be empty: with sub-720p variants filtered out, every remaining
+                # variant can exceed the configured limit -> fall through to the dialog
+                if bandwidths:
+                    best_match = max(bandwidths)
+                    try:
+                        index = next(idx for idx, video in enumerate(videos) if int(video['bandwidth']) == best_match)
+                        return videos[index]
+                    except:
+                        pass
             return self.select_video_for_quality(videos)
 
     @staticmethod

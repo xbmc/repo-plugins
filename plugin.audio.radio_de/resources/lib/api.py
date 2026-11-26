@@ -9,13 +9,12 @@
  *  See LICENSE.txt for more information.
 '''
 
-import json
-import sys
 import random
 import xbmc
 
-from urllib.parse import urlencode
 from urllib.request import urlopen, Request, HTTPError, URLError
+
+from resources.lib.radiobrowser_client import RadioBrowserClient, RadioBrowserError
 
 
 class RadioApiError(Exception):
@@ -24,96 +23,101 @@ class RadioApiError(Exception):
 
 class RadioApi():
 
-    MAIN_URLS = {
-        'english': 'http://api.rad.io/info',
-        'german': 'http://api.radio.de/info',
-        'french': 'http://api.radio.fr/info',
-        'portuguese': 'http://api.radio.pt/info',
-        'spanish': 'http://api.radio.es/info',
-    }
+    SUPPORTED_LANGUAGES = ('english', 'german', 'french', 'portuguese', 'spanish')
 
     USER_AGENT = 'XBMC Addon Radio'
 
     PLAYLIST_PREFIXES = ('m3u', 'pls', 'asx', 'xml')
 
+    CACHED_FIELDS = ('name', 'thumbnail', 'stream_url', 'current_track')
+
     def __init__(self, language='english', user_agent=USER_AGENT):
-        self.set_language(language)
         self.user_agent = user_agent
+        self.client = RadioBrowserClient(user_agent=user_agent)
+        self.language = 'english'
+        self.set_language(language)
 
     def set_language(self, language):
-        if not language in RadioApi.MAIN_URLS.keys():
+        if language not in RadioApi.SUPPORTED_LANGUAGES:
             raise ValueError('Invalid language')
-        self.api_url = RadioApi.MAIN_URLS[language]
+        self.language = language
+
+    def __sort_key(self, sorttype):
+        if sorttype == 'STATION_NAME':
+            return 'name'
+        return 'clickcount'
+
+    @staticmethod
+    def __page_count_from_has_more(pageindex, has_more):
+        if has_more:
+            return int(pageindex) + 1
+        return int(pageindex)
+
+    @staticmethod
+    def __normalize_category(items, key='name'):
+        categories = []
+        seen = set()
+        for item in items:
+            value = item.get(key, '').strip()
+            if value and value.lower() not in seen:
+                categories.append({'systemEnglish': value})
+                seen.add(value.lower())
+        return categories
 
     def get_genres(self):
         self.log('get_genres started')
-        path = 'v2/search/getgenres'
-        return self.__api_call(path)
+        tags = self.client.get_tags()
+        return self.__normalize_category(tags)
 
     def get_topics(self):
         self.log('get_topics started')
-        path = 'v2/search/gettopics'
-        return self.__api_call(path)
+        tags = self.client.get_tags()
+        return self.__normalize_category(tags)
 
     def get_languages(self):
         self.log('get_topics started')
-        path = 'v2/search/getlanguages'
-        return self.__api_call(path)
+        languages = self.client.get_languages()
+        return self.__normalize_category(languages)
 
     def get_countries(self):
         self.log('get_countries started')
-        path = 'v2/search/getcountries'
-        return self.__api_call(path)
+        countries = self.client.get_countries()
+        return self.__normalize_category(countries)
 
     def get_cities(self, country=None):
         self.log('get_cities_by_country started with country = %s' % country)
-        path = 'v2/search/getcities'
-        if country:
-            param = {
-                'country': country
-            }
-            return self.__api_call(path, param)
-        else:
-            return self.__api_call(path)
+        states = self.client.get_states(country=country)
+        return self.__normalize_category(states)
 
     def get_recommendation_stations(self):
         self.log('get_recommendation_stations started')
-        path = 'v2/search/editorstips'
-        return self.__format_stations_v2(self.__api_call(path))
+        has_more, stations = self.client.list_stations(50, 1, 'stations/topclick', order='clickcount')
+        return self.__format_stations_v2(stations)
 
     def get_stations_by_genre(self, genre, sorttype, sizeperpage, pageindex):
         self.log(('get_stations_by_genre started with genre=%s, '
                   'sorttype=%s, sizeperpage=%s, pageindex=%s') % (
                       genre, sorttype, sizeperpage, pageindex))
-        path = 'v2/search/stationsbygenre'
-        param = {
-            'genre': genre,
-            'sorttype': sorttype,
-            'sizeperpage': sizeperpage,
-            'pageindex': pageindex
-        }
-        response = self.__api_call(path, param)
-        if not response.get('categories'):
-            raise ValueError('Bad category_type')
-        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+        has_more, stations = self.client.search_stations(
+            sizeperpage,
+            pageindex,
+            order=self.__sort_key(sorttype),
+            tag=genre
+        )
+        return self.__page_count_from_has_more(pageindex, has_more), self.__format_stations_v2(stations)
 
     def get_station_by_station_id(self, station_id, resolve_playlists=True, force_http=False):
         self.log('get_station_by_station_id started with station_id=%s'
                  % station_id)
-        path = 'v2/search/station'
-        param = {'station': str(station_id)}
-        station = self.__api_call(path, param)
+        station = self.client.get_station_by_uuid(station_id)
+        if not station:
+            self.log('Unable to detect a playable stream for station')
+            return None
 
-        streams = station.get('streamUrls')
+        station['streamUrl'] = station.get('url_resolved') or station.get('url')
 
-        if streams:
-            station['streamUrl'] = streams[0].get('streamUrl')
-
-            if force_http:
-                for stream in streams:
-                    if "http://" in stream.get('streamUrl'):
-                        station['streamUrl'] = stream['streamUrl']
-                        break
+        if force_http and station.get('url') and station.get('url').startswith('http://'):
+            station['streamUrl'] = station.get('url')
 
         if not station.get('streamUrl'):
             self.log('Unable to detect a playable stream for station')
@@ -123,6 +127,22 @@ class RadioApi():
             station['streamUrl'] = self.__resolve_playlist(station)
         stations = (station, )
         return self.__format_stations_v2(stations)[0]
+
+    def get_station_cached(self, station_id, cache, resolve_playlists=True, force_http=False):
+        '''Like get_station_by_station_id, but remembers the fields needed for
+        playback in `cache` (a dict) and falls back to them when the lookup
+        fails, so stations that were played before survive a Radio Browser outage.'''
+        try:
+            station = self.get_station_by_station_id(station_id, resolve_playlists, force_http)
+        except RadioApiError as error:
+            cached = cache.get(station_id)
+            if not cached:
+                raise
+            self.log('using cached station %s after: %s' % (station_id, error))
+            return cached
+        if station:
+            cache[station_id] = {key: station.get(key, '') for key in RadioApi.CACHED_FIELDS}
+        return station
 
     def internal_resolver(self, station, ):
         if station.get('is_custom', False):
@@ -139,121 +159,87 @@ class RadioApi():
         self.log(('get_top_stations started with '
                   'sizeperpage=%s, pageindex=%s') % (
                       sizeperpage, pageindex))
-        path = 'v2/search/topstations'
-        param = {
-            'sizeperpage': sizeperpage,
-            'pageindex': pageindex
-        }
-        response = self.__api_call(path, param)
-        if not response.get('categories'):
-            raise ValueError('Bad category_type')
-        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+        has_more, stations = self.client.list_stations(
+            sizeperpage,
+            pageindex,
+            'stations/topclick',
+            order='clickcount'
+        )
+        return self.__page_count_from_has_more(pageindex, has_more), self.__format_stations_v2(stations)
 
     def get_stations_by_country(self, country, sorttype, sizeperpage, pageindex):
         self.log(('get_stations_by_country started with country=%s, '
                   'sorttype=%s, sizeperpage=%s, pageindex=%s') % (
                       country, sorttype, sizeperpage, pageindex))
-        path = 'v2/search/stationsbycountry'
-        param = {
-            'country': country,
-            'sorttype': sorttype,
-            'sizeperpage': sizeperpage,
-            'pageindex': pageindex
-        }
-        response = self.__api_call(path, param)
-        if not response.get('categories'):
-            raise ValueError('Bad category_type')
-        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+        has_more, stations = self.client.search_stations(
+            sizeperpage,
+            pageindex,
+            order=self.__sort_key(sorttype),
+            country=country
+        )
+        return self.__page_count_from_has_more(pageindex, has_more), self.__format_stations_v2(stations)
 
     def get_stations_by_city(self, city, sorttype, sizeperpage, pageindex):
         self.log(('get_stations_by_city started with city=%s, '
                   'sorttype=%s, sizeperpage=%s, pageindex=%s') % (
                       city, sorttype, sizeperpage, pageindex))
-        path = 'v2/search/stationsbycity'
-        param = {
-            'city': city,
-            'sorttype': sorttype,
-            'sizeperpage': sizeperpage,
-            'pageindex': pageindex
-        }
-        response = self.__api_call(path, param)
-        if not response.get('categories'):
-            raise ValueError('Bad category_type')
-        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+        has_more, stations = self.client.search_stations(
+            sizeperpage,
+            pageindex,
+            order=self.__sort_key(sorttype),
+            state=city
+        )
+        return self.__page_count_from_has_more(pageindex, has_more), self.__format_stations_v2(stations)
 
     def get_stations_by_topic(self, topic, sorttype, sizeperpage, pageindex):
         self.log(('get_stations_by_topic started with topic=%s, '
                   'sorttype=%s, sizeperpage=%s, pageindex=%s') % (
                       topic, sorttype, sizeperpage, pageindex))
-        path = 'v2/search/stationsbytopic'
-        param = {
-            'topic': topic,
-            'sorttype': sorttype,
-            'sizeperpage': sizeperpage,
-            'pageindex': pageindex
-        }
-        response = self.__api_call(path, param)
-        if not response.get('categories'):
-            raise ValueError('Bad category_type')
-        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+        has_more, stations = self.client.search_stations(
+            sizeperpage,
+            pageindex,
+            order=self.__sort_key(sorttype),
+            tag=topic
+        )
+        return self.__page_count_from_has_more(pageindex, has_more), self.__format_stations_v2(stations)
 
     def get_stations_by_language(self, language, sorttype, sizeperpage, pageindex):
         self.log(('get_stations_by_language started with language=%s, '
                   'sorttype=%s, sizeperpage=%s, pageindex=%s') % (
                       language, sorttype, sizeperpage, pageindex))
-        path = 'v2/search/stationsbylanguage'
-        param = {
-            'language': language,
-            'sorttype': sorttype,
-            'sizeperpage': sizeperpage,
-            'pageindex': pageindex
-        }
-        response = self.__api_call(path, param)
-        if not response.get('categories'):
-            raise ValueError('Bad category_type')
-        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+        has_more, stations = self.client.search_stations(
+            sizeperpage,
+            pageindex,
+            order=self.__sort_key(sorttype),
+            language=language
+        )
+        return self.__page_count_from_has_more(pageindex, has_more), self.__format_stations_v2(stations)
 
     def get_stations_nearby(self, sizeperpage, pageindex):
         self.log(('get_stations_nearby started with, '
                   'sizeperpage=%s, pageindex=%s') % (sizeperpage, pageindex))
-        path = 'v2/search/localstations'
-        param = {
-            'sizeperpage': sizeperpage,
-            'pageindex': pageindex
-        }
-        response = self.__api_call(path, param)
-        if not response.get('categories'):
-            raise ValueError('Bad category_type')
-        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
+        has_more, stations = self.client.list_stations(
+            sizeperpage,
+            pageindex,
+            'stations/topvote',
+            order='votes'
+        )
+        return self.__page_count_from_has_more(pageindex, has_more), self.__format_stations_v2(stations)
 
     def search_stations_by_string(self, search_string, sizeperpage, pageindex):
         self.log('search_stations_by_string started with search_string=%s'
                  % search_string)
-        path = 'v2/search/stations'
-        param = {
-            'query': search_string,
-            'sizeperpage': sizeperpage,
-            'pageindex': pageindex
-        }
-        response = self.__api_call(path, param)
-        if not response.get('categories'):
-            raise ValueError('Bad category_type')
-        return response.get('numberPages'), self.__format_stations_v2(response.get('categories')[0].get('matches'))
-
-    def __api_call(self, path, param=None):
-        self.log('__api_call started with path=%s, param=%s'
-                 % (path, param))
-        url = '%s/%s' % (self.api_url, path)
-        if param:
-            url += '?%s' % urlencode(param)
-
-        response = self.__urlopen(url)
-        json_data = json.loads(response)
-        return json_data
+        has_more, stations = self.client.search_stations(
+            sizeperpage,
+            pageindex,
+            order='clickcount',
+            name=search_string
+        )
+        return self.__page_count_from_has_more(pageindex, has_more), self.__format_stations_v2(stations)
 
     def __resolve_playlist(self, station):
         self.log('__resolve_playlist started with station=%s'
-                 % station['id'])
+                 % station.get('id', station.get('stationuuid', 'unknown')))
         servers = []
 
         # Check if it is a custom station
@@ -292,7 +278,7 @@ class RadioApi():
             ]
         if servers:
             self.log('__resolve_playlist found %d servers' % len(servers))
-            return random.choice(servers)
+            return self.__ensure_text(random.choice(servers))
         return stream_url
 
     def __follow_redirect(self, url):
@@ -320,38 +306,28 @@ class RadioApi():
     def __format_stations_v2(stations):
         formated_stations = []
         for station in stations:
-            thumbnail = (
-                station.get('logo300x300') or
-                station.get('logo175x175') or
-                station.get('logo100x100') or
-                station.get('logo44x44')
-            )
+            thumbnail = station.get('favicon')
 
-            try:
-                genre = [g['value'] for g in station.get('genres')]
-            except:
-                genre = [g for g in station.get('genres')]
+            genres_value = station.get('tags', '')
+            if isinstance(genres_value, list):
+                genre = genres_value
+            else:
+                genre = [value.strip() for value in genres_value.split(',') if value.strip()]
 
-            try:
-                description = station.get('description')['value'] if station.get('description') else ''
-            except:
-                description = station.get('description')
-
-            try:
-                name = station['name']['value'] if station.get('name') else ''
-            except:
-                name = station.get('name')
+            description = station.get('homepage') or ''
+            name = station.get('name') or ''
 
             formated_stations.append({
                 'name': name,
                 'thumbnail': thumbnail,
-                'rating': station.get('rank', ''),
+                'rating': station.get('votes', station.get('clickcount', 0)),
                 'genre': ','.join(genre),
                 'mediatype': 'song',
-                'id': station['id'],
-                'current_track': station.get('nowPlaying', ''),
-                'stream_url': station.get('streamUrl', ''),
-                'description': description
+                'id': station.get('stationuuid'),
+                'current_track': station.get('lastsong', ''),
+                'stream_url': station.get('streamUrl', station.get('url_resolved', station.get('url', ''))),
+                'description': description,
+                'bitrate': station.get('bitrate', 0)
             })
         return formated_stations
 
@@ -375,5 +351,22 @@ class RadioApi():
         return bytearray(string, 'utf-8')
 
     @staticmethod
+    def __ensure_text(value):
+        if isinstance(value, bytes):
+            return value.decode('utf-8', errors='ignore').strip()
+        return str(value).strip()
+
+    @staticmethod
     def log(text):
         xbmc.log('RadioApi: %s' % repr(text))
+
+    def __getattribute__(self, name):
+        attr = super().__getattribute__(name)
+        if callable(attr) and (name.startswith('get_') or name.startswith('search_')):
+            def wrapped(*args, **kwargs):
+                try:
+                    return attr(*args, **kwargs)
+                except RadioBrowserError as error:
+                    raise RadioApiError(str(error))
+            return wrapped
+        return attr

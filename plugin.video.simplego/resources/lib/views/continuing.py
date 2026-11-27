@@ -1,5 +1,7 @@
 """Continue watching: where watching back was left off, here or in the provider's apps."""
 
+import collections
+
 import xbmc
 import xbmcgui
 import xbmcplugin
@@ -14,10 +16,16 @@ from resources.lib.views import rows
 
 _s = kodiutil.string
 _log = kodiutil.log
+# A row of Continue watching: the account's position, its airing's start and end, its channel, its state
+# (see continuelist.rows), and whether its airing left catch-up (see ContinueViews._expired).
+ContinueRow = collections.namedtuple("ContinueRow", "mark start end channel state expired")
+# Seconds in a day and an hour: what a row's "N days left" counts in.
+DAY_SECONDS = 86400
+HOUR_SECONDS = 3600
 
 
 class ContinueViews:
-    """Continue watching (see plugin.ROUTES).
+    """Continue watching (see views.routes).
 
     :param call: the plugin call (see views.call.Call)
     """
@@ -29,75 +37,72 @@ class ContinueViews:
         """List where watching back was left off, here or in the provider's apps (the web's "Lejátszás folytatása").
 
         Those watched to their end or reset here stay greyed out below the others until they leave
-        catch-up (see continuelist). No row says until when: the provider does not say (see continuelist.on_catchup).
+        catch-up (see continuelist), each the soonest to leave first; on its right how long it is
+        expected to stay (an estimate, see continuelist.EXPECTED_CATCHUP_SECONDS). Those that left
+        it, by the provider's word (see _expired), go to the bottom, greyed and "Expired".
         """
-        channels = channellist.by_station(self._call.client)
-        marks = []
-        for mark, state in continuelist.rows(continuelist.catchup(self._call.client.bookmarks(details=True))):
-            marked = guidedata.from_bookmark_id(mark["id"])
-            channel = channels.get(marked[0])
-            if channel:
-                marks.append((mark, marked, channel, state))
+        listed = self._listed()
         self._call.laps("lists")  # timed apart from the pages, for the log
-        self._log_catchup([(mark, state) for mark, _, _, state in marks])
+        expired = self._expired(listed)
+        listed = [row._replace(expired=row.mark["id"] in expired) for row in listed]
+        listed = [row for row in listed if not row.expired] + [row for row in listed if row.expired]
         # The provider's list has no plots, types or years: the info pages have them.
-        pages = listing.pages(self._call, [("program", mark.get("program_id")) for mark, _, _, _ in marks])
-        plots = {key: page.get("plot") or "" for key, page in pages.items()}
+        pages = listing.pages(self._call, [_page_key(row.mark) for row in listed])
         cast = rows.cast_of(pages, kodiutil.cast_kinds())
-        for mark, marked, channel, state in marks:
-            _, start, end = marked
-            page = pages.get(("program", mark.get("program_id"))) or {}
-            year = page.get("year") if page.get("type") == "movie" else None
-            label = rows.with_episode(rows.film_title(mark.get("title") or "?", year), mark)
-            active = state == continuelist.ACTIVE
-            li = xbmcgui.ListItem(label if active else rows.greyed(label))
-            # The rows show a resume icon, the side panel the 2:3 poster, the background the 16:9 picture.
-            # No thumb: Estuary's info page would put the poster over itself for a video or an episode.
-            poster = guidedata.poster("program", mark.get("program_id"))
-            art = {"fanart": guidedata.fanart(mark) or mark.get("thumbnail"), "poster": poster}
-            rows.set_art(li, art)
-            tag = li.getVideoInfoTag()
-            tag.setTitle(mark.get("title") or "")
-            if year:  # Estuary's info page puts it after the title
-                tag.setYear(year)
-            tag.setPlot(plots.get(("program", mark.get("program_id"))) or "")
-            tag.setStudios([channel["name"]])
-            rows.set_credits(tag, cast.get(("program", mark.get("program_id"))))
-            numbers = guidedata.season_episode(mark)
-            if numbers:  # an episode: the info page says "season x episode"
-                tag.setMediaType("episode")
-                tag.setSeason(numbers[0])
-                tag.setEpisode(numbers[1])
-            elif page.get("type") == "movie":
-                tag.setMediaType("movie")
-            rows.set_mpaa(tag, mark.get("ratings"))
-            # The row's icon: resume (from the position, whether or not the row plays itself); a greyed
-            # one has no position: Kodi's tick if watched to its end, none if reset here.
-            if active:
-                tag.setResumePoint(float(mark.get("time_seconds") or 0), float(mark.get("runtime_seconds") or 0))
-            else:
-                tag.setPlaycount(1 if state == continuelist.WATCHED else 0)
-            rows.set_length(tag, int(mark.get("runtime_seconds") or 0))
-            # An action, as the favourites' pickers: a click opens the picker (see do_continue_pick).
-            li.setProperty("IsPlayable", "false")
-            li.addContextMenuItems(self._menu(mark, active))
-            rows.hide_kodi_favourites(li)
-            programme = {"start_time": start, "end_time": end, "content_flags": ["ct"], "ratings": mark.get("ratings")}
-            # KODI_RESUME: Kodi's own "Resume" / "Play" (context menu, info page) say which.
-            param = guidedata.param(programme, known_age=False, then=guidedata.KODI_RESUME)
-            at = int(float(mark.get("time_seconds") or 0))
-            if active:
-                url = self._call.url(
-                    action="continue_pick", id=channel["id"], media=channel["media_id"], programme=param, mark=mark["id"], at=at
-                )
-            else:  # nothing to resume: a click plays it from its beginning, without asking
-                url = self._call.url(
-                    action="continue_pick", id=channel["id"], media=channel["media_id"], programme=param, start=1
-                )
-            xbmcplugin.addDirectoryItem(self._call.handle, url, li, isFolder=False)
+        for row in listed:
+            key = _page_key(row.mark)
+            li = self._continue_item(row, pages.get(key) or {}, cast.get(key))
+            xbmcplugin.addDirectoryItem(self._call.handle, self._pick_url(row), li, isFolder=False)
         xbmcplugin.setContent(self._call.handle, "videos")
-        rows.show_right_labels(self._call.handle)
+        rows.right_labels_from_production_code(self._call.handle)
         xbmcplugin.endOfDirectory(self._call.handle, cacheToDisc=False)
+
+    def _listed(self):
+        """Return the Continue watching rows on the subscribed channels, as ContinueRows."""
+        channels = channellist.by_station(self._call.client)
+        listed = []
+        for mark, state in continuelist.rows(continuelist.catchup(self._call.client.bookmarks(details=True))):
+            station, start, end = guidedata.from_bookmark_id(mark["id"])
+            if channels.get(station):
+                listed.append(ContinueRow(mark, start, end, channels[station], state, False))
+        return listed
+
+    def _continue_item(self, row, page, programme_cast):
+        """Return a row of Continue watching (see ContinueRow), greyed out once watched to its end, reset here or expired.
+
+        :param page: its programme's info page; {} without one
+        :param programme_cast: its programme's cast (see rows.set_credits); None without one
+        """
+        mark = row.mark
+        year = page.get("year") if page.get("type") == "movie" else None
+        label = rows.with_episode(rows.film_title(mark.get("title") or "?", year), mark)
+        active = row.state == continuelist.ACTIVE and not row.expired
+        li = xbmcgui.ListItem(label if active else rows.greyed(label))
+        rows.set_art(li, _continue_art(mark))
+        _set_continue_info(li.getVideoInfoTag(), row, page, year, programme_cast)
+        # An action, as the favourites' pickers: a click opens the picker (see do_continue_pick).
+        li.setProperty("IsPlayable", "false")
+        li.addContextMenuItems(self._menu(mark, active))
+        rows.hide_kodi_favourites(li)
+        return li
+
+    def _pick_url(self, row):
+        """Return what a row's click runs: the picker (see do_continue_pick); with nothing to resume, a play from its start."""
+        mark, channel = row.mark, row.channel
+        programme = {
+            "start_time": row.start,
+            "end_time": row.end,
+            "content_flags": [guidedata.CATCHUP_FLAG],
+            "ratings": mark.get("ratings"),
+        }
+        # KODI_RESUME: Kodi's own "Resume" / "Play" (context menu, info page) say which.
+        param = guidedata.param(programme, known_age=False, then=guidedata.KODI_RESUME)
+        pick = {"action": "continue_pick", "id": channel["id"], "media": channel["media_id"], "programme": param}
+        if row.expired:  # nothing to play: a click says so, and offers what is left (see do_continue_pick)
+            return self._call.url(**dict(pick, expired=1))
+        if row.state != continuelist.ACTIVE:  # nothing to resume: a click plays it from its beginning, without asking
+            return self._call.url(**dict(pick, start=1))
+        return self._call.url(**dict(pick, mark=mark["id"], at=int(float(mark.get("time_seconds") or 0))))
 
     def _menu(self, mark, active):
         """Return a row's context menu items: onto the favourite programmes; a greyed row's removal."""
@@ -110,13 +115,15 @@ class ContinueViews:
             menu.append((_s(30263), "RunPlugin(%s)" % self._call.url(action="continue_remove", mark=mark["id"])))
         return menu
 
-    def _log_catchup(self, listed):
-        """Log whether each row's airing is still on catch-up by its programme's airings.
+    def _expired(self, listed):
+        """Return the ids of the rows whose airing left catch-up: not among its programme's catch-up airings.
 
-        Whether those are the provider's word on it the log tells: compared with what playing the row says.
-        TODO: show a row as expired (and count them in the main menu) once the log shows these answers right.
+        The provider's word on it: on 2026-11-15 it said so as playing did, both ways (#4). A row
+        without a programme, or whose airings could not be had, counts as on catch-up. Logged, each.
         """
-        for mark, state in listed:
+        expired = set()
+        for row in listed:
+            mark, state = row.mark, row.state
             if not mark.get("program_id"):
                 continue
             try:
@@ -124,12 +131,16 @@ class ContinueViews:
             except provider.ApiError as e:
                 _log("catch-up of %s unknown: %s" % (mark["id"], e), xbmc.LOGDEBUG)
                 continue
+            on = continuelist.on_catchup(mark, back)
+            if not on:
+                expired.add(mark["id"])
             _log(
                 "catch-up of %s (%s, %s): %s, by its programme's %d catch-up airings"
-                % (mark["id"], mark.get("title"), state, "on" if continuelist.on_catchup(mark, back) else "gone", len(back)),
+                % (mark["id"], mark.get("title"), state, "on" if on else "gone", len(back)),
                 xbmc.LOGDEBUG,
             )
         self._call.laps("catch-up")
+        return expired
 
     def do_continue_pick(self):
         """Resume, play from the beginning or reset the position of a Continue watching row.
@@ -139,11 +150,18 @@ class ContinueViews:
         """
         from resources.lib.views import play  # here: only a pick may play at once
 
+        if self._call.params.get("expired"):  # its airing left catch-up: what playing it would say, without trying
+            from resources.lib.data import watchoffer
+
+            e = provider.errors.CatchupExpiredError("catch-up of %s expired" % self._call.params["programme"])
+            e.offer = watchoffer.offer_for_play(self._call.client, self._call.params["id"], self._call.params["programme"])
+            raise e  # told as a play's (see plugin.tell)
         if self._call.params.get("start"):  # a greyed row: from its beginning, at once
             params = self._continue_play(guidedata.from_beginning(self._call.params["programme"]))
             if self._call.handle >= 0:
                 return play.resolve(self._call, params)
-            xbmc.executebuiltin("PlayMedia(%s)" % self._call.url(**params))
+            # "noresume": Kodi asks its own resume question otherwise, when it kept a position for the address.
+            xbmc.executebuiltin("PlayMedia(%s,noresume)" % self._call.url(**params))
             return None
         if self._call.handle >= 0:  # Kodi waits for the stream; the programme already has its answer
             return play.resolve(self._call, self._continue_play(self._call.params["programme"]))
@@ -194,11 +212,11 @@ class ContinueViews:
         return next((b for b in self._call.client.bookmarks(details=True) if b.get("id") == self._call.params["mark"]), None)
 
     def _delete_position(self, mark):
-        """Delete a position: through the web's own delete; failing that, a position at the start, which the list leaves out."""
+        """Delete a position; failing that, reset it to the start."""
         try:
             self._call.client.delete_bookmarks([mark])
         except provider.ApiError as e:
-            _log("deleting the position failed (%s): saving it at the start" % e, xbmc.LOGWARNING)
+            _log("deleting the position failed (%s): resetting it to the start" % e, xbmc.LOGWARNING)
             station, start, end = guidedata.from_bookmark_id(mark["id"])
             # A removal comes without the channel's media id (an expired airing's question): its channel's.
             media = self._call.params.get("media") or channellist.by_station(self._call.client).get(station, {}).get(
@@ -207,3 +225,71 @@ class ContinueViews:
             info = {"id": mark["id"], "program_id": mark.get("program_id", ""), "media_id": media}
             info.update(start_time=start, end_time=end, station_id=station)
             self._call.client.set_bookmark(info, 0, mark.get("runtime_seconds") or 0)
+
+
+def _page_key(mark):
+    """Return the info page key (see infopages) of a position's programme."""
+    return ("program", mark.get("program_id"))
+
+
+def _continue_art(mark):
+    """Return a row's pictures: the side panel shows the 2:3 poster, the background the 16:9 picture.
+
+    The row shows its resume icon. No thumb: Estuary's info page would put the poster over itself for a video or an episode.
+    """
+    return {
+        "fanart": guidedata.fanart(mark) or mark.get("thumbnail"),
+        "poster": guidedata.poster("program", mark.get("program_id")),
+    }
+
+
+def _set_continue_info(tag, row, page, year, programme_cast):
+    """Put a row's programme on its info tag: title, year, plot, channel, cast, type, rating, position and length."""
+    mark = row.mark
+    tag.setTitle(mark.get("title") or "")
+    if year:  # Estuary's info page puts it after the title
+        tag.setYear(year)
+    tag.setPlot(page.get("plot") or "")
+    tag.setStudios([row.channel["name"]])
+    rows.set_credits(tag, programme_cast)
+    numbers = guidedata.season_episode(mark)
+    if numbers:  # an episode: the info page says "season x episode"
+        tag.setMediaType("episode")
+        tag.setSeason(numbers[0])
+        tag.setEpisode(numbers[1])
+    elif page.get("type") == "movie":
+        tag.setMediaType("movie")
+    rows.set_mpaa(tag, mark.get("ratings"))
+    _set_position(tag, row)
+    rows.set_length(tag, int(mark.get("runtime_seconds") or 0))
+    tag.setProductionCode(_right_label(row))  # shown on the row's right (see rows.right_labels_from_production_code)
+
+
+def _set_position(tag, row):
+    """Give a row its icon: resume, from the position, whether or not the row plays itself.
+
+    A greyed row on catch-up has no position: Kodi's tick, watched to its end or reset here. An
+    expired one has neither: no tick (the provider drops it from its list, so whether it was
+    watched to its end is not known).
+    """
+    if row.expired:
+        tag.setPlaycount(0)
+    elif row.state == continuelist.ACTIVE:
+        tag.setResumePoint(float(row.mark.get("time_seconds") or 0), float(row.mark.get("runtime_seconds") or 0))
+    else:
+        tag.setPlaycount(1)
+
+
+def _right_label(row):
+    """Return what a row says on its right: "Expired", or how long it is expected to stay on catch-up; "" if unknown.
+
+    Whole days from a day on, whole hours below it (at least one).
+    """
+    if row.expired:
+        return _s(30269)
+    left = continuelist.seconds_left(row.mark)
+    if left is None:
+        return ""
+    if left >= DAY_SECONDS:
+        return _s(30270) % int(left // DAY_SECONDS)
+    return _s(30271) % max(1, -(-int(left) // HOUR_SECONDS))

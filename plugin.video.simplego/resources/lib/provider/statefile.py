@@ -110,6 +110,8 @@ _STATE_LOCK = threading.RLock()
 _FILE_LOCKS = {}  # lock file -> [depth, descriptor], held by this interpreter
 # Past this the work goes on unlocked rather than hang Kodi (a stuck renewal may take its timeouts).
 LOCK_WAIT = 45
+# Seconds between tries for a lock file another interpreter holds.
+LOCK_RETRY = 0.05
 
 try:
     import fcntl
@@ -162,7 +164,7 @@ def _lock_file(path, wait=None):
                 msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
             return fd
         except OSError:
-            if time.monotonic() > deadline or _pause(0.05, wait):
+            if time.monotonic() > deadline or _pause(LOCK_RETRY, wait):
                 os.close(fd)
                 return None
 

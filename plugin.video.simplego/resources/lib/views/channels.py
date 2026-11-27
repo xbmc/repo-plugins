@@ -8,7 +8,10 @@ import xbmcplugin
 
 from resources.lib import kodiutil
 from resources.lib import provider
+from resources.lib.data import channellist
 from resources.lib.data import guidedata
+from resources.lib.util import homelock
+from resources.lib.util import localtime
 from resources.lib.views import listing
 from resources.lib.views import rows
 
@@ -21,33 +24,31 @@ LISTING_STALE = 30
 
 
 class ChannelViews:
-    """Live channels (see plugin.ROUTES).
+    """Live channels (see views.routes).
 
     :param call: the plugin call (see views.call.Call)
     """
 
     def __init__(self, call):
         self._call = call
-        self.playing = None  # the channel last handed to Kodi to play, while something plays
 
     def do_channels(self):
         """List the live channels, every one (the public ones without a login), in the default order of channellist.grouped.
 
         One at a time: back from the full screen after a stop, Kodi asks for the list twice at once
         (its own reload, then another 0.1 s later, seen 2026-11-02), and showed both answers in one list
-        (each channel twice). The later of two at once ends at once as failed: Kodi keeps the one made.
+        (each channel twice). Of two at once only one makes it; the other ends at once as failed, and
+        Kodi keeps the one made.
         """
-        home = kodiutil.home()
-        began = home.getProperty(LISTING)
-        if began and time.time() - float(began) < LISTING_STALE:
+        lock = homelock.HomeLock(kodiutil.home(), LISTING, LISTING_STALE)
+        if not lock.try_take():
             _log("channel list asked for again while one is being made: this one ends", xbmc.LOGDEBUG)
             xbmcplugin.endOfDirectory(self._call.handle, succeeded=False)
             return
-        home.setProperty(LISTING, str(time.time()))
         try:
             self._list_channels()
         finally:
-            home.clearProperty(LISTING)
+            lock.release()
 
     def _list_channels(self):
         view = listing.list_view(self._call)
@@ -66,10 +67,10 @@ class ChannelViews:
         # The channel last handed to Kodi to play, while something plays (the service drops it once none of ours does).
         from resources.lib.service import quickplay
 
-        self.playing = kodiutil.home().getProperty(quickplay.PLAYING) if xbmc.Player().isPlaying() else None
+        playing = kodiutil.home().getProperty(quickplay.PLAYING) if xbmc.Player().isPlaying() else None
 
         for position, c in enumerate(view["channels"]):
-            deactivated = str(c["id"]) in off
+            deactivated = channellist.is_deactivated(c["id"], off)
             if deactivated or (subscribed is not None and c["id"] not in subscribed):
                 # Greyed out: its name and why (see My channels), no programme. A click says why: that
                 # it is deactivated, or which package it is in.
@@ -83,11 +84,12 @@ class ChannelViews:
                 xbmcplugin.addDirectoryItem(self._call.handle, url, li, isFolder=False)
                 continue
             prog = now.get(c["station_id"]) or {}
-            li = self.channel_item(c, prog, following.get(c["station_id"]), trusted, position)
+            is_playing = c.get("id") is not None and c.get("id") == playing
+            li = self.channel_item(c, prog, following.get(c["station_id"]), trusted, position, is_playing)
             rows.set_credits(li.getVideoInfoTag(), infopages.programme_credits(prog, cast))
             menu = self._channel_menu(c, prog, favourites) if favourites is not None else []
             # From its beginning where the web player allows it, in Kodi's words ("Play from beginning").
-            if trusted and prog.get("start_time") and "rn" not in (prog.get("content_flags") or []):
+            if trusted and prog.get("start_time") and guidedata.restartable(prog):
                 restart = self._call.url(action="play", id=c["id"], media=c["media_id"], programme=guidedata.param(prog))
                 menu.insert(0, (kodiutil.kodi_string(12021), "PlayMedia(%s)" % restart))
             li.addContextMenuItems(menu)
@@ -151,65 +153,23 @@ class ChannelViews:
         action = "RunPlugin(%s)" % self._call.url(action="favourite", number=c["number"], on=int(on))
         return [(rows.favourite_channel_item(on), action)]
 
-    def channel_item(self, c, prog, following, playable, position):
+    def channel_item(self, c, prog, following, playable, position, playing=False):
         """Return a channel's row: the programme on air, in its channel's category colour.
 
-        `following` (if known) is the second line. Where it cannot play (Windows/macOS), a click
+        `following` (if known) is the second line. Where it cannot play (off Android), a click
         only shows why, with no stream session opened.
+
+        :param playing: it is the channel playing: selected, in the skin's own colour for it (no category colour over it)
         """
-        # The logo is in the row and the channel name on the info page: the label is the programme alone.
-        # The channel playing: selected, in the skin's own colour for it (no category colour over it).
-        playing = c.get("id") is not None and c.get("id") == self.playing
-        colour = None if playing else guidedata.channel_colour(c) if self._call.colours else None
-        title = rows.row_title(prog) if prog.get("description") else c["name"]
-        label = kodiutil.coloured(colour, title) if colour else title
-        if following:
-            # In Kodi's words ("Next"), all of it grey and italic below the programme on now.
-            label += "[CR][I]%s[/I]" % rows.greyed(
-                "%s: %s - %s: %s"
-                % (
-                    kodiutil.kodi_string(19031),
-                    kodiutil.local_time(following["start_time"], date=False),
-                    kodiutil.local_time(following["end_time"], date=False),
-                    rows.with_episode(following.get("description") or "", following),
-                )
-            )
-        li = xbmcgui.ListItem(label)
+        colour = guidedata.channel_colour(c) if self._call.colours and not playing else None
+        li = xbmcgui.ListItem(_channel_label(c, prog, following, colour))
         if playing:  # as Kodi TV's channel list marks the one playing
             li.select(True)
-        # The thumb (the logo) is the row's and, without a poster, the side panel's. No fanart: behind
-        # the list it made the rows hard to read.
-        art = {"thumb": rows.panel_logo(c["logo"]), "icon": c["logo"]}
-        if prog and prog.get("program_id"):
-            # Estuary's info page only (its side panel ignores tvshow.poster): the 2:3 poster, with the
-            # thumb over it for a video or an episode.
-            art["tvshow.poster"] = guidedata.poster("program", prog["program_id"])
-        rows.set_art(li, art)
+        rows.set_art(li, _channel_art(c, prog))
         tag = li.getVideoInfoTag()
-        tag.setTitle(prog.get("episode_name") or prog.get("description") or c["name"])
         rows.set_channel_sort_keys(tag, c, position)
         rows.hide_kodi_favourites(li)
-        rows.set_programme_extras(tag, prog)
-        # Never "watched": Kodi counts a live stream as played to its end and keeps that by its address;
-        # an item that sets its own play count is not given the kept one.
-        tag.setPlaycount(0)
-        tag.setPlot(prog.get("full_description") or prog.get("description") or "")
-        tag.setGenres([g["name"] for g in prog.get("genres") or [] if g.get("name")])
-        rows.set_mpaa(tag, prog.get("ratings"))
-        # The played item's type (see playitem), but a movie is a video: Estuary's info page puts the
-        # logo over the poster only for a video or an episode.
-        kind = guidedata.kind(prog) if prog else None
-        numbers = guidedata.season_episode(prog)
-        episodic = bool(numbers or prog.get("episode_name"))
-        if not c.get("radio"):  # a radio has no type of Kodi's: none, rather than its info page saying "video"
-            tag.setMediaType(guidedata.media_type("other" if kind == "movie" else kind, episodic))
-        if guidedata.year(prog):
-            tag.setYear(guidedata.year(prog))
-        if episodic or kind == "series":
-            tag.setTvShowTitle(prog.get("description") or "")
-            if numbers:
-                tag.setSeason(numbers[0])
-                tag.setEpisode(numbers[1])
+        _set_programme_info(tag, c, prog)
         li.setProperty("IsPlayable", "true" if playable else "false")
         return li
 
@@ -228,3 +188,71 @@ class ChannelViews:
                 (_s(30171), "RunPlugin(%s)" % self._call.url(action="watch", id=prog["program_id"], kind="program", on=1))
             )
         return menu
+
+
+def _channel_label(c, prog, following, colour):
+    """Return a channel row's label: the programme on air, and below it the next one if known.
+
+    The logo is in the row and the channel name on the info page: the label is the programme alone.
+    """
+    title = rows.row_title(prog) if prog.get("description") else c["name"]
+    label = kodiutil.coloured(colour, title) if colour else title
+    if following:
+        label += "[CR][I]%s[/I]" % rows.greyed(_following_line(following))
+    return label
+
+
+def _following_line(following):
+    """Return the next programme's line in Kodi's words ("Next"): "Next: 21:00 - 22:00: Title"."""
+    return "%s: %s - %s: %s" % (
+        kodiutil.kodi_string(19031),
+        localtime.local_time(following["start_time"], date=False),
+        localtime.local_time(following["end_time"], date=False),
+        rows.with_episode(following.get("description") or "", following),
+    )
+
+
+def _channel_art(c, prog):
+    """Return a channel row's pictures: the logo is the row's thumb and, without a poster, the side panel's.
+
+    No fanart: behind the list it made the rows hard to read.
+    """
+    art = {"thumb": rows.panel_logo(c["logo"]), "icon": c["logo"]}
+    if prog and prog.get("program_id"):
+        # Estuary's info page only (its side panel ignores tvshow.poster): the 2:3 poster, with the
+        # thumb over it for a video or an episode.
+        art["tvshow.poster"] = guidedata.poster("program", prog["program_id"])
+    return art
+
+
+def _set_programme_info(tag, c, prog):
+    """Put the programme on air on a channel row's info tag: its title, plot, genres, rating, type and episode."""
+    tag.setTitle(prog.get("episode_name") or prog.get("description") or c["name"])
+    rows.set_programme_extras(tag, prog)
+    # Never "watched": Kodi counts a live stream as played to its end and keeps that by its address;
+    # an item that sets its own play count is not given the kept one.
+    tag.setPlaycount(0)
+    tag.setPlot(prog.get("full_description") or prog.get("description") or "")
+    tag.setGenres([g["name"] for g in prog.get("genres") or [] if g.get("name")])
+    rows.set_mpaa(tag, prog.get("ratings"))
+    _set_programme_type(tag, c, prog)
+
+
+def _set_programme_type(tag, c, prog):
+    """Give a channel row the type of the programme on air, and its year, series and episode where it has them.
+
+    The played item's type (see playitem), but a movie is a video: Estuary's info page puts the
+    logo over the poster only for a video or an episode.
+    """
+    kind = guidedata.kind(prog) if prog else None
+    numbers = guidedata.season_episode(prog)
+    episodic = bool(numbers or prog.get("episode_name"))
+    if not c.get("radio"):  # a radio has no type of Kodi's: none, rather than its info page saying "video"
+        tag.setMediaType(guidedata.media_type("other" if kind == "movie" else kind, episodic))
+    if guidedata.year(prog):
+        tag.setYear(guidedata.year(prog))
+    if episodic or kind == "series":
+        tag.setTvShowTitle(prog.get("description") or "")
+        if numbers:
+            tag.setSeason(numbers[0])
+            tag.setEpisode(numbers[1])

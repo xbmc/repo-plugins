@@ -22,7 +22,8 @@ def list_item(item_spec):
         # Kodi's playback info shows poster, else tvshow.poster, else icon; a resolved item's art is
         # added to its row's. Live: the logo, not the row's 2:3 poster. Watched back: its 16:9 picture.
         logo = item_spec["logo"]
-        li.setArt({"icon": logo} if item_spec.get("details") else {"icon": logo, "poster": logo})
+        live = item_spec.get("live", not item_spec.get("details"))
+        li.setArt({"icon": logo, "poster": logo} if live else {"icon": logo})
     return li
 
 

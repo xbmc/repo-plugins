@@ -70,7 +70,7 @@ def ca_bundle():
 
     The server omits its Sectigo DV E36 intermediate, and Kodi's certifi (2023.5.7)
     predates the Sectigo E46 root, so E46 cross-signed by USERTrust ECC is shipped too.
-    Refreshed by scripts/update_certs.py; tests/test_certs.py warns before expiry.
+    Refreshed by scripts/update_certs.py; its weekly run warns a year before expiry.
     """
     global _bundle
     if _bundle:
@@ -85,7 +85,7 @@ def ca_bundle():
         with open(bundle, "w") as out:
             for p in sources:
                 with open(p) as f:
-                    out.write((trusted(f.read()) if p == certifi_file else f.read()) + "\n")
+                    out.write((drop_distrusted(f.read()) if p == certifi_file else f.read()) + "\n")
         for old in OLD_BUNDLES:
             with contextlib.suppress(OSError):
                 os.remove(os.path.join(kodiutil.PROFILE, old))
@@ -93,7 +93,7 @@ def ca_bundle():
     return bundle
 
 
-def trusted(pem):
+def drop_distrusted(pem):
     """Return certifi's cacert.pem text without the DISTRUSTED roots (each entry starts with its "# Issuer:" lines)."""
     entries = re.split(r"\n(?=# Issuer: )", pem)
     return "\n".join(e for e in entries if not any('# Label: "%s"' % label in e for label in DISTRUSTED))

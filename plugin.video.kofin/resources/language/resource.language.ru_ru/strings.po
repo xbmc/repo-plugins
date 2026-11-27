@@ -1,0 +1,1969 @@
+# Kodi Media Center language file
+# Addon Name: Kofin
+# Addon id: plugin.video.kofin
+# Addon Provider: kontell
+# Note: machine-translated (LLM), pending native review.
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.kofin\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-08-14 00:00+0000\n"
+"Last-Translator: Claude (machine translation) <noreply@anthropic.com>\n"
+"Language-Team: Russian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "Addon Summary"
+msgid "Jellyfin client for seamless Kodi integration"
+msgstr "Клиент Jellyfin для полной интеграции с Kodi"
+
+msgctxt "Addon Description"
+msgid "Play movies, shows & music from a Jellyfin server."
+msgstr "Воспроизведение фильмов, сериалов и музыки с сервера Jellyfin."
+
+msgctxt "#30010"
+msgid "Play with transcoding"
+msgstr "Воспроизвести с перекодированием"
+
+msgctxt "#30011"
+msgid "Quick Connect"
+msgstr "Quick Connect"
+
+msgctxt "#30012"
+msgid "Username and password"
+msgstr "Имя пользователя и пароль"
+
+msgctxt "#30013"
+msgid "Username"
+msgstr "Имя пользователя"
+
+msgctxt "#30014"
+msgid "Password"
+msgstr "Пароль"
+
+msgctxt "#30015"
+msgid "Enter code [B]%s[/B] in the Jellyfin app or web interface."
+msgstr "Введите код [B]%s[/B] в приложении Jellyfin или в веб-интерфейсе."
+
+msgctxt "#30016"
+msgid "Logged in as %s"
+msgstr "Выполнен вход как %s"
+
+msgctxt "#30017"
+msgid "Login failed: wrong username or password"
+msgstr "Не удалось войти: неверное имя пользователя или пароль"
+
+msgctxt "#30018"
+msgid "Server unreachable"
+msgstr "Сервер недоступен"
+
+msgctxt "#30019"
+msgid "Log out from %s?"
+msgstr "Выйти из %s?"
+
+msgctxt "#30020"
+msgid "Logged out"
+msgstr "Выход выполнен"
+
+msgctxt "#30021"
+msgid "Connection OK — %s (%s)"
+msgstr "Соединение установлено — %s (%s)"
+
+msgctxt "#30022"
+msgid "Session rejected — log in again from the Account tab"
+msgstr "Сеанс отклонён — войдите снова на вкладке «Учётная запись»"
+
+msgctxt "#30023"
+msgid "Restarting the Kofin service"
+msgstr "Перезапуск службы Kofin"
+
+msgctxt "#30024"
+msgid "Quick Connect timed out"
+msgstr "Время ожидания Quick Connect истекло"
+
+msgctxt "#30025"
+msgid "Already logged in"
+msgstr "Вход уже выполнен"
+
+msgctxt "#30026"
+msgid "Not logged in"
+msgstr "Вход не выполнен"
+
+msgctxt "#30027"
+msgid "Log in to %s"
+msgstr "Войти на %s"
+
+msgctxt "#30050"
+msgid "Account"
+msgstr "Учётная запись"
+
+msgctxt "#30051"
+msgid "Connect to your Jellyfin server and manage the session."
+msgstr "Подключитесь к серверу Jellyfin и управляйте сеансом."
+
+msgctxt "#30052"
+msgid "Server address"
+msgstr "Адрес сервера"
+
+msgctxt "#30053"
+msgid "Host name, IP address or full URL of the Jellyfin server. A bare host uses http on port 8096."
+msgstr "Имя хоста, IP-адрес или полный URL сервера Jellyfin. Для голого имени хоста используются http и порт 8096."
+
+msgctxt "#30054"
+msgid "Log in…"
+msgstr "Вход…"
+
+msgctxt "#30055"
+msgid "Connect to the server above using Quick Connect or a username and password."
+msgstr "Подключитесь к указанному выше серверу через Quick Connect либо по имени пользователя и паролю."
+
+msgctxt "#30056"
+msgid "Server"
+msgstr "Сервер"
+
+msgctxt "#30057"
+msgid "The connected Jellyfin server."
+msgstr "Подключённый сервер Jellyfin."
+
+msgctxt "#30058"
+msgid "Logged-in user"
+msgstr "Вошедший пользователь"
+
+msgctxt "#30059"
+msgid "The Jellyfin user this device plays and reports as."
+msgstr "Пользователь Jellyfin, от имени которого это устройство воспроизводит и отчитывается."
+
+msgctxt "#30060"
+msgid "Test connection"
+msgstr "Проверить соединение"
+
+msgctxt "#30061"
+msgid "Check that the server is reachable and the session is still valid."
+msgstr "Проверить, доступен ли сервер и действителен ли ещё сеанс."
+
+msgctxt "#30062"
+msgid "Log out"
+msgstr "Выход"
+
+msgctxt "#30063"
+msgid "End the session on the server and forget it on this device. The server address is kept."
+msgstr "Завершить сеанс на сервере и забыть его на этом устройстве. Адрес сервера сохраняется."
+
+msgctxt "#30064"
+msgid "Restart Kofin"
+msgstr "Перезапустить Kofin"
+
+msgctxt "#30065"
+msgid "Restart the background service without restarting Kodi."
+msgstr "Перезапустить фоновую службу без перезапуска Kodi."
+
+msgctxt "#30071"
+msgid "Advanced"
+msgstr "Дополнительно"
+
+msgctxt "#30072"
+msgid "Notification, browsing, playback and deletion options."
+msgstr "Параметры уведомлений, навигации, воспроизведения и удаления."
+
+msgctxt "#30073"
+msgid "Enable Delete from server"
+msgstr "Включить удаление с сервера"
+
+msgctxt "#30074"
+msgid "Adds a Delete entry to an item's 'Jellyfin actions' context menu. Deletion is permanent: the file itself is removed on the Jellyfin server, for every user."
+msgstr "Добавляет пункт «Удалить» в контекстное меню «Действия Jellyfin» для элемента. Удаление необратимо: сам файл удаляется на сервере Jellyfin для всех пользователей."
+
+msgctxt "#30075"
+msgid "Delete without confirmation"
+msgstr "Удалять без подтверждения"
+
+msgctxt "#30076"
+msgid "Delete the item as soon as the entry is picked, with no 'are you sure?' prompt. The deletion is still permanent and applies on the server."
+msgstr "Удалять элемент сразу после выбора пункта, без вопроса «вы уверены?». Удаление всё равно необратимо и выполняется на сервере."
+
+msgctxt "#30077"
+msgid "Offer to delete after watching"
+msgstr "Предлагать удаление после просмотра"
+
+msgctxt "#30078"
+msgid "When a movie or episode finishes, ask whether to delete it from the server. Always asks, whatever 'Delete without confirmation' is set to."
+msgstr "Когда фильм или серия досмотрены, спрашивать, удалить ли их с сервера. Спрашивает всегда, независимо от параметра «Удалять без подтверждения»."
+
+msgctxt "#30079"
+msgid "Who's watching shortlist"
+msgstr "Список для «Кто смотрит?»"
+
+msgctxt "#30080"
+msgid "Choose which server users the addon's Who's watching? entry offers. \"All\" offers everyone. With nothing selected the entry is hidden and anyone already on the session is removed."
+msgstr "Выберите, каких пользователей сервера предлагает пункт «Кто смотрит?». Вариант \"Все\" предлагает всех. Если ничего не выбрано, пункт скрывается, а все, кто уже добавлен к сеансу, удаляются."
+
+msgctxt "#30030"
+msgid "All"
+msgstr "Все"
+
+msgctxt "#30031"
+msgid "Recently added"
+msgstr "Недавно добавленные"
+
+msgctxt "#30032"
+msgid "Next up"
+msgstr "Далее"
+
+msgctxt "#30033"
+msgid "In progress"
+msgstr "Начатые"
+
+msgctxt "#30034"
+msgid "Unwatched"
+msgstr "Непросмотренные"
+
+msgctxt "#30035"
+msgid "Favourites"
+msgstr "Избранное"
+
+msgctxt "#30036"
+msgid "Genres"
+msgstr "Жанры"
+
+msgctxt "#30037"
+msgid "Random"
+msgstr "Случайные"
+
+msgctxt "#30038"
+msgid "Sets"
+msgstr "Наборы"
+
+msgctxt "#30039"
+msgid "Artists"
+msgstr "Исполнители"
+
+msgctxt "#30040"
+msgid "Albums"
+msgstr "Альбомы"
+
+msgctxt "#30049"
+msgid "Continue watching"
+msgstr "Продолжить просмотр"
+
+msgctxt "#30100"
+msgid "Transcoding"
+msgstr "Перекодирование"
+
+msgctxt "#30101"
+msgid "When and how the server converts media for this device."
+msgstr "Когда и как сервер преобразует медиафайлы для этого устройства."
+
+msgctxt "#30102"
+msgid "Force direct play"
+msgstr "Принудительное прямое воспроизведение"
+
+msgctxt "#30103"
+msgid "Always play the original video file. Overrides every other video transcoding setting; playback fails if the device cannot handle the media. Music is unaffected — see 'Transcode music'."
+msgstr "Всегда воспроизводить исходный видеофайл. Переопределяет все остальные настройки перекодирования видео; воспроизведение не удастся, если устройство не справится с медиафайлом. На музыку не влияет — см. «Перекодировать музыку»."
+
+msgctxt "#30104"
+msgid "Force remux"
+msgstr "Принудительный ремукс"
+
+msgctxt "#30105"
+msgid "Remux into HLS and copy the source codecs. Does not use Maximum audio channels, Maximum streaming bitrate or Transcode audio bitrate below — those would re-encode a listed codec. Direct play codecs, Allowed HDR types and Maximum resolution still apply."
+msgstr "Делает ремукс в HLS и копирует исходные кодеки. Не использует «Максимальное число аудиоканалов», «Максимальный битрейт потоковой передачи» и «Битрейт звука при перекодировании» ниже — они перекодировали бы кодек из списка. Кодеки прямого воспроизведения, «Разрешённые типы HDR» и «Максимальное разрешение» по-прежнему действуют."
+
+msgctxt "#30106"
+msgid "Force transcode"
+msgstr "Принудительное перекодирование"
+
+msgctxt "#30107"
+msgid "Always re-encode video and audio to the preferred codecs. Honours the bitrate cap, the channel cap, allowed codecs, HDR types and resolution."
+msgstr "Всегда перекодирует видео и аудио в предпочитаемые кодеки. Соблюдает ограничение битрейта, ограничение каналов, разрешённые кодеки, типы HDR и разрешение."
+
+msgctxt "#30108"
+msgid "Direct play video codecs"
+msgstr "Видеокодеки для прямого воспроизведения"
+
+msgctxt "#30109"
+msgid "Video formats this device can decode. Media using formats not selected here is transcoded."
+msgstr "Видеоформаты, которые это устройство может декодировать. Медиафайлы в форматах, не выбранных здесь, перекодируются."
+
+msgctxt "#30110"
+msgid "Direct play audio codecs"
+msgstr "Аудиокодеки для прямого воспроизведения"
+
+msgctxt "#30111"
+msgid "Audio formats this device can decode or pass through. Others are transcoded."
+msgstr "Аудиоформаты, которые это устройство может декодировать или передавать без изменений. Остальные перекодируются."
+
+msgctxt "#30112"
+msgid "Allowed HDR types"
+msgstr "Разрешённые типы HDR"
+
+msgctxt "#30113"
+msgid "HDR formats the display accepts. Media in formats not selected is tone-mapped or transcoded to SDR/HDR10 by the server."
+msgstr "Форматы HDR, которые принимает дисплей. Медиафайлы в невыбранных форматах сервер преобразует тональной компрессией или перекодирует в SDR/HDR10."
+
+msgctxt "#30114"
+msgid "Preferred video codec"
+msgstr "Предпочитаемый видеокодек"
+
+msgctxt "#30115"
+msgid "The codec the client asks for when video must be transcoded."
+msgstr "Кодек, который запрашивает клиент, когда видео нужно перекодировать."
+
+msgctxt "#30116"
+msgid "Preferred audio codec"
+msgstr "Предпочитаемый аудиокодек"
+
+msgctxt "#30117"
+msgid "The codec the client asks for when audio must be transcoded."
+msgstr "Кодек, который запрашивает клиент, когда звук нужно перекодировать."
+
+msgctxt "#30118"
+msgid "Maximum audio channels"
+msgstr "Максимальное число аудиоканалов"
+
+msgctxt "#30119"
+msgid "Maximum number of audio channels allowed when transcoding. Streams with more channels will be downmixed. No effect on direct playback."
+msgstr "Максимальное число аудиоканалов, разрешённое при перекодировании. Потоки с большим числом каналов будут сведены вниз. Не влияет на прямое воспроизведение."
+
+msgctxt "#30120"
+msgid "Maximum streaming bitrate"
+msgstr "Максимальный битрейт потоковой передачи"
+
+msgctxt "#30121"
+msgid "Media above this bitrate is transcoded down to it."
+msgstr "Медиафайлы с более высоким битрейтом перекодируются до этого значения."
+
+msgctxt "#30122"
+msgid "Maximum resolution"
+msgstr "Максимальное разрешение"
+
+msgctxt "#30123"
+msgid "Wider media is downscaled by the server."
+msgstr "Более широкие медиафайлы масштабируются сервером вниз."
+
+msgctxt "#30124"
+msgid "Transcode audio bitrate"
+msgstr "Битрейт звука при перекодировании"
+
+msgctxt "#30125"
+msgid "Bitrate for the audio track when video is transcoded."
+msgstr "Битрейт звуковой дорожки, когда видео перекодируется."
+
+msgctxt "#30126"
+msgid "Context menu bitrates"
+msgstr "Битрейты в контекстном меню"
+
+msgctxt "#30127"
+msgid "Bitrates offered by 'Play with transcoding'. With one selected the popup is skipped."
+msgstr "Битрейты, предлагаемые пунктом «Воспроизвести с перекодированием». Если выбран только один, окно выбора пропускается."
+
+msgctxt "#30129"
+msgid "Maximum music bitrate"
+msgstr "Максимальный битрейт музыки"
+
+msgctxt "#30130"
+msgid "Music above this bitrate is transcoded using the codec and bitrate below. Unlimited never transcodes."
+msgstr "Музыка с более высоким битрейтом перекодируется указанными ниже кодеком и битрейтом. «Без ограничений» не перекодирует никогда."
+
+msgctxt "#30131"
+msgid "Music transcode codec"
+msgstr "Кодек перекодирования музыки"
+
+msgctxt "#30132"
+msgid "Codec for transcoded music streams."
+msgstr "Кодек для перекодированных музыкальных потоков."
+
+msgctxt "#30133"
+msgid "Music transcode bitrate"
+msgstr "Битрейт перекодирования музыки"
+
+msgctxt "#30134"
+msgid "Bitrate for transcoded music streams."
+msgstr "Битрейт перекодированных музыкальных потоков."
+
+msgctxt "#30135"
+msgid "Transcode music"
+msgstr "Перекодировать музыку"
+
+msgctxt "#30150"
+msgid "H.264 (AVC)"
+msgstr "H.264 (AVC)"
+
+msgctxt "#30151"
+msgid "H.264 10-bit (Hi10P)"
+msgstr "H.264 10-bit (Hi10P)"
+
+msgctxt "#30152"
+msgid "H.265 (HEVC)"
+msgstr "H.265 (HEVC)"
+
+msgctxt "#30153"
+msgid "HEVC RExt (4:2:2/4:4:4)"
+msgstr "HEVC RExt (4:2:2/4:4:4)"
+
+msgctxt "#30154"
+msgid "AV1"
+msgstr "AV1"
+
+msgctxt "#30155"
+msgid "MPEG-2"
+msgstr "MPEG-2"
+
+msgctxt "#30156"
+msgid "VP9"
+msgstr "VP9"
+
+msgctxt "#30157"
+msgid "VC-1"
+msgstr "VC-1"
+
+msgctxt "#30158"
+msgid "AAC"
+msgstr "AAC"
+
+msgctxt "#30159"
+msgid "MP2"
+msgstr "MP2"
+
+msgctxt "#30160"
+msgid "MP3"
+msgstr "MP3"
+
+msgctxt "#30161"
+msgid "AC3 (Dolby Digital)"
+msgstr "AC3 (Dolby Digital)"
+
+msgctxt "#30162"
+msgid "E-AC3 (Dolby Digital Plus)"
+msgstr "E-AC3 (Dolby Digital Plus)"
+
+msgctxt "#30163"
+msgid "Opus"
+msgstr "Opus"
+
+msgctxt "#30164"
+msgid "FLAC"
+msgstr "FLAC"
+
+msgctxt "#30165"
+msgid "DTS"
+msgstr "DTS"
+
+msgctxt "#30166"
+msgid "HDR10"
+msgstr "HDR10"
+
+msgctxt "#30167"
+msgid "HLG"
+msgstr "HLG"
+
+msgctxt "#30168"
+msgid "HDR10+"
+msgstr "HDR10+"
+
+msgctxt "#30169"
+msgid "Dolby Vision"
+msgstr "Dolby Vision"
+
+msgctxt "#30170"
+msgid "Dolby Vision with HDR10 fallback"
+msgstr "Dolby Vision (резерв HDR10)"
+
+msgctxt "#30171"
+msgid "Dolby Vision with HLG fallback"
+msgstr "Dolby Vision (резерв HLG)"
+
+msgctxt "#30172"
+msgid "Dolby Vision with SDR fallback"
+msgstr "Dolby Vision (резерв SDR)"
+
+msgctxt "#30173"
+msgid "Dolby Vision Profile 7 (EL)"
+msgstr "Dolby Vision, профиль 7 (EL)"
+
+msgctxt "#30174"
+msgid "Dolby Vision with HDR10+ fallback"
+msgstr "Dolby Vision (резерв HDR10+)"
+
+msgctxt "#30175"
+msgid "Dolby Vision P7 with HDR10+ fallback"
+msgstr "Dolby Vision P7 (резерв HDR10+)"
+
+msgctxt "#30176"
+msgid "Unlimited"
+msgstr "Без ограничений"
+
+msgctxt "#30177"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30178"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30179"
+msgid "4K"
+msgstr "4K"
+
+msgctxt "#30180"
+msgid "2.0 stereo"
+msgstr "2.0 стерео"
+
+msgctxt "#30181"
+msgid "5.1 surround"
+msgstr "5.1 объёмный"
+
+msgctxt "#30182"
+msgid "7.1 surround"
+msgstr "7.1 объёмный"
+
+msgctxt "#30183"
+msgid "1 Mbit/s"
+msgstr "1 Mbit/s"
+
+msgctxt "#30184"
+msgid "2 Mbit/s"
+msgstr "2 Mbit/s"
+
+msgctxt "#30185"
+msgid "3 Mbit/s"
+msgstr "3 Mbit/s"
+
+msgctxt "#30186"
+msgid "4 Mbit/s"
+msgstr "4 Mbit/s"
+
+msgctxt "#30187"
+msgid "6 Mbit/s"
+msgstr "6 Mbit/s"
+
+msgctxt "#30188"
+msgid "8 Mbit/s"
+msgstr "8 Mbit/s"
+
+msgctxt "#30189"
+msgid "10 Mbit/s"
+msgstr "10 Mbit/s"
+
+msgctxt "#30190"
+msgid "15 Mbit/s"
+msgstr "15 Mbit/s"
+
+msgctxt "#30191"
+msgid "20 Mbit/s"
+msgstr "20 Mbit/s"
+
+msgctxt "#30192"
+msgid "25 Mbit/s"
+msgstr "25 Mbit/s"
+
+msgctxt "#30193"
+msgid "40 Mbit/s"
+msgstr "40 Mbit/s"
+
+msgctxt "#30194"
+msgid "60 Mbit/s"
+msgstr "60 Mbit/s"
+
+msgctxt "#30195"
+msgid "120 Mbit/s"
+msgstr "120 Mbit/s"
+
+msgctxt "#30196"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30197"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30198"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30199"
+msgid "256 kbit/s"
+msgstr "256 kbit/s"
+
+msgctxt "#30200"
+msgid "320 kbit/s"
+msgstr "320 kbit/s"
+
+msgctxt "#30201"
+msgid "384 kbit/s"
+msgstr "384 kbit/s"
+
+msgctxt "#30202"
+msgid "448 kbit/s"
+msgstr "448 kbit/s"
+
+msgctxt "#30203"
+msgid "640 kbit/s"
+msgstr "640 kbit/s"
+
+msgctxt "#30204"
+msgid "0.5 Mbit/s"
+msgstr "0.5 Mbit/s"
+
+msgctxt "#30205"
+msgid "0.75 Mbit/s"
+msgstr "0.75 Mbit/s"
+
+msgctxt "#30206"
+msgid "Default (max streaming bitrate)"
+msgstr "По умолчанию (макс. битрейт потока)"
+
+msgctxt "#30041"
+msgid "Who's watching?"
+msgstr "Кто смотрит?"
+
+msgctxt "#30045"
+msgid "No active session on the server yet"
+msgstr "На сервере ещё нет активного сеанса"
+
+msgctxt "#30046"
+msgid "Who's watching? (%s)"
+msgstr "Кто смотрит? (%s)"
+
+msgctxt "#30047"
+msgid "Who's watching with %s?"
+msgstr "Кто смотрит вместе с %s?"
+
+msgctxt "#30048"
+msgid "Who can be added to the session"
+msgstr "Кого можно добавить к сеансу"
+
+msgctxt "#30250"
+msgid "Library"
+msgstr "Библиотека"
+
+msgctxt "#30251"
+msgid "Select and manage the Jellyfin libraries mirrored into Kodi's own database."
+msgstr "Выбор библиотек Jellyfin, зеркалируемых в собственную базу данных Kodi, и управление ими."
+
+msgctxt "#30252"
+msgid "Select libraries to sync"
+msgstr "Выбрать библиотеки для синхронизации"
+
+msgctxt "#30253"
+msgid "Choose which server libraries are mirrored into the Kodi library. Changes apply when you confirm the selection."
+msgstr "Выберите, какие библиотеки сервера зеркалируются в библиотеку Kodi. Изменения применяются после подтверждения выбора."
+
+msgctxt "#30256"
+msgid "Update libraries"
+msgstr "Обновить библиотеки"
+
+msgctxt "#30258"
+msgid "Repair libraries"
+msgstr "Восстановить библиотеки"
+
+msgctxt "#30259"
+msgid "Remove and re-sync the libraries you pick from scratch, restoring watched state from the server. Runs when you confirm the selection."
+msgstr "Удалить и заново синхронизировать выбранные библиотеки с нуля, восстановив состояние просмотра с сервера. Выполняется после подтверждения выбора."
+
+msgctxt "#30262"
+msgid "Sync status"
+msgstr "Состояние синхронизации"
+
+msgctxt "#30264"
+msgid "Remove synced library?"
+msgstr "Убрать синхронизированную библиотеку?"
+
+msgctxt "#30265"
+msgid "Remove %s from the Kodi library? The items are deleted from this device only."
+msgstr "Убрать %s из библиотеки Kodi? Элементы удаляются только с этого устройства."
+
+msgctxt "#30266"
+msgid "Repair which libraries?"
+msgstr "Какие библиотеки восстановить?"
+
+msgctxt "#30267"
+msgid "All"
+msgstr "Все"
+
+msgctxt "#30268"
+msgid "Select libraries"
+msgstr "Выбрать библиотеки"
+
+msgctxt "#30269"
+msgid "No libraries available"
+msgstr "Нет доступных библиотек"
+
+msgctxt "#30302"
+msgid "Hide update status below (items)"
+msgstr "Скрывать ход обновления менее (элементов)"
+
+msgctxt "#30303"
+msgid "Hide Kodi's library-update progress for syncs smaller than this. 0 always shows it."
+msgstr "Скрывать индикатор обновления библиотеки Kodi для синхронизаций меньше указанного размера. 0 — показывать всегда."
+
+msgctxt "#30318"
+msgid "Compress artwork"
+msgstr "Сжимать обложки"
+
+msgctxt "#30319"
+msgid "Re-encode capped artwork at JPEG quality 90. No effect without a resolution cap."
+msgstr "Перекодировать ограниченные по размеру обложки в JPEG с качеством 90. Без ограничения разрешения не действует."
+
+msgctxt "#30320"
+msgid "Maximum artwork resolution"
+msgstr "Максимальное разрешение обложек"
+
+msgctxt "#30321"
+msgid "Cap the size of artwork from the server. Auto matches Kodi's image cache: 1080p for backdrops, 720p for posters and logos."
+msgstr "Ограничить размер обложек с сервера. «Авто» следует кешу изображений Kodi: 1080p для фонов, 720p для постеров и логотипов."
+
+msgctxt "#30322"
+msgid "Original"
+msgstr "Оригинал"
+
+msgctxt "#30323"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30324"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30325"
+msgid "2160p"
+msgstr "2160p"
+
+msgctxt "#30326"
+msgid "Notify on server connection changes"
+msgstr "Уведомлять об изменениях соединения с сервером"
+
+msgctxt "#30327"
+msgid "Show a notification when the server connects, disconnects or restarts."
+msgstr "Показывать уведомление, когда сервер подключается, отключается или перезапускается."
+
+msgctxt "#30350"
+msgid "Recently added"
+msgstr "Недавно добавленные"
+
+msgctxt "#30351"
+msgid "In progress"
+msgstr "Начатые"
+
+msgctxt "#30352"
+msgid "Unwatched"
+msgstr "Непросмотренные"
+
+msgctxt "#30353"
+msgid "Random"
+msgstr "Случайные"
+
+msgctxt "#30354"
+msgid "Recommended"
+msgstr "Рекомендуемые"
+
+msgctxt "#30355"
+msgid "Recently added episodes"
+msgstr "Недавно добавленные серии"
+
+msgctxt "#30356"
+msgid "In progress episodes"
+msgstr "Начатые серии"
+
+msgctxt "#30358"
+msgid "Favorite movies"
+msgstr "Избранные фильмы"
+
+msgctxt "#30359"
+msgid "Favorite shows"
+msgstr "Избранные сериалы"
+
+msgctxt "#30360"
+msgid "Favorite episodes"
+msgstr "Избранные серии"
+
+msgctxt "#30401"
+msgid "Updating media"
+msgstr "Обновление медиатеки"
+
+msgctxt "#30403"
+msgid "Sync incomplete; retrying shortly"
+msgstr "Синхронизация неполная, повтор"
+
+msgctxt "#30408"
+msgid "Removing library"
+msgstr "Удаление библиотеки"
+
+msgctxt "#30415"
+msgid "Connected to %s"
+msgstr "Подключено к %s"
+
+msgctxt "#30416"
+msgid "Lost connection to the server"
+msgstr "Соединение с сервером потеряно"
+
+msgctxt "#30417"
+msgid "Server is restarting"
+msgstr "Сервер перезапускается"
+
+msgctxt "#30418"
+msgid "Server is shutting down"
+msgstr "Сервер выключается"
+
+msgctxt "#30420"
+msgid "Library sync is off: %s"
+msgstr "Синхронизация отключена: %s"
+
+msgctxt "#30450"
+msgid "Skipping & Play next"
+msgstr "Пропуск и следующая серия"
+
+msgctxt "#30451"
+msgid "Media segment skipping and the Play Next prompt."
+msgstr "Пропуск медиасегментов и запрос следующей серии."
+
+msgctxt "#30453"
+msgid "Skip media segments"
+msgstr "Пропускать медиасегменты"
+
+msgctxt "#30454"
+msgid "Fetch Jellyfin media segments (intro, credits, recap, preview, commercial) during playback and act on them per type."
+msgstr "Получать медиасегменты Jellyfin (заставка, титры, краткое содержание, анонс, реклама) во время воспроизведения и действовать по типу сегмента."
+
+msgctxt "#30455"
+msgid "Intros"
+msgstr "Заставки"
+
+msgctxt "#30456"
+msgid "Off ignores intro segments, Auto skips past them, Ask shows a skip button."
+msgstr "«Выкл.» — игнорировать заставки, «Авто» — пропускать их, «Спрашивать» — показывать кнопку пропуска."
+
+msgctxt "#30457"
+msgid "Credits"
+msgstr "Титры"
+
+msgctxt "#30458"
+msgid "Off ignores credits, Auto seeks past them, Ask offers Skip Outro — with Play Next when a next episode exists."
+msgstr "«Выкл.» — игнорировать титры, «Авто» — перематывать их, «Спрашивать» — предлагать «Пропустить титры», а если есть следующая серия — и «Далее»."
+
+msgctxt "#30459"
+msgid "Recaps"
+msgstr "Краткое содержание"
+
+msgctxt "#30460"
+msgid "Off ignores recap segments, Auto skips past them, Ask shows a skip button."
+msgstr "«Выкл.» — игнорировать сегменты с кратким содержанием, «Авто» — пропускать их, «Спрашивать» — показывать кнопку пропуска."
+
+msgctxt "#30461"
+msgid "Previews"
+msgstr "Анонсы"
+
+msgctxt "#30462"
+msgid "Off ignores preview segments, Auto skips past them, Ask shows a skip button."
+msgstr "«Выкл.» — игнорировать анонсы, «Авто» — пропускать их, «Спрашивать» — показывать кнопку пропуска."
+
+msgctxt "#30463"
+msgid "Commercials"
+msgstr "Реклама"
+
+msgctxt "#30464"
+msgid "Off ignores commercial segments, Auto skips past them, Ask shows a skip button."
+msgstr "«Выкл.» — игнорировать рекламные сегменты, «Авто» — пропускать их, «Спрашивать» — показывать кнопку пропуска."
+
+msgctxt "#30465"
+msgid "Off"
+msgstr "Выкл."
+
+msgctxt "#30466"
+msgid "Auto"
+msgstr "Авто"
+
+msgctxt "#30467"
+msgid "Ask"
+msgstr "Спрашивать"
+
+msgctxt "#30469"
+msgid "Offer Play Next"
+msgstr "Предлагать следующую серию"
+
+msgctxt "#30470"
+msgid "Offer the next episode at the credits, or near the end when no credits segment exists."
+msgstr "Предлагать следующую серию на титрах или ближе к концу, если сегмента титров нет."
+
+msgctxt "#30471"
+msgid "Play Next lead time"
+msgstr "За сколько предлагать следующую"
+
+msgctxt "#30472"
+msgid "Seconds before the end to show the Play Next prompt for content without a credits segment."
+msgstr "За сколько секунд до конца показывать запрос следующей серии для материала без сегмента титров."
+
+msgctxt "#30473"
+msgid "Autoplay next episode"
+msgstr "Автовоспроизведение следующей серии"
+
+msgctxt "#30474"
+msgid "Count down on the Play Next prompt and start the next episode automatically."
+msgstr "Вести обратный отсчёт в запросе следующей серии и запускать её автоматически."
+
+msgctxt "#30475"
+msgid "Resume offset (seconds)"
+msgstr "Отступ при возобновлении (секунды)"
+
+msgctxt "#30476"
+msgid "Seconds to rewind before the stored resume point."
+msgstr "На сколько секунд отмотать назад от сохранённой точки возобновления."
+
+msgctxt "#30477"
+msgid "Hide the skip button after"
+msgstr "Скрывать кнопку пропуска после"
+
+msgctxt "#30478"
+msgid "How far into a segment the skip button disappears. 100% keeps it up for the whole segment."
+msgstr "Насколько глубоко в сегмент кнопка пропуска исчезает. 100% оставляет её на весь сегмент."
+
+msgctxt "#30481"
+msgid "Skip Intro"
+msgstr "Пропустить заставку"
+
+msgctxt "#30482"
+msgid "Skip Outro"
+msgstr "Пропустить титры"
+
+msgctxt "#30483"
+msgid "Skip Recap"
+msgstr "Пропустить содержание"
+
+msgctxt "#30484"
+msgid "Skip Preview"
+msgstr "Пропустить анонс"
+
+msgctxt "#30485"
+msgid "Skip Ad"
+msgstr "Пропустить рекламу"
+
+msgctxt "#30486"
+msgid "Play Next"
+msgstr "Далее"
+
+msgctxt "#30487"
+msgid "Close"
+msgstr "Закрыть"
+
+msgctxt "#30488"
+msgid "Skipped %s"
+msgstr "Пропущено: %s"
+
+msgctxt "#30489"
+msgid "Up next: %s"
+msgstr "Далее: %s"
+
+msgctxt "#30500"
+msgid "Extras"
+msgstr "Дополнительные материалы"
+
+msgctxt "#30501"
+msgid "Browse extras"
+msgstr "Обзор дополнительных материалов"
+
+msgctxt "#30502"
+msgid "Jellyfin actions"
+msgstr "Действия Jellyfin"
+
+msgctxt "#30504"
+msgid "Settings"
+msgstr "Настройки"
+
+msgctxt "#30505"
+msgid "Permanently delete \"%s\" from the server? This cannot be undone."
+msgstr "Безвозвратно удалить \"%s\" с сервера? Это действие нельзя отменить."
+
+msgctxt "#30506"
+msgid "Finished \"%s\". Permanently delete it from the server? This cannot be undone."
+msgstr "Просмотр \"%s\" завершён. Безвозвратно удалить его с сервера? Это действие нельзя отменить."
+
+msgctxt "#30507"
+msgid "Server request failed"
+msgstr "Сбой запроса к серверу"
+
+msgctxt "#30508"
+msgid "Mark as watched on Jellyfin"
+msgstr "Отметить просмотренным в Jellyfin"
+
+msgctxt "#30509"
+msgid "Mark as unwatched on Jellyfin"
+msgstr "Отметить непросмотренным в Jellyfin"
+
+msgctxt "#30550"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30551"
+msgid "Enable SyncPlay"
+msgstr "Включить SyncPlay"
+
+msgctxt "#30552"
+msgid "Watch in sync with other Jellyfin clients. Leave Kodi's 'Sync playback to display' off for a reliable experience"
+msgstr "Смотрите синхронно с другими клиентами Jellyfin. Оставьте «Синхронизировать воспроизведение с экраном» выключенным в Kodi — так надёжнее"
+
+msgctxt "#30557"
+msgid "Group notifications"
+msgstr "Уведомления группы"
+
+msgctxt "#30558"
+msgid "Show member join/leave and group-waiting notifications. Errors are always shown."
+msgstr "Показывать уведомления о входе и выходе участников и об ожидании группы. Ошибки показываются всегда."
+
+msgctxt "#30560"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30561"
+msgid "New group..."
+msgstr "Новая группа..."
+
+msgctxt "#30562"
+msgid "Leave group"
+msgstr "Покинуть группу"
+
+msgctxt "#30563"
+msgid "Joined group: %s"
+msgstr "Вход в группу: %s"
+
+msgctxt "#30564"
+msgid "Left the group"
+msgstr "Группа покинута"
+
+msgctxt "#30565"
+msgid "%s joined the group"
+msgstr "%s вошёл в группу"
+
+msgctxt "#30566"
+msgid "%s left the group"
+msgstr "%s покинул группу"
+
+msgctxt "#30567"
+msgid "Group name"
+msgstr "Название группы"
+
+msgctxt "#30568"
+msgid "Playback stopped — what should the group do?"
+msgstr "Воспроизведение остановлено — что делать группе?"
+
+msgctxt "#30569"
+msgid "Spectator mode: the group will not wait for you"
+msgstr "Режим наблюдателя: группа не будет вас ждать"
+
+msgctxt "#30570"
+msgid "SyncPlay needs a working websocket connection to the server"
+msgstr "Для SyncPlay нужно рабочее соединение websocket с сервером"
+
+msgctxt "#30571"
+msgid "Removed from the group"
+msgstr "Вас удалили из группы"
+
+msgctxt "#30572"
+msgid "Members"
+msgstr "Участники"
+
+msgctxt "#30573"
+msgid "Resync with group"
+msgstr "Пересинхронизировать с группой"
+
+msgctxt "#30574"
+msgid "SyncPlay is unavailable (server not reachable?)"
+msgstr "SyncPlay недоступен (сервер не отвечает?)"
+
+msgctxt "#30575"
+msgid "External players cannot be synchronized"
+msgstr "Внешние проигрыватели не синхронизируются"
+
+msgctxt "#30576"
+msgid "Playback could not be synchronized"
+msgstr "Сбой синхронизации воспроизведения"
+
+msgctxt "#30577"
+msgid "buffering"
+msgstr "буферизация"
+
+msgctxt "#30578"
+msgid "Could not join the group"
+msgstr "Не удалось войти в группу"
+
+msgctxt "#30579"
+msgid "You don't have access to some items in the group's queue"
+msgstr "У вас нет доступа к некоторым элементам очереди группы"
+
+msgctxt "#30580"
+msgid "Become a spectator (group won't wait for me)"
+msgstr "Стать наблюдателем (группа не будет меня ждать)"
+
+msgctxt "#30581"
+msgid "Wait for me again (leave spectator mode)"
+msgstr "Снова ждать меня (выйти из режима наблюдателя)"
+
+msgctxt "#30582"
+msgid "disconnected"
+msgstr "отключено"
+
+msgctxt "#30583"
+msgid "The group will wait for you again"
+msgstr "Группа снова будет вас ждать"
+
+msgctxt "#30584"
+msgid "Stop playback for everyone"
+msgstr "Остановить воспроизведение у всех"
+
+msgctxt "#30585"
+msgid "Waiting for the group..."
+msgstr "Ожидание группы..."
+
+msgctxt "#30586"
+msgid "Fine sync using tempo"
+msgstr "Точная синхронизация темпом"
+
+msgctxt "#30587"
+msgid "Keeps this device on the group's position by briefly playing faster or slower. A video correction decodes passthrough audio until the next item."
+msgstr "Удерживает это устройство на позиции группы, ненадолго воспроизводя быстрее или медленнее. Коррекция видео декодирует звук passthrough до следующего элемента."
+
+msgctxt "#30592"
+msgid "Fine sync stopped: rate mismatch"
+msgstr "Точная синхронизация остановлена: темп не совпадает"
+
+msgctxt "#30593"
+msgid "Largest video error closed by tempo (ms)"
+msgstr "Наибольшая ошибка видео, устраняемая темпом (мс)"
+
+msgctxt "#30594"
+msgid "Position errors up to this are closed by playing faster or slower; anything larger is closed with a skip. Higher means fewer skips and longer speed changes."
+msgstr "Ошибки позиции до этого значения устраняются более быстрым или медленным воспроизведением; большие — перемоткой. Выше — меньше перемоток и более долгие изменения скорости."
+
+msgctxt "#30595"
+msgid "Fastest video correction speed (%)"
+msgstr "Максимальная скорость коррекции видео (%)"
+
+msgctxt "#30596"
+msgid "The most playback speed may change during a correction. At 25% a 2.5 second error takes 10 seconds to close; lower is less noticeable but slower. Large changes ramp in and out."
+msgstr "Насколько сильно может измениться скорость воспроизведения во время коррекции. При 25 % ошибка в 2,5 секунды устраняется за 10 секунд; меньше — незаметнее, но медленнее. Большие изменения вводятся и снимаются плавно."
+
+msgctxt "#30604"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30605"
+msgid "1440p"
+msgstr "1440p"
+
+msgctxt "#30613"
+msgid "Audio and subtitle streams"
+msgstr "Звуковые дорожки и субтитры"
+
+msgctxt "#30614"
+msgid "Audio stream"
+msgstr "Звуковая дорожка"
+
+msgctxt "#30615"
+msgid "Subtitles"
+msgstr "Субтитры"
+
+msgctxt "#30616"
+msgid "Restarting to change stream..."
+msgstr "Перезапуск для смены дорожки..."
+
+msgctxt "#30617"
+msgid "burned in, restarts playback"
+msgstr "вшитые, перезапустит воспроизведение"
+
+msgctxt "#30618"
+msgid "Use Jellyfin's default tracks"
+msgstr "Использовать дорожки Jellyfin по умолчанию"
+
+msgctxt "#30619"
+msgid "Start playback on the audio and subtitle tracks your Jellyfin account asks for, instead of the ones Kodi's own language settings pick. The server resolves both from your Jellyfin profile, so the choice follows you to every client."
+msgstr "Начинать воспроизведение с тех звуковых дорожек и субтитров, которые запрашивает ваша учётная запись Jellyfin, а не с тех, что выбирают языковые настройки самой Kodi. Сервер определяет и то и другое по вашему профилю Jellyfin, поэтому выбор следует за вами на любой клиент."
+
+msgctxt "#30622"
+msgid "Notify about new content"
+msgstr "Уведомлять о новом контенте"
+
+msgctxt "#30623"
+msgid "Show a notification when new films, shows, episodes, music videos, artists or albums are added to your library."
+msgstr "Показывать уведомление, когда в библиотеку добавляются новые фильмы, сериалы, серии, клипы, исполнители или альбомы."
+
+msgctxt "#30624"
+msgid "%s movie added to library"
+msgstr "Новый фильм: %s"
+
+msgctxt "#30625"
+msgid "%s movies added to library"
+msgstr "Фильмов добавлено: %s"
+
+msgctxt "#30626"
+msgid "%s show added to library"
+msgstr "Новый сериал: %s"
+
+msgctxt "#30627"
+msgid "%s new shows added to library"
+msgstr "Сериалов добавлено: %s"
+
+msgctxt "#30628"
+msgid "%s episode of %s added to library"
+msgstr "%s серия сериала %s добавлена"
+
+msgctxt "#30629"
+msgid "%s episodes of %s added to library"
+msgstr "%s серий сериала %s добавлено"
+
+msgctxt "#30630"
+msgid "%s episodes added to library"
+msgstr "Серий добавлено: %s"
+
+msgctxt "#30631"
+msgid "%s music video added to library"
+msgstr "Новый клип: %s"
+
+msgctxt "#30632"
+msgid "%s music videos added to library"
+msgstr "Клипов добавлено: %s"
+
+msgctxt "#30633"
+msgid "%s added to music library"
+msgstr "Новый исполнитель: %s"
+
+msgctxt "#30634"
+msgid "%s artists added to library"
+msgstr "Исполнителей добавлено: %s"
+
+msgctxt "#30635"
+msgid "%s added to music library"
+msgstr "Новый альбом: %s"
+
+msgctxt "#30636"
+msgid "%s albums added to library"
+msgstr "Альбомов добавлено: %s"
+
+msgctxt "#30637"
+msgid "Use the server's splashscreen as the backdrop"
+msgstr "Использовать заставку сервера как фон"
+
+msgctxt "#30638"
+msgid "Show the Jellyfin server's splashscreen behind the addon instead of the bundled artwork. Refreshed when the service connects, at most once a day."
+msgstr "Показывать заставку сервера Jellyfin позади дополнения вместо встроенного изображения. Обновляется при подключении службы, не чаще раза в сутки."
+
+msgctxt "#30700"
+msgid "Downloads"
+msgstr "Загрузки"
+
+msgctxt "#30701"
+msgid "Download items for offline playback"
+msgstr "Загрузка элементов для просмотра офлайн"
+
+msgctxt "#30702"
+msgid "Enable downloads"
+msgstr "Включить загрузки"
+
+msgctxt "#30703"
+msgid "Adds Download to the Jellyfin actions menu and runs the download manager. Only for libraries you sync with Kofin."
+msgstr "Добавляет пункт «Загрузить» в меню «Действия Jellyfin» и запускает менеджер загрузок. Только для библиотек, синхронизируемых с Kofin."
+
+msgctxt "#30704"
+msgid "Download location"
+msgstr "Папка загрузок"
+
+msgctxt "#30705"
+msgid "Where downloaded files are kept. Leave empty for the addon profile folder"
+msgstr "Где хранятся загруженные файлы. Оставьте пустым, чтобы использовать папку профиля дополнения"
+
+msgctxt "#30706"
+msgid "Parallel video downloads"
+msgstr "Параллельных загрузок видео"
+
+msgctxt "#30707"
+msgid "How many movies and episodes download at the same time"
+msgstr "Сколько фильмов и серий загружается одновременно"
+
+msgctxt "#30708"
+msgid "Download"
+msgstr "Загрузить"
+
+msgctxt "#30709"
+msgid "Cancel download"
+msgstr "Отменить загрузку"
+
+msgctxt "#30710"
+msgid "Delete download"
+msgstr "Удалить загрузку"
+
+msgctxt "#30712"
+msgid "Download complete: %s"
+msgstr "Загрузка завершена: %s"
+
+msgctxt "#30713"
+msgid "Download failed: %s"
+msgstr "Сбой загрузки: %s"
+
+msgctxt "#30714"
+msgid "Delete the download of %s?"
+msgstr "Удалить загруженный файл %s?"
+
+msgctxt "#30715"
+msgid "Not enough free space for %s"
+msgstr "Недостаточно места для %s"
+
+msgctxt "#30717"
+msgid "The downloads folder is not writable"
+msgstr "Папка загрузок недоступна для записи"
+
+msgctxt "#30718"
+msgid "Downloaded movies"
+msgstr "Загруженные фильмы"
+
+msgctxt "#30719"
+msgid "Downloaded shows"
+msgstr "Загруженные сериалы"
+
+msgctxt "#30720"
+msgid "Not available offline"
+msgstr "Недоступно офлайн"
+
+msgctxt "#30721"
+msgid "Downloaded episodes"
+msgstr "Загруженные серии"
+
+msgctxt "#30722"
+msgid "Transcode videos"
+msgstr "Перекодировать видео"
+
+msgctxt "#30723"
+msgid "Transcode when the original exceeds a limit below or when triggered by settings in the Transcoding tab (HDR, codec, etc)"
+msgstr "Перекодировать, когда оригинал превышает предел ниже или когда этого требуют настройки на вкладке «Перекодирование» (HDR, кодек и т. п.)"
+
+msgctxt "#30724"
+msgid "Maximum download bitrate"
+msgstr "Максимальный битрейт загрузки"
+
+msgctxt "#30725"
+msgid "Videos over this total bitrate are transcoded down to it. Unlimited transcodes only for codec, HDR or resolution reasons."
+msgstr "Видео с общим битрейтом выше этого перекодируется до него. «Без ограничений» перекодирует только из-за кодека, HDR или разрешения."
+
+msgctxt "#30726"
+msgid "Maximum download resolution"
+msgstr "Максимальное разрешение загрузки"
+
+msgctxt "#30727"
+msgid "Videos wider than this are scaled down. Unlimited never scales."
+msgstr "Видео шире этого масштабируется вниз. «Без ограничений» не масштабирует никогда."
+
+msgctxt "#30728"
+msgid "Transcode music"
+msgstr "Перекодировать музыку"
+
+msgctxt "#30729"
+msgid "Transcode a track only when it is lossless or over the bitrate limit below. Compliant tracks download as the original file."
+msgstr "Перекодировать трек, только если он в формате без потерь или превышает предел битрейта ниже. Подходящие треки загружаются как оригинальные файлы."
+
+msgctxt "#30730"
+msgid "Transcode music over"
+msgstr "Перекодировать музыку выше"
+
+msgctxt "#30731"
+msgid "Tracks over this bitrate, and all lossless tracks, are transcoded. Unlimited transcodes only lossless tracks."
+msgstr "Треки с битрейтом выше этого, а также все треки без потерь перекодируются. «Без ограничений» перекодирует только треки без потерь."
+
+msgctxt "#30732"
+msgid "Transcode music to"
+msgstr "Перекодировать музыку в"
+
+msgctxt "#30733"
+msgid "The codec transcoded tracks are encoded with. Opus gives the best quality per megabyte."
+msgstr "Кодек, в который кодируются перекодированные треки. Opus даёт лучшее качество на мегабайт."
+
+msgctxt "#30734"
+msgid "Transcoded music bitrate"
+msgstr "Битрейт перекодированной музыки"
+
+msgctxt "#30735"
+msgid "The bitrate transcoded tracks are encoded at. 128 kbps Opus is transparent for most listening."
+msgstr "Битрейт, с которым кодируются перекодированные треки. Opus 128 кбит/с прозрачен для большинства случаев прослушивания."
+
+msgctxt "#30737"
+msgid "Kofin downloads"
+msgstr "Загрузки Kofin"
+
+msgctxt "#30738"
+msgid "Download the next episodes automatically"
+msgstr "Загружать следующие серии автоматически"
+
+msgctxt "#30739"
+msgid "While watching a downloaded episode, the next unwatched episodes of the show are queued for download at the 50% mark."
+msgstr "Во время просмотра загруженной серии следующие непросмотренные серии сериала ставятся в очередь загрузки на отметке 50%."
+
+msgctxt "#30740"
+msgid "Episodes to keep ahead"
+msgstr "Серий держать про запас"
+
+msgctxt "#30741"
+msgid "How many unwatched episodes ahead of the one playing are kept downloaded."
+msgstr "Сколько непросмотренных серий после текущей держать загруженными."
+
+msgctxt "#30742"
+msgid "Download newly added movies"
+msgstr "Загружать новые фильмы"
+
+msgctxt "#30743"
+msgid "Movies newly added to a synced library are downloaded automatically."
+msgstr "Фильмы, только что добавленные в синхронизируемую библиотеку, загружаются автоматически."
+
+msgctxt "#30746"
+msgid "Delete download after watching"
+msgstr "Удалять загрузку после просмотра"
+
+msgctxt "#30747"
+msgid "When you finish watching a downloaded item, its local copy is removed. The item stays on the server and in your library."
+msgstr "Когда вы досматриваете загруженный элемент, его локальная копия удаляется. Элемент остаётся на сервере и в вашей библиотеке."
+
+msgctxt "#30751"
+msgid "%s new movies were not downloaded automatically"
+msgstr "%s новых фильмов не загружены автоматически"
+
+msgctxt "#30752"
+msgid "Export NFO files and artwork"
+msgstr "Экспортировать NFO-файлы и обложки"
+
+msgctxt "#30753"
+msgid "Write NFO metadata and artwork beside downloaded files, so other Kodi profiles and apps can scan the download folder as a library."
+msgstr "Записывать метаданные NFO и обложки рядом с загруженными файлами, чтобы другие профили Kodi и приложения могли сканировать папку загрузок как библиотеку."
+
+msgctxt "#30754"
+msgid "Download all new episodes"
+msgstr "Загружать все новые серии"
+
+msgctxt "#30755"
+msgid "Every episode newly added to a synced library is downloaded automatically."
+msgstr "Каждая серия, только что добавленная в синхронизируемую библиотеку, загружается автоматически."
+
+msgctxt "#30756"
+msgid "Download new albums"
+msgstr "Загружать новые альбомы"
+
+msgctxt "#30757"
+msgid "Albums newly added to a synced library are downloaded automatically."
+msgstr "Альбомы, только что добавленные в синхронизируемую библиотеку, загружаются автоматически."
+
+msgctxt "#30758"
+msgid "Shows downloading new episodes"
+msgstr "Сериалы с загрузкой новых серий"
+
+msgctxt "#30759"
+msgid "Review the shows set to download their new episodes automatically, and untick any to stop."
+msgstr "Просмотрите сериалы, для которых включена автоматическая загрузка новых серий, и снимите отметки с ненужных."
+
+msgctxt "#30760"
+msgid "Download new episodes"
+msgstr "Загружать новые серии"
+
+msgctxt "#30761"
+msgid "Stop downloading new episodes"
+msgstr "Не загружать новые серии"
+
+msgctxt "#30762"
+msgid "New episodes of %s will download automatically"
+msgstr "Новые серии %s будут загружаться автоматически"
+
+msgctxt "#30763"
+msgid "New episodes of %s will no longer download automatically"
+msgstr "Новые серии %s больше не будут загружаться автоматически"
+
+msgctxt "#30764"
+msgid "%s new episodes were not downloaded automatically"
+msgstr "%s новых серий не загружены автоматически"
+
+msgctxt "#30765"
+msgid "%s new albums were not downloaded automatically"
+msgstr "%s новых альбомов не загружены автоматически"
+
+msgctxt "#30766"
+msgid "No shows are set to download new episodes"
+msgstr "Нет сериалов с загрузкой новых серий"
+
+msgctxt "#30767"
+msgid "Show download notifications"
+msgstr "Показывать уведомления о загрузках"
+
+msgctxt "#30768"
+msgid "Announce queued and completed downloads. Failures and warnings are always shown."
+msgstr "Сообщать о поставленных в очередь и завершённых загрузках. Сбои и предупреждения показываются всегда."
+
+msgctxt "#30769"
+msgid "Delete download automatically"
+msgstr "Удалять загрузку автоматически"
+
+msgctxt "#30770"
+msgid "Remove the local copy without asking. With this off, Kofin asks first each time."
+msgstr "Удалять локальную копию без вопросов. Если выключено, Kofin каждый раз спрашивает."
+
+msgctxt "#30771"
+msgid "Download %s item(s), about %s? %s free"
+msgstr "Загрузить элементов: %s, около %s? Свободно %s"
+
+msgctxt "#30772"
+msgid "Parallel music downloads"
+msgstr "Параллельных загрузок музыки"
+
+msgctxt "#30773"
+msgid "How many tracks download at the same time. Tracks are small and mostly overhead, so this can sit well above the video figure."
+msgstr "Сколько треков загружается одновременно. Треки маленькие и состоят в основном из накладных расходов, поэтому значение может быть заметно выше, чем для видео."
+
+msgctxt "#30775"
+msgid "downloaded from the server"
+msgstr "загружено с сервера"
+
+msgctxt "#30776"
+msgid "Downloading subtitle..."
+msgstr "Загрузка субтитров..."
+
+msgctxt "#30777"
+msgid "Jellyfin account settings"
+msgstr "Настройки учётной записи Jellyfin"
+
+msgctxt "#30778"
+msgid "Audio and subtitle preferences stored on the server against your Jellyfin account. They apply to every client you sign in from, not just this one."
+msgstr "Настройки звука и субтитров, хранящиеся на сервере в вашей учётной записи Jellyfin. Они действуют на всех клиентах, где вы вошли, а не только на этом."
+
+msgctxt "#30779"
+msgid "Jellyfin settings for %s"
+msgstr "Настройки Jellyfin для %s"
+
+msgctxt "#30780"
+msgid "Preferred audio language"
+msgstr "Предпочитаемый язык звука"
+
+msgctxt "#30781"
+msgid "Play default audio track"
+msgstr "Воспроизводить звуковую дорожку по умолчанию"
+
+msgctxt "#30782"
+msgid "Preferred subtitle language"
+msgstr "Предпочитаемый язык субтитров"
+
+msgctxt "#30783"
+msgid "Subtitle mode"
+msgstr "Режим субтитров"
+
+msgctxt "#30784"
+msgid "Remember audio selections"
+msgstr "Запоминать выбор звуковой дорожки"
+
+msgctxt "#30785"
+msgid "Remember subtitle selections"
+msgstr "Запоминать выбор субтитров"
+
+msgctxt "#30786"
+msgid "Enabled"
+msgstr "Включено"
+
+msgctxt "#30787"
+msgid "Disabled"
+msgstr "Отключено"
+
+msgctxt "#30788"
+msgid "Any"
+msgstr "Любой"
+
+msgctxt "#30789"
+msgid "Default"
+msgstr "По умолчанию"
+
+msgctxt "#30790"
+msgid "Always"
+msgstr "Всегда"
+
+msgctxt "#30791"
+msgid "Only forced"
+msgstr "Только форсированные"
+
+msgctxt "#30792"
+msgid "None"
+msgstr "Нет"
+
+msgctxt "#30793"
+msgid "Smart"
+msgstr "Умный"
+
+msgctxt "#30794"
+msgid "Not applied here: \"Use Jellyfin's default tracks\" is off"
+msgstr "Здесь не применяется: \"Использовать дорожки Jellyfin по умолчанию\" отключено"
+
+msgctxt "#30795"
+msgid "Could not load your Jellyfin settings"
+msgstr "Не удалось загрузить ваши настройки Jellyfin"
+
+msgctxt "#30796"
+msgid "Could not save to the server"
+msgstr "Не удалось сохранить на сервере"
+
+msgctxt "#30797"
+msgid "Your Jellyfin account is not allowed to change these settings"
+msgstr "Вашей учётной записи Jellyfin не разрешено менять эти настройки"
+
+msgctxt "#30798"
+msgid "Skip movie imports larger than"
+msgstr "Пропускать импорт фильмов больше чем"
+
+msgctxt "#30799"
+msgid "When a sync adds more new movies than this at once, none of them are downloaded — a bulk import is rarely a request to fill the disk. Raise it if you want big additions pulled automatically."
+msgstr "Если синхронизация добавляет за один раз больше новых фильмов, чем указано, ни один из них не загружается — массовый импорт редко бывает просьбой забить диск. Повысьте значение, если хотите, чтобы крупные пополнения тоже скачивались."
+
+msgctxt "#30800"
+msgid "Skip episode imports larger than"
+msgstr "Пропускать импорт серий больше чем"
+
+msgctxt "#30801"
+msgid "When a sync adds more new episodes than this at once, none of them are downloaded. Shows you have subscribed to are exempt — a subscription is a standing order."
+msgstr "Если синхронизация добавляет за один раз больше новых серий, чем указано, ни одна из них не загружается. Сериалы, на которые вы подписались, — исключение: подписка это постоянный заказ."
+
+msgctxt "#30802"
+msgid "Skip album imports larger than"
+msgstr "Пропускать импорт альбомов больше чем"
+
+msgctxt "#30803"
+msgid "When a sync adds more new albums than this at once, none of them are downloaded. Counted in albums, not tracks."
+msgstr "Если синхронизация добавляет за один раз больше новых альбомов, чем указано, ни один из них не загружается. Считается в альбомах, а не в треках."
+
+msgctxt "#30810"
+msgid "Needs %s, only %s free"
+msgstr "Нужно %s, свободно только %s"
+
+msgctxt "#30804"
+msgid "Delete all downloads"
+msgstr "Удалить все загрузки"
+
+msgctxt "#30805"
+msgid "Delete every downloaded file from this device and stop keeping playlists and music libraries in sync. The items stay in your library and play from the server again."
+msgstr "Удалить с этого устройства все загруженные файлы и перестать поддерживать синхронизацию плейлистов и музыкальных библиотек. Элементы остаются в вашей библиотеке и снова воспроизводятся с сервера."
+
+msgctxt "#30806"
+msgid "Delete all %s download(s), freeing about %s?"
+msgstr "Удалить все загрузки (%s), освободив около %s?"
+
+msgctxt "#30807"
+msgid "There are no downloads to delete"
+msgstr "Загрузок для удаления нет"
+
+msgctxt "#30808"
+msgid "Pause downloads during playback"
+msgstr "Пауза загрузок при воспроизведении"
+
+msgctxt "#30809"
+msgid "Do not start new downloads while something is playing, video or music. A file already downloading finishes; the rest wait until playback stops."
+msgstr "Не начинать новые загрузки, пока что-то воспроизводится — видео или музыка. Уже идущая загрузка завершится; остальные дождутся остановки воспроизведения."
+
+msgctxt "#30811"
+msgid "Delete stale downloads"
+msgstr "Удалять устаревшие загрузки"
+
+msgctxt "#30812"
+msgid "Remove downloaded files nobody has played for a while. Anything you are part-way through is kept, however long it sits. The items stay in your library and play from the server again."
+msgstr "Удалять загруженные файлы, которые давно никто не воспроизводил. Всё, что вы смотрите не до конца, сохраняется, сколько бы оно ни лежало. Элементы остаются в вашей библиотеке и снова воспроизводятся с сервера."
+
+msgctxt "#30813"
+msgid "Delete after (days)"
+msgstr "Удалять через (дней)"
+
+msgctxt "#30814"
+msgid "How long a download may sit unplayed before it is removed. Playing it again starts the count over."
+msgstr "Сколько загрузка может лежать невоспроизведённой, прежде чем будет удалена. Повторное воспроизведение начинает отсчёт заново."
+
+msgctxt "#30817"
+msgid "All"
+msgstr "Все"
+
+msgctxt "#30818"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30819"
+msgid "Show cast in add-on listings"
+msgstr "Показывать актёров в списках дополнения"
+
+msgctxt "#30820"
+msgid "Fetch cast and crew for the shorter add-on listings — Recently added, In progress, Next up, Continue watching, search results and a show's episodes — so the information dialog can show them. Whole-library listings never fetch it, because the server needs about a second for every 40 items. The Kodi library always has cast."
+msgstr "Загружает актёров и съёмочную группу для коротких списков дополнения — Недавно добавленные, Начатые, Далее, Продолжить просмотр, результатов поиска и серий сериала — чтобы окно информации могло их показать. Списки, охватывающие всю медиатеку, никогда этого не делают: серверу нужно около секунды на каждые 40 элементов. В медиатеке Kodi актёры есть всегда."
+
+msgctxt "#30821"
+msgid "Server error — %s"
+msgstr "Ошибка сервера — %s"
+
+msgctxt "#30823"
+msgid "Download deleted: %s"
+msgstr "Загрузка удалена: %s"
+
+msgctxt "#30824"
+msgid "%s download(s) deleted"
+msgstr "Загрузок удалено: %s"
+
+msgctxt "#30825"
+msgid "Find servers on local network"
+msgstr "Найти серверы в локальной сети"
+
+msgctxt "#30826"
+msgid "Looks for Jellyfin servers on this network and lists the ones that answer. The one you choose is filled into \"Server address\"."
+msgstr "Ищет серверы Jellyfin в этой сети и показывает те, что ответили. Выбранный подставляется в поле \"Адрес сервера\"."
+
+msgctxt "#30827"
+msgid "Searching for Jellyfin servers…"
+msgstr "Поиск серверов Jellyfin…"
+
+msgctxt "#30828"
+msgid "Select a server"
+msgstr "Выберите сервер"
+
+msgctxt "#30829"
+msgid "No Jellyfin servers answered — enter the address manually"
+msgstr "Ни один сервер Jellyfin не ответил — введите адрес вручную"
+
+msgctxt "#30830"
+msgid "did not answer"
+msgstr "не ответил"
+
+msgctxt "#30831"
+msgid "%s did not answer — the address it gave may not work here"
+msgstr "%s не ответил — указанный им адрес может здесь не работать"
+
+msgctxt "#30832"
+msgid "Storage used"
+msgstr "Занято места"
+
+msgctxt "#30833"
+msgid "Show where the downloads are kept and how much space each kind is using."
+msgstr "Показывает, где хранятся загрузки и сколько места занимает каждый тип."
+
+msgctxt "#30834"
+msgid "Other files in this folder"
+msgstr "Другие файлы в этой папке"
+
+msgctxt "#30835"
+msgid "Nothing has been downloaded yet"
+msgstr "Пока ничего не загружено"
+
+msgctxt "#30836"
+msgid "Folder too large to measure fully — the totals above are partial"
+msgstr "Папка слишком велика, чтобы измерить её полностью — итоги выше неполные"
+
+msgctxt "#30837"
+msgid "Watch in sync with other Jellyfin clients."
+msgstr "Смотрите синхронно с другими клиентами Jellyfin."
+
+msgctxt "#30841"
+msgid "Save to Jellyfin"
+msgstr "Сохранить в Jellyfin"
+
+msgctxt "#30842"
+msgid "This playlist mixes audio and video, which cannot be saved as one Jellyfin playlist"
+msgstr "Этот плейлист смешивает аудио и видео и не может быть сохранён как один плейлист Jellyfin"
+
+msgctxt "#30843"
+msgid "Playlist saved to Jellyfin"
+msgstr "Плейлист сохранён в Jellyfin"
+
+msgctxt "#30844"
+msgid "No library items in this playlist to save"
+msgstr "В этом плейлисте нет элементов библиотеки для сохранения"
+
+msgctxt "#30845"
+msgid "Show library update progress"
+msgstr "Показывать ход обновления библиотеки"
+
+msgctxt "#30846"
+msgid "Show Kodi's library-update progress while the library syncs."
+msgstr "Показывать индикатор обновления библиотеки Kodi во время синхронизации."
+
+msgctxt "#30849"
+msgid "Download & keep in sync"
+msgstr "Скачать и поддерживать синхронизацию"
+
+msgctxt "#30850"
+msgid "Stop keeping downloads in sync"
+msgstr "Прекратить синхронизацию загрузок"
+
+msgctxt "#30851"
+msgid "Manage playlist downloads"
+msgstr "Управление загрузками плейлистов"
+
+msgctxt "#30852"
+msgid "Manage music library downloads"
+msgstr "Управление загрузками музыкальных библиотек"
+
+msgctxt "#30853"
+msgid "Content not downloaded"
+msgstr "Содержимое не скачано"
+
+msgctxt "#30854"
+msgid "Review subscribed playlists; untick to stop syncing downloads."
+msgstr "Просмотрите подписанные плейлисты; снимите отметку, чтобы остановить синхронизацию загрузок."
+
+msgctxt "#30855"
+msgid "Review subscribed music libraries; untick to stop syncing downloads."
+msgstr "Просмотрите подписанные музыкальные библиотеки; снимите отметку, чтобы остановить синхронизацию загрузок."
+
+msgctxt "#30856"
+msgid "Library nodes and playlists"
+msgstr "Узлы библиотеки и плейлисты"
+
+msgctxt "#30857"
+msgid "Create Kodi library nodes and smart playlists for the synced video libraries, and copy Jellyfin playlists into Kodi under Videos → Playlists → Kofin and Music → Playlists → Kofin. Turning this off removes every node and playlist Kofin created."
+msgstr "Создавать узлы библиотеки Kodi и умные плейлисты для синхронизированных видеобиблиотек и копировать плейлисты Jellyfin в Kodi в Видео → Плейлисты → Kofin и Музыка → Плейлисты → Kofin. При отключении удаляются все узлы и плейлисты, созданные Kofin."
+
+msgctxt "#30859"
+msgid "Library status"
+msgstr "Состояние библиотеки"
+
+msgctxt "#30860"
+msgid "What is synced, what is still pending and what the sync is doing now."
+msgstr "Что синхронизировано, что ещё ожидает и что синхронизация делает сейчас."
+
+msgctxt "#30861"
+msgid "Transcode music whose bitrate is above the maximum set below. Off, songs play from the server untouched."
+msgstr "Перекодировать музыку, битрейт которой выше максимума, заданного ниже. Если выключено, композиции воспроизводятся с сервера без изменений."
+
+msgctxt "#30862"
+msgid "in Kodi / on the server"
+msgstr "в Kodi / на сервере"
+
+msgctxt "#30863"
+msgid "Pending"
+msgstr "Ожидает"
+
+msgctxt "#30864"
+msgid "Failed"
+msgstr "Сбой"
+
+msgctxt "#30865"
+msgid "Last full update"
+msgstr "Последнее полное обновление"
+
+msgctxt "#30867"
+msgid "Repair to add codec details"
+msgstr "Восстановите, чтобы добавить сведения о кодеках"
+
+msgctxt "#30868"
+msgid "Kodi cannot import"
+msgstr "Kodi не может импортировать"
+
+msgctxt "#30869"
+msgid "Scheduled full update"
+msgstr "Плановое полное обновление"
+
+msgctxt "#30870"
+msgid "How often to re-read every library from the server. Turn this on if the server lacks the KofinSyncQueue plugin, or deletions there won't reach Kodi."
+msgstr "Как часто заново читать все библиотеки с сервера. Включите, если на сервере нет плагина KofinSyncQueue, иначе удаления не попадут в Kodi."
+
+msgctxt "#30871"
+msgid "Daily"
+msgstr "Ежедневно"
+
+msgctxt "#30872"
+msgid "Weekly"
+msgstr "Еженедельно"
+
+msgctxt "#30873"
+msgid "Update all libraries now?"
+msgstr "Обновить все библиотеки сейчас?"
+
+msgctxt "#30874"
+msgid "Re-read every library from the server now."
+msgstr "Сейчас заново читает все библиотеки с сервера."
+
+msgctxt "#30876"
+msgid "Not on this Kodi"
+msgstr "Недоступно в этом Kodi"
+
+msgctxt "#30877"
+msgid "Season plots"
+msgstr "Описания сезонов"
+
+msgctxt "#30878"
+msgid "Favorite episodes"
+msgstr "Избранные эпизоды"
+
+msgctxt "#30879"
+msgid "Removing emptied collections"
+msgstr "Удаление опустевших коллекций"
+
+msgctxt "#30880"
+msgid "Movie versions"
+msgstr "Версии фильмов"
+
+msgctxt "#30881"
+msgid "Stream flags"
+msgstr "Флаги дорожек"
+
+msgctxt "#30882"
+msgid "Song date added"
+msgstr "Дата добавления песен"
+
+msgctxt "#30883"
+msgid "Removing dropped versions and extras"
+msgstr "Удаление удалённых версий и дополнений"
+
+msgctxt "#30884"
+msgid "Fine sync"
+msgstr "Точная синхронизация"
+
+msgctxt "#30885"
+msgid "Kodi imports a special only with an episode number. Give these one on the server, or play them from the Kofin add-on."
+msgstr "Kodi импортирует спецвыпуск, только если у него есть номер эпизода. Присвойте им номера на сервере или воспроизводите их из дополнения Kofin."
+
+msgctxt "#30886"
+msgid "KofinSyncQueue"
+msgstr "KofinSyncQueue"
+
+msgctxt "#30887"
+msgid "Available"
+msgstr "Доступен"
+
+msgctxt "#30888"
+msgid "this profile holds a library from an older Kofin"
+msgstr "этот профиль содержит библиотеку старой версии Kofin"
+
+msgctxt "#30889"
+msgid "Kofin cannot use it. To clean it, go back to Kofin 0.29:"
+msgstr "Kofin не может её использовать. Чтобы очистить её, вернитесь на Kofin 0.29:"
+
+msgctxt "#30890"
+msgid "Open Kofin in Kodi's add-on list, select Versions and choose 0.29."
+msgstr "Откройте Kofin в списке дополнений Kodi, выберите «Версии» и укажите 0.29."
+
+msgctxt "#30891"
+msgid "In Kofin's settings, log out on the Account tab and run Clean databases."
+msgstr "В настройках Kofin выйдите на вкладке «Учётная запись» и запустите «Очистить базы данных»."
+
+msgctxt "#30892"
+msgid "When Kodi has restarted, open Kofin again, select Versions and choose the newest version. Then log in and choose the libraries to sync."
+msgstr "После перезапуска Kodi снова откройте Kofin, выберите «Версии» и укажите самую новую версию. Затем войдите и выберите библиотеки для синхронизации."
+
+msgctxt "#30893"
+msgid "Alternatively, close Kodi and delete its video and music databases by hand, as the Kofin wiki describes:"
+msgstr "Также можно закрыть Kodi и вручную удалить его базы данных видео и музыки, как описано в вики Kofin:"
+
+msgctxt "#30894"
+msgid "No longer on the server"
+msgstr "Больше нет на сервере"
+
+msgctxt "#30895"
+msgid "%s is no longer on the server and was removed from the library"
+msgstr "Библиотеки %s больше нет на сервере, она удалена из Kodi"
+
+msgctxt "#30896"
+msgid "The synced libraries stay in Kodi until you log in again; a different account removes them."
+msgstr "Синхронизированные библиотеки остаются в Kodi до повторного входа; другая учётная запись их удаляет."
+
+msgctxt "#30897"
+msgid "Queued %s of %s tracks"
+msgstr "В очередь добавлено %s из %s треков"
+
+msgctxt "#30898"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30899"
+msgid "540p"
+msgstr "540p"

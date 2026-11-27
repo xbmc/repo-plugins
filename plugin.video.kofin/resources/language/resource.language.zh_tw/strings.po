@@ -1,0 +1,1969 @@
+# Kodi Media Center language file
+# Addon Name: Kofin
+# Addon id: plugin.video.kofin
+# Addon Provider: kontell
+# Note: machine-translated (LLM), pending native review.
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.kofin\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-08-14 00:00+0000\n"
+"Last-Translator: Claude (machine translation) <noreply@anthropic.com>\n"
+"Language-Team: Chinese (Traditional)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "Addon Summary"
+msgid "Jellyfin client for seamless Kodi integration"
+msgstr "無縫整合 Kodi 的 Jellyfin 用戶端"
+
+msgctxt "Addon Description"
+msgid "Play movies, shows & music from a Jellyfin server."
+msgstr "播放 Jellyfin 伺服器上的電影、影集與音樂。"
+
+msgctxt "#30010"
+msgid "Play with transcoding"
+msgstr "以轉碼播放"
+
+msgctxt "#30011"
+msgid "Quick Connect"
+msgstr "Quick Connect"
+
+msgctxt "#30012"
+msgid "Username and password"
+msgstr "使用者名稱與密碼"
+
+msgctxt "#30013"
+msgid "Username"
+msgstr "使用者名稱"
+
+msgctxt "#30014"
+msgid "Password"
+msgstr "密碼"
+
+msgctxt "#30015"
+msgid "Enter code [B]%s[/B] in the Jellyfin app or web interface."
+msgstr "請在 Jellyfin 應用程式或網頁介面輸入代碼 [B]%s[/B]。"
+
+msgctxt "#30016"
+msgid "Logged in as %s"
+msgstr "已以 %s 登入"
+
+msgctxt "#30017"
+msgid "Login failed: wrong username or password"
+msgstr "登入失敗：使用者名稱或密碼錯誤"
+
+msgctxt "#30018"
+msgid "Server unreachable"
+msgstr "無法連線到伺服器"
+
+msgctxt "#30019"
+msgid "Log out from %s?"
+msgstr "要從 %s 登出嗎？"
+
+msgctxt "#30020"
+msgid "Logged out"
+msgstr "已登出"
+
+msgctxt "#30021"
+msgid "Connection OK — %s (%s)"
+msgstr "連線正常 — %s（%s）"
+
+msgctxt "#30022"
+msgid "Session rejected — log in again from the Account tab"
+msgstr "工作階段遭拒 — 請從「帳戶」頁重新登入"
+
+msgctxt "#30023"
+msgid "Restarting the Kofin service"
+msgstr "正在重新啟動 Kofin 服務"
+
+msgctxt "#30024"
+msgid "Quick Connect timed out"
+msgstr "Quick Connect 已逾時"
+
+msgctxt "#30025"
+msgid "Already logged in"
+msgstr "已經登入"
+
+msgctxt "#30026"
+msgid "Not logged in"
+msgstr "尚未登入"
+
+msgctxt "#30027"
+msgid "Log in to %s"
+msgstr "登入 %s"
+
+msgctxt "#30050"
+msgid "Account"
+msgstr "帳戶"
+
+msgctxt "#30051"
+msgid "Connect to your Jellyfin server and manage the session."
+msgstr "連線到你的 Jellyfin 伺服器並管理工作階段。"
+
+msgctxt "#30052"
+msgid "Server address"
+msgstr "伺服器位址"
+
+msgctxt "#30053"
+msgid "Host name, IP address or full URL of the Jellyfin server. A bare host uses http on port 8096."
+msgstr "Jellyfin 伺服器的主機名稱、IP 位址或完整網址。只填主機時會使用 http 與 8096 連接埠。"
+
+msgctxt "#30054"
+msgid "Log in…"
+msgstr "登入…"
+
+msgctxt "#30055"
+msgid "Connect to the server above using Quick Connect or a username and password."
+msgstr "使用 Quick Connect 或使用者名稱與密碼連線到上方的伺服器。"
+
+msgctxt "#30056"
+msgid "Server"
+msgstr "伺服器"
+
+msgctxt "#30057"
+msgid "The connected Jellyfin server."
+msgstr "已連線的 Jellyfin 伺服器。"
+
+msgctxt "#30058"
+msgid "Logged-in user"
+msgstr "登入的使用者"
+
+msgctxt "#30059"
+msgid "The Jellyfin user this device plays and reports as."
+msgstr "本裝置以這個 Jellyfin 使用者的身分播放與回報。"
+
+msgctxt "#30060"
+msgid "Test connection"
+msgstr "測試連線"
+
+msgctxt "#30061"
+msgid "Check that the server is reachable and the session is still valid."
+msgstr "檢查伺服器是否可連線，以及工作階段是否仍然有效。"
+
+msgctxt "#30062"
+msgid "Log out"
+msgstr "登出"
+
+msgctxt "#30063"
+msgid "End the session on the server and forget it on this device. The server address is kept."
+msgstr "結束伺服器上的工作階段，並在本裝置上忘記它。伺服器位址會保留。"
+
+msgctxt "#30064"
+msgid "Restart Kofin"
+msgstr "重新啟動 Kofin"
+
+msgctxt "#30065"
+msgid "Restart the background service without restarting Kodi."
+msgstr "不必重新啟動 Kodi，即可重新啟動背景服務。"
+
+msgctxt "#30071"
+msgid "Advanced"
+msgstr "進階"
+
+msgctxt "#30072"
+msgid "Notification, browsing, playback and deletion options."
+msgstr "通知、瀏覽、播放與刪除選項。"
+
+msgctxt "#30073"
+msgid "Enable Delete from server"
+msgstr "啟用「從伺服器刪除」"
+
+msgctxt "#30074"
+msgid "Adds a Delete entry to an item's 'Jellyfin actions' context menu. Deletion is permanent: the file itself is removed on the Jellyfin server, for every user."
+msgstr "在項目的「Jellyfin 動作」內容選單中加入「刪除」。刪除是永久的：檔案本身會從 Jellyfin 伺服器上移除，對所有使用者皆然。"
+
+msgctxt "#30075"
+msgid "Delete without confirmation"
+msgstr "刪除時不確認"
+
+msgctxt "#30076"
+msgid "Delete the item as soon as the entry is picked, with no 'are you sure?' prompt. The deletion is still permanent and applies on the server."
+msgstr "選取項目後立即刪除，不顯示「確定嗎？」提示。刪除仍然是永久的，且會套用在伺服器上。"
+
+msgctxt "#30077"
+msgid "Offer to delete after watching"
+msgstr "觀看後詢問是否刪除"
+
+msgctxt "#30078"
+msgid "When a movie or episode finishes, ask whether to delete it from the server. Always asks, whatever 'Delete without confirmation' is set to."
+msgstr "電影或劇集播放結束時，詢問是否要從伺服器刪除。無論「刪除時不確認」如何設定，都一定會詢問。"
+
+msgctxt "#30079"
+msgid "Who's watching shortlist"
+msgstr "「誰在看？」候選名單"
+
+msgctxt "#30080"
+msgid "Choose which server users the addon's Who's watching? entry offers. \"All\" offers everyone. With nothing selected the entry is hidden and anyone already on the session is removed."
+msgstr "選擇外掛的「誰在看？」要列出哪些伺服器使用者。選擇\"全部\"會列出所有人。未選取任何人時會隱藏這個項目，並將已加入工作階段的人移除。"
+
+msgctxt "#30030"
+msgid "All"
+msgstr "全部"
+
+msgctxt "#30031"
+msgid "Recently added"
+msgstr "最近加入"
+
+msgctxt "#30032"
+msgid "Next up"
+msgstr "接下來要看"
+
+msgctxt "#30033"
+msgid "In progress"
+msgstr "觀看中"
+
+msgctxt "#30034"
+msgid "Unwatched"
+msgstr "未觀看"
+
+msgctxt "#30035"
+msgid "Favourites"
+msgstr "我的最愛"
+
+msgctxt "#30036"
+msgid "Genres"
+msgstr "類型"
+
+msgctxt "#30037"
+msgid "Random"
+msgstr "隨機"
+
+msgctxt "#30038"
+msgid "Sets"
+msgstr "電影系列"
+
+msgctxt "#30039"
+msgid "Artists"
+msgstr "演出者"
+
+msgctxt "#30040"
+msgid "Albums"
+msgstr "專輯"
+
+msgctxt "#30049"
+msgid "Continue watching"
+msgstr "繼續觀看"
+
+msgctxt "#30100"
+msgid "Transcoding"
+msgstr "轉碼"
+
+msgctxt "#30101"
+msgid "When and how the server converts media for this device."
+msgstr "伺服器在何時、以何種方式為本裝置轉換媒體。"
+
+msgctxt "#30102"
+msgid "Force direct play"
+msgstr "強制直接播放"
+
+msgctxt "#30103"
+msgid "Always play the original video file. Overrides every other video transcoding setting; playback fails if the device cannot handle the media. Music is unaffected — see 'Transcode music'."
+msgstr "一律播放原始影片檔。會覆寫其他所有影片轉碼設定；若裝置無法處理該媒體，播放就會失敗。音樂不受影響 — 請見「轉碼音樂」。"
+
+msgctxt "#30104"
+msgid "Force remux"
+msgstr "強制重新封裝"
+
+msgctxt "#30105"
+msgid "Remux into HLS and copy the source codecs. Does not use Maximum audio channels, Maximum streaming bitrate or Transcode audio bitrate below — those would re-encode a listed codec. Direct play codecs, Allowed HDR types and Maximum resolution still apply."
+msgstr "混流為 HLS 並複製來源編解碼器。不使用下方的最大音訊聲道數、最大串流位元率或轉碼音訊位元率——那些會把清單中的編解碼器重新編碼。直接播放編解碼器、允許的 HDR 類型和最大解析度仍然適用。"
+
+msgctxt "#30106"
+msgid "Force transcode"
+msgstr "強制轉碼"
+
+msgctxt "#30107"
+msgid "Always re-encode video and audio to the preferred codecs. Honours the bitrate cap, the channel cap, allowed codecs, HDR types and resolution."
+msgstr "一律將視訊和音訊重新編碼為偏好的編解碼器。遵守位元率上限、聲道上限、允許的編解碼器、HDR 類型和解析度。"
+
+msgctxt "#30108"
+msgid "Direct play video codecs"
+msgstr "直接播放的視訊編解碼器"
+
+msgctxt "#30109"
+msgid "Video formats this device can decode. Media using formats not selected here is transcoded."
+msgstr "本裝置能解碼的視訊格式。未在此選取的格式會被轉碼。"
+
+msgctxt "#30110"
+msgid "Direct play audio codecs"
+msgstr "直接播放的音訊編解碼器"
+
+msgctxt "#30111"
+msgid "Audio formats this device can decode or pass through. Others are transcoded."
+msgstr "本裝置能解碼或直通的音訊格式。其餘格式會被轉碼。"
+
+msgctxt "#30112"
+msgid "Allowed HDR types"
+msgstr "允許的 HDR 類型"
+
+msgctxt "#30113"
+msgid "HDR formats the display accepts. Media in formats not selected is tone-mapped or transcoded to SDR/HDR10 by the server."
+msgstr "顯示器可接受的 HDR 格式。未選取的格式會由伺服器色調對應或轉碼為 SDR/HDR10。"
+
+msgctxt "#30114"
+msgid "Preferred video codec"
+msgstr "偏好的視訊編解碼器"
+
+msgctxt "#30115"
+msgid "The codec the client asks for when video must be transcoded."
+msgstr "影像必須轉碼時用戶端要求的編解碼器。"
+
+msgctxt "#30116"
+msgid "Preferred audio codec"
+msgstr "偏好的音訊編解碼器"
+
+msgctxt "#30117"
+msgid "The codec the client asks for when audio must be transcoded."
+msgstr "音訊必須轉碼時用戶端要求的編解碼器。"
+
+msgctxt "#30118"
+msgid "Maximum audio channels"
+msgstr "最大音訊聲道數"
+
+msgctxt "#30119"
+msgid "Maximum number of audio channels allowed when transcoding. Streams with more channels will be downmixed. No effect on direct playback."
+msgstr "轉碼時允許的最大音訊聲道數。聲道更多的串流會被向下混音。對直接播放沒有影響。"
+
+msgctxt "#30120"
+msgid "Maximum streaming bitrate"
+msgstr "最大串流位元率"
+
+msgctxt "#30121"
+msgid "Media above this bitrate is transcoded down to it."
+msgstr "超過此位元率的媒體會被轉碼降至此值。"
+
+msgctxt "#30122"
+msgid "Maximum resolution"
+msgstr "最大解析度"
+
+msgctxt "#30123"
+msgid "Wider media is downscaled by the server."
+msgstr "更寬的媒體會由伺服器縮小。"
+
+msgctxt "#30124"
+msgid "Transcode audio bitrate"
+msgstr "轉碼音訊位元率"
+
+msgctxt "#30125"
+msgid "Bitrate for the audio track when video is transcoded."
+msgstr "影片轉碼時，音軌所使用的位元率。"
+
+msgctxt "#30126"
+msgid "Context menu bitrates"
+msgstr "內容選單中的位元率"
+
+msgctxt "#30127"
+msgid "Bitrates offered by 'Play with transcoding'. With one selected the popup is skipped."
+msgstr "「以轉碼播放」提供的位元率選項。只選取一項時會略過彈出視窗。"
+
+msgctxt "#30129"
+msgid "Maximum music bitrate"
+msgstr "最大音樂位元率"
+
+msgctxt "#30130"
+msgid "Music above this bitrate is transcoded using the codec and bitrate below. Unlimited never transcodes."
+msgstr "超過此位元率的音樂會依下方的編解碼器與位元率轉碼。選「無限制」則永不轉碼。"
+
+msgctxt "#30131"
+msgid "Music transcode codec"
+msgstr "音樂轉碼編解碼器"
+
+msgctxt "#30132"
+msgid "Codec for transcoded music streams."
+msgstr "轉碼音樂串流所使用的編解碼器。"
+
+msgctxt "#30133"
+msgid "Music transcode bitrate"
+msgstr "音樂轉碼位元率"
+
+msgctxt "#30134"
+msgid "Bitrate for transcoded music streams."
+msgstr "轉碼音樂串流所使用的位元率。"
+
+msgctxt "#30135"
+msgid "Transcode music"
+msgstr "轉碼音樂"
+
+msgctxt "#30150"
+msgid "H.264 (AVC)"
+msgstr "H.264 (AVC)"
+
+msgctxt "#30151"
+msgid "H.264 10-bit (Hi10P)"
+msgstr "H.264 10-bit (Hi10P)"
+
+msgctxt "#30152"
+msgid "H.265 (HEVC)"
+msgstr "H.265 (HEVC)"
+
+msgctxt "#30153"
+msgid "HEVC RExt (4:2:2/4:4:4)"
+msgstr "HEVC RExt (4:2:2/4:4:4)"
+
+msgctxt "#30154"
+msgid "AV1"
+msgstr "AV1"
+
+msgctxt "#30155"
+msgid "MPEG-2"
+msgstr "MPEG-2"
+
+msgctxt "#30156"
+msgid "VP9"
+msgstr "VP9"
+
+msgctxt "#30157"
+msgid "VC-1"
+msgstr "VC-1"
+
+msgctxt "#30158"
+msgid "AAC"
+msgstr "AAC"
+
+msgctxt "#30159"
+msgid "MP2"
+msgstr "MP2"
+
+msgctxt "#30160"
+msgid "MP3"
+msgstr "MP3"
+
+msgctxt "#30161"
+msgid "AC3 (Dolby Digital)"
+msgstr "AC3 (Dolby Digital)"
+
+msgctxt "#30162"
+msgid "E-AC3 (Dolby Digital Plus)"
+msgstr "E-AC3 (Dolby Digital Plus)"
+
+msgctxt "#30163"
+msgid "Opus"
+msgstr "Opus"
+
+msgctxt "#30164"
+msgid "FLAC"
+msgstr "FLAC"
+
+msgctxt "#30165"
+msgid "DTS"
+msgstr "DTS"
+
+msgctxt "#30166"
+msgid "HDR10"
+msgstr "HDR10"
+
+msgctxt "#30167"
+msgid "HLG"
+msgstr "HLG"
+
+msgctxt "#30168"
+msgid "HDR10+"
+msgstr "HDR10+"
+
+msgctxt "#30169"
+msgid "Dolby Vision"
+msgstr "Dolby Vision"
+
+msgctxt "#30170"
+msgid "Dolby Vision with HDR10 fallback"
+msgstr "Dolby Vision（HDR10 備援）"
+
+msgctxt "#30171"
+msgid "Dolby Vision with HLG fallback"
+msgstr "Dolby Vision（HLG 備援）"
+
+msgctxt "#30172"
+msgid "Dolby Vision with SDR fallback"
+msgstr "Dolby Vision（SDR 備援）"
+
+msgctxt "#30173"
+msgid "Dolby Vision Profile 7 (EL)"
+msgstr "Dolby Vision Profile 7（EL）"
+
+msgctxt "#30174"
+msgid "Dolby Vision with HDR10+ fallback"
+msgstr "Dolby Vision（HDR10+ 備援）"
+
+msgctxt "#30175"
+msgid "Dolby Vision P7 with HDR10+ fallback"
+msgstr "Dolby Vision P7（HDR10+ 備援）"
+
+msgctxt "#30176"
+msgid "Unlimited"
+msgstr "無限制"
+
+msgctxt "#30177"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30178"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30179"
+msgid "4K"
+msgstr "4K"
+
+msgctxt "#30180"
+msgid "2.0 stereo"
+msgstr "2.0 立體聲"
+
+msgctxt "#30181"
+msgid "5.1 surround"
+msgstr "5.1 環繞聲"
+
+msgctxt "#30182"
+msgid "7.1 surround"
+msgstr "7.1 環繞聲"
+
+msgctxt "#30183"
+msgid "1 Mbit/s"
+msgstr "1 Mbit/s"
+
+msgctxt "#30184"
+msgid "2 Mbit/s"
+msgstr "2 Mbit/s"
+
+msgctxt "#30185"
+msgid "3 Mbit/s"
+msgstr "3 Mbit/s"
+
+msgctxt "#30186"
+msgid "4 Mbit/s"
+msgstr "4 Mbit/s"
+
+msgctxt "#30187"
+msgid "6 Mbit/s"
+msgstr "6 Mbit/s"
+
+msgctxt "#30188"
+msgid "8 Mbit/s"
+msgstr "8 Mbit/s"
+
+msgctxt "#30189"
+msgid "10 Mbit/s"
+msgstr "10 Mbit/s"
+
+msgctxt "#30190"
+msgid "15 Mbit/s"
+msgstr "15 Mbit/s"
+
+msgctxt "#30191"
+msgid "20 Mbit/s"
+msgstr "20 Mbit/s"
+
+msgctxt "#30192"
+msgid "25 Mbit/s"
+msgstr "25 Mbit/s"
+
+msgctxt "#30193"
+msgid "40 Mbit/s"
+msgstr "40 Mbit/s"
+
+msgctxt "#30194"
+msgid "60 Mbit/s"
+msgstr "60 Mbit/s"
+
+msgctxt "#30195"
+msgid "120 Mbit/s"
+msgstr "120 Mbit/s"
+
+msgctxt "#30196"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30197"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30198"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30199"
+msgid "256 kbit/s"
+msgstr "256 kbit/s"
+
+msgctxt "#30200"
+msgid "320 kbit/s"
+msgstr "320 kbit/s"
+
+msgctxt "#30201"
+msgid "384 kbit/s"
+msgstr "384 kbit/s"
+
+msgctxt "#30202"
+msgid "448 kbit/s"
+msgstr "448 kbit/s"
+
+msgctxt "#30203"
+msgid "640 kbit/s"
+msgstr "640 kbit/s"
+
+msgctxt "#30204"
+msgid "0.5 Mbit/s"
+msgstr "0.5 Mbit/s"
+
+msgctxt "#30205"
+msgid "0.75 Mbit/s"
+msgstr "0.75 Mbit/s"
+
+msgctxt "#30206"
+msgid "Default (max streaming bitrate)"
+msgstr "預設（最大串流位元率）"
+
+msgctxt "#30041"
+msgid "Who's watching?"
+msgstr "誰在看？"
+
+msgctxt "#30045"
+msgid "No active session on the server yet"
+msgstr "伺服器上尚無使用中的工作階段"
+
+msgctxt "#30046"
+msgid "Who's watching? (%s)"
+msgstr "誰在看？（%s）"
+
+msgctxt "#30047"
+msgid "Who's watching with %s?"
+msgstr "誰和 %s 一起看？"
+
+msgctxt "#30048"
+msgid "Who can be added to the session"
+msgstr "可以加入這個工作階段的人"
+
+msgctxt "#30250"
+msgid "Library"
+msgstr "媒體庫"
+
+msgctxt "#30251"
+msgid "Select and manage the Jellyfin libraries mirrored into Kodi's own database."
+msgstr "選擇並管理鏡射到 Kodi 自身資料庫的 Jellyfin 媒體庫。"
+
+msgctxt "#30252"
+msgid "Select libraries to sync"
+msgstr "選擇要同步的媒體庫"
+
+msgctxt "#30253"
+msgid "Choose which server libraries are mirrored into the Kodi library. Changes apply when you confirm the selection."
+msgstr "選擇哪些伺服器媒體庫要鏡射到 Kodi 媒體庫。確認選擇後才會套用變更。"
+
+msgctxt "#30256"
+msgid "Update libraries"
+msgstr "更新媒體庫"
+
+msgctxt "#30258"
+msgid "Repair libraries"
+msgstr "修復媒體庫"
+
+msgctxt "#30259"
+msgid "Remove and re-sync the libraries you pick from scratch, restoring watched state from the server. Runs when you confirm the selection."
+msgstr "移除你挑選的媒體庫並從頭重新同步，同時從伺服器還原觀看狀態。確認選擇後即開始執行。"
+
+msgctxt "#30262"
+msgid "Sync status"
+msgstr "同步狀態"
+
+msgctxt "#30264"
+msgid "Remove synced library?"
+msgstr "要移除已同步的媒體庫嗎？"
+
+msgctxt "#30265"
+msgid "Remove %s from the Kodi library? The items are deleted from this device only."
+msgstr "要從 Kodi 媒體庫移除 %s 嗎？項目只會從本裝置刪除。"
+
+msgctxt "#30266"
+msgid "Repair which libraries?"
+msgstr "要修復哪些媒體庫？"
+
+msgctxt "#30267"
+msgid "All"
+msgstr "全部"
+
+msgctxt "#30268"
+msgid "Select libraries"
+msgstr "選擇媒體庫"
+
+msgctxt "#30269"
+msgid "No libraries available"
+msgstr "沒有可用的媒體庫"
+
+msgctxt "#30302"
+msgid "Hide update status below (items)"
+msgstr "低於此項目數時隱藏更新狀態"
+
+msgctxt "#30303"
+msgid "Hide Kodi's library-update progress for syncs smaller than this. 0 always shows it."
+msgstr "同步項目數少於此值時，隱藏 Kodi 的媒體庫更新進度。設為 0 則一律顯示。"
+
+msgctxt "#30318"
+msgid "Compress artwork"
+msgstr "壓縮美工圖"
+
+msgctxt "#30319"
+msgid "Re-encode capped artwork at JPEG quality 90. No effect without a resolution cap."
+msgstr "以 JPEG 品質 90 重新編碼經過縮限的美工圖。未設定解析度上限時無效。"
+
+msgctxt "#30320"
+msgid "Maximum artwork resolution"
+msgstr "最大美工圖解析度"
+
+msgctxt "#30321"
+msgid "Cap the size of artwork from the server. Auto matches Kodi's image cache: 1080p for backdrops, 720p for posters and logos."
+msgstr "限制從伺服器取得的美工圖尺寸。「自動」與 Kodi 的圖片快取一致：背景圖 1080p，海報和標誌 720p。"
+
+msgctxt "#30322"
+msgid "Original"
+msgstr "原始"
+
+msgctxt "#30323"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30324"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30325"
+msgid "2160p"
+msgstr "2160p"
+
+msgctxt "#30326"
+msgid "Notify on server connection changes"
+msgstr "伺服器連線變更時通知"
+
+msgctxt "#30327"
+msgid "Show a notification when the server connects, disconnects or restarts."
+msgstr "伺服器連線、斷線或重新啟動時顯示通知。"
+
+msgctxt "#30350"
+msgid "Recently added"
+msgstr "最近加入"
+
+msgctxt "#30351"
+msgid "In progress"
+msgstr "觀看中"
+
+msgctxt "#30352"
+msgid "Unwatched"
+msgstr "未觀看"
+
+msgctxt "#30353"
+msgid "Random"
+msgstr "隨機"
+
+msgctxt "#30354"
+msgid "Recommended"
+msgstr "推薦"
+
+msgctxt "#30355"
+msgid "Recently added episodes"
+msgstr "最近加入的劇集"
+
+msgctxt "#30356"
+msgid "In progress episodes"
+msgstr "觀看中的劇集"
+
+msgctxt "#30358"
+msgid "Favorite movies"
+msgstr "最愛的電影"
+
+msgctxt "#30359"
+msgid "Favorite shows"
+msgstr "最愛的影集"
+
+msgctxt "#30360"
+msgid "Favorite episodes"
+msgstr "最愛的劇集"
+
+msgctxt "#30401"
+msgid "Updating media"
+msgstr "正在更新媒體"
+
+msgctxt "#30403"
+msgid "Sync incomplete; retrying shortly"
+msgstr "同步未完成，稍後重試"
+
+msgctxt "#30408"
+msgid "Removing library"
+msgstr "正在移除媒體庫"
+
+msgctxt "#30415"
+msgid "Connected to %s"
+msgstr "已連線到 %s"
+
+msgctxt "#30416"
+msgid "Lost connection to the server"
+msgstr "已失去與伺服器的連線"
+
+msgctxt "#30417"
+msgid "Server is restarting"
+msgstr "伺服器正在重新啟動"
+
+msgctxt "#30418"
+msgid "Server is shutting down"
+msgstr "伺服器正在關閉"
+
+msgctxt "#30420"
+msgid "Library sync is off: %s"
+msgstr "媒體庫同步已關閉：%s"
+
+msgctxt "#30450"
+msgid "Skipping & Play next"
+msgstr "跳過與播放下一集"
+
+msgctxt "#30451"
+msgid "Media segment skipping and the Play Next prompt."
+msgstr "媒體片段略過與「播放下一集」提示。"
+
+msgctxt "#30453"
+msgid "Skip media segments"
+msgstr "略過媒體片段"
+
+msgctxt "#30454"
+msgid "Fetch Jellyfin media segments (intro, credits, recap, preview, commercial) during playback and act on them per type."
+msgstr "播放時取得 Jellyfin 的媒體片段（片頭、片尾、前情提要、預告、廣告），並依類型分別處理。"
+
+msgctxt "#30455"
+msgid "Intros"
+msgstr "片頭"
+
+msgctxt "#30456"
+msgid "Off ignores intro segments, Auto skips past them, Ask shows a skip button."
+msgstr "「關閉」忽略片頭片段，「自動」直接跳過，「詢問」顯示略過按鈕。"
+
+msgctxt "#30457"
+msgid "Credits"
+msgstr "片尾"
+
+msgctxt "#30458"
+msgid "Off ignores credits, Auto seeks past them, Ask offers Skip Outro — with Play Next when a next episode exists."
+msgstr "「關閉」忽略片尾，「自動」直接跳過，「詢問」顯示「略過片尾」— 若有下一集則同時提供「播放下一集」。"
+
+msgctxt "#30459"
+msgid "Recaps"
+msgstr "前情提要"
+
+msgctxt "#30460"
+msgid "Off ignores recap segments, Auto skips past them, Ask shows a skip button."
+msgstr "「關閉」忽略前情提要片段，「自動」直接跳過，「詢問」顯示略過按鈕。"
+
+msgctxt "#30461"
+msgid "Previews"
+msgstr "預告"
+
+msgctxt "#30462"
+msgid "Off ignores preview segments, Auto skips past them, Ask shows a skip button."
+msgstr "「關閉」忽略預告片段，「自動」直接跳過，「詢問」顯示略過按鈕。"
+
+msgctxt "#30463"
+msgid "Commercials"
+msgstr "廣告"
+
+msgctxt "#30464"
+msgid "Off ignores commercial segments, Auto skips past them, Ask shows a skip button."
+msgstr "「關閉」忽略廣告片段，「自動」直接跳過，「詢問」顯示略過按鈕。"
+
+msgctxt "#30465"
+msgid "Off"
+msgstr "關閉"
+
+msgctxt "#30466"
+msgid "Auto"
+msgstr "自動"
+
+msgctxt "#30467"
+msgid "Ask"
+msgstr "詢問"
+
+msgctxt "#30469"
+msgid "Offer Play Next"
+msgstr "提供「播放下一集」"
+
+msgctxt "#30470"
+msgid "Offer the next episode at the credits, or near the end when no credits segment exists."
+msgstr "在片尾時提供下一集；若沒有片尾片段，則於接近結尾時提供。"
+
+msgctxt "#30471"
+msgid "Play Next lead time"
+msgstr "「播放下一集」提前秒數"
+
+msgctxt "#30472"
+msgid "Seconds before the end to show the Play Next prompt for content without a credits segment."
+msgstr "對於沒有片尾片段的內容，要在結束前多少秒顯示「播放下一集」提示。"
+
+msgctxt "#30473"
+msgid "Autoplay next episode"
+msgstr "自動播放下一集"
+
+msgctxt "#30474"
+msgid "Count down on the Play Next prompt and start the next episode automatically."
+msgstr "在「播放下一集」提示上倒數，並自動開始播放下一集。"
+
+msgctxt "#30475"
+msgid "Resume offset (seconds)"
+msgstr "續播回捲秒數"
+
+msgctxt "#30476"
+msgid "Seconds to rewind before the stored resume point."
+msgstr "從記錄的續播點往回捲的秒數。"
+
+msgctxt "#30477"
+msgid "Hide the skip button after"
+msgstr "略過按鈕在此之後隱藏"
+
+msgctxt "#30478"
+msgid "How far into a segment the skip button disappears. 100% keeps it up for the whole segment."
+msgstr "略過按鈕在片段進行到多少比例時消失。設為 100% 則整個片段都會顯示。"
+
+msgctxt "#30481"
+msgid "Skip Intro"
+msgstr "略過片頭"
+
+msgctxt "#30482"
+msgid "Skip Outro"
+msgstr "略過片尾"
+
+msgctxt "#30483"
+msgid "Skip Recap"
+msgstr "略過前情提要"
+
+msgctxt "#30484"
+msgid "Skip Preview"
+msgstr "略過預告"
+
+msgctxt "#30485"
+msgid "Skip Ad"
+msgstr "略過廣告"
+
+msgctxt "#30486"
+msgid "Play Next"
+msgstr "播放下一集"
+
+msgctxt "#30487"
+msgid "Close"
+msgstr "關閉"
+
+msgctxt "#30488"
+msgid "Skipped %s"
+msgstr "已略過%s"
+
+msgctxt "#30489"
+msgid "Up next: %s"
+msgstr "接下來：%s"
+
+msgctxt "#30500"
+msgid "Extras"
+msgstr "特別收錄"
+
+msgctxt "#30501"
+msgid "Browse extras"
+msgstr "瀏覽特別收錄"
+
+msgctxt "#30502"
+msgid "Jellyfin actions"
+msgstr "Jellyfin 動作"
+
+msgctxt "#30504"
+msgid "Settings"
+msgstr "設定"
+
+msgctxt "#30505"
+msgid "Permanently delete \"%s\" from the server? This cannot be undone."
+msgstr "要從伺服器永久刪除 \"%s\" 嗎？此操作無法復原。"
+
+msgctxt "#30506"
+msgid "Finished \"%s\". Permanently delete it from the server? This cannot be undone."
+msgstr "已看完 \"%s\"。要從伺服器永久刪除嗎？此操作無法復原。"
+
+msgctxt "#30507"
+msgid "Server request failed"
+msgstr "伺服器請求失敗"
+
+msgctxt "#30508"
+msgid "Mark as watched on Jellyfin"
+msgstr "在 Jellyfin 標記為已觀看"
+
+msgctxt "#30509"
+msgid "Mark as unwatched on Jellyfin"
+msgstr "在 Jellyfin 標記為未觀看"
+
+msgctxt "#30550"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30551"
+msgid "Enable SyncPlay"
+msgstr "啟用 SyncPlay"
+
+msgctxt "#30552"
+msgid "Watch in sync with other Jellyfin clients. Leave Kodi's 'Sync playback to display' off for a reliable experience"
+msgstr "與其他 Jellyfin 用戶端同步觀看。請在 Kodi 中關閉「同步播放至顯示器」，體驗會更穩定"
+
+msgctxt "#30557"
+msgid "Group notifications"
+msgstr "群組通知"
+
+msgctxt "#30558"
+msgid "Show member join/leave and group-waiting notifications. Errors are always shown."
+msgstr "顯示成員加入／離開與群組等待的通知。錯誤訊息一律顯示。"
+
+msgctxt "#30560"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30561"
+msgid "New group..."
+msgstr "新增群組..."
+
+msgctxt "#30562"
+msgid "Leave group"
+msgstr "離開群組"
+
+msgctxt "#30563"
+msgid "Joined group: %s"
+msgstr "已加入群組：%s"
+
+msgctxt "#30564"
+msgid "Left the group"
+msgstr "已離開群組"
+
+msgctxt "#30565"
+msgid "%s joined the group"
+msgstr "%s 加入了群組"
+
+msgctxt "#30566"
+msgid "%s left the group"
+msgstr "%s 離開了群組"
+
+msgctxt "#30567"
+msgid "Group name"
+msgstr "群組名稱"
+
+msgctxt "#30568"
+msgid "Playback stopped — what should the group do?"
+msgstr "播放已停止 — 群組該怎麼做？"
+
+msgctxt "#30569"
+msgid "Spectator mode: the group will not wait for you"
+msgstr "旁觀模式：群組不會等你"
+
+msgctxt "#30570"
+msgid "SyncPlay needs a working websocket connection to the server"
+msgstr "SyncPlay 需要與伺服器之間可用的 WebSocket 連線"
+
+msgctxt "#30571"
+msgid "Removed from the group"
+msgstr "已被移出群組"
+
+msgctxt "#30572"
+msgid "Members"
+msgstr "成員"
+
+msgctxt "#30573"
+msgid "Resync with group"
+msgstr "與群組重新同步"
+
+msgctxt "#30574"
+msgid "SyncPlay is unavailable (server not reachable?)"
+msgstr "SyncPlay 無法使用（伺服器連不上？）"
+
+msgctxt "#30575"
+msgid "External players cannot be synchronized"
+msgstr "外部播放器無法同步"
+
+msgctxt "#30576"
+msgid "Playback could not be synchronized"
+msgstr "無法同步播放"
+
+msgctxt "#30577"
+msgid "buffering"
+msgstr "緩衝中"
+
+msgctxt "#30578"
+msgid "Could not join the group"
+msgstr "無法加入群組"
+
+msgctxt "#30579"
+msgid "You don't have access to some items in the group's queue"
+msgstr "你沒有權限存取群組佇列中的部分項目"
+
+msgctxt "#30580"
+msgid "Become a spectator (group won't wait for me)"
+msgstr "成為旁觀者（群組不會等我）"
+
+msgctxt "#30581"
+msgid "Wait for me again (leave spectator mode)"
+msgstr "重新等我（離開旁觀模式）"
+
+msgctxt "#30582"
+msgid "disconnected"
+msgstr "已斷線"
+
+msgctxt "#30583"
+msgid "The group will wait for you again"
+msgstr "群組將重新等你"
+
+msgctxt "#30584"
+msgid "Stop playback for everyone"
+msgstr "停止所有人的播放"
+
+msgctxt "#30585"
+msgid "Waiting for the group..."
+msgstr "正在等待群組..."
+
+msgctxt "#30586"
+msgid "Fine sync using tempo"
+msgstr "使用變速的精細同步"
+
+msgctxt "#30587"
+msgid "Keeps this device on the group's position by briefly playing faster or slower. A video correction decodes passthrough audio until the next item."
+msgstr "透過短暫地加快或放慢播放，讓此裝置保持在群組位置上。進行影片校正時，直通音訊會被解碼，直到下一個項目。"
+
+msgctxt "#30592"
+msgid "Fine sync stopped: rate mismatch"
+msgstr "精細同步已停止：速率不符"
+
+msgctxt "#30593"
+msgid "Largest video error closed by tempo (ms)"
+msgstr "以變速校正的最大影片誤差 (ms)"
+
+msgctxt "#30594"
+msgid "Position errors up to this are closed by playing faster or slower; anything larger is closed with a skip. Higher means fewer skips and longer speed changes."
+msgstr "不超過此值的位置誤差以加快或放慢播放校正；更大的誤差以跳轉校正。數值越高，跳轉越少，變速時間越長。"
+
+msgctxt "#30595"
+msgid "Fastest video correction speed (%)"
+msgstr "最快影片校正速度 (%)"
+
+msgctxt "#30596"
+msgid "The most playback speed may change during a correction. At 25% a 2.5 second error takes 10 seconds to close; lower is less noticeable but slower. Large changes ramp in and out."
+msgstr "校正期間播放速度最多可改變的幅度。在 25% 時，2.5 秒的誤差需 10 秒校正；越低越不明顯，但越慢。較大的改變會逐步切入切出。"
+
+msgctxt "#30604"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30605"
+msgid "1440p"
+msgstr "1440p"
+
+msgctxt "#30613"
+msgid "Audio and subtitle streams"
+msgstr "音訊與字幕串流"
+
+msgctxt "#30614"
+msgid "Audio stream"
+msgstr "音訊串流"
+
+msgctxt "#30615"
+msgid "Subtitles"
+msgstr "字幕"
+
+msgctxt "#30616"
+msgid "Restarting to change stream..."
+msgstr "正在重新啟動以切換串流..."
+
+msgctxt "#30617"
+msgid "burned in, restarts playback"
+msgstr "燒錄字幕，會重新開始播放"
+
+msgctxt "#30618"
+msgid "Use Jellyfin's default tracks"
+msgstr "使用 Jellyfin 的預設軌道"
+
+msgctxt "#30619"
+msgid "Start playback on the audio and subtitle tracks your Jellyfin account asks for, instead of the ones Kodi's own language settings pick. The server resolves both from your Jellyfin profile, so the choice follows you to every client."
+msgstr "播放時直接採用你的 Jellyfin 帳戶所指定的音軌與字幕軌，而不是由 Kodi 自身的語言設定挑選。兩者都由伺服器依你的 Jellyfin 個人設定決定，因此這個選擇會跟著你到每一個用戶端。"
+
+msgctxt "#30622"
+msgid "Notify about new content"
+msgstr "有新內容時通知"
+
+msgctxt "#30623"
+msgid "Show a notification when new films, shows, episodes, music videos, artists or albums are added to your library."
+msgstr "當有新的電影、影集、劇集、音樂錄影帶、演出者或專輯加入媒體庫時顯示通知。"
+
+msgctxt "#30624"
+msgid "%s movie added to library"
+msgstr "電影「%s」已加入媒體庫"
+
+msgctxt "#30625"
+msgid "%s movies added to library"
+msgstr "已加入 %s 部電影到媒體庫"
+
+msgctxt "#30626"
+msgid "%s show added to library"
+msgstr "影集「%s」已加入媒體庫"
+
+msgctxt "#30627"
+msgid "%s new shows added to library"
+msgstr "已加入 %s 部新影集到媒體庫"
+
+msgctxt "#30628"
+msgid "%s episode of %s added to library"
+msgstr "%s 集已加入媒體庫：「%s」"
+
+msgctxt "#30629"
+msgid "%s episodes of %s added to library"
+msgstr "%s 集已加入媒體庫：「%s」"
+
+msgctxt "#30630"
+msgid "%s episodes added to library"
+msgstr "已加入 %s 集劇集到媒體庫"
+
+msgctxt "#30631"
+msgid "%s music video added to library"
+msgstr "音樂錄影帶「%s」已加入媒體庫"
+
+msgctxt "#30632"
+msgid "%s music videos added to library"
+msgstr "已加入 %s 部音樂錄影帶到媒體庫"
+
+msgctxt "#30633"
+msgid "%s added to music library"
+msgstr "演出者「%s」已加入音樂庫"
+
+msgctxt "#30634"
+msgid "%s artists added to library"
+msgstr "已加入 %s 位演出者到媒體庫"
+
+msgctxt "#30635"
+msgid "%s added to music library"
+msgstr "專輯「%s」已加入音樂庫"
+
+msgctxt "#30636"
+msgid "%s albums added to library"
+msgstr "已加入 %s 張專輯到媒體庫"
+
+msgctxt "#30637"
+msgid "Use the server's splashscreen as the backdrop"
+msgstr "以伺服器的啟動畫面作為背景"
+
+msgctxt "#30638"
+msgid "Show the Jellyfin server's splashscreen behind the addon instead of the bundled artwork. Refreshed when the service connects, at most once a day."
+msgstr "在外掛背後顯示 Jellyfin 伺服器的啟動畫面，取代內建的美工圖。服務連線時更新，每天最多一次。"
+
+msgctxt "#30700"
+msgid "Downloads"
+msgstr "下載"
+
+msgctxt "#30701"
+msgid "Download items for offline playback"
+msgstr "下載項目以供離線播放"
+
+msgctxt "#30702"
+msgid "Enable downloads"
+msgstr "啟用下載"
+
+msgctxt "#30703"
+msgid "Adds Download to the Jellyfin actions menu and runs the download manager. Only for libraries you sync with Kofin."
+msgstr "在「Jellyfin 動作」選單中加入「下載」，並啟動下載管理員。僅適用於你以 Kofin 同步的媒體庫。"
+
+msgctxt "#30704"
+msgid "Download location"
+msgstr "下載位置"
+
+msgctxt "#30705"
+msgid "Where downloaded files are kept. Leave empty for the addon profile folder"
+msgstr "下載檔案的存放位置。留空則使用外掛的設定檔資料夾"
+
+msgctxt "#30706"
+msgid "Parallel video downloads"
+msgstr "平行影片下載數"
+
+msgctxt "#30707"
+msgid "How many movies and episodes download at the same time"
+msgstr "同時下載多少部電影與劇集"
+
+msgctxt "#30708"
+msgid "Download"
+msgstr "下載"
+
+msgctxt "#30709"
+msgid "Cancel download"
+msgstr "取消下載"
+
+msgctxt "#30710"
+msgid "Delete download"
+msgstr "刪除下載檔"
+
+msgctxt "#30712"
+msgid "Download complete: %s"
+msgstr "下載完成：%s"
+
+msgctxt "#30713"
+msgid "Download failed: %s"
+msgstr "下載失敗：%s"
+
+msgctxt "#30714"
+msgid "Delete the download of %s?"
+msgstr "要刪除 %s 的下載檔嗎？"
+
+msgctxt "#30715"
+msgid "Not enough free space for %s"
+msgstr "可用空間不足，無法下載 %s"
+
+msgctxt "#30717"
+msgid "The downloads folder is not writable"
+msgstr "下載資料夾無法寫入"
+
+msgctxt "#30718"
+msgid "Downloaded movies"
+msgstr "已下載的電影"
+
+msgctxt "#30719"
+msgid "Downloaded shows"
+msgstr "已下載的影集"
+
+msgctxt "#30720"
+msgid "Not available offline"
+msgstr "離線時無法使用"
+
+msgctxt "#30721"
+msgid "Downloaded episodes"
+msgstr "已下載的劇集"
+
+msgctxt "#30722"
+msgid "Transcode videos"
+msgstr "轉碼影片"
+
+msgctxt "#30723"
+msgid "Transcode when the original exceeds a limit below or when triggered by settings in the Transcoding tab (HDR, codec, etc)"
+msgstr "當原始檔超過下方限制，或因「轉碼」頁的設定（HDR、編解碼器等）而觸發時進行轉碼"
+
+msgctxt "#30724"
+msgid "Maximum download bitrate"
+msgstr "最大下載位元率"
+
+msgctxt "#30725"
+msgid "Videos over this total bitrate are transcoded down to it. Unlimited transcodes only for codec, HDR or resolution reasons."
+msgstr "總位元率超過此值的影片會被轉碼降至此值。選「無限制」時，只有因編解碼器、HDR 或解析度才會轉碼。"
+
+msgctxt "#30726"
+msgid "Maximum download resolution"
+msgstr "最大下載解析度"
+
+msgctxt "#30727"
+msgid "Videos wider than this are scaled down. Unlimited never scales."
+msgstr "比此寬度更寬的影片會被縮小。選「無限制」則永不縮放。"
+
+msgctxt "#30728"
+msgid "Transcode music"
+msgstr "轉碼音樂"
+
+msgctxt "#30729"
+msgid "Transcode a track only when it is lossless or over the bitrate limit below. Compliant tracks download as the original file."
+msgstr "只有無損音軌或超過下方位元率上限的音軌才會轉碼。符合條件的音軌會以原始檔下載。"
+
+msgctxt "#30730"
+msgid "Transcode music over"
+msgstr "轉碼超過此位元率的音樂"
+
+msgctxt "#30731"
+msgid "Tracks over this bitrate, and all lossless tracks, are transcoded. Unlimited transcodes only lossless tracks."
+msgstr "超過此位元率的音軌，以及所有無損音軌，都會轉碼。選「無限制」則只轉碼無損音軌。"
+
+msgctxt "#30732"
+msgid "Transcode music to"
+msgstr "音樂轉碼為"
+
+msgctxt "#30733"
+msgid "The codec transcoded tracks are encoded with. Opus gives the best quality per megabyte."
+msgstr "轉碼音軌所使用的編碼格式。Opus 在相同容量下音質最佳。"
+
+msgctxt "#30734"
+msgid "Transcoded music bitrate"
+msgstr "轉碼音樂位元率"
+
+msgctxt "#30735"
+msgid "The bitrate transcoded tracks are encoded at. 128 kbps Opus is transparent for most listening."
+msgstr "轉碼音軌所使用的位元率。對大多數聆聽情境而言，128 kbps 的 Opus 已聽不出差異。"
+
+msgctxt "#30737"
+msgid "Kofin downloads"
+msgstr "Kofin 下載"
+
+msgctxt "#30738"
+msgid "Download the next episodes automatically"
+msgstr "自動下載接下來的劇集"
+
+msgctxt "#30739"
+msgid "While watching a downloaded episode, the next unwatched episodes of the show are queued for download at the 50% mark."
+msgstr "觀看已下載的劇集時，播放到 50% 會把該影集接下來未觀看的劇集排入下載佇列。"
+
+msgctxt "#30740"
+msgid "Episodes to keep ahead"
+msgstr "預先保留的劇集數"
+
+msgctxt "#30741"
+msgid "How many unwatched episodes ahead of the one playing are kept downloaded."
+msgstr "在目前播放的劇集之後，要保持多少集未觀看的劇集處於已下載狀態。"
+
+msgctxt "#30742"
+msgid "Download newly added movies"
+msgstr "下載新加入的電影"
+
+msgctxt "#30743"
+msgid "Movies newly added to a synced library are downloaded automatically."
+msgstr "新加入已同步媒體庫的電影會自動下載。"
+
+msgctxt "#30746"
+msgid "Delete download after watching"
+msgstr "觀看後刪除下載檔"
+
+msgctxt "#30747"
+msgid "When you finish watching a downloaded item, its local copy is removed. The item stays on the server and in your library."
+msgstr "你看完已下載的項目後，本機副本會被移除。項目仍留在伺服器與媒體庫中。"
+
+msgctxt "#30751"
+msgid "%s new movies were not downloaded automatically"
+msgstr "有 %s 部新電影未自動下載"
+
+msgctxt "#30752"
+msgid "Export NFO files and artwork"
+msgstr "匯出 NFO 檔案與美工圖"
+
+msgctxt "#30753"
+msgid "Write NFO metadata and artwork beside downloaded files, so other Kodi profiles and apps can scan the download folder as a library."
+msgstr "在下載檔案旁寫入 NFO 中繼資料與美工圖，讓其他 Kodi 設定檔和應用程式可以把下載資料夾當成媒體庫掃描。"
+
+msgctxt "#30754"
+msgid "Download all new episodes"
+msgstr "下載所有新劇集"
+
+msgctxt "#30755"
+msgid "Every episode newly added to a synced library is downloaded automatically."
+msgstr "每一集新加入已同步媒體庫的劇集都會自動下載。"
+
+msgctxt "#30756"
+msgid "Download new albums"
+msgstr "下載新專輯"
+
+msgctxt "#30757"
+msgid "Albums newly added to a synced library are downloaded automatically."
+msgstr "新加入已同步媒體庫的專輯會自動下載。"
+
+msgctxt "#30758"
+msgid "Shows downloading new episodes"
+msgstr "會自動下載新劇集的影集"
+
+msgctxt "#30759"
+msgid "Review the shows set to download their new episodes automatically, and untick any to stop."
+msgstr "檢視設定為自動下載新劇集的影集，取消勾選即可停止。"
+
+msgctxt "#30760"
+msgid "Download new episodes"
+msgstr "下載新劇集"
+
+msgctxt "#30761"
+msgid "Stop downloading new episodes"
+msgstr "停止下載新劇集"
+
+msgctxt "#30762"
+msgid "New episodes of %s will download automatically"
+msgstr "%s 的新劇集將自動下載"
+
+msgctxt "#30763"
+msgid "New episodes of %s will no longer download automatically"
+msgstr "%s 的新劇集將不再自動下載"
+
+msgctxt "#30764"
+msgid "%s new episodes were not downloaded automatically"
+msgstr "有 %s 集新劇集未自動下載"
+
+msgctxt "#30765"
+msgid "%s new albums were not downloaded automatically"
+msgstr "有 %s 張新專輯未自動下載"
+
+msgctxt "#30766"
+msgid "No shows are set to download new episodes"
+msgstr "沒有任何影集設定為下載新劇集"
+
+msgctxt "#30767"
+msgid "Show download notifications"
+msgstr "顯示下載通知"
+
+msgctxt "#30768"
+msgid "Announce queued and completed downloads. Failures and warnings are always shown."
+msgstr "通知已排入佇列與已完成的下載。失敗與警告一律顯示。"
+
+msgctxt "#30769"
+msgid "Delete download automatically"
+msgstr "自動刪除下載檔"
+
+msgctxt "#30770"
+msgid "Remove the local copy without asking. With this off, Kofin asks first each time."
+msgstr "直接移除本機副本，不會詢問。關閉時，Kofin 每次都會先詢問。"
+
+msgctxt "#30771"
+msgid "Download %s item(s), about %s? %s free"
+msgstr "要下載 %s 個項目、約 %s 嗎？可用空間 %s"
+
+msgctxt "#30772"
+msgid "Parallel music downloads"
+msgstr "平行音樂下載數"
+
+msgctxt "#30773"
+msgid "How many tracks download at the same time. Tracks are small and mostly overhead, so this can sit well above the video figure."
+msgstr "同時下載多少首曲目。曲目檔案小、大多是額外負擔，因此這個值可以遠高於影片的設定。"
+
+msgctxt "#30775"
+msgid "downloaded from the server"
+msgstr "已從伺服器下載"
+
+msgctxt "#30776"
+msgid "Downloading subtitle..."
+msgstr "正在下載字幕..."
+
+msgctxt "#30777"
+msgid "Jellyfin account settings"
+msgstr "Jellyfin 帳戶設定"
+
+msgctxt "#30778"
+msgid "Audio and subtitle preferences stored on the server against your Jellyfin account. They apply to every client you sign in from, not just this one."
+msgstr "儲存在伺服器上、隸屬於你 Jellyfin 帳戶的音訊與字幕偏好設定。它們會套用到你登入的每一個用戶端，不只是這一台。"
+
+msgctxt "#30779"
+msgid "Jellyfin settings for %s"
+msgstr "%s 的 Jellyfin 設定"
+
+msgctxt "#30780"
+msgid "Preferred audio language"
+msgstr "偏好的音訊語言"
+
+msgctxt "#30781"
+msgid "Play default audio track"
+msgstr "播放預設音軌"
+
+msgctxt "#30782"
+msgid "Preferred subtitle language"
+msgstr "偏好的字幕語言"
+
+msgctxt "#30783"
+msgid "Subtitle mode"
+msgstr "字幕模式"
+
+msgctxt "#30784"
+msgid "Remember audio selections"
+msgstr "記住音訊選擇"
+
+msgctxt "#30785"
+msgid "Remember subtitle selections"
+msgstr "記住字幕選擇"
+
+msgctxt "#30786"
+msgid "Enabled"
+msgstr "已啟用"
+
+msgctxt "#30787"
+msgid "Disabled"
+msgstr "已停用"
+
+msgctxt "#30788"
+msgid "Any"
+msgstr "任何"
+
+msgctxt "#30789"
+msgid "Default"
+msgstr "預設"
+
+msgctxt "#30790"
+msgid "Always"
+msgstr "一律"
+
+msgctxt "#30791"
+msgid "Only forced"
+msgstr "僅強制字幕"
+
+msgctxt "#30792"
+msgid "None"
+msgstr "無"
+
+msgctxt "#30793"
+msgid "Smart"
+msgstr "智慧"
+
+msgctxt "#30794"
+msgid "Not applied here: \"Use Jellyfin's default tracks\" is off"
+msgstr "此處不適用：\"使用 Jellyfin 的預設軌道\" 已關閉"
+
+msgctxt "#30795"
+msgid "Could not load your Jellyfin settings"
+msgstr "無法載入你的 Jellyfin 設定"
+
+msgctxt "#30796"
+msgid "Could not save to the server"
+msgstr "無法儲存到伺服器"
+
+msgctxt "#30797"
+msgid "Your Jellyfin account is not allowed to change these settings"
+msgstr "你的 Jellyfin 帳戶沒有變更這些設定的權限"
+
+msgctxt "#30798"
+msgid "Skip movie imports larger than"
+msgstr "略過超過此數量的電影匯入"
+
+msgctxt "#30799"
+msgid "When a sync adds more new movies than this at once, none of them are downloaded — a bulk import is rarely a request to fill the disk. Raise it if you want big additions pulled automatically."
+msgstr "當一次同步加入的新電影超過此數量時，一部也不會下載 — 大量匯入很少代表你想把磁碟塞滿。若希望大批新增也自動下載，請調高此值。"
+
+msgctxt "#30800"
+msgid "Skip episode imports larger than"
+msgstr "略過超過此數量的劇集匯入"
+
+msgctxt "#30801"
+msgid "When a sync adds more new episodes than this at once, none of them are downloaded. Shows you have subscribed to are exempt — a subscription is a standing order."
+msgstr "當一次同步加入的新劇集超過此數量時，一集也不會下載。你已訂閱的影集不受此限 — 訂閱本身就是長期指令。"
+
+msgctxt "#30802"
+msgid "Skip album imports larger than"
+msgstr "略過超過此數量的專輯匯入"
+
+msgctxt "#30803"
+msgid "When a sync adds more new albums than this at once, none of them are downloaded. Counted in albums, not tracks."
+msgstr "當一次同步加入的新專輯超過此數量時，一張也不會下載。以專輯計算，而非曲目。"
+
+msgctxt "#30810"
+msgid "Needs %s, only %s free"
+msgstr "需要 %s，可用空間只有 %s"
+
+msgctxt "#30804"
+msgid "Delete all downloads"
+msgstr "刪除所有下載檔"
+
+msgctxt "#30805"
+msgid "Delete every downloaded file from this device and stop keeping playlists and music libraries in sync. The items stay in your library and play from the server again."
+msgstr "從本裝置刪除所有已下載的檔案，並停止讓播放清單和音樂庫保持同步。項目仍會留在媒體庫中，並改回從伺服器播放。"
+
+msgctxt "#30806"
+msgid "Delete all %s download(s), freeing about %s?"
+msgstr "要刪除全部 %s 個下載檔、釋出約 %s 嗎？"
+
+msgctxt "#30807"
+msgid "There are no downloads to delete"
+msgstr "沒有可刪除的下載檔"
+
+msgctxt "#30808"
+msgid "Pause downloads during playback"
+msgstr "播放期間暫停下載"
+
+msgctxt "#30809"
+msgid "Do not start new downloads while something is playing, video or music. A file already downloading finishes; the rest wait until playback stops."
+msgstr "有影片或音樂正在播放時，不開始新的下載。已在下載中的檔案會完成，其餘的則等到播放停止。"
+
+msgctxt "#30811"
+msgid "Delete stale downloads"
+msgstr "刪除久未播放的下載檔"
+
+msgctxt "#30812"
+msgid "Remove downloaded files nobody has played for a while. Anything you are part-way through is kept, however long it sits. The items stay in your library and play from the server again."
+msgstr "移除一段時間沒人播放的下載檔。看到一半的項目一律保留，無論放置多久。項目仍會留在媒體庫中，並改回從伺服器播放。"
+
+msgctxt "#30813"
+msgid "Delete after (days)"
+msgstr "幾天後刪除"
+
+msgctxt "#30814"
+msgid "How long a download may sit unplayed before it is removed. Playing it again starts the count over."
+msgstr "一個下載檔可以放置多久未播放才會被移除。再次播放會重新計算天數。"
+
+msgctxt "#30817"
+msgid "All"
+msgstr "全部"
+
+msgctxt "#30818"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30819"
+msgid "Show cast in add-on listings"
+msgstr "在外掛清單中顯示演員"
+
+msgctxt "#30820"
+msgid "Fetch cast and crew for the shorter add-on listings — Recently added, In progress, Next up, Continue watching, search results and a show's episodes — so the information dialog can show them. Whole-library listings never fetch it, because the server needs about a second for every 40 items. The Kodi library always has cast."
+msgstr "為外掛的短清單 — 最近加入、觀看中、接下來要看、繼續觀看、搜尋結果與影集的分集 — 取得演員與工作人員，讓資訊對話框能顯示。涵蓋整個媒體庫的清單一律不取得，因為伺服器每 40 個項目大約需要一秒。Kodi 媒體庫一律包含演員資訊。"
+
+msgctxt "#30821"
+msgid "Server error — %s"
+msgstr "伺服器錯誤 — %s"
+
+msgctxt "#30823"
+msgid "Download deleted: %s"
+msgstr "已刪除下載：%s"
+
+msgctxt "#30824"
+msgid "%s download(s) deleted"
+msgstr "已刪除 %s 個下載"
+
+msgctxt "#30825"
+msgid "Find servers on local network"
+msgstr "在區域網路中尋找伺服器"
+
+msgctxt "#30826"
+msgid "Looks for Jellyfin servers on this network and lists the ones that answer. The one you choose is filled into \"Server address\"."
+msgstr "在本網路中尋找 Jellyfin 伺服器並列出有回應的伺服器。所選伺服器會填入 \"伺服器位址\"。"
+
+msgctxt "#30827"
+msgid "Searching for Jellyfin servers…"
+msgstr "正在尋找 Jellyfin 伺服器…"
+
+msgctxt "#30828"
+msgid "Select a server"
+msgstr "選擇伺服器"
+
+msgctxt "#30829"
+msgid "No Jellyfin servers answered — enter the address manually"
+msgstr "沒有 Jellyfin 伺服器回應 — 請手動輸入位址"
+
+msgctxt "#30830"
+msgid "did not answer"
+msgstr "無回應"
+
+msgctxt "#30831"
+msgid "%s did not answer — the address it gave may not work here"
+msgstr "%s 無回應 — 它提供的位址在此可能無法使用"
+
+msgctxt "#30832"
+msgid "Storage used"
+msgstr "已用空間"
+
+msgctxt "#30833"
+msgid "Show where the downloads are kept and how much space each kind is using."
+msgstr "顯示下載內容的存放位置以及各類佔用的空間。"
+
+msgctxt "#30834"
+msgid "Other files in this folder"
+msgstr "此資料夾中的其他檔案"
+
+msgctxt "#30835"
+msgid "Nothing has been downloaded yet"
+msgstr "尚未下載任何內容"
+
+msgctxt "#30836"
+msgid "Folder too large to measure fully — the totals above are partial"
+msgstr "資料夾過大，無法完整統計 — 以上合計並不完整"
+
+msgctxt "#30837"
+msgid "Watch in sync with other Jellyfin clients."
+msgstr "與其他 Jellyfin 用戶端同步觀看。"
+
+msgctxt "#30841"
+msgid "Save to Jellyfin"
+msgstr "儲存到 Jellyfin"
+
+msgctxt "#30842"
+msgid "This playlist mixes audio and video, which cannot be saved as one Jellyfin playlist"
+msgstr "此播放清單混合了音訊與影片，無法儲存為單一 Jellyfin 播放清單"
+
+msgctxt "#30843"
+msgid "Playlist saved to Jellyfin"
+msgstr "播放清單已儲存到 Jellyfin"
+
+msgctxt "#30844"
+msgid "No library items in this playlist to save"
+msgstr "此播放清單中沒有可儲存的資料庫項目"
+
+msgctxt "#30845"
+msgid "Show library update progress"
+msgstr "顯示媒體庫更新進度"
+
+msgctxt "#30846"
+msgid "Show Kodi's library-update progress while the library syncs."
+msgstr "同步媒體庫時顯示 Kodi 的媒體庫更新進度。"
+
+msgctxt "#30849"
+msgid "Download & keep in sync"
+msgstr "下載並保持同步"
+
+msgctxt "#30850"
+msgid "Stop keeping downloads in sync"
+msgstr "停止同步下載"
+
+msgctxt "#30851"
+msgid "Manage playlist downloads"
+msgstr "管理播放清單下載"
+
+msgctxt "#30852"
+msgid "Manage music library downloads"
+msgstr "管理音樂資料庫下載"
+
+msgctxt "#30853"
+msgid "Content not downloaded"
+msgstr "內容尚未下載"
+
+msgctxt "#30854"
+msgid "Review subscribed playlists; untick to stop syncing downloads."
+msgstr "檢視已訂閱的播放清單；取消勾選即可停止同步下載。"
+
+msgctxt "#30855"
+msgid "Review subscribed music libraries; untick to stop syncing downloads."
+msgstr "檢視已訂閱的音樂資料庫；取消勾選即可停止同步下載。"
+
+msgctxt "#30856"
+msgid "Library nodes and playlists"
+msgstr "資料庫節點和播放清單"
+
+msgctxt "#30857"
+msgid "Create Kodi library nodes and smart playlists for the synced video libraries, and copy Jellyfin playlists into Kodi under Videos → Playlists → Kofin and Music → Playlists → Kofin. Turning this off removes every node and playlist Kofin created."
+msgstr "為已同步的影片資料庫建立 Kodi 資料庫節點和智慧播放清單，並將 Jellyfin 播放清單複製到 Kodi 的 影片 → 播放清單 → Kofin 和 音樂 → 播放清單 → Kofin。關閉後會移除 Kofin 建立的所有節點和播放清單。"
+
+msgctxt "#30859"
+msgid "Library status"
+msgstr "媒體庫狀態"
+
+msgctxt "#30860"
+msgid "What is synced, what is still pending and what the sync is doing now."
+msgstr "已同步的內容、仍在等待的內容，以及同步目前正在做什麼。"
+
+msgctxt "#30861"
+msgid "Transcode music whose bitrate is above the maximum set below. Off, songs play from the server untouched."
+msgstr "對位元率高於下方所設上限的音樂進行轉碼。關閉時，歌曲會原樣從伺服器播放。"
+
+msgctxt "#30862"
+msgid "in Kodi / on the server"
+msgstr "Kodi 中 / 伺服器上"
+
+msgctxt "#30863"
+msgid "Pending"
+msgstr "待處理"
+
+msgctxt "#30864"
+msgid "Failed"
+msgstr "失敗"
+
+msgctxt "#30865"
+msgid "Last full update"
+msgstr "上次完整更新"
+
+msgctxt "#30867"
+msgid "Repair to add codec details"
+msgstr "修復以加入編解碼器資訊"
+
+msgctxt "#30868"
+msgid "Kodi cannot import"
+msgstr "Kodi 無法匯入"
+
+msgctxt "#30869"
+msgid "Scheduled full update"
+msgstr "定期完整更新"
+
+msgctxt "#30870"
+msgid "How often to re-read every library from the server. Turn this on if the server lacks the KofinSyncQueue plugin, or deletions there won't reach Kodi."
+msgstr "從伺服器重新讀取所有媒體庫的頻率。如果伺服器沒有 KofinSyncQueue 外掛，請開啟此項，否則刪除不會同步到 Kodi。"
+
+msgctxt "#30871"
+msgid "Daily"
+msgstr "每天"
+
+msgctxt "#30872"
+msgid "Weekly"
+msgstr "每週"
+
+msgctxt "#30873"
+msgid "Update all libraries now?"
+msgstr "立即更新所有媒體庫？"
+
+msgctxt "#30874"
+msgid "Re-read every library from the server now."
+msgstr "立即從伺服器重新讀取所有媒體庫。"
+
+msgctxt "#30876"
+msgid "Not on this Kodi"
+msgstr "此 Kodi 不支援"
+
+msgctxt "#30877"
+msgid "Season plots"
+msgstr "季簡介"
+
+msgctxt "#30878"
+msgid "Favorite episodes"
+msgstr "最愛的劇集"
+
+msgctxt "#30879"
+msgid "Removing emptied collections"
+msgstr "移除已清空的合輯"
+
+msgctxt "#30880"
+msgid "Movie versions"
+msgstr "電影版本"
+
+msgctxt "#30881"
+msgid "Stream flags"
+msgstr "軌道旗標"
+
+msgctxt "#30882"
+msgid "Song date added"
+msgstr "歌曲加入日期"
+
+msgctxt "#30883"
+msgid "Removing dropped versions and extras"
+msgstr "移除已刪除的版本和花絮"
+
+msgctxt "#30884"
+msgid "Fine sync"
+msgstr "精細同步"
+
+msgctxt "#30885"
+msgid "Kodi imports a special only with an episode number. Give these one on the server, or play them from the Kofin add-on."
+msgstr "Kodi 只匯入有集數編號的特別篇。請在伺服器上為它們編號，或從 Kofin 附加元件播放。"
+
+msgctxt "#30886"
+msgid "KofinSyncQueue"
+msgstr "KofinSyncQueue"
+
+msgctxt "#30887"
+msgid "Available"
+msgstr "可用"
+
+msgctxt "#30888"
+msgid "this profile holds a library from an older Kofin"
+msgstr "此設定檔包含舊版 Kofin 的媒體庫"
+
+msgctxt "#30889"
+msgid "Kofin cannot use it. To clean it, go back to Kofin 0.29:"
+msgstr "Kofin 無法使用它。若要清理它，請返回 Kofin 0.29："
+
+msgctxt "#30890"
+msgid "Open Kofin in Kodi's add-on list, select Versions and choose 0.29."
+msgstr "在 Kodi 的附加元件清單中開啟 Kofin，選擇「版本」，然後選擇 0.29。"
+
+msgctxt "#30891"
+msgid "In Kofin's settings, log out on the Account tab and run Clean databases."
+msgstr "在 Kofin 設定的「帳戶」分頁中登出，然後執行「清理資料庫」。"
+
+msgctxt "#30892"
+msgid "When Kodi has restarted, open Kofin again, select Versions and choose the newest version. Then log in and choose the libraries to sync."
+msgstr "Kodi 重新啟動後，再次開啟 Kofin，選擇「版本」，然後選擇最新版本。接著登入並選擇要同步的媒體庫。"
+
+msgctxt "#30893"
+msgid "Alternatively, close Kodi and delete its video and music databases by hand, as the Kofin wiki describes:"
+msgstr "也可以依照 Kofin wiki 的說明，關閉 Kodi 並手動刪除其視訊和音樂資料庫："
+
+msgctxt "#30894"
+msgid "No longer on the server"
+msgstr "已不在伺服器上"
+
+msgctxt "#30895"
+msgid "%s is no longer on the server and was removed from the library"
+msgstr "%s 已不在伺服器上，已從媒體庫中移除"
+
+msgctxt "#30896"
+msgid "The synced libraries stay in Kodi until you log in again; a different account removes them."
+msgstr "已同步的媒體庫會保留在 Kodi 中，直到你再次登入；使用其他帳號登入會將其移除。"
+
+msgctxt "#30897"
+msgid "Queued %s of %s tracks"
+msgstr "已將 %s / %s 首曲目加入佇列"
+
+msgctxt "#30898"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30899"
+msgid "540p"
+msgstr "540p"

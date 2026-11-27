@@ -1,0 +1,2082 @@
+# Kodi Media Center language file
+# Addon Name: Kofin
+# Addon id: plugin.video.kofin
+# Addon Provider: kontell
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.kofin\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Add-on browser metadata. The same sentences are the <summary> and
+# <description> in addon.xml, one lang attribute per shipped locale. en_GB
+# there is the fallback for a locale this add-on does not ship.
+
+msgctxt "Addon Summary"
+msgid "Jellyfin client for seamless Kodi integration"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Play movies, shows & music from a Jellyfin server."
+msgstr ""
+
+# 30000-30049 — general / dialogs
+
+msgctxt "#30010"
+msgid "Play with transcoding"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Quick Connect"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Username and password"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Enter code [B]%s[/B] in the Jellyfin app or web interface."
+msgstr ""
+
+msgctxt "#30016"
+msgid "Logged in as %s"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Login failed: wrong username or password"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Server unreachable"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Log out from %s?"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Logged out"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Connection OK — %s (%s)"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Session rejected — log in again from the Account tab"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Restarting the Kofin service"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Quick Connect timed out"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Already logged in"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Not logged in"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Log in to %s"
+msgstr ""
+
+# 30050-30099 — Account tab (30066-30067 and 30071-30080: Advanced tab)
+
+msgctxt "#30050"
+msgid "Account"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Connect to your Jellyfin server and manage the session."
+msgstr ""
+
+msgctxt "#30052"
+msgid "Server address"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Host name, IP address or full URL of the Jellyfin server. A bare host uses http on port 8096."
+msgstr ""
+
+msgctxt "#30054"
+msgid "Log in…"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Connect to the server above using Quick Connect or a username and password."
+msgstr ""
+
+msgctxt "#30056"
+msgid "Server"
+msgstr ""
+
+msgctxt "#30057"
+msgid "The connected Jellyfin server."
+msgstr ""
+
+msgctxt "#30058"
+msgid "Logged-in user"
+msgstr ""
+
+msgctxt "#30059"
+msgid "The Jellyfin user this device plays and reports as."
+msgstr ""
+
+msgctxt "#30060"
+msgid "Test connection"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Check that the server is reachable and the session is still valid."
+msgstr ""
+
+msgctxt "#30062"
+msgid "Log out"
+msgstr ""
+
+msgctxt "#30063"
+msgid "End the session on the server and forget it on this device. The server address is kept."
+msgstr ""
+
+msgctxt "#30064"
+msgid "Restart Kofin"
+msgstr ""
+
+msgctxt "#30065"
+msgid "Restart the background service without restarting Kodi."
+msgstr ""
+
+msgctxt "#30071"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30072"
+msgid "Notification, browsing, playback and deletion options."
+msgstr ""
+
+msgctxt "#30073"
+msgid "Enable Delete from server"
+msgstr ""
+
+msgctxt "#30074"
+msgid "Adds a Delete entry to an item's 'Jellyfin actions' context menu. Deletion is permanent: the file itself is removed on the Jellyfin server, for every user."
+msgstr ""
+
+msgctxt "#30075"
+msgid "Delete without confirmation"
+msgstr ""
+
+msgctxt "#30076"
+msgid "Delete the item as soon as the entry is picked, with no 'are you sure?' prompt. The deletion is still permanent and applies on the server."
+msgstr ""
+
+msgctxt "#30077"
+msgid "Offer to delete after watching"
+msgstr ""
+
+msgctxt "#30078"
+msgid "When a movie or episode finishes, ask whether to delete it from the server. Always asks, whatever 'Delete without confirmation' is set to."
+msgstr ""
+
+msgctxt "#30079"
+msgid "Who's watching shortlist"
+msgstr ""
+
+msgctxt "#30080"
+msgid "Choose which server users the addon's Who's watching? entry offers. \"All\" offers everyone. With nothing selected the entry is hidden and anyone already on the session is removed."
+msgstr ""
+
+# 30030-30049 — browse nodes
+
+msgctxt "#30030"
+msgid "All"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Recently added"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Next up"
+msgstr ""
+
+msgctxt "#30033"
+msgid "In progress"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Unwatched"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Favourites"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Genres"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Random"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Sets"
+msgstr ""
+
+msgctxt "#30039"
+msgid "Artists"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Albums"
+msgstr ""
+
+msgctxt "#30049"
+msgid "Continue watching"
+msgstr ""
+
+# 30100-30203 — Transcoding tab (30150+ are option labels)
+
+msgctxt "#30100"
+msgid "Transcoding"
+msgstr ""
+
+msgctxt "#30101"
+msgid "When and how the server converts media for this device."
+msgstr ""
+
+msgctxt "#30102"
+msgid "Force direct play"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Always play the original video file. Overrides every other video transcoding setting; playback fails if the device cannot handle the media. Music is unaffected — see 'Transcode music'."
+msgstr ""
+
+msgctxt "#30104"
+msgid "Force remux"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Remux into HLS and copy the source codecs. Does not use Maximum audio channels, Maximum streaming bitrate or Transcode audio bitrate below — those would re-encode a listed codec. Direct play codecs, Allowed HDR types and Maximum resolution still apply."
+msgstr ""
+
+msgctxt "#30106"
+msgid "Force transcode"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Always re-encode video and audio to the preferred codecs. Honours the bitrate cap, the channel cap, allowed codecs, HDR types and resolution."
+msgstr ""
+
+msgctxt "#30108"
+msgid "Direct play video codecs"
+msgstr ""
+
+msgctxt "#30109"
+msgid "Video formats this device can decode. Media using formats not selected here is transcoded."
+msgstr ""
+
+msgctxt "#30110"
+msgid "Direct play audio codecs"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Audio formats this device can decode or pass through. Others are transcoded."
+msgstr ""
+
+msgctxt "#30112"
+msgid "Allowed HDR types"
+msgstr ""
+
+msgctxt "#30113"
+msgid "HDR formats the display accepts. Media in formats not selected is tone-mapped or transcoded to SDR/HDR10 by the server."
+msgstr ""
+
+msgctxt "#30114"
+msgid "Preferred video codec"
+msgstr ""
+
+msgctxt "#30115"
+msgid "The codec the client asks for when video must be transcoded."
+msgstr ""
+
+msgctxt "#30116"
+msgid "Preferred audio codec"
+msgstr ""
+
+msgctxt "#30117"
+msgid "The codec the client asks for when audio must be transcoded."
+msgstr ""
+
+msgctxt "#30118"
+msgid "Maximum audio channels"
+msgstr ""
+
+msgctxt "#30119"
+msgid "Maximum number of audio channels allowed when transcoding. Streams with more channels will be downmixed. No effect on direct playback."
+msgstr ""
+
+msgctxt "#30120"
+msgid "Maximum streaming bitrate"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Media above this bitrate is transcoded down to it."
+msgstr ""
+
+msgctxt "#30122"
+msgid "Maximum resolution"
+msgstr ""
+
+msgctxt "#30123"
+msgid "Wider media is downscaled by the server."
+msgstr ""
+
+msgctxt "#30124"
+msgid "Transcode audio bitrate"
+msgstr ""
+
+msgctxt "#30125"
+msgid "Bitrate for the audio track when video is transcoded."
+msgstr ""
+
+msgctxt "#30126"
+msgid "Context menu bitrates"
+msgstr ""
+
+msgctxt "#30127"
+msgid "Bitrates offered by 'Play with transcoding'. With one selected the popup is skipped."
+msgstr ""
+
+msgctxt "#30129"
+msgid "Maximum music bitrate"
+msgstr ""
+
+msgctxt "#30130"
+msgid "Music above this bitrate is transcoded using the codec and bitrate below. Unlimited never transcodes."
+msgstr ""
+
+msgctxt "#30131"
+msgid "Music transcode codec"
+msgstr ""
+
+msgctxt "#30132"
+msgid "Codec for transcoded music streams."
+msgstr ""
+
+msgctxt "#30133"
+msgid "Music transcode bitrate"
+msgstr ""
+
+msgctxt "#30134"
+msgid "Bitrate for transcoded music streams."
+msgstr ""
+
+msgctxt "#30135"
+msgid "Transcode music"
+msgstr ""
+
+msgctxt "#30150"
+msgid "H.264 (AVC)"
+msgstr ""
+
+msgctxt "#30151"
+msgid "H.264 10-bit (Hi10P)"
+msgstr ""
+
+msgctxt "#30152"
+msgid "H.265 (HEVC)"
+msgstr ""
+
+msgctxt "#30153"
+msgid "HEVC RExt (4:2:2/4:4:4)"
+msgstr ""
+
+msgctxt "#30154"
+msgid "AV1"
+msgstr ""
+
+msgctxt "#30155"
+msgid "MPEG-2"
+msgstr ""
+
+msgctxt "#30156"
+msgid "VP9"
+msgstr ""
+
+msgctxt "#30157"
+msgid "VC-1"
+msgstr ""
+
+msgctxt "#30158"
+msgid "AAC"
+msgstr ""
+
+msgctxt "#30159"
+msgid "MP2"
+msgstr ""
+
+msgctxt "#30160"
+msgid "MP3"
+msgstr ""
+
+msgctxt "#30161"
+msgid "AC3 (Dolby Digital)"
+msgstr ""
+
+msgctxt "#30162"
+msgid "E-AC3 (Dolby Digital Plus)"
+msgstr ""
+
+msgctxt "#30163"
+msgid "Opus"
+msgstr ""
+
+msgctxt "#30164"
+msgid "FLAC"
+msgstr ""
+
+msgctxt "#30165"
+msgid "DTS"
+msgstr ""
+
+msgctxt "#30166"
+msgid "HDR10"
+msgstr ""
+
+msgctxt "#30167"
+msgid "HLG"
+msgstr ""
+
+msgctxt "#30168"
+msgid "HDR10+"
+msgstr ""
+
+msgctxt "#30169"
+msgid "Dolby Vision"
+msgstr ""
+
+msgctxt "#30170"
+msgid "Dolby Vision with HDR10 fallback"
+msgstr ""
+
+msgctxt "#30171"
+msgid "Dolby Vision with HLG fallback"
+msgstr ""
+
+msgctxt "#30172"
+msgid "Dolby Vision with SDR fallback"
+msgstr ""
+
+msgctxt "#30173"
+msgid "Dolby Vision Profile 7 (EL)"
+msgstr ""
+
+msgctxt "#30174"
+msgid "Dolby Vision with HDR10+ fallback"
+msgstr ""
+
+msgctxt "#30175"
+msgid "Dolby Vision P7 with HDR10+ fallback"
+msgstr ""
+
+msgctxt "#30176"
+msgid "Unlimited"
+msgstr ""
+
+msgctxt "#30177"
+msgid "720p"
+msgstr ""
+
+msgctxt "#30178"
+msgid "1080p"
+msgstr ""
+
+msgctxt "#30179"
+msgid "4K"
+msgstr ""
+
+msgctxt "#30180"
+msgid "2.0 stereo"
+msgstr ""
+
+msgctxt "#30181"
+msgid "5.1 surround"
+msgstr ""
+
+msgctxt "#30182"
+msgid "7.1 surround"
+msgstr ""
+
+msgctxt "#30183"
+msgid "1 Mbit/s"
+msgstr ""
+
+msgctxt "#30184"
+msgid "2 Mbit/s"
+msgstr ""
+
+msgctxt "#30185"
+msgid "3 Mbit/s"
+msgstr ""
+
+msgctxt "#30186"
+msgid "4 Mbit/s"
+msgstr ""
+
+msgctxt "#30187"
+msgid "6 Mbit/s"
+msgstr ""
+
+msgctxt "#30188"
+msgid "8 Mbit/s"
+msgstr ""
+
+msgctxt "#30189"
+msgid "10 Mbit/s"
+msgstr ""
+
+msgctxt "#30190"
+msgid "15 Mbit/s"
+msgstr ""
+
+msgctxt "#30191"
+msgid "20 Mbit/s"
+msgstr ""
+
+msgctxt "#30192"
+msgid "25 Mbit/s"
+msgstr ""
+
+msgctxt "#30193"
+msgid "40 Mbit/s"
+msgstr ""
+
+msgctxt "#30194"
+msgid "60 Mbit/s"
+msgstr ""
+
+msgctxt "#30195"
+msgid "120 Mbit/s"
+msgstr ""
+
+msgctxt "#30196"
+msgid "96 kbit/s"
+msgstr ""
+
+msgctxt "#30197"
+msgid "128 kbit/s"
+msgstr ""
+
+msgctxt "#30198"
+msgid "192 kbit/s"
+msgstr ""
+
+msgctxt "#30199"
+msgid "256 kbit/s"
+msgstr ""
+
+msgctxt "#30200"
+msgid "320 kbit/s"
+msgstr ""
+
+msgctxt "#30201"
+msgid "384 kbit/s"
+msgstr ""
+
+msgctxt "#30202"
+msgid "448 kbit/s"
+msgstr ""
+
+msgctxt "#30203"
+msgid "640 kbit/s"
+msgstr ""
+
+msgctxt "#30204"
+msgid "0.5 Mbit/s"
+msgstr ""
+
+msgctxt "#30205"
+msgid "0.75 Mbit/s"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Default (max streaming bitrate)"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Who's watching?"
+msgstr ""
+
+msgctxt "#30045"
+msgid "No active session on the server yet"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Who's watching? (%s)"
+msgstr ""
+
+msgctxt "#30047"
+msgid "Who's watching with %s?"
+msgstr ""
+
+msgctxt "#30048"
+msgid "Who can be added to the session"
+msgstr ""
+
+# 30250-30299 — Library tab
+
+msgctxt "#30250"
+msgid "Library"
+msgstr ""
+
+msgctxt "#30251"
+msgid "Select and manage the Jellyfin libraries mirrored into Kodi's own database."
+msgstr ""
+
+msgctxt "#30252"
+msgid "Select libraries to sync"
+msgstr ""
+
+msgctxt "#30253"
+msgid "Choose which server libraries are mirrored into the Kodi library. Changes apply when you confirm the selection."
+msgstr ""
+
+msgctxt "#30256"
+msgid "Update libraries"
+msgstr ""
+
+msgctxt "#30258"
+msgid "Repair libraries"
+msgstr ""
+
+msgctxt "#30259"
+msgid "Remove and re-sync the libraries you pick from scratch, restoring watched state from the server. Runs when you confirm the selection."
+msgstr ""
+
+msgctxt "#30262"
+msgid "Sync status"
+msgstr ""
+
+msgctxt "#30264"
+msgid "Remove synced library?"
+msgstr ""
+
+msgctxt "#30265"
+msgid "Remove %s from the Kodi library? The items are deleted from this device only."
+msgstr ""
+
+msgctxt "#30266"
+msgid "Repair which libraries?"
+msgstr ""
+
+msgctxt "#30267"
+msgid "All"
+msgstr ""
+
+msgctxt "#30268"
+msgid "Select libraries"
+msgstr ""
+
+msgctxt "#30269"
+msgid "No libraries available"
+msgstr ""
+
+# 30300-30349 — Library tab, sync settings
+
+msgctxt "#30302"
+msgid "Hide update status below (items)"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Hide Kodi's library-update progress for syncs smaller than this. 0 always shows it."
+msgstr ""
+
+msgctxt "#30318"
+msgid "Compress artwork"
+msgstr ""
+
+msgctxt "#30319"
+msgid "Re-encode capped artwork at JPEG quality 90. No effect without a resolution cap."
+msgstr ""
+
+msgctxt "#30320"
+msgid "Maximum artwork resolution"
+msgstr ""
+
+msgctxt "#30321"
+msgid "Cap the size of artwork from the server. Auto matches Kodi's image cache: 1080p for backdrops, 720p for posters and logos."
+msgstr ""
+
+msgctxt "#30322"
+msgid "Original"
+msgstr ""
+
+msgctxt "#30323"
+msgid "720p"
+msgstr ""
+
+msgctxt "#30324"
+msgid "1080p"
+msgstr ""
+
+msgctxt "#30325"
+msgid "2160p"
+msgstr ""
+
+# 30326/30327 keep their sync-block ids: the setting moved to the Advanced
+# tab, and renumbering a shipped string only breaks translations.
+
+msgctxt "#30326"
+msgid "Notify on server connection changes"
+msgstr ""
+
+msgctxt "#30327"
+msgid "Show a notification when the server connects, disconnects or restarts."
+msgstr ""
+
+# 30350-30369 — library node labels
+
+msgctxt "#30350"
+msgid "Recently added"
+msgstr ""
+
+msgctxt "#30351"
+msgid "In progress"
+msgstr ""
+
+msgctxt "#30352"
+msgid "Unwatched"
+msgstr ""
+
+msgctxt "#30353"
+msgid "Random"
+msgstr ""
+
+msgctxt "#30354"
+msgid "Recommended"
+msgstr ""
+
+msgctxt "#30355"
+msgid "Recently added episodes"
+msgstr ""
+
+msgctxt "#30356"
+msgid "In progress episodes"
+msgstr ""
+
+msgctxt "#30358"
+msgid "Favorite movies"
+msgstr ""
+
+msgctxt "#30359"
+msgid "Favorite shows"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Favorite episodes"
+msgstr ""
+
+# 30400-30429 — sync runtime messages
+
+msgctxt "#30401"
+msgid "Updating media"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Sync incomplete; retrying shortly"
+msgstr ""
+
+msgctxt "#30408"
+msgid "Removing library"
+msgstr ""
+
+msgctxt "#30415"
+msgid "Connected to %s"
+msgstr ""
+
+msgctxt "#30416"
+msgid "Lost connection to the server"
+msgstr ""
+
+msgctxt "#30417"
+msgid "Server is restarting"
+msgstr ""
+
+msgctxt "#30418"
+msgid "Server is shutting down"
+msgstr ""
+
+msgctxt "#30420"
+msgid "Library sync is off: %s"
+msgstr ""
+
+# 30450-30499 — Skipping & Play next tab: media segments + Play Next
+
+msgctxt "#30450"
+msgid "Skipping & Play next"
+msgstr ""
+
+msgctxt "#30451"
+msgid "Media segment skipping and the Play Next prompt."
+msgstr ""
+
+msgctxt "#30453"
+msgid "Skip media segments"
+msgstr ""
+
+msgctxt "#30454"
+msgid "Fetch Jellyfin media segments (intro, credits, recap, preview, commercial) during playback and act on them per type."
+msgstr ""
+
+msgctxt "#30455"
+msgid "Intros"
+msgstr ""
+
+msgctxt "#30456"
+msgid "Off ignores intro segments, Auto skips past them, Ask shows a skip button."
+msgstr ""
+
+msgctxt "#30457"
+msgid "Credits"
+msgstr ""
+
+msgctxt "#30458"
+msgid "Off ignores credits, Auto seeks past them, Ask offers Skip Outro — with Play Next when a next episode exists."
+msgstr ""
+
+msgctxt "#30459"
+msgid "Recaps"
+msgstr ""
+
+msgctxt "#30460"
+msgid "Off ignores recap segments, Auto skips past them, Ask shows a skip button."
+msgstr ""
+
+msgctxt "#30461"
+msgid "Previews"
+msgstr ""
+
+msgctxt "#30462"
+msgid "Off ignores preview segments, Auto skips past them, Ask shows a skip button."
+msgstr ""
+
+msgctxt "#30463"
+msgid "Commercials"
+msgstr ""
+
+msgctxt "#30464"
+msgid "Off ignores commercial segments, Auto skips past them, Ask shows a skip button."
+msgstr ""
+
+msgctxt "#30465"
+msgid "Off"
+msgstr ""
+
+msgctxt "#30466"
+msgid "Auto"
+msgstr ""
+
+msgctxt "#30467"
+msgid "Ask"
+msgstr ""
+
+msgctxt "#30469"
+msgid "Offer Play Next"
+msgstr ""
+
+msgctxt "#30470"
+msgid "Offer the next episode at the credits, or near the end when no credits segment exists."
+msgstr ""
+
+msgctxt "#30471"
+msgid "Play Next lead time"
+msgstr ""
+
+msgctxt "#30472"
+msgid "Seconds before the end to show the Play Next prompt for content without a credits segment."
+msgstr ""
+
+msgctxt "#30473"
+msgid "Autoplay next episode"
+msgstr ""
+
+msgctxt "#30474"
+msgid "Count down on the Play Next prompt and start the next episode automatically."
+msgstr ""
+
+msgctxt "#30475"
+msgid "Resume offset (seconds)"
+msgstr ""
+
+msgctxt "#30476"
+msgid "Seconds to rewind before the stored resume point."
+msgstr ""
+
+msgctxt "#30477"
+msgid "Hide the skip button after"
+msgstr ""
+
+msgctxt "#30478"
+msgid "How far into a segment the skip button disappears. 100% keeps it up for the whole segment."
+msgstr ""
+
+msgctxt "#30481"
+msgid "Skip Intro"
+msgstr ""
+
+msgctxt "#30482"
+msgid "Skip Outro"
+msgstr ""
+
+msgctxt "#30483"
+msgid "Skip Recap"
+msgstr ""
+
+msgctxt "#30484"
+msgid "Skip Preview"
+msgstr ""
+
+msgctxt "#30485"
+msgid "Skip Ad"
+msgstr ""
+
+msgctxt "#30486"
+msgid "Play Next"
+msgstr ""
+
+msgctxt "#30487"
+msgid "Close"
+msgstr ""
+
+msgctxt "#30488"
+msgid "Skipped %s"
+msgstr ""
+
+msgctxt "#30489"
+msgid "Up next: %s"
+msgstr ""
+
+# 30500-30549 — extras
+
+msgctxt "#30500"
+msgid "Extras"
+msgstr ""
+
+msgctxt "#30501"
+msgid "Browse extras"
+msgstr ""
+
+msgctxt "#30502"
+msgid "Jellyfin actions"
+msgstr ""
+
+msgctxt "#30504"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#30505"
+msgid "Permanently delete \"%s\" from the server? This cannot be undone."
+msgstr ""
+
+msgctxt "#30506"
+msgid "Finished \"%s\". Permanently delete it from the server? This cannot be undone."
+msgstr ""
+
+msgctxt "#30507"
+msgid "Server request failed"
+msgstr ""
+
+# 30508/30509 deliberately name the server: Kodi contributes its own
+# "Mark as watched" (16103/16104) to the same context menu.
+
+msgctxt "#30508"
+msgid "Mark as watched on Jellyfin"
+msgstr ""
+
+msgctxt "#30509"
+msgid "Mark as unwatched on Jellyfin"
+msgstr ""
+
+# 30550-30599 — SyncPlay (settings tab label 30550, toggle 30551-30552,
+# menu/toasts 30560+). #30837 is the tab help.
+
+msgctxt "#30550"
+msgid "SyncPlay"
+msgstr ""
+
+msgctxt "#30551"
+msgid "Enable SyncPlay"
+msgstr ""
+
+msgctxt "#30552"
+msgid "Watch in sync with other Jellyfin clients. Leave Kodi's 'Sync playback to display' off for a reliable experience"
+msgstr ""
+
+msgctxt "#30557"
+msgid "Group notifications"
+msgstr ""
+
+msgctxt "#30558"
+msgid "Show member join/leave and group-waiting notifications. Errors are always shown."
+msgstr ""
+
+msgctxt "#30560"
+msgid "SyncPlay"
+msgstr ""
+
+msgctxt "#30561"
+msgid "New group..."
+msgstr ""
+
+msgctxt "#30562"
+msgid "Leave group"
+msgstr ""
+
+msgctxt "#30563"
+msgid "Joined group: %s"
+msgstr ""
+
+msgctxt "#30564"
+msgid "Left the group"
+msgstr ""
+
+msgctxt "#30565"
+msgid "%s joined the group"
+msgstr ""
+
+msgctxt "#30566"
+msgid "%s left the group"
+msgstr ""
+
+msgctxt "#30567"
+msgid "Group name"
+msgstr ""
+
+msgctxt "#30568"
+msgid "Playback stopped — what should the group do?"
+msgstr ""
+
+msgctxt "#30569"
+msgid "Spectator mode: the group will not wait for you"
+msgstr ""
+
+msgctxt "#30570"
+msgid "SyncPlay needs a working websocket connection to the server"
+msgstr ""
+
+msgctxt "#30571"
+msgid "Removed from the group"
+msgstr ""
+
+msgctxt "#30572"
+msgid "Members"
+msgstr ""
+
+msgctxt "#30573"
+msgid "Resync with group"
+msgstr ""
+
+msgctxt "#30574"
+msgid "SyncPlay is unavailable (server not reachable?)"
+msgstr ""
+
+msgctxt "#30575"
+msgid "External players cannot be synchronized"
+msgstr ""
+
+msgctxt "#30576"
+msgid "Playback could not be synchronized"
+msgstr ""
+
+msgctxt "#30577"
+msgid "buffering"
+msgstr ""
+
+msgctxt "#30578"
+msgid "Could not join the group"
+msgstr ""
+
+msgctxt "#30579"
+msgid "You don't have access to some items in the group's queue"
+msgstr ""
+
+msgctxt "#30580"
+msgid "Become a spectator (group won't wait for me)"
+msgstr ""
+
+msgctxt "#30581"
+msgid "Wait for me again (leave spectator mode)"
+msgstr ""
+
+msgctxt "#30582"
+msgid "disconnected"
+msgstr ""
+
+msgctxt "#30583"
+msgid "The group will wait for you again"
+msgstr ""
+
+msgctxt "#30584"
+msgid "Stop playback for everyone"
+msgstr ""
+
+msgctxt "#30585"
+msgid "Waiting for the group..."
+msgstr ""
+
+# 30586-30599 — SyncPlay fine sync (lib/kofin/syncplay/tempo.py). #30592 is a
+# toast.
+msgctxt "#30586"
+msgid "Fine sync using tempo"
+msgstr ""
+
+msgctxt "#30587"
+msgid "Keeps this device on the group's position by briefly playing faster or slower. A video correction decodes passthrough audio until the next item."
+msgstr ""
+
+msgctxt "#30592"
+msgid "Fine sync stopped: rate mismatch"
+msgstr ""
+
+msgctxt "#30593"
+msgid "Largest video error closed by tempo (ms)"
+msgstr ""
+
+msgctxt "#30594"
+msgid "Position errors up to this are closed by playing faster or slower; anything larger is closed with a skip. Higher means fewer skips and longer speed changes."
+msgstr ""
+
+msgctxt "#30595"
+msgid "Fastest video correction speed (%)"
+msgstr ""
+
+msgctxt "#30596"
+msgid "The most playback speed may change during a correction. At 25% a 2.5 second error takes 10 seconds to close; lower is less noticeable but slower. Large changes ramp in and out."
+msgstr ""
+
+# 30604-30605 — maximum-resolution steps
+msgctxt "#30604"
+msgid "480p"
+msgstr ""
+
+msgctxt "#30605"
+msgid "1440p"
+msgstr ""
+
+# 30613-30617 — transcoding stream selection
+msgctxt "#30613"
+msgid "Audio and subtitle streams"
+msgstr ""
+
+msgctxt "#30614"
+msgid "Audio stream"
+msgstr ""
+
+msgctxt "#30615"
+msgid "Subtitles"
+msgstr ""
+
+msgctxt "#30616"
+msgid "Restarting to change stream..."
+msgstr ""
+
+msgctxt "#30617"
+msgid "burned in, restarts playback"
+msgstr ""
+
+# 30618-30619 — Jellyfin default tracks
+msgctxt "#30618"
+msgid "Use Jellyfin's default tracks"
+msgstr ""
+
+msgctxt "#30619"
+msgid "Start playback on the audio and subtitle tracks your Jellyfin account asks for, instead of the ones Kodi's own language settings pick. The server resolves both from your Jellyfin profile, so the choice follows you to every client."
+msgstr ""
+
+# 30622-30636 — new-content notifications
+msgctxt "#30622"
+msgid "Notify about new content"
+msgstr ""
+
+msgctxt "#30623"
+msgid "Show a notification when new films, shows, episodes, music videos, artists or albums are added to your library."
+msgstr ""
+
+msgctxt "#30624"
+msgid "%s movie added to library"
+msgstr ""
+
+msgctxt "#30625"
+msgid "%s movies added to library"
+msgstr ""
+
+msgctxt "#30626"
+msgid "%s show added to library"
+msgstr ""
+
+msgctxt "#30627"
+msgid "%s new shows added to library"
+msgstr ""
+
+msgctxt "#30628"
+msgid "%s episode of %s added to library"
+msgstr ""
+
+msgctxt "#30629"
+msgid "%s episodes of %s added to library"
+msgstr ""
+
+msgctxt "#30630"
+msgid "%s episodes added to library"
+msgstr ""
+
+msgctxt "#30631"
+msgid "%s music video added to library"
+msgstr ""
+
+msgctxt "#30632"
+msgid "%s music videos added to library"
+msgstr ""
+
+msgctxt "#30633"
+msgid "%s added to music library"
+msgstr ""
+
+msgctxt "#30634"
+msgid "%s artists added to library"
+msgstr ""
+
+msgctxt "#30635"
+msgid "%s added to music library"
+msgstr ""
+
+msgctxt "#30636"
+msgid "%s albums added to library"
+msgstr ""
+
+# 30637-30638 — server splashscreen backdrop
+msgctxt "#30637"
+msgid "Use the server's splashscreen as the backdrop"
+msgstr ""
+
+msgctxt "#30638"
+msgid "Show the Jellyfin server's splashscreen behind the addon instead of the bundled artwork. Refreshed when the service connects, at most once a day."
+msgstr ""
+
+msgctxt "#30700"
+msgid "Downloads"
+msgstr ""
+
+msgctxt "#30701"
+msgid "Download items for offline playback"
+msgstr ""
+
+msgctxt "#30702"
+msgid "Enable downloads"
+msgstr ""
+
+msgctxt "#30703"
+msgid "Adds Download to the Jellyfin actions menu and runs the download manager. Only for libraries you sync with Kofin."
+msgstr ""
+
+msgctxt "#30704"
+msgid "Download location"
+msgstr ""
+
+msgctxt "#30705"
+msgid "Where downloaded files are kept. Leave empty for the addon profile folder"
+msgstr ""
+
+msgctxt "#30706"
+msgid "Parallel video downloads"
+msgstr ""
+
+msgctxt "#30707"
+msgid "How many movies and episodes download at the same time"
+msgstr ""
+
+msgctxt "#30708"
+msgid "Download"
+msgstr ""
+
+msgctxt "#30709"
+msgid "Cancel download"
+msgstr ""
+
+msgctxt "#30710"
+msgid "Delete download"
+msgstr ""
+
+msgctxt "#30712"
+msgid "Download complete: %s"
+msgstr ""
+
+msgctxt "#30713"
+msgid "Download failed: %s"
+msgstr ""
+
+msgctxt "#30714"
+msgid "Delete the download of %s?"
+msgstr ""
+
+msgctxt "#30715"
+msgid "Not enough free space for %s"
+msgstr ""
+
+msgctxt "#30717"
+msgid "The downloads folder is not writable"
+msgstr ""
+
+msgctxt "#30718"
+msgid "Downloaded movies"
+msgstr ""
+
+msgctxt "#30719"
+msgid "Downloaded shows"
+msgstr ""
+
+msgctxt "#30720"
+msgid "Not available offline"
+msgstr ""
+
+# 30721 — the Downloaded episodes node (sync/nodes/video.py).
+msgctxt "#30721"
+msgid "Downloaded episodes"
+msgstr ""
+
+msgctxt "#30722"
+msgid "Transcode videos"
+msgstr ""
+
+msgctxt "#30723"
+msgid "Transcode when the original exceeds a limit below or when triggered by settings in the Transcoding tab (HDR, codec, etc)"
+msgstr ""
+
+msgctxt "#30724"
+msgid "Maximum download bitrate"
+msgstr ""
+
+msgctxt "#30725"
+msgid "Videos over this total bitrate are transcoded down to it. Unlimited transcodes only for codec, HDR or resolution reasons."
+msgstr ""
+
+msgctxt "#30726"
+msgid "Maximum download resolution"
+msgstr ""
+
+msgctxt "#30727"
+msgid "Videos wider than this are scaled down. Unlimited never scales."
+msgstr ""
+
+msgctxt "#30728"
+msgid "Transcode music"
+msgstr ""
+
+msgctxt "#30729"
+msgid "Transcode a track only when it is lossless or over the bitrate limit below. Compliant tracks download as the original file."
+msgstr ""
+
+msgctxt "#30730"
+msgid "Transcode music over"
+msgstr ""
+
+msgctxt "#30731"
+msgid "Tracks over this bitrate, and all lossless tracks, are transcoded. Unlimited transcodes only lossless tracks."
+msgstr ""
+
+msgctxt "#30732"
+msgid "Transcode music to"
+msgstr ""
+
+msgctxt "#30733"
+msgid "The codec transcoded tracks are encoded with. Opus gives the best quality per megabyte."
+msgstr ""
+
+msgctxt "#30734"
+msgid "Transcoded music bitrate"
+msgstr ""
+
+msgctxt "#30735"
+msgid "The bitrate transcoded tracks are encoded at. 128 kbps Opus is transparent for most listening."
+msgstr ""
+
+msgctxt "#30737"
+msgid "Kofin downloads"
+msgstr ""
+
+msgctxt "#30738"
+msgid "Download the next episodes automatically"
+msgstr ""
+
+msgctxt "#30739"
+msgid "While watching a downloaded episode, the next unwatched episodes of the show are queued for download at the 50% mark."
+msgstr ""
+
+msgctxt "#30740"
+msgid "Episodes to keep ahead"
+msgstr ""
+
+msgctxt "#30741"
+msgid "How many unwatched episodes ahead of the one playing are kept downloaded."
+msgstr ""
+
+msgctxt "#30742"
+msgid "Download newly added movies"
+msgstr ""
+
+msgctxt "#30743"
+msgid "Movies newly added to a synced library are downloaded automatically."
+msgstr ""
+
+msgctxt "#30746"
+msgid "Delete download after watching"
+msgstr ""
+
+msgctxt "#30747"
+msgid "When you finish watching a downloaded item, its local copy is removed. The item stays on the server and in your library."
+msgstr ""
+
+msgctxt "#30751"
+msgid "%s new movies were not downloaded automatically"
+msgstr ""
+
+msgctxt "#30752"
+msgid "Export NFO files and artwork"
+msgstr ""
+
+msgctxt "#30753"
+msgid "Write NFO metadata and artwork beside downloaded files, so other Kodi profiles and apps can scan the download folder as a library."
+msgstr ""
+
+msgctxt "#30754"
+msgid "Download all new episodes"
+msgstr ""
+
+msgctxt "#30755"
+msgid "Every episode newly added to a synced library is downloaded automatically."
+msgstr ""
+
+msgctxt "#30756"
+msgid "Download new albums"
+msgstr ""
+
+msgctxt "#30757"
+msgid "Albums newly added to a synced library are downloaded automatically."
+msgstr ""
+
+msgctxt "#30758"
+msgid "Shows downloading new episodes"
+msgstr ""
+
+msgctxt "#30759"
+msgid "Review the shows set to download their new episodes automatically, and untick any to stop."
+msgstr ""
+
+msgctxt "#30760"
+msgid "Download new episodes"
+msgstr ""
+
+msgctxt "#30761"
+msgid "Stop downloading new episodes"
+msgstr ""
+
+msgctxt "#30762"
+msgid "New episodes of %s will download automatically"
+msgstr ""
+
+msgctxt "#30763"
+msgid "New episodes of %s will no longer download automatically"
+msgstr ""
+
+msgctxt "#30764"
+msgid "%s new episodes were not downloaded automatically"
+msgstr ""
+
+msgctxt "#30765"
+msgid "%s new albums were not downloaded automatically"
+msgstr ""
+
+msgctxt "#30766"
+msgid "No shows are set to download new episodes"
+msgstr ""
+
+msgctxt "#30767"
+msgid "Show download notifications"
+msgstr ""
+
+msgctxt "#30768"
+msgid "Announce queued and completed downloads. Failures and warnings are always shown."
+msgstr ""
+
+msgctxt "#30769"
+msgid "Delete download automatically"
+msgstr ""
+
+msgctxt "#30770"
+msgid "Remove the local copy without asking. With this off, Kofin asks first each time."
+msgstr ""
+
+msgctxt "#30771"
+msgid "Download %s item(s), about %s? %s free"
+msgstr ""
+
+msgctxt "#30772"
+msgid "Parallel music downloads"
+msgstr ""
+
+msgctxt "#30773"
+msgid "How many tracks download at the same time. Tracks are small and mostly overhead, so this can sit well above the video figure."
+msgstr ""
+
+# 30775-30776 — the other half of #30617: a text subtitle a transcode did not
+# attach is fetched onto the running playback, not burned in and not restarted
+msgctxt "#30775"
+msgid "downloaded from the server"
+msgstr ""
+
+msgctxt "#30776"
+msgid "Downloading subtitle..."
+msgstr ""
+
+# 30777-30797 — Jellyfin account settings: the server-side user preferences
+# that resolve every playback's default audio and subtitle track, edited from
+# the Account tab (plugin/userprefs.py)
+msgctxt "#30777"
+msgid "Jellyfin account settings"
+msgstr ""
+
+msgctxt "#30778"
+msgid "Audio and subtitle preferences stored on the server against your Jellyfin account. They apply to every client you sign in from, not just this one."
+msgstr ""
+
+msgctxt "#30779"
+msgid "Jellyfin settings for %s"
+msgstr ""
+
+msgctxt "#30780"
+msgid "Preferred audio language"
+msgstr ""
+
+msgctxt "#30781"
+msgid "Play default audio track"
+msgstr ""
+
+msgctxt "#30782"
+msgid "Preferred subtitle language"
+msgstr ""
+
+msgctxt "#30783"
+msgid "Subtitle mode"
+msgstr ""
+
+msgctxt "#30784"
+msgid "Remember audio selections"
+msgstr ""
+
+msgctxt "#30785"
+msgid "Remember subtitle selections"
+msgstr ""
+
+msgctxt "#30786"
+msgid "Enabled"
+msgstr ""
+
+msgctxt "#30787"
+msgid "Disabled"
+msgstr ""
+
+msgctxt "#30788"
+msgid "Any"
+msgstr ""
+
+msgctxt "#30789"
+msgid "Default"
+msgstr ""
+
+msgctxt "#30790"
+msgid "Always"
+msgstr ""
+
+msgctxt "#30791"
+msgid "Only forced"
+msgstr ""
+
+msgctxt "#30792"
+msgid "None"
+msgstr ""
+
+msgctxt "#30793"
+msgid "Smart"
+msgstr ""
+
+msgctxt "#30794"
+msgid "Not applied here: \"Use Jellyfin's default tracks\" is off"
+msgstr ""
+
+msgctxt "#30795"
+msgid "Could not load your Jellyfin settings"
+msgstr ""
+
+msgctxt "#30796"
+msgid "Could not save to the server"
+msgstr ""
+
+msgctxt "#30797"
+msgid "Your Jellyfin account is not allowed to change these settings"
+msgstr ""
+
+# 30798-30803 — the bulk-import guard, one threshold per automatic arm. Over
+# the number the whole batch is skipped, not trimmed.
+msgctxt "#30798"
+msgid "Skip movie imports larger than"
+msgstr ""
+
+msgctxt "#30799"
+msgid "When a sync adds more new movies than this at once, none of them are downloaded — a bulk import is rarely a request to fill the disk. Raise it if you want big additions pulled automatically."
+msgstr ""
+
+msgctxt "#30800"
+msgid "Skip episode imports larger than"
+msgstr ""
+
+msgctxt "#30801"
+msgid "When a sync adds more new episodes than this at once, none of them are downloaded. Shows you have subscribed to are exempt — a subscription is a standing order."
+msgstr ""
+
+msgctxt "#30802"
+msgid "Skip album imports larger than"
+msgstr ""
+
+msgctxt "#30803"
+msgid "When a sync adds more new albums than this at once, none of them are downloaded. Counted in albums, not tracks."
+msgstr ""
+
+# 30810 — the aggregate refusal, before anything is queued. Distinct from
+# #30715, which the manager raises per item once a transfer is under way.
+#
+# Kept short: a Kodi notification shows about 33 characters and scrolls the
+# rest. The warning glyph and the Kofin heading carry the context.
+msgctxt "#30810"
+msgid "Needs %s, only %s free"
+msgstr ""
+
+# 30804-30807 — the settings button that clears every download at once. The
+# confirmation states what is on disk rather than what was promised: a queued
+# row has fetched nothing yet, and a transcode usually lands under its source.
+msgctxt "#30804"
+msgid "Delete all downloads"
+msgstr ""
+
+msgctxt "#30805"
+msgid "Delete every downloaded file from this device and stop keeping playlists and music libraries in sync. The items stay in your library and play from the server again."
+msgstr ""
+
+msgctxt "#30806"
+msgid "Delete all %s download(s), freeing about %s?"
+msgstr ""
+
+msgctxt "#30807"
+msgid "There are no downloads to delete"
+msgstr ""
+
+# 30808-30809 — the playback gate. It holds the queue, not a transfer in
+# flight: stopping mid-file would strand a .part for the length of a film.
+msgctxt "#30808"
+msgid "Pause downloads during playback"
+msgstr ""
+
+msgctxt "#30809"
+msgid "Do not start new downloads while something is playing, video or music. A file already downloading finishes; the rest wait until playback stops."
+msgstr ""
+
+# 30811-30814 — the stale sweep. Its help text has to carry the resume-point
+# exemption: an unfinished film sitting untouched for months is exactly what
+# a user expects an age-based rule to eat, and the promise that it will not
+# is the reason the setting is safe to leave on.
+msgctxt "#30811"
+msgid "Delete stale downloads"
+msgstr ""
+
+msgctxt "#30812"
+msgid "Remove downloaded files nobody has played for a while. Anything you are part-way through is kept, however long it sits. The items stay in your library and play from the server again."
+msgstr ""
+
+msgctxt "#30813"
+msgid "Delete after (days)"
+msgstr ""
+
+msgctxt "#30814"
+msgid "How long a download may sit unplayed before it is removed. Playing it again starts the count over."
+msgstr ""
+
+# 30817 — the shortlist's first row. Not #30030's "All": that one labels a
+# browse node ("all movies"), and the languages that decline the word render
+# the two differently — French wants "Tout" there and "Tous" for a list of
+# people. #30080 quotes this label verbatim, which pocheck.py enforces.
+msgctxt "#30817"
+msgid "All"
+msgstr ""
+
+msgctxt "#30818"
+msgid "A-Z"
+msgstr ""
+
+# 30819-30820 — cast in the add-on's own listings. The help must name which
+# listings; the node names are #30031, #30033, #30032 and #30049, so translate
+# them as those ids are translated.
+msgctxt "#30819"
+msgid "Show cast in add-on listings"
+msgstr ""
+
+msgctxt "#30820"
+msgid "Fetch cast and crew for the shorter add-on listings — Recently added, In progress, Next up, Continue watching, search results and a show's episodes — so the information dialog can show them. Whole-library listings never fetch it, because the server needs about a second for every 40 items. The Kodi library always has cast."
+msgstr ""
+
+# Test connection: the server answered, but not with the OK the button asks
+# for (a 5xx, an unparseable body). Neither "unreachable" (#30018) nor "session
+# rejected" (#30022) is true of it. %s is the transport's status text.
+msgctxt "#30821"
+msgid "Server error — %s"
+msgstr ""
+
+# 30823-30824 — a removal answers once, whether it was one item or a
+# container's worth (downloads/manager.py::_flush_removed). #30823 names the
+# item, #30824 counts them; %s is the file's own name and the count.
+msgctxt "#30823"
+msgid "Download deleted: %s"
+msgstr ""
+
+msgctxt "#30824"
+msgid "%s download(s) deleted"
+msgstr ""
+
+# 30825-30831 -- LAN server discovery (core/discovery.py, plugin/serverpicker.py).
+# #30829 points to manual entry rather than a retry: a server answers the
+# broadcast at once or not at all. #30830 is a fragment after the address,
+# #30831 the same fact as a sentence; %s is the server's own name.
+msgctxt "#30825"
+msgid "Find servers on local network"
+msgstr ""
+
+# Quotes #30052 verbatim -- pocheck.py holds the pair.
+msgctxt "#30826"
+msgid "Looks for Jellyfin servers on this network and lists the ones that answer. The one you choose is filled into \"Server address\"."
+msgstr ""
+
+msgctxt "#30827"
+msgid "Searching for Jellyfin servers…"
+msgstr ""
+
+msgctxt "#30828"
+msgid "Select a server"
+msgstr ""
+
+msgctxt "#30829"
+msgid "No Jellyfin servers answered — enter the address manually"
+msgstr ""
+
+msgctxt "#30830"
+msgid "did not answer"
+msgstr ""
+
+msgctxt "#30831"
+msgid "%s did not answer — the address it gave may not work here"
+msgstr ""
+
+# 30832-30836 — the download size report (Downloads tab, directly above
+# "Delete all downloads"). #30832 labels the button and heads the dialog it
+# opens, where it is followed by an em dash and the folder's path. The rows
+# themselves reuse Kodi's own strings — #342 Movies, #20343 TV shows, #2
+# Music, #20161 Total, #160 Free — so only the two below need translating.
+msgctxt "#30832"
+msgid "Storage used"
+msgstr ""
+
+msgctxt "#30833"
+msgid "Show where the downloads are kept and how much space each kind is using."
+msgstr ""
+
+# Everything under the downloads folder kofin did not put there. Not simply
+# "Other": beside Movies, TV shows and Music that reads as another kind of
+# media.
+msgctxt "#30834"
+msgid "Other files in this folder"
+msgstr ""
+
+# Shown instead of the report when the downloads folder holds nothing at all
+# — including the case where it does not exist yet, which is normal before
+# the first download.
+msgctxt "#30835"
+msgid "Nothing has been downloaded yet"
+msgstr ""
+
+# The walk has a ceiling, and stopping at it is said out loud rather than
+# hidden: a total that quietly stopped counting is worse than no total.
+msgctxt "#30836"
+msgid "Folder too large to measure fully — the totals above are partial"
+msgstr ""
+
+# 30837 — SyncPlay tab help. The toggle's own help is #30552.
+msgctxt "#30837"
+msgid "Watch in sync with other Jellyfin clients."
+msgstr ""
+
+msgctxt "#30841"
+msgid "Save to Jellyfin"
+msgstr ""
+
+msgctxt "#30842"
+msgid "This playlist mixes audio and video, which cannot be saved as one Jellyfin playlist"
+msgstr ""
+
+msgctxt "#30843"
+msgid "Playlist saved to Jellyfin"
+msgstr ""
+
+msgctxt "#30844"
+msgid "No library items in this playlist to save"
+msgstr ""
+
+# 30845-30846 — Library-tab toggle for Kodi's library-update progress bar.
+# #30302 (the item threshold) is visible only while this is on.
+msgctxt "#30845"
+msgid "Show library update progress"
+msgstr ""
+
+msgctxt "#30846"
+msgid "Show Kodi's library-update progress while the library syncs."
+msgstr ""
+
+msgctxt "#30849"
+msgid "Download & keep in sync"
+msgstr ""
+
+msgctxt "#30850"
+msgid "Stop keeping downloads in sync"
+msgstr ""
+
+msgctxt "#30851"
+msgid "Manage playlist downloads"
+msgstr ""
+
+msgctxt "#30852"
+msgid "Manage music library downloads"
+msgstr ""
+
+msgctxt "#30853"
+msgid "Content not downloaded"
+msgstr ""
+
+msgctxt "#30854"
+msgid "Review subscribed playlists; untick to stop syncing downloads."
+msgstr ""
+
+msgctxt "#30855"
+msgid "Review subscribed music libraries; untick to stop syncing downloads."
+msgstr ""
+
+# 30856-30857 — the presentation toggle (settings.xml libraryNodes).
+msgctxt "#30856"
+msgid "Library nodes and playlists"
+msgstr ""
+
+msgctxt "#30857"
+msgid "Create Kodi library nodes and smart playlists for the synced video libraries, and copy Jellyfin playlists into Kodi under Videos → Playlists → Kofin and Music → Playlists → Kofin. Turning this off removes every node and playlist Kofin created."
+msgstr ""
+
+# 30859-30868 — the library status dialog (settings.xml libraryStatus,
+# plugin/actions.py library_status) and the help for "Transcode music" (30861).
+# 30862 follows 30859 in the dialog's heading; 30863-30868 each lead a row
+# and are followed by a colon and a value. 30868 counts what Kodi's scanner
+# has no place for, such as a special with no episode number.
+msgctxt "#30859"
+msgid "Library status"
+msgstr ""
+
+msgctxt "#30860"
+msgid "What is synced, what is still pending and what the sync is doing now."
+msgstr ""
+
+msgctxt "#30861"
+msgid "Transcode music whose bitrate is above the maximum set below. Off, songs play from the server untouched."
+msgstr ""
+
+msgctxt "#30862"
+msgid "in Kodi / on the server"
+msgstr ""
+
+msgctxt "#30863"
+msgid "Pending"
+msgstr ""
+
+msgctxt "#30864"
+msgid "Failed"
+msgstr ""
+
+msgctxt "#30865"
+msgid "Last full update"
+msgstr ""
+
+msgctxt "#30867"
+msgid "Repair to add codec details"
+msgstr ""
+
+msgctxt "#30868"
+msgid "Kodi cannot import"
+msgstr ""
+
+msgctxt "#30869"
+msgid "Scheduled full update"
+msgstr ""
+
+msgctxt "#30870"
+msgid "How often to re-read every library from the server. Turn this on if the server lacks the KofinSyncQueue plugin, or deletions there won't reach Kodi."
+msgstr ""
+
+msgctxt "#30871"
+msgid "Daily"
+msgstr ""
+
+msgctxt "#30872"
+msgid "Weekly"
+msgstr ""
+
+msgctxt "#30873"
+msgid "Update all libraries now?"
+msgstr ""
+
+msgctxt "#30874"
+msgid "Re-read every library from the server now."
+msgstr ""
+
+# 30876-30884 — the Library status dialog's "Not on this Kodi" row and the
+# names of the features a Kodi may lack (sync/backends/api/capabilities.py).
+
+msgctxt "#30876"
+msgid "Not on this Kodi"
+msgstr ""
+
+msgctxt "#30877"
+msgid "Season plots"
+msgstr ""
+
+msgctxt "#30878"
+msgid "Favorite episodes"
+msgstr ""
+
+msgctxt "#30879"
+msgid "Removing emptied collections"
+msgstr ""
+
+msgctxt "#30880"
+msgid "Movie versions"
+msgstr ""
+
+msgctxt "#30881"
+msgid "Stream flags"
+msgstr ""
+
+msgctxt "#30882"
+msgid "Song date added"
+msgstr ""
+
+msgctxt "#30883"
+msgid "Removing dropped versions and extras"
+msgstr ""
+
+msgctxt "#30884"
+msgid "Fine sync"
+msgstr ""
+
+# 30885 — the text viewer behind the Library status dialog's "Kodi cannot
+# import" row (#30868), above the list of what it counts.
+msgctxt "#30885"
+msgid "Kodi imports a special only with an episode number. Give these one on the server, or play them from the Kofin add-on."
+msgstr ""
+
+# 30886-30887 — the Library status dialog's row for the server's sync-queue
+# companion (sync/backends/api/status.py). 30886 is the plugin's name; the
+# "not" value is Kodi's own #10005.
+msgctxt "#30886"
+msgid "KofinSyncQueue"
+msgstr ""
+
+msgctxt "#30887"
+msgid "Available"
+msgstr ""
+
+# The reason in #30420, and the instructions the Library status button opens
+# when that is why sync is off: #30889, the numbered steps #30890 to #30892,
+# and #30893, which the URL of the wiki page follows. Versions is Kodi's #24069,
+# and Account and Clean databases are labels the viewer has on screen.
+msgctxt "#30888"
+msgid "this profile holds a library from an older Kofin"
+msgstr ""
+
+msgctxt "#30889"
+msgid "Kofin cannot use it. To clean it, go back to Kofin 0.29:"
+msgstr ""
+
+msgctxt "#30890"
+msgid "Open Kofin in Kodi's add-on list, select Versions and choose 0.29."
+msgstr ""
+
+msgctxt "#30891"
+msgid "In Kofin's settings, log out on the Account tab and run Clean databases."
+msgstr ""
+
+msgctxt "#30892"
+msgid "When Kodi has restarted, open Kofin again, select Versions and choose the newest version. Then log in and choose the libraries to sync."
+msgstr ""
+
+msgctxt "#30893"
+msgid "Alternatively, close Kodi and delete its video and music databases by hand, as the Kofin wiki describes:"
+msgstr ""
+
+msgctxt "#30894"
+msgid "No longer on the server"
+msgstr ""
+
+msgctxt "#30895"
+msgid "%s is no longer on the server and was removed from the library"
+msgstr ""
+
+msgctxt "#30896"
+msgid "The synced libraries stay in Kodi until you log in again; a different account removes them."
+msgstr ""
+
+msgctxt "#30897"
+msgid "Queued %s of %s tracks"
+msgstr ""
+
+msgctxt "#30898"
+msgid "480p"
+msgstr ""
+
+msgctxt "#30899"
+msgid "540p"
+msgstr ""

@@ -1,0 +1,1969 @@
+# Kodi Media Center language file
+# Addon Name: Kofin
+# Addon id: plugin.video.kofin
+# Addon Provider: kontell
+# Note: machine-translated (LLM), pending native review.
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.kofin\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-08-14 00:00+0000\n"
+"Last-Translator: Claude (machine translation) <noreply@anthropic.com>\n"
+"Language-Team: Czech\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+msgctxt "Addon Summary"
+msgid "Jellyfin client for seamless Kodi integration"
+msgstr "Klient Jellyfin pro plynulou integraci s Kodi"
+
+msgctxt "Addon Description"
+msgid "Play movies, shows & music from a Jellyfin server."
+msgstr "Přehrávejte filmy, seriály a hudbu ze serveru Jellyfin."
+
+msgctxt "#30010"
+msgid "Play with transcoding"
+msgstr "Přehrát s překódováním"
+
+msgctxt "#30011"
+msgid "Quick Connect"
+msgstr "Quick Connect"
+
+msgctxt "#30012"
+msgid "Username and password"
+msgstr "Uživatelské jméno a heslo"
+
+msgctxt "#30013"
+msgid "Username"
+msgstr "Uživatelské jméno"
+
+msgctxt "#30014"
+msgid "Password"
+msgstr "Heslo"
+
+msgctxt "#30015"
+msgid "Enter code [B]%s[/B] in the Jellyfin app or web interface."
+msgstr "Zadejte kód [B]%s[/B] v aplikaci Jellyfin nebo ve webovém rozhraní."
+
+msgctxt "#30016"
+msgid "Logged in as %s"
+msgstr "Přihlášeno jako %s"
+
+msgctxt "#30017"
+msgid "Login failed: wrong username or password"
+msgstr "Přihlášení se nezdařilo: chybné jméno nebo heslo"
+
+msgctxt "#30018"
+msgid "Server unreachable"
+msgstr "Server je nedostupný"
+
+msgctxt "#30019"
+msgid "Log out from %s?"
+msgstr "Odhlásit se od %s?"
+
+msgctxt "#30020"
+msgid "Logged out"
+msgstr "Odhlášeno"
+
+msgctxt "#30021"
+msgid "Connection OK — %s (%s)"
+msgstr "Připojení v pořádku — %s (%s)"
+
+msgctxt "#30022"
+msgid "Session rejected — log in again from the Account tab"
+msgstr "Relace odmítnuta — přihlaste se znovu na kartě Účet"
+
+msgctxt "#30023"
+msgid "Restarting the Kofin service"
+msgstr "Restartuje se služba Kofin"
+
+msgctxt "#30024"
+msgid "Quick Connect timed out"
+msgstr "Vypršel časový limit Quick Connect"
+
+msgctxt "#30025"
+msgid "Already logged in"
+msgstr "Již přihlášeno"
+
+msgctxt "#30026"
+msgid "Not logged in"
+msgstr "Nepřihlášeno"
+
+msgctxt "#30027"
+msgid "Log in to %s"
+msgstr "Přihlásit se k %s"
+
+msgctxt "#30050"
+msgid "Account"
+msgstr "Účet"
+
+msgctxt "#30051"
+msgid "Connect to your Jellyfin server and manage the session."
+msgstr "Připojte se k serveru Jellyfin a spravujte relaci."
+
+msgctxt "#30052"
+msgid "Server address"
+msgstr "Adresa serveru"
+
+msgctxt "#30053"
+msgid "Host name, IP address or full URL of the Jellyfin server. A bare host uses http on port 8096."
+msgstr "Název hostitele, IP adresa nebo úplná URL serveru Jellyfin. Samotný hostitel použije http na portu 8096."
+
+msgctxt "#30054"
+msgid "Log in…"
+msgstr "Přihlásit se…"
+
+msgctxt "#30055"
+msgid "Connect to the server above using Quick Connect or a username and password."
+msgstr "Připojte se k výše uvedenému serveru pomocí Quick Connect nebo uživatelského jména a hesla."
+
+msgctxt "#30056"
+msgid "Server"
+msgstr "Server"
+
+msgctxt "#30057"
+msgid "The connected Jellyfin server."
+msgstr "Připojený server Jellyfin."
+
+msgctxt "#30058"
+msgid "Logged-in user"
+msgstr "Přihlášený uživatel"
+
+msgctxt "#30059"
+msgid "The Jellyfin user this device plays and reports as."
+msgstr "Uživatel Jellyfin, pod kterým toto zařízení přehrává a hlásí přehrávání."
+
+msgctxt "#30060"
+msgid "Test connection"
+msgstr "Otestovat připojení"
+
+msgctxt "#30061"
+msgid "Check that the server is reachable and the session is still valid."
+msgstr "Ověřte, že je server dostupný a že relace je stále platná."
+
+msgctxt "#30062"
+msgid "Log out"
+msgstr "Odhlásit se"
+
+msgctxt "#30063"
+msgid "End the session on the server and forget it on this device. The server address is kept."
+msgstr "Ukončí relaci na serveru a zapomene ji na tomto zařízení. Adresa serveru zůstane zachována."
+
+msgctxt "#30064"
+msgid "Restart Kofin"
+msgstr "Restartovat Kofin"
+
+msgctxt "#30065"
+msgid "Restart the background service without restarting Kodi."
+msgstr "Restartuje službu na pozadí bez restartu Kodi."
+
+msgctxt "#30071"
+msgid "Advanced"
+msgstr "Pokročilé"
+
+msgctxt "#30072"
+msgid "Notification, browsing, playback and deletion options."
+msgstr "Volby oznámení, procházení, přehrávání a mazání."
+
+msgctxt "#30073"
+msgid "Enable Delete from server"
+msgstr "Povolit mazání ze serveru"
+
+msgctxt "#30074"
+msgid "Adds a Delete entry to an item's 'Jellyfin actions' context menu. Deletion is permanent: the file itself is removed on the Jellyfin server, for every user."
+msgstr "Přidá položku Smazat do kontextové nabídky „Akce Jellyfin“ dané položky. Smazání je trvalé: samotný soubor je odstraněn na serveru Jellyfin, pro všechny uživatele."
+
+msgctxt "#30075"
+msgid "Delete without confirmation"
+msgstr "Mazat bez potvrzení"
+
+msgctxt "#30076"
+msgid "Delete the item as soon as the entry is picked, with no 'are you sure?' prompt. The deletion is still permanent and applies on the server."
+msgstr "Smaže položku ihned po zvolení, bez dotazu „opravdu?“. Smazání je stále trvalé a projeví se na serveru."
+
+msgctxt "#30077"
+msgid "Offer to delete after watching"
+msgstr "Nabídnout smazání po zhlédnutí"
+
+msgctxt "#30078"
+msgid "When a movie or episode finishes, ask whether to delete it from the server. Always asks, whatever 'Delete without confirmation' is set to."
+msgstr "Po skončení filmu nebo epizody se zeptá, zda ji smazat ze serveru. Ptá se vždy, bez ohledu na nastavení „Mazat bez potvrzení“."
+
+msgctxt "#30079"
+msgid "Who's watching shortlist"
+msgstr "Užší výběr pro „Kdo se dívá?“"
+
+msgctxt "#30080"
+msgid "Choose which server users the addon's Who's watching? entry offers. \"All\" offers everyone. With nothing selected the entry is hidden and anyone already on the session is removed."
+msgstr "Vyberte, které uživatele serveru nabízí položka doplňku „Kdo se dívá?“. Volba \"Všichni\" nabídne všechny. Když nevyberete nikoho, položka se skryje a kdokoli už je v relaci, bude odebrán."
+
+msgctxt "#30030"
+msgid "All"
+msgstr "Vše"
+
+msgctxt "#30031"
+msgid "Recently added"
+msgstr "Naposledy přidané"
+
+msgctxt "#30032"
+msgid "Next up"
+msgstr "Další na řadě"
+
+msgctxt "#30033"
+msgid "In progress"
+msgstr "Rozkoukané"
+
+msgctxt "#30034"
+msgid "Unwatched"
+msgstr "Nezhlédnuté"
+
+msgctxt "#30035"
+msgid "Favourites"
+msgstr "Oblíbené"
+
+msgctxt "#30036"
+msgid "Genres"
+msgstr "Žánry"
+
+msgctxt "#30037"
+msgid "Random"
+msgstr "Náhodné"
+
+msgctxt "#30038"
+msgid "Sets"
+msgstr "Kolekce"
+
+msgctxt "#30039"
+msgid "Artists"
+msgstr "Interpreti"
+
+msgctxt "#30040"
+msgid "Albums"
+msgstr "Alba"
+
+msgctxt "#30049"
+msgid "Continue watching"
+msgstr "Pokračovat ve sledování"
+
+msgctxt "#30100"
+msgid "Transcoding"
+msgstr "Překódování"
+
+msgctxt "#30101"
+msgid "When and how the server converts media for this device."
+msgstr "Kdy a jak server převádí média pro toto zařízení."
+
+msgctxt "#30102"
+msgid "Force direct play"
+msgstr "Vynutit přímé přehrávání"
+
+msgctxt "#30103"
+msgid "Always play the original video file. Overrides every other video transcoding setting; playback fails if the device cannot handle the media. Music is unaffected — see 'Transcode music'."
+msgstr "Vždy přehraje původní videosoubor. Má přednost před všemi ostatními nastaveními překódování videa; přehrávání selže, pokud zařízení dané médium nezvládne. Hudby se to netýká — viz „Překódovat hudbu“."
+
+msgctxt "#30104"
+msgid "Force remux"
+msgstr "Vynutit remux"
+
+msgctxt "#30105"
+msgid "Remux into HLS and copy the source codecs. Does not use Maximum audio channels, Maximum streaming bitrate or Transcode audio bitrate below — those would re-encode a listed codec. Direct play codecs, Allowed HDR types and Maximum resolution still apply."
+msgstr "Remuxuje do HLS a zkopíruje zdrojové kodeky. Nepoužívá «Maximální počet zvukových kanálů», «Maximální datový tok streamování» ani «Datový tok zvuku při překódování» níže — ty by znovu zakódovaly uvedený kodek. Kodeky přímého přehrávání, «Povolené typy HDR» a «Maximální rozlišení» platí dál."
+
+msgctxt "#30106"
+msgid "Force transcode"
+msgstr "Vynutit překódování"
+
+msgctxt "#30107"
+msgid "Always re-encode video and audio to the preferred codecs. Honours the bitrate cap, the channel cap, allowed codecs, HDR types and resolution."
+msgstr "Vždy znovu zakóduje video i zvuk do preferovaných kodeků. Dodržuje limit datového toku, limit kanálů, povolené kodeky, typy HDR i rozlišení."
+
+msgctxt "#30108"
+msgid "Direct play video codecs"
+msgstr "Videokodeky pro přímé přehrávání"
+
+msgctxt "#30109"
+msgid "Video formats this device can decode. Media using formats not selected here is transcoded."
+msgstr "Formáty videa, které toto zařízení umí dekódovat. Média ve formátech, které zde nejsou vybrány, se překódují."
+
+msgctxt "#30110"
+msgid "Direct play audio codecs"
+msgstr "Zvukové kodeky pro přímé přehrávání"
+
+msgctxt "#30111"
+msgid "Audio formats this device can decode or pass through. Others are transcoded."
+msgstr "Formáty zvuku, které toto zařízení umí dekódovat nebo předat dál. Ostatní se překódují."
+
+msgctxt "#30112"
+msgid "Allowed HDR types"
+msgstr "Povolené typy HDR"
+
+msgctxt "#30113"
+msgid "HDR formats the display accepts. Media in formats not selected is tone-mapped or transcoded to SDR/HDR10 by the server."
+msgstr "Formáty HDR, které displej přijímá. Média ve formátech, které nejsou vybrány, server tónově mapuje nebo překóduje do SDR/HDR10."
+
+msgctxt "#30114"
+msgid "Preferred video codec"
+msgstr "Preferovaný videokodek"
+
+msgctxt "#30115"
+msgid "The codec the client asks for when video must be transcoded."
+msgstr "Kodek, o který klient žádá, když se video musí překódovat."
+
+msgctxt "#30116"
+msgid "Preferred audio codec"
+msgstr "Preferovaný zvukový kodek"
+
+msgctxt "#30117"
+msgid "The codec the client asks for when audio must be transcoded."
+msgstr "Kodek, o který klient žádá, když se zvuk musí překódovat."
+
+msgctxt "#30118"
+msgid "Maximum audio channels"
+msgstr "Maximální počet zvukových kanálů"
+
+msgctxt "#30119"
+msgid "Maximum number of audio channels allowed when transcoding. Streams with more channels will be downmixed. No effect on direct playback."
+msgstr "Maximální počet zvukových kanálů povolený při překódování. Streamy s více kanály budou smíchány dolů. Bez vlivu na přímé přehrávání."
+
+msgctxt "#30120"
+msgid "Maximum streaming bitrate"
+msgstr "Maximální datový tok streamování"
+
+msgctxt "#30121"
+msgid "Media above this bitrate is transcoded down to it."
+msgstr "Média nad tímto datovým tokem se na něj překódují."
+
+msgctxt "#30122"
+msgid "Maximum resolution"
+msgstr "Maximální rozlišení"
+
+msgctxt "#30123"
+msgid "Wider media is downscaled by the server."
+msgstr "Širší média server zmenší."
+
+msgctxt "#30124"
+msgid "Transcode audio bitrate"
+msgstr "Datový tok zvuku při překódování"
+
+msgctxt "#30125"
+msgid "Bitrate for the audio track when video is transcoded."
+msgstr "Datový tok zvukové stopy, když se překódovává video."
+
+msgctxt "#30126"
+msgid "Context menu bitrates"
+msgstr "Datové toky v kontextové nabídce"
+
+msgctxt "#30127"
+msgid "Bitrates offered by 'Play with transcoding'. With one selected the popup is skipped."
+msgstr "Datové toky nabízené volbou „Přehrát s překódováním“. Když je vybrán jen jeden, okno se přeskočí."
+
+msgctxt "#30129"
+msgid "Maximum music bitrate"
+msgstr "Maximální datový tok hudby"
+
+msgctxt "#30130"
+msgid "Music above this bitrate is transcoded using the codec and bitrate below. Unlimited never transcodes."
+msgstr "Hudba nad tímto datovým tokem se překóduje kodekem a datovým tokem níže. Neomezeno nepřekódovává nikdy."
+
+msgctxt "#30131"
+msgid "Music transcode codec"
+msgstr "Kodek pro překódování hudby"
+
+msgctxt "#30132"
+msgid "Codec for transcoded music streams."
+msgstr "Kodek pro překódované hudební streamy."
+
+msgctxt "#30133"
+msgid "Music transcode bitrate"
+msgstr "Datový tok překódované hudby"
+
+msgctxt "#30134"
+msgid "Bitrate for transcoded music streams."
+msgstr "Datový tok překódovaných hudebních streamů."
+
+msgctxt "#30135"
+msgid "Transcode music"
+msgstr "Překódovat hudbu"
+
+msgctxt "#30150"
+msgid "H.264 (AVC)"
+msgstr "H.264 (AVC)"
+
+msgctxt "#30151"
+msgid "H.264 10-bit (Hi10P)"
+msgstr "H.264 10-bit (Hi10P)"
+
+msgctxt "#30152"
+msgid "H.265 (HEVC)"
+msgstr "H.265 (HEVC)"
+
+msgctxt "#30153"
+msgid "HEVC RExt (4:2:2/4:4:4)"
+msgstr "HEVC RExt (4:2:2/4:4:4)"
+
+msgctxt "#30154"
+msgid "AV1"
+msgstr "AV1"
+
+msgctxt "#30155"
+msgid "MPEG-2"
+msgstr "MPEG-2"
+
+msgctxt "#30156"
+msgid "VP9"
+msgstr "VP9"
+
+msgctxt "#30157"
+msgid "VC-1"
+msgstr "VC-1"
+
+msgctxt "#30158"
+msgid "AAC"
+msgstr "AAC"
+
+msgctxt "#30159"
+msgid "MP2"
+msgstr "MP2"
+
+msgctxt "#30160"
+msgid "MP3"
+msgstr "MP3"
+
+msgctxt "#30161"
+msgid "AC3 (Dolby Digital)"
+msgstr "AC3 (Dolby Digital)"
+
+msgctxt "#30162"
+msgid "E-AC3 (Dolby Digital Plus)"
+msgstr "E-AC3 (Dolby Digital Plus)"
+
+msgctxt "#30163"
+msgid "Opus"
+msgstr "Opus"
+
+msgctxt "#30164"
+msgid "FLAC"
+msgstr "FLAC"
+
+msgctxt "#30165"
+msgid "DTS"
+msgstr "DTS"
+
+msgctxt "#30166"
+msgid "HDR10"
+msgstr "HDR10"
+
+msgctxt "#30167"
+msgid "HLG"
+msgstr "HLG"
+
+msgctxt "#30168"
+msgid "HDR10+"
+msgstr "HDR10+"
+
+msgctxt "#30169"
+msgid "Dolby Vision"
+msgstr "Dolby Vision"
+
+msgctxt "#30170"
+msgid "Dolby Vision with HDR10 fallback"
+msgstr "Dolby Vision se zálohou HDR10"
+
+msgctxt "#30171"
+msgid "Dolby Vision with HLG fallback"
+msgstr "Dolby Vision se zálohou HLG"
+
+msgctxt "#30172"
+msgid "Dolby Vision with SDR fallback"
+msgstr "Dolby Vision se zálohou SDR"
+
+msgctxt "#30173"
+msgid "Dolby Vision Profile 7 (EL)"
+msgstr "Dolby Vision Profil 7 (EL)"
+
+msgctxt "#30174"
+msgid "Dolby Vision with HDR10+ fallback"
+msgstr "Dolby Vision se zálohou HDR10+"
+
+msgctxt "#30175"
+msgid "Dolby Vision P7 with HDR10+ fallback"
+msgstr "Dolby Vision P7 se zálohou HDR10+"
+
+msgctxt "#30176"
+msgid "Unlimited"
+msgstr "Neomezeno"
+
+msgctxt "#30177"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30178"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30179"
+msgid "4K"
+msgstr "4K"
+
+msgctxt "#30180"
+msgid "2.0 stereo"
+msgstr "Stereo 2.0"
+
+msgctxt "#30181"
+msgid "5.1 surround"
+msgstr "Prostorový 5.1"
+
+msgctxt "#30182"
+msgid "7.1 surround"
+msgstr "Prostorový 7.1"
+
+msgctxt "#30183"
+msgid "1 Mbit/s"
+msgstr "1 Mbit/s"
+
+msgctxt "#30184"
+msgid "2 Mbit/s"
+msgstr "2 Mbit/s"
+
+msgctxt "#30185"
+msgid "3 Mbit/s"
+msgstr "3 Mbit/s"
+
+msgctxt "#30186"
+msgid "4 Mbit/s"
+msgstr "4 Mbit/s"
+
+msgctxt "#30187"
+msgid "6 Mbit/s"
+msgstr "6 Mbit/s"
+
+msgctxt "#30188"
+msgid "8 Mbit/s"
+msgstr "8 Mbit/s"
+
+msgctxt "#30189"
+msgid "10 Mbit/s"
+msgstr "10 Mbit/s"
+
+msgctxt "#30190"
+msgid "15 Mbit/s"
+msgstr "15 Mbit/s"
+
+msgctxt "#30191"
+msgid "20 Mbit/s"
+msgstr "20 Mbit/s"
+
+msgctxt "#30192"
+msgid "25 Mbit/s"
+msgstr "25 Mbit/s"
+
+msgctxt "#30193"
+msgid "40 Mbit/s"
+msgstr "40 Mbit/s"
+
+msgctxt "#30194"
+msgid "60 Mbit/s"
+msgstr "60 Mbit/s"
+
+msgctxt "#30195"
+msgid "120 Mbit/s"
+msgstr "120 Mbit/s"
+
+msgctxt "#30196"
+msgid "96 kbit/s"
+msgstr "96 kbit/s"
+
+msgctxt "#30197"
+msgid "128 kbit/s"
+msgstr "128 kbit/s"
+
+msgctxt "#30198"
+msgid "192 kbit/s"
+msgstr "192 kbit/s"
+
+msgctxt "#30199"
+msgid "256 kbit/s"
+msgstr "256 kbit/s"
+
+msgctxt "#30200"
+msgid "320 kbit/s"
+msgstr "320 kbit/s"
+
+msgctxt "#30201"
+msgid "384 kbit/s"
+msgstr "384 kbit/s"
+
+msgctxt "#30202"
+msgid "448 kbit/s"
+msgstr "448 kbit/s"
+
+msgctxt "#30203"
+msgid "640 kbit/s"
+msgstr "640 kbit/s"
+
+msgctxt "#30204"
+msgid "0.5 Mbit/s"
+msgstr "0.5 Mbit/s"
+
+msgctxt "#30205"
+msgid "0.75 Mbit/s"
+msgstr "0.75 Mbit/s"
+
+msgctxt "#30206"
+msgid "Default (max streaming bitrate)"
+msgstr "Výchozí (max. datový tok streamování)"
+
+msgctxt "#30041"
+msgid "Who's watching?"
+msgstr "Kdo se dívá?"
+
+msgctxt "#30045"
+msgid "No active session on the server yet"
+msgstr "Na serveru zatím není žádná aktivní relace"
+
+msgctxt "#30046"
+msgid "Who's watching? (%s)"
+msgstr "Kdo se dívá? (%s)"
+
+msgctxt "#30047"
+msgid "Who's watching with %s?"
+msgstr "Kdo se dívá s %s?"
+
+msgctxt "#30048"
+msgid "Who can be added to the session"
+msgstr "Koho lze přidat do relace"
+
+msgctxt "#30250"
+msgid "Library"
+msgstr "Knihovna"
+
+msgctxt "#30251"
+msgid "Select and manage the Jellyfin libraries mirrored into Kodi's own database."
+msgstr "Vyberte a spravujte knihovny Jellyfin zrcadlené do vlastní databáze Kodi."
+
+msgctxt "#30252"
+msgid "Select libraries to sync"
+msgstr "Vyberte knihovny k synchronizaci"
+
+msgctxt "#30253"
+msgid "Choose which server libraries are mirrored into the Kodi library. Changes apply when you confirm the selection."
+msgstr "Vyberte, které knihovny serveru se zrcadlí do knihovny Kodi. Změny se projeví po potvrzení výběru."
+
+msgctxt "#30256"
+msgid "Update libraries"
+msgstr "Aktualizovat knihovny"
+
+msgctxt "#30258"
+msgid "Repair libraries"
+msgstr "Opravit knihovny"
+
+msgctxt "#30259"
+msgid "Remove and re-sync the libraries you pick from scratch, restoring watched state from the server. Runs when you confirm the selection."
+msgstr "Odstraní a od začátku znovu synchronizuje knihovny, které vyberete, a obnoví stav zhlédnutí ze serveru. Spustí se po potvrzení výběru."
+
+msgctxt "#30262"
+msgid "Sync status"
+msgstr "Stav synchronizace"
+
+msgctxt "#30264"
+msgid "Remove synced library?"
+msgstr "Odebrat synchronizovanou knihovnu?"
+
+msgctxt "#30265"
+msgid "Remove %s from the Kodi library? The items are deleted from this device only."
+msgstr "Odebrat %s z knihovny Kodi? Položky budou smazány pouze z tohoto zařízení."
+
+msgctxt "#30266"
+msgid "Repair which libraries?"
+msgstr "Které knihovny opravit?"
+
+msgctxt "#30267"
+msgid "All"
+msgstr "Všechny"
+
+msgctxt "#30268"
+msgid "Select libraries"
+msgstr "Vybrat knihovny"
+
+msgctxt "#30269"
+msgid "No libraries available"
+msgstr "Nejsou dostupné žádné knihovny"
+
+msgctxt "#30302"
+msgid "Hide update status below (items)"
+msgstr "Skrýt stav aktualizace pod (položek)"
+
+msgctxt "#30303"
+msgid "Hide Kodi's library-update progress for syncs smaller than this. 0 always shows it."
+msgstr "Skryje průběh aktualizace knihovny Kodi u synchronizací menších než tato hodnota. 0 jej zobrazuje vždy."
+
+msgctxt "#30318"
+msgid "Compress artwork"
+msgstr "Komprimovat grafiku"
+
+msgctxt "#30319"
+msgid "Re-encode capped artwork at JPEG quality 90. No effect without a resolution cap."
+msgstr "Překóduje zmenšenou grafiku do JPEG s kvalitou 90. Bez omezení rozlišení nemá efekt."
+
+msgctxt "#30320"
+msgid "Maximum artwork resolution"
+msgstr "Maximální rozlišení grafiky"
+
+msgctxt "#30321"
+msgid "Cap the size of artwork from the server. Auto matches Kodi's image cache: 1080p for backdrops, 720p for posters and logos."
+msgstr "Omezí velikost grafiky ze serveru. Volba Automaticky odpovídá mezipaměti obrázků Kodi: 1080p pro pozadí, 720p pro plakáty a loga."
+
+msgctxt "#30322"
+msgid "Original"
+msgstr "Originál"
+
+msgctxt "#30323"
+msgid "720p"
+msgstr "720p"
+
+msgctxt "#30324"
+msgid "1080p"
+msgstr "1080p"
+
+msgctxt "#30325"
+msgid "2160p"
+msgstr "2160p"
+
+msgctxt "#30326"
+msgid "Notify on server connection changes"
+msgstr "Upozorňovat na změny připojení k serveru"
+
+msgctxt "#30327"
+msgid "Show a notification when the server connects, disconnects or restarts."
+msgstr "Zobrazí oznámení, když se server připojí, odpojí nebo restartuje."
+
+msgctxt "#30350"
+msgid "Recently added"
+msgstr "Naposledy přidané"
+
+msgctxt "#30351"
+msgid "In progress"
+msgstr "Rozkoukané"
+
+msgctxt "#30352"
+msgid "Unwatched"
+msgstr "Nezhlédnuté"
+
+msgctxt "#30353"
+msgid "Random"
+msgstr "Náhodné"
+
+msgctxt "#30354"
+msgid "Recommended"
+msgstr "Doporučené"
+
+msgctxt "#30355"
+msgid "Recently added episodes"
+msgstr "Naposledy přidané epizody"
+
+msgctxt "#30356"
+msgid "In progress episodes"
+msgstr "Rozkoukané epizody"
+
+msgctxt "#30358"
+msgid "Favorite movies"
+msgstr "Oblíbené filmy"
+
+msgctxt "#30359"
+msgid "Favorite shows"
+msgstr "Oblíbené seriály"
+
+msgctxt "#30360"
+msgid "Favorite episodes"
+msgstr "Oblíbené epizody"
+
+msgctxt "#30401"
+msgid "Updating media"
+msgstr "Aktualizace médií"
+
+msgctxt "#30403"
+msgid "Sync incomplete; retrying shortly"
+msgstr "Synchronizace neúplná; opakuji"
+
+msgctxt "#30408"
+msgid "Removing library"
+msgstr "Odebírání knihovny"
+
+msgctxt "#30415"
+msgid "Connected to %s"
+msgstr "Připojeno k %s"
+
+msgctxt "#30416"
+msgid "Lost connection to the server"
+msgstr "Ztraceno spojení se serverem"
+
+msgctxt "#30417"
+msgid "Server is restarting"
+msgstr "Server se restartuje"
+
+msgctxt "#30418"
+msgid "Server is shutting down"
+msgstr "Server se vypíná"
+
+msgctxt "#30420"
+msgid "Library sync is off: %s"
+msgstr "Synchronizace vypnuta: %s"
+
+msgctxt "#30450"
+msgid "Skipping & Play next"
+msgstr "Přeskakování a přehrát další"
+
+msgctxt "#30451"
+msgid "Media segment skipping and the Play Next prompt."
+msgstr "Přeskakování segmentů médií a nabídka přehrání dalšího dílu."
+
+msgctxt "#30453"
+msgid "Skip media segments"
+msgstr "Přeskakovat segmenty médií"
+
+msgctxt "#30454"
+msgid "Fetch Jellyfin media segments (intro, credits, recap, preview, commercial) during playback and act on them per type."
+msgstr "Během přehrávání načítá segmenty médií z Jellyfinu (úvod, závěrečné titulky, shrnutí, ukázka, reklama) a podle typu na ně reaguje."
+
+msgctxt "#30455"
+msgid "Intros"
+msgstr "Úvody"
+
+msgctxt "#30456"
+msgid "Off ignores intro segments, Auto skips past them, Ask shows a skip button."
+msgstr "Vypnuto ignoruje segmenty úvodu, Automaticky je přeskočí, Zeptat se zobrazí tlačítko pro přeskočení."
+
+msgctxt "#30457"
+msgid "Credits"
+msgstr "Závěrečné titulky"
+
+msgctxt "#30458"
+msgid "Off ignores credits, Auto seeks past them, Ask offers Skip Outro — with Play Next when a next episode exists."
+msgstr "Vypnuto ignoruje závěrečné titulky, Automaticky je přetočí, Zeptat se nabídne Přeskočit závěr — a když existuje další epizoda, také Přehrát další."
+
+msgctxt "#30459"
+msgid "Recaps"
+msgstr "Shrnutí"
+
+msgctxt "#30460"
+msgid "Off ignores recap segments, Auto skips past them, Ask shows a skip button."
+msgstr "Vypnuto ignoruje segmenty shrnutí, Automaticky je přeskočí, Zeptat se zobrazí tlačítko pro přeskočení."
+
+msgctxt "#30461"
+msgid "Previews"
+msgstr "Ukázky"
+
+msgctxt "#30462"
+msgid "Off ignores preview segments, Auto skips past them, Ask shows a skip button."
+msgstr "Vypnuto ignoruje segmenty ukázek, Automaticky je přeskočí, Zeptat se zobrazí tlačítko pro přeskočení."
+
+msgctxt "#30463"
+msgid "Commercials"
+msgstr "Reklamy"
+
+msgctxt "#30464"
+msgid "Off ignores commercial segments, Auto skips past them, Ask shows a skip button."
+msgstr "Vypnuto ignoruje reklamní segmenty, Automaticky je přeskočí, Zeptat se zobrazí tlačítko pro přeskočení."
+
+msgctxt "#30465"
+msgid "Off"
+msgstr "Vypnuto"
+
+msgctxt "#30466"
+msgid "Auto"
+msgstr "Automaticky"
+
+msgctxt "#30467"
+msgid "Ask"
+msgstr "Zeptat se"
+
+msgctxt "#30469"
+msgid "Offer Play Next"
+msgstr "Nabízet Přehrát další"
+
+msgctxt "#30470"
+msgid "Offer the next episode at the credits, or near the end when no credits segment exists."
+msgstr "Nabídne další epizodu u závěrečných titulků, nebo ke konci, když segment titulků neexistuje."
+
+msgctxt "#30471"
+msgid "Play Next lead time"
+msgstr "Předstih nabídky dalšího dílu"
+
+msgctxt "#30472"
+msgid "Seconds before the end to show the Play Next prompt for content without a credits segment."
+msgstr "Kolik sekund před koncem zobrazit nabídku Přehrát další u obsahu bez segmentu závěrečných titulků."
+
+msgctxt "#30473"
+msgid "Autoplay next episode"
+msgstr "Automaticky přehrát další epizodu"
+
+msgctxt "#30474"
+msgid "Count down on the Play Next prompt and start the next episode automatically."
+msgstr "Na nabídce Přehrát další odpočítává čas a další epizodu spustí automaticky."
+
+msgctxt "#30475"
+msgid "Resume offset (seconds)"
+msgstr "Posun obnovení (sekundy)"
+
+msgctxt "#30476"
+msgid "Seconds to rewind before the stored resume point."
+msgstr "O kolik sekund se vrátit před uložený bod obnovení."
+
+msgctxt "#30477"
+msgid "Hide the skip button after"
+msgstr "Skrýt tlačítko pro přeskočení po"
+
+msgctxt "#30478"
+msgid "How far into a segment the skip button disappears. 100% keeps it up for the whole segment."
+msgstr "Jak daleko v segmentu tlačítko pro přeskočení zmizí. 100% jej ponechá po celý segment."
+
+msgctxt "#30481"
+msgid "Skip Intro"
+msgstr "Přeskočit úvod"
+
+msgctxt "#30482"
+msgid "Skip Outro"
+msgstr "Přeskočit závěr"
+
+msgctxt "#30483"
+msgid "Skip Recap"
+msgstr "Přeskočit shrnutí"
+
+msgctxt "#30484"
+msgid "Skip Preview"
+msgstr "Přeskočit ukázku"
+
+msgctxt "#30485"
+msgid "Skip Ad"
+msgstr "Přeskočit reklamu"
+
+msgctxt "#30486"
+msgid "Play Next"
+msgstr "Přehrát další"
+
+msgctxt "#30487"
+msgid "Close"
+msgstr "Zavřít"
+
+msgctxt "#30488"
+msgid "Skipped %s"
+msgstr "Přeskočeno: %s"
+
+msgctxt "#30489"
+msgid "Up next: %s"
+msgstr "Další: %s"
+
+msgctxt "#30500"
+msgid "Extras"
+msgstr "Bonusy"
+
+msgctxt "#30501"
+msgid "Browse extras"
+msgstr "Procházet bonusy"
+
+msgctxt "#30502"
+msgid "Jellyfin actions"
+msgstr "Akce Jellyfin"
+
+msgctxt "#30504"
+msgid "Settings"
+msgstr "Nastavení"
+
+msgctxt "#30505"
+msgid "Permanently delete \"%s\" from the server? This cannot be undone."
+msgstr "Trvale smazat \"%s\" ze serveru? Tuto akci nelze vrátit zpět."
+
+msgctxt "#30506"
+msgid "Finished \"%s\". Permanently delete it from the server? This cannot be undone."
+msgstr "Dokončeno \"%s\". Trvale to smazat ze serveru? Tuto akci nelze vrátit zpět."
+
+msgctxt "#30507"
+msgid "Server request failed"
+msgstr "Požadavek na server selhal"
+
+msgctxt "#30508"
+msgid "Mark as watched on Jellyfin"
+msgstr "Označit jako zhlédnuté v Jellyfinu"
+
+msgctxt "#30509"
+msgid "Mark as unwatched on Jellyfin"
+msgstr "Označit jako nezhlédnuté v Jellyfinu"
+
+msgctxt "#30550"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30551"
+msgid "Enable SyncPlay"
+msgstr "Povolit SyncPlay"
+
+msgctxt "#30552"
+msgid "Watch in sync with other Jellyfin clients. Leave Kodi's 'Sync playback to display' off for a reliable experience"
+msgstr "Sledujte synchronizovaně s ostatními klienty Jellyfin. Pro spolehlivý zážitek nechte v Kodi vypnutou volbu Synchronizovat přehrávání s obrazovkou"
+
+msgctxt "#30557"
+msgid "Group notifications"
+msgstr "Oznámení skupiny"
+
+msgctxt "#30558"
+msgid "Show member join/leave and group-waiting notifications. Errors are always shown."
+msgstr "Zobrazuje oznámení o připojení a odchodu členů a o čekání skupiny. Chyby se zobrazují vždy."
+
+msgctxt "#30560"
+msgid "SyncPlay"
+msgstr "SyncPlay"
+
+msgctxt "#30561"
+msgid "New group..."
+msgstr "Nová skupina..."
+
+msgctxt "#30562"
+msgid "Leave group"
+msgstr "Opustit skupinu"
+
+msgctxt "#30563"
+msgid "Joined group: %s"
+msgstr "Připojeno ke skupině: %s"
+
+msgctxt "#30564"
+msgid "Left the group"
+msgstr "Skupina opuštěna"
+
+msgctxt "#30565"
+msgid "%s joined the group"
+msgstr "%s se připojil ke skupině"
+
+msgctxt "#30566"
+msgid "%s left the group"
+msgstr "%s opustil skupinu"
+
+msgctxt "#30567"
+msgid "Group name"
+msgstr "Název skupiny"
+
+msgctxt "#30568"
+msgid "Playback stopped — what should the group do?"
+msgstr "Přehrávání zastaveno — co má skupina udělat?"
+
+msgctxt "#30569"
+msgid "Spectator mode: the group will not wait for you"
+msgstr "Režim diváka: skupina na vás nebude čekat"
+
+msgctxt "#30570"
+msgid "SyncPlay needs a working websocket connection to the server"
+msgstr "SyncPlay vyžaduje funkční připojení websocket k serveru"
+
+msgctxt "#30571"
+msgid "Removed from the group"
+msgstr "Odebráno ze skupiny"
+
+msgctxt "#30572"
+msgid "Members"
+msgstr "Členové"
+
+msgctxt "#30573"
+msgid "Resync with group"
+msgstr "Znovu synchronizovat se skupinou"
+
+msgctxt "#30574"
+msgid "SyncPlay is unavailable (server not reachable?)"
+msgstr "SyncPlay není dostupný (nedostupný server?)"
+
+msgctxt "#30575"
+msgid "External players cannot be synchronized"
+msgstr "Externí přehrávače nelze synchronizovat"
+
+msgctxt "#30576"
+msgid "Playback could not be synchronized"
+msgstr "Přehrávání se nepodařilo synchronizovat"
+
+msgctxt "#30577"
+msgid "buffering"
+msgstr "načítá se"
+
+msgctxt "#30578"
+msgid "Could not join the group"
+msgstr "Ke skupině se nepodařilo připojit"
+
+msgctxt "#30579"
+msgid "You don't have access to some items in the group's queue"
+msgstr "K některým položkám ve frontě skupiny nemáte přístup"
+
+msgctxt "#30580"
+msgid "Become a spectator (group won't wait for me)"
+msgstr "Stát se divákem (skupina na mě nebude čekat)"
+
+msgctxt "#30581"
+msgid "Wait for me again (leave spectator mode)"
+msgstr "Čekejte na mě znovu (opustit režim diváka)"
+
+msgctxt "#30582"
+msgid "disconnected"
+msgstr "odpojeno"
+
+msgctxt "#30583"
+msgid "The group will wait for you again"
+msgstr "Skupina na vás bude znovu čekat"
+
+msgctxt "#30584"
+msgid "Stop playback for everyone"
+msgstr "Zastavit přehrávání pro všechny"
+
+msgctxt "#30585"
+msgid "Waiting for the group..."
+msgstr "Čekání na skupinu..."
+
+msgctxt "#30586"
+msgid "Fine sync using tempo"
+msgstr "Jemná synchronizace tempem"
+
+msgctxt "#30587"
+msgid "Keeps this device on the group's position by briefly playing faster or slower. A video correction decodes passthrough audio until the next item."
+msgstr "Drží toto zařízení na pozici skupiny tím, že krátce přehrává rychleji nebo pomaleji. Korekce videa dekóduje passthrough zvuk až do další položky."
+
+msgctxt "#30592"
+msgid "Fine sync stopped: rate mismatch"
+msgstr "Jemná synchronizace zastavena: tempo nesedí"
+
+msgctxt "#30593"
+msgid "Largest video error closed by tempo (ms)"
+msgstr "Největší chyba videa srovnaná tempem (ms)"
+
+msgctxt "#30594"
+msgid "Position errors up to this are closed by playing faster or slower; anything larger is closed with a skip. Higher means fewer skips and longer speed changes."
+msgstr "Chyby pozice až do této hodnoty se srovnávají rychlejším nebo pomalejším přehráváním; větší skokem. Vyšší znamená méně skoků a delší změny rychlosti."
+
+msgctxt "#30595"
+msgid "Fastest video correction speed (%)"
+msgstr "Nejrychlejší oprava videa (%)"
+
+msgctxt "#30596"
+msgid "The most playback speed may change during a correction. At 25% a 2.5 second error takes 10 seconds to close; lower is less noticeable but slower. Large changes ramp in and out."
+msgstr "O kolik se smí během opravy nejvýš změnit rychlost přehrávání. Při 25 % se chyba 2,5 sekundy srovná za 10 sekund; nižší je méně nápadné, ale pomalejší. Velké změny se zavádějí a ukončují postupně."
+
+msgctxt "#30604"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30605"
+msgid "1440p"
+msgstr "1440p"
+
+msgctxt "#30613"
+msgid "Audio and subtitle streams"
+msgstr "Zvukové stopy a titulky"
+
+msgctxt "#30614"
+msgid "Audio stream"
+msgstr "Zvuková stopa"
+
+msgctxt "#30615"
+msgid "Subtitles"
+msgstr "Titulky"
+
+msgctxt "#30616"
+msgid "Restarting to change stream..."
+msgstr "Restart kvůli změně stopy..."
+
+msgctxt "#30617"
+msgid "burned in, restarts playback"
+msgstr "vypálené, restartuje přehrávání"
+
+msgctxt "#30618"
+msgid "Use Jellyfin's default tracks"
+msgstr "Používat výchozí stopy z Jellyfinu"
+
+msgctxt "#30619"
+msgid "Start playback on the audio and subtitle tracks your Jellyfin account asks for, instead of the ones Kodi's own language settings pick. The server resolves both from your Jellyfin profile, so the choice follows you to every client."
+msgstr "Spustí přehrávání se zvukovými stopami a titulky, které požaduje váš účet Jellyfin, místo těch, které vyberou jazyková nastavení Kodi. Server obojí určuje z vašeho profilu Jellyfin, takže volba vás provází na každém klientovi."
+
+msgctxt "#30622"
+msgid "Notify about new content"
+msgstr "Upozorňovat na nový obsah"
+
+msgctxt "#30623"
+msgid "Show a notification when new films, shows, episodes, music videos, artists or albums are added to your library."
+msgstr "Zobrazí oznámení, když do vaší knihovny přibudou nové filmy, seriály, epizody, hudební videoklipy, interpreti nebo alba."
+
+msgctxt "#30624"
+msgid "%s movie added to library"
+msgstr "Film %s přidán do knihovny"
+
+msgctxt "#30625"
+msgid "%s movies added to library"
+msgstr "Nových filmů v knihovně: %s"
+
+msgctxt "#30626"
+msgid "%s show added to library"
+msgstr "Seriál %s přidán do knihovny"
+
+msgctxt "#30627"
+msgid "%s new shows added to library"
+msgstr "Nových seriálů v knihovně: %s"
+
+msgctxt "#30628"
+msgid "%s episode of %s added to library"
+msgstr "%s epizoda seriálu %s v knihovně"
+
+msgctxt "#30629"
+msgid "%s episodes of %s added to library"
+msgstr "%s epizod seriálu %s v knihovně"
+
+msgctxt "#30630"
+msgid "%s episodes added to library"
+msgstr "Nových epizod v knihovně: %s"
+
+msgctxt "#30631"
+msgid "%s music video added to library"
+msgstr "Videoklip %s přidán do knihovny"
+
+msgctxt "#30632"
+msgid "%s music videos added to library"
+msgstr "Nových videoklipů v knihovně: %s"
+
+msgctxt "#30633"
+msgid "%s added to music library"
+msgstr "Interpret %s v hudební knihovně"
+
+msgctxt "#30634"
+msgid "%s artists added to library"
+msgstr "Nových interpretů v knihovně: %s"
+
+msgctxt "#30635"
+msgid "%s added to music library"
+msgstr "Album %s v hudební knihovně"
+
+msgctxt "#30636"
+msgid "%s albums added to library"
+msgstr "Nových alb v knihovně: %s"
+
+msgctxt "#30637"
+msgid "Use the server's splashscreen as the backdrop"
+msgstr "Použít úvodní obrazovku serveru jako pozadí"
+
+msgctxt "#30638"
+msgid "Show the Jellyfin server's splashscreen behind the addon instead of the bundled artwork. Refreshed when the service connects, at most once a day."
+msgstr "Zobrazí za doplňkem úvodní obrazovku serveru Jellyfin místo přiložené grafiky. Obnovuje se, když se služba připojí, nejvýše jednou denně."
+
+msgctxt "#30700"
+msgid "Downloads"
+msgstr "Stahování"
+
+msgctxt "#30701"
+msgid "Download items for offline playback"
+msgstr "Stahujte položky pro přehrávání offline"
+
+msgctxt "#30702"
+msgid "Enable downloads"
+msgstr "Povolit stahování"
+
+msgctxt "#30703"
+msgid "Adds Download to the Jellyfin actions menu and runs the download manager. Only for libraries you sync with Kofin."
+msgstr "Přidá položku Stáhnout do nabídky Akce Jellyfin a spustí správce stahování. Pouze pro knihovny synchronizované Kofinem."
+
+msgctxt "#30704"
+msgid "Download location"
+msgstr "Umístění stažených souborů"
+
+msgctxt "#30705"
+msgid "Where downloaded files are kept. Leave empty for the addon profile folder"
+msgstr "Kde se uchovávají stažené soubory. Ponechte prázdné pro složku profilu doplňku"
+
+msgctxt "#30706"
+msgid "Parallel video downloads"
+msgstr "Souběžná stahování videa"
+
+msgctxt "#30707"
+msgid "How many movies and episodes download at the same time"
+msgstr "Kolik filmů a epizod se stahuje současně"
+
+msgctxt "#30708"
+msgid "Download"
+msgstr "Stáhnout"
+
+msgctxt "#30709"
+msgid "Cancel download"
+msgstr "Zrušit stahování"
+
+msgctxt "#30710"
+msgid "Delete download"
+msgstr "Smazat stažený soubor"
+
+msgctxt "#30712"
+msgid "Download complete: %s"
+msgstr "Staženo: %s"
+
+msgctxt "#30713"
+msgid "Download failed: %s"
+msgstr "Stahování selhalo: %s"
+
+msgctxt "#30714"
+msgid "Delete the download of %s?"
+msgstr "Smazat stažený soubor %s?"
+
+msgctxt "#30715"
+msgid "Not enough free space for %s"
+msgstr "Nedostatek místa pro %s"
+
+msgctxt "#30717"
+msgid "The downloads folder is not writable"
+msgstr "Do složky stahování nelze zapisovat"
+
+msgctxt "#30718"
+msgid "Downloaded movies"
+msgstr "Stažené filmy"
+
+msgctxt "#30719"
+msgid "Downloaded shows"
+msgstr "Stažené seriály"
+
+msgctxt "#30720"
+msgid "Not available offline"
+msgstr "Není dostupné offline"
+
+msgctxt "#30721"
+msgid "Downloaded episodes"
+msgstr "Stažené epizody"
+
+msgctxt "#30722"
+msgid "Transcode videos"
+msgstr "Překódovat videa"
+
+msgctxt "#30723"
+msgid "Transcode when the original exceeds a limit below or when triggered by settings in the Transcoding tab (HDR, codec, etc)"
+msgstr "Překóduje, když originál přesáhne limit níže nebo když to vyvolá nastavení na kartě Překódování (HDR, kodek atd.)"
+
+msgctxt "#30724"
+msgid "Maximum download bitrate"
+msgstr "Maximální datový tok stahování"
+
+msgctxt "#30725"
+msgid "Videos over this total bitrate are transcoded down to it. Unlimited transcodes only for codec, HDR or resolution reasons."
+msgstr "Videa nad tímto celkovým datovým tokem se na něj překódují. Neomezeno překódovává jen kvůli kodeku, HDR nebo rozlišení."
+
+msgctxt "#30726"
+msgid "Maximum download resolution"
+msgstr "Maximální rozlišení stahování"
+
+msgctxt "#30727"
+msgid "Videos wider than this are scaled down. Unlimited never scales."
+msgstr "Videa širší než tato hodnota se zmenší. Neomezeno nezmenšuje nikdy."
+
+msgctxt "#30728"
+msgid "Transcode music"
+msgstr "Překódovat hudbu"
+
+msgctxt "#30729"
+msgid "Transcode a track only when it is lossless or over the bitrate limit below. Compliant tracks download as the original file."
+msgstr "Překóduje skladbu jen tehdy, je-li bezztrátová nebo přesahuje limit datového toku níže. Vyhovující skladby se stáhnou jako původní soubor."
+
+msgctxt "#30730"
+msgid "Transcode music over"
+msgstr "Překódovat hudbu nad"
+
+msgctxt "#30731"
+msgid "Tracks over this bitrate, and all lossless tracks, are transcoded. Unlimited transcodes only lossless tracks."
+msgstr "Skladby nad tímto datovým tokem a všechny bezztrátové skladby se překódují. Neomezeno překódovává pouze bezztrátové skladby."
+
+msgctxt "#30732"
+msgid "Transcode music to"
+msgstr "Překódovat hudbu do"
+
+msgctxt "#30733"
+msgid "The codec transcoded tracks are encoded with. Opus gives the best quality per megabyte."
+msgstr "Kodek, kterým se překódované skladby kódují. Opus dává nejlepší kvalitu na megabajt."
+
+msgctxt "#30734"
+msgid "Transcoded music bitrate"
+msgstr "Datový tok překódované hudby"
+
+msgctxt "#30735"
+msgid "The bitrate transcoded tracks are encoded at. 128 kbps Opus is transparent for most listening."
+msgstr "Datový tok, kterým se překódované skladby kódují. Opus 128 kbps je pro většinu poslechu transparentní."
+
+msgctxt "#30737"
+msgid "Kofin downloads"
+msgstr "Stažené v Kofinu"
+
+msgctxt "#30738"
+msgid "Download the next episodes automatically"
+msgstr "Automaticky stahovat další epizody"
+
+msgctxt "#30739"
+msgid "While watching a downloaded episode, the next unwatched episodes of the show are queued for download at the 50% mark."
+msgstr "Při sledování stažené epizody se další nezhlédnuté epizody seriálu zařadí do fronty stahování na značce 50%."
+
+msgctxt "#30740"
+msgid "Episodes to keep ahead"
+msgstr "Epizod udržovat v předstihu"
+
+msgctxt "#30741"
+msgid "How many unwatched episodes ahead of the one playing are kept downloaded."
+msgstr "Kolik nezhlédnutých epizod po právě přehrávané se udržuje stažených."
+
+msgctxt "#30742"
+msgid "Download newly added movies"
+msgstr "Stahovat nově přidané filmy"
+
+msgctxt "#30743"
+msgid "Movies newly added to a synced library are downloaded automatically."
+msgstr "Filmy nově přidané do synchronizované knihovny se stahují automaticky."
+
+msgctxt "#30746"
+msgid "Delete download after watching"
+msgstr "Smazat stažený soubor po zhlédnutí"
+
+msgctxt "#30747"
+msgid "When you finish watching a downloaded item, its local copy is removed. The item stays on the server and in your library."
+msgstr "Když dokoukáte staženou položku, její místní kopie se odstraní. Položka zůstane na serveru i ve vaší knihovně."
+
+msgctxt "#30751"
+msgid "%s new movies were not downloaded automatically"
+msgstr "Automaticky nestažené nové filmy: %s"
+
+msgctxt "#30752"
+msgid "Export NFO files and artwork"
+msgstr "Exportovat soubory NFO a grafiku"
+
+msgctxt "#30753"
+msgid "Write NFO metadata and artwork beside downloaded files, so other Kodi profiles and apps can scan the download folder as a library."
+msgstr "Zapíše metadata NFO a grafiku vedle stažených souborů, aby jiné profily Kodi a aplikace mohly složku stahování prohledat jako knihovnu."
+
+msgctxt "#30754"
+msgid "Download all new episodes"
+msgstr "Stahovat všechny nové epizody"
+
+msgctxt "#30755"
+msgid "Every episode newly added to a synced library is downloaded automatically."
+msgstr "Každá epizoda nově přidaná do synchronizované knihovny se stáhne automaticky."
+
+msgctxt "#30756"
+msgid "Download new albums"
+msgstr "Stahovat nová alba"
+
+msgctxt "#30757"
+msgid "Albums newly added to a synced library are downloaded automatically."
+msgstr "Alba nově přidaná do synchronizované knihovny se stahují automaticky."
+
+msgctxt "#30758"
+msgid "Shows downloading new episodes"
+msgstr "Seriály stahující nové epizody"
+
+msgctxt "#30759"
+msgid "Review the shows set to download their new episodes automatically, and untick any to stop."
+msgstr "Projděte seriály nastavené na automatické stahování nových epizod a odškrtněte ty, u kterých to má skončit."
+
+msgctxt "#30760"
+msgid "Download new episodes"
+msgstr "Stahovat nové epizody"
+
+msgctxt "#30761"
+msgid "Stop downloading new episodes"
+msgstr "Přestat stahovat nové epizody"
+
+msgctxt "#30762"
+msgid "New episodes of %s will download automatically"
+msgstr "Nové epizody seriálu %s se budou stahovat automaticky"
+
+msgctxt "#30763"
+msgid "New episodes of %s will no longer download automatically"
+msgstr "Nové epizody seriálu %s se už nebudou stahovat automaticky"
+
+msgctxt "#30764"
+msgid "%s new episodes were not downloaded automatically"
+msgstr "Automaticky nestažené nové epizody: %s"
+
+msgctxt "#30765"
+msgid "%s new albums were not downloaded automatically"
+msgstr "Automaticky nestažená nová alba: %s"
+
+msgctxt "#30766"
+msgid "No shows are set to download new episodes"
+msgstr "Žádný seriál nestahuje nové epizody"
+
+msgctxt "#30767"
+msgid "Show download notifications"
+msgstr "Zobrazovat oznámení o stahování"
+
+msgctxt "#30768"
+msgid "Announce queued and completed downloads. Failures and warnings are always shown."
+msgstr "Oznamuje zařazená a dokončená stahování. Chyby a varování se zobrazují vždy."
+
+msgctxt "#30769"
+msgid "Delete download automatically"
+msgstr "Mazat stažené soubory automaticky"
+
+msgctxt "#30770"
+msgid "Remove the local copy without asking. With this off, Kofin asks first each time."
+msgstr "Odstraní místní kopii bez dotazu. Když je toto vypnuto, Kofin se pokaždé zeptá."
+
+msgctxt "#30771"
+msgid "Download %s item(s), about %s? %s free"
+msgstr "Stáhnout %s položek, asi %s? Volné: %s"
+
+msgctxt "#30772"
+msgid "Parallel music downloads"
+msgstr "Souběžná stahování hudby"
+
+msgctxt "#30773"
+msgid "How many tracks download at the same time. Tracks are small and mostly overhead, so this can sit well above the video figure."
+msgstr "Kolik skladeb se stahuje současně. Skladby jsou malé a jde hlavně o režii, takže tato hodnota může být výrazně vyšší než u videa."
+
+msgctxt "#30775"
+msgid "downloaded from the server"
+msgstr "staženo ze serveru"
+
+msgctxt "#30776"
+msgid "Downloading subtitle..."
+msgstr "Stahování titulků..."
+
+msgctxt "#30777"
+msgid "Jellyfin account settings"
+msgstr "Nastavení účtu Jellyfin"
+
+msgctxt "#30778"
+msgid "Audio and subtitle preferences stored on the server against your Jellyfin account. They apply to every client you sign in from, not just this one."
+msgstr "Předvolby zvuku a titulků uložené na serveru u vašeho účtu Jellyfin. Platí pro každého klienta, ze kterého se přihlásíte, nejen pro tento."
+
+msgctxt "#30779"
+msgid "Jellyfin settings for %s"
+msgstr "Nastavení Jellyfinu pro %s"
+
+msgctxt "#30780"
+msgid "Preferred audio language"
+msgstr "Preferovaný jazyk zvuku"
+
+msgctxt "#30781"
+msgid "Play default audio track"
+msgstr "Přehrávat výchozí zvukovou stopu"
+
+msgctxt "#30782"
+msgid "Preferred subtitle language"
+msgstr "Preferovaný jazyk titulků"
+
+msgctxt "#30783"
+msgid "Subtitle mode"
+msgstr "Režim titulků"
+
+msgctxt "#30784"
+msgid "Remember audio selections"
+msgstr "Pamatovat si volby zvuku"
+
+msgctxt "#30785"
+msgid "Remember subtitle selections"
+msgstr "Pamatovat si volby titulků"
+
+msgctxt "#30786"
+msgid "Enabled"
+msgstr "Povoleno"
+
+msgctxt "#30787"
+msgid "Disabled"
+msgstr "Zakázáno"
+
+msgctxt "#30788"
+msgid "Any"
+msgstr "Jakýkoli"
+
+msgctxt "#30789"
+msgid "Default"
+msgstr "Výchozí"
+
+msgctxt "#30790"
+msgid "Always"
+msgstr "Vždy"
+
+msgctxt "#30791"
+msgid "Only forced"
+msgstr "Pouze vynucené"
+
+msgctxt "#30792"
+msgid "None"
+msgstr "Žádné"
+
+msgctxt "#30793"
+msgid "Smart"
+msgstr "Chytrý"
+
+msgctxt "#30794"
+msgid "Not applied here: \"Use Jellyfin's default tracks\" is off"
+msgstr "Zde se neuplatní: \"Používat výchozí stopy z Jellyfinu\" je vypnuto"
+
+msgctxt "#30795"
+msgid "Could not load your Jellyfin settings"
+msgstr "Nepodařilo se načíst vaše nastavení Jellyfinu"
+
+msgctxt "#30796"
+msgid "Could not save to the server"
+msgstr "Nepodařilo se uložit na server"
+
+msgctxt "#30797"
+msgid "Your Jellyfin account is not allowed to change these settings"
+msgstr "Váš účet Jellyfin nemá oprávnění tato nastavení měnit"
+
+msgctxt "#30798"
+msgid "Skip movie imports larger than"
+msgstr "Přeskočit import filmů větší než"
+
+msgctxt "#30799"
+msgid "When a sync adds more new movies than this at once, none of them are downloaded — a bulk import is rarely a request to fill the disk. Raise it if you want big additions pulled automatically."
+msgstr "Když synchronizace přidá najednou více nových filmů, než je tato hodnota, nestáhne se žádný z nich — hromadný import je zřídka žádostí o zaplnění disku. Zvyšte ji, pokud chcete velké přírůstky stahovat automaticky."
+
+msgctxt "#30800"
+msgid "Skip episode imports larger than"
+msgstr "Přeskočit import epizod větší než"
+
+msgctxt "#30801"
+msgid "When a sync adds more new episodes than this at once, none of them are downloaded. Shows you have subscribed to are exempt — a subscription is a standing order."
+msgstr "Když synchronizace přidá najednou více nových epizod, než je tato hodnota, nestáhne se žádná z nich. Seriály, které odebíráte, jsou výjimkou — odběr je trvalá objednávka."
+
+msgctxt "#30802"
+msgid "Skip album imports larger than"
+msgstr "Přeskočit import alb větší než"
+
+msgctxt "#30803"
+msgid "When a sync adds more new albums than this at once, none of them are downloaded. Counted in albums, not tracks."
+msgstr "Když synchronizace přidá najednou více nových alb, než je tato hodnota, nestáhne se žádné z nich. Počítá se v albech, ne ve skladbách."
+
+msgctxt "#30810"
+msgid "Needs %s, only %s free"
+msgstr "Potřebuje %s, volné jen %s"
+
+msgctxt "#30804"
+msgid "Delete all downloads"
+msgstr "Smazat všechna stažení"
+
+msgctxt "#30805"
+msgid "Delete every downloaded file from this device and stop keeping playlists and music libraries in sync. The items stay in your library and play from the server again."
+msgstr "Smaže z tohoto zařízení každý stažený soubor a přestane udržovat playlisty a hudební knihovny synchronizované. Položky zůstanou ve vaší knihovně a budou se opět přehrávat ze serveru."
+
+msgctxt "#30806"
+msgid "Delete all %s download(s), freeing about %s?"
+msgstr "Smazat všechna stažení (%s) a uvolnit asi %s?"
+
+msgctxt "#30807"
+msgid "There are no downloads to delete"
+msgstr "Nejsou žádná stažení ke smazání"
+
+msgctxt "#30808"
+msgid "Pause downloads during playback"
+msgstr "Pozastavit stahování při přehrávání"
+
+msgctxt "#30809"
+msgid "Do not start new downloads while something is playing, video or music. A file already downloading finishes; the rest wait until playback stops."
+msgstr "Nezahajuje nová stahování, když se něco přehrává, ať už video nebo hudba. Soubor, který se již stahuje, se dokončí; ostatní počkají na konec přehrávání."
+
+msgctxt "#30811"
+msgid "Delete stale downloads"
+msgstr "Mazat nepoužívaná stažení"
+
+msgctxt "#30812"
+msgid "Remove downloaded files nobody has played for a while. Anything you are part-way through is kept, however long it sits. The items stay in your library and play from the server again."
+msgstr "Odstraní stažené soubory, které nikdo delší dobu nepřehrál. Cokoli máte rozkoukané, zůstane, ať leží jakkoli dlouho. Položky zůstanou ve vaší knihovně a budou se opět přehrávat ze serveru."
+
+msgctxt "#30813"
+msgid "Delete after (days)"
+msgstr "Smazat po (dnech)"
+
+msgctxt "#30814"
+msgid "How long a download may sit unplayed before it is removed. Playing it again starts the count over."
+msgstr "Jak dlouho může stažený soubor ležet nepřehraný, než bude odstraněn. Opětovné přehrání začne počítat znovu."
+
+msgctxt "#30817"
+msgid "All"
+msgstr "Všichni"
+
+msgctxt "#30818"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30819"
+msgid "Show cast in add-on listings"
+msgstr "Zobrazit obsazení v seznamech doplňku"
+
+msgctxt "#30820"
+msgid "Fetch cast and crew for the shorter add-on listings — Recently added, In progress, Next up, Continue watching, search results and a show's episodes — so the information dialog can show them. Whole-library listings never fetch it, because the server needs about a second for every 40 items. The Kodi library always has cast."
+msgstr "Načte obsazení a štáb pro kratší seznamy doplňku — Naposledy přidané, Rozkoukané, Další na řadě, Pokračovat ve sledování, výsledky hledání a epizody seriálu —, aby je mohl zobrazit informační dialog. Seznamy zahrnující celou knihovnu je nenačítají nikdy, protože server potřebuje přibližně sekundu na každých 40 položek. Knihovna Kodi má obsazení vždy."
+
+msgctxt "#30821"
+msgid "Server error — %s"
+msgstr "Chyba serveru — %s"
+
+msgctxt "#30823"
+msgid "Download deleted: %s"
+msgstr "Stažená položka odstraněna: %s"
+
+msgctxt "#30824"
+msgid "%s download(s) deleted"
+msgstr "Odstraněno stažených položek: %s"
+
+msgctxt "#30825"
+msgid "Find servers on local network"
+msgstr "Najít servery v místní síti"
+
+msgctxt "#30826"
+msgid "Looks for Jellyfin servers on this network and lists the ones that answer. The one you choose is filled into \"Server address\"."
+msgstr "Vyhledá servery Jellyfin v této síti a zobrazí ty, které odpoví. Vybraný se doplní do pole \"Adresa serveru\"."
+
+msgctxt "#30827"
+msgid "Searching for Jellyfin servers…"
+msgstr "Vyhledávání serverů Jellyfin…"
+
+msgctxt "#30828"
+msgid "Select a server"
+msgstr "Vyberte server"
+
+msgctxt "#30829"
+msgid "No Jellyfin servers answered — enter the address manually"
+msgstr "Žádný server Jellyfin neodpověděl — zadejte adresu ručně"
+
+msgctxt "#30830"
+msgid "did not answer"
+msgstr "neodpověděl"
+
+msgctxt "#30831"
+msgid "%s did not answer — the address it gave may not work here"
+msgstr "%s neodpověděl — zadaná adresa zde nemusí fungovat"
+
+msgctxt "#30832"
+msgid "Storage used"
+msgstr "Využité místo"
+
+msgctxt "#30833"
+msgid "Show where the downloads are kept and how much space each kind is using."
+msgstr "Zobrazí, kde jsou stažené soubory uloženy a kolik místa zabírá každý druh."
+
+msgctxt "#30834"
+msgid "Other files in this folder"
+msgstr "Ostatní soubory v této složce"
+
+msgctxt "#30835"
+msgid "Nothing has been downloaded yet"
+msgstr "Zatím nebylo nic staženo"
+
+msgctxt "#30836"
+msgid "Folder too large to measure fully — the totals above are partial"
+msgstr "Složka je příliš velká na úplné změření — součty výše jsou neúplné"
+
+msgctxt "#30837"
+msgid "Watch in sync with other Jellyfin clients."
+msgstr "Sledujte synchronizovaně s ostatními klienty Jellyfin."
+
+msgctxt "#30841"
+msgid "Save to Jellyfin"
+msgstr "Uložit do Jellyfin"
+
+msgctxt "#30842"
+msgid "This playlist mixes audio and video, which cannot be saved as one Jellyfin playlist"
+msgstr "Tento seznam míchá zvuk a video a nelze ho uložit jako jeden seznam Jellyfin"
+
+msgctxt "#30843"
+msgid "Playlist saved to Jellyfin"
+msgstr "Seznam uložen do Jellyfin"
+
+msgctxt "#30844"
+msgid "No library items in this playlist to save"
+msgstr "V tomto seznamu nejsou položky knihovny k uložení"
+
+msgctxt "#30845"
+msgid "Show library update progress"
+msgstr "Zobrazit průběh aktualizace knihovny"
+
+msgctxt "#30846"
+msgid "Show Kodi's library-update progress while the library syncs."
+msgstr "Zobrazí průběh aktualizace knihovny Kodi během synchronizace."
+
+msgctxt "#30849"
+msgid "Download & keep in sync"
+msgstr "Stáhnout a udržovat v synchronizaci"
+
+msgctxt "#30850"
+msgid "Stop keeping downloads in sync"
+msgstr "Přestat synchronizovat stahování"
+
+msgctxt "#30851"
+msgid "Manage playlist downloads"
+msgstr "Spravovat stahování playlistů"
+
+msgctxt "#30852"
+msgid "Manage music library downloads"
+msgstr "Spravovat stahování hudebních knihoven"
+
+msgctxt "#30853"
+msgid "Content not downloaded"
+msgstr "Obsah není stažen"
+
+msgctxt "#30854"
+msgid "Review subscribed playlists; untick to stop syncing downloads."
+msgstr "Zkontrolujte odebírané playlisty; zrušením výběru zastavíte synchronizaci stahování."
+
+msgctxt "#30855"
+msgid "Review subscribed music libraries; untick to stop syncing downloads."
+msgstr "Zkontrolujte odebírané hudební knihovny; zrušením výběru zastavíte synchronizaci stahování."
+
+msgctxt "#30856"
+msgid "Library nodes and playlists"
+msgstr "Uzly knihovny a seznamy stop"
+
+msgctxt "#30857"
+msgid "Create Kodi library nodes and smart playlists for the synced video libraries, and copy Jellyfin playlists into Kodi under Videos → Playlists → Kofin and Music → Playlists → Kofin. Turning this off removes every node and playlist Kofin created."
+msgstr "Vytvářet uzly knihovny Kodi a chytré seznamy pro synchronizované video knihovny a kopírovat seznamy Jellyfin do Kodi do Video → Seznamy stop → Kofin a Hudba → Seznamy stop → Kofin. Vypnutí odstraní všechny uzly a seznamy, které Kofin vytvořil."
+
+msgctxt "#30859"
+msgid "Library status"
+msgstr "Stav knihovny"
+
+msgctxt "#30860"
+msgid "What is synced, what is still pending and what the sync is doing now."
+msgstr "Co je synchronizováno, co ještě čeká a co synchronizace právě dělá."
+
+msgctxt "#30861"
+msgid "Transcode music whose bitrate is above the maximum set below. Off, songs play from the server untouched."
+msgstr "Překódovat hudbu, jejíž datový tok je vyšší než maximum nastavené níže. Vypnuto: skladby se přehrávají ze serveru beze změny."
+
+msgctxt "#30862"
+msgid "in Kodi / on the server"
+msgstr "v Kodi / na serveru"
+
+msgctxt "#30863"
+msgid "Pending"
+msgstr "Čeká"
+
+msgctxt "#30864"
+msgid "Failed"
+msgstr "Selhalo"
+
+msgctxt "#30865"
+msgid "Last full update"
+msgstr "Poslední úplná aktualizace"
+
+msgctxt "#30867"
+msgid "Repair to add codec details"
+msgstr "Opravit pro doplnění údajů o kodecích"
+
+msgctxt "#30868"
+msgid "Kodi cannot import"
+msgstr "Kodi nedokáže importovat"
+
+msgctxt "#30869"
+msgid "Scheduled full update"
+msgstr "Plánovaná úplná aktualizace"
+
+msgctxt "#30870"
+msgid "How often to re-read every library from the server. Turn this on if the server lacks the KofinSyncQueue plugin, or deletions there won't reach Kodi."
+msgstr "Jak často znovu načíst všechny knihovny ze serveru. Zapněte, pokud server nemá plugin KofinSyncQueue, jinak se smazání do Kodi nedostanou."
+
+msgctxt "#30871"
+msgid "Daily"
+msgstr "Denně"
+
+msgctxt "#30872"
+msgid "Weekly"
+msgstr "Týdně"
+
+msgctxt "#30873"
+msgid "Update all libraries now?"
+msgstr "Aktualizovat nyní všechny knihovny?"
+
+msgctxt "#30874"
+msgid "Re-read every library from the server now."
+msgstr "Nyní znovu načte všechny knihovny ze serveru."
+
+msgctxt "#30876"
+msgid "Not on this Kodi"
+msgstr "V tomto Kodi není k dispozici"
+
+msgctxt "#30877"
+msgid "Season plots"
+msgstr "Popisy sezón"
+
+msgctxt "#30878"
+msgid "Favorite episodes"
+msgstr "Oblíbené epizody"
+
+msgctxt "#30879"
+msgid "Removing emptied collections"
+msgstr "Odstraňování vyprázdněných kolekcí"
+
+msgctxt "#30880"
+msgid "Movie versions"
+msgstr "Verze filmů"
+
+msgctxt "#30881"
+msgid "Stream flags"
+msgstr "Příznaky stop"
+
+msgctxt "#30882"
+msgid "Song date added"
+msgstr "Datum přidání skladeb"
+
+msgctxt "#30883"
+msgid "Removing dropped versions and extras"
+msgstr "Odstraňování odebraných verzí a bonusů"
+
+msgctxt "#30884"
+msgid "Fine sync"
+msgstr "Jemná synchronizace"
+
+msgctxt "#30885"
+msgid "Kodi imports a special only with an episode number. Give these one on the server, or play them from the Kofin add-on."
+msgstr "Kodi importuje speciál, jen pokud má číslo epizody. Přidělte jim je na serveru, nebo je přehrajte z doplňku Kofin."
+
+msgctxt "#30886"
+msgid "KofinSyncQueue"
+msgstr "KofinSyncQueue"
+
+msgctxt "#30887"
+msgid "Available"
+msgstr "K dispozici"
+
+msgctxt "#30888"
+msgid "this profile holds a library from an older Kofin"
+msgstr "tento profil obsahuje knihovnu ze starší verze Kofin"
+
+msgctxt "#30889"
+msgid "Kofin cannot use it. To clean it, go back to Kofin 0.29:"
+msgstr "Kofin ji nemůže použít. Chcete-li ji vyčistit, vraťte se ke Kofin 0.29:"
+
+msgctxt "#30890"
+msgid "Open Kofin in Kodi's add-on list, select Versions and choose 0.29."
+msgstr "Otevřete Kofin v seznamu doplňků Kodi, vyberte Verze a zvolte 0.29."
+
+msgctxt "#30891"
+msgid "In Kofin's settings, log out on the Account tab and run Clean databases."
+msgstr "V nastavení Kofin se na kartě Účet odhlaste a spusťte Vyčistit databáze."
+
+msgctxt "#30892"
+msgid "When Kodi has restarted, open Kofin again, select Versions and choose the newest version. Then log in and choose the libraries to sync."
+msgstr "Po restartu Kodi znovu otevřete Kofin, vyberte Verze a zvolte nejnovější verzi. Pak se přihlaste a vyberte knihovny k synchronizaci."
+
+msgctxt "#30893"
+msgid "Alternatively, close Kodi and delete its video and music databases by hand, as the Kofin wiki describes:"
+msgstr "Případně zavřete Kodi a smažte jeho databáze videa a hudby ručně, jak popisuje wiki Kofin:"
+
+msgctxt "#30894"
+msgid "No longer on the server"
+msgstr "Již není na serveru"
+
+msgctxt "#30895"
+msgid "%s is no longer on the server and was removed from the library"
+msgstr "Knihovna %s již není na serveru a byla odebrána z Kodi"
+
+msgctxt "#30896"
+msgid "The synced libraries stay in Kodi until you log in again; a different account removes them."
+msgstr "Synchronizované knihovny zůstanou v Kodi, dokud se znovu nepřihlásíš; jiný účet je odstraní."
+
+msgctxt "#30897"
+msgid "Queued %s of %s tracks"
+msgstr "Zařazeno %s z %s skladeb"
+
+msgctxt "#30898"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30899"
+msgid "540p"
+msgstr "540p"

@@ -1,0 +1,48 @@
+# Kodi Media Center language file
+# Addon Name: radioko
+# Addon id: plugin.audio.radioko
+# Addon Provider: radioko
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.audio.radioko\n"
+"Report-Msgid-Bugs-To: info@radioko.com\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sq-al\n"
+
+msgctxt "#30000"
+msgid "Search all countries"
+msgstr "Kërko në të gjitha vendet"
+
+msgctxt "#30001"
+msgid "Station name, city or genre"
+msgstr "Emri i stacionit, qyteti ose zhanri"
+
+msgctxt "#30002"
+msgid "No station matches “{q}”."
+msgstr "Asnjë stacion nuk përputhet me „{q}“."
+
+msgctxt "#30003"
+msgid "This stream isn't playing right now."
+msgstr "Ky transmetim nuk po luhet tani."
+
+msgctxt "#30004"
+msgid "radioko cannot be reached right now."
+msgstr "radioko nuk mund të arrihet tani."
+
+msgctxt "#30005"
+msgid "Loading all countries…"
+msgstr "Po ngarkohen të gjitha vendet…"
+
+msgctxt "#30006"
+msgid "Choose a country"
+msgstr "Zgjidh një vend"
+
+msgctxt "#30007"
+msgid "This station's stream can only be heard in its own country: {country}."
+msgstr "Transmetimi i këtij stacioni mund të dëgjohet vetëm në vendin e tij: {country}."
+
+msgctxt "#30008"
+msgid "Search"
+msgstr "Kërko"

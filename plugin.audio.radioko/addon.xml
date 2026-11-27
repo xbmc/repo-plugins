@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.radioko" name="radioko" version="1.0.0" provider-name="radioko">
+  <requires>
+    <import addon="xbmc.python" version="3.0.1"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="main.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Internet radio from around the world</summary>
+    <summary lang="ar_SA">راديو عبر الإنترنت من حول العالم</summary>
+    <summary lang="bg_BG">Интернет радио от цял свят</summary>
+    <summary lang="bs_BA">Internet radio iz cijelog svijeta</summary>
+    <summary lang="cs_CZ">Internetová rádia z celého světa</summary>
+    <summary lang="da_DK">Internetradio fra hele verden</summary>
+    <summary lang="de_DE">Internetradio aus aller Welt</summary>
+    <summary lang="el_GR">Διαδικτυακό ραδιόφωνο από όλο τον κόσμο</summary>
+    <summary lang="es_ES">Radio por internet de todo el mundo</summary>
+    <summary lang="et_EE">Internetiraadio kogu maailmast</summary>
+    <summary lang="fi_FI">Nettiradiot ympäri maailmaa</summary>
+    <summary lang="fr_FR">Les radios du monde sur internet</summary>
+    <summary lang="he_IL">רדיו באינטרנט מכל העולם</summary>
+    <summary lang="hr_HR">Internetski radio iz cijelog svijeta</summary>
+    <summary lang="hu_HU">Internetes rádiók a világ minden tájáról</summary>
+    <summary lang="id_ID">Radio internet dari seluruh dunia</summary>
+    <summary lang="it_IT">Radio online da tutto il mondo</summary>
+    <summary lang="ja_JP">世界のインターネットラジオ</summary>
+    <summary lang="ko_KR">전 세계 인터넷 라디오</summary>
+    <summary lang="lt_LT">Internetinis radijas iš viso pasaulio</summary>
+    <summary lang="lv_LV">Interneta radio no visas pasaules</summary>
+    <summary lang="nb_NO">Nettradio fra hele verden</summary>
+    <summary lang="nl_NL">Internetradio van over de hele wereld</summary>
+    <summary lang="pl_PL">Radio internetowe z całego świata</summary>
+    <summary lang="pt_BR">Rádios do mundo todo pela internet</summary>
+    <summary lang="pt_PT">Rádios do mundo todo pela internet</summary>
+    <summary lang="ro_RO">Radio online din întreaga lume</summary>
+    <summary lang="ru_RU">Интернет-радио со всего мира</summary>
+    <summary lang="si_LK">ලොව වටා අන්තර්ජාල ගුවන්විදුලිය</summary>
+    <summary lang="sk_SK">Internetové rádiá z celého sveta</summary>
+    <summary lang="sl_SI">Spletni radio z vsega sveta</summary>
+    <summary lang="sq_AL">Radio në internet nga e gjithë bota</summary>
+    <summary lang="sr_RS">Интернет радио из целог света</summary>
+    <summary lang="sr_RS@latin">Internet radio iz celog sveta</summary>
+    <summary lang="sv_SE">Internetradio från hela världen</summary>
+    <summary lang="th_TH">วิทยุออนไลน์จากทั่วโลก</summary>
+    <summary lang="uk_UA">Інтернет-радіо з усього світу</summary>
+    <summary lang="vi_VN">Radio trực tuyến từ khắp thế giới</summary>
+    <summary lang="zh_CN">来自世界各地的网络电台</summary>
+    <summary lang="zh_TW">來自世界各地的網路電台</summary>
+    <description lang="en_GB">Radio stations from more than 180 countries, from radioko.com: pick a country and play its stations, or search by station name, city or genre. We test every stream ourselves every night and hide a station after three failed nights in a row, until it plays again.</description>
+    <description lang="ar_SA">محطات راديو من أكثر من 180 دولة على radioko.com: اختر بلدًا واستمع إلى محطاته، أو ابحث باسم المحطة أو المدينة أو التصنيف. نختبر بأنفسنا كل بث كل ليلة، ونخفي المحطة بعد فشل بثها ثلاث ليالٍ متتالية حتى يعود تشغيلها.</description>
+    <description lang="bg_BG">Радиостанции от над 180 държави в radioko.com: избери държава и слушай нейните станции или търси по име на станция, град или жанр. Всяка нощ сами тестваме всеки поток и скриваме станцията след три последователни нощи с неуспешен тест, докато отново не заработи.</description>
+    <description lang="bs_BA">Radio stanice iz više od 180 zemalja na radioko.com: izaberi zemlju i slušaj njene stanice ili traži po nazivu stanice, gradu ili žanru. Svake noći sami testiramo svaki prijenos i sakrivamo stanicu nakon tri neuspješne noći zaredom, dok ponovo ne proradi.</description>
+    <description lang="cs_CZ">Rozhlasové stanice z více než 180 zemí na radioko.com: vyber zemi a poslouchej její stanice, nebo hledej podle názvu stanice, města či žánru. Každou noc sami testujeme každý stream a stanici, která tři noci po sobě nehraje, skryjeme, dokud znovu nezačne hrát.</description>
+    <description lang="da_DK">Radiostationer fra mere end 180 lande på radioko.com: vælg et land og lyt til dets stationer, eller søg efter stationsnavn, by eller genre. Vi tester selv alle streams hver nat og skjuler en station efter tre mislykkede nætter i træk, indtil den spiller igen.</description>
+    <description lang="de_DE">Radiosender aus mehr als 180 Ländern auf radioko.com: Wähle ein Land und hör seine Sender, oder suche nach Sendername, Stadt oder Genre. Wir testen jede Nacht selbst jeden Stream und blenden einen Sender nach drei fehlgeschlagenen Nächten in Folge aus, bis er wieder läuft.</description>
+    <description lang="el_GR">Ραδιοφωνικοί σταθμοί από περισσότερες από 180 χώρες στο radioko.com: διάλεξε χώρα και άκου τους σταθμούς της ή αναζήτησε με όνομα σταθμού, πόλη ή είδος. Κάθε βράδυ ελέγχουμε εμείς οι ίδιοι κάθε μετάδοση και κρύβουμε έναν σταθμό αφού αποτύχει τρία συνεχόμενα βράδια, μέχρι να παίξει ξανά.</description>
+    <description lang="es_ES">Emisoras de radio de más de 180 países en radioko.com: elige un país y escucha sus emisoras, o busca por nombre de la emisora, ciudad o género. Comprobamos nosotros mismos cada transmisión todas las noches y ocultamos una emisora si falla tres noches seguidas, hasta que vuelva a sonar.</description>
+    <description lang="et_EE">radioko.com raadiojaamad enam kui 180 riigist: vali riik ja kuula selle jaamu või otsi jaama nime, linna või žanri järgi. Testime igal ööl ise iga voogu ja peidame jaama pärast kolme järjestikust ebaõnnestunud ööd, kuni see jälle mängib.</description>
+    <description lang="fi_FI">radioko.comin radioasemat yli 180 maasta: valitse maa ja kuuntele sen asemia tai hae aseman nimellä, kaupungilla tai tyylilajilla. Testaamme itse jokaisen lähetyksen joka yö ja piilotamme aseman kolmen peräkkäisen epäonnistuneen yön jälkeen, kunnes se taas soi.</description>
+    <description lang="fr_FR">Des radios de plus de 180 pays sur radioko.com : choisissez un pays et écoutez ses radios, ou cherchez par nom de radio, ville ou genre. Nous testons nous-mêmes chaque flux toutes les nuits et masquons une radio après trois nuits d’échec consécutives, jusqu’à ce qu’elle fonctionne à nouveau.</description>
+    <description lang="he_IL">תחנות רדיו מיותר מ-180 מדינות ב-radioko.com: בחרו מדינה והאזינו לתחנות שלה, או חפשו לפי שם תחנה, עיר או סגנון. בכל לילה אנחנו בודקים בעצמנו כל שידור, ומסתירים תחנה אחרי שלושה לילות רצופים שבהם הבדיקה נכשלה, עד שהיא מתנגנת שוב.</description>
+    <description lang="hr_HR">Radijske postaje iz više od 180 zemalja na radioko.com: odaberi zemlju i slušaj njezine postaje ili traži po nazivu postaje, gradu ili žanru. Svake noći sami testiramo svaki prijenos i skrivamo postaju nakon tri neuspjele noći zaredom, dok ponovno ne proradi.</description>
+    <description lang="hu_HU">A radioko.com rádióállomásai több mint 180 országból: válassz országot, és hallgasd az ottani rádiókat, vagy keress a rádió neve, város vagy műfaj szerint. Minden éjjel magunk teszteljük az összes adást, és ha egy rádió három egymást követő éjjel nem működik, elrejtjük, amíg újra meg nem szólal.</description>
+    <description lang="id_ID">Stasiun radio dari lebih dari 180 negara di radioko.com: pilih negara dan dengarkan stasiunnya, atau cari berdasarkan nama stasiun, kota, atau genre. Kami menguji sendiri setiap siaran setiap malam dan menyembunyikan stasiun yang gagal tiga malam berturut-turut, sampai siarannya bisa diputar kembali.</description>
+    <description lang="it_IT">Stazioni radio di oltre 180 paesi su radioko.com: scegli un paese e ascolta le sue stazioni, oppure cerca per nome della stazione, città o genere. Ogni notte verifichiamo noi stessi tutti i flussi e nascondiamo una stazione dopo tre notti consecutive di test falliti, finché non torna a funzionare.</description>
+    <description lang="ja_JP">radioko.com の 180 以上の国のラジオ局。国を選んでその国のラジオ局を聴くか、ラジオ局名、都市、ジャンルで検索できます。毎晩すべての配信を独自にテストし、3晩続けて失敗したラジオ局は、再び聴けるようになるまで非表示にします。</description>
+    <description lang="ko_KR">radioko.com의 180여 개국 라디오 방송국. 국가를 골라 그 나라의 방송국을 듣거나, 방송국 이름, 도시 또는 장르로 검색해 보세요. 매일 밤 모든 스트림을 직접 점검하고, 사흘 밤 연속으로 실패한 방송국은 다시 재생될 때까지 숨겨요.</description>
+    <description lang="lt_LT">radioko.com radijo stotys iš daugiau nei 180 šalių: pasirinkite šalį ir klausykitės jos stočių arba ieškokite pagal stoties pavadinimą, miestą ar žanrą. Kiekvieną naktį patys patikriname kiekvieną transliaciją ir paslepiame stotį po trijų nesėkmingų naktų iš eilės, kol ji vėl pradės groti.</description>
+    <description lang="lv_LV">radioko.com radiostacijas no vairāk nekā 180 valstīm: izvēlies valsti un klausies tās radiostacijas vai meklē pēc radiostacijas nosaukuma, pilsētas vai žanra. Katru nakti mēs paši pārbaudām katru straumi un paslēpjam radiostaciju pēc trim neveiksmīgām naktīm pēc kārtas, līdz to atkal var atskaņot.</description>
+    <description lang="nb_NO">Radiostasjoner fra over 180 land på radioko.com: velg et land og lytt til stasjonene der, eller søk etter stasjonsnavn, by eller sjanger. Vi tester selv hver strøm hver natt og skjuler en stasjon etter tre mislykkede netter på rad, til den spiller igjen.</description>
+    <description lang="nl_NL">Radiozenders uit meer dan 180 landen op radioko.com: kies een land en luister naar de zenders daar, of zoek op zendernaam, stad of genre. We testen elke nacht zelf elke stream en verbergen een zender na drie mislukte nachten op rij, totdat deze weer speelt.</description>
+    <description lang="pl_PL">Stacje radiowe z ponad 180 krajów w radioko.com: wybierz kraj i słuchaj jego stacji albo szukaj po nazwie stacji, mieście lub gatunku. Co noc sami testujemy każdy strumień i ukrywamy stację po trzech nieudanych nocach z rzędu, dopóki znów nie zacznie działać.</description>
+    <description lang="pt_BR">Rádios de mais de 180 países no radioko.com: escolha um país e ouça as rádios de lá, ou pesquise por nome da rádio, cidade ou gênero. Todas as noites nós mesmos testamos cada transmissão e ocultamos uma rádio depois de três noites seguidas de falhas, até que ela volte a tocar.</description>
+    <description lang="pt_PT">Rádios de mais de 180 países no radioko.com: escolha um país e ouça as suas rádios, ou pesquise por nome da rádio, cidade ou género. Todas as noites nós mesmos testamos cada transmissão e ocultamos uma rádio depois de três noites seguidas de falhas, até que ela volte a tocar.</description>
+    <description lang="ro_RO">Posturi de radio din peste 180 de țări pe radioko.com: alege o țară și ascultă posturile ei sau caută după numele postului, oraș sau gen. Testăm noi înșine fiecare flux în fiecare noapte și ascundem un post după trei nopți la rând cu teste eșuate, până când funcționează din nou.</description>
+    <description lang="ru_RU">Радиостанции из более чем 180 стран на radioko.com: выберите страну и слушайте её станции или ищите по названию станции, городу или жанру. Каждую ночь мы сами проверяем все потоки и скрываем станцию после трёх неудачных ночей подряд, пока она снова не заиграет.</description>
+    <description lang="sk_SK">Rozhlasové stanice z viac ako 180 krajín na radioko.com: vyber krajinu a počúvaj jej stanice, alebo hľadaj podľa názvu stanice, mesta či žánru. Každú noc sami testujeme každý stream a stanicu, ktorá tri noci po sebe nehrá, skryjeme, kým znova nezačne hrať.</description>
+    <description lang="sl_SI">Radijske postaje iz več kot 180 držav na radioko.com: izberi državo in poslušaj njene postaje ali išči po imenu postaje, mestu ali zvrsti. Vsak prenos vsako noč preizkusimo sami in postajo, ki ne deluje tri noči zapored, skrijemo, dokler se spet ne predvaja.</description>
+    <description lang="sq_AL">Stacione radioje nga më shumë se 180 vende në radioko.com: zgjidh një vend dhe dëgjo stacionet e tij, ose kërko sipas emrit të stacionit, qytetit ose zhanrit. Çdo natë e testojmë vetë çdo transmetim dhe e fshehim një stacion pas tri netësh radhazi pa sukses, derisa të luajë përsëri.</description>
+    <description lang="sr_RS">Радио станице из више од 180 земаља на radioko.com: изабери земљу и слушај њене станице или тражи по називу станице, граду или жанру. Сваке ноћи сами тестирамо сваки стрим и сакривамо станицу након три неуспешне ноћи заредом, док поново не проради.</description>
+    <description lang="sr_RS@latin">Radio stanice iz više od 180 zemalja na radioko.com: izaberi zemlju i slušaj njene stanice ili traži po nazivu stanice, gradu ili žanru. Svake noći sami testiramo svaki strim i sakrivamo stanicu nakon tri neuspešne noći zaredom, dok ponovo ne proradi.</description>
+    <description lang="sv_SE">Radiostationer från fler än 180 länder på radioko.com: välj ett land och lyssna på dess stationer, eller sök på stationsnamn, stad eller genre. Vi testar själva varje ström varje natt och döljer en station efter tre misslyckade nätter i rad, tills den går att spela upp igen.</description>
+    <description lang="th_TH">สถานีวิทยุจากกว่า 180 ประเทศบน radioko.com: เลือกประเทศแล้วฟังสถานีของประเทศนั้น หรือค้นหาตามชื่อสถานี เมือง หรือแนวรายการ เราทดสอบทุกสตรีมด้วยตัวเองทุกคืน และจะซ่อนสถานีที่ล้มเหลวสามคืนติดต่อกันไว้จนกว่าจะกลับมาฟังได้อีกครั้ง</description>
+    <description lang="uk_UA">Радіостанції з понад 180 країн на radioko.com: виберіть країну та слухайте її станції або шукайте за назвою станції, містом чи жанром. Щоночі ми самі перевіряємо кожен потік і приховуємо станцію після трьох невдалих ночей поспіль, доки вона знову не запрацює.</description>
+    <description lang="vi_VN">Các đài phát thanh từ hơn 180 quốc gia trên radioko.com: chọn một quốc gia và nghe các đài của quốc gia đó, hoặc tìm theo tên đài, thành phố hoặc thể loại. Chúng tôi tự kiểm tra từng luồng âm thanh mỗi đêm và ẩn một đài sau ba đêm thất bại liên tiếp, cho đến khi nghe được trở lại.</description>
+    <description lang="zh_CN">radioko.com 上来自 180 多个国家的电台：选择一个国家收听当地电台，或按电台名称、城市或类型搜索。我们每晚都会亲自测试每个音频流，连续三晚测试失败的电台会被暂时隐藏，直到恢复播放。</description>
+    <description lang="zh_TW">radioko.com 上來自 180 多個國家的電台：選擇一個國家收聽當地電台，或依電台名稱、城市或類型搜尋。我們每晚都會自行測試每個串流，連續三晚測試失敗的電台會暫時隱藏，直到恢復播放。</description>
+    <platform>all</platform>
+    <license>GPL-2.0-or-later</license>
+    <website>https://radioko.com</website>
+    <email>info@radioko.com</email>
+    <source>https://github.com/NebiSarigul/radioko-kodi</source>
+    <news>v1.0.0 (2026-11-28)&#10;- First version: every country radioko lists, its stations in radioko's order, search in one country or in all of them, a default country in the settings.</news>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+      <screenshot>resources/screenshot-01.jpg</screenshot>
+    </assets>
+  </extension>
+</addon>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+  <section id="plugin.audio.radioko">
+    <category id="general" label="128">
+      <group id="1">
+        <setting id="default_country_name" type="string" label="574">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <enable>false</enable>
+          <control type="edit" format="string">
+            <heading>574</heading>
+          </control>
+        </setting>
+        <setting id="choose_country" type="action" label="30006">
+          <level>0</level>
+          <data>RunPlugin(plugin://plugin.audio.radioko/?action=choose_country)</data>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <control type="button" format="action">
+            <close>true</close>
+          </control>
+        </setting>
+        <setting id="default_country" type="string" label="574">
+          <level>0</level>
+          <default/>
+          <constraints>
+            <allowempty>true</allowempty>
+          </constraints>
+          <visible>false</visible>
+          <control type="edit" format="string">
+            <heading>574</heading>
+          </control>
+        </setting>
+      </group>
+    </category>
+  </section>
+</settings>

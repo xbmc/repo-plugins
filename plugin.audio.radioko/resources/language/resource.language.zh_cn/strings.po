@@ -1,0 +1,48 @@
+# Kodi Media Center language file
+# Addon Name: radioko
+# Addon id: plugin.audio.radioko
+# Addon Provider: radioko
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.audio.radioko\n"
+"Report-Msgid-Bugs-To: info@radioko.com\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh-cn\n"
+
+msgctxt "#30000"
+msgid "Search all countries"
+msgstr "搜索所有国家"
+
+msgctxt "#30001"
+msgid "Station name, city or genre"
+msgstr "电台名称、城市或类型"
+
+msgctxt "#30002"
+msgid "No station matches “{q}”."
+msgstr "没有找到与“{q}”匹配的电台。"
+
+msgctxt "#30003"
+msgid "This stream isn't playing right now."
+msgstr "此音频流暂时无法播放。"
+
+msgctxt "#30004"
+msgid "radioko cannot be reached right now."
+msgstr "暂时无法连接 radioko。"
+
+msgctxt "#30005"
+msgid "Loading all countries…"
+msgstr "正在加载所有国家…"
+
+msgctxt "#30006"
+msgid "Choose a country"
+msgstr "选择国家"
+
+msgctxt "#30007"
+msgid "This station's stream can only be heard in its own country: {country}."
+msgstr "该电台的音频流仅限在其所在国家收听：{country}。"
+
+msgctxt "#30008"
+msgid "Search"
+msgstr "搜索"

@@ -43,13 +43,14 @@ class _Favourites:
 
         try:
             resp = fetch.get(parse.BASE_URL + 'my')
-        except AccountError:
+            data = parse.scrape_json_data(resp.text)
+            rails = data['props']['pageProps']['dehydratedState']['queries'][-1]['state']['data']['data']
+            self.scrape_urns(rails)
+        except Exception as err:
+            if not isinstance(err, AccountError):
+                log("Unexpected error while refreshing favourites", exc_info=True)
             self._bookmark_urns = False
             self._subscription_urns = False
-        else:
-            data = parse.scrape_json_data(resp.text)
-            rails = data['props']['pageProps']['dehydratedState']['queries'][1]['state']['data']['data']
-            self.scrape_urns(rails)
 
     def scrape_urns(self, rail_data: dict):
         """Get all subscription and bookmark urns from the given page data."""

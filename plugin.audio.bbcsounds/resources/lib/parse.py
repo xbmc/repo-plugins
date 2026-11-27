@@ -131,7 +131,7 @@ class Parser:
         }[item_type].format(item_id)
         return url, item_type
 
-    def parser_from_item_type(self, item_type: str) -> Callable[dict]:
+    def parser_from_item_type(self, item_type: str) -> Callable[dict, ListItemTuple | None] | None:
         return {
             'playable_item': self.parse_playable_item,
             'container_item': self.parse_container_item,
@@ -346,19 +346,23 @@ class Parser:
         li.setIsFolder(False)
         return callback, li, False
 
-    def parse_promo_item(self, item: dict) -> ListItemTuple:
+    def parse_promo_item(self, item: dict) -> ListItemTuple | None:
         """Parse the item in a 'single item promo' rail."""
         inner_item = item['data'][0]
         promo_item = inner_item['item']
         titles = inner_item['titles']
         promo_title = f'[B][COLOR orange]{titles["primary"]}: {titles["secondary"]}[/COLOR][/B]'
         parser_func = self.parser_from_item_type(promo_item['type'])
-        callback, li, is_folder = parser_func(promo_item)
-        info = li.getVideoInfoTag()
-        info.setTitle(promo_title)
-        info.setPlotOutline('\n'.join((titles['tertiary'], info.getPlotOutline())))
-        li.setArt({'icon': format_img(inner_item['image_url'])})
-        return callback, li, is_folder
+        if not parser_func:
+            return None
+        item = parser_func(promo_item)
+        if item:
+            li = item[1]
+            info = li.getVideoInfoTag()
+            info.setTitle(promo_title)
+            info.setPlotOutline('\n'.join((titles['tertiary'], info.getPlotOutline())))
+            li.setArt({'icon': format_img(inner_item['image_url'])})
+        return item
 
     def parse_controls(self, controls) -> ListItemTuple | None:
         """Parse the navigation control objects in a container.

@@ -1,3 +1,6 @@
+v 1.0.1 - 27-10-2026
+- Fix: All folder with playable content were empty
+
 v 1.0.0 - 16-10-2026
 - First full release
 

@@ -5,11 +5,15 @@ import time
 import xbmcgui
 
 from resources.lib import kodiutil
+from resources.lib.provider import guideblocks
 from resources.lib.tv import iptvfiles
 from resources.lib.tv import kodipvr
+from resources.lib.util import localtime
 
 # The refresh button's dialog opens only after this (see LateProgressDialog).
 SHOW_AFTER = 1.0
+DAY = 24 * 3600
+BLOCKS_PER_DAY = len(guideblocks.BLOCK_OFFSETS)
 
 
 class Progress:
@@ -27,11 +31,11 @@ class Progress:
         percent = low + (high - low) * done // total if total else low
         s = kodiutil.string
         if stage == "guide":
-            # A day is eight 3-hour blocks, starting with the days back.
-            day = min(done // 8, total // 8 - 1) - self.past
+            # The blocks start with the days back.
+            day = min(done // BLOCKS_PER_DAY, total // BLOCKS_PER_DAY - 1) - self.past
             # The guide's days are UTC ones: the date at their noon.
-            noon = int(time.time()) // 86400 * 86400 + 43200 + day * 86400
-            date = kodiutil.local_date(noon)
+            noon = int(time.time()) // DAY * DAY + DAY // 2 + day * DAY
+            date = localtime.local_date(noon)
             line = s(30136) % (date, self.past, self.ahead)
         elif stage == "info":
             line = s(30137) % (done, total)
@@ -52,7 +56,10 @@ class Progress:
 
 
 class ProgressDialog(Progress):
-    """Report in the given DialogProgress (the export button's); its Cancel stops the export."""
+    """Report in the given DialogProgress (the export button's); its Cancel stops the export.
+
+    :param dialog: the DialogProgress; None until a subclass opens one (see LateProgressDialog)
+    """
 
     def __init__(self, dialog):
         super().__init__()
@@ -63,7 +70,7 @@ class ProgressDialog(Progress):
 
         :raises iptvfiles.Cancelled: the dialog's Cancel was pressed
         """
-        if self.dialog.iscanceled():
+        if self.dialog is not None and self.dialog.iscanceled():
             raise iptvfiles.Cancelled()
         super().__call__(stage, done, total)
 
@@ -83,13 +90,6 @@ class LateProgressDialog(ProgressDialog):
         super().__init__(None)
         self.title = title
         self.started = time.monotonic()
-
-    def __call__(self, stage, done=0, total=0):
-        """Show how far the export is (see ProgressDialog), once the dialog is due."""
-        if self.dialog is None:
-            Progress.__call__(self, stage, done, total)  # nothing to cancel yet
-        else:
-            super().__call__(stage, done, total)
 
     def show(self, percent, line):
         """Show the percentage and line, opening the dialog once SHOW_AFTER has passed."""

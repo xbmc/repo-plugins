@@ -12,6 +12,8 @@ from resources.lib.provider import errors
 
 # What a logout keeps: the device's identity and the startup page's constants, for the next login.
 LOGOUT_KEEPS = ("device_id", "device_uuid", "session_id", "consts", "config_at")
+# How long an access token is taken to last when the STS does not say (seconds).
+DEFAULT_TOKEN_LIFETIME = 3600
 
 
 class Auth:
@@ -26,7 +28,7 @@ class Auth:
         self._api = api
         # Guest mode: the public channel list and guide, used when the login is missing or refused.
         self.guest = False
-        self._readded = []  # see on_device_readded
+        self._readd_listeners = []
 
     def is_logged_in(self):
         """Return whether there is a refresh token, even in guest mode."""
@@ -48,7 +50,7 @@ class Auth:
 
     def on_device_readded(self, forget):
         """Have forget() called when this device is attached to the account again: what was the old device's is void."""
-        self._readded.append(forget)
+        self._readd_listeners.append(forget)
 
     # ------------------------------------------------------------- calls
 
@@ -67,8 +69,8 @@ class Auth:
                 break
             if "device was removed" not in r.text:
                 self._renew()
-            elif readd and (params or {}).get("fresh_login") != "true":
-                self.readd_device()  # its /user/account call has fresh_login=true: a 401 there gives up, no loop
+            elif readd:
+                self.readd_device()
             else:
                 break
         if r.status_code == 401:
@@ -142,13 +144,16 @@ class Auth:
             )
         st["access_token"] = tokens["access_token"]
         st["refresh_token"] = tokens.get("refresh_token") or st["refresh_token"]
-        st["access_expires"] = time.time() + int(tokens.get("expires_in") or 3600)
+        st["access_expires"] = time.time() + int(tokens.get("expires_in") or DEFAULT_TOKEN_LIFETIME)
         st["sts_slot"] = slot
         st.save()
 
     def _follow_to_tokens(self, url):
         """Follow the STS's redirects; return (the tokens or None, the last address, the last response)."""
-        for _ in range(10):
+        # Here, not at module level: transport loads http.client and ssl, which menus skip (see core.Api.http).
+        from resources.lib.net import transport
+
+        for _ in range(transport.MAX_REDIRECTS):
             r = self._api.http.get(url, allow_redirects=False, timeout=core.TIMEOUT)
             loc = r.headers.get("Location")
             if not loc:
@@ -162,11 +167,7 @@ class Auth:
         return None, url, r
 
     def login_url(self):
-        """Return the SSO login address that ends on a static page with the tokens in its URL.
-
-        The STS only redirects to the player's host, whose app consumes the tokens;
-        robots.txt is a plain file, so the phone can copy the address.
-        """
+        """Return the SSO login address for the phone login (see core.PHONE_REDIRECT_URI)."""
         self._api.bootstrap()
         tpl = self._tenant_config()["login_url"].replace("&amp;", "&")
         return tpl.replace("${redirectUri}", quote(core.PHONE_REDIRECT_URI, safe=""))
@@ -209,6 +210,7 @@ class Auth:
                 "START_UP",
                 "GET_USER_ACCOUNT",
                 params={"fresh_login": "true" if fresh_login else "false"},
+                readd=not fresh_login,
             )
             st["account_at"] = time.time()
             st.save()
@@ -221,7 +223,7 @@ class Auth:
     def readd_device(self):
         """Re-attach this device after the backend dropped it from the account."""
         self.valid_account(force=True, fresh_login=True)
-        for forget in self._readded:
+        for forget in self._readd_listeners:
             forget()
         self._state.save()
 

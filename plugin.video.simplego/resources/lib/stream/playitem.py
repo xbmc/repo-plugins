@@ -46,4 +46,5 @@ def spec(stream, manifest_url, license_url, kodi_major):
         "properties": props,
         "details": stream.get("details"),
         "logo": stream.get("logo"),
+        "live": not stream.get("programme"),
     }

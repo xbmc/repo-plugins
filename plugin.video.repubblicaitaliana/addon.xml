@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.repubblicaitaliana" name="RepubblicaItaliana" version="2.4.0" provider-name="Testato">
+<addon id="plugin.video.repubblicaitaliana" name="RepubblicaItaliana" version="2.5.0" provider-name="Testato">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
     <import addon="plugin.video.youtube" version="0.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
-    <provides>video</provides>
+    <provides>video audio</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
     <reuselanguageinvoker>true</reuselanguageinvoker>
@@ -23,7 +23,12 @@
         <icon>resources/icon.png</icon>
         <fanart>resources/fanart.jpg</fanart>
     </assets>
-    <news>2.4.0 (15 Oct 2026)
+    <news>2.5.0 (24 Nov 2026)
+- Dynamic Camera channels from webtv.camera.it
+- Added all live Camera streams (Satellite, Assembly, Commissions, Events, Subtitles)
+- Improved Radio channels metadata and music layout
+
+2.4.0 (15 Oct 2026)
 - Senato channels now use direct streams (no more YouTube)
 - YouTube is still required for the Camera channels
 

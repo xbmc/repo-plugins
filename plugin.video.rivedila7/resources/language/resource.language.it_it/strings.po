@@ -49,13 +49,33 @@ msgid "Programs"
 msgstr "Programmi"
 
 msgctxt "#32008"
-msgid "Personalities"
-msgstr "Personaggi"
+msgid "Podcast"
+msgstr "Podcast"
 
 msgctxt "#32010"
-msgid "LA7 Prime"
-msgstr "LA7 Prime"
+msgid "Film"
+msgstr "Film"
 
-msgctxt "#32011"
-msgid "LA7 Eventi Live"
-msgstr "Diretta LA7 Eventi"
+msgctxt "#32012"
+msgid "Search"
+msgstr "Cerca"
+
+msgctxt "#32013"
+msgid "Aired"
+msgstr "In onda"
+
+msgctxt "#32015"
+msgid "Search the site"
+msgstr "Ricerca nel sito"
+
+msgctxt "#32016"
+msgid "No results found"
+msgstr "La ricerca non ha prodotto risultati"
+
+msgctxt "#32017"
+msgid "Untitled"
+msgstr "Senza titolo"
+
+msgctxt "#32020"
+msgid "Documentaries"
+msgstr "Documentari"

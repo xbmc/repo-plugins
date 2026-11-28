@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rivedila7" name="LA7-LA7Cinema" version="7.0.0" provider-name="Luivit, Testato">
+<addon id="plugin.video.rivedila7" name="LA7 Play" version="8.0.0" provider-name="Luivit, Testato">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
-    <import addon="script.module.requests" version="0.0.0"/>
     <import addon="script.module.inputstreamhelper" version="0.0.0"/>
     <import addon="script.module.beautifulsoup4" version="0.0.0"/>
   </requires>
@@ -11,15 +10,15 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <reuselanguageinvoker>true</reuselanguageinvoker>
-    <summary lang="en_GB">LA7-LA7Cinema</summary>
-    <description lang="en_GB">Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News and Weather, Teche LA7-The Protagonists</description>
-    <summary lang="it_IT">LA7-LA7Cinema</summary>
-    <description lang="it_IT">Diretta Live, Rivedi ultima settimana, LA7 Prime, Programmi On-Demand, Telegiornali e Meteo, Teche LA7-I Protagonisti</description>
+    <summary lang="en_GB">LA7 Play</summary>
+    <description lang="en_GB">Live Streaming, Replay the last week, Film, Documentaries, On-Demand programs, News and Weather, Podcast, Search</description>
+    <summary lang="it_IT">LA7 Play</summary>
+    <description lang="it_IT">Diretta Live, Rivedi ultima settimana, Film, Documentari, Programmi On-Demand, Telegiornali e Meteo, Podcast, Cerca</description>
     <language>it</language>
     <platform>all</platform>
     <license>GPL-3.0-only</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=331064</forum>
-    <website>https://www.la7.it</website>
+    <website>https://www.la7play.it</website>
     <email>luivit39@gmail.com, speednpower@gmail.com</email>
     <source>https://github.com/luivit/plugin.video.rivedila7</source>
     <assets>
@@ -29,29 +28,24 @@
       <screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
       <screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
     </assets>
-    <news>7.0.0 (2025-10-23)
-- LA7d channel replaced with the new LA7 Cinema
-- New channel LA7 Eventi
-- Review function of the new LA7 Cinema channel
-- Added Tutti i Film page in the La7 Prime section
-- TG La7d replaced with TG Digital in the News and Weather section
-- Omnibus News replaced with Edicola in the News and Weather section
-- Protagonist section replaced with Personalities section
+    <news>8.0.0 (2026-11-21)
+- Plugin renamed to LA7 Play
+- Removed all the old la7.it code, the config file and the "requests" dependency
+- New Film and Documentaries sections (replaces LA7 Prime), sorted by date; documentaries include series episodes
+- Search reworked on the la7play.it search API: programs and videos, with next pages
+- News &amp; Weather: removed Edicola and Meteo della Sera (no longer updated)
+- Removed LA7 Eventi Live
+- Real episode and film description shown in the player (from the video page)
+- Programs list with portrait posters, new icons for Search, Film and Documentaries
+- New menu order and localized day/month names (English and Italian)
 
-6.3.0 (2025-05-11)
-- fix Programs title and added Config for manual added programs (thanks @24mu13)
-- patch text not found (thanks @lpuglia)
+7.3.0 (2026-11-03) (thanks @fabpolli)
+- Added Podcast section
+- Removed Personalities section, no longer available on the LA7 site
 
-6.2.1 (2024-05-09)
-- Solved program cataloging (thanks @fabpolli)
-
-6.2.0 (2022-03-5)
-- Solved 4h Live delay problem
-
-6.1.0 (2022-10-29)
-- Improved Regex that repair many Programs view
-- Added "Una giornata particolare" to Programs
-- Filter Omnibus News vs Omnibus
+7.2.0 (2026-10-29) (thanks @fabpolli)
+- Migration to the new la7play.it site (Live, Replay, Programs, Movies, News &amp; Weather)
+- Search function adapted to la7play.it
     </news>
   </extension>
 </addon>

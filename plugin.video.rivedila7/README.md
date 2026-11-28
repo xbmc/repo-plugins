@@ -1,12 +1,36 @@
-# LA7-LA7Cinema Kodi plugin
-Live Streaming, Replay the last week, LA7 Prime, On-Demand programs, News & Weather, Teche LA7-The Protagonists (italian language)
+# LA7 Play Kodi plugin
+Live Streaming, Replay the last week, Film, Documentaries, On-Demand programs, News & Weather, Podcast, Search function (italian language)
 
 ### Install tips
-- You can install this plugin via the official Kodi19 repository
+- You can install this plugin via the official Kodi repository
 - On some Linux distros Kodi comes packaged without the inputstream.adaptive plugin, in this case please manually install the missing plugin. For example on Ubuntu use the command:
 "sudo apt install kodi-inputstream-adaptive"
 
 ### Changelog
+8.0.0 (2026-11-21)
+- Plugin renamed to LA7 Play
+- Removed all the old la7.it code, the config file and the "requests" dependency
+- New Film and Documentaries sections (replaces LA7 Prime), sorted by date; documentaries include series episodes
+- Search reworked on the la7play.it search API: programs and videos, with next pages
+- News & Weather: removed Edicola and Meteo della Sera (no longer updated)
+- Removed LA7 Eventi Live
+- Real episode and film description shown in the player (from the video page)
+- Programs list with portrait posters, new icons for Search, Film and Documentaries
+- New menu order and localized day/month names (English and Italian)
+
+7.3.0 (2026-11-03) (thanks @fabpolli)
+- Added Podcast section
+- Removed Personalities section, no longer available on the LA7 site
+
+7.2.0 (2026-10-29) (thanks @fabpolli)
+- Migration to the new la7play.it site (Live, Replay, Programs, Movies, News & Weather)
+- Search function adapted to la7play.it
+
+7.1.0 (2026-10-08)
+- Added Search function
+- Fix Personalities biography
+- LA7 Meteo replaced with Omnibus Meteo in the News and Weather section
+
 7.0.0 (2025-10-23)
 - LA7d channel replaced with the new LA7 Cinema
 - New channel LA7 Eventi

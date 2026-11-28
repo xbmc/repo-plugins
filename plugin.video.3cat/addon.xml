@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.3cat" name="3Cat" version="1.4.1" provider-name="mcr222">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+		<import addon="script.module.beautifulsoup4" version="4.12.2"/>
+        <import addon="script.module.inputstreamhelper" version="0.4.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">Entertainment, news, documentaries, etc from catalan television 3cat.cat</summary>
+        <description lang="en_GB">Entertainment, news, documentaries, etc from catalan television 3cat.cat. </description>
+        <summary lang="ca_ES">Tots els programes de 3Cat.</summary>
+        <description lang="ca_ES">Tota la programació de 3Cat.</description>
+        <summary lang="es_ES">Toda la programación de 3Cat</summary>
+        <description lang="es_ES">Toda la programación de 3Cat</description>
+        <news>v1.4.1
+- Packaging fixes for the Kodi add-on repository
+
+v1.4.0
+- Search for programmes and videos
+- Subtitles for on-demand videos
+- Setting to play the fixed 720p MP4 instead of the adaptive stream
+- Duration, season, episode, air date and artwork in listings
+- Faster browsing: the catalogue and programme ids are cached
+- Retries when 3cat does not answer, and an error message instead of a silent failure</news>
+        <language>ca</language>
+        <license>GPL-2.0-or-later</license>
+        <source>https://github.com/mcr222/plugin.video.3cat</source>
+        <website>https://www.3cat.cat/3cat/</website>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

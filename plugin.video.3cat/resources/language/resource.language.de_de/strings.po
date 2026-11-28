@@ -1,0 +1,177 @@
+# Kodi Media Center language file
+# Addon Name: TV3cat
+# Addon id: plugin.video.3cat
+# Addon Provider: jqandreu
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: https://github.com/jqandreu/plugin.video.3cat/issues\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Connum\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Today Featured"
+msgstr "Empfehlungen des Tages"
+
+msgctxt "#30002"
+msgid "Don't miss"
+msgstr "Nicht verpassen"
+
+msgctxt "#30003"
+msgid "Most viewed"
+msgstr "Meistgesehen"
+
+msgctxt "#30004"
+msgid "Programs"
+msgstr "Programme"
+
+msgctxt "#30005"
+msgid "Series"
+msgstr "Serien"
+
+msgctxt "#30006"
+msgid "News"
+msgstr "Nachrichten"
+
+msgctxt "#30007"
+msgid "Entertainment"
+msgstr "Unterhaltung"
+
+msgctxt "#30008"
+msgid "Sports"
+msgstr "Sport"
+
+msgctxt "#30009"
+msgid "Documentaries"
+msgstr "Dokumentationen"
+
+msgctxt "#30010"
+msgid "Divulgation"
+msgstr "Verbreitung"
+
+msgctxt "#30011"
+msgid "Culture"
+msgstr "Kultur"
+
+msgctxt "#30012"
+msgid "Music"
+msgstr "Musik"
+
+msgctxt "#30013"
+msgid "All A-Z"
+msgstr "Alles A-Z"
+
+msgctxt "#30014"
+msgid "Aired A-Z"
+msgstr "Laufend A-Z"
+
+msgctxt "#30015"
+msgid ">>Next Page"
+msgstr ">>Nächste Seite"
+
+msgctxt "#30016"
+msgid ">>Previous Page"
+msgstr ">>Vorherige Seite"
+
+msgctxt "#30017"
+msgid "Live channels"
+msgstr "Live-Sender"
+
+msgctxt "#30018"
+msgid "TV3"
+msgstr "TV3"
+
+msgctxt "#30019"
+msgid "Canal 324"
+msgstr "Canal 324"
+
+msgctxt "#30020"
+msgid "SX3"
+msgstr "SX3"
+
+msgctxt "#30021"
+msgid "Esport 3"
+msgstr "Esport 3"
+
+msgctxt "#30022"
+msgid "Search"
+msgstr "Finden"
+
+msgctxt "#30023"
+msgid "Collections"
+msgstr "Sammlungen"
+
+msgctxt "#30024"
+msgid "TV3 (International broadcast)"
+msgstr "TV3 (International)"
+
+msgctxt "#30025"
+msgid "Canal 324 (International broadcast)"
+msgstr "Canal 324 (International)"
+
+msgctxt "#30026"
+msgid "SX3 (International broadcast)"
+msgstr "SX3 (International)"
+
+msgctxt "#30027"
+msgid "Esport 3 (International broadcast)"
+msgstr "Esport 3 (International)"
+
+msgctxt "#30028"
+msgid "Season"
+msgstr "Staffel"
+
+msgctxt "#30029"
+msgid "Films"
+msgstr "Filme"
+
+msgctxt "#30030"
+msgid "New releases"
+msgstr "Neuheiten"
+
+msgctxt "#30031"
+msgid "Full catalogue"
+msgstr "Gesamtkatalog"
+
+msgctxt "#30032"
+msgid "Categories"
+msgstr "Kategorien"
+
+msgctxt "#30033"
+msgid "Playback"
+msgstr "Wiedergabe"
+
+msgctxt "#30034"
+msgid "Preferred video format"
+msgstr "Bevorzugtes Videoformat"
+
+msgctxt "#30035"
+msgid "Adaptive (DASH, best quality)"
+msgstr "Adaptiv (DASH, beste Qualität)"
+
+msgctxt "#30036"
+msgid "MP4 (fixed 720p, more compatible)"
+msgstr "MP4 (feste 720p, kompatibler)"
+
+msgctxt "#30037"
+msgid "Load subtitles for on-demand videos"
+msgstr "Untertitel für Videos auf Abruf laden"
+
+msgctxt "#30038"
+msgid "Could not load content from 3Cat"
+msgstr "Inhalte von 3Cat konnten nicht geladen werden"
+
+msgctxt "#30039"
+msgid "This video is not available"
+msgstr "Dieses Video ist nicht verfügbar"
+
+msgctxt "#30040"
+msgid "No results"
+msgstr "Keine Ergebnisse"

@@ -5,6 +5,11 @@ Italian politics - TV and Radio channels
 - You can install this plugin via the official Kodi repository
 
 ### Changelog
+2.5.0 (24 Nov 2026)
+- Dynamic Camera channels from webtv.camera.it
+- Added all live Camera streams (Satellite, Assembly, Commissions, Events, Subtitles)
+- Improved Radio channels metadata and music layout
+
 2.4.0 (15 Oct 2026)
 - Senato channels now use direct streams (no more YouTube)
 - YouTube is still required for the Camera channels
